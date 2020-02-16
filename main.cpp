@@ -1,28 +1,12 @@
-//#include <QGuiApplication>
-//#include <QQmlApplicationEngine>
-
 #include <QtGui>
 #include <QtQuick>
+#include <QtAndroidExtras/QtAndroid>
 
 #include "backend.h"
 #include "fileio.h"
 
 int main(int argc, char *argv[])
 {
-//    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-//    QGuiApplication app(argc, argv);
-//    QQuickView viewer;
-//    viewer.setResizeMode(QQuickView::SizeRootObjectToView);
-
-//    BackEnd backend(viewer);
-
-//    viewer.rootContext()->setContextProperty("backEnd", &backend);
-
-//    QObject::connect(viewer.engine(), &QQmlEngine::quit, &viewer, &QWindow::close);
-//    viewer.setSource(QUrl("qrc:/main.qml"));
-//    viewer.show();
-//    return app.exec();
-
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
@@ -40,7 +24,7 @@ int main(int argc, char *argv[])
 
     engine.load(url);
 
-
+    QtAndroid::hideSplashScreen(250);
 
     return app.exec();
 }

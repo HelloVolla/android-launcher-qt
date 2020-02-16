@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.XmlListModel 2.13
 import QtQuick.Controls.Universal 2.12
+import QtGraphicalEffects 1.12
 
 Page {
     id: collectionPage
@@ -11,6 +13,14 @@ Page {
     property string textInput
     property int currentCollectionMode: 3
     property var currentCollectionModel: peopleModel
+
+    property string cTITLE: "title"   // large main title, bold
+    property string cSTITLE: "stitle" // small title above the main, grey
+    property string cTEXT: "text"     // large main text, regular
+    property string cSTEXT: "stext"   // small text beyond the main text, grey
+    property string cICON: "icon"     // small icon at the left side
+    property string cIMAGE: "image"   // preview image
+    property string cBADGE: "badge"   // red dot for unread contentChildren
 
     onTextInputChanged: {
         console.log("text input changed")
@@ -136,49 +146,207 @@ Page {
         delegate: MouseArea {
             id: backgroundItem
             width: parent.width
-            implicitHeight: template.height
+            implicitHeight: contactBox.height
 
-            Image {
-                id: template
-                anchors.top: parent.top
-                source: model.source
+            property var selectedMenuItem: contactBox
+
+            Rectangle {
+                id: contactBox
+                color: "transparent"
                 width: parent.width
+                implicitHeight: contactMenu.visible ? contactRow.height + contactMenu.height + swipeView.innerSpacing : contactRow.height + swipeView.innerSpacing
 
-                fillMode: Image.PreserveAspectFit
+                Row {
+                    id: contactRow
+                    x: swipeView.innerSpacing
+                    spacing: 18.0
+                    topPadding: swipeView.innerSpacing / 2
+
+                    Image {
+                        id: contactImage
+                        source: model.cICON
+                        sourceSize: Qt.size(swipeView.innerSpacing * 2.5, swipeView.innerSpacing * 2.5)
+                        smooth: true
+                        visible: false
+                    }
+                    Image {
+                        source: "/images/contact-mask.png"
+                        id: contactMask
+                        sourceSize: Qt.size(swipeView.innerSpacing * 2.5, swipeView.innerSpacing * 2.5)
+                        smooth: true
+                        visible: false
+                    }
+                    OpacityMask {
+                        width: swipeView.innerSpacing * 2.5
+                        height: swipeView.innerSpacing * 2.5
+                        source: contactImage
+                        maskSource: contactMask
+                    }
+                    Column {
+                        spacing: 3.0
+                        Label {
+                            topPadding: 8.0
+                            text: model.cTITLE
+                            font.pointSize: swipeView.pointSize
+                            font.weight: Font.Black
+                        }
+                        Label {
+                            text: model.cSTEXT
+                            font.pointSize: swipeView.smallPointSize
+                            opacity: 0.8
+                        }
+                    }
+                }
+                Column {
+                    id: contactMenu
+                    anchors.top: contactRow.bottom
+                    topPadding: 16.0
+                    bottomPadding: 8.0
+                    leftPadding: swipeView.innerSpacing
+                    spacing: 12.0
+                    visible: false
+                    Label {
+                        id: callLabel
+                        text: qsTr("Call")
+                        font.pointSize: swipeView.middlePointSize
+                    }
+                    Label {
+                        id: messageLabel
+                        text: qsTr("Send Message")
+                        font.pointSize: swipeView.middlePointSize
+                    }
+                    Label {
+                        id: emailLabel
+                        text: qsTr("Send Email")
+                        font.pointSize: swipeView.middlePointSize
+                    }
+                }
+            }
+            Behavior on height {
+                NumberAnimation {
+                    duration: 250.0
+                }
             }
 
-            onClicked: {
-                console.log("Collection item clicked")
-                currentCollectionModel.executeSelection(model)
-            }
             onPressAndHold: {
-                console.log("Collection item pressed and hold")
-                template.source = currentCollectionModel.openContextMenu(model)
+                contactMenu.visible = true
+                contactBox.color = Universal.accent
                 preventStealing = true
             }
             onExited: {
-                console.log("Collection item exited")
-                if (template.source.toString().split("/").pop() !== model.source.split("/").pop()) {
-                    console.log("Source: " + template.source + ", " + model.source)
-                    currentCollectionModel.executeContextMenuOption(model, mouseY, backgroundItem.height)
-                    template.source = model.source
-                }
+                contactMenu.visible = false
+                contactBox.color = "transparent"
                 preventStealing = false
             }
-            onCanceled: {
-                console.log("Collection item exited")
-                if (template.source.toString().split("/").pop() !== model.source.split("/").pop()) {
-                    console.log("Source: " + template.source + ", " + model.source)
-                    currentCollectionModel.executeContextMenuOption(model, mouseY, backgroundItem.height)
-                    template.source = model.source
+            onMouseYChanged: {
+                console.log("Content menua mouse y changed to: " + mouse.y)
+                var plPoint = mapFromItem(callLabel, 0, 0)
+                var mlPoint = mapFromItem(messageLabel, 0, 0)
+                var elPoint = mapFromItem(emailLabel, 0, 0)
+
+                if (mouseY > plPoint.y && mouseY < plPoint.y + callLabel.height) {
+                    selectedMenuItem = callLabel
+                } else if (mouseY > mlPoint.y && mouseY < mlPoint.y + messageLabel.height) {
+                    selectedMenuItem = messageLabel
+                } else if (mouseY > elPoint.y && mouseY < elPoint.y + emailLabel.height) {
+                    selectedMenuItem = emailLabel
+                } else {
+                    selectedMenuItem = contactBox
                 }
-                preventStealing = false
             }
+            onSelectedMenuItemChanged: {
+
+            }
+
+//            onClicked: {
+//                console.log("Collection item clicked")
+//                currentCollectionModel.executeSelection(model)
+//            }
+//            onPressAndHold: {
+//                console.log("Collection item pressed and hold")
+//                template.source = currentCollectionModel.openContextMenu(model)
+//                preventStealing = true
+//            }
+//            onExited: {
+//                console.log("Collection item exited")
+//                if (template.source.toString().split("/").pop() !== model.source.split("/").pop()) {
+//                    console.log("Source: " + template.source + ", " + model.source)
+//                    currentCollectionModel.executeContextMenuOption(model, mouseY, backgroundItem.height)
+//                    template.source = model.source
+//                }
+//                preventStealing = false
+//            }
+//            onCanceled: {
+//                console.log("Collection item exited")
+//                if (template.source.toString().split("/").pop() !== model.source.split("/").pop()) {
+//                    console.log("Source: " + template.source + ", " + model.source)
+//                    currentCollectionModel.executeContextMenuOption(model, mouseY, backgroundItem.height)
+//                    template.source = model.source
+//                }
+//                preventStealing = false
+//            }
         }
     }
 
     ListModel {
         id: peopleModel
+
+        property var modelArr: [{cTITLE: "Max Miller", cSTEXT: "Hello World Ltd.", cICON: "/images/contact-max-miller.jpg"},
+                                {cTITLE: "Paula Black", cSTEXT: "How are you?", cICON: "/images/contact-paula-black.jpg"}]
+
+        function update(text) {
+            console.log("Update model with text input: " + text)
+
+            var filteredModelDict = new Object
+            var filteredModelItem
+            var modelItem
+            var found
+            var i
+
+            console.log("Model has " + modelArr.length + "elements")
+
+            for (i = 0; i < modelArr.length; i++) {
+                filteredModelItem = modelArr[i]
+                var modelItemName = modelArr[i].cTITLE
+                if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
+                    console.log("Add " + modelItemName + " to filtered items")
+                    filteredModelDict[modelItemName] = filteredModelItem
+                }
+            }
+
+            var existingGridDict = new Object
+            for (i = 0; i < count; ++i) {
+                modelItemName = get(i).cTITLE
+                existingGridDict[modelItemName] = true
+            }
+            // remove items no longer in filtered set
+            i = 0
+            while (i < count) {
+                modelItemName = get(i).cTITLE
+                found = filteredModelDict.hasOwnProperty(modelItemName)
+                if (!found) {
+                    console.log("Remove " + modelItemName)
+                    remove(i)
+                } else {
+                    i++
+                }
+            }
+
+            // add new items
+            for (modelItemName in filteredModelDict) {
+                found = existingGridDict.hasOwnProperty(modelItemName)
+                if (!found) {
+                    // for simplicity, just adding to end instead of corresponding position in original list
+                    filteredModelItem = filteredModelDict[modelItemName]
+                    console.log("Will append " + filteredModelItem.cTITLE)
+                    append(filteredModelDict[modelItemName])
+                }
+            }
+        }
+    }
+
+    ListModel {
+        id: prototypePeopleModel
 
         property var modelArr: [{"itemName": "Julia Herbst", "source": "/images/people01.png"},
                                 {"itemName": "Lucille Bush", "source": "/images/people02.png"},
@@ -232,7 +400,7 @@ Page {
             var found
             var i
 
-            console.log("Model: " + modelArr)
+            console.log("Model has " + modelArr.length + "elements")
 
             for (i = 0; i < modelArr.length; i++) {
                 filteredModelItem = modelArr[i]

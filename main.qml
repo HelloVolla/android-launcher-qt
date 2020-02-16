@@ -1,11 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Controls.Universal 2.12
+import QtQuick.Controls.Styles 1.4
 
 ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Tabs")
+    title: qsTr("Volla")
 
     onActiveChanged: {
         var message = active ? "active" : "not active"
@@ -24,6 +26,8 @@ ApplicationWindow {
         property real innerSpacing : 22.0
         property real pointSize: 20.0
         property real headerPointSize: 40.0
+        property real smallPointSize: 12.0
+        property real middlePointSize: 15.0
         property var collectionMode : {
             'People' : 0,
             'Threads' : 1,

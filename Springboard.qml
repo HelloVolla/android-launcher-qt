@@ -132,11 +132,11 @@ Page {
             }
 
             function emailAddressForContact(contactIdentifier) {
-                var contact = contacts.personById(contactIdentifier)
+                var contact = contacts.get(contactIdentifier)
                 var emailAddress
                 if (contact) {
                     console.log("Contact " + contactIdentifier + " " + contact.name)
-                    var emailDetails = contact.email
+                    emailAddress = contact.email
                 } else {
                     notification.previewSummary = qsTr("Sorry")
                     notification.previewBody = qsTr("I couldn't identify the contact")
@@ -147,7 +147,7 @@ Page {
             }
 
             function executeAction(actionValue, actionType) {
-                console.log(actionValue + ":" + actionType)
+                console.log(actionValue + ":" + actionType + ":" + contactId)
 
                 switch (actionType) {
                     case vollaActionType.MakeCall:

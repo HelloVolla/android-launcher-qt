@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>Springboard.qml</file>
         <file>AppGrid.qml</file>
@@ -59,5 +58,8 @@
         <file>images/threads05.png</file>
         <file>images/threads06.png</file>
         <file>images/threads07.png</file>
+        <file>images/contact-max-miller.jpg</file>
+        <file>images/contact-paula-black.jpg</file>
+        <file>images/contact-mask.png</file>
     </qresource>
 </RCC>

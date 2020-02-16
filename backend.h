@@ -16,6 +16,7 @@ explicit BackEnd(QObject *parent = nullptr);
 
 public slots:
     QString getApplist();
+    QString getApplistAsJSON();
     void runApp(QString ID);
 };
 
