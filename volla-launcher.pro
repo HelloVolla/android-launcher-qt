@@ -36,11 +36,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 OTHER_FILES += \
     android/AndroidManifest.xml \
     android/build.gradle \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew \
-    android/gradlew.bat \
-    android/res/values/libs.xml \
     android/src/com/volla/launcher/worker/AppWorker.java
 
 contains(ANDROID_TARGET_ARCH,x86) {

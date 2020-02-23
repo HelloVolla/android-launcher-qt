@@ -24,14 +24,24 @@ ApplicationWindow {
         interactive: true
 
         property real innerSpacing : 22.0
-        property real pointSize: 20.0
+        property real pointSize: 22.0
         property real headerPointSize: 40.0
-        property real smallPointSize: 12.0
-        property real middlePointSize: 15.0
+        property real smallPointSize: 16.0
+        property real mediumPointSize: 18.0
         property var collectionMode : {
             'People' : 0,
             'Threads' : 1,
             'News' : 2
+        }
+        property var actionType: {
+            'MakeCall': 20000,
+            'SendEmail': 20001,
+            'SendSMS': 20002,
+            'OpenURL': 20003,
+            'SearchWeb': 20004,
+            'CreateNote': 20005,
+            'ShowGroup': 20006,
+            'ShowDetails': 20007
         }
         property string galleryApp: "com.google.android.apps.photos"
         property string calendarApp: "com.google.android.calendar"

@@ -61,5 +61,8 @@
         <file>images/contact-max-miller.jpg</file>
         <file>images/contact-paula-black.jpg</file>
         <file>images/contact-mask.png</file>
+        <file>images/news-ben-rogers.jpg</file>
+        <file>images/news-image.png</file>
+        <file>images/news-ny-times.png</file>
     </qresource>
 </RCC>
