@@ -31,7 +31,11 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+include(vendor/vendor.pri)
+# ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+android {
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+}
 
 OTHER_FILES += \
     android/AndroidManifest.xml \
@@ -46,3 +50,6 @@ contains(ANDROID_TARGET_ARCH,x86) {
 HEADERS += \
     backend.h \
     fileio.h
+
+DISTFILES += \
+    android/src/com/volla/launcher/worker/ContactWorker.java

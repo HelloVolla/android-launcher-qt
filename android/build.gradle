@@ -54,4 +54,7 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    apply from: "androidnative.gradle"
+    setAndroidNativePath("/../vendor/android/native/pri")
 }

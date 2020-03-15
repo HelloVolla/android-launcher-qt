@@ -103,19 +103,19 @@ Page {
 
             onSelectedMenuItemChanged: {
                 peopleLabel.font.bold = selectedMenuItem === peopleLabel
-                peopleLabel.font.pointSize = selectedMenuItem === peopleLabel ?swipeView.pointSize * 1.2: swipeView.pointSize
+                peopleLabel.font.pointSize = selectedMenuItem === peopleLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
                 threadLabel.font.bold = selectedMenuItem === threadLabel
-                threadLabel.font.pointSize = selectedMenuItem === threadLabel ?swipeView.pointSize * 1.2: swipeView.pointSize
+                threadLabel.font.pointSize = selectedMenuItem === threadLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
                 newsLabel.font.bold = selectedMenuItem === newsLabel
-                newsLabel.font.pointSize = selectedMenuItem === newsLabel ?swipeView.pointSize * 1.2: swipeView.pointSize
+                newsLabel.font.pointSize = selectedMenuItem === newsLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
                 galleryLabel.font.bold = selectedMenuItem === galleryLabel
-                galleryLabel.font.pointSize = selectedMenuItem === galleryLabel ?swipeView.pointSize * 1.2: swipeView.pointSize
+                galleryLabel.font.pointSize = selectedMenuItem === galleryLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
                 agendaLabel.font.bold = selectedMenuItem === agendaLabel
-                agendaLabel.font.pointSize = selectedMenuItem === agendaLabel ?swipeView.pointSize * 1.2: swipeView.pointSize
+                agendaLabel.font.pointSize = selectedMenuItem === agendaLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
                 cameraLabel.font.bold = selectedMenuItem === cameraLabel
-                cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ?swipeView.pointSize * 1.2: swipeView.pointSize
+                cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
                 dialerLabel.font.bold = selectedMenuItem === dialerLabel
-                dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ?swipeView.pointSize * 1.2: swipeView.pointSize
+                dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
             }
 
             onEntered: {
@@ -203,7 +203,7 @@ Page {
                 Label {
                     id: dialerLabel
                     text: qsTr("Show Dialer")
-                    font.pointSize:swipeView.pointSize
+                    font.pointSize:swipeView.largeFontSize
                     anchors.left: parent.left
                     topPadding: swipeView.innerSpacing * 2
                     leftPadding: swipeView.innerSpacing
@@ -212,7 +212,7 @@ Page {
                 Label {
                     id: cameraLabel
                     text: qsTr("Open Camera")
-                    font.pointSize:swipeView.pointSize
+                    font.pointSize:swipeView.largeFontSize
                     anchors.left: parent.left
                     leftPadding: swipeView.innerSpacing
                     bottomPadding: swipeView.innerSpacing
@@ -220,7 +220,7 @@ Page {
                 Label {
                     id: agendaLabel
                     text: qsTr("Agenda")
-                    font.pointSize:swipeView.pointSize
+                    font.pointSize:swipeView.largeFontSize
                     anchors.left: parent.left
                     leftPadding: swipeView.innerSpacing
                     bottomPadding: swipeView.innerSpacing
@@ -228,7 +228,7 @@ Page {
                 Label {
                     id: galleryLabel
                     text: qsTr("Gallery")
-                    font.pointSize:swipeView.pointSize
+                    font.pointSize:swipeView.largeFontSize
                     anchors.left: parent.left
                     leftPadding: swipeView.innerSpacing
                     bottomPadding: swipeView.innerSpacing
@@ -236,7 +236,7 @@ Page {
                 Label {
                     id: newsLabel
                     text: qsTr("Recent News")
-                    font.pointSize:swipeView.pointSize
+                    font.pointSize:swipeView.largeFontSize
                     anchors.left: parent.left
                     leftPadding: swipeView.innerSpacing
                     bottomPadding: swipeView.innerSpacing
@@ -244,7 +244,7 @@ Page {
                 Label {
                     id: threadLabel
                     text: qsTr("Recent Threads")
-                    font.pointSize:swipeView.pointSize
+                    font.pointSize:swipeView.largeFontSize
                     anchors.left: parent.left
                     leftPadding: swipeView.innerSpacing
                     bottomPadding: swipeView.innerSpacing
@@ -252,7 +252,7 @@ Page {
                 Label {
                     id: peopleLabel
                     text: qsTr("Revent People")
-                    font.pointSize:swipeView.pointSize
+                    font.pointSize:swipeView.largeFontSize
                     anchors.left: parent.left
                     leftPadding: swipeView.innerSpacing
                     bottomPadding: swipeView.innerSpacing * 2

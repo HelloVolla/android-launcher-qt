@@ -36,7 +36,7 @@ Page {
                 topPadding: swipeView.innerSpacing
                 x: swipeView.innerSpacing
                 text: qsTr("Details")
-                font.pointSize: swipeView.headerPointSize
+                font.pointSize: swipeView.headerFontSize
                 font.weight: Font.Black
                 Binding {
                     target: detailPage
@@ -52,7 +52,7 @@ Page {
                 placeholderText: qsTr("Filter collections")
                 color: Universal.foreground
                 placeholderTextColor: "darkgrey"
-                font.pointSize: swipeView.pointSize
+                font.pointSize: swipeView.largeFontSize
                 leftPadding: 0.0
                 rightPadding: 0.0
                 background: Rectangle {
@@ -70,7 +70,7 @@ Page {
                     id: deleteButton
                     visible: textField.activeFocus
                     text: "<font color='#808080'>×</font>"
-                    font.pointSize: swipeView.pointSize * 2
+                    font.pointSize: swipeView.largeFontSize * 2
                     flat: true
                     topPadding: 0.0
                     anchors.top: parent.top

@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
+import AndroidNative 1.0 as AN
 
 ApplicationWindow {
     visible: true
@@ -11,7 +12,7 @@ ApplicationWindow {
 
     onActiveChanged: {
         var message = active ? "active" : "not active"
-        console.log("Volla app is " + message)
+        console.log("MainView | Volla app is " + message)
         if (active) {
             swipeView.currentIndex = 2
         }
@@ -24,16 +25,18 @@ ApplicationWindow {
         interactive: true
 
         property real innerSpacing : 22.0
-        property real pointSize: 22.0
-        property real headerPointSize: 40.0
-        property real smallPointSize: 16.0
-        property real mediumPointSize: 18.0
+        property real headerFontSize: 40.0
+        property real largeFontSize: 22.0
+        property real mediumFontSize: 18.0
+        property real smallFontSize: 16.0
+
         property var collectionMode : {
             'People' : 0,
             'Threads' : 1,
             'News' : 2
         }
         property var actionType: {
+            'SuggestContact': 0,
             'MakeCall': 20000,
             'SendEmail': 20001,
             'SendSMS': 20002,
@@ -41,8 +44,15 @@ ApplicationWindow {
             'SearchWeb': 20004,
             'CreateNote': 20005,
             'ShowGroup': 20006,
-            'ShowDetails': 20007
+            'ShowDetails': 20007,
+            'ShowGallery': 20008,
+            'ShowConacts': 20009,
+            'ShowThreads': 20010,
+            'ShowNews': 20011,
+            'OpenCam': 20012
         }
+        property var contacts: new Array
+
         property string galleryApp: "com.google.android.apps.photos"
         property string calendarApp: "com.google.android.calendar"
         property string cameraApp: "com.android.camera2"
@@ -96,15 +106,36 @@ ApplicationWindow {
         }
 
         function updateCollectionMode(mode) {
-            console.log("New collection mode: " + mode)
+            console.log("MainView | New collection mode: " + mode)
             currentIndex = currentIndex + 1
             collectionPageLoader.item.updateCollectionMode(mode)
         }
 
         function updateDetailPage(imageSource, headline, placeholderText) {
-            console.log("Will update detail page")
+            console.log("MainView | Will update detail page")
             currentIndex = currentIndex + 1
             detaulPageLoader.item.updateDetailPage(imageSource, headline, placeholderText)
+        }
+
+        function loadContacts() {
+            console.log("MainView | SwipeView | Will load contacts")
+            AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+        }
+
+        Connections {
+            target: AN.SystemDispatcher
+            onDispatched: {
+                // process the message
+                console.log("MainView | onDispatched: " + type)
+                if (type === "volla.launcher.contactResponse") {
+                    swipeView.contacts = message["contacts"]
+                    message["contacts"].forEach(function (aContact, index) {
+                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
+                        }
+                    })
+                }
+            }
         }
     }
 

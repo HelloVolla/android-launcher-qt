@@ -59,7 +59,7 @@ Page {
                 topPadding: swipeView.innerSpacing
                 x: swipeView.innerSpacing
                 text: qsTr("Apps")
-                font.pointSize: swipeView.headerPointSize
+                font.pointSize: swipeView.headerFontSize
                 font.weight: Font.Black
             }
             TextField {
@@ -70,7 +70,7 @@ Page {
                 placeholderText: qsTr("Filter apps")
                 color: Universal.foreground
                 placeholderTextColor: "darkgrey"
-                font.pointSize: swipeView.pointSize
+                font.pointSize: swipeView.largeFontSize
                 leftPadding: 0.0
                 rightPadding: 0.0
 
