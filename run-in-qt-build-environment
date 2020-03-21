@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# The container we use is: a12e/docker-qt:5.12-android_arm64_v8a
+
+WORKSPACE=${WORKSPACE:-$PWD}
+WORKSPACE=`realpath $WORKSPACE`
+EXECUTABLE=${1:-$WORKSPACE/build_android_arm64_v8a}
+EXECUTABLE=`realpath $EXECUTABLE`
+EXECUTABLE_NAME=`basename $EXECUTABLE`
+TARGET=${EXECUTABLE_NAME#"build_"}
+CONTAINER=${CONTAINER:-a12e/docker-qt:5.12-$TARGET}
+TIMESTAMP=`date +%Y%m%d`
+BUILD_ID=${BUILD_ID:-$TIMESTAMP}
+CCACHE_DIR=$HOME/.ccache
+GRADLE_DIR=$HOME/.gradle/
+
+mkdir -p $WORKSPACE
+mkdir -p $CCACHE_DIR
+mkdir -p $GRADLE_DIR
+
+[[ -v DISPLAY ]] && xhost +local:root
+
+docker run --privileged=true \
+           -e LOCAL_DISPLAY=$DISPLAY \
+           -e BUILD_ID=$BUILD_ID \
+           -e WORKSPACE=$WORKSPACE \
+           -e CCACHE_DIR=$CCACHE_DIR \
+           -v /tmp/.X11-unix:/tmp/.X11-unix \
+           -v $CCACHE_DIR:$CCACHE_DIR \
+           -v $GRADLE_DIR:$GRADLE_DIR \
+           -v $WORKSPACE:$WORKSPACE -it --rm \
+           -u $USER \
+           $CONTAINER $EXECUTABLE
