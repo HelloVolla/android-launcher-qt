@@ -1,0 +1,3 @@
+[submodule "vendor/android/native/pri"]
+	path = vendor/android/native/pri
+	url = https://github.com/HelloVolla/androidnative.pri
