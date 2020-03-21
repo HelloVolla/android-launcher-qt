@@ -6,4 +6,3 @@ QML_IMPORT_PATH += $$PWD
 
 
 include($$PWD/android/native/pri/androidnative.pri)
-include($$PWD/android/native/pri/examples/androidnativeexample/.pri)
