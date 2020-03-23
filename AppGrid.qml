@@ -277,7 +277,7 @@ Page {
                 filteredGridItem = modelArr[i]
                 var modelItemName = modelArr[i].label
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    console.log("Add " + modelItemName + " to filtered items")
+                    //console.log("Add " + modelItemName + " to filtered items")
                     filteredGridDict[modelItemName] = filteredGridItem
                 }
             }

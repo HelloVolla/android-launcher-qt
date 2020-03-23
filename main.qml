@@ -118,8 +118,12 @@ ApplicationWindow {
         }
 
         function loadContacts() {
-            console.log("MainView | SwipeView | Will load contacts")
+            console.log("MainView | Will load contacts")
             AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+        }
+
+        Component.onCompleted: {
+            loadContacts()
         }
 
         Connections {

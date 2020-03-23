@@ -27,7 +27,6 @@ Page {
     }
 
     Component.onCompleted: {
-        swipeView.loadContacts()
         listModel.update()
     }
 

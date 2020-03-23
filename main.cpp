@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
 
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.ContactWorker");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.MessageWorker");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
