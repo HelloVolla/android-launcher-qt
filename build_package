@@ -1,0 +1,38 @@
+#!/bin/bash
+
+BUILD_TARGET=${1:-android_arm64_v8a}
+EXECUTABLE=${EXECUTABLE:-$WORKSPACE/build_android}
+
+if [[ "$BUILD_TARGET" != "android_arm64_v8a" && "$BUILD_TARGET" != "android_armv7" ]]; then
+    echo "Usage: build_package [BUILD_TARGET]"
+    echo "      BUILD_TARGET *MUST* be one of: android_arm64_v8a, android_armv7"
+    exit -1
+fi
+
+WORKSPACE=${WORKSPACE:-$PWD}
+WORKSPACE=`realpath $WORKSPACE`
+# The container we use is: a12e/docker-qt:5.12-android_arm64_v8a
+CONTAINER=${CONTAINER:-a12e/docker-qt:5.12-$BUILD_TARGET}
+TIMESTAMP=`date +%Y%m%d`
+BUILD_ID=${BUILD_ID:-$TIMESTAMP}
+
+CCACHE_DIR=$HOME/.ccache
+GRADLE_DIR=$HOME/.gradle/
+
+mkdir -p $WORKSPACE
+mkdir -p $CCACHE_DIR
+mkdir -p $GRADLE_DIR
+
+[[ -v DISPLAY ]] && xhost +local:root
+
+docker run --rm \
+           -e BUILD_ID=$BUILD_ID \
+           -e WORKSPACE=$WORKSPACE \
+           -e CCACHE_DIR=$CCACHE_DIR \
+           -e BUILD_TARGET=$BUILD_TARGET \
+           -v /tmp/.X11-unix:/tmp/.X11-unix \
+           -v $CCACHE_DIR:$CCACHE_DIR \
+           -v $GRADLE_DIR:$GRADLE_DIR \
+           -v $WORKSPACE:$WORKSPACE -it \
+           -u $USER \
+           $CONTAINER $EXECUTABLE

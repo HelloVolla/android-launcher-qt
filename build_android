@@ -1,0 +1,45 @@
+#!/bin/bash
+
+BUILD_TARGET=${BUILD_TARGET:-android_arm64_v8a}
+TIMESTAMP=`date +%Y%m%d`
+BUILD_ID=${BUILD_ID:-$TIMESTAMP}
+WORKSPACE=${WORKSPACE:-$PWD}
+BUILD_DIR=$WORKSPACE/build/$BUILD_TARGET
+ANDROID_BUILD_DIR=${BUILD_DIR}/com.volla.launcher-${BUILD_TARGET}-${BUILD_ID}/
+RELEASE_DIR=$WORKSPACE/releases
+
+#Got the platform from readme of https://github.com/a12e/docker-qt
+SDK_PLATFORM=android-21
+
+die() {
+  echo $@
+  echo "Make sure your sources are compilable and run this script only in the build container."
+  exit -1
+}
+
+
+cd $WORKSPACE
+#git submodule init
+#git submodule update
+
+rm -rf $BUILD_DIR
+
+mkdir -p $BUILD_DIR
+mkdir -p $ANDROID_BUILD_DIR
+mkdir -p $RELEASE_DIR
+
+cd $BUILD_DIR
+
+# Run qmake, optional: ship the OpenSSL libraries
+qmake -r $WORKSPACE ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libcrypto.so ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libssl.so
+make -j`nproc` || die "Building the sources failed"
+make install INSTALL_ROOT=$ANDROID_BUILD_DIR
+
+# Create APK
+androiddeployqt --input android-libvolla-launcher.so-deployment-settings.json \
+                --output $ANDROID_BUILD_DIR \
+                --android-platform $SDK_PLATFORM \
+                --deployment bundled \
+                --gradle --release || die "Building APK failed"
+
+mv $ANDROID_BUILD_DIR/build/outputs/apk/**/*.apk $RELEASE_DIR/ || die "No APK was found to deploy to the release dir"
