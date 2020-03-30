@@ -64,6 +64,6 @@
         <file>images/news-ben-rogers.jpg</file>
         <file>images/news-image.png</file>
         <file>images/news-ny-times.png</file>
-        <file>Feed.qml</file>
+        <file>Conversation.qml</file>
     </qresource>
 </RCC>

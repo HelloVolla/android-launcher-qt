@@ -160,6 +160,11 @@ public class MessageWorker {
     }
 
     static void getMessages(Map message) {
+
+    }
+
+    static void getConversatiom(Map message) {
+
     }
 
     static void getThreads(Map message) {
@@ -178,12 +183,40 @@ public class MessageWorker {
         try {
             String filter = " 1=1 " ;
 
+            if ( message.containsKey("age") ) {
+                int age = (Integer) message.get("age");   // age in seconds
+                cutOffTimeStamp = System.currentTimeMillis() - age * 1000 ;
+                filter = filter + " and date >= " + cutOffTimeStamp ;
+            }
+
+            if ( message.containsKey("after") ) {
+                String after = (String) message.get("after") ;   // after is milliseconds since epoch
+                filter = filter + " and date > " + after  ;
+            }
+
+            if ( message.containsKey("afterId") ) {
+                int   afterId = (Integer) message.get("afterId");
+                filter = filter + " and thread_id > " + afterId ;
+            }
+
             if ( message.containsKey("read") ) {
                 int read_status = (Integer) message.get("read");
                 filter = filter + " and read = " + read_status ;
             }
 
             String sortOrder  = " date desc " ;
+
+            if ( message.containsKey("count") ) {
+                int count = (Integer) message.get("count");
+                sortOrder = sortOrder + " limit " +  count ;
+            }
+
+            String[] selectionArgs = {""};
+            if ( message.containsKey("match") ) {
+                String match = (String) message.get("match");
+                filter = filter + " and body like ? "  ;
+                selectionArgs[0] = '%' + match + '%' ;
+            }
 
             Log.d(TAG,  "Thread Filter is : " + filter );
 
@@ -202,7 +235,8 @@ public class MessageWorker {
                 int index_read = cursor.getColumnIndex("read");
                 int index_person = cursor.getColumnIndex("person");
                 int index_address = cursor.getColumnIndex("address");
-                int index_type = cursor.getColumnIndex("ct_t");
+                int index_type = cursor.getColumnIndex("type");
+                int index_ct_t = cursor.getColumnIndex("ct_t");
 
                 while (cursor.moveToNext()) {
                     for (int i = 0; i < cursor.getColumnCount(); i++) {
@@ -214,9 +248,19 @@ public class MessageWorker {
                     String body = cursor.getString(index_body);
                     String person = cursor.getString(index_person);
                     String address = cursor.getString(index_address);
-                    String type = cursor.getString(index_type);
+                    String ct_t = cursor.getString(index_ct_t);
                     Long d = cursor.getLong(index_date);
                     int read = cursor.getInt(index_read);
+                    int type = cursor.getInt(index_type);
+                    boolean isMMS = false;
+
+                    if ("application/vnd.wap.multipart.related".equals(ct_t)) {
+                        // it's MMS
+                        isMMS = true;
+
+                    } else {
+                        // it's SMS
+                    }
 
                     Map thread = new HashMap();
 
@@ -225,9 +269,11 @@ public class MessageWorker {
                     thread.put("body", body);
                     thread.put("person", person);
                     thread.put("address", address);
-                    thread.put("type", type);
                     thread.put("date", d);
                     thread.put("read", read == 1 ? true : false);
+                    thread.put("isSent", type == 2 ? true : false);
+                    thread.put("isMMS", isMMS);
+
                     threadlist.add( thread );
                 }
 

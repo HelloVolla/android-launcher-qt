@@ -16,6 +16,7 @@ Page {
     property int currentCollectionMode: 3
     property var currentCollectionModel: peopleModel
     property var threads: new Array
+    property var threadAge: 84000 * 10 // one day in seconds
 
     property string c_TITLE:     "title"   // large main title, bold
     property string c_STITLE:    "stitle"  // small title above the main, grey
@@ -27,7 +28,7 @@ Page {
     property string c_SBADGE:    "sbadge"  // red dot for unread messages
     property string c_PHONE:     "phome"   // recent phone number
     property string c_IS_MOBILE: "mobile"  // true if phone number is for a cell phone
-    property string c_EMAI:      "email"   // recent email address
+    property string c_EMAIL:     "email"   // recent email address
 
 
     onTextInputChanged: {
@@ -51,17 +52,19 @@ Page {
                     headline.text = qsTr("People")
                     textInputField.placeholderText = "Find poeple ..."
                     currentCollectionModel = peopleModel
-                    collectionPage.loadThreads()
+                    collectionPage.loadThreads({})
                     break;
                 case swipeView.collectionMode.Threads:
                     headline.text = qsTr("Threads")
                     textInputField.placeholderText = "Find thread ..."
                     currentCollectionModel = threadModel
+                    collectionPage.loadThreads({})
                     break;
                 case swipeView.collectionMode.News:
                     headline.text = qsTr("News")
                     textInputField.placeholderText = "Find news ..."
                     currentCollectionModel = newsModel
+                    collectionPage.threads = new Array
                     break;
                 default:
                     console.log("Collections | Unknown collection mode")
@@ -71,9 +74,46 @@ Page {
         }
     }
 
-    function loadThreads() {
+    function loadThreads(filter) {
         console.log("Collections | Will load threads")
-        AN.SystemDispatcher.dispatch("volla.launcher.threadAction", {})
+        // Todo: Update threads
+        collectionPage.threads = new Array
+        AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
+    }
+
+    // Todo: Improve display date and time
+    function parseTime(timeInMillis) {
+        var now = new Date()
+        var date = new Date(timeInMillis)
+        var today = new Date()
+        today.setHours(0)
+        today.setMinutes(0)
+        var yesterday = new Date()
+        yesterday.setHours(0)
+        yesterday.setMinutes(0)
+        yesterday.setMilliseconds(yesterday.valueOf() - 84000)
+        var timeDelta = (now.valueOf() - timeInMillis) / 1000 / 60
+        if (timeDelta < 1) {
+            return qsTr("Just now")
+        } else if (timeDelta < 60) {
+            return Math.floor(timeDelta) + " " + qsTr("minutes ago")
+        } else if (date.valueOf() > today.valueOf()) {
+            if (date.getMinutes() < 10) {
+                return qsTr("Today") + " " + date.getHours() + ":0" + date.getMinutes()
+            } else {
+                return qsTr("Today") + " " + date.getHours() + ":" + date.getMinutes()
+            }
+        } else if (date.valueOf() > yesterday.valueOf()) {
+            if (date.getMinutes() < 10) {
+                return qsTr("Yesterday") + " " + date.getHours() + ":0" + date.getMinutes()
+            } else {
+                return qsTr("Yesterday") + " " + date.getHours() + ":" + date.getMinutes()
+            }
+        } else if (date.getMinutes() < 10) {
+            return date.toLocaleDateString() + " " + date.getHours() + ":0" + date.getMinutes()
+        } else {
+            return date.toLocaleDateString() + " " + date.getHours() + ":" + date.getMinutes()
+        }
     }
 
     ListView {
@@ -189,7 +229,7 @@ Page {
                         border.color: Universal.foreground
                         opacity: 0.9
                         color: "transparent"
-                        visible: model.c_ICON === undefined
+                        visible: model.c_ICON === undefined && collectionPage.currentCollectionMode === swipeView.collectionMode.People
 
                         Label {
                             text: getInitials()
@@ -238,7 +278,13 @@ Page {
                         visible: model.c_ICON !== undefined
                     }
                     Column {
+                        id: contactColumn
                         spacing: 3.0
+
+                        property real columnWidth: collectionPage.currentCollectionMode === swipeView.collectionMode.Threads ?
+                                                       contactBox.width - swipeView.innerSpacing * 2 - contactRow.spacing
+                                                     : contactBox.width - swipeView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
+
                         Label {
                             id: sourceLabel
                             topPadding: model.c_STITLE !== undefined ? 8.0 : 0.0
@@ -253,7 +299,7 @@ Page {
                         Label {
                             id: titleLabel
                             topPadding: model.c_TITLE !== undefined ? 8.0 : 0.0
-                            width: contactBox.width - swipeView.innerSpacing * 2 - collectionPage.iconSize - contactRow.spacing
+                            width: contactColumn.columnWidth
                             text: model.c_TITLE !== undefined ? model.c_TITLE : ""
                             font.pointSize: swipeView.largeFontSize
                             font.weight: Font.Black
@@ -279,7 +325,7 @@ Page {
                         }
                         Label {
                             id: textLabel
-                            width: contactBox.width - swipeView.innerSpacing * 2 - collectionPage.iconSize
+                            width: contactColumn.columnWidth
                             text: model.c_TEXT !== undefined ? model.c_TEXT : ""
                             font.pointSize: swipeView.largeFontSize
                             lineHeight: 1.1
@@ -303,8 +349,8 @@ Page {
                                 id: statusLabel
                                 bottomPadding:  model.c_IMAGE !== undefined ? swipeView.innerSpacing : 0.0
                                 width: statusBadge.visible ?
-                                           contactBox.width - swipeView.innerSpacing * 2 - collectionPage.iconSize - contactRow.spacing - statusBadge.width - statusRow.spacing
-                                         : contactBox.width - swipeView.innerSpacing * 2 - collectionPage.iconSize - contactRow.spacing
+                                           contactColumn.columnWidth - statusBadge.width - statusRow.spacing
+                                         : contactColumn.columnWidth
                                 text: model.c_STEXT !== undefined ? model.c_STEXT : ""
                                 font.pointSize: swipeView.smallFontSize
                                 clip: true
@@ -332,7 +378,7 @@ Page {
                         }
                         Image {
                             id: newsImage
-                            width: contactBox.width - swipeView.innerSpacing - collectionPage.iconSize - contactRow.spacing
+                            width: contactColumn.columnWidth
                             source: model.c_IMAGE !== undefined ? model.c_IMAGE : ""
                             fillMode: Image.PreserveAspectFit
 
@@ -397,14 +443,13 @@ Page {
             onClicked: {
                 console.log("Collections | List entry '" + model.c_TITLE + "' clicked.")
                 var imPoint = mapFromItem(iconMask, 0, 0)
-                    currentCollectionModel.executeSelection(model, swipeView.actionType.ShowGroup)
                 if (currentCollectionMode === swipeView.collectionMode.News
                         && mouseY > imPoint.y && mouseY < imPoint.y + iconMask.height
                         && mouseX > imPoint.x && mouseX < imPoint.x + iconMask.width) {
                     currentCollectionModel.executeSelection(model, swipeView.actionType.ShowGroup)
                 } else {
                     // todo: should be replaced by model id
-                    currentCollectionModel.executeSelection(model.c_TITLE, swipeView.actionType.ShowDetails)
+                    currentCollectionModel.executeSelection(model, swipeView.actionType.ShowDetails)
                 }
             }
             onPressAndHold: {
@@ -413,7 +458,6 @@ Page {
                     contactBox.color = Universal.accent
                     preventStealing = true
                     isMenuStatus = true
-                    backgroundItem.executeSelection()
                 }
             }
             onExited: {
@@ -470,15 +514,13 @@ Page {
         id: peopleModel
 
         property var modelArr: []
-//        property var modelArr: [{c_TITLE: "Max Miller", c_STEXT: "Hello World Ltd.", c_ICON: "/images/contact-max-miller.jpg"},
-//                                {c_TITLE: "Paula Black", c_STEXT: "How are you? This is a very long status text, that needs to be truncated", c_SBADGE: true}]
         property var contactThreads: new Object
 
         function loadData() {
-            console.log("Collections | loadData()")
+            console.log("Collections | Load data for contact collection")
 
             collectionPage.threads.forEach(function (thread, index) {
-                if ((!thread["read"] || Date.now() - thread["date"] < 86400) && thread["address"] !== undefined) {
+                if ((!thread["read"] || Date.now() - thread["date"] < collectionPage.threadAge) && thread["address"] !== undefined) {
                     contactThreads[thread["address"]] = thread
                 }
             })
@@ -536,17 +578,9 @@ Page {
                     thread = contactThreads[contact["phone.work"]]
                 }
                 if (thread !== undefined) {
-//                    cContact.c_STEXT = thread["body"]
                     cContact.c_SBADGE = !thread["read"]
                     if (!thread["read"]) {
-                        var timeDelta = (Date.now() - thread["date"]) / 1000 / 60
-                        if (timeDelta < 60) {
-                            cContact.c_STEXT = qsTr("1 New message, " + Math.floor(timeDelta) + " minutes ago")
-                        } else if (timeDelta < 60 * 24) {
-                            cContact.c_STEXT = qsTr("1 New message, " + Math.floor(timeDelta/60) + " hours ago")
-                        } else {
-                            cContact.c_STEXT = qsTr("1 New message, " + Math.floor(timeDelta/60/24) + " hours ago")
-                        }
+                        cContact.c_STEXT = "1 " + qsTr("New message") + " " + collectionPage.parseTime(thread["date"])
                     }
                 }
 
@@ -629,7 +663,7 @@ Page {
                     break
                 default:
                     // Todo: Create dynamic detail page
-                    swipeView.updateDetailPage("/images/contactTimeline.png", item, qsTr("Filter content ..."))
+                    swipeView.updateConversationPage(swipeView.conversationMode.Person, 0, item.c_TITLE)
             }
         }
     }
@@ -637,11 +671,56 @@ Page {
     ListModel {
         id: threadModel
 
-        property var modelArr: [{c_TITLE: "Julia Herbst", c_TEXT: "Hello, have you read my ideas about the project?", c_STEXT: "1h ago • SMS"},
-                                {c_TITLE: "Pierre Vaillant", c_TEXT: "First Studio recodings of Pink Elepants", c_STEXT: "Yesterday, 17:56 • Email"}]
+        property var modelArr: []
+
+        function loadData() {
+            console.log("Collections | Load data for thread collection")
+
+            collectionPage.threads.forEach(function (thread, index) {
+                var cThread = {}
+
+                function checkMatchigThread(contact) {
+                    return (contact["id"] === thread["person"]
+                            || (contact["phone.mobile"] === thread["address"])
+                            || (contact["phone.other"] === thread["address"])
+                            || (contact["phone.work"] === thread["address"])
+                            || (contact["phone.home"] === thread["address"]))
+                }
+
+                var contact = swipeView.contacts.find(checkMatchigThread)
+
+                if (contact !== undefined) {
+                    cThread.c_TITLE = contact["name"]
+                } else {
+                    cThread.c_TITLE = thread["address"]
+                }
+
+                if (thread["body"] !== undefined) {
+                    if (thread["isSent"]) {
+                        cThread.c_TEXT = qsTr("You") + ": " + thread["body"]
+                    } else {
+                        cThread.c_TEXT = thread["body"]
+                    }
+                }
+
+                var kind = "SMS"
+
+                if (thread["isMMS"]) {
+                    kind = "MMS"
+                }
+
+                cThread.c_STEXT = collectionPage.parseTime(thread["date"]) + " • " + qsTr(kind)
+
+                modelArr.push(cThread)
+            })
+        }
 
         function update (text) {
             console.log("Collections | Update model with text input: " + text)
+
+            if (modelArr.length === 0) {
+                loadData()
+            }
 
             var filteredModelDict = new Object
             var filteredModelItem
@@ -665,7 +744,8 @@ Page {
                 modelItemName = get(i).c_TEXT
                 existingGridDict[modelItemName] = true
             }
-            // remove items no longer in filtered set
+
+            // Remove items no longer in filtered set
             i = 0
             while (i < count) {
                 modelItemName = get(i).c_TEXT
@@ -678,7 +758,7 @@ Page {
                 }
             }
 
-            // add new items
+            // Add new items
             for (modelItemName in filteredModelDict) {
                 found = existingGridDict.hasOwnProperty(modelItemName)
                 if (!found) {

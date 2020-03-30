@@ -35,6 +35,10 @@ ApplicationWindow {
             'Threads' : 1,
             'News' : 2
         }
+        property var conversationMode: {
+            'Person' : 0,
+            'Thread' : 1
+        }
         property var actionType: {
             'SuggestContact': 0,
             'MakeCall': 20000,
@@ -96,10 +100,20 @@ ApplicationWindow {
         }
 
         Item {
+            id: conversationPage
+
+            Loader {
+                id: conversationPageLoader
+                anchors.fill: parent
+                sourceComponent: Qt.createComponent("/Conversation.qml", swipeView)
+            }
+        }
+
+        Item {
             id: detailPage
 
             Loader {
-                id: detaulPageLoader
+                id: detailPageLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/Details.qml", swipeView)
             }
@@ -111,10 +125,16 @@ ApplicationWindow {
             collectionPageLoader.item.updateCollectionMode(mode)
         }
 
+        function updateConversationPage(mode, id, name) {
+            console.log("MainView | Will update conversation page")
+            currentIndex = currentIndex + 1
+            conversationPageLoader.item.updateConversationPage(mode, id, name)
+        }
+
         function updateDetailPage(imageSource, headline, placeholderText) {
             console.log("MainView | Will update detail page")
             currentIndex = currentIndex + 1
-            detaulPageLoader.item.updateDetailPage(imageSource, headline, placeholderText)
+            detailPageLoader.item.updateDetailPage(imageSource, headline, placeholderText)
         }
 
         function loadContacts() {

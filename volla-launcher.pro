@@ -52,5 +52,6 @@ HEADERS += \
     fileio.h
 
 DISTFILES += \
+    android/src/com/volla/launcher/worker/CallWorker.java \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java
