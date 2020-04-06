@@ -12,11 +12,14 @@ Page {
     property var headline
     property var textInputField
     property string textInput
-    property int threadAge: 84000 * 7 // one week in seconds
-    property int currentConversationMode: 0
     property real widthFactor: 0.9
+    property int threadAge: 84000 * 7 // one week in seconds
+
+    property int currentConversationMode: 0
+    property var currentId: 0
     property var currentConversationModel: personContentModel
     property var messages: new Array
+    property var calls: new Array
 
     property string c_ID:        "id"      // the id of the message or content
     property string c_TEXT:      "text"    // large main text, regular
@@ -24,6 +27,7 @@ Page {
     property string c_IMAGE:     "image"   // preview image
     property string c_IS_SENT:   "sent"    // true if the content was sent by user
     property string c_KIND:      "kind"    // kind of content like sms or mms
+    property string c_DATE:      "date"    // date in milliseconds of the item
 
     onTextInputChanged: {
         console.log("Conversation | text input changed")
@@ -36,33 +40,46 @@ Page {
     }
 
     function updateConversationPage (mode, id, name) {
-        console.log("Conversation | Update conversation mode: " + mode)
+        console.log("Conversation | Update conversation mode: " + mode + " with id " + id)
 
-        if (mode !== currentConversationMode) {
+        if (mode !== currentConversationMode || currentId !== id) {
             currentConversationMode = mode
+            currentConversationModel.clear()
+            currentConversationModel.modelArr = new Array
 
             switch (mode) {
                 case swipeView.conversationMode.Person:
                     headline.text = name
+                    currentId = id
                     currentConversationModel = personContentModel
+                    loadConversation({"personId": id})
+                    loadCalls({"match": name})
                     break;
                 case swipeView.conversationMode.Thread:
                     headline.text = name
+                    currentId = id
                     currentConversationModel = threadContentModel
+                    loadConversation({"threadId": id})
                     break;
                 default:
                     console.log("Conversation | Unknown conversation mode")
                     break;
             }
-            currentConversationModel.update(textInput)
         }
     }
 
     function loadConversation(filter) {
         console.log("Conversations | Will load messages")
         // Todo: Update messages
-        conversationPage.messages = new Array
+        messages = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
+    }
+
+    function loadCalls(filter) {
+        console.log("Conversations | Will load calls")
+        // Todo: Update calls
+        calls = new Array
+        AN.SystemDispatcher.dispatch("volla.launcher.callConversationAction", filter)
     }
 
     // Todo: Improve display date and time
@@ -72,10 +89,12 @@ Page {
         var today = new Date()
         today.setHours(0)
         today.setMinutes(0)
+        today.setMilliseconds(0)
         var yesterday = new Date()
         yesterday.setHours(0)
         yesterday.setMinutes(0)
-        yesterday.setMilliseconds(yesterday.valueOf() - 84000)
+        yesterday.setMilliseconds(0)
+        yesterday = new Date(yesterday.valueOf() - 84000 * 1000)
         var timeDelta = (now.valueOf() - timeInMillis) / 1000 / 60
         if (timeDelta < 1) {
             return qsTr("Just now")
@@ -204,11 +223,11 @@ Page {
                         leftPadding: swipeView.innerSpacing
                         rightPadding: swipeView.innerSpacing
                         width: messageBox.width * widthFactor
-                        text: model.c_TEXT
+                        text: model.c_TEXT !== undefined ? model.c_TEXT : ""
                         lineHeight: 1.1
                         font.pointSize: swipeView.largeFontSize
                         wrapMode: Text.WordWrap
-                        visible: !model.c_IS_SENT
+                        visible: !model.c_IS_SENT && model.c_TEXT !== undefined
                     }
                     Label {
                         anchors.left: parent.left
@@ -230,13 +249,13 @@ Page {
                         leftPadding: swipeView.innerSpacing
                         rightPadding: swipeView.innerSpacing
                         width: messageBox.width * widthFactor
-                        text: model.c_TEXT
+                        text: model.c_TEXT !== undefined ? model.c_TEXT : ""
                         lineHeight: 1.1
                         font.pointSize: swipeView.largeFontSize
                         wrapMode: Text.WordWrap
                         opacity: 0.8
                         horizontalAlignment: Text.AlignRight
-                        visible: model.c_IS_SENT
+                        visible: model.c_IS_SENT && model.c_TEXT !== undefined
                     }
                     Label {
                         id: sentDate
@@ -284,6 +303,41 @@ Page {
 
         function loadData() {
             console.log("Conversation | Load data for person's content")
+
+            conversationPage.messages.forEach(function (message, index) {
+                var cMessage = {c_ID: "message." + message["id"]}
+
+                cMessage.c_TEXT = message["body"]
+
+                if (message["isMMS"] === true) {
+                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • MMS"
+                } else {
+                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • SMS"
+                }
+
+                cMessage.c_IS_SENT = message["isSent"]
+
+                if (message["image"] !== undefined) {
+                    cMessage.c_IMAGE = "data:image/png;base64," + message["image"]
+                }
+
+                cMessage.c_DATE = message["date"]
+
+                modelArr.push(cMessage)
+            })
+
+            conversationPage.calls.forEach(function (call, index) {
+                var cCall = {c_ID: "call." + call["id"]}
+
+                cCall.c_STEXT = conversationPage.parseTime(call["date"]) + " • Call"
+                cCall.c_IS_SENT = call["isSent"]
+
+                modelArr.push(cCall)
+            })
+
+            modelArr.sort(function(a,b) {
+                return b.c_DATE - a.c_DATE
+            })
         }
 
         function update(text) {
@@ -352,6 +406,26 @@ Page {
 
         function loadData() {
             console.log("Conversation | Load data for thread content")
+
+            conversationPage.messages.forEach(function (message, index) {
+                var cMessage = {c_ID: message["id"]}
+
+                cMessage.c_TEXT = message["body"]
+
+                if (message["isMMS"] === true) {
+                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • MMS"
+                } else {
+                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • SMS"
+                }
+
+                cMessage.c_IS_SENT = message["isSent"]
+
+                if (message["image"] !== undefined) {
+                    cMessage.c_IMAGE = "data:image/png;base64," + message["image"]
+                }
+
+                modelArr.push(cMessage)
+            })
         }
 
         function update (text) {
@@ -367,11 +441,11 @@ Page {
             var found
             var i
 
-            console.log("Conversation | Model has " + modelArr.length + "elements")
+            console.log("Conversation | Model has " + modelArr.length + " elements")
 
             for (i = 0; i < modelArr.length; i++) {
                 filteredModelItem = modelArr[i]
-                var modelItemName = modelArr[i].c_TEXT
+                var modelItemName = modelArr[i].c_ID
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
                     console.log("Conversation | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
@@ -380,14 +454,14 @@ Page {
 
             var existingGridDict = new Object
             for (i = 0; i < count; ++i) {
-                modelItemName = get(i).c_TEXT
+                modelItemName = get(i).c_ID
                 existingGridDict[modelItemName] = true
             }
 
             // Remove items no longer in filtered set
             i = 0
             while (i < count) {
-                modelItemName = get(i).c_TEXT
+                modelItemName = get(i).c_ID
                 found = filteredModelDict.hasOwnProperty(modelItemName)
                 if (!found) {
                     console.log("Conversation | Remove " + modelItemName)
@@ -423,13 +497,22 @@ Page {
     Connections {
         target: AN.SystemDispatcher
         onDispatched: {
-            // process the message
-            console.log("Conversation | onDispatched: " + type)
-            if (type === "volla.launcher.convrsationResponse") {
+            if (type === "volla.launcher.conversationResponse") {
+                console.log("Conversation | onDispatched: " + type)
                 conversationPage.messages = message["messages"]
                 message["messages"].forEach(function (message, index) {
                     for (const [messageKey, messageValue] of Object.entries(message)) {
                         console.log("Conversation | * " + messageKey + ": " + messageValue)
+                    }
+                })
+                conversationPage.currentConversationModel.loadData()
+                conversationPage.currentConversationModel.update(conversationPage.textInput)
+            } else if (type === "volla.launcher.callConversationResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                conversationPage.calls = message["calls"]
+                message["calls"].forEach(function (call, index) {
+                    for (const [callKey, callValue] of Object.entries(call)) {
+                        console.log("Collections | * " + callKey + ": " + callValue)
                     }
                 })
                 conversationPage.currentConversationModel.loadData()

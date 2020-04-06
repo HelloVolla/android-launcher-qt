@@ -14,7 +14,8 @@
 #include <QtAndroidExtras/QAndroidJniEnvironment>
 
 const QVector<QString> permissions({"android.permission.READ_CONTACTS",
-                                    "android.permission.READ_SMS"});
+                                    "android.permission.READ_SMS",
+                                    "android.permission.READ_CALL_LOG"});
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
     Q_UNUSED(vm);
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
 
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.ContactWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.MessageWorker");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.CallWorker");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

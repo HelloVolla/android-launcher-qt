@@ -16,20 +16,22 @@ Page {
     property int currentCollectionMode: 3
     property var currentCollectionModel: peopleModel
     property var threads: new Array
+    property var calls: new Array
     property var threadAge: 84000 * 10 // one day in seconds
+    property int maxCalls: 50
 
-    property string c_TITLE:     "title"   // large main title, bold
-    property string c_STITLE:    "stitle"  // small title above the main, grey
-    property string c_TEXT:      "text"    // large main text, regular
-    property string c_STEXT:     "stext"   // small text beyond the main text, grey
-    property string c_ICON:      "icon"    // small icon at the left side
-    property string c_IMAGE:     "image"   // preview image
-    property string c_BADGE:     "badge"   // red dot for unread content children
-    property string c_SBADGE:    "sbadge"  // red dot for unread messages
-    property string c_PHONE:     "phome"   // recent phone number
-    property string c_IS_MOBILE: "mobile"  // true if phone number is for a cell phone
-    property string c_EMAIL:     "email"   // recent email address
-
+    property string c_TITLE:     "title"    // large main title, bold
+    property string c_STITLE:    "stitle"   // small title above the main, grey
+    property string c_TEXT:      "text"     // large main text, regular
+    property string c_STEXT:     "stext"    // small text beyond the main text, grey
+    property string c_ICON:      "icon"     // small icon at the left side
+    property string c_IMAGE:     "image"    // preview image
+    property string c_BADGE:     "badge"    // red dot for unread content children
+    property string c_SBADGE:    "sbadge"   // red dot for unread messages
+    property string c_PHONE:     "phome"    // recent phone number
+    property string c_IS_MOBILE: "mobile"   // true if phone number is for a cell phone
+    property string c_EMAIL:     "email"    // recent email address
+    property string c_ID:        "id"       // id of the contact, thread or news
 
     onTextInputChanged: {
         console.log("Collections | text input changed")
@@ -46,6 +48,8 @@ Page {
 
         if (mode !== currentCollectionMode) {
             currentCollectionMode = mode
+            currentCollectionModel.clear()
+            currentCollectionModel.modelArr = new Array
 
             switch (mode) {
                 case swipeView.collectionMode.People:
@@ -53,6 +57,7 @@ Page {
                     textInputField.placeholderText = "Find poeple ..."
                     currentCollectionModel = peopleModel
                     collectionPage.loadThreads({})
+                    collectionPage.loadCalls({"count": maxCalls})
                     break;
                 case swipeView.collectionMode.Threads:
                     headline.text = qsTr("Threads")
@@ -70,7 +75,6 @@ Page {
                     console.log("Collections | Unknown collection mode")
                     break;
             }
-            currentCollectionModel.update(textInput)
         }
     }
 
@@ -81,6 +85,12 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
     }
 
+    function loadCalls(filter) {
+        console.log("Collections | Will load calls")
+        collectionPage.calls = new Array
+        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)
+    }
+
     // Todo: Improve display date and time
     function parseTime(timeInMillis) {
         var now = new Date()
@@ -88,10 +98,12 @@ Page {
         var today = new Date()
         today.setHours(0)
         today.setMinutes(0)
+        today.setMilliseconds(0)
         var yesterday = new Date()
         yesterday.setHours(0)
         yesterday.setMinutes(0)
-        yesterday.setMilliseconds(yesterday.valueOf() - 84000)
+        yesterday.setMilliseconds(0)
+        yesterday = new Date(yesterday.valueOf() - 84000 * 1000)
         var timeDelta = (now.valueOf() - timeInMillis) / 1000 / 60
         if (timeDelta < 1) {
             return qsTr("Just now")
@@ -515,6 +527,7 @@ Page {
 
         property var modelArr: []
         property var contactThreads: new Object
+        property var contactCalls: new Object
 
         function loadData() {
             console.log("Collections | Load data for contact collection")
@@ -525,10 +538,21 @@ Page {
                 }
             })
 
+            collectionPage.calls.forEach(function (call, index) {
+                if ((call["new"] || Date.now() - call["date"] < collectionPage.threadAge) && call["number"] !== undefined) {
+                    if (contactCalls[call["number"]] === undefined) {
+                        call["count"] = call["new"] ? 1 : 0
+                        contactCalls[call["number"]] = call
+                    } else if (call["new"] === true) {
+                        contactCalls[call["number"]]["count"] += 1
+                    }
+                }
+            })
+
             var contacts = swipeView.contacts.filter(checkStarredOrRecent)
             contacts.forEach(function (contact, index) {
                 console.log("Collections | Matched contact: " + contact["name"])
-                var cContact = {}
+                var cContact = {c_ID: contact["id"]}
 
                 if (contact["name"] !== undefined) {
                     cContact.c_TITLE = contact["name"]
@@ -577,10 +601,28 @@ Page {
                 if (thread === undefined) {
                     thread = contactThreads[contact["phone.work"]]
                 }
-                if (thread !== undefined) {
+
+                var call = contactCalls[contact["phone.mobile"]]
+                if (call === undefined) {
+                    call = contactCalls[contact["phone.other"]]
+                }
+                if (call === undefined) {
+                    call = contactCalls[contact["phone.work"]]
+                }
+
+                if ((thread !== undefined && call !== undefined && thread["date"] > call["date"])
+                        || (thread !== undefined && call === undefined)) {
                     cContact.c_SBADGE = !thread["read"]
                     if (!thread["read"]) {
+                        cContact.c_ITEM_ID = thread["thread_id"]
                         cContact.c_STEXT = "1 " + qsTr("New message") + " " + collectionPage.parseTime(thread["date"])
+                    }
+                } else if ((thread !== undefined && call !== undefined && thread["date"] < call["date"])
+                        || (thread === undefined && call !== undefined)) {
+                    cContact.c_SBADGE = call["new"]
+                    if (call["new"] === true) {
+                        var messageText = (call["count"] > 1) ? qsTr("New calls") : qsTr("New call")
+                        cContact.c_STEXT = call["count"] + " " + messageText + " " + collectionPage.parseTime(call["date"])
                     }
                 }
 
@@ -593,7 +635,11 @@ Page {
                     || (contact["phone.mobile"] in contactThreads)
                     || (contact["phone.other"] in contactThreads)
                     || (contact["phone.work"] in contactThreads)
-                    || (contact["phone.home"] in contactThreads))
+                    || (contact["phone.home"] in contactThreads)
+                    || (contact["phone.mobile"] in contactCalls)
+                    || (contact["phone.other"] in contactCalls)
+                    || (contact["phone.work"] in contactCalls)
+                    || (contact["phone.home"] in contactCalls))
         }
 
         function update(text) {
@@ -663,7 +709,7 @@ Page {
                     break
                 default:
                     // Todo: Create dynamic detail page
-                    swipeView.updateConversationPage(swipeView.conversationMode.Person, 0, item.c_TITLE)
+                    swipeView.updateConversationPage(swipeView.conversationMode.Person, item.c_ID, item.c_TITLE)
             }
         }
     }
@@ -677,7 +723,7 @@ Page {
             console.log("Collections | Load data for thread collection")
 
             collectionPage.threads.forEach(function (thread, index) {
-                var cThread = {}
+                var cThread = {c_ID: thread["thread_id"]}
 
                 function checkMatchigThread(contact) {
                     return (contact["id"] === thread["person"]
@@ -771,7 +817,7 @@ Page {
         }
 
         function executeSelection(item, typ) {
-            toast.show()
+            swipeView.updateConversationPage(swipeView.conversationMode.Thread, item.c_ID, item.c_TITLE)
         }
     }
 
@@ -781,8 +827,16 @@ Page {
         property var modelArr: [{c_STITLE: "The New York Times • Feed", c_TEXT: "What Makes People Charismatic and How You Can Be, Too", c_STEXT: "14 Min ago", c_ICON: "/images/news-ny-times.png", c_BADGE: true},
                                 {c_STITLE: "Ben Rogers\n@brogers • Twitter", c_TEXT: "Impressive view from the coars of the lake Juojärvi in Finnland :)", c_STEXT: "1h ago", c_ICON: "/images/news-ben-rogers.jpg", c_IMAGE: "/images/news-image.png", c_BADGE: false}]
 
+        function loadData() {
+
+        }
+
         function update (text) {
             console.log("Collections | Update model with text input: " + text)
+
+            if (modelArr.length === 0) {
+                loadData()
+            }
 
             var filteredModelDict = new Object
             var filteredModelItem
@@ -862,13 +916,22 @@ Page {
     Connections {
         target: AN.SystemDispatcher
         onDispatched: {
-            // process the message
-            console.log("Collections | onDispatched: " + type)
             if (type === "volla.launcher.threadResponse") {
+                console.log("Collections | onDispatched: " + type)
                 collectionPage.threads = message["threads"]
                 message["threads"].forEach(function (thread, index) {
                     for (const [threadKey, threadValue] of Object.entries(thread)) {
                         console.log("Collections | * " + threadKey + ": " + threadValue)
+                    }
+                })
+                collectionPage.currentCollectionModel.loadData()
+                collectionPage.currentCollectionModel.update(collectionPage.textInput)
+            } else if (type === "volla.launcher.callLogResponse") {
+                console.log("Collections | onDispatched: " + type)
+                collectionPage.calls = message["calls"]
+                message["calls"].forEach(function (call, index) {
+                    for (const [callKey, callValue] of Object.entries(call)) {
+                        console.log("Collections | * " + callKey + ": " + callValue)
                     }
                 })
                 collectionPage.currentCollectionModel.loadData()

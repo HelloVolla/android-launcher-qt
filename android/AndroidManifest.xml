@@ -93,4 +93,5 @@
 <!-- %%INSERT_PERMISSIONS -->
 <uses-permission android:name="android.permission.READ_CONTACTS"/>
 <uses-permission android:name="android.permission.READ_SMS"/>
+<uses-permission android:name="android.permission.READ_CALL_LOG"/>
 </manifest>

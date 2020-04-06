@@ -149,9 +149,8 @@ ApplicationWindow {
         Connections {
             target: AN.SystemDispatcher
             onDispatched: {
-                // process the message
-                console.log("MainView | onDispatched: " + type)
                 if (type === "volla.launcher.contactResponse") {
+                    console.log("MainView | onDispatched: " + type)
                     swipeView.contacts = message["contacts"]
                     message["contacts"].forEach(function (aContact, index) {
                         for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
