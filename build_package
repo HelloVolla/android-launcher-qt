@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BUILD_TARGET=${1:-android_arm64_v8a}
-EXECUTABLE=${EXECUTABLE:-$WORKSPACE/build_android}
+EXECUTABLE=${EXECUTABLE:-$WORKSPACE/build_package_android}
 
 if [[ "$BUILD_TARGET" != "android_arm64_v8a" && "$BUILD_TARGET" != "android_armv7" ]]; then
     echo "Usage: build_package [BUILD_TARGET]"
@@ -16,8 +16,10 @@ CONTAINER=${CONTAINER:-a12e/docker-qt:5.12-$BUILD_TARGET}
 TIMESTAMP=`date +%Y%m%d`
 BUILD_ID=${BUILD_ID:-$TIMESTAMP}
 
-CCACHE_DIR=$HOME/.ccache
-GRADLE_DIR=$HOME/.gradle/
+CACHE_DIR=$WORKSPACE/.cache
+CCACHE_DIR=$CACHE_DIR/.ccache
+GRADLE_DIR=$CACHE_DIR/.gradle
+MAVEN_DIR=$CACHE_DIR/.m2
 
 mkdir -p $WORKSPACE
 mkdir -p $CCACHE_DIR
@@ -26,10 +28,16 @@ mkdir -p $GRADLE_DIR
 [[ -v DISPLAY ]] && xhost +local:root
 
 docker run --rm \
-           -e BUILD_ID=$BUILD_ID \
-           -e WORKSPACE=$WORKSPACE \
-           -e CCACHE_DIR=$CCACHE_DIR \
-           -e BUILD_TARGET=$BUILD_TARGET \
+           -e BUILD_ID="$BUILD_ID" \
+           -e WORKSPACE="$WORKSPACE" \
+           -e CCACHE_DIR="$CCACHE_DIR" \
+           -e GRADLE_USER_HOME="$GRADLE_DIR" \
+           -e M2_HOME="$MAVEN_DIR" \
+           -e MAVEN_HOME="$MAVEN_DIR" \
+           -e BUILD_TARGET="$BUILD_TARGET" \
+           -e ANDROID_KEYSTORE_FILE_CONTENTS="$ANDROID_KEYSTORE_FILE_CONTENTS" \
+           -e ANDROID_KEYSTORE_ALIAS="$ANDROID_KEYSTORE_ALIAS" \
+           -e ANDROID_KEYSTORE_PASS="$ANDROID_KEYSTORE_PASS" \
            -v /tmp/.X11-unix:/tmp/.X11-unix \
            -v $CCACHE_DIR:$CCACHE_DIR \
            -v $GRADLE_DIR:$GRADLE_DIR \

@@ -3,8 +3,81 @@ kind: pipeline
 name: default
 
 steps:
-- name: build_android_arm64_v82
-  image: a12e/docker-qt:5.12-android_arm64_v82
-  commands:
-  - ./build_android
+  - name: restore-cache
+    image: appleboy/drone-sftp-cache
+    settings:
+      server: volla.tech
+      port: 22
+      username: drone
+      key:
+        from_secret: DRONE_DEPLOY_KEY
+      path: /cache
+      restore: true
+      mount:
+        - ./.cache/
 
+  - name: build-android_arm64_v8a
+    image: a12e/docker-qt:5.12-android_arm64_v8a
+    user: root
+    environment:
+      CACHE_DIR: ./.cache/
+      ANDROID_KEYSTORE_FILE_CONTENTS:
+        from_secret: ANDROID_KEYSTORE_FILE_CONTENTS
+      ANDROID_KEYSTORE_ALIAS:
+        from_secret: ANDROID_KEYSTORE_ALIAS
+      ANDROID_KEYSTORE_PASS:
+        from_secret: ANDROID_KEYSTORE_PASS
+    commands:
+      - export M2_HOME=`realpath -m $CACHE_DIR/.m2`
+      - export MAVEN_HOME=`realpath -m $CACHE_DIR/.m2`
+      - export GRADLE_USER_HOME=`realpath -m $CACHE_DIR/.gradle`
+      - mkdir -p $MAVEN_HOME
+      - mkdir -p $GRADLE_USER_HOME
+      - ./build_package_android
+
+  - name: archive nightly
+    image: appleboy/drone-sftp-cache
+    when:
+      status: success
+      event: cron
+      cron:
+        - nightly
+    settings:
+      server: volla.tech
+      port: 22
+      username: drone
+      key:
+        from_secret: DRONE_DEPLOY_KEY
+      path: /builds/nightly/
+      rebuild: true
+      mount:
+        - ./releases/
+
+  - name: archive release
+    image: appleboy/drone-sftp-cache
+    when:
+      status: success
+      event: tag
+    settings:
+      server: volla.tech
+      port: 22
+      username: drone
+      key:
+        from_secret: DRONE_DEPLOY_KEY
+      path: /builds/release/
+      rebuild: true
+      mount:
+        - ./releases/
+
+  - name: rebuild-cache
+    image: appleboy/drone-sftp-cache
+    settings:
+      server: volla.tech
+      port: 22
+      username: drone
+      key:
+        from_secret: DRONE_DEPLOY_KEY
+      path: /cache
+      rebuild: true
+      mount:
+        - ./.cache/
