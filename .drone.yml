@@ -39,9 +39,10 @@ steps:
     image: appleboy/drone-sftp-cache
     when:
       status: success
-      event: cron
+      event:
+      - cron
       cron:
-        - nightly
+      - nightly
     settings:
       server: volla.tech
       port: 22
