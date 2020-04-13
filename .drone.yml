@@ -2,6 +2,8 @@
 kind: pipeline
 name: default
 
+
+#TODO: Trigger an FDroid Repo update once the nightly/release builds succeed
 steps:
   - name: restore-cache
     image: appleboy/drone-sftp-cache
@@ -35,7 +37,7 @@ steps:
       - mkdir -p $GRADLE_USER_HOME
       - ./build_package_android
 
-  - name: archive nightly
+  - name: archive-nightly
     image: appleboy/drone-sftp-cache
     when:
       status: success
@@ -54,7 +56,7 @@ steps:
       mount:
         - ./releases/
 
-  - name: archive release
+  - name: archive-release
     image: appleboy/drone-sftp-cache
     when:
       status: success
