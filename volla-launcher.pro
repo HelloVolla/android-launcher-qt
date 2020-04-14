@@ -32,6 +32,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 include(vendor/vendor.pri)
+include(android_openssl/openssl.pri)
+
 # ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 android {
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
@@ -52,6 +54,7 @@ HEADERS += \
     fileio.h
 
 DISTFILES += \
+    android/src/com/volla/launcher/worker/AccountWorker.java \
     android/src/com/volla/launcher/worker/CallWorker.java \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java

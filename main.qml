@@ -137,6 +137,10 @@ ApplicationWindow {
             detailPageLoader.item.updateDetailPage(imageSource, headline, placeholderText)
         }
 
+        function updateNewsPage() {
+
+        }
+
         function loadContacts() {
             console.log("MainView | Will load contacts")
             AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})

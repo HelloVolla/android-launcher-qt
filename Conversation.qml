@@ -336,7 +336,7 @@ Page {
             })
 
             modelArr.sort(function(a,b) {
-                return b.c_DATE - a.c_DATE
+                return a.c_DATE - b.c_DATE
             })
         }
 
@@ -392,6 +392,8 @@ Page {
                     append(filteredModelDict[modelItemName])
                 }
             }
+
+            listView.positionViewAtEnd()
         }
 
         function executeSelection(item, typ) {
@@ -425,6 +427,10 @@ Page {
                 }
 
                 modelArr.push(cMessage)
+            })
+
+            modelArr.sort(function(a,b) {
+                return a.c_DATE - b.c_DATE
             })
         }
 
@@ -481,6 +487,8 @@ Page {
                     append(filteredModelDict[modelItemName])
                 }
             }
+
+            listView.positionViewAtEnd()
         }
 
         function executeSelection(item, typ) {

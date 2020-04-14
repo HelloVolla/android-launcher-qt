@@ -32,6 +32,8 @@ Page {
     property string c_IS_MOBILE: "mobile"   // true if phone number is for a cell phone
     property string c_EMAIL:     "email"    // recent email address
     property string c_ID:        "id"       // id of the contact, thread or news
+    property string c_CHANNEL:   "channel"  // twitter or news channel
+    property string c_TSTAMP:    "tstamp"   // timestamp to sort the list
 
     onTextInputChanged: {
         console.log("Collections | text input changed")
@@ -70,6 +72,8 @@ Page {
                     textInputField.placeholderText = "Find news ..."
                     currentCollectionModel = newsModel
                     collectionPage.threads = new Array
+                    collectionPage.calls = new Array
+                    currentCollectionModel.update("")
                     break;
                 default:
                     console.log("Collections | Unknown collection mode")
@@ -244,7 +248,7 @@ Page {
                         visible: model.c_ICON === undefined && collectionPage.currentCollectionMode === swipeView.collectionMode.People
 
                         Label {
-                            text: getInitials()
+                            text: model.c_TITLE !== undefined ? getInitials() : "?"
                             height: parent.height
                             width: parent.width
                             horizontalAlignment: Text.AlignHCenter
@@ -253,7 +257,7 @@ Page {
                             opacity: 0.9
                             font.pointSize: swipeView.largeFontSize
 
-                            function getInitials() {
+                            function getInitials() {                      
                                 const namesArray = model.c_TITLE.split(' ');
                                 if (namesArray.length === 1) return `${namesArray[0].charAt(0)}`;
                                 else return `${namesArray[0].charAt(0)}${namesArray[namesArray.length - 1].charAt(0)}`;
@@ -824,11 +828,101 @@ Page {
     ListModel {
         id: newsModel
 
-        property var modelArr: [{c_STITLE: "The New York Times • Feed", c_TEXT: "What Makes People Charismatic and How You Can Be, Too", c_STEXT: "14 Min ago", c_ICON: "/images/news-ny-times.png", c_BADGE: true},
-                                {c_STITLE: "Ben Rogers\n@brogers • Twitter", c_TEXT: "Impressive view from the coars of the lake Juojärvi in Finnland :)", c_STEXT: "1h ago", c_ICON: "/images/news-ben-rogers.jpg", c_IMAGE: "/images/news-image.png", c_BADGE: false}]
+        // todo: Read from settings
+        property var rssFeeds: [{"source": "https://www.nzz.ch/recent.rss", "title": "NZZ", "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
+                                {"source": "https://www.chip.de/rss/rss_topnews.xml", "title": "Chip.de", "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
+                                {"source": "https://www.theguardian.com/world/rss", "title": "The Guardian", "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
+
+        property var modelArr: []
+            // [{c_STITLE: "The New York Times • Feed", c_TEXT: "What Makes People Charismatic and How You Can Be, Too", c_STEXT: "14 Min ago", c_ICON: "/images/news-ny-times.png", c_BADGE: true},
+            //  {c_STITLE: "Ben Rogers\n@brogers • Twitter", c_TEXT: "Impressive view from the coars of the lake Juojärvi in Finnland :)", c_STEXT: "1h ago", c_ICON: "/images/news-ben-rogers.jpg", c_IMAGE: "/images/news-image.png", c_BADGE: false}]
 
         function loadData() {
+            // Iterate over rss feeds to the the first item
+            rssFeeds.forEach(function (rssFeed, index) {
+                console.log("Collections | Create request for" + rssFeed.source)
+                var doc = new XMLHttpRequest();
+                doc.onreadystatechange = function() {
+                    if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                        console.log("Collections | Received header status: " + doc.status);
+                        if (doc.status !== 200) {
+                            toast.text = qsTr("Could not load RSS feed " + rssFeed.title)
+                            toast.show()
+                        }
+                    } else if (doc.readyState === XMLHttpRequest.DONE) {
+                        var cNews = {c_CHANNEL: rssFeed.source, c_ICON: rssFeed.icon}
 
+                        var rss = doc.responseXML.documentElement
+                        var channel
+                        for (var i = 0; i < rss.childNodes.length; ++i) {
+                            if (rss.childNodes[i].nodeName === "channel") {
+                                channel = rss.childNodes[i]
+                                break
+                            }
+                        }
+                        if (channel === undefined) {
+                            console.log("Collection | Missing rss channel")
+                            toast.text = qsTr("Invalid RSS feed: ") + rssFeed.title
+                            toast.show()
+                            return
+                        }
+
+                        var feedItem
+                        for (i = 0; i < channel.childNodes.length; ++i) {
+                            if (channel.childNodes[i].nodeName === "title") {
+                                var childNode = channel.childNodes[i]
+                                var textNode = childNode.firstChild
+                                cNews.c_STITLE = textNode.nodeValue + " • Feed"
+                            }
+                            if (channel.childNodes[i].nodeName === "item") {
+                                feedItem = channel.childNodes[i]
+                                break
+                            }
+                        }
+                        if (feedItem === undefined) {
+                            console.log("Collection | Missing rss feed item")
+                            toast.text = qsTr("Missing RSS item: ") + rssFeed.title
+                            return
+                        }
+                        for (i = 0; i < feedItem.childNodes.length; ++i) {
+                            childNode = feedItem.childNodes[i]
+                            textNode = childNode.firstChild
+
+                            if (childNode.nodeName === "title") {
+                                cNews.c_TEXT = textNode.nodeValue
+                            }
+                            else if (childNode.nodeName === "pubDate") {
+                                var date = new Date(textNode.nodeValue)
+                                cNews.c_TSTAMP = date.valueOf()
+                                cNews.c_STEXT = collectionPage.parseTime(date.valueOf())
+                            }
+                            else if (childNode.nodeName === "link") {
+                                cNews.c_ID = textNode.nodeValue
+
+                                if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
+                                    cNews.c_BADGE = true
+                                }
+                            }
+                            else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail") {
+                                for (var ii = 0; ii < childNode.attributes.length; ++ii) {
+                                    var attribute = childNode.attributes[ii]
+                                    if (attribute.name === "url") {
+                                        console.log("Collections | Image: " + attribute.value)
+                                        cNews.c_IMAGE = attribute.value
+                                        break
+                                    }
+                                }
+                            }
+                        }
+
+                        modelArr.push(cNews)
+                        update(collectionPage.textInput)
+                    }
+                }
+
+                doc.open("GET", rssFeed.source);
+                doc.send();
+            })
         }
 
         function update (text) {
@@ -837,6 +931,10 @@ Page {
             if (modelArr.length === 0) {
                 loadData()
             }
+
+            modelArr.sort(function(a,b) {
+                return b.c_TSTAMP - a.c_TSTAMP
+            })
 
             var filteredModelDict = new Object
             var filteredModelItem
@@ -889,21 +987,10 @@ Page {
             if (type === swipeView.actionType.ShowGroup) {
                 console.log("Collections | Group view not implemented yet")
             } else {
-                swipeView.updateDetailPage("/images/newsDetail01.png", "", "")
+                console.log("Collections | Detail view not implemented yet")
             }
-        }
-    }
-
-    AN.Util {
-        id: util
-
-        onSmsFetched: {
-            console.log("Collections | " + smsMessagesCount + "SMS fetched")
-            smsMessages.forEach(function (smsMessage, index) {
-                for (const [messageKey, messageValue] of Object.entries(smsMessage)) {
-                    console.log("Collections | * " + messageKey + ": " + messageValue)
-                }
-            })
+            toast.text = qsTr("Not yet implemented")
+            toast.show()
         }
     }
 

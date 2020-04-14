@@ -65,5 +65,6 @@
         <file>images/news-image.png</file>
         <file>images/news-ny-times.png</file>
         <file>Conversation.qml</file>
+        <file>Feed.qml</file>
     </qresource>
 </RCC>
