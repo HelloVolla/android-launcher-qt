@@ -1,3 +1,6 @@
 [submodule "vendor/android/native/pri"]
 	path = vendor/android/native/pri
 	url = https://github.com/HelloVolla/androidnative.pri
+[submodule "vendor/android_openssl"]
+	path = vendor/android_openssl
+	url = https://github.com/KDAB/android_openssl

@@ -32,7 +32,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 include(vendor/vendor.pri)
-include(android_openssl/openssl.pri)
+include(vendor/android_openssl/openssl.pri)
 
 # ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 android {
