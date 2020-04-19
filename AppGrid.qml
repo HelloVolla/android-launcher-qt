@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
-import QtQuick.XmlListModel 2.13
+import QtQuick.XmlListModel 2.12
 import QtGraphicalEffects 1.12
 
 import com.volla.launcher.backend 1.0
