@@ -6,7 +6,8 @@ BUILD_ID=${BUILD_ID:-$TIMESTAMP}
 WORKSPACE=${WORKSPACE:-$PWD}
 BUILD_DIR=$WORKSPACE/build/$BUILD_TARGET
 ANDROID_BUILD_DIR=${BUILD_DIR}/com.volla.launcher-${BUILD_TARGET}-${BUILD_ID}/
-RELEASE_DIR=$WORKSPACE/releases
+RELEASE_DIR=${1:-"$WORKSPACE/releases"}
+RELEASE_DIR="`readlink -fm $RELEASE_DIR`"
 
 #Got the platform from readme of https://github.com/a12e/docker-qt
 SDK_PLATFORM=android-21

@@ -2,7 +2,6 @@
 kind: pipeline
 name: default
 
-
 #TODO: Trigger an FDroid Repo update once the nightly/release builds succeed
 steps:
   - name: restore-cache
@@ -33,44 +32,54 @@ steps:
       - export M2_HOME=`realpath -m $CACHE_DIR/.m2`
       - export MAVEN_HOME=`realpath -m $CACHE_DIR/.m2`
       - export GRADLE_USER_HOME=`realpath -m $CACHE_DIR/.gradle`
+      - export VERSION=`git describe --tags || git rev-parse --short HEAD`
+      - export TIMESTAMP=`date +%Y%m%d%H%M`
+      - export BUILD_ID="$VERSION-$TIMESTAMP"
       - mkdir -p $MAVEN_HOME
       - mkdir -p $GRADLE_USER_HOME
-      - ./build_package_android
+      - mkdir -p releases
+      - ./build_package_android ./releases
 
   - name: archive-nightly
-    image: appleboy/drone-sftp-cache
+    image: a12e/docker-qt:5.12-android_arm64_v8a
     when:
       status: success
       event:
       - cron
       cron:
       - nightly
-    settings:
-      server: volla.tech
-      port: 22
-      username: drone
-      key:
+    environment:
+      DRONE_DEPLOY_KEY:
         from_secret: DRONE_DEPLOY_KEY
-      path: /builds/nightly/
-      rebuild: true
-      mount:
-        - ./releases/
+    commands:
+      - APK_PATH="`realpath ./releases/`"
+      - KEY_PATH=/tmp/deploykey
+      - UPLOAD_PATH="/builds/nightly/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/"
+      - SFTP_OPTIONS="-b - -i $KEY_PATH -o CheckHostIP=no -o StrictHostKeyChecking=no drone@volla.tech"
+      - echo "$${DRONE_DEPLOY_KEY}" > $KEY_PATH
+      - chmod 06400 $KEY_PATH
+      - DIR="$UPLOAD_PATH"; while [ "$DIR" != / ]; do echo -mkdir "$DIR"; DIR=`readlink -fm "$DIR"/..`; done | tac | sftp $SFTP_OPTIONS
+      - find "$APK_PATH" -type f -name "*.apk" -exec echo -put \"{}\" \;| sftp $SFTP_OPTIONS:$UPLOAD_PATH
+      - rm $KEY_PATH
 
   - name: archive-release
-    image: appleboy/drone-sftp-cache
+    image: a12e/docker-qt:5.12-android_arm64_v8a
     when:
       status: success
       event: tag
-    settings:
-      server: volla.tech
-      port: 22
-      username: drone
-      key:
+    environment:
+      DRONE_DEPLOY_KEY:
         from_secret: DRONE_DEPLOY_KEY
-      path: /builds/release/
-      rebuild: true
-      mount:
-        - ./releases/
+    commands:
+      - APK_PATH="`realpath ./releases/`"
+      - KEY_PATH=/tmp/deploykey
+      - UPLOAD_PATH="/builds/release/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/"
+      - SFTP_OPTIONS="-b - -i /tmp/deploykey -o CheckHostIP=no -o StrictHostKeyChecking=no drone@volla.tech"
+      - echo "$${DRONE_DEPLOY_KEY}" > $KEY_PATH
+      - chmod 0600 $KEY_PATH
+      - DIR="$UPLOAD_PATH"; while [ "$DIR" != / ]; do echo -mkdir "$DIR"; DIR=`readlink -fm "$DIR"/..`; done | tac | sftp $SFTP_OPTIONS
+      - find "$APK_PATH" -type f -name "*.apk" -exec echo -put \"{}\" \;| sftp $SFTP_OPTIONS:$UPLOAD_PATH
+      - rm $KEY_PATH
 
   - name: rebuild-cache
     image: appleboy/drone-sftp-cache
