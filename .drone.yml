@@ -43,7 +43,6 @@ steps:
   - name: archive-nightly
     image: a12e/docker-qt:5.12-android_arm64_v8a
     when:
-      status: success
       event:
       - cron
       cron:
@@ -65,7 +64,6 @@ steps:
   - name: archive-release
     image: a12e/docker-qt:5.12-android_arm64_v8a
     when:
-      status: success
       event: tag
     environment:
       DRONE_DEPLOY_KEY:
@@ -80,6 +78,24 @@ steps:
       - DIR="$UPLOAD_PATH"; while [ "$DIR" != / ]; do echo -mkdir "$DIR"; DIR=`readlink -fm "$DIR"/..`; done | tac | sftp $SFTP_OPTIONS
       - find "$APK_PATH" -type f -name "*.apk" -exec echo -put \"{}\" \;| sftp $SFTP_OPTIONS:$UPLOAD_PATH
       - rm $KEY_PATH
+
+  #TODO: Make sure the key has the least amount of privileges
+  - name: update-fdroid
+    image: plugins/downstream
+    when:
+      event:
+      - cron
+      - tag
+      cron:
+      - nightly
+    settings:
+      server: https://drone.volla.tech
+      token:
+        from_secret: DRONE_ACCESS_TOKEN
+      fork: true
+      repositories:
+        - volla/fdroid-updater@master
+
 
   - name: rebuild-cache
     image: appleboy/drone-sftp-cache
