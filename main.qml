@@ -39,6 +39,10 @@ ApplicationWindow {
             'Person' : 0,
             'Thread' : 1
         }
+        property var feedMode: {
+            'RSS' : 0,
+            'Twitter': 1
+        }
         property var actionType: {
             'SuggestContact': 0,
             'MakeCall': 20000,
@@ -56,6 +60,8 @@ ApplicationWindow {
             'OpenCam': 20012
         }
         property var contacts: new Array
+
+        property var newsPage
 
         property string galleryApp: "com.google.android.apps.photos"
         property string calendarApp: "com.google.android.calendar"
@@ -100,10 +106,10 @@ ApplicationWindow {
         }
 
         Item {
-            id: conversationPage
+            id: conversationAndNewsPage
 
             Loader {
-                id: conversationPageLoader
+                id: conversationAndNewsPageLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/Conversation.qml", swipeView)
             }
@@ -127,8 +133,9 @@ ApplicationWindow {
 
         function updateConversationPage(mode, id, name) {
             console.log("MainView | Will update conversation page")
+            conversationAndNewsPageLoader.sourceComponent = Qt.createComponent("/Conversation.qml", swipeView)
+            conversationAndNewsPageLoader.item.updateConversationPage(mode, id, name)
             currentIndex = currentIndex + 1
-            conversationPageLoader.item.updateConversationPage(mode, id, name)
         }
 
         function updateDetailPage(imageSource, headline, placeholderText) {
@@ -137,13 +144,53 @@ ApplicationWindow {
             detailPageLoader.item.updateDetailPage(imageSource, headline, placeholderText)
         }
 
-        function updateNewsPage() {
-
+        function updateNewsPage(mode, id, name, icon) {
+            console.log("MainView | Will update news page")
+            conversationAndNewsPageLoader.sourceComponent = Qt.createComponent("/Feed.qml", swipeView)
+            conversationAndNewsPageLoader.item.updateFeedPage(mode, id, name, icon)
+            currentIndex = currentIndex + 1
         }
 
         function loadContacts() {
             console.log("MainView | Will load contacts")
             AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+        }
+
+        // Todo: Improve display date and time
+        function parseTime(timeInMillis) {
+            var now = new Date()
+            var date = new Date(timeInMillis)
+            var today = new Date()
+            today.setHours(0)
+            today.setMinutes(0)
+            today.setMilliseconds(0)
+            var yesterday = new Date()
+            yesterday.setHours(0)
+            yesterday.setMinutes(0)
+            yesterday.setMilliseconds(0)
+            yesterday = new Date(yesterday.valueOf() - 84000 * 1000)
+            var timeDelta = (now.valueOf() - timeInMillis) / 1000 / 60
+            if (timeDelta < 1) {
+                return qsTr("Just now")
+            } else if (timeDelta < 60) {
+                return Math.floor(timeDelta) + " " + qsTr("minutes ago")
+            } else if (date.valueOf() > today.valueOf()) {
+                if (date.getMinutes() < 10) {
+                    return qsTr("Today") + " " + date.getHours() + ":0" + date.getMinutes()
+                } else {
+                    return qsTr("Today") + " " + date.getHours() + ":" + date.getMinutes()
+                }
+            } else if (date.valueOf() > yesterday.valueOf()) {
+                if (date.getMinutes() < 10) {
+                    return qsTr("Yesterday") + " " + date.getHours() + ":0" + date.getMinutes()
+                } else {
+                    return qsTr("Yesterday") + " " + date.getHours() + ":" + date.getMinutes()
+                }
+            } else if (date.getMinutes() < 10) {
+                return date.toLocaleDateString() + " " + date.getHours() + ":0" + date.getMinutes()
+            } else {
+                return date.toLocaleDateString() + " " + date.getHours() + ":" + date.getMinutes()
+            }
         }
 
         Component.onCompleted: {

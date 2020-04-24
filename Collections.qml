@@ -95,43 +95,6 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)
     }
 
-    // Todo: Improve display date and time
-    function parseTime(timeInMillis) {
-        var now = new Date()
-        var date = new Date(timeInMillis)
-        var today = new Date()
-        today.setHours(0)
-        today.setMinutes(0)
-        today.setMilliseconds(0)
-        var yesterday = new Date()
-        yesterday.setHours(0)
-        yesterday.setMinutes(0)
-        yesterday.setMilliseconds(0)
-        yesterday = new Date(yesterday.valueOf() - 84000 * 1000)
-        var timeDelta = (now.valueOf() - timeInMillis) / 1000 / 60
-        if (timeDelta < 1) {
-            return qsTr("Just now")
-        } else if (timeDelta < 60) {
-            return Math.floor(timeDelta) + " " + qsTr("minutes ago")
-        } else if (date.valueOf() > today.valueOf()) {
-            if (date.getMinutes() < 10) {
-                return qsTr("Today") + " " + date.getHours() + ":0" + date.getMinutes()
-            } else {
-                return qsTr("Today") + " " + date.getHours() + ":" + date.getMinutes()
-            }
-        } else if (date.valueOf() > yesterday.valueOf()) {
-            if (date.getMinutes() < 10) {
-                return qsTr("Yesterday") + " " + date.getHours() + ":0" + date.getMinutes()
-            } else {
-                return qsTr("Yesterday") + " " + date.getHours() + ":" + date.getMinutes()
-            }
-        } else if (date.getMinutes() < 10) {
-            return date.toLocaleDateString() + " " + date.getHours() + ":0" + date.getMinutes()
-        } else {
-            return date.toLocaleDateString() + " " + date.getHours() + ":" + date.getMinutes()
-        }
-    }
-
     ListView {
         id: listView
         anchors.fill: parent
@@ -394,9 +357,10 @@ Page {
                         }
                         Image {
                             id: newsImage
-                            width: contactColumn.columnWidth
+                            sourceSize.width: contactColumn.columnWidth
                             source: model.c_IMAGE !== undefined ? model.c_IMAGE : ""
                             fillMode: Image.PreserveAspectFit
+                            asynchronous: true
 
                             Desaturate {
                                 anchors.fill: newsImage
@@ -405,6 +369,19 @@ Page {
                             }
                         }
                     }                    
+                }
+                Rectangle {
+                    anchors.top: contactBox.top
+                    anchors.topMargin: swipeView.innerSpacing * 0.5
+                    anchors.left: contactBox.left
+                    anchors.leftMargin: swipeView.innerSpacing
+                    width: collectionPage.iconSize
+                    height: collectionPage.iconSize
+                    color: "transparent"
+                    border.color: Universal.foreground
+                    opacity: 0.7
+                    radius: height * 0.5
+                    visible: collectionPage.currentCollectionMode === swipeView.collectionMode.News
                 }
                 Rectangle {
                     id: notificationBadge
@@ -457,7 +434,7 @@ Page {
             }
 
             onClicked: {
-                console.log("Collections | List entry '" + model.c_TITLE + "' clicked.")
+                console.log("Collections | List entry '" + model.c_ID + "' clicked.")
                 var imPoint = mapFromItem(iconMask, 0, 0)
                 if (currentCollectionMode === swipeView.collectionMode.News
                         && mouseY > imPoint.y && mouseY < imPoint.y + iconMask.height
@@ -619,14 +596,14 @@ Page {
                     cContact.c_SBADGE = !thread["read"]
                     if (!thread["read"]) {
                         cContact.c_ITEM_ID = thread["thread_id"]
-                        cContact.c_STEXT = "1 " + qsTr("New message") + " " + collectionPage.parseTime(thread["date"])
+                        cContact.c_STEXT = "1 " + qsTr("New message") + " " + swipeView.parseTime(thread["date"])
                     }
                 } else if ((thread !== undefined && call !== undefined && thread["date"] < call["date"])
                         || (thread === undefined && call !== undefined)) {
                     cContact.c_SBADGE = call["new"]
                     if (call["new"] === true) {
                         var messageText = (call["count"] > 1) ? qsTr("New calls") : qsTr("New call")
-                        cContact.c_STEXT = call["count"] + " " + messageText + " " + collectionPage.parseTime(call["date"])
+                        cContact.c_STEXT = call["count"] + " " + messageText + " " + swipeView.parseTime(call["date"])
                     }
                 }
 
@@ -759,7 +736,7 @@ Page {
                     kind = "MMS"
                 }
 
-                cThread.c_STEXT = collectionPage.parseTime(thread["date"]) + " • " + qsTr(kind)
+                cThread.c_STEXT = swipeView.parseTime(thread["date"]) + " • " + qsTr(kind)
 
                 modelArr.push(cThread)
             })
@@ -834,8 +811,6 @@ Page {
                                 {"source": "https://www.theguardian.com/world/rss", "title": "The Guardian", "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
 
         property var modelArr: []
-            // [{c_STITLE: "The New York Times • Feed", c_TEXT: "What Makes People Charismatic and How You Can Be, Too", c_STEXT: "14 Min ago", c_ICON: "/images/news-ny-times.png", c_BADGE: true},
-            //  {c_STITLE: "Ben Rogers\n@brogers • Twitter", c_TEXT: "Impressive view from the coars of the lake Juojärvi in Finnland :)", c_STEXT: "1h ago", c_ICON: "/images/news-ben-rogers.jpg", c_IMAGE: "/images/news-image.png", c_BADGE: false}]
 
         function loadData() {
             // Iterate over rss feeds to the the first item
@@ -894,7 +869,7 @@ Page {
                             else if (childNode.nodeName === "pubDate") {
                                 var date = new Date(textNode.nodeValue)
                                 cNews.c_TSTAMP = date.valueOf()
-                                cNews.c_STEXT = collectionPage.parseTime(date.valueOf())
+                                cNews.c_STEXT = swipeView.parseTime(date.valueOf())
                             }
                             else if (childNode.nodeName === "link") {
                                 cNews.c_ID = textNode.nodeValue
@@ -985,12 +960,12 @@ Page {
 
         function executeSelection(item, type) {
             if (type === swipeView.actionType.ShowGroup) {
-                console.log("Collections | Group view not implemented yet")
+                swipeView.updateNewsPage(swipeView.feedMode.RSS, item.c_CHANNEL, item.c_STITLE, item.c_ICON)
             } else {
                 console.log("Collections | Detail view not implemented yet")
+                toast.text = qsTr("Not yet implemented")
+                toast.show()
             }
-            toast.text = qsTr("Not yet implemented")
-            toast.show()
         }
     }
 

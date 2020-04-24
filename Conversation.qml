@@ -82,43 +82,6 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.callConversationAction", filter)
     }
 
-    // Todo: Improve display date and time
-    function parseTime(timeInMillis) {
-        var now = new Date()
-        var date = new Date(timeInMillis)
-        var today = new Date()
-        today.setHours(0)
-        today.setMinutes(0)
-        today.setMilliseconds(0)
-        var yesterday = new Date()
-        yesterday.setHours(0)
-        yesterday.setMinutes(0)
-        yesterday.setMilliseconds(0)
-        yesterday = new Date(yesterday.valueOf() - 84000 * 1000)
-        var timeDelta = (now.valueOf() - timeInMillis) / 1000 / 60
-        if (timeDelta < 1) {
-            return qsTr("Just now")
-        } else if (timeDelta < 60) {
-            return Math.floor(timeDelta) + " " + qsTr("minutes ago")
-        } else if (date.valueOf() > today.valueOf()) {
-            if (date.getMinutes() < 10) {
-                return qsTr("Today") + " " + date.getHours() + ":0" + date.getMinutes()
-            } else {
-                return qsTr("Today") + " " + date.getHours() + ":" + date.getMinutes()
-            }
-        } else if (date.valueOf() > yesterday.valueOf()) {
-            if (date.getMinutes() < 10) {
-                return qsTr("Yesterday") + " " + date.getHours() + ":0" + date.getMinutes()
-            } else {
-                return qsTr("Yesterday") + " " + date.getHours() + ":" + date.getMinutes()
-            }
-        } else if (date.getMinutes() < 10) {
-            return date.toLocaleDateString() + " " + date.getHours() + ":0" + date.getMinutes()
-        } else {
-            return date.toLocaleDateString() + " " + date.getHours() + ":" + date.getMinutes()
-        }
-    }
-
     ListView {
         id: listView
         anchors.fill: parent
@@ -310,9 +273,9 @@ Page {
                 cMessage.c_TEXT = message["body"]
 
                 if (message["isMMS"] === true) {
-                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • MMS"
+                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • MMS"
                 } else {
-                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • SMS"
+                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • SMS"
                 }
 
                 cMessage.c_IS_SENT = message["isSent"]
@@ -329,7 +292,7 @@ Page {
             conversationPage.calls.forEach(function (call, index) {
                 var cCall = {c_ID: "call." + call["id"]}
 
-                cCall.c_STEXT = conversationPage.parseTime(call["date"]) + " • Call"
+                cCall.c_STEXT = swipeView.parseTime(call["date"]) + " • Call"
                 cCall.c_IS_SENT = call["isSent"]
 
                 modelArr.push(cCall)
@@ -415,9 +378,9 @@ Page {
                 cMessage.c_TEXT = message["body"]
 
                 if (message["isMMS"] === true) {
-                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • MMS"
+                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • MMS"
                 } else {
-                    cMessage.c_STEXT = conversationPage.parseTime(message["date"]) + " • SMS"
+                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • SMS"
                 }
 
                 cMessage.c_IS_SENT = message["isSent"]
