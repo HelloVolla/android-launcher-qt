@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
-import QtWebView 1.13
+import QtWebView 1.1
 
 Page {
     id: browserPage

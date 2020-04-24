@@ -2,7 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Layouts 1.13
+import QtQuick.Layouts 1.12
 import FileIO 1.0
 import com.volla.launcher.backend 1.0
 import AndroidNative 1.0 as AN
