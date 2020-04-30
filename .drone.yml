@@ -2,7 +2,6 @@
 kind: pipeline
 name: default
 
-#TODO: Trigger an FDroid Repo update once the nightly/release builds succeed
 steps:
   - name: restore-cache
     image: appleboy/drone-sftp-cache
@@ -109,3 +108,8 @@ steps:
       rebuild: true
       mount:
         - ./.cache/
+---
+kind: signature
+hmac: 0923699ed81261e139596a8ce7dca3cc83571b5ea64d6ee0314f76345188a0ca
+
+...
