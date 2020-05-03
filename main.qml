@@ -81,8 +81,6 @@ ApplicationWindow {
         property string cameraApp: "com.android.camera2"
         property string phoneApp: "com.google.android.dialer"
 
-        property string template: value
-
         Item {
             id: demoBrowser
 

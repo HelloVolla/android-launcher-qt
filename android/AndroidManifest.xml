@@ -13,7 +13,12 @@
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Volla" android:icon="@drawable/icon">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="Volla" android:screenOrientation="unspecified" android:launchMode="singleTop">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc"
+                  android:name="org.qtproject.qt5.android.bindings.QtActivity"
+                  android:label="Volla"
+                  android:theme="@style/AppTheme"
+                  android:screenOrientation="unspecified"
+                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
@@ -58,6 +63,7 @@
             <!-- meta-data android:name="android.app.splash_screen_drawable_landscape" android:resource="@drawable/logo_landscape" / -->
             <!-- meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/logo"/ -->
             <!-- meta-data android:name="android.app.splash_screen_sticky" android:value="true"/ -->
+            <meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/splash"/>
             <!-- Splash screen -->
 
             <!-- Background running -->
