@@ -56,21 +56,21 @@ Page {
             width: parent.width
             Label {
                 id: headerLabel
-                topPadding: swipeView.innerSpacing
-                x: swipeView.innerSpacing
+                topPadding: mainView.innerSpacing
+                x: mainView.innerSpacing
                 text: qsTr("Apps")
-                font.pointSize: swipeView.headerFontSize
+                font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
             }
             TextField {
                 id: textField
-                padding: swipeView.innerSpacing
-                x: swipeView.innerSpacing
-                width: parent.width - swipeView.innerSpacing * 2
+                padding: mainView.innerSpacing
+                x: mainView.innerSpacing
+                width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Filter apps")
                 color: Universal.foreground
                 placeholderTextColor: "darkgrey"
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 leftPadding: 0.0
                 rightPadding: 0.0
 
@@ -90,7 +90,7 @@ Page {
                 color: "transparent"
                 height: 1.1
             }
-            bottomPadding: swipeView.innerSpacing / 2
+            bottomPadding: mainView.innerSpacing / 2
         }
 
         delegate: Rectangle {
@@ -129,8 +129,8 @@ Page {
                     Label {
                         id: buttonLabel
                         anchors.horizontalCenter: parent.horizontalCenter
-                        width: gridButton.width - swipeView.innerSpacing
-                        horizontalAlignment: contentWidth > gridButton.width - swipeView.innerSpacing ? Text.AlignLeft : Text.AlignHCenter
+                        width: gridButton.width - mainView.innerSpacing
+                        horizontalAlignment: contentWidth > gridButton.width - mainView.innerSpacing ? Text.AlignLeft : Text.AlignHCenter
                         text: gridButton.text
                         font.pointSize: appLauncher.labelPointSize
                         clip: true

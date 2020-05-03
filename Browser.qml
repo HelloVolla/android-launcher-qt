@@ -7,7 +7,7 @@ Page {
     id: browserPage
     anchors.fill: parent
 
-    property real menuheight: 22 * 7 + swipeView.innerSpacing * 10
+    property real menuheight: 22 * 7 + mainView.innerSpacing * 10
     property var placeholderImage
 
 //    WebView {
@@ -15,7 +15,7 @@ Page {
 //       //anchors.fill: parent
 //       anchors.top: parent.top
 //       anchors.left: parent.left
-//       width: parent.width - swipeView.swipeView.innerSpacing
+//       width: parent.width - mainView.mainView.innerSpacing
 //       height: parent.height
 //       url: "http://www.instagram.com"
 //    }
@@ -103,19 +103,19 @@ Page {
 
             onSelectedMenuItemChanged: {
                 peopleLabel.font.bold = selectedMenuItem === peopleLabel
-                peopleLabel.font.pointSize = selectedMenuItem === peopleLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
+                peopleLabel.font.pointSize = selectedMenuItem === peopleLabel ?mainView.largeFontSize * 1.2: mainView.largeFontSize
                 threadLabel.font.bold = selectedMenuItem === threadLabel
-                threadLabel.font.pointSize = selectedMenuItem === threadLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
+                threadLabel.font.pointSize = selectedMenuItem === threadLabel ?mainView.largeFontSize * 1.2: mainView.largeFontSize
                 newsLabel.font.bold = selectedMenuItem === newsLabel
-                newsLabel.font.pointSize = selectedMenuItem === newsLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
+                newsLabel.font.pointSize = selectedMenuItem === newsLabel ?mainView.largeFontSize * 1.2: mainView.largeFontSize
                 galleryLabel.font.bold = selectedMenuItem === galleryLabel
-                galleryLabel.font.pointSize = selectedMenuItem === galleryLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
+                galleryLabel.font.pointSize = selectedMenuItem === galleryLabel ?mainView.largeFontSize * 1.2: mainView.largeFontSize
                 agendaLabel.font.bold = selectedMenuItem === agendaLabel
-                agendaLabel.font.pointSize = selectedMenuItem === agendaLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
+                agendaLabel.font.pointSize = selectedMenuItem === agendaLabel ?mainView.largeFontSize * 1.2: mainView.largeFontSize
                 cameraLabel.font.bold = selectedMenuItem === cameraLabel
-                cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
+                cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ?mainView.largeFontSize * 1.2: mainView.largeFontSize
                 dialerLabel.font.bold = selectedMenuItem === dialerLabel
-                dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ?swipeView.largeFontSize * 1.2: swipeView.largeFontSize
+                dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ?mainView.largeFontSize * 1.2: mainView.largeFontSize
             }
 
             onEntered: {
@@ -169,25 +169,25 @@ Page {
 
                 if (selectedMenuItem == peopleLabel) {
                     console.log("Show people")
-                    swipeView.updateCollectionMode(swipeView.collectionMode.People)
+                    mainView.updateCollectionMode(mainView.collectionMode.People)
                 } else if (selectedMenuItem == threadLabel) {
                     console.log("Show threads")
-                    swipeView.updateCollectionMode(swipeView.collectionMode.Threads)
+                    mainView.updateCollectionMode(mainView.collectionMode.Threads)
                 } else if (selectedMenuItem == newsLabel) {
                     console.log("Show news")
-                    swipeView.updateCollectionMode(swipeView.collectionMode.News)
+                    mainView.updateCollectionMode(mainView.collectionMode.News)
                 } else if (selectedMenuItem == galleryLabel) {
                     console.log("Show gallery")
-                    backEnd.runApp(swipeView.galleryApp)
+                    backEnd.runApp(mainView.galleryApp)
                 } else if (selectedMenuItem == agendaLabel) {
                     console.log("Show agenda")
-                    backEnd.runApp(swipeView.calendarApp)
+                    backEnd.runApp(mainView.calendarApp)
                 } else if (selectedMenuItem == cameraLabel) {
                     console.log("Show camera")
-                    backEnd.runApp(swipeView.cameraApp)
+                    backEnd.runApp(mainView.cameraApp)
                 } else if (selectedMenuItem == dialerLabel) {
                     console.log("Show dialer")
-                    backEnd.runApp(swipeView.phoneApp)
+                    backEnd.runApp(mainView.phoneApp)
                 }
             }
 
@@ -203,59 +203,59 @@ Page {
                 Label {
                     id: dialerLabel
                     text: qsTr("Show Dialer")
-                    font.pointSize:swipeView.largeFontSize
+                    font.pointSize:mainView.largeFontSize
                     anchors.left: parent.left
-                    topPadding: swipeView.innerSpacing * 2
-                    leftPadding: swipeView.innerSpacing
-                    bottomPadding: swipeView.innerSpacing
+                    topPadding: mainView.innerSpacing * 2
+                    leftPadding: mainView.innerSpacing
+                    bottomPadding: mainView.innerSpacing
                 }
                 Label {
                     id: cameraLabel
                     text: qsTr("Open Camera")
-                    font.pointSize:swipeView.largeFontSize
+                    font.pointSize:mainView.largeFontSize
                     anchors.left: parent.left
-                    leftPadding: swipeView.innerSpacing
-                    bottomPadding: swipeView.innerSpacing
+                    leftPadding: mainView.innerSpacing
+                    bottomPadding: mainView.innerSpacing
                 }
                 Label {
                     id: agendaLabel
                     text: qsTr("Agenda")
-                    font.pointSize:swipeView.largeFontSize
+                    font.pointSize:mainView.largeFontSize
                     anchors.left: parent.left
-                    leftPadding: swipeView.innerSpacing
-                    bottomPadding: swipeView.innerSpacing
+                    leftPadding: mainView.innerSpacing
+                    bottomPadding: mainView.innerSpacing
                 }
                 Label {
                     id: galleryLabel
                     text: qsTr("Gallery")
-                    font.pointSize:swipeView.largeFontSize
+                    font.pointSize:mainView.largeFontSize
                     anchors.left: parent.left
-                    leftPadding: swipeView.innerSpacing
-                    bottomPadding: swipeView.innerSpacing
+                    leftPadding: mainView.innerSpacing
+                    bottomPadding: mainView.innerSpacing
                 }
                 Label {
                     id: newsLabel
                     text: qsTr("Recent News")
-                    font.pointSize:swipeView.largeFontSize
+                    font.pointSize:mainView.largeFontSize
                     anchors.left: parent.left
-                    leftPadding: swipeView.innerSpacing
-                    bottomPadding: swipeView.innerSpacing
+                    leftPadding: mainView.innerSpacing
+                    bottomPadding: mainView.innerSpacing
                 }
                 Label {
                     id: threadLabel
                     text: qsTr("Recent Threads")
-                    font.pointSize:swipeView.largeFontSize
+                    font.pointSize:mainView.largeFontSize
                     anchors.left: parent.left
-                    leftPadding: swipeView.innerSpacing
-                    bottomPadding: swipeView.innerSpacing
+                    leftPadding: mainView.innerSpacing
+                    bottomPadding: mainView.innerSpacing
                 }
                 Label {
                     id: peopleLabel
                     text: qsTr("Revent People")
-                    font.pointSize:swipeView.largeFontSize
+                    font.pointSize:mainView.largeFontSize
                     anchors.left: parent.left
-                    leftPadding: swipeView.innerSpacing
-                    bottomPadding: swipeView.innerSpacing * 2
+                    leftPadding: mainView.innerSpacing
+                    bottomPadding: mainView.innerSpacing * 2
                 }
             }
         }

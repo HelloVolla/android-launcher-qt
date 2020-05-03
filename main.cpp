@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.ContactWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.MessageWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.CallWorker");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.parser.ArticleParser");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

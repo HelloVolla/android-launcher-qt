@@ -2,22 +2,30 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
-    }
+        classpath 'com.android.tools.build:gradle:3.2.0'    }
 }
 
 repositories {
     google()
     jcenter()
+    mavenCentral()
+}
+
+allprojects {
+  repositories {
+    mavenCentral()
+  }
 }
 
 apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'com.chimbori.crux:crux:2.2.0'
 }
 
 android {

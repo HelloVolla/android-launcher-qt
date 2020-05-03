@@ -39,11 +39,11 @@ Page {
             currentFeedId = id
 
             switch (mode) {
-                case swipeView.feedMode.RSS:
+                case mainView.feedMode.RSS:
                     currentFeedModel = rssFeedModel
                     rssFeedModel.source = currentFeedId
                     break;
-                case swipeView.feedMode.Twitter:
+                case mainView.feedMode.Twitter:
                     currentFeedModel = twitterFeedModel
                     // todo: load tweet data
                     break;
@@ -73,10 +73,10 @@ Page {
                 id: headerColumn
                 width: parent.width
                 Row {
-                    topPadding: swipeView.innerSpacing
-                    leftPadding: swipeView.innerSpacing
-                    rightPadding: swipeView.innerSpacing
-                    spacing: swipeView.innerSpacing * 0.75
+                    topPadding: mainView.innerSpacing
+                    leftPadding: mainView.innerSpacing
+                    rightPadding: mainView.innerSpacing
+                    spacing: mainView.innerSpacing * 0.75
                     Image {
                         id: headerIcon
                         source: ""
@@ -112,11 +112,11 @@ Page {
                     }
                     Label {
                         id: headerLabel
-                        width: header.width - iconSize - (2 * swipeView.innerSpacing)
+                        width: header.width - iconSize - (2 * mainView.innerSpacing)
                         text: qsTr("Feed")
                         clip: true
                         verticalAlignment: Text.AlignVCenter
-                        font.pointSize: swipeView.headerFontSize
+                        font.pointSize: mainView.headerFontSize
                         font.weight: Font.Black
                         Binding {
                             target: feedPage
@@ -127,7 +127,7 @@ Page {
                             id: headerLabelTruncator
                             height: headerLabel.height
                             width: headerLabel.width
-                            start: Qt.point(headerLabel.width - 2 * swipeView.innerSpacing,0)
+                            start: Qt.point(headerLabel.width - 2 * mainView.innerSpacing,0)
                             end: Qt.point(headerLabel.width,0)
                             gradient: Gradient {
                                 GradientStop {
@@ -144,13 +144,13 @@ Page {
                 }
                 TextField {
                     id: textField
-                    padding: swipeView.innerSpacing
-                    x: swipeView.innerSpacing
-                    width: parent.width -swipeView.innerSpacing * 2
+                    padding: mainView.innerSpacing
+                    x: mainView.innerSpacing
+                    width: parent.width -mainView.innerSpacing * 2
                     placeholderText: qsTr("Filter news ...")
                     color: Universal.foreground
                     placeholderTextColor: "darkgrey"
-                    font.pointSize: swipeView.largeFontSize
+                    font.pointSize: mainView.largeFontSize
                     leftPadding: 0.0
                     rightPadding: 0.0
                     background: Rectangle {
@@ -171,7 +171,7 @@ Page {
                         id: deleteButton
                         visible: textField.activeFocus
                         text: "<font color='#808080'>×</font>"
-                        font.pointSize: swipeView.largeFontSize * 2
+                        font.pointSize: mainView.largeFontSize * 2
                         flat: true
                         topPadding: 0.0
                         anchors.top: parent.top
@@ -194,9 +194,9 @@ Page {
             Rectangle {
                 id: heeaderIconBorder
                 anchors.top: header.top
-                anchors.topMargin: swipeView.innerSpacing
+                anchors.topMargin: mainView.innerSpacing
                 anchors.left: header.left
-                anchors.leftMargin: swipeView.innerSpacing
+                anchors.leftMargin: mainView.innerSpacing
                 width: headerIcon.width
                 height: headerIcon.height
                 color: "transparent"
@@ -211,7 +211,7 @@ Page {
         delegate: MouseArea {
             id: backgroundItem
             width: parent.width
-            implicitHeight: newsBox.height + swipeView.innerSpacing
+            implicitHeight: newsBox.height + mainView.innerSpacing
 
             Rectangle {
                 id: newsBox
@@ -221,7 +221,7 @@ Page {
 
                 Row {
                     id: newsRow
-                    topPadding: swipeView.innerSpacing
+                    topPadding: mainView.innerSpacing
 
                     Column {
                         id: newsColumn
@@ -229,12 +229,12 @@ Page {
                         Label {
                             id: newsAuthor
                             anchors.left: parent.left
-                            leftPadding: swipeView.innerSpacing
-                            rightPadding: swipeView.innerSpacing
-                            width: newsBox.width - iconSize - swipeView.innerSpacing
+                            leftPadding: mainView.innerSpacing
+                            rightPadding: mainView.innerSpacing
+                            width: newsBox.width - iconSize - mainView.innerSpacing
                             text: model.n_STITLE !== undefined ? model.n_STITLE : ""
                             lineHeight: 1.1
-                            font.pointSize: swipeView.smallFontSize
+                            font.pointSize: mainView.smallFontSize
                             opacity: 0.7
                             visible: model.n_STITLE !== undefined && model.n_STITLE.length > 0
                             wrapMode: Text.WordWrap
@@ -242,32 +242,32 @@ Page {
                         Label {
                             id: newsText
                             anchors.left: parent.left
-                            topPadding: model.n_STITLE !== undefined && model.n_STITLE.length > 0 ? swipeView.innerSpacing / 2 : 0
-                            leftPadding: swipeView.innerSpacing
-                            rightPadding: swipeView.innerSpacing
-                            width: newsBox.width - iconSize - swipeView.innerSpacing
+                            topPadding: model.n_STITLE !== undefined && model.n_STITLE.length > 0 ? mainView.innerSpacing / 2 : 0
+                            leftPadding: mainView.innerSpacing
+                            rightPadding: mainView.innerSpacing
+                            width: newsBox.width - iconSize - mainView.innerSpacing
                             text: model.n_TEXT
                             lineHeight: 1.1
-                            font.pointSize: swipeView.largeFontSize
+                            font.pointSize: mainView.largeFontSize
                             wrapMode: Text.WordWrap
                         }
                         Label {
                             id: newsDate
                             anchors.left: parent.left
-                            topPadding: swipeView.innerSpacing / 2
-                            leftPadding: swipeView.innerSpacing
-                            rightPadding: swipeView.innerSpacing
-                            width: newsBox.width - iconSize - swipeView.innerSpacing
+                            topPadding: mainView.innerSpacing / 2
+                            leftPadding: mainView.innerSpacing
+                            rightPadding: mainView.innerSpacing
+                            width: newsBox.width - iconSize - mainView.innerSpacing
                             text: getDateString()
                             lineHeight: 1.1
-                            font.pointSize: swipeView.smallFontSize
+                            font.pointSize: mainView.smallFontSize
                             opacity: 0.7
                             visible: model.n_DATE !== undefined && model.n_DATE.length > 0
                             wrapMode: Text.WordWrap
 
                             function getDateString() {
                                 var d = new Date(model.n_DATE)
-                                var s = swipeView.parseTime(d.valueOf())
+                                var s = mainView.parseTime(d.valueOf())
                                 console.log("FeedPage | " + d + ": " + s)
                                 if (s.length > 0)
                                     return s
@@ -305,6 +305,10 @@ Page {
                     }
                 }
             }   
+
+            onClicked: {
+                currentFeedModel.executeSelection(model)
+            }
         }
     }
 
@@ -355,6 +359,12 @@ Page {
         function dropData() {
             source = ""
         }
+
+        function executeSelection(model) {
+            console.log("FeedPage | News selected: " + model.n_ID)
+            var author = model.n_STITLE !== undefined && model.n_STITLE.length > 0 ? headline.text + " • " + model.n_STITLE : headline.text
+            mainView.updateDetailPage(mainView.detailMode.Web, model.n_ID, author, model.n_DATE)
+        }
     }
 
     ListModel {
@@ -366,6 +376,10 @@ Page {
 
         function dropData() {
             twitterFeedModel.clear()
+        }
+
+        function executeSelection(model) {
+            mainView.showToast(qsTr("Not yet supported"))
         }
     }
 }

@@ -14,12 +14,12 @@ ApplicationWindow {
         var message = active ? "active" : "not active"
         console.log("MainView | Volla app is " + message)
         if (active) {
-            swipeView.currentIndex = 2
+            mainView.currentIndex = 2
         }
     }
 
     SwipeView {
-        id: swipeView
+        id: mainView
         anchors.fill: parent
         currentIndex: 2
         interactive: true
@@ -43,6 +43,12 @@ ApplicationWindow {
             'RSS' : 0,
             'Twitter': 1
         }
+        property var detailMode: {
+            'Web' : 0,
+            'Twitter' : 1,
+            'MMS' : 2,
+            'Mail' : 3
+        }
         property var actionType: {
             'SuggestContact': 0,
             'MakeCall': 20000,
@@ -59,21 +65,30 @@ ApplicationWindow {
             'ShowNews': 20011,
             'OpenCam': 20012
         }
-        property var contacts: new Array
+        property var swipeIndex: {
+            'Preferences' : 0,
+            'Apps' : 1,
+            'Springboard': 2,
+            'Collections' : 3,
+            'ConversationOrNewsOrDetails' : 4,
+            'Details' : 5
+        }
 
-        property var newsPage
+        property var contacts: new Array
 
         property string galleryApp: "com.google.android.apps.photos"
         property string calendarApp: "com.google.android.calendar"
         property string cameraApp: "com.android.camera2"
         property string phoneApp: "com.google.android.dialer"
 
+        property string template: value
+
         Item {
             id: demoBrowser
 
             Loader {
                 anchors.fill: parent
-                sourceComponent: Qt.createComponent("/Browser.qml", swipeView)
+                sourceComponent: Qt.createComponent("/Browser.qml", mainView)
             }
         }
 
@@ -82,7 +97,7 @@ ApplicationWindow {
 
             Loader {
                 anchors.fill: parent
-                sourceComponent: Qt.createComponent("/AppGrid.qml", swipeView)
+                sourceComponent: Qt.createComponent("/AppGrid.qml", mainView)
             }
         }
 
@@ -91,64 +106,87 @@ ApplicationWindow {
 
             Loader {
                 anchors.fill: parent
-                sourceComponent: Qt.createComponent("/Springboard.qml", swipeView)
+                sourceComponent: Qt.createComponent("/Springboard.qml", mainView)
             }
         }
 
-        Item {
-            id: collectionPage
-
-            Loader {
-                id: collectionPageLoader
-                anchors.fill: parent
-                sourceComponent: Qt.createComponent("/Collections.qml", swipeView)
-            }
-        }
-
-        Item {
-            id: conversationAndNewsPage
-
-            Loader {
-                id: conversationAndNewsPageLoader
-                anchors.fill: parent
-                sourceComponent: Qt.createComponent("/Conversation.qml", swipeView)
-            }
-        }
-
-        Item {
-            id: detailPage
-
-            Loader {
-                id: detailPageLoader
-                anchors.fill: parent
-                sourceComponent: Qt.createComponent("/Details.qml", swipeView)
-            }
-        }
-
-        function updateCollectionMode(mode) {
+        function updateCollectionPage(mode) {
             console.log("MainView | New collection mode: " + mode)
-            currentIndex = currentIndex + 1
-            collectionPageLoader.item.updateCollectionMode(mode)
+            if (count === swipeIndex.Springboard + 1) {
+                var item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
+                item.children[0].sourceComponent = Qt.createComponent("/Collections.qml", mainView)
+                addItem(item)
+            } else {
+                item = itemAt(swipeIndex.Collections)
+                while (count > swipeIndex.Collections + 2) removeItem(swipeIndex.Collections + 2)
+            }
+            item.children[0].item.updateCollectionPage(mode)
+            currentIndex++
         }
 
         function updateConversationPage(mode, id, name) {
             console.log("MainView | Will update conversation page")
-            conversationAndNewsPageLoader.sourceComponent = Qt.createComponent("/Conversation.qml", swipeView)
-            conversationAndNewsPageLoader.item.updateConversationPage(mode, id, name)
-            currentIndex = currentIndex + 1
+            if (count === swipeIndex.Collections + 1) {
+                var item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
+                addItem(item)
+            } else {
+                item = itemAt(swipeIndex.ConversationOrNewsOrDetails)
+                while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+            }
+            item.children[0].sourceComponent = Qt.createComponent("/Conversation.qml", mainView)
+            item.children[0].item.updateConversationPage(mode, id, name)
+            currentIndex++
         }
 
-        function updateDetailPage(imageSource, headline, placeholderText) {
+        function updateDetailPage(mode, id, author, date) {
             console.log("MainView | Will update detail page")
-            currentIndex = currentIndex + 1
-            detailPageLoader.item.updateDetailPage(imageSource, headline, placeholderText)
+            switch (currentIndex) {
+                case swipeIndex.Collections:
+                    if (count > swipeIndex.Collections + 1) {
+                        var item = itemAt(swipeIndex.ConversationOrNewsOrDetails)
+                        item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
+                        while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+                    } else {
+                        item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
+                        item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
+                        addItem(item)
+                    }
+                    break
+                case swipeIndex.ConversationOrNewsOrDetails:
+                    if (count > swipeIndex.ConversationOrNewsOrDetails + 1) {
+                        item = itemAt(swipeIndex.Details)
+                        item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
+                        while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+                    } else {
+                        item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
+                        item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
+                        addItem(item)
+                    }
+                    break
+                default:
+                    console.log("MainView | Unexpected state for detail view request")
+            }
+            item.children[0].item.updateDetailPage(mode, id, author, date)
+            currentIndex++
         }
 
         function updateNewsPage(mode, id, name, icon) {
             console.log("MainView | Will update news page")
-            conversationAndNewsPageLoader.sourceComponent = Qt.createComponent("/Feed.qml", swipeView)
-            conversationAndNewsPageLoader.item.updateFeedPage(mode, id, name, icon)
-            currentIndex = currentIndex + 1
+            if (count === swipeIndex.Collections + 1) {
+                var item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
+                addItem(item)
+            } else {
+                item = itemAt(swipeIndex.ConversationOrNewsOrDetails)
+                while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(ConversationOrNewsOrDetails.Collections + 2)
+            }
+            item.children[0].sourceComponent = Qt.createComponent("/Feed.qml", mainView)
+            item.children[0].item.updateFeedPage(mode, id, name, icon)
+            currentIndex++
+        }
+
+        function showToast(message) {
+            toast.text = message
+            toast.show()
         }
 
         function loadContacts() {
@@ -156,7 +194,7 @@ ApplicationWindow {
             AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
         }
 
-        // Todo: Improve display date and time
+        // Todo: Improve display date and time with third party library
         function parseTime(timeInMillis) {
             var now = new Date()
             var date = new Date(timeInMillis)
@@ -195,6 +233,7 @@ ApplicationWindow {
 
         Component.onCompleted: {
             loadContacts()
+            console.log("MainView | Number of items: " + count)
         }
 
         Connections {
@@ -202,7 +241,7 @@ ApplicationWindow {
             onDispatched: {
                 if (type === "volla.launcher.contactResponse") {
                     console.log("MainView | onDispatched: " + type)
-                    swipeView.contacts = message["contacts"]
+                    mainView.contacts = message["contacts"]
                     message["contacts"].forEach(function (aContact, index) {
                         for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
                             console.log("MainView | * " + aContactKey + ": " + aContactValue)
@@ -213,4 +252,9 @@ ApplicationWindow {
         }
     }
 
+    AN.Toast {
+        id: toast
+        text: qsTr("Not yet supported")
+        longDuration: true
+    }
 }

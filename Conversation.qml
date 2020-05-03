@@ -21,13 +21,13 @@ Page {
     property var messages: new Array
     property var calls: new Array
 
-    property string c_ID:        "id"      // the id of the message or content
-    property string c_TEXT:      "text"    // large main text, regular
-    property string c_STEXT:     "stext"   // small text beyond the main text, grey
-    property string c_IMAGE:     "image"   // preview image
-    property string c_IS_SENT:   "sent"    // true if the content was sent by user
-    property string c_KIND:      "kind"    // kind of content like sms or mms
-    property string c_DATE:      "date"    // date in milliseconds of the item
+    property string m_ID:        "id"      // the id of the message or content
+    property string m_TEXT:      "text"    // large main text, regular
+    property string m_STEXT:     "stext"   // small text beyond the main text, grey
+    property string m_IMAGE:     "image"   // preview image
+    property string m_IS_SENT:   "sent"    // true if the content was sent by user
+    property string m_KIND:      "kind"    // kind of content like sms or mms
+    property string m_DATE:      "date"    // date in milliseconds of the item
 
     onTextInputChanged: {
         console.log("Conversation | text input changed")
@@ -48,14 +48,14 @@ Page {
             currentConversationModel.modelArr = new Array
 
             switch (mode) {
-                case swipeView.conversationMode.Person:
+                case mainView.conversationMode.Person:
                     headline.text = name
                     currentId = id
                     currentConversationModel = personContentModel
                     loadConversation({"personId": id})
                     loadCalls({"match": name})
                     break;
-                case swipeView.conversationMode.Thread:
+                case mainView.conversationMode.Thread:
                     headline.text = name
                     currentId = id
                     currentConversationModel = threadContentModel
@@ -97,10 +97,10 @@ Page {
                 width: parent.width
                 Label {
                     id: headerLabel
-                    topPadding: swipeView.innerSpacing
-                    x: swipeView.innerSpacing
+                    topPadding: mainView.innerSpacing
+                    x: mainView.innerSpacing
                     text: qsTr("Conversation")
-                    font.pointSize: swipeView.headerFontSize
+                    font.pointSize: mainView.headerFontSize
                     font.weight: Font.Black
                     Binding {
                         target: conversationPage
@@ -110,13 +110,13 @@ Page {
                 }
                 TextField {
                     id: textField
-                    padding: swipeView.innerSpacing
-                    x: swipeView.innerSpacing
-                    width: parent.width -swipeView.innerSpacing * 2
+                    padding: mainView.innerSpacing
+                    x: mainView.innerSpacing
+                    width: parent.width -mainView.innerSpacing * 2
                     placeholderText: qsTr("Filter messages ...")
                     color: Universal.foreground
                     placeholderTextColor: "darkgrey"
-                    font.pointSize: swipeView.largeFontSize
+                    font.pointSize: mainView.largeFontSize
                     leftPadding: 0.0
                     rightPadding: 0.0
                     background: Rectangle {
@@ -140,7 +140,7 @@ Page {
                         id: deleteButton
                         visible: textField.activeFocus
                         text: "<font color='#808080'>×</font>"
-                        font.pointSize: swipeView.largeFontSize * 2
+                        font.pointSize: mainView.largeFontSize * 2
                         flat: true
                         topPadding: 0.0
                         anchors.top: parent.top
@@ -166,7 +166,7 @@ Page {
         delegate: MouseArea {
             id: backgroundItem
             width: parent.width
-            implicitHeight: messageBox.height + swipeView.innerSpacing
+            implicitHeight: messageBox.height + mainView.innerSpacing
 
             Rectangle {
                 id: messageBox
@@ -182,64 +182,64 @@ Page {
                     Label {
                         id: receivedMessage
                         anchors.left: parent.left
-                        topPadding: swipeView.innerSpacing
-                        leftPadding: swipeView.innerSpacing
-                        rightPadding: swipeView.innerSpacing
+                        topPadding: mainView.innerSpacing
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
                         width: messageBox.width * widthFactor
-                        text: model.c_TEXT !== undefined ? model.c_TEXT : ""
+                        text: model.m_TEXT !== undefined ? model.m_TEXT : ""
                         lineHeight: 1.1
-                        font.pointSize: swipeView.largeFontSize
+                        font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
-                        visible: !model.c_IS_SENT && model.c_TEXT !== undefined
+                        visible: !model.m_IS_SENT && model.m_TEXT !== undefined
                     }
                     Label {
                         anchors.left: parent.left
                         id: receivedDate
-                        leftPadding: swipeView.innerSpacing
-                        rightPadding: swipeView.innerSpacing
-                        bottomPadding: model.c_IMAGE === undefined ? 0 : 6.0
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: model.m_IMAGE === undefined ? 0 : 6.0
                         width: messageBox.width * widthFactor
-                        text: model.c_STEXT
-                        font.pointSize: swipeView.smallFontSize
+                        text: model.m_STEXT
+                        font.pointSize: mainView.smallFontSize
                         clip: true
                         opacity: 0.7
-                        visible: !model.c_IS_SENT
+                        visible: !model.m_IS_SENT
                     }
                     Label {
                         id: sentMessage
                         anchors.right: parent.right
-                        topPadding: swipeView.innerSpacing
-                        leftPadding: swipeView.innerSpacing
-                        rightPadding: swipeView.innerSpacing
+                        topPadding: mainView.innerSpacing
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
                         width: messageBox.width * widthFactor
-                        text: model.c_TEXT !== undefined ? model.c_TEXT : ""
+                        text: model.m_TEXT !== undefined ? model.m_TEXT : ""
                         lineHeight: 1.1
-                        font.pointSize: swipeView.largeFontSize
+                        font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         opacity: 0.8
                         horizontalAlignment: Text.AlignRight
-                        visible: model.c_IS_SENT && model.c_TEXT !== undefined
+                        visible: model.m_IS_SENT && model.m_TEXT !== undefined
                     }
                     Label {
                         id: sentDate
                         anchors.right: parent.right
-                        leftPadding: swipeView.innerSpacing
-                        rightPadding: swipeView.innerSpacing
-                        bottomPadding: model.c_IMAGE === undefined ? 0 : 6.0
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: model.m_IMAGE === undefined ? 0 : 6.0
                         width: messageBox.width * widthFactor
-                        text: model.c_STEXT
-                        font.pointSize: swipeView.smallFontSize
+                        text: model.m_STEXT
+                        font.pointSize: mainView.smallFontSize
                         clip: true
                         opacity: 0.7
                         horizontalAlignment: Text.AlignRight
-                        visible: model.c_IS_SENT
+                        visible: model.m_IS_SENT
                     }
                     Image {
                         id: messageImage
-                        x: model.c_IS_SENT ? messageBox.width * (1 -  widthFactor) + swipeView.innerSpacing : swipeView.innerSpacing
+                        x: model.m_IS_SENT ? messageBox.width * (1 -  widthFactor) + mainView.innerSpacing : mainView.innerSpacing
                         horizontalAlignment: Image.AlignLeft
                         width: messageBox.width * widthFactor
-                        source: model.c_IMAGE !== undefined ? model.c_IMAGE : ""
+                        source: model.m_IMAGE !== undefined ? model.m_IMAGE : ""
                         fillMode: Image.PreserveAspectFit
 
                         Desaturate {
@@ -260,46 +260,46 @@ Page {
     ListModel {
         id: personContentModel
 
-        property var modelArr: [{c_ID: "0", c_TEXT: "What you think about having lunch together in the restaurant, that opened recently", c_STEXT: "Yesterday 10:30 • SMS", c_IS_SENT: false},
-                                {c_ID: "2", c_TEXT: "Sure, I would like to order a pizza with red wine and a small dessert afterwards", c_STEXT: "Yesterday 10:46 • SMS", c_IS_SENT: true},
-                                {c_ID: "3", c_TEXT: "Look at this nice image", c_STEXT: "Today 14:01 • SMS", c_IS_SENT: false, c_IMAGE: "/images/news-image.png"}]
+        property var modelArr: [{m_ID: "0", m_TEXT: "What you think about having lunch together in the restaurant, that opened recently", m_STEXT: "Yesterday 10:30 • SMS", m_IS_SENT: false},
+                                {m_ID: "2", m_TEXT: "Sure, I would like to order a pizza with red wine and a small dessert afterwards", m_STEXT: "Yesterday 10:46 • SMS", m_IS_SENT: true},
+                                {m_ID: "3", m_TEXT: "Look at this nice image", m_STEXT: "Today 14:01 • SMS", m_IS_SENT: false, m_IMAGE: "/images/news-image.png"}]
 
         function loadData() {
             console.log("Conversation | Load data for person's content")
 
             conversationPage.messages.forEach(function (message, index) {
-                var cMessage = {c_ID: "message." + message["id"]}
+                var cMessage = {m_ID: "message." + message["id"]}
 
-                cMessage.c_TEXT = message["body"]
+                cMessage.m_TEXT = message["body"]
 
                 if (message["isMMS"] === true) {
-                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • MMS"
+                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • MMS"
                 } else {
-                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • SMS"
+                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • SMS"
                 }
 
-                cMessage.c_IS_SENT = message["isSent"]
+                cMessage.m_IS_SENT = message["isSent"]
 
                 if (message["image"] !== undefined) {
-                    cMessage.c_IMAGE = "data:image/png;base64," + message["image"]
+                    cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 }
 
-                cMessage.c_DATE = message["date"]
+                cMessage.m_DATE = message["date"]
 
                 modelArr.push(cMessage)
             })
 
             conversationPage.calls.forEach(function (call, index) {
-                var cCall = {c_ID: "call." + call["id"]}
+                var cCall = {m_ID: "call." + call["id"]}
 
-                cCall.c_STEXT = swipeView.parseTime(call["date"]) + " • Call"
-                cCall.c_IS_SENT = call["isSent"]
+                cCall.m_STEXT = mainView.parseTime(call["date"]) + " • Call"
+                cCall.m_IS_SENT = call["isSent"]
 
                 modelArr.push(cCall)
             })
 
             modelArr.sort(function(a,b) {
-                return a.c_DATE - b.c_DATE
+                return a.m_DATE - b.m_DATE
             })
         }
 
@@ -320,7 +320,7 @@ Page {
 
             for (i = 0; i < modelArr.length; i++) {
                 filteredModelItem = modelArr[i]
-                var modelItemName = modelArr[i].c_ID
+                var modelItemName = modelArr[i].m_ID
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
                     console.log("Conversation | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
@@ -329,13 +329,13 @@ Page {
 
             var existingGridDict = new Object
             for (i = 0; i < count; ++i) {
-                modelItemName = get(i).c_ID
+                modelItemName = get(i).m_ID
                 existingGridDict[modelItemName] = true
             }
             // remove items no longer in filtered set
             i = 0
             while (i < count) {
-                modelItemName = get(i).c_ID
+                modelItemName = get(i).m_ID
                 found = filteredModelDict.hasOwnProperty(modelItemName)
                 if (!found) {
                     console.log("Conversation | Remove " + modelItemName)
@@ -351,7 +351,7 @@ Page {
                 if (!found) {
                     // for simplicity, just adding to end instead of corresponding position in original list
                     filteredModelItem = filteredModelDict[modelItemName]
-                    console.log("Conversation | Will append " + filteredModelItem.c_TEXT)
+                    console.log("Conversation | Will append " + filteredModelItem.m_TEXT)
                     append(filteredModelDict[modelItemName])
                 }
             }
@@ -360,7 +360,7 @@ Page {
         }
 
         function executeSelection(item, typ) {
-            toast.show()
+            mainView.showToast(qsTr("Not yet supported"))
         }
     }
 
@@ -373,27 +373,27 @@ Page {
             console.log("Conversation | Load data for thread content")
 
             conversationPage.messages.forEach(function (message, index) {
-                var cMessage = {c_ID: message["id"]}
+                var cMessage = {m_ID: message["id"]}
 
-                cMessage.c_TEXT = message["body"]
+                cMessage.m_TEXT = message["body"]
 
                 if (message["isMMS"] === true) {
-                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • MMS"
+                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • MMS"
                 } else {
-                    cMessage.c_STEXT = swipeView.parseTime(message["date"]) + " • SMS"
+                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • SMS"
                 }
 
-                cMessage.c_IS_SENT = message["isSent"]
+                cMessage.m_IS_SENT = message["isSent"]
 
                 if (message["image"] !== undefined) {
-                    cMessage.c_IMAGE = "data:image/png;base64," + message["image"]
+                    cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 }
 
                 modelArr.push(cMessage)
             })
 
             modelArr.sort(function(a,b) {
-                return a.c_DATE - b.c_DATE
+                return a.m_DATE - b.m_DATE
             })
         }
 
@@ -414,7 +414,7 @@ Page {
 
             for (i = 0; i < modelArr.length; i++) {
                 filteredModelItem = modelArr[i]
-                var modelItemName = modelArr[i].c_ID
+                var modelItemName = modelArr[i].m_ID
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
                     console.log("Conversation | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
@@ -423,14 +423,14 @@ Page {
 
             var existingGridDict = new Object
             for (i = 0; i < count; ++i) {
-                modelItemName = get(i).c_ID
+                modelItemName = get(i).m_ID
                 existingGridDict[modelItemName] = true
             }
 
             // Remove items no longer in filtered set
             i = 0
             while (i < count) {
-                modelItemName = get(i).c_ID
+                modelItemName = get(i).m_ID
                 found = filteredModelDict.hasOwnProperty(modelItemName)
                 if (!found) {
                     console.log("Conversation | Remove " + modelItemName)
@@ -446,7 +446,7 @@ Page {
                 if (!found) {
                     // for simplicity, just adding to end instead of corresponding position in original list
                     filteredModelItem = filteredModelDict[modelItemName]
-                    console.log("Conversation | Will append " + filteredModelItem.c_TEXT)
+                    console.log("Conversation | Will append " + filteredModelItem.m_TEXT)
                     append(filteredModelDict[modelItemName])
                 }
             }
@@ -454,15 +454,9 @@ Page {
             listView.positionViewAtEnd()
         }
 
-        function executeSelection(item, typ) {
-            toast.show()
+        function executeSelection(item, type) {
+            mainView.showToast(qsTr("Not yet supported"))
         }
-    }
-
-    AN.Toast {
-        id: toast
-        text: qsTr("Not yet supported")
-        longDuration: true
     }
 
     Connections {

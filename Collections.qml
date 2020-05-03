@@ -45,7 +45,7 @@ Page {
         currentCollectionModel.update("")
     }
 
-    function updateCollectionMode (mode) {
+    function updateCollectionPage (mode) {
         console.log("Collections | Update collection model: " + mode)
 
         if (mode !== currentCollectionMode) {
@@ -54,20 +54,20 @@ Page {
             currentCollectionModel.modelArr = new Array
 
             switch (mode) {
-                case swipeView.collectionMode.People:
+                case mainView.collectionMode.People:
                     headline.text = qsTr("People")
                     textInputField.placeholderText = "Find poeple ..."
                     currentCollectionModel = peopleModel
                     collectionPage.loadThreads({})
                     collectionPage.loadCalls({"count": maxCalls})
                     break;
-                case swipeView.collectionMode.Threads:
+                case mainView.collectionMode.Threads:
                     headline.text = qsTr("Threads")
                     textInputField.placeholderText = "Find thread ..."
                     currentCollectionModel = threadModel
                     collectionPage.loadThreads({})
                     break;
-                case swipeView.collectionMode.News:
+                case mainView.collectionMode.News:
                     headline.text = qsTr("News")
                     textInputField.placeholderText = "Find news ..."
                     currentCollectionModel = newsModel
@@ -110,10 +110,10 @@ Page {
                 width: parent.width
                 Label {
                     id: headerLabel
-                    topPadding: swipeView.innerSpacing
-                    x: swipeView.innerSpacing
+                    topPadding: mainView.innerSpacing
+                    x: mainView.innerSpacing
                     text: qsTr("People")
-                    font.pointSize: swipeView.headerFontSize
+                    font.pointSize: mainView.headerFontSize
                     font.weight: Font.Black
                     Binding {
                         target: collectionPage
@@ -123,13 +123,13 @@ Page {
                 }
                 TextField {
                     id: textField
-                    padding: swipeView.innerSpacing
-                    x: swipeView.innerSpacing
-                    width: parent.width -swipeView.innerSpacing * 2
+                    padding: mainView.innerSpacing
+                    x: mainView.innerSpacing
+                    width: parent.width -mainView.innerSpacing * 2
                     placeholderText: qsTr("Filter collections")
                     color: Universal.foreground
                     placeholderTextColor: "darkgrey"
-                    font.pointSize: swipeView.largeFontSize
+                    font.pointSize: mainView.largeFontSize
                     leftPadding: 0.0
                     rightPadding: 0.0
                     background: Rectangle {
@@ -153,7 +153,7 @@ Page {
                         id: deleteButton
                         visible: textField.activeFocus
                         text: "<font color='#808080'>×</font>"
-                        font.pointSize: swipeView.largeFontSize * 2
+                        font.pointSize: mainView.largeFontSize * 2
                         flat: true
                         topPadding: 0.0
                         anchors.top: parent.top
@@ -189,14 +189,14 @@ Page {
                 color: "transparent"
                 width: parent.width
                 implicitHeight: contactMenu.visible ?
-                                    contactRow.height + contactMenu.height + swipeView.innerSpacing
-                                  : contactRow.height + swipeView.innerSpacing
+                                    contactRow.height + contactMenu.height + mainView.innerSpacing
+                                  : contactRow.height + mainView.innerSpacing
 
                 Row {
                     id: contactRow
-                    x: swipeView.innerSpacing
+                    x: mainView.innerSpacing
                     spacing: 18.0
-                    topPadding: swipeView.innerSpacing / 2
+                    topPadding: mainView.innerSpacing / 2
 
                     // todo: handle no image
                     Rectangle {
@@ -208,7 +208,7 @@ Page {
                         border.color: Universal.foreground
                         opacity: 0.9
                         color: "transparent"
-                        visible: model.c_ICON === undefined && collectionPage.currentCollectionMode === swipeView.collectionMode.People
+                        visible: model.c_ICON === undefined && collectionPage.currentCollectionMode === mainView.collectionMode.People
 
                         Label {
                             text: model.c_TITLE !== undefined ? getInitials() : "?"
@@ -218,7 +218,7 @@ Page {
                             verticalAlignment: Text.AlignVCenter
                             color: Universal.foreground
                             opacity: 0.9
-                            font.pointSize: swipeView.largeFontSize
+                            font.pointSize: mainView.largeFontSize
 
                             function getInitials() {                      
                                 const namesArray = model.c_TITLE.split(' ');
@@ -260,16 +260,16 @@ Page {
                         id: contactColumn
                         spacing: 3.0
 
-                        property real columnWidth: collectionPage.currentCollectionMode === swipeView.collectionMode.Threads ?
-                                                       contactBox.width - swipeView.innerSpacing * 2 - contactRow.spacing
-                                                     : contactBox.width - swipeView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
+                        property real columnWidth: collectionPage.currentCollectionMode === mainView.collectionMode.Threads ?
+                                                       contactBox.width - mainView.innerSpacing * 2 - contactRow.spacing
+                                                     : contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
 
                         Label {
                             id: sourceLabel
                             topPadding: model.c_STITLE !== undefined ? 8.0 : 0.0
-                            width: contactBox.width - swipeView.innerSpacing * 2 - collectionPage.iconSize - contactRow.spacing
+                            width: contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize - contactRow.spacing
                             text: model.c_STITLE !== undefined ? model.c_STITLE : ""
-                            font.pointSize: swipeView.smallFontSize
+                            font.pointSize: mainView.smallFontSize
                             lineHeight: 1.1
                             wrapMode: Text.Wrap
                             opacity: 0.8
@@ -280,7 +280,7 @@ Page {
                             topPadding: model.c_TITLE !== undefined ? 8.0 : 0.0
                             width: contactColumn.columnWidth
                             text: model.c_TITLE !== undefined ? model.c_TITLE : ""
-                            font.pointSize: swipeView.largeFontSize
+                            font.pointSize: mainView.largeFontSize
                             font.weight: Font.Black
                             visible: model.c_TITLE !== undefined
 
@@ -288,7 +288,7 @@ Page {
                                 id: titleLabelTruncator
                                 height: titleLabel.height
                                 width: titleLabel.width
-                                start: Qt.point(titleLabel.width - swipeView.innerSpacing,0)
+                                start: Qt.point(titleLabel.width - mainView.innerSpacing,0)
                                 end: Qt.point(titleLabel.width,0)
                                 gradient: Gradient {
                                     GradientStop {
@@ -306,7 +306,7 @@ Page {
                             id: textLabel
                             width: contactColumn.columnWidth
                             text: model.c_TEXT !== undefined ? model.c_TEXT : ""
-                            font.pointSize: swipeView.largeFontSize
+                            font.pointSize: mainView.largeFontSize
                             lineHeight: 1.1
                             opacity: 0.9
                             wrapMode: Text.WordWrap
@@ -318,20 +318,20 @@ Page {
                             Rectangle {
                                 id: statusBadge
                                 visible: model.c_SBADGE !== undefined ? model.c_SBADGE : false
-                                width: swipeView.smallFontSize * 0.6
-                                height: swipeView.smallFontSize * 0.6
-                                y: swipeView.smallFontSize * 0.3
+                                width: mainView.smallFontSize * 0.6
+                                height: mainView.smallFontSize * 0.6
+                                y: mainView.smallFontSize * 0.3
                                 radius: height * 0.5
                                 color: backgroundItem.isMenuStatus ? Universal.background : Universal.accent
                             }
                             Label {
                                 id: statusLabel
-                                bottomPadding:  model.c_IMAGE !== undefined ? swipeView.innerSpacing : 0.0
+                                bottomPadding:  model.c_IMAGE !== undefined ? mainView.innerSpacing : 0.0
                                 width: statusBadge.visible ?
                                            contactColumn.columnWidth - statusBadge.width - statusRow.spacing
                                          : contactColumn.columnWidth
                                 text: model.c_STEXT !== undefined ? model.c_STEXT : ""
-                                font.pointSize: swipeView.smallFontSize
+                                font.pointSize: mainView.smallFontSize
                                 clip: true
                                 opacity: 0.8
                                 visible: model.c_STEXT !== undefined
@@ -340,7 +340,7 @@ Page {
                                     id: statusLabelTruncator
                                     height: statusLabel.height
                                     width: statusLabel.width
-                                    start: Qt.point(statusLabel.width - swipeView.innerSpacing,0)
+                                    start: Qt.point(statusLabel.width - mainView.innerSpacing,0)
                                     end: Qt.point(statusLabel.width,0)
                                     gradient: Gradient {
                                         GradientStop {
@@ -372,23 +372,23 @@ Page {
                 }
                 Rectangle {
                     anchors.top: contactBox.top
-                    anchors.topMargin: swipeView.innerSpacing * 0.5
+                    anchors.topMargin: mainView.innerSpacing * 0.5
                     anchors.left: contactBox.left
-                    anchors.leftMargin: swipeView.innerSpacing
+                    anchors.leftMargin: mainView.innerSpacing
                     width: collectionPage.iconSize
                     height: collectionPage.iconSize
                     color: "transparent"
                     border.color: Universal.foreground
                     opacity: 0.7
                     radius: height * 0.5
-                    visible: collectionPage.currentCollectionMode === swipeView.collectionMode.News
+                    visible: collectionPage.currentCollectionMode === mainView.collectionMode.News
                 }
                 Rectangle {
                     id: notificationBadge
                     anchors.top: contactBox.top
-                    anchors.topMargin: swipeView.innerSpacing * 0.5
+                    anchors.topMargin: mainView.innerSpacing * 0.5
                     anchors.left: contactBox.left
-                    anchors.leftMargin: swipeView.innerSpacing
+                    anchors.leftMargin: mainView.innerSpacing
                     visible: model.c_BADGE !== undefined ? model.c_BADGE : false
                     width: collectionPage.iconSize * 0.25
                     height: collectionPage.iconSize * 0.25
@@ -400,29 +400,29 @@ Page {
                     anchors.top: contactRow.bottom
                     topPadding: 22.0
                     bottomPadding: 8.0
-                    leftPadding: swipeView.innerSpacing
+                    leftPadding: mainView.innerSpacing
                     spacing: 14.0
                     visible: false
 
                     Label {
                         id: callLabel
-                        height: swipeView.mediumFontSize * 1.2
+                        height: mainView.mediumFontSize * 1.2
                         text: qsTr("Call")
-                        font.pointSize: swipeView.mediumFontSize
+                        font.pointSize: mainView.mediumFontSize
                         visible: model.c_PHONE !== undefined
                     }
                     Label {
                         id: messageLabel
-                        height: swipeView.mediumFontSize * 1.2
+                        height: mainView.mediumFontSize * 1.2
                         text: qsTr("Send Message")
-                        font.pointSize: swipeView.mediumFontSize
+                        font.pointSize: mainView.mediumFontSize
                         visible: model.c_PHONE !== undefined && model.c_IS_MOBILE
                     }
                     Label {
                         id: emailLabel
-                        height: swipeView.mediumFontSize * 1.2
+                        height: mainView.mediumFontSize * 1.2
                         text: qsTr("Send Email")
-                        font.pointSize: swipeView.mediumFontSize
+                        font.pointSize: mainView.mediumFontSize
                         visible: model.c_EMAIL !== undefined
                     }
                 }
@@ -436,17 +436,17 @@ Page {
             onClicked: {
                 console.log("Collections | List entry '" + model.c_ID + "' clicked.")
                 var imPoint = mapFromItem(iconMask, 0, 0)
-                if (currentCollectionMode === swipeView.collectionMode.News
+                if (currentCollectionMode === mainView.collectionMode.News
                         && mouseY > imPoint.y && mouseY < imPoint.y + iconMask.height
                         && mouseX > imPoint.x && mouseX < imPoint.x + iconMask.width) {
-                    currentCollectionModel.executeSelection(model, swipeView.actionType.ShowGroup)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.ShowGroup)
                 } else {
                     // todo: should be replaced by model id
-                    currentCollectionModel.executeSelection(model, swipeView.actionType.ShowDetails)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.ShowDetails)
                 }
             }
             onPressAndHold: {
-                if (currentCollectionMode === swipeView.collectionMode.People) {
+                if (currentCollectionMode === mainView.collectionMode.People) {
                     contactMenu.visible = true
                     contactBox.color = Universal.accent
                     preventStealing = true
@@ -454,7 +454,7 @@ Page {
                 }
             }
             onExited: {
-                if (currentCollectionMode === swipeView.collectionMode.People) {
+                if (currentCollectionMode === mainView.collectionMode.People) {
                     contactMenu.visible = false
                     contactBox.color = "transparent"
                     preventStealing = false
@@ -479,23 +479,23 @@ Page {
             }
             onSelectedMenuItemChanged: {
                 callLabel.font.bold = selectedMenuItem === callLabel
-                callLabel.font.pointSize = selectedMenuItem === callLabel ? swipeView.mediumFontSize * 1.2 : swipeView.mediumFontSize
+                callLabel.font.pointSize = selectedMenuItem === callLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
                 messageLabel.font.bold = selectedMenuItem === messageLabel
-                messageLabel.font.pointSize = selectedMenuItem === messageLabel ? swipeView.mediumFontSize * 1.2 : swipeView.mediumFontSize
+                messageLabel.font.pointSize = selectedMenuItem === messageLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
                 emailLabel.font.bold = selectedMenuItem === emailLabel
-                emailLabel.font.pointSize = selectedMenuItem === emailLabel ? swipeView.mediumFontSize * 1.2 : swipeView.mediumFontSize
+                emailLabel.font.pointSize = selectedMenuItem === emailLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
             }
 
             function executeSelection() {
                 if (selectedMenuItem === callLabel) {
                     console.log("Collections | Call " + model.c_TITLE)
-                    currentCollectionModel.executeSelection(model, swipeView.actionType.MakeCall)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.MakeCall)
                 } else if (selectedMenuItem === messageLabel) {
                     console.log("Collections | Send message to " + model.c_TITLE)
-                    currentCollectionModel.executeSelection(model, swipeView.actionType.SendSMS)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.SendSMS)
                 } else if (selectedMenuItem === emailLabel) {
                     console.log("Collections | Send email to " + model.c_TITLE)
-                    currentCollectionModel.executeSelection(model, swipeView.actionType.SendEmail)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.SendEmail)
                 } else {
                     console.log("Collections | Nothing selected")
                 }
@@ -530,7 +530,7 @@ Page {
                 }
             })
 
-            var contacts = swipeView.contacts.filter(checkStarredOrRecent)
+            var contacts = mainView.contacts.filter(checkStarredOrRecent)
             contacts.forEach(function (contact, index) {
                 console.log("Collections | Matched contact: " + contact["name"])
                 var cContact = {c_ID: contact["id"]}
@@ -596,14 +596,14 @@ Page {
                     cContact.c_SBADGE = !thread["read"]
                     if (!thread["read"]) {
                         cContact.c_ITEM_ID = thread["thread_id"]
-                        cContact.c_STEXT = "1 " + qsTr("New message") + " " + swipeView.parseTime(thread["date"])
+                        cContact.c_STEXT = "1 " + qsTr("New message") + " " + mainView.parseTime(thread["date"])
                     }
                 } else if ((thread !== undefined && call !== undefined && thread["date"] < call["date"])
                         || (thread === undefined && call !== undefined)) {
                     cContact.c_SBADGE = call["new"]
                     if (call["new"] === true) {
                         var messageText = (call["count"] > 1) ? qsTr("New calls") : qsTr("New call")
-                        cContact.c_STEXT = call["count"] + " " + messageText + " " + swipeView.parseTime(call["date"])
+                        cContact.c_STEXT = call["count"] + " " + messageText + " " + mainView.parseTime(call["date"])
                     }
                 }
 
@@ -679,18 +679,18 @@ Page {
 
         function executeSelection(item, type) {
             switch (type) {
-                case swipeView.actionType.MakeCall:
+                case mainView.actionType.MakeCall:
                     Qt.openUrlExternally("tel:" + item.c_PHONE)
                     break
-                case swipeView.actionType.SendSMS:
+                case mainView.actionType.SendSMS:
                     Qt.openUrlExternally("sms:" + item.c_PHONE)
                     break
-                case swipeView.actionType.SendEmail:
+                case mainView.actionType.SendEmail:
                     Qt.openUrlExternally("mailto:" + item.c_EMAIL)
                     break
                 default:
                     // Todo: Create dynamic detail page
-                    swipeView.updateConversationPage(swipeView.conversationMode.Person, item.c_ID, item.c_TITLE)
+                    mainView.updateConversationPage(mainView.conversationMode.Person, item.c_ID, item.c_TITLE)
             }
         }
     }
@@ -714,7 +714,7 @@ Page {
                             || (contact["phone.home"] === thread["address"]))
                 }
 
-                var contact = swipeView.contacts.find(checkMatchigThread)
+                var contact = mainView.contacts.find(checkMatchigThread)
 
                 if (contact !== undefined) {
                     cThread.c_TITLE = contact["name"]
@@ -736,7 +736,7 @@ Page {
                     kind = "MMS"
                 }
 
-                cThread.c_STEXT = swipeView.parseTime(thread["date"]) + " • " + qsTr(kind)
+                cThread.c_STEXT = mainView.parseTime(thread["date"]) + " • " + qsTr(kind)
 
                 modelArr.push(cThread)
             })
@@ -798,7 +798,7 @@ Page {
         }
 
         function executeSelection(item, typ) {
-            swipeView.updateConversationPage(swipeView.conversationMode.Thread, item.c_ID, item.c_TITLE)
+            mainView.updateConversationPage(mainView.conversationMode.Thread, item.c_ID, item.c_TITLE)
         }
     }
 
@@ -821,8 +821,7 @@ Page {
                     if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                         console.log("Collections | Received header status: " + doc.status);
                         if (doc.status !== 200) {
-                            toast.text = qsTr("Could not load RSS feed " + rssFeed.title)
-                            toast.show()
+                            mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.title))
                         }
                     } else if (doc.readyState === XMLHttpRequest.DONE) {
                         var cNews = {c_CHANNEL: rssFeed.source, c_ICON: rssFeed.icon}
@@ -837,8 +836,7 @@ Page {
                         }
                         if (channel === undefined) {
                             console.log("Collection | Missing rss channel")
-                            toast.text = qsTr("Invalid RSS feed: ") + rssFeed.title
-                            toast.show()
+                            mainView.showToast(qsTr("Invalid RSS feed: ") + rssFeed.title)
                             return
                         }
 
@@ -856,7 +854,7 @@ Page {
                         }
                         if (feedItem === undefined) {
                             console.log("Collection | Missing rss feed item")
-                            toast.text = qsTr("Missing RSS item: ") + rssFeed.title
+                            mainView.showToast(qsTr("Missing RSS item: ") + rssFeed.title)
                             return
                         }
                         for (i = 0; i < feedItem.childNodes.length; ++i) {
@@ -869,7 +867,7 @@ Page {
                             else if (childNode.nodeName === "pubDate") {
                                 var date = new Date(textNode.nodeValue)
                                 cNews.c_TSTAMP = date.valueOf()
-                                cNews.c_STEXT = swipeView.parseTime(date.valueOf())
+                                cNews.c_STEXT = mainView.parseTime(date.valueOf())
                             }
                             else if (childNode.nodeName === "link") {
                                 cNews.c_ID = textNode.nodeValue
@@ -959,20 +957,16 @@ Page {
         }
 
         function executeSelection(item, type) {
-            if (type === swipeView.actionType.ShowGroup) {
-                swipeView.updateNewsPage(swipeView.feedMode.RSS, item.c_CHANNEL, item.c_STITLE, item.c_ICON)
+            if (type === mainView.actionType.ShowGroup) {
+                var n = item.c_STITLE.indexOf("•") - 1
+                var author = item.c_STITLE.substring(0, n)
+                mainView.updateNewsPage(mainView.feedMode.RSS, item.c_CHANNEL, author, item.c_ICON)
             } else {
-                console.log("Collections | Detail view not implemented yet")
-                toast.text = qsTr("Not yet implemented")
-                toast.show()
+                var n = item.c_STITLE.indexOf("•") - 1
+                var author = item.c_STITLE.substring(0, n)
+                mainView.updateDetailPage(mainView.detailMode.Web, item.c_ID, author, item.c_STEXT)
             }
         }
-    }
-
-    AN.Toast {
-        id: toast
-        text: qsTr("Not yet supported")
-        longDuration: true
     }
 
     Connections {

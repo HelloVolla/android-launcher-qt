@@ -13,7 +13,7 @@ Page {
 
     property string textInput
     property bool textFocus
-    property real menuheight: swipeView.largeFontSize * 7 + swipeView.innerSpacing * 10.5
+    property real menuheight: mainView.largeFontSize * 7 + mainView.innerSpacing * 10.5
     property var textInputArea
     property var selectedObj
 
@@ -40,24 +40,24 @@ Page {
             width: parent.width
             Label {
                 id: headline
-                topPadding: swipeView.innerSpacing
-                x: swipeView.innerSpacing
+                topPadding: mainView.innerSpacing
+                x: mainView.innerSpacing
                 text: qsTr("Springboard")
-                font.pointSize: swipeView.headerFontSize
+                font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
             }
             TextArea {
-                padding: swipeView.innerSpacing
+                padding: mainView.innerSpacing
                 id: textArea
-                x: swipeView.innerSpacing
-                width: parent.width - swipeView.innerSpacing * 2
+                x: mainView.innerSpacing
+                width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Type anything")
                 color: Universal.foreground
                 placeholderTextColor: "darkgrey"
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 wrapMode: Text.WordWrap
                 leftPadding: 0.0
-                rightPadding: swipeView.innerSpacing
+                rightPadding: mainView.innerSpacing
 
                 background: Rectangle {
                     color: "black"
@@ -87,7 +87,7 @@ Page {
                 Button {
                     id: deleteButton
                     text: "<font color='#808080'>×</font>"
-                    font.pointSize: swipeView.largeFontSize * 2
+                    font.pointSize: mainView.largeFontSize * 2
                     flat: true
                     topPadding: 0.0
                     anchors.top: parent.top
@@ -122,8 +122,7 @@ Page {
                         phoneNumber = selectedObj["phone.work"]
                     }
                 } else {
-                    toast.text = qsTr("Sorry. I couldn't identify the contact")
-                    toast.show()
+                    mainView.showToast(qsTr("Sorry. I couldn't identify the contact"))
                 }
 
                 return phoneNumber
@@ -142,8 +141,7 @@ Page {
                         emailAddress = selectedObj["email.mobile"]
                     }
                 } else {
-                    toast.text = qsTr("Sorry. I couldn't identify the contact")
-                    toast.show()
+                    mainView.showToast(qsTr("Sorry. I couldn't identify the contact"))
                 }
 
                 return emailAddress
@@ -153,7 +151,7 @@ Page {
                 console.log(actionValue + ":" + actionType + ":" + actionObj["id"])
 
                 switch (actionType) {
-                    case swipeView.actionType.MakeCall:
+                    case mainView.actionType.MakeCall:
                         var phoneNumber = textInput
                         if (!textInputStartsWithPhoneNumber()) {
                             phoneNumber = phoneNumberForContact()
@@ -162,7 +160,7 @@ Page {
                         Qt.openUrlExternally("tel:" + phoneNumber)
                         textInputArea.text = ""
                         break
-                    case swipeView.actionType.SendSMS:
+                    case mainView.actionType.SendSMS:
                         var idx = textInput.search(/\s/)
                         console.log("Springboard | Index: " + idx)
                         phoneNumber = textInput.substring(0,idx)
@@ -171,15 +169,14 @@ Page {
                             phoneNumber = phoneNumberForContact()
                         }
                         if (phoneNumber === -1) {
-                            toast.text = qsTr("Sorry. Contact has no mobile phone number")
-                            toast.show()
+                            mainView.showToast(qsTr("Sorry. Contact has no mobile phone number"))
                         } else {
                             console.log("Springboard | Will send message " + message)
                             Qt.openUrlExternally("sms:" + phoneNumber + "?body=" + encodeURIComponent(message))
                         }
                         textInputArea.text = ""
                         break
-                    case swipeView.actionType.SendEmail:
+                    case mainView.actionType.SendEmail:
                         idx = textInput.search(/\s/)
                         var recipient = textInput.substring(0, idx)
                         console.log("Springboard | 2nd Index: " + idx)
@@ -201,18 +198,17 @@ Page {
                             console.log("Springboard | Will send email " + message)
                             Qt.openUrlExternally(message)
                         } else {
-                            toast.text = qsTr("Sorry. Contact has no email address")
-                            toast.show()
+                            mainView.showToast(qsTr("Sorry. Contact has no email address"))
                         }
                         textInputArea.text = ""
                         break
-                    case swipeView.actionType.SearchWeb:
+                    case mainView.actionType.SearchWeb:
                         message = encodeURIComponent(textInput)
                         console.log("Springboard | Will search for " + message)
                         Qt.openUrlExternally("https://duck.com?q=" + message)
                         textInputArea.text = ""
                         break
-                    case swipeView.actionType.OpenURL:
+                    case mainView.actionType.OpenURL:
                         console.log("Springboard | Will open in browser" + textInput)
                         if (/^http/.test(textInput)) {
                             Qt.openUrlExternally(textInput)
@@ -221,7 +217,7 @@ Page {
                         }
                         textInputArea.text = ""
                         break
-                    case swipeView.actionType.CreateNote:
+                    case mainView.actionType.CreateNote:
                         console.log("Springboard | Will create note")
                         // todo create note
                         var source = "note" + Math.floor(Date.now()) + ".txt"
@@ -232,7 +228,7 @@ Page {
                         //Qt.openUrlExternally("content:///data/user/0/com.volla.launcher/files/" + source)
                         textInputArea.text = ""
                         break
-                    case swipeView.actionType.SuggestContact:
+                    case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         actionValue = "@" + actionValue.replace(/\s/g, "_")
                         textInputArea.text = textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue + " "
@@ -278,45 +274,45 @@ Page {
 
                 if (textInputHasMultiTokens()) {
                     if (textInputHasContactPrefix()) {
-                        filteredSuggestionObj[0] = [qsTr("Send message"), swipeView.actionType.SendSMS]
-                        filteredSuggestionObj[1] = [qsTr("Send email"), swipeView.actionType.SendEmail]
+                        filteredSuggestionObj[0] = [qsTr("Send message"), mainView.actionType.SendSMS]
+                        filteredSuggestionObj[1] = [qsTr("Send email"), mainView.actionType.SendEmail]
                     } else if (textInputStartsWithPhoneNumber()) {
-                        filteredSuggestionObj[0] = [qsTr("Send message"), swipeView.actionType.SendSMS]
+                        filteredSuggestionObj[0] = [qsTr("Send message"), mainView.actionType.SendSMS]
                     } else if (textInputStartWithEmailAddress()) {
-                        filteredSuggestionObj[0] = [qsTr("Send email"), swipeView.actionType.SendEmail]
+                        filteredSuggestionObj[0] = [qsTr("Send email"), mainView.actionType.SendEmail]
                     } else if (textInputHasMultiLines()) {
-                        filteredSuggestionObj[0] = [qsTr("Create note"), swipeView.actionType.CreateNote]
+                        filteredSuggestionObj[0] = [qsTr("Create note"), mainView.actionType.CreateNote]
                     } else {
-                        filteredSuggestionObj[0] = [qsTr("Create note"), swipeView.actionType.CreateNote]
-                        filteredSuggestionObj[1] = [qsTr("Search web"), swipeView.actionType.SearchWeb]
+                        filteredSuggestionObj[0] = [qsTr("Create note"), mainView.actionType.CreateNote]
+                        filteredSuggestionObj[1] = [qsTr("Search web"), mainView.actionType.SearchWeb]
                     }
                 } else if (textInputHasContactPrefix()) {                   
                     var lastChar = textInput.substring(textInput.length - 1, textInput.length)
                     console.log("Springboard | last char: " + lastChar)
                     if (lastChar === " ") {
-                        filteredSuggestionObj[0] = [qsTr("Call"), swipeView.actionType.MakeCall]
+                        filteredSuggestionObj[0] = [qsTr("Call"), mainView.actionType.MakeCall]
                     }
 
                     var lastToken = textInput.substring(1, textInput.length).toLowerCase()
                     console.log("Springboard | last token:" + lastToken)
-                    for (i = 0; i < swipeView.contacts.length; i++) {
-                        var contact = swipeView.contacts[i]
+                    for (i = 0; i < mainView.contacts.length; i++) {
+                        var contact = mainView.contacts[i]
                         var name = contact["name"].toLowerCase()
                         if (lastToken.length === 0 || name.includes(lastToken)) {
-                            filteredSuggestionObj[i] = [contact["name"], swipeView.actionType.SuggestContact, contact]
+                            filteredSuggestionObj[i] = [contact["name"], mainView.actionType.SuggestContact, contact]
                         }
                     }
                 } else if (textInputIsWebAddress()) {
-                    filteredSuggestionObj[0] = [qsTr("Open in browser"), swipeView.actionType.OpenURL]
+                    filteredSuggestionObj[0] = [qsTr("Open in browser"), mainView.actionType.OpenURL]
                 } else if (textInputStartsWithPhoneNumber()) {
-                    filteredSuggestionObj[0] = [qsTr("Call"), swipeView.actionType.MakeCall]
+                    filteredSuggestionObj[0] = [qsTr("Call"), mainView.actionType.MakeCall]
                 } else if (textInput.length > 1) {
-                    filteredSuggestionObj[0] = [qsTr("Search web"), swipeView.actionType.SearchWeb]
+                    filteredSuggestionObj[0] = [qsTr("Search web"), mainView.actionType.SearchWeb]
                 } else if (defaultSuggestions) {
-                    filteredSuggestionObj[0] = [qsTr("Make Call"), swipeView.actionType.MakeCall]
-                    filteredSuggestionObj[1] = [qsTr("Create Message"), swipeView.actionType.SendSMS]
-                    filteredSuggestionObj[2] = [qsTr("Create Mail"), swipeView.actionType.SendEmail]
-                    filteredSuggestionObj[3] = [qsTr("Open Cam"), swipeView.actionType.OpenCam]
+                    filteredSuggestionObj[0] = [qsTr("Make Call"), mainView.actionType.MakeCall]
+                    filteredSuggestionObj[1] = [qsTr("Create Message"), mainView.actionType.SendSMS]
+                    filteredSuggestionObj[2] = [qsTr("Create Mail"), mainView.actionType.SendEmail]
+                    filteredSuggestionObj[3] = [qsTr("Open Cam"), mainView.actionType.OpenCam]
                     filteredSuggestionObj[4] = [qsTr("Gallery"), swipe.actionType.ShowGallery]
                     filteredSuggestionObj[5] = [qsTr("Recent people"), swipe.actionType.ShowContacts]
                     filteredSuggestionObj[6] = [qsTr("Recent threads"), swipe.actionType.ShowThreads]
@@ -362,13 +358,13 @@ Page {
             width: parent.width
             color: model.action < 20000 ? "transparent" : Universal.accent
             Button {
-                leftPadding: swipeView.innerSpacing
-                topPadding: model.index === 0 ? swipeView.innerSpacing : 0
-                bottomPadding: model.index === listModel.count - 1 ? swipeView.innerSpacing : swipeView.innerSpacing / 2
+                leftPadding: mainView.innerSpacing
+                topPadding: model.index === 0 ? mainView.innerSpacing : 0
+                bottomPadding: model.index === listModel.count - 1 ? mainView.innerSpacing : mainView.innerSpacing / 2
                 id: button
                 anchors.top: parent.top
                 text: styledText(model.text, textInput.substring(1, textInput.length))
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 flat: model.action >= 20000 ? false : true
                 background: Rectangle {
                     color: "transparent"
@@ -390,12 +386,6 @@ Page {
             }
         }
 
-        AN.Toast {
-            id: toast
-            text: qsTr("Not yet supported")
-            longDuration: true
-        }
-
         FileIO {
             id: myNote
             source: "myNote.txt"
@@ -408,7 +398,7 @@ Page {
     MouseArea {
         id: shortcutMenu
         width: parent.width
-        height: dotShortcut ? swipeView.innerSpacing * 4 : swipeView.innerSpacing * 3 // parent.height / 2 // todo: make dynamic
+        height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3 // parent.height / 2 // todo: make dynamic
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         preventStealing: true
@@ -418,19 +408,19 @@ Page {
 
         onSelectedMenuItemChanged: {
             peopleLabel.font.bold = selectedMenuItem === peopleLabel
-            peopleLabel.font.pointSize = selectedMenuItem === peopleLabel ? swipeView.largeFontSize * 1.2 : swipeView.largeFontSize
+            peopleLabel.font.pointSize = selectedMenuItem === peopleLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             threadLabel.font.bold = selectedMenuItem === threadLabel
-            threadLabel.font.pointSize = selectedMenuItem === threadLabel ? swipeView.largeFontSize * 1.2 : swipeView.largeFontSize
+            threadLabel.font.pointSize = selectedMenuItem === threadLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             newsLabel.font.bold = selectedMenuItem === newsLabel
-            newsLabel.font.pointSize = selectedMenuItem === newsLabel ? swipeView.largeFontSize * 1.2 : swipeView.largeFontSize
+            newsLabel.font.pointSize = selectedMenuItem === newsLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             galleryLabel.font.bold = selectedMenuItem === galleryLabel
-            galleryLabel.font.pointSize = selectedMenuItem === galleryLabel ? swipeView.largeFontSize * 1.2 : swipeView.largeFontSize
+            galleryLabel.font.pointSize = selectedMenuItem === galleryLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             agendaLabel.font.bold = selectedMenuItem === agendaLabel
-            agendaLabel.font.pointSize = selectedMenuItem === agendaLabel ? swipeView.largeFontSize * 1.2 : swipeView.largeFontSize
+            agendaLabel.font.pointSize = selectedMenuItem === agendaLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             cameraLabel.font.bold = selectedMenuItem === cameraLabel
-            cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ? swipeView.largeFontSize * 1.2 : swipeView.largeFontSize
+            cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             dialerLabel.font.bold = selectedMenuItem === dialerLabel
-            dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ? swipeView.largeFontSize * 1.2 : swipeView.largeFontSize
+            dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
         }
 
         onEntered: {
@@ -443,7 +433,7 @@ Page {
                 console.log("Springboard | enable menu")
                 //shortcutBackground.visible = true
                 shortcutMenu.height = springBoard.height * 0.6
-                shortcutBackground.width = roundedShortcutMenu ? parent.width - swipeView.innerSpacing * 4 : parent.width
+                shortcutBackground.width = roundedShortcutMenu ? parent.width - mainView.innerSpacing * 4 : parent.width
                 shortcutBackground.height = shortcutColumn.height
                 shortcutColumn.opacity = 1
             }
@@ -452,23 +442,23 @@ Page {
         onExited: {
             console.log("Springboard | exited")
             //shortcutBackground.visible = false
-            shortcutBackground.width = dotShortcut ? swipeView.innerSpacing * 2 : parent.width
-            shortcutBackground.height = dotShortcut ? swipeView.innerSpacing * 2 : swipeView.innerSpacing
+            shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
+            shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             shortcutColumn.opacity = 0
             shortcutMenu.executeSelection()
             selectedMenuItem = rootMenuButton
-            shortcutMenu.height = dotShortcut ? swipeView.innerSpacing * 4 : swipeView.innerSpacing * 3
+            shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         }
 
         onCanceled: {
             console.log("Springboard | cancelled")
             //shortcutBackground.visible = false
-            shortcutBackground.width = dotShortcut ? swipeView.innerSpacing * 2 : parent.width
-            shortcutBackground.height = dotShortcut ? swipeView.innerSpacing * 2 : swipeView.innerSpacing
+            shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
+            shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             shortcutColumn.opacity = 0
             shortcutMenu.executeSelection()
             selectedMenuItem = rootMenuButton
-            shortcutMenu.height = dotShortcut ? swipeView.innerSpacing * 4 : swipeView.innerSpacing * 3
+            shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         }
 
         onPositionChanged: {
@@ -508,25 +498,25 @@ Page {
 
             if (selectedMenuItem == peopleLabel) {
                 console.log("Springboard | Show people")
-                swipeView.updateCollectionMode(swipeView.collectionMode.People)
+                mainView.updateCollectionPage(mainView.collectionMode.People)
             } else if (selectedMenuItem == threadLabel) {
                 console.log("Springboard | Show threads")
-                swipeView.updateCollectionMode(swipeView.collectionMode.Threads)
+                mainView.updateCollectionPage(mainView.collectionMode.Threads)
             } else if (selectedMenuItem == newsLabel) {
                 console.log("Springboard | Show news")
-                swipeView.updateCollectionMode(swipeView.collectionMode.News)
+                mainView.updateCollectionPage(mainView.collectionMode.News)
             } else if (selectedMenuItem == galleryLabel) {
                 console.log("Springboard | Show gallery")
-                backEnd.runApp(swipeView.galleryApp)
+                backEnd.runApp(mainView.galleryApp)
             } else if (selectedMenuItem == agendaLabel) {
                 console.log("Springboard | Show agenda")
-                backEnd.runApp(swipeView.calendarApp)
+                backEnd.runApp(mainView.calendarApp)
             } else if (selectedMenuItem == cameraLabel) {
                 console.log("Springboard | Show camera")
-                backEnd.runApp(swipeView.cameraApp)
+                backEnd.runApp(mainView.cameraApp)
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
-                backEnd.runApp(swipeView.phoneApp)
+                backEnd.runApp(mainView.phoneApp)
             }
         }
 
@@ -537,14 +527,14 @@ Page {
         Rectangle {
             id: shortcutBackground
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: roundedShortcutMenu ? swipeView.innerSpacing * 2 : 0
+            anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
             //anchors.horizontalCenter: parent.horizontalCenter
             anchors.right: parent.right
-            anchors.rightMargin: roundedShortcutMenu ? swipeView.innerSpacing * 2 : 0
+            anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
             //implicitHeight: shortcutColumn.height
-            //width: dotShortcut ? swipeView.innerSpacing * 2 : parent.width
-            height: dotShortcut ? swipeView.innerSpacing * 2 : swipeView.innerSpacing
-            width: dotShortcut ? swipeView.innerSpacing * 2 : parent.width
+            //width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
+            height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
+            width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
             color: Universal.accent
             visible: true
             radius: roundedShortcutMenu ? rootMenuButton.width / 2 : 0
@@ -570,7 +560,7 @@ Page {
             width: parent.width
             height: menuheight
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: roundedShortcutMenu ? swipeView.innerSpacing * 2 : 0
+            anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 
             property int duration: 200
             property real leftDistance: parent.width / 4
@@ -578,59 +568,59 @@ Page {
             Label {
                 id: dialerLabel
                 text: qsTr("Show Dialer")
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
-                topPadding: swipeView.innerSpacing * 1.5
+                topPadding: mainView.innerSpacing * 1.5
                 leftPadding: shortcutColumn.leftDistance
-                bottomPadding: swipeView.innerSpacing
+                bottomPadding: mainView.innerSpacing
             }
             Label {
                 id: cameraLabel
                 text: qsTr("Open Camera")
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
-                bottomPadding: swipeView.innerSpacing
+                bottomPadding: mainView.innerSpacing
             }
             Label {
                 id: agendaLabel
                 text: qsTr("Agenda")
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
-                bottomPadding: swipeView.innerSpacing
+                bottomPadding: mainView.innerSpacing
             }
             Label {
                 id: galleryLabel
                 text: qsTr("Gallery")
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
-                bottomPadding: swipeView.innerSpacing
+                bottomPadding: mainView.innerSpacing
             }
             Label {
                 id: newsLabel
                 text: qsTr("Recent News")
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
-                bottomPadding: swipeView.innerSpacing
+                bottomPadding: mainView.innerSpacing
             }
             Label {
                 id: threadLabel
                 text: qsTr("Recent Threads")
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
-                bottomPadding: swipeView.innerSpacing
+                bottomPadding: mainView.innerSpacing
             }
             Label {
                 id: peopleLabel
                 text: qsTr("Recent People")
-                font.pointSize: swipeView.largeFontSize
+                font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
-                bottomPadding: swipeView.innerSpacing * 2
+                bottomPadding: mainView.innerSpacing * 2
             }
 
             Behavior on opacity {
@@ -643,14 +633,14 @@ Page {
         Rectangle {
             id: rootMenuButton
             visible: true
-            height: dotShortcut ? swipeView.innerSpacing * 2 : swipeView.innerSpacing
-            width: dotShortcut ? swipeView.innerSpacing * 2 : parent.width
+            height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
+            width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
             color: Universal.accent
             radius: dotShortcut ? width * 0.5 : 0.0
             anchors.right: parent.right
-            anchors.rightMargin: dotShortcut ? swipeView.innerSpacing * 2 : 0
+            anchors.rightMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: dotShortcut ? swipeView.innerSpacing * 2 : 0
+            anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
         }
     }
 }
