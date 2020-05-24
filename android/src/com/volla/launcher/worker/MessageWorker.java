@@ -14,6 +14,7 @@ import android.provider.Telephony;
 import android.provider.Telephony.TextBasedSmsColumns;
 import android.provider.Telephony.Threads;
 import android.provider.Telephony.ThreadsColumns;
+import android.provider.Telephony.MmsSms;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import org.qtproject.qt5.android.QtNative;
@@ -42,21 +43,22 @@ public class MessageWorker {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map message) {
+
+                final Activity activity = QtNative.activity();
+
                 if (type.equals(GET_CONVERSATION)) {
-                    getConversation(message);
+                    getConversation(message, activity);
                 } else if (type.equals(GET_THREADS)) {
-                    getThreads(message);
+                    getThreads(message, activity);
                 }
             }
         });
     }
 
-    static void getConversation(Map message) {
+    static void getConversation(Map message, Activity activity) {
         Log.d(TAG, "Invoked JAVA getConversation" );
 
         // params are threadId, age , after, afterId, read , match , count
-
-        Activity activity = org.qtproject.qt5.android.QtNative.activity();
 
         ArrayList<Map> messageList = new ArrayList();
 
@@ -237,14 +239,13 @@ public class MessageWorker {
         SystemDispatcher.dispatch(GOT_CONVERSATION, reply);
     }
 
-    static void getThreads(Map message) {
+    static void getThreads(Map message, Activity activity) {
         Log.d(TAG, "Invoked JAVA getThreads" );
 
         // params are age , read , match , count
 
-        Activity activity = org.qtproject.qt5.android.QtNative.activity();
-
-        Uri uriThread = Uri.parse("content://mms-sms/conversations/");
+        Uri uriThread = Uri.parse("content://mms-sms/conversations?simple=true");
+//        Uri uriThread = Telephony.MmsSms.CONTENT_CONVERSATIONS_URI;
         String[] projection = new String[] {"*"};
 
         ArrayList<Map> threadlist = new ArrayList();
@@ -291,7 +292,8 @@ public class MessageWorker {
 
             Log.d(TAG,  "Thread Filter is : " + filter );
 
-            Cursor cursor = activity.getContentResolver().query(uriThread, projection , filter, null , sortOrder );
+//            Cursor cursor = activity.getContentResolver().query(uriThread, projection, filter, selectionArgs , sortOrder );
+            Cursor cursor = activity.getContentResolver().query(uriThread, null, null, null , null );
 
             int mesgCount = cursor.getCount();
             Log.d(TAG,  "ThreadsCount = " + mesgCount );
@@ -299,79 +301,113 @@ public class MessageWorker {
 
             if (cursor != null)
             {
-                int index_id = cursor.getColumnIndex("_id"); // message id
-                int index_thread_id = cursor.getColumnIndex("thread_id");
-                int index_body = cursor.getColumnIndex("body");
-                int index_date = cursor.getColumnIndex("date");
-                int index_read = cursor.getColumnIndex("read");
-                int index_person = cursor.getColumnIndex("person");
-                int index_address = cursor.getColumnIndex("address");
-                int index_type = cursor.getColumnIndex("type");
-                int index_ct_t = cursor.getColumnIndex("ct_t");
+                int index_thread_id = cursor.getColumnIndex("_id");
+
+//                int index_id = cursor.getColumnIndex("_id"); // message id
+//                int index_thread_id = cursor.getColumnIndex("thread_id");
+//                int index_body = cursor.getColumnIndex("body");
+//                int index_date = cursor.getColumnIndex("date");
+//                int index_read = cursor.getColumnIndex("read");
+//                int index_person = cursor.getColumnIndex("person");
+//                int index_address = cursor.getColumnIndex("address");
+//                int index_type = cursor.getColumnIndex("type");
+//                int index_ct_t = cursor.getColumnIndex("ct_t");
 
                 while (cursor.moveToNext()) {
-//                    for (int i = 0; i < cursor.getColumnCount(); i++) {
-//                        Log.d(cursor.getColumnName(i) + "", cursor.getString(i) + "");
-//                    }
-
-                    String message_id = cursor.getString(index_id);
-                    String thread_id = cursor.getString(index_thread_id);
-                    String body = cursor.getString(index_body);
-                    String person = cursor.getString(index_person);
-                    String address = cursor.getString(index_address);
-                    String ct_t = cursor.getString(index_ct_t);
-                    Long d = cursor.getLong(index_date);
-                    int read = cursor.getInt(index_read);
-                    int type = cursor.getInt(index_type);
-                    boolean isMMS = false;
-
-                    Map thread = new HashMap();
-
-                    thread.put("id", message_id);
-                    thread.put("thread_id", thread_id);
-                    thread.put("body", body);
-                    thread.put("person", person);
-                    thread.put("address", address);
-                    thread.put("date", d);
-                    thread.put("read", read == 1 ? true : false);
-                    thread.put("isSent", type == 2 ? true : false);
-                    thread.put("isMMS", isMMS);
-
-                    if ("application/vnd.wap.multipart.related".equals(ct_t)) {
-                        // it's MMS
-                        isMMS = true;
-                        if ("application/vnd.wap.multipart.related".equals(ct_t)) {
-                            // it's MMS
-                            isMMS = true;
-
-                            String selectionPart = "mid=" + message_id;
-                            Uri uri = Uri.parse("content://mms/part");
-                            Cursor mmsCursor = activity.getContentResolver().query(uri, null, selectionPart, null, null);
-                            if (mmsCursor.moveToFirst()) {
-                                do {
-                                    String partId = mmsCursor.getString(mmsCursor.getColumnIndex("_id"));
-                                    String mmsType = mmsCursor.getString(mmsCursor.getColumnIndex("ct"));
-                                    if ("text/plain".equals(mmsType)) {
-                                        String data = mmsCursor.getString(mmsCursor.getColumnIndex("_data"));
-                                        if (data != null) {
-                                            body = getMmsText(partId, activity);
-                                        } else {
-                                            body = mmsCursor.getString(mmsCursor.getColumnIndex("text"));
-                                        }
-                                    }
-                                } while (mmsCursor.moveToNext());
-                            }
-
-                            Bitmap bitmap = getMmsImage(message_id, activity);
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                            byte[] imageBytes = baos.toByteArray();
-                            String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-                            thread.put("image", image);
-                        }
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
+                        Log.d(cursor.getColumnName(i) + "", cursor.getString(i) + "");
                     }
 
-                    threadlist.add( thread );
+                    String thId = cursor.getString(index_thread_id);
+                    Uri thUri = Uri.parse("content://mms-sms/conversations/" + thId + "/");
+                    String thFilter = " 1=1 ";
+                    String[] thProjection = new String[] { "_id", "address", "date", "body", "person", "read", "ct_t", "type" };
+                    String[] thSelectionArgs = {""};
+                    String thSortOrder  = " date desc limit 1";
+                    Cursor thCursor = activity.getContentResolver().query(thUri , thProjection , thFilter , null , thSortOrder );
+
+                    if (thCursor.moveToFirst()) {
+                        do {
+//                            for (int i = 0; i < thCursor.getColumnCount(); i++) {
+//                                Log.d(thCursor.getColumnName(i) + "", thCursor.getString(i) + "");
+//                            }
+
+                            int index_id = thCursor.getColumnIndex("_id"); // message id
+                            int index_body = thCursor.getColumnIndex("body");
+                            int index_date = thCursor.getColumnIndex("date");
+                            int index_read = thCursor.getColumnIndex("read");
+                            int index_person = thCursor.getColumnIndex("person");
+                            int index_address = thCursor.getColumnIndex("address");
+                            int index_type = thCursor.getColumnIndex("type");
+                            int index_ct_t = thCursor.getColumnIndex("ct_t");
+
+                            String message_id = thCursor.getString(index_id);
+                            String thread_id = thId;
+                            String body = thCursor.getString(index_body);
+                            String person = thCursor.getString(index_person);
+                            String address = thCursor.getString(index_address);
+                            String ct_t = thCursor.getString(index_ct_t);
+                            Long d = thCursor.getLong(index_date);
+                            int read = thCursor.getInt(index_read);
+                            int type = thCursor.getInt(index_type);
+                            boolean isMMS = false;
+
+                            Map thread = new HashMap();
+
+                            thread.put("id", message_id);
+                            thread.put("thread_id", thread_id);
+                            thread.put("body", body);
+                            thread.put("person", person);
+                            thread.put("address", address);
+                            thread.put("date", d);
+                            thread.put("read", read == 1 ? true : false);
+                            thread.put("isSent", type == 2 ? true : false);
+                            thread.put("isMMS", isMMS);
+
+                            if ("application/vnd.wap.multipart.related".equals(ct_t)) {
+                                // it's MMS
+                                isMMS = true;
+                                if ("application/vnd.wap.multipart.related".equals(ct_t)) {
+                                    // it's MMS
+                                    isMMS = true;
+
+                                    String selectionPart = "mid=" + message_id;
+                                    Uri uri = Uri.parse("content://mms/part");
+                                    Cursor mmsCursor = activity.getContentResolver().query(uri, null, selectionPart, null, null);
+                                    if (mmsCursor.moveToFirst()) {
+                                        do {
+                                            String partId = mmsCursor.getString(mmsCursor.getColumnIndex("_id"));
+                                            String mmsType = mmsCursor.getString(mmsCursor.getColumnIndex("ct"));
+                                            if ("text/plain".equals(mmsType)) {
+                                                String data = mmsCursor.getString(mmsCursor.getColumnIndex("_data"));
+                                                if (data != null) {
+                                                    body = getMmsText(partId, activity);
+                                                } else {
+                                                    body = mmsCursor.getString(mmsCursor.getColumnIndex("text"));
+                                                }
+                                            }
+                                        } while (mmsCursor.moveToNext());
+                                    }
+
+                                    Bitmap bitmap = getMmsImage(message_id, activity);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                    byte[] imageBytes = baos.toByteArray();
+                                    String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+                                    thread.put("image", image);
+                                }
+                            }
+
+                            threadlist.add( thread );
+                        } while (thCursor.moveToNext());
+                    }
+
+                    if (!thCursor.isClosed()) {
+                        thCursor.close();
+                        thCursor = null;
+                    } else {
+                        Log.d(TAG, "cursor is not defined");
+                    }
                 }
 
                 if (!cursor.isClosed()) {

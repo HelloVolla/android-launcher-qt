@@ -55,6 +55,7 @@ HEADERS += \
     fileio.h
 
 DISTFILES += \
+    LICENSE.txt \
     android/src/com/volla/launcher/parser/ArticleParser.java \
     android/src/com/volla/launcher/worker/AccountWorker.java \
     android/src/com/volla/launcher/worker/CallWorker.java \

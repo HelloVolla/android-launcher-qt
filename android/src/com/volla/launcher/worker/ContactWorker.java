@@ -144,11 +144,13 @@ public class ContactWorker {
                             Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
                             InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(contentResolver, contactUri);
                             Bitmap bitmap = BitmapFactory.decodeStream(input);
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                            byte[] imageBytes = baos.toByteArray();
-                            String icon = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-                            contact.put("icon", icon);
+                            if (bitmap != null) {
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                byte[] imageBytes = baos.toByteArray();
+                                String icon = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+                                contact.put("icon", icon);
+                            }
 
                             contacts.add(contact);
                         }

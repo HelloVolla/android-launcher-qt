@@ -12,24 +12,44 @@ Page {
 
     property string textInput
     property real labelPointSize: 16
-    property var iconMap: {"com.android.dialer": "/icons/dial-phone@4x.png",
-        "com.google.android.apps.messaging": "/icons/message@4x.png",
-        "com.google.android.apps.maps": "/icons/route-directions-map@4x.png",
-        "com.android.camera2": "/icons/camera@4x.png",
-        "com.google.android.apps.photos": "/icons/photo-gallery@4x.png",
-        "com.android.contacts": "/icons/people-contacts-agenda@4x.png",
+    property var iconMap: {
+        "com.android.dialer": "/icons/dial-phone@4x.png",
+        "org.smssecure.smssecure": "/icons/message@4x.png",
+        "com.junjunguo.pocketmaps": "/icons/route-directions-map@4x.png",
+        "com.mediatek.camera": "/icons/camera@4x.png",
+        "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
+        "com.simplemobiletools.contacts.pro": "/icons/people-contacts-agenda@4x.png",
         "com.google.android.deskclock": "/icons/clock@4x.png",
         "com.android.settings": "/icons/settings@4x.png",
-        "com.google.android.calendar": "/icons/calendar@4x.png",
-        "com.android.documentsui": "/icons/folder@4x.png",
-        "": "/icons/telegram@4x.png",
-        "com.google.android.gm": "/icons/email@4x.png",
-        "": "/icons/slack@4x.png",
-        "": "/icons/notes@4x.png",
-        "com.android.chrome": "/icons/browser@4x.png",
-        "": "/icons/music@4x.png",
-        "": "/icons/instagram@4x.png",
-        "": "/icons/yalp-store@4x.png"}
+        "com.simplemobiletools.calendar.pro": "/icons/calendar@4x.png",
+        "com.simplemobiletools.filemanager.pro": "/icons/folder@4x.png",
+        "org.telegram.messenger": "/icons/telegram@4x.png",
+        "com.android.email": "/icons/email@4x.png",
+        "com.Slack": "/icons/slack@4x.png",
+        "com.simplemobiletools.notes.pro": "/icons/notes@4x.png",
+        "org.mozilla.fennec_fdroid": "/icons/browser@4x.png",
+        "com.maxfour.music": "/icons/music@4x.png",
+        "com.instagram.android": "/icons/instagram@4x.png",
+        "com.github.yeriomin.yalpstore": "/icons/yalp-store@4x.png",
+        "com.aurora.store": "/icons/aurora-store-line@4x.png",
+        "": "/icons/amazon@4x.png",
+        "": "/icons/db-navigator@4x.png",
+        "": "/icons/dropbox@4x.png",
+        "org.fdroid.fdroid": "/icons/f-droid@4x.png",
+        "": "/icons/facebook@4x.png",
+        "": "/icons/gmx@4x.png",
+        "hideme.android.vpn.noPlayStore": "/icons/hide-me@4x.png",
+        "": "/icons/linkedin@4x.png",
+        "": "/icons/nextcloud@4x.png",
+        "": "/icons/paypal@4x.png",
+        "": "/icons/skype@4x.png",
+        "": "/icons/spotify@4x.png",
+        "": "/icons/tutanota@4x.png",
+        "": "/icons/volla-settings@4x.png",
+        "": "/icons/web-de@4x.png",
+        "": "/icons/wetter-com@4x.png",
+        "": "/icons/whats-app@4x.png",
+    }
     property var notificationMap: ["com.google.android.apps.messaging"]
 
     onTextInputChanged: {
@@ -75,7 +95,7 @@ Page {
                 rightPadding: 0.0
 
                 background: Rectangle {
-                    color: "black"
+                    color: "transparent"
                     border.color: "transparent"
                 }
                 Binding {
@@ -86,7 +106,7 @@ Page {
             }
             Rectangle {
                 width: parent.width
-                border.color: Universal.background
+                border.color: "transparent"
                 color: "transparent"
                 height: 1.1
             }
@@ -98,6 +118,8 @@ Page {
             width: parent.width * 0.25
             height: parent.width * 0.32
             color: "transparent"
+
+            property var gradientColer: Universal.background
 
             Rectangle {
                 id: gridCircle
@@ -138,6 +160,9 @@ Page {
                     }
                 }
                 flat:true
+                background: Rectangle {
+                    color: "transparent"
+                }
                 onClicked: {
                     console.log("App " + model.label + " selected")
                     if (model.package.length > 0) {
@@ -165,7 +190,7 @@ Page {
                     }
                     GradientStop {
                         position: 1.0
-                        color: "#FF000000"
+                        color: gridCell.gradientColer
                     }
                 }
             }

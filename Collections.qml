@@ -133,7 +133,7 @@ Page {
                     leftPadding: 0.0
                     rightPadding: 0.0
                     background: Rectangle {
-                        color: "black"
+                        color: "transparent"
                         border.color: "transparent"
                     }
 
@@ -263,6 +263,7 @@ Page {
                         property real columnWidth: collectionPage.currentCollectionMode === mainView.collectionMode.Threads ?
                                                        contactBox.width - mainView.innerSpacing * 2 - contactRow.spacing
                                                      : contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
+                        property var gradientColer: Universal.background
 
                         Label {
                             id: sourceLabel
@@ -297,7 +298,7 @@ Page {
                                     }
                                     GradientStop {
                                         position: 1.0
-                                        color: backgroundItem.isMenuStatus ? Universal.accent : Universal.background
+                                        color: contactColumn.gradientColer
                                     }
                                 }
                             }
@@ -322,7 +323,7 @@ Page {
                                 height: mainView.smallFontSize * 0.6
                                 y: mainView.smallFontSize * 0.3
                                 radius: height * 0.5
-                                color: backgroundItem.isMenuStatus ? Universal.background : Universal.accent
+                                color: backgroundItem.isMenuStatus ? "transparent" : Universal.accent
                             }
                             Label {
                                 id: statusLabel
@@ -349,7 +350,7 @@ Page {
                                         }
                                         GradientStop {
                                             position: 1.0
-                                            color: backgroundItem.isMenuStatus ? Universal.accent : Universal.background
+                                            color: contactColumn.gradientColer
                                         }
                                     }
                                 }
@@ -409,6 +410,7 @@ Page {
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Call")
                         font.pointSize: mainView.mediumFontSize
+                        color: "white"
                         visible: model.c_PHONE !== undefined
                     }
                     Label {
@@ -416,6 +418,7 @@ Page {
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Send Message")
                         font.pointSize: mainView.mediumFontSize
+                        color: "white"
                         visible: model.c_PHONE !== undefined && model.c_IS_MOBILE
                     }
                     Label {
@@ -423,6 +426,7 @@ Page {
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Send Email")
                         font.pointSize: mainView.mediumFontSize
+                        color: "white"
                         visible: model.c_EMAIL !== undefined
                     }
                 }
@@ -807,7 +811,7 @@ Page {
 
         // todo: Read from settings
         property var rssFeeds: [{"source": "https://www.nzz.ch/recent.rss", "title": "NZZ", "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
-                                {"source": "https://www.chip.de/rss/rss_topnews.xml", "title": "Chip.de", "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
+                                {"source": "https://www.chip.de/rss/rss_topnews.xml", "title": "Chip Online", "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
                                 {"source": "https://www.theguardian.com/world/rss", "title": "The Guardian", "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
 
         property var modelArr: []

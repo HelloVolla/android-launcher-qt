@@ -60,7 +60,7 @@ Page {
                 rightPadding: mainView.innerSpacing
 
                 background: Rectangle {
-                    color: "black"
+                    color: "transparent"
                     border.color: "transparent"
                 }
 
@@ -358,14 +358,18 @@ Page {
             width: parent.width
             color: model.action < 20000 ? "transparent" : Universal.accent
             Button {
+                id: button
                 leftPadding: mainView.innerSpacing
                 topPadding: model.index === 0 ? mainView.innerSpacing : 0
                 bottomPadding: model.index === listModel.count - 1 ? mainView.innerSpacing : mainView.innerSpacing / 2
-                id: button
                 anchors.top: parent.top
                 text: styledText(model.text, textInput.substring(1, textInput.length))
-                font.pointSize: mainView.largeFontSize
                 flat: model.action >= 20000 ? false : true
+                contentItem: Text {
+                    text: text
+                    font.pointSize: mainView.largeFontSize
+                    color: model.action < 20000 ? Universal.foreground : "white"
+                }
                 background: Rectangle {
                     color: "transparent"
                 }
@@ -573,6 +577,7 @@ Page {
                 topPadding: mainView.innerSpacing * 1.5
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing
+                color: "white"
             }
             Label {
                 id: cameraLabel
@@ -581,6 +586,7 @@ Page {
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing
+                color: "white"
             }
             Label {
                 id: agendaLabel
@@ -589,6 +595,7 @@ Page {
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing
+                color: "white"
             }
             Label {
                 id: galleryLabel
@@ -597,6 +604,7 @@ Page {
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing
+                color: "white"
             }
             Label {
                 id: newsLabel
@@ -605,6 +613,7 @@ Page {
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing
+                color: "white"
             }
             Label {
                 id: threadLabel
@@ -613,6 +622,7 @@ Page {
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing
+                color: "white"
             }
             Label {
                 id: peopleLabel
@@ -621,6 +631,7 @@ Page {
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing * 2
+                color: "white"
             }
 
             Behavior on opacity {

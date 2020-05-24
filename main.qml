@@ -18,6 +18,15 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: {
+        mainView.switchTheme(appSettings.theme)
+    }
+
+    Settings {
+        id: appSettings
+        property int theme: mainView.theme.Dark
+    }
+
     SwipeView {
         id: mainView
         anchors.fill: parent
@@ -26,7 +35,7 @@ ApplicationWindow {
 
         property real innerSpacing : 22.0
         property real headerFontSize: 40.0
-        property real largeFontSize: 22.0
+        property real largeFontSize: 20.0
         property real mediumFontSize: 18.0
         property real smallFontSize: 16.0
 
@@ -49,6 +58,13 @@ ApplicationWindow {
             'MMS' : 2,
             'Mail' : 3
         }
+        property
+
+        var theme: {
+            'Light': 0,
+            'Dark': 1,
+            'Translucent': 2
+        }
         property var actionType: {
             'SuggestContact': 0,
             'MakeCall': 20000,
@@ -63,7 +79,10 @@ ApplicationWindow {
             'ShowConacts': 20009,
             'ShowThreads': 20010,
             'ShowNews': 20011,
-            'OpenCam': 20012
+            'OpenCam': 20012,
+            'ShowNotes': 20013,
+            'ShowDialer': 20014,
+            'CreatEvent': 20015
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -76,17 +95,17 @@ ApplicationWindow {
 
         property var contacts: new Array
 
-        property string galleryApp: "com.google.android.apps.photos"
-        property string calendarApp: "com.google.android.calendar"
-        property string cameraApp: "com.android.camera2"
+        property string galleryApp: "com.simplemobiletools.gallery.pro"
+        property string calendarApp: "com.simplemobiletools.calendar.pro"
+        property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.google.android.dialer"
 
         Item {
-            id: demoBrowser
+            id: settings
 
             Loader {
                 anchors.fill: parent
-                sourceComponent: Qt.createComponent("/Browser.qml", mainView)
+                sourceComponent: Qt.createComponent("/Settings.qml", mainView)
             }
         }
 
@@ -190,6 +209,10 @@ ApplicationWindow {
         function loadContacts() {
             console.log("MainView | Will load contacts")
             AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+        }
+
+        function switchTheme(theme) {
+            Universal.theme = theme
         }
 
         // Todo: Improve display date and time with third party library

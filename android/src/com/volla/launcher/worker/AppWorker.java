@@ -52,7 +52,7 @@ public class AppWorker extends org.qtproject.qt5.android.bindings.QtActivity
         i.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
         for (ResolveInfo ri:availableActivities) {
-//            Log.d("Icon", ri.activityInfo.packageName);
+            Log.d("Found package", ri.activityInfo.packageName);
             json+="{\n";
             json+="\"package\": \"" + ri.activityInfo.packageName + "\",\n";
             json+="\"label\": \"" + String.valueOf(ri.loadLabel(pm)) + "\",\n";

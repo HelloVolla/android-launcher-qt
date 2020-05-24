@@ -28,22 +28,22 @@ public class CallWorker {
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
+            final Activity activity = QtNative.activity();
+
             public void onDispatched(String type, Map message) {
                 if (type.equals(GET_CALLS)) {
-                    getCalls(message, GOT_CALLS);
+                    getCalls(message, GOT_CALLS, activity);
                 } else if (type.equals(GET_CONVERSATION)) {
-                    getCalls(message, GOT_CONVERSATION);
+                    getCalls(message, GOT_CONVERSATION, activity);
                 }
             }
         });
     }
 
-    static void getCalls(Map message, String responseType) {
+    static void getCalls(Map message, String responseType, Activity activity) {
         Log.d(TAG, "Invoked JAVA getCalls" );
 
         // params are ...
-
-        Activity activity = org.qtproject.qt5.android.QtNative.activity();
 
         ArrayList<Map> callList = new ArrayList();
 

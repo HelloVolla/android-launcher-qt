@@ -120,7 +120,7 @@ Page {
                     leftPadding: 0.0
                     rightPadding: 0.0
                     background: Rectangle {
-                        color: "black"
+                        color: "transparent"
                         border.color: "transparent"
                     }
 
