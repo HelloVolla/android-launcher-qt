@@ -19,7 +19,9 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        mainView.switchTheme(appSettings.theme)
+        if (Universal.theme !== appSettings.theme) {
+            mainView.switchTheme(appSettings.theme)
+        }
     }
 
     Settings {
@@ -34,7 +36,7 @@ ApplicationWindow {
         interactive: true
 
         property real innerSpacing : 22.0
-        property real headerFontSize: 40.0
+        property real headerFontSize: 36.0
         property real largeFontSize: 20.0
         property real mediumFontSize: 18.0
         property real smallFontSize: 16.0

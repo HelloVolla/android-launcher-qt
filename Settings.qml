@@ -197,7 +197,7 @@ Page {
 
                 function executeSelection() {
                     console.log("Settings | Execute mode selection: " + selectedMenuItem.text)
-                    if (modeSettingsTitle.text !== selectedMenuItem.text) {
+                    if (settings.theme !== selectedMenuItem.theme) {
                         modeSettingsTitle.text = selectedMenuItem.text
 
                         // Todo: Update settings
@@ -208,20 +208,20 @@ Page {
 
                         switch (settings.theme) {
                         case mainView.theme.Dark:
+                            console.log("Enable dark mode")
                             mainView.switchTheme(Universal.Dark)
-                            console.log("Settings: " + Universal.theme)
                             break
                         case mainView.theme.Light:
                             console.log("Enable light mode")
                             mainView.switchTheme(Universal.Light)
-                            console.log("Settings: " + Universal.theme)
                             break
                         case mainView.theme.Translucent:
+                            console.log("Enable translucent mode")
+                            mainView.showToast(qsTr("No yet implemented"))
                             break
                         default:
                             console.log("Settings | Unknown theme selected")
                         }
-
 
                         selectedMenuItem = modeSettingsTitle
                     }
