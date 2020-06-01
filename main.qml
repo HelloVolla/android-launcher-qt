@@ -2,7 +2,9 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
+import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
+import Qt.labs.settings 1.0
 
 ApplicationWindow {
     visible: true
@@ -14,26 +16,50 @@ ApplicationWindow {
         var message = active ? "active" : "not active"
         console.log("MainView | Volla app is " + message)
         if (active) {
-            mainView.currentIndex = 2
+            console.log("MainView | Do some updates")
+            mainView.currentIndex = mainView.swipeIndex.Springboard
+            mainView.loadWallPaper()
+            mainView.loadContacts()
+            mainView.updateAppGrid()
         }
     }
 
-    Component.onCompleted: {
-        if (Universal.theme !== appSettings.theme) {
-            mainView.switchTheme(appSettings.theme)
-        }
-    }
-
-    Settings {
-        id: appSettings
-        property int theme: mainView.theme.Dark
-    }
+//    Component.onCompleted: {
+//        AN.SystemDispatcher.dispatch("androidnative.Util.setTranslucentStatusBar", {"value": true})
+//    }
 
     SwipeView {
         id: mainView
         anchors.fill: parent
         currentIndex: 2
         interactive: true
+
+        background: Item {
+            id: background
+            anchors.fill: parent
+            Image {
+                id: backgroundImage
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                source: mainView.wallpaper
+            }
+            FastBlur {
+                anchors.fill: backgroundImage
+                source: backgroundImage
+                radius: 60
+            }
+            Rectangle {
+                anchors.fill: parent
+                color: Universal.background
+                opacity: mainView.backgroundOpacity
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 300
+                    }
+                }
+            }
+         }
 
         property real innerSpacing : 22.0
         property real headerFontSize: 36.0
@@ -60,9 +86,7 @@ ApplicationWindow {
             'MMS' : 2,
             'Mail' : 3
         }
-        property
-
-        var theme: {
+        property var theme: {
             'Light': 0,
             'Dark': 1,
             'Translucent': 2
@@ -96,14 +120,22 @@ ApplicationWindow {
         }
 
         property var contacts: new Array
+        property var wallpaper: ""
+        property var backgroundOpacity: 1.0
 
         property string galleryApp: "com.simplemobiletools.gallery.pro"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.google.android.dialer"
 
+        onCurrentIndexChanged: {
+            if (currentIndex === swipeIndex.Apps) {
+                appGrid.children[0].item.updateNotifications()
+            }
+        }
+
         Item {
-            id: settings
+            id: settingsPage
 
             Loader {
                 anchors.fill: parent
@@ -161,21 +193,33 @@ ApplicationWindow {
             console.log("MainView | Will update detail page")
             switch (currentIndex) {
                 case swipeIndex.Collections:
+                    console.log("MainView | Current page is a collection")
                     if (count > swipeIndex.Collections + 1) {
                         var item = itemAt(swipeIndex.ConversationOrNewsOrDetails)
-                        item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
-                        while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
-                    } else {
+                        if (item.children[0].item.objectName !== "detailPage") {
+                            console.log("MainView | Create detail page")
+                            item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
+                            while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+                        } else {
+                            console.log("MainView | Re-use existing detail page")
+                        }
+                     } else {
                         item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
                         item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
                         addItem(item)
                     }
                     break
                 case swipeIndex.ConversationOrNewsOrDetails:
+                    console.log("MainView | Current page is a news or detail view")
                     if (count > swipeIndex.ConversationOrNewsOrDetails + 1) {
                         item = itemAt(swipeIndex.Details)
-                        item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
-                        while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+                        if (item.children[0].item.objectName !== "detailPage") {
+                            console.log("MainView | Create detail page")
+                            item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
+                            while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+                        } else {
+                            console.log("MainView | Re-use existing detail page")
+                        }
                     } else {
                         item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
                         item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
@@ -203,6 +247,10 @@ ApplicationWindow {
             currentIndex++
         }
 
+        function updateAppGrid() {
+            appGrid.children[0].item.updateAppLauncher()
+        }
+
         function showToast(message) {
             toast.text = message
             toast.show()
@@ -213,8 +261,30 @@ ApplicationWindow {
             AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
         }
 
+        function loadWallPaper() {
+            AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {})
+        }
+
         function switchTheme(theme) {
-            Universal.theme = theme
+            settings.sync()
+            console.log("MainView | Swith theme to " + theme + ", " + settings.theme)
+            switch (theme) {
+            case mainView.theme.Dark:
+                Universal.theme = Universal.Dark
+                mainView.backgroundOpacity = 1.0
+                break
+            case mainView.theme.Light:
+                Universal.theme = Universal.Light
+                mainView.backgroundOpacity = 1.0
+                break
+            case mainView.theme.Translucent:
+                Universal.theme = Universal.Dark
+                mainView.backgroundOpacity = 0.3
+                break
+            default:
+                console.log("Not supported theme: " + theme)
+                break
+            }
         }
 
         // Todo: Improve display date and time with third party library
@@ -254,23 +324,49 @@ ApplicationWindow {
             }
         }
 
-        Component.onCompleted: {
-            loadContacts()
-            console.log("MainView | Number of items: " + count)
-        }
-
         Connections {
             target: AN.SystemDispatcher
             onDispatched: {
                 if (type === "volla.launcher.contactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     mainView.contacts = message["contacts"]
-                    message["contacts"].forEach(function (aContact, index) {
-                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
-                        }
-                    })
+//                    message["contacts"].forEach(function (aContact, index) {
+//                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+//                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
+//                        }
+//                    })
+                } else if (type === "volla.launcher.wallpaperResponse") {
+                    console.log("MainView | onDispatched: " + type)
+                    mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                 }
+            }
+        }
+    }
+
+    Rectangle {
+        id: initialCover
+        anchors.fill: parent
+        color: "black"
+        opacity: 1.0
+
+        Component.onCompleted: {
+            opacity = 0.0
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+            }
+        }
+    }
+
+    Settings {
+        id: settings
+        property int theme: mainView.theme.Dark
+
+        Component.onCompleted: {
+            console.log("Current themes: " + Universal.theme + ", " + settings.theme)
+            if (Universal.theme !== settings.theme) {
+                mainView.switchTheme(settings.theme)
             }
         }
     }

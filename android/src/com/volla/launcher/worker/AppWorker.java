@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.util.Base64;
 import java.util.List;
+import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 
 public class AppWorker extends org.qtproject.qt5.android.bindings.QtActivity
@@ -48,16 +49,23 @@ public class AppWorker extends org.qtproject.qt5.android.bindings.QtActivity
     public static String getApplistAsJSON(Activity a){
         String json="[\n";
         final PackageManager pm = a.getPackageManager();
+        final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts", "com.android.gallery3d",
+            "com.android.mms", "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk",
+            "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control");
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
         for (ResolveInfo ri:availableActivities) {
             Log.d("Found package", ri.activityInfo.packageName);
-            json+="{\n";
-            json+="\"package\": \"" + ri.activityInfo.packageName + "\",\n";
-            json+="\"label\": \"" + String.valueOf(ri.loadLabel(pm)) + "\",\n";
-            json+="\"icon\": \"" + AppWorker.drawableToBase64(ri.loadIcon(pm)) + "\"\n";
-            json+="},\n";
+
+            // Todo: Remove. Workaround for beta demo purpose
+            if (!packages.contains(ri.activityInfo.packageName)) {
+                json+="{\n";
+                json+="\"package\": \"" + ri.activityInfo.packageName + "\",\n";
+                json+="\"label\": \"" + String.valueOf(ri.loadLabel(pm)) + "\",\n";
+                json+="\"icon\": \"" + AppWorker.drawableToBase64(ri.loadIcon(pm)) + "\"\n";
+                json+="},\n";
+            }
         }
         json=json.substring(0,json.length()-2);
         json+="\n]";

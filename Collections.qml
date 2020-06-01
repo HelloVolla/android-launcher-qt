@@ -35,6 +35,11 @@ Page {
     property string c_CHANNEL:   "channel"  // twitter or news channel
     property string c_TSTAMP:    "tstamp"   // timestamp to sort the list
 
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+
     onTextInputChanged: {
         console.log("Collections | text input changed")
         currentCollectionModel.update(textInput)
@@ -100,77 +105,68 @@ Page {
         anchors.fill: parent
         headerPositioning: ListView.PullBackHeader
 
-        header: Rectangle {
+        header: Column {
             id: header
-            color: Universal.background
             width: parent.width
-            implicitHeight: headerColumn.height
-            Column {
-                id: headerColumn
-                width: parent.width
-                Label {
-                    id: headerLabel
-                    topPadding: mainView.innerSpacing
-                    x: mainView.innerSpacing
-                    text: qsTr("People")
-                    font.pointSize: mainView.headerFontSize
-                    font.weight: Font.Black
-                    Binding {
-                        target: collectionPage
-                        property: "headline"
-                        value: headerLabel
-                    }
+            Label {
+                id: headerLabel
+                topPadding: mainView.innerSpacing
+                x: mainView.innerSpacing
+                text: qsTr("People")
+                font.pointSize: mainView.headerFontSize
+                font.weight: Font.Black
+                Binding {
+                    target: collectionPage
+                    property: "headline"
+                    value: headerLabel
                 }
-                TextField {
-                    id: textField
-                    padding: mainView.innerSpacing
-                    x: mainView.innerSpacing
-                    width: parent.width -mainView.innerSpacing * 2
-                    placeholderText: qsTr("Filter collections")
-                    color: Universal.foreground
-                    placeholderTextColor: "darkgrey"
-                    font.pointSize: mainView.largeFontSize
-                    leftPadding: 0.0
-                    rightPadding: 0.0
-                    background: Rectangle {
-                        color: "transparent"
-                        border.color: "transparent"
-                    }
-
-                    Binding {
-                        target: collectionPage
-                        property: "textInput"
-                        value: textField.displayText.toLowerCase()
-                    }
-
-                    Binding {
-                        target: collectionPage
-                        property: "textInputField"
-                        value: textField
-                    }
-
-                    Button {
-                        id: deleteButton
-                        visible: textField.activeFocus
-                        text: "<font color='#808080'>×</font>"
-                        font.pointSize: mainView.largeFontSize * 2
-                        flat: true
-                        topPadding: 0.0
-                        anchors.top: parent.top
-                        anchors.right: parent.right
-
-                        onClicked: {
-                            textField.text = ""
-                            textField.activeFocus = false
-                        }
-                    }
-                }
-                Rectangle {
-                    width: parent.width
-                    border.color: Universal.background
+            }
+            TextField {
+                id: textField
+                padding: mainView.innerSpacing
+                x: mainView.innerSpacing
+                width: parent.width -mainView.innerSpacing * 2
+                placeholderText: qsTr("Filter collections")
+                color: Universal.foreground
+                placeholderTextColor: "darkgrey"
+                font.pointSize: mainView.largeFontSize
+                leftPadding: 0.0
+                rightPadding: 0.0
+                background: Rectangle {
                     color: "transparent"
-                    height: 1.1
+                    border.color: "transparent"
                 }
+                Binding {
+                    target: collectionPage
+                    property: "textInput"
+                    value: textField.displayText.toLowerCase()
+                }
+                Binding {
+                    target: collectionPage
+                    property: "textInputField"
+                    value: textField
+                }
+                Button {
+                    id: deleteButton
+                    visible: textField.activeFocus
+                    text: "<font color='#808080'>×</font>"
+                    font.pointSize: mainView.largeFontSize * 2
+                    flat: true
+                    topPadding: 0.0
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+
+                    onClicked: {
+                        textField.text = ""
+                        textField.activeFocus = false
+                    }
+                }
+            }
+            Rectangle {
+                width: parent.width
+                border.color: "transparent"
+                color: "transparent"
+                height: 1.1
             }
         }
 
@@ -198,7 +194,6 @@ Page {
                     spacing: 18.0
                     topPadding: mainView.innerSpacing / 2
 
-                    // todo: handle no image
                     Rectangle {
                         id: contactInicials
 
@@ -283,6 +278,8 @@ Page {
                             text: model.c_TITLE !== undefined ? model.c_TITLE : ""
                             font.pointSize: mainView.largeFontSize
                             font.weight: Font.Black
+                            clip: mainView.backgroundOpacity === 1.0 ? true : false
+                            elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone : Text.ElideRight
                             visible: model.c_TITLE !== undefined
 
                             LinearGradient {
@@ -301,6 +298,7 @@ Page {
                                         color: contactColumn.gradientColer
                                     }
                                 }
+                                visible: mainView.backgroundOpacity === 1.0
                             }
                         }
                         Label {
@@ -333,7 +331,8 @@ Page {
                                          : contactColumn.columnWidth
                                 text: model.c_STEXT !== undefined ? model.c_STEXT : ""
                                 font.pointSize: mainView.smallFontSize
-                                clip: true
+                                clip: mainView.backgroundOpacity === 1.0 ? true : false
+                                elide: mainView.backgroundOpacity === 1.0 ? Text.ElideRight : Text.ElideNone
                                 opacity: 0.8
                                 visible: model.c_STEXT !== undefined
 
@@ -353,6 +352,7 @@ Page {
                                             color: contactColumn.gradientColer
                                         }
                                     }
+                                    visible: mainView.backgroundOpacity === 1.0
                                 }
                             }
                         }
@@ -684,7 +684,8 @@ Page {
         function executeSelection(item, type) {
             switch (type) {
                 case mainView.actionType.MakeCall:
-                    Qt.openUrlExternally("tel:" + item.c_PHONE)
+                    //Qt.openUrlExternally("tel:" + item.c_PHONE)
+                    util.makeCall({"number": item.c_PHONE})
                     break
                 case mainView.actionType.SendSMS:
                     Qt.openUrlExternally("sms:" + item.c_PHONE)
@@ -810,7 +811,7 @@ Page {
         id: newsModel
 
         // todo: Read from settings
-        property var rssFeeds: [{"source": "https://www.nzz.ch/recent.rss", "title": "NZZ", "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
+        property var rssFeeds: [{"source": "https://www.nzz.ch/startseite.rss", "title": "NZZ", "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
                                 {"source": "https://www.chip.de/rss/rss_topnews.xml", "title": "Chip Online", "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
                                 {"source": "https://www.theguardian.com/world/rss", "title": "The Guardian", "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
 
@@ -998,5 +999,9 @@ Page {
                 collectionPage.currentCollectionModel.update(collectionPage.textInput)
             }
         }
+    }
+
+    AN.Util {
+        id: util
     }
 }

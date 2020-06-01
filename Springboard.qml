@@ -21,6 +21,11 @@ Page {
     property bool dotShortcut: true
     property bool roundedShortcutMenu: true
 
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+
     onTextInputChanged: {
         console.log("Springboard | text input changed")
         listModel.update()
@@ -101,7 +106,7 @@ Page {
             }
             Rectangle {
                 width: parent.width
-                border.color: Universal.accent
+                border.color: "transparent"
                 color: "transparent"
                 height: 1.1
             }
@@ -366,7 +371,7 @@ Page {
                 text: styledText(model.text, textInput.substring(1, textInput.length))
                 flat: model.action >= 20000 ? false : true
                 contentItem: Text {
-                    text: text
+                    text: button.text
                     font.pointSize: mainView.largeFontSize
                     color: model.action < 20000 ? Universal.foreground : "white"
                 }

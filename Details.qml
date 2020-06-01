@@ -6,17 +6,24 @@ import AndroidNative 1.0 as AN
 
 Page {
     id: detailPage
+    objectName: "detailPage"
     anchors.fill: parent
 
     property var currentDetailMode: 0
     property var currentDetailId
     property var currentDetailAuthorAndDate
 
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+
     function updateDetailPage(mode, id, author, date) {
         console.log("DetailPage | Update detail page: " + id + ", " + mode)
         currentDetailMode = mode
         currentDetailId = id
         currentDetailAuthorAndDate = author !== undefined ? author  + "\n" + date : date
+        resetContent()
 
         switch (mode) {
         case mainView.detailMode.Web:
@@ -28,22 +35,34 @@ Page {
         }
     }
 
+    function resetContent() {
+        title.text = ""
+        author.text = ""
+        image.source = ""
+        text.text = ""
+    }
+
     function prepareWebArticleView (url) {
+        console.log("Will send XMLHTTPRequest for " + url)
         var doc = new XMLHttpRequest();
         doc.onreadystatechange = function() {
             if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                console.log("DetailPage | Received header status: " + doc.status);
+                console.log("DetailPage | Received header status: " + doc.status)
                 if (doc.status !== 200) {
-                    mainView.showToast(qsTr("Failed to load article with status " + doc.status))
+                    mainView.showToast(qsTr("Failed to load article with status " + doc.statusText))
                 }
             } else if (doc.readyState === XMLHttpRequest.DONE) {
-                var message = {"url": url, "rawHTML": doc.responseText}
-                AN.SystemDispatcher.dispatch("volla.launcher.articleAction", message)
+                console.log("DetailPage | Received response with status: " + doc.status)
+                if (doc.status === 200) {
+                    var message = {"url": url, "rawHTML": doc.responseText}
+                    AN.SystemDispatcher.dispatch("volla.launcher.articleAction", message)
+                } else {
+                    text.text = qsTr("Couldn't load article. <a href=\"" + url + "\">Open in Browser.</a>")
+                }
             }
         }
-
-        doc.open("GET", url);
-        doc.send();
+        doc.open("GET", url)
+        doc.send()
     }
 
     Flickable {
@@ -90,6 +109,8 @@ Page {
                 color: Universal.foreground
                 wrapMode: Text.WordWrap
                 linkColor: "lightgrey"
+
+                onLinkActivated: Qt.openUrlExternally(link)
             }
         }
     }
@@ -102,8 +123,16 @@ Page {
                 console.log("DetailPage | title: " + message.title)
                 console.log("DetailPage | image: " + message.imageUrl)
                 console.log("DetailPage | video: " + message.videoUrl)
+//                console.log("DetailPage | html: " + message.html)
                 title.text = message.title
-                text.text = message.html
+
+                var html = message.html.replace("<h1>", "<strong>")
+                html = html.replace("</h1>", "</strong>")
+                html = html.replace(/((<p>){2,})/g, "<p>")
+                html = html.replace(/((<\/p>){2,})/g, "</p>")
+//                console.log("DetailPage | html: " + html)
+
+                text.text = html
                 image.source = message.imageUrl
                 author.text = currentDetailAuthorAndDate
             }

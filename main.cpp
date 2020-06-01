@@ -15,7 +15,8 @@
 
 const QVector<QString> permissions({"android.permission.READ_CONTACTS",
                                     "android.permission.READ_SMS",
-                                    "android.permission.READ_CALL_LOG"});
+                                    "android.permission.READ_CALL_LOG",
+                                    "android.permission.READ_EXTERNAL_STORAGE"});
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
     Q_UNUSED(vm);
@@ -33,6 +34,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("Hallo Welt Systeme UG");
+    app.setOrganizationDomain("volla.online");
+    app.setApplicationName("Volla Launcher");
 
     qmlRegisterType<BackEnd>("com.volla.launcher.backend", 1, 0, "BackEnd");
     qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
@@ -40,6 +44,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.ContactWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.MessageWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.CallWorker");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.WallpaperWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.parser.ArticleParser");
 
     QQmlApplicationEngine engine;

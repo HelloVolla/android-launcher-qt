@@ -29,6 +29,11 @@ Page {
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
 
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+
     onTextInputChanged: {
         console.log("Conversation | text input changed")
         currentConversationModel.update(textInput)
@@ -87,77 +92,71 @@ Page {
         anchors.fill: parent
         headerPositioning: ListView.PullBackHeader
 
-        header: Rectangle {
+        header: Column {
             id: header
-            color: Universal.background
             width: parent.width
-            implicitHeight: headerColumn.height
-            Column {
-                id: headerColumn
-                width: parent.width
-                Label {
-                    id: headerLabel
-                    topPadding: mainView.innerSpacing
-                    x: mainView.innerSpacing
-                    text: qsTr("Conversation")
-                    font.pointSize: mainView.headerFontSize
-                    font.weight: Font.Black
-                    Binding {
-                        target: conversationPage
-                        property: "headline"
-                        value: headerLabel
-                    }
+            Label {
+                id: headerLabel
+                topPadding: mainView.innerSpacing
+                x: mainView.innerSpacing
+                text: qsTr("Conversation")
+                font.pointSize: mainView.headerFontSize
+                font.weight: Font.Black
+                Binding {
+                    target: conversationPage
+                    property: "headline"
+                    value: headerLabel
                 }
-                TextField {
-                    id: textField
-                    padding: mainView.innerSpacing
-                    x: mainView.innerSpacing
-                    width: parent.width -mainView.innerSpacing * 2
-                    placeholderText: qsTr("Filter messages ...")
-                    color: Universal.foreground
-                    placeholderTextColor: "darkgrey"
-                    font.pointSize: mainView.largeFontSize
-                    leftPadding: 0.0
-                    rightPadding: 0.0
-                    background: Rectangle {
-                        color: "transparent"
-                        border.color: "transparent"
-                    }
-
-                    Binding {
-                        target: conversationPage
-                        property: "textInput"
-                        value: textField.displayText.toLowerCase()
-                    }
-
-                    Binding {
-                        target: conversationPage
-                        property: "textInputField"
-                        value: textField
-                    }
-
-                    Button {
-                        id: deleteButton
-                        visible: textField.activeFocus
-                        text: "<font color='#808080'>×</font>"
-                        font.pointSize: mainView.largeFontSize * 2
-                        flat: true
-                        topPadding: 0.0
-                        anchors.top: parent.top
-                        anchors.right: parent.right
-
-                        onClicked: {
-                            textField.text = ""
-                            textField.activeFocus = false
-                        }
-                    }
-                }
-                Rectangle {
-                    width: parent.width
-                    border.color: Universal.background
+            }
+            TextField {
+                id: textField
+                padding: mainView.innerSpacing
+                x: mainView.innerSpacing
+                width: parent.width -mainView.innerSpacing * 2
+                placeholderText: qsTr("Filter messages ...")
+                color: Universal.foreground
+                placeholderTextColor: "darkgrey"
+                font.pointSize: mainView.largeFontSize
+                leftPadding: 0.0
+                rightPadding: 0.0
+                background: Rectangle {
                     color: "transparent"
-                    height: 1.1
+                    border.color: "transparent"
                 }
+
+                Binding {
+                    target: conversationPage
+                    property: "textInput"
+                    value: textField.displayText.toLowerCase()
+                }
+
+                Binding {
+                    target: conversationPage
+                    property: "textInputField"
+                    value: textField
+                }
+
+                Button {
+                    id: deleteButton
+                    visible: textField.activeFocus
+                    text: "<font color='#808080'>×</font>"
+                    font.pointSize: mainView.largeFontSize * 2
+                    flat: true
+                    topPadding: 0.0
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+
+                    onClicked: {
+                        textField.text = ""
+                        textField.activeFocus = false
+                    }
+                }
+            }
+            Rectangle {
+                width: parent.width
+                border.color: "transparent"
+                color: "transparent"
+                height: 1.1
             }
         }
 

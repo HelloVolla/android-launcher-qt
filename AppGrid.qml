@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.XmlListModel 2.12
 import QtGraphicalEffects 1.12
-
+import AndroidNative 1.0 as AN
 import com.volla.launcher.backend 1.0
 
 Page {
@@ -50,7 +50,12 @@ Page {
         "": "/icons/wetter-com@4x.png",
         "": "/icons/whats-app@4x.png",
     }
-    property var notificationMap: ["com.google.android.apps.messaging"]
+    property bool unreadMessages: false
+
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
 
     onTextInputChanged: {
         console.log("text input changed")
@@ -58,9 +63,12 @@ Page {
         //xmlModel.update(textInput)
     }
 
-    Component.onCompleted: {
-        console.log("component completed")
+    function updateAppLauncher() {
         gridModel.loadModel()
+    }
+
+    function updateNotifications() {
+        util.getSMSMessages({"read": 0, "match": " "})
     }
 
     GridView {
@@ -119,7 +127,8 @@ Page {
             height: parent.width * 0.32
             color: "transparent"
 
-            property var gradientColer: Universal.background
+            property var gradientColor: Universal.background
+            property var overlayColor: Universal.foreground
 
             Rectangle {
                 id: gridCircle
@@ -127,8 +136,8 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: parent.width * 0.6
                 width: parent.width * 0.6
-                color: "grey"
-                opacity: 0.4
+                color: Universal.foreground
+                opacity: Universal.theme === Universal.Light ? 0.1 : 0.2
                 radius: width * 0.5
             }
 
@@ -144,9 +153,17 @@ Page {
                         id: buttonIcon
                         anchors.left: parent.left
                         anchors.leftMargin: gridCell.width * 0.25
-                        source: model.package in appLauncher.iconMap ? Qt.resolvedUrl(appLauncher.iconMap[model.package]) : "data:image/png;base64," + model.icon
+                        source: model.package in appLauncher.iconMap ? Qt.resolvedUrl(appLauncher.iconMap[model.package])
+                                                                     : "data:image/png;base64," + model.icon
                         width: gridButton.width * 0.35
                         height: gridButton.width * 0.35
+
+                        ColorOverlay {
+                            anchors.fill: buttonIcon
+                            source: buttonIcon
+                            color: gridCell.overlayColor
+                            visible: model.package in appLauncher.iconMap
+                        }
                     }
                     Label {
                         id: buttonLabel
@@ -155,8 +172,8 @@ Page {
                         horizontalAlignment: contentWidth > gridButton.width - mainView.innerSpacing ? Text.AlignLeft : Text.AlignHCenter
                         text: gridButton.text
                         font.pointSize: appLauncher.labelPointSize
-                        clip: true
-                        color: Universal.foreground
+                        clip: mainView.backgroundOpacity === 1.0 ? true : false
+                        elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone :  Text.ElideRight
                     }
                 }
                 flat:true
@@ -180,8 +197,8 @@ Page {
             LinearGradient {
                 id: labelTruncator
                 height: parent.height
-                width: parent.width + parent.width * 0.2
-                start: Qt.point(parent.width - 22,0)
+                width: parent.width //+ parent.width * 0.2
+                start: Qt.point(parent.width - mainView.innerSpacing, 0)
                 end: Qt.point(parent.width,0)
                 gradient: Gradient {
                     GradientStop {
@@ -190,21 +207,29 @@ Page {
                     }
                     GradientStop {
                         position: 1.0
-                        color: gridCell.gradientColer
+                        color: gridCell.gradientColor
                     }
                 }
+                visible: mainView.backgroundOpacity === 1.0
             }
 
             Rectangle {
                 id: notificationBadge
-                visible: model.package in appLauncher.notificationMap
+                visible: false
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
                 width: parent.width * 0.15
                 height: parent.width * 0.15
                 radius: height * 0.5
-                color: Universal.accent
+                color:  Universal.accent
+
+                Binding {
+                    target: appLauncher
+                    property: "unreadMessages"
+                    value: notificationBadge.visible
+                    when: model.package === "org.smssecure.smssecure"
+                }
             }
         }
     }
@@ -335,6 +360,15 @@ Page {
                     append(filteredGridDict[modelItemName])
                 }
             }
+        }
+    }
+
+    AN.Util {
+        id: util
+
+        onSmsFetched: {
+            console.log("AppGrid | " + smsMessagesCount + " unread messages")
+            appLauncher.unreadMessages = smsMessagesCount > 0
         }
     }
 }

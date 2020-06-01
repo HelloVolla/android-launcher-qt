@@ -8,6 +8,11 @@ Page {
     id: settingsPage
     anchors.fill: parent
 
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+
     Flickable {
         anchors.fill: parent
         contentWidth: parent.width
@@ -43,6 +48,9 @@ Page {
 
                     Label {
                         id: modeSettingsTitle
+
+                        property var theme: themeSettings.theme
+
                         padding: mainView.innerSpacing
                         width: parent.width
                         text: qsTr("Dark Mode")
@@ -55,7 +63,8 @@ Page {
                         }
 
                         Component.onCompleted: {
-                            switch (settings.theme) {
+                            theme = themeSettings.theme
+                            switch (themeSettings.theme) {
                             case mainView.theme.Dark:
                                 text = qsTr("Dark Mode")
                                 break
@@ -66,7 +75,7 @@ Page {
                                 text = qsTr("Tanslucent Mode")
                                 break
                             default:
-                                console.log("Settings | Unknown theme selected")
+                                console.log("Settings | Unknown theme selected: " + mainView.theme)
                             }
                         }
                     }
@@ -196,31 +205,32 @@ Page {
                 }
 
                 function executeSelection() {
-                    console.log("Settings | Execute mode selection: " + selectedMenuItem.text)
-                    if (settings.theme !== selectedMenuItem.theme) {
+                    console.log("Settings | Current mode: " + Universal.theme + ", " + themeSettings.theme)
+                    console.log("Settings | Execute mode selection: " + selectedMenuItem.text + ", " + selectedMenuItem.theme)
+                    if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== modeSettingsTitle) {
                         modeSettingsTitle.text = selectedMenuItem.text
 
                         // Todo: Update settings
-                        console.log("Current Theme: " + settings.theme)
-                        settings.theme = selectedMenuItem.theme
-                        settings.sync()
-                        console.log("Updated Theme: " + settings.theme)
+                        console.log("Current Theme: " + themeSettings.theme)
+                        themeSettings.theme = selectedMenuItem.theme
+                        themeSettings.sync()
+                        console.log("Updated Theme: " + themeSettings.theme)
 
-                        switch (settings.theme) {
-                        case mainView.theme.Dark:
-                            console.log("Enable dark mode")
-                            mainView.switchTheme(Universal.Dark)
-                            break
-                        case mainView.theme.Light:
-                            console.log("Enable light mode")
-                            mainView.switchTheme(Universal.Light)
-                            break
-                        case mainView.theme.Translucent:
-                            console.log("Enable translucent mode")
-                            mainView.showToast(qsTr("No yet implemented"))
-                            break
-                        default:
-                            console.log("Settings | Unknown theme selected")
+                        switch (themeSettings.theme) {
+                            case mainView.theme.Dark:
+                                console.log("Enable dark mode")
+                                mainView.switchTheme(mainView.theme.Dark)
+                                break
+                            case mainView.theme.Light:
+                                console.log("Enable light mode")
+                                mainView.switchTheme(mainView.theme.Light)
+                                break
+                            case mainView.theme.Translucent:
+                                console.log("Enable translucent mode")
+                                mainView.switchTheme(mainView.theme.Translucent)
+                                break
+                            default:
+                                console.log("Settings | Unknown theme selected: " + themeSettings.theme)
                         }
 
                         selectedMenuItem = modeSettingsTitle
@@ -228,7 +238,7 @@ Page {
                 }
 
                 Settings {
-                    id: settings
+                    id: themeSettings
                     property int theme: mainView.theme.Dark
                 }
             }

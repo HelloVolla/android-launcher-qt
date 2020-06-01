@@ -28,6 +28,11 @@ Page {
     property string n_IMAGE:     "image"   // preview image
     property string n_DATE:      "date"    // date in milliseconds of the item
 
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+
     function updateFeedPage(mode, id, name, icon) {
         console.log("Feed | Update feed mode: " + mode + " with id " + id)
 
@@ -66,13 +71,14 @@ Page {
 
         header: Rectangle {
             id: header
-            color: Universal.background
             width: parent.width
             implicitHeight: headerColumn.height
+            color: "transparent"
             Column {
                 id: headerColumn
                 width: parent.width
                 Row {
+                    id: headerRow
                     topPadding: mainView.innerSpacing
                     leftPadding: mainView.innerSpacing
                     rightPadding: mainView.innerSpacing
@@ -112,7 +118,7 @@ Page {
                     }
                     Label {
                         id: headerLabel
-                        width: header.width - iconSize - (2 * mainView.innerSpacing)
+                        width: header.width - iconSize - headerRow.leftPadding - headerRow.rightPadding - headerRow.spacing
                         text: qsTr("Feed")
                         clip: true
                         verticalAlignment: Text.AlignVCenter
@@ -186,10 +192,11 @@ Page {
                 Rectangle {
                     id: headerBottomSpace
                     width: parent.width
-                    border.color: Universal.background
+                    border.color: "transparent"
                     color: "transparent"
                     height: 1.1
                 }
+
             }
             Rectangle {
                 id: heeaderIconBorder
