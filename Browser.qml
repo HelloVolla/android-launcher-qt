@@ -6,6 +6,7 @@ import QtWebView 1.1
 Page {
     id: browserPage
     anchors.fill: parent
+    topPadding: mainView.innerSpacing
 
     property real menuheight: 22 * 7 + mainView.innerSpacing * 10
     property var placeholderImage

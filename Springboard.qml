@@ -10,6 +10,7 @@ import AndroidNative 1.0 as AN
 Page {
     id: springBoard
     anchors.fill: parent
+    topPadding: mainView.innerSpacing
 
     property string textInput
     property bool textFocus
@@ -43,6 +44,7 @@ Page {
         header: Column {
             id: header
             width: parent.width
+
             Label {
                 id: headline
                 topPadding: mainView.innerSpacing
@@ -50,6 +52,7 @@ Page {
                 text: qsTr("Springboard")
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
+                color: mainView.fontColor
             }
             TextArea {
                 padding: mainView.innerSpacing
@@ -57,7 +60,7 @@ Page {
                 x: mainView.innerSpacing
                 width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Type anything")
-                color: Universal.foreground
+                color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
                 font.pointSize: mainView.largeFontSize
                 wrapMode: Text.WordWrap
@@ -86,7 +89,7 @@ Page {
                 }
 
                 onActiveFocusChanged: {
-                    headline.color = activeFocus ? "grey" : Universal.foreground
+                    headline.color = textArea.activeFocus ? "grey" : mainView.fontColor
                 }
 
                 Button {
@@ -100,7 +103,7 @@ Page {
 
                     onClicked: {
                         textArea.text = ""
-                        textArea.activeFocus = false
+                        textArea.focus = false
                     }
                 }
             }
@@ -117,7 +120,7 @@ Page {
 
             function phoneNumberForContact() {
                 var phoneNumber = -1
-                if (selectedObj) {
+                if (selectedObj !== undefined) {
                     // Todo: Offer selection
                     if (selectedObj["phone.mobile"].length > 0) {
                         phoneNumber = selectedObj["phone.mobile"]
@@ -136,7 +139,7 @@ Page {
             function emailAddressForContact() {
                 var emailAddress
                 if (selectedObj) {
-                    console.log("Springboard | Contact " + contactIdentifier + " " + contact.name)
+                    console.log("Springboard | Contact " + selectedObj["id"] + " " + selectedObj["name"])
                     // Todo: Offer selection
                     if (selectedObj["email.home"].length > 0) {
                         emailAddress = selectedObj["email.home"]
@@ -153,7 +156,11 @@ Page {
             }
 
             function executeAction(actionValue, actionType, actionObj) {
-                console.log(actionValue + ":" + actionType + ":" + actionObj["id"])
+                if (actionObj !== undefined) {
+                    console.log(actionValue + ":" + actionType + ":" + actionObj["id"])
+                } else {
+                    console.log(actionValue + ":" + actionType)
+                }
 
                 switch (actionType) {
                     case mainView.actionType.MakeCall:
@@ -214,12 +221,15 @@ Page {
                         textInputArea.text = ""
                         break
                     case mainView.actionType.OpenURL:
-                        console.log("Springboard | Will open in browser" + textInput)
+                        console.log("Springboard | Will open in browser " + textInput)
                         if (/^http/.test(textInput)) {
-                            Qt.openUrlExternally(textInput)
+                            var url = textInput.trim()
                         } else {
-                            Qt.openUrlExternally("http://" + textInput)
+                            url = "https://" + textInput.trim()
+
                         }
+                        var success = Qt.openUrlExternally(url)
+                        console.log("Springboard | Did open in browser: " + success)
                         textInputArea.text = ""
                         break
                     case mainView.actionType.CreateNote:
@@ -228,9 +238,9 @@ Page {
                         var source = "note" + Math.floor(Date.now()) + ".txt"
                         myNote.setSource(source)
                         myNote.write(textInput)
-                        console.log( "WRITE "+ myNote.write(textInput))
+                        console.log( "Springboard | WRITE "+ myNote.write(textInput))
                         console.log("Springboard | READ " + myNote.read())
-                        //Qt.openUrlExternally("content:///data/user/0/com.volla.launcher/files/" + source)
+                        // Qt.openUrlExternally("content:///storage/emulated/0/Documents/" + source)
                         textInputArea.text = ""
                         break
                     case mainView.actionType.SuggestContact:
@@ -239,7 +249,7 @@ Page {
                         textInputArea.text = textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue + " "
                         textInputArea.cursorPosition = textInput.length
                         textInputArea.forceActiveFocus()
-                        springBoard.selectedObject = actionObj
+                        springBoard.selectedObj = actionObj
                 }
             }
 

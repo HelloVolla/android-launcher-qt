@@ -8,6 +8,7 @@ Page {
     id: detailPage
     objectName: "detailPage"
     anchors.fill: parent
+    topPadding: mainView.innerSpacing
 
     property var currentDetailMode: 0
     property var currentDetailId

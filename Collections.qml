@@ -8,6 +8,7 @@ import AndroidNative 1.0 as AN
 Page {
     id: collectionPage
     anchors.fill: parent
+    topPadding: mainView.innerSpacing
 
     property var headline
     property var textInputField
@@ -266,6 +267,7 @@ Page {
                             width: contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize - contactRow.spacing
                             text: model.c_STITLE !== undefined ? model.c_STITLE : ""
                             font.pointSize: mainView.smallFontSize
+                            color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
                             lineHeight: 1.1
                             wrapMode: Text.Wrap
                             opacity: 0.8
@@ -278,6 +280,7 @@ Page {
                             text: model.c_TITLE !== undefined ? model.c_TITLE : ""
                             font.pointSize: mainView.largeFontSize
                             font.weight: Font.Black
+                            color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
                             clip: mainView.backgroundOpacity === 1.0 ? true : false
                             elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone : Text.ElideRight
                             visible: model.c_TITLE !== undefined
@@ -295,7 +298,7 @@ Page {
                                     }
                                     GradientStop {
                                         position: 1.0
-                                        color: contactColumn.gradientColer
+                                        color: backgroundItem.isMenuStatus ? Universal.accent : contactColumn.gradientColer
                                     }
                                 }
                                 visible: mainView.backgroundOpacity === 1.0
@@ -306,6 +309,7 @@ Page {
                             width: contactColumn.columnWidth
                             text: model.c_TEXT !== undefined ? model.c_TEXT : ""
                             font.pointSize: mainView.largeFontSize
+                            color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
                             lineHeight: 1.1
                             opacity: 0.9
                             wrapMode: Text.WordWrap
@@ -331,6 +335,7 @@ Page {
                                          : contactColumn.columnWidth
                                 text: model.c_STEXT !== undefined ? model.c_STEXT : ""
                                 font.pointSize: mainView.smallFontSize
+                                color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
                                 clip: mainView.backgroundOpacity === 1.0 ? true : false
                                 elide: mainView.backgroundOpacity === 1.0 ? Text.ElideRight : Text.ElideNone
                                 opacity: 0.8
@@ -349,7 +354,7 @@ Page {
                                         }
                                         GradientStop {
                                             position: 1.0
-                                            color: contactColumn.gradientColer
+                                            color: backgroundItem.isMenuStatus ? Universal.accent : contactColumn.gradientColer
                                         }
                                     }
                                     visible: mainView.backgroundOpacity === 1.0

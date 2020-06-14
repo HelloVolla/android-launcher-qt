@@ -9,24 +9,35 @@ import Qt.labs.settings 1.0
 ApplicationWindow {
     visible: true
     width: 640
-    height: 480
+    height: 1200
     title: qsTr("Volla")
+    //visibility: ApplicationWindow.FullScreen
+
+    Connections {
+       target: Qt.application
+       onStateChanged: {
+          if (Qt.application.state === Qt.ApplicationActive) {
+              // Application go in active state
+              console.log("Application became active")
+              mainView.currentIndex = mainView.swipeIndex.Springboard
+              mainView.loadWallPaper()
+              mainView.updateAppGrid()
+              mainView.loadContacts()
+          } else {
+              // Application go in suspend state
+              console.log("Application became inactive")
+          }
+       }
+    }
 
     onActiveChanged: {
-        var message = active ? "active" : "not active"
-        console.log("MainView | Volla app is " + message)
         if (active) {
-            console.log("MainView | Do some updates")
-            mainView.currentIndex = mainView.swipeIndex.Springboard
-            mainView.loadWallPaper()
-            mainView.loadContacts()
-            mainView.updateAppGrid()
+            AN.SystemDispatcher.dispatch("volla.launcher.layoutAction", { })
         }
     }
 
-//    Component.onCompleted: {
-//        AN.SystemDispatcher.dispatch("androidnative.Util.setTranslucentStatusBar", {"value": true})
-//    }
+    Component.onCompleted: {
+    }
 
     SwipeView {
         id: mainView
@@ -120,8 +131,11 @@ ApplicationWindow {
         }
 
         property var contacts: new Array
+        property double lastContactsCheck: 0
         property var wallpaper: ""
+        property var wallpaperId: ""
         property var backgroundOpacity: 1.0
+        property var fontColor: Universal.foreground
 
         property string galleryApp: "com.simplemobiletools.gallery.pro"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
@@ -248,7 +262,7 @@ ApplicationWindow {
         }
 
         function updateAppGrid() {
-            appGrid.children[0].item.updateAppLauncher()
+            AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
         }
 
         function showToast(message) {
@@ -258,11 +272,11 @@ ApplicationWindow {
 
         function loadContacts() {
             console.log("MainView | Will load contacts")
-            AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+            AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": mainView.lastContactsCheck})
         }
 
         function loadWallPaper() {
-            AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {})
+            AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
         }
 
         function switchTheme(theme) {
@@ -285,6 +299,8 @@ ApplicationWindow {
                 console.log("Not supported theme: " + theme)
                 break
             }
+            mainView.fontColor = Universal.foreground
+            AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme})
         }
 
         // Todo: Improve display date and time with third party library
@@ -330,31 +346,25 @@ ApplicationWindow {
                 if (type === "volla.launcher.contactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     mainView.contacts = message["contacts"]
-//                    message["contacts"].forEach(function (aContact, index) {
-//                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-//                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
-//                        }
-//                    })
+                    mainView.lastContactsCheck = new Date().getTime()
+                    message["contacts"].forEach(function (aContact, index) {
+                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
+                        }
+                    });
+                } else if (type === "volla.launcher.checkContactResponse") {
+                    console.log("MainView | onDispatched: " + type)
+                    if (message["needsSync"]) {
+                        console.log("MainView | Need to sync contacts")
+                        AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+                    }
                 } else if (type === "volla.launcher.wallpaperResponse") {
                     console.log("MainView | onDispatched: " + type)
-                    mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
+                    if (message["wallpaper"] !== undefined) {
+                        mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
+                    }
+                    mainView.wallpaperId = message["wallpaperId"]
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        id: initialCover
-        anchors.fill: parent
-        color: "black"
-        opacity: 1.0
-
-        Component.onCompleted: {
-            opacity = 0.0
-        }
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 300
             }
         }
     }

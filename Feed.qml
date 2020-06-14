@@ -8,6 +8,7 @@ import AndroidNative 1.0 as AN
 Page {
     id : feedPage
     anchors.fill: parent
+    topPadding: mainView.innerSpacing
 
     property var headline
     property var headIcon

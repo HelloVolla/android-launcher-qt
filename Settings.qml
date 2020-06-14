@@ -7,6 +7,7 @@ import Qt.labs.settings 1.0
 Page {
     id: settingsPage
     anchors.fill: parent
+    topPadding: mainView.innerSpacing
 
     background: Rectangle {
         anchors.fill: parent

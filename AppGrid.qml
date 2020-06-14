@@ -9,6 +9,7 @@ import com.volla.launcher.backend 1.0
 Page {
     id: appLauncher
     anchors.fill: parent
+    topPadding: mainView.innerSpacing
 
     property string textInput
     property real labelPointSize: 16
@@ -49,8 +50,12 @@ Page {
         "": "/icons/web-de@4x.png",
         "": "/icons/wetter-com@4x.png",
         "": "/icons/whats-app@4x.png",
+        "": "/icons/radio@4x_104x104px.png",
+        "": "/icons/sync@4x_104x104px.png",
+        "": "/icons/signal@4x_104x104px.png"
     }
     property bool unreadMessages: false
+    property int appCount: 0
 
     background: Rectangle {
         anchors.fill: parent
@@ -215,7 +220,7 @@ Page {
 
             Rectangle {
                 id: notificationBadge
-                visible: false
+                visible: model.package === "org.smssecure.smssecure" ? appLauncher.unreadMessages : false
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
@@ -223,13 +228,6 @@ Page {
                 height: parent.width * 0.15
                 radius: height * 0.5
                 color:  Universal.accent
-
-                Binding {
-                    target: appLauncher
-                    property: "unreadMessages"
-                    value: notificationBadge.visible
-                    when: model.package === "org.smssecure.smssecure"
-                }
             }
         }
     }
@@ -358,6 +356,19 @@ Page {
                     filteredGridItem = filteredGridDict[modelItemName]
                     console.log("Will append " + filteredGridItem.label)
                     append(filteredGridDict[modelItemName])
+                }
+            }
+        }
+    }
+
+    Connections {
+        target: AN.SystemDispatcher
+        onDispatched: {
+            if (type === "volla.launcher.appCountResponse") {
+                if (message["appCount"] !== appLauncher.appCount) {
+                    appLauncher.updateAppLauncher()
+                    console.log("AppGrid | Number of apps: " + message["appCount"], ", " + appLauncher.appCount)
+                    appLauncher.appCount = message["appCount"]
                 }
             }
         }

@@ -31,10 +31,17 @@ public class WallpaperWorker {
 
                 if (type.equals(GET_WALLPAPER)) {
                     WallpaperManager wallpaperManager = WallpaperManager.getInstance(activity);
-                    Drawable wallpaperDrawable = wallpaperManager.getDrawable();
-                    String wallpaperBitmap = WallpaperWorker.drawableToBase64(wallpaperDrawable);
                     Map reply = new HashMap();
-                    reply.put("wallpaper", wallpaperBitmap);
+
+                    int wallpaperId = wallpaperManager.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                    reply.put("wallpaperId", wallpaperId);
+
+                    if (!message.get("wallpaperId").equals(wallpaperId)) {
+                        Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+                        String wallpaperBitmap = WallpaperWorker.drawableToBase64(wallpaperDrawable);
+                        reply.put("wallpaper", wallpaperBitmap);
+                    }
+
                     SystemDispatcher.dispatch(GOT_WALLPAPER, reply);
                 }
             }

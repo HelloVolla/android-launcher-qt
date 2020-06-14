@@ -87,5 +87,8 @@
         <file>icons/web-de@4x.png</file>
         <file>icons/wetter-com@4x.png</file>
         <file>icons/whats-app@4x.png</file>
+        <file>icons/radio@4x_104x104px.png</file>
+        <file>icons/signal@4x_104x104px.png</file>
+        <file>icons/sync@4x_104x104px.png</file>
     </qresource>
 </RCC>

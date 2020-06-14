@@ -162,6 +162,40 @@ public class ContactWorker {
 
                     SystemDispatcher.dispatch("volla.launcher.contactResponse", responseMessage);
                 }
+                else if (type.equals("volla.launcher.checkContactAction")) {
+
+                    Map responseMessage = new HashMap();
+
+                    ContentResolver contentResolver = activity.getContentResolver();
+                    String[] mainQueryProjection = {
+                        ContactsContract.Contacts._ID,
+                        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                        ContactsContract.Contacts.STARRED
+                    };
+                    String mainQuerySelection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ? and "
+                                                + ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP + " > ? ";
+                    String[] mainQuerySelectionArgs = new String[]{"1", String.valueOf((double) message.get("timestamp"))};
+                    String mainQuerySortOrder = String.format("%1$s COLLATE NOCASE", ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+
+                    Cursor mainQueryCursor = contentResolver.query(
+                                    ContactsContract.Contacts.CONTENT_URI,
+                                    mainQueryProjection,
+                                    mainQuerySelection,
+                                    mainQuerySelectionArgs,
+                                    mainQuerySortOrder);
+
+                    boolean needsSync = false;
+
+                    if (mainQueryCursor != null) {
+                        Log.d("ContactWorker", "Number of contacts: " + mainQueryCursor.getCount());
+                        needsSync = mainQueryCursor.getCount() > 0;
+                    }
+
+                    responseMessage.put("needsSync", needsSync);
+
+                    SystemDispatcher.dispatch("volla.launcher.checkContactResponse", responseMessage);
+                }
+
                 return;
             }
         });

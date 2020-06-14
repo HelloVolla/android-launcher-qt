@@ -18,7 +18,7 @@ QString FileIO::read()
         return QString();
     }
 
-    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0);
+    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
     qDebug() << "Data Path: " << mDataPath;
     QDir myDir(mDataPath);
     if (!myDir.exists()) {
@@ -52,7 +52,7 @@ bool FileIO::write(const QString& data)
     if (mSource.isEmpty())
         return false;
 
-    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0);
+    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
     qDebug() << "Data Path: " << mDataPath;
     QDir myDir(mDataPath);
     if (!myDir.exists()) {
