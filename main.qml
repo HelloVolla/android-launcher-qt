@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 import Qt.labs.settings 1.0
+import QtQml 2.12
 
 ApplicationWindow {
     visible: true
@@ -37,6 +38,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        console.log("MainView | Current locale: " + Qt.locale().name)
     }
 
     SwipeView {
@@ -140,7 +142,8 @@ ApplicationWindow {
         property string galleryApp: "com.simplemobiletools.gallery.pro"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
-        property string phoneApp: "com.google.android.dialer"
+        property string phoneApp: "com.android.dialer"
+        property string messageApp: "org.smssecure.smssecure"
 
         onCurrentIndexChanged: {
             if (currentIndex === swipeIndex.Apps) {

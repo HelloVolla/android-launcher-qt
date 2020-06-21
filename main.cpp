@@ -39,6 +39,12 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("volla.online");
     app.setApplicationName("Volla Launcher");
 
+    QTranslator myappTranslator;
+    if (myappTranslator.load(QLocale(), QLatin1String("Volla"), QLatin1String("_"), QLatin1String(":/translations")) != 1) {
+        qDebug() << "FAILED TO LOAD TRANSLATOR for LOCALE" << QLocale();
+    }
+    app.installTranslator(&myappTranslator);
+
     qmlRegisterType<BackEnd>("com.volla.launcher.backend", 1, 0, "BackEnd");
     qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
 

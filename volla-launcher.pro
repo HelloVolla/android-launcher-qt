@@ -59,8 +59,17 @@ DISTFILES += \
     android/src/com/volla/launcher/parser/ArticleParser.java \
     android/src/com/volla/launcher/util/AppUtil.java \
     android/src/com/volla/launcher/util/LayoutUtil.java \
+    android/src/com/volla/launcher/util/VibrationUtil.java \
     android/src/com/volla/launcher/worker/AccountWorker.java \
     android/src/com/volla/launcher/worker/CallWorker.java \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java \
     android/src/com/volla/launcher/worker/WallpaperWorker.java
+
+TRANSLATIONS += \
+    translations/Volla_de.ts \
+    translations/Volla_fr.ts \
+    translations/Volla_nl.ts \
+    translations/Volla_se.ts \
+    translations/Volla_ro.ts \
+    translations/Volla_es.ts

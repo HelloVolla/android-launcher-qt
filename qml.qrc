@@ -10,32 +10,7 @@
         <file>icons/message@4x.png</file>
         <file>icons/photo-gallery@4x.png</file>
         <file>Browser.qml</file>
-        <file>images/people01.png</file>
-        <file>images/people02.png</file>
-        <file>images/people03.png</file>
-        <file>images/people04.png</file>
-        <file>images/people05.png</file>
-        <file>images/people06.png</file>
-        <file>images/people07.png</file>
-        <file>images/people08.png</file>
-        <file>images/people09.png</file>
-        <file>images/people11.png</file>
-        <file>images/people12.png</file>
-        <file>images/people13.png</file>
-        <file>images/people10.png</file>
         <file>Details.qml</file>
-        <file>images/contactTimeline.png</file>
-        <file>images/people01.1.png</file>
-        <file>images/news01.png</file>
-        <file>images/news02.png</file>
-        <file>images/news03.png</file>
-        <file>images/news04.png</file>
-        <file>images/news05.png</file>
-        <file>images/news06.png</file>
-        <file>images/news07.png</file>
-        <file>images/news08.png</file>
-        <file>images/news09.png</file>
-        <file>images/newsDetail01.png</file>
         <file>icons/calendar@4x.png</file>
         <file>icons/camera@4x.png</file>
         <file>icons/clock@4x.png</file>
@@ -51,19 +26,7 @@
         <file>icons/telegram@4x.png</file>
         <file>icons/yalp-store@4x.png</file>
         <file>images/InstagramPlaceholder.png</file>
-        <file>images/threads01.png</file>
-        <file>images/threads02.png</file>
-        <file>images/threads03.png</file>
-        <file>images/threads04.png</file>
-        <file>images/threads05.png</file>
-        <file>images/threads06.png</file>
-        <file>images/threads07.png</file>
-        <file>images/contact-max-miller.jpg</file>
-        <file>images/contact-paula-black.jpg</file>
         <file>images/contact-mask.png</file>
-        <file>images/news-ben-rogers.jpg</file>
-        <file>images/news-image.png</file>
-        <file>images/news-ny-times.png</file>
         <file>Conversation.qml</file>
         <file>Feed.qml</file>
         <file>Settings.qml</file>
@@ -90,5 +53,11 @@
         <file>icons/radio@4x_104x104px.png</file>
         <file>icons/signal@4x_104x104px.png</file>
         <file>icons/sync@4x_104x104px.png</file>
+        <file>translations/Volla_de.qm</file>
+        <file>translations/Volla_es.qm</file>
+        <file>translations/Volla_fr.qm</file>
+        <file>translations/Volla_nl.qm</file>
+        <file>translations/Volla_ro.qm</file>
+        <file>translations/Volla_se.qm</file>
     </qresource>
 </RCC>

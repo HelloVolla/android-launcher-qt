@@ -16,7 +16,7 @@ Page {
     property var iconMap: {
         "com.android.dialer": "/icons/dial-phone@4x.png",
         "org.smssecure.smssecure": "/icons/message@4x.png",
-        "com.junjunguo.pocketmaps": "/icons/route-directions-map@4x.png",
+        "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
         "com.simplemobiletools.contacts.pro": "/icons/people-contacts-agenda@4x.png",
@@ -33,28 +33,38 @@ Page {
         "com.instagram.android": "/icons/instagram@4x.png",
         "com.github.yeriomin.yalpstore": "/icons/yalp-store@4x.png",
         "com.aurora.store": "/icons/aurora-store-line@4x.png",
-        "": "/icons/amazon@4x.png",
-        "": "/icons/db-navigator@4x.png",
-        "": "/icons/dropbox@4x.png",
+        "com.amazon.mShop.android.shopping": "/icons/amazon@4x.png",
+        "de.hafas.android.db": "/icons/db-navigator@4x.png",
+        "com.dropbox.android": "/icons/dropbox@4x.png",
         "org.fdroid.fdroid": "/icons/f-droid@4x.png",
-        "": "/icons/facebook@4x.png",
-        "": "/icons/gmx@4x.png",
+        "com.facebook.katana": "/icons/facebook@4x.png",
+        "de.gmx.mobile.android.mail": "/icons/gmx@4x.png",
         "hideme.android.vpn.noPlayStore": "/icons/hide-me@4x.png",
-        "": "/icons/linkedin@4x.png",
-        "": "/icons/nextcloud@4x.png",
-        "": "/icons/paypal@4x.png",
-        "": "/icons/skype@4x.png",
-        "": "/icons/spotify@4x.png",
-        "": "/icons/tutanota@4x.png",
-        "": "/icons/volla-settings@4x.png",
-        "": "/icons/web-de@4x.png",
-        "": "/icons/wetter-com@4x.png",
-        "": "/icons/whats-app@4x.png",
-        "": "/icons/radio@4x_104x104px.png",
-        "": "/icons/sync@4x_104x104px.png",
-        "": "/icons/signal@4x_104x104px.png"
+        "com.linkedin.android": "/icons/linkedin@4x.png",
+        "com.nextcloud.client": "/icons/nextcloud@4x.png",
+        "com.paypal.android.p2pmobile": "/icons/paypal@4x.png",
+        "com.skype.raider": "/icons/skype@4x.png",
+        "com.spotify.music": "/icons/spotify@4x.png",
+        "de.tutao.tutanota": "/icons/tutanota@4x.png",
+        "com.volla.launcher": "/icons/volla-settings@4x.png",
+        "de.web.mobile.android.mail": "/icons/web-de@4x.png",
+        "com.wetter.androidclient": "/icons/wetter-com@4x.png",
+        "com.whatsapp": "/icons/whats-app@4x.png",
+        "com.android.fmradio": "/icons/radio@4x_104x104px.png",
+        "at.bitfire.davdroid": "/icons/sync@4x_104x104px.png",
+        "org.thoughtcrime.securesms": "/icons/signal@4x_104x104px.png",
+    }
+    property var labelMap: {
+        "org.mozilla.fennec_fdroid": "Browser",
+        "at.bitfire.davdroid": "Sync",
+        "hideme.android.vpn.noPlayStore": "VPN",
+        "com.simplemobiletools.filemanager.pro": "Files",
+        "com.aurora.store": "Store",
+        "net.osmand.plus": "Maps",
+        "com.volla.launcher": "Settings"
     }
     property bool unreadMessages: false
+    property bool newCalls: false
     property int appCount: 0
 
     background: Rectangle {
@@ -74,6 +84,7 @@ Page {
 
     function updateNotifications() {
         util.getSMSMessages({"read": 0, "match": " "})
+        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", {"new": 1})
     }
 
     GridView {
@@ -151,7 +162,8 @@ Page {
                 anchors.top: parent.top
                 anchors.topMargin: parent.width * 0.08 // Adjustment
                 width: parent.width
-                text: model.label
+                text: model.package in appLauncher.labelMap ? qsTr(appLauncher.labelMap[model.package])
+                                                            : model.label
                 contentItem: Column {
                     spacing: gridCell.width * 0.25
                     Image {
@@ -220,7 +232,9 @@ Page {
 
             Rectangle {
                 id: notificationBadge
-                visible: model.package === "org.smssecure.smssecure" ? appLauncher.unreadMessages : false
+                visible: model.package === mainView.messageApp ? appLauncher.unreadMessages
+                                                               : model.package === mainView.phoneApp ? appLauncher.newCalls
+                                                                                                     : false
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
@@ -370,6 +384,8 @@ Page {
                     console.log("AppGrid | Number of apps: " + message["appCount"], ", " + appLauncher.appCount)
                     appLauncher.appCount = message["appCount"]
                 }
+            } else if (type === "volla.launcher.callLogResponse") {
+                appLauncher.newCalls = message["callsCount"] > 0
             }
         }
     }

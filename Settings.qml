@@ -73,7 +73,7 @@ Page {
                                 text = qsTr("Light Mode")
                                 break
                             case mainView.theme.Translucent:
-                                text = qsTr("Tanslucent Mode")
+                                text = qsTr("Translucent Mode")
                                 break
                             default:
                                 console.log("Settings | Unknown theme selected: " + mainView.theme)
