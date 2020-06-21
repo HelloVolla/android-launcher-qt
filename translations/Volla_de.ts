@@ -353,8 +353,7 @@
     <message>
         <location filename="../Springboard.qml" line="644"/>
         <source>Recent People</source>
-        <translation type="unfinished">
-        Kontakte</translation>
+        <translation type="unfinished">Kontakte</translation>
     </message>
 </context>
 <context>
