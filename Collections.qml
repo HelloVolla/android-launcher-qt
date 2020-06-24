@@ -128,7 +128,7 @@ Page {
                 x: mainView.innerSpacing
                 width: parent.width -mainView.innerSpacing * 2
                 placeholderText: qsTr("Filter collections")
-                color: Universal.foreground
+                color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
                 font.pointSize: mainView.largeFontSize
                 leftPadding: 0.0
@@ -159,7 +159,7 @@ Page {
 
                     onClicked: {
                         textField.text = ""
-                        textField.activeFocus = false
+                        textField.focus = false
                     }
                 }
             }

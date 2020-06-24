@@ -85,7 +85,6 @@ Page {
     }
 
     function updateNotifications() {
-//        util.getSMSMessages({"read": 0, "match": " "})
         AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", {"is_read": 0})
         AN.SystemDispatcher.dispatch("volla.launcher.threadsCountAction", {"read": 0})
     }
@@ -97,6 +96,8 @@ Page {
         cellWidth: parent.width * 0.25
 
         model: gridModel
+
+        currentIndex: -1
 
         header: Column {
             id: header
@@ -115,7 +116,7 @@ Page {
                 x: mainView.innerSpacing
                 width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Filter apps")
-                color: Universal.foreground
+                color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
                 font.pointSize: mainView.largeFontSize
                 leftPadding: 0.0
@@ -396,15 +397,6 @@ Page {
             } else if (type === "volla.launcher.threadsCountResponse") {
                 appLauncher.unreadMessages = message["threadsCount"] > 0
             }
-        }
-    }
-
-    AN.Util {
-        id: util
-
-        onSmsFetched: {
-            console.log("AppGrid | " + smsMessagesCount + " unread messages")
-            appLauncher.unreadMessages = smsMessagesCount > 0
         }
     }
 }
