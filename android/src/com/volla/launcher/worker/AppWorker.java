@@ -50,7 +50,7 @@ public class AppWorker extends org.qtproject.qt5.android.bindings.QtActivity
         String json="[\n";
         final PackageManager pm = a.getPackageManager();
         final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts", "com.android.gallery3d",
-            "com.android.mms", "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk",
+            "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk", "com.mediatek.filemanager",
             "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "com.android.quicksearchbox");
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);

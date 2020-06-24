@@ -48,7 +48,7 @@ public class CallWorker {
         ArrayList<Map> callList = new ArrayList();
 
         Uri uriCalls = CallLog.Calls.CONTENT_URI;
-        String[] projection = new String[] { CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.NEW, CallLog.Calls._ID,
+        String[] projection = new String[] { CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.IS_READ, CallLog.Calls._ID,
             CallLog.Calls.TYPE, CallLog.Calls.CACHED_NAME, CallLog.Calls.CACHED_MATCHED_NUMBER};
 
         long cutOffTimeStamp = 0;
@@ -71,9 +71,9 @@ public class CallWorker {
                 filter = filter + " and _id > " + afterId ;
             }
 
-            if ( message.containsKey("new") ) {
-                int new_status = (Integer) message.get("new");
-                filter = filter + " and new = " + new_status ;
+            if ( message.containsKey("is_read") ) {
+                int new_status = (Integer) message.get("is_read");
+                filter = filter + " and is_read = " + new_status ;
             }
 
             String sortOrder  = " date desc " ;
@@ -96,9 +96,9 @@ public class CallWorker {
             Cursor cursor;
 
             if (selectionArgs[0].length() > 0) {
-                cursor = activity.getContentResolver().query(uriCalls , projection , filter , selectionArgs , sortOrder );
+                cursor = activity.getContentResolver().query(uriCalls , null , filter , selectionArgs , sortOrder );
             } else {
-                cursor = activity.getContentResolver().query(uriCalls , projection , filter , null , sortOrder );
+                cursor = activity.getContentResolver().query(uriCalls , null , filter , null , sortOrder );
             }
 
             int mesgCount = cursor.getCount();
@@ -110,19 +110,18 @@ public class CallWorker {
                 int index_id = cursor.getColumnIndex(CallLog.Calls._ID); // message id
                 int index_number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
                 int index_date = cursor.getColumnIndex(CallLog.Calls.DATE);
-                int index_new = cursor.getColumnIndex(CallLog.Calls.NEW);
+                int index_is_read = cursor.getColumnIndex(CallLog.Calls.IS_READ);
                 int index_type = cursor.getColumnIndex(CallLog.Calls.TYPE);
                 int index_name = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
                 int index_match = cursor.getColumnIndex(CallLog.Calls.CACHED_MATCHED_NUMBER);
 
                 while (cursor.moveToNext()) {
-
                     String call_id = cursor.getString(index_id);
                     String number = cursor.getString(index_number);
                     String name = cursor.getString(index_name);
                     String match = cursor.getString(index_match);
                     Long d = cursor.getLong(index_date);
-                    int state = cursor.getInt(index_new);
+                    int state = cursor.getInt(index_is_read);
                     int type = cursor.getInt(index_type);
 
                     if (match != null) {
@@ -135,8 +134,8 @@ public class CallWorker {
                     call.put("number", number);
                     call.put("isSent", type == CallLog.Calls.OUTGOING_TYPE ? true : false);
                     call.put("name", name);
-                    call.put("date", d);
-                    call.put("new", state == 1 ? true : false);
+                    call.put("date", Long.toString(d));
+                    call.put("is_read", state == 0 ? false : true);
 
                     callList.add( call );
                 }

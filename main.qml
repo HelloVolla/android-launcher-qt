@@ -12,7 +12,9 @@ ApplicationWindow {
     width: 640
     height: 1200
     title: qsTr("Volla")
-    //visibility: ApplicationWindow.FullScreen
+
+    // Todo: Introduce setting
+    // visibility: ApplicationWindow.FullScreen
 
     Connections {
        target: Qt.application
@@ -143,7 +145,7 @@ ApplicationWindow {
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.android.dialer"
-        property string messageApp: "org.smssecure.smssecure"
+        property string messageApp: "com.android.mms" // "org.smssecure.smssecure"
 
         onCurrentIndexChanged: {
             if (currentIndex === swipeIndex.Apps) {
@@ -350,11 +352,11 @@ ApplicationWindow {
                     console.log("MainView | onDispatched: " + type)
                     mainView.contacts = message["contacts"]
                     mainView.lastContactsCheck = new Date().getTime()
-                    message["contacts"].forEach(function (aContact, index) {
-                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
-                        }
-                    });
+//                    message["contacts"].forEach(function (aContact, index) {
+//                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+//                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
+//                        }
+//                    });
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     if (message["needsSync"]) {

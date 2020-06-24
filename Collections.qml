@@ -18,7 +18,7 @@ Page {
     property var currentCollectionModel: peopleModel
     property var threads: new Array
     property var calls: new Array
-    property var threadAge: 84000 * 10 // one day in seconds
+    property var threadAge: 86400 * 1000 // one day in milliseconds
     property int maxCalls: 50
 
     property string c_TITLE:     "title"    // large main title, bold
@@ -518,12 +518,12 @@ Page {
         property var modelArr: []
         property var contactThreads: new Object
         property var contactCalls: new Object
-
         function loadData() {
             console.log("Collections | Load data for contact collection")
 
             collectionPage.threads.forEach(function (thread, index) {
                 if ((!thread["read"] || Date.now() - thread["date"] < collectionPage.threadAge) && thread["address"] !== undefined) {
+                    console.log("Collections | Thread matched: " + thread["id"])
                     contactThreads[thread["address"]] = thread
                 }
             })
@@ -605,14 +605,14 @@ Page {
                     cContact.c_SBADGE = !thread["read"]
                     if (!thread["read"]) {
                         cContact.c_ITEM_ID = thread["thread_id"]
-                        cContact.c_STEXT = "1 " + qsTr("New message") + " " + mainView.parseTime(thread["date"])
+                        cContact.c_STEXT = "1 " + qsTr("New message") + " " + mainView.parseTime(Number(thread["date"]))
                     }
                 } else if ((thread !== undefined && call !== undefined && thread["date"] < call["date"])
                         || (thread === undefined && call !== undefined)) {
                     cContact.c_SBADGE = call["new"]
                     if (call["new"] === true) {
                         var messageText = (call["count"] > 1) ? qsTr("New calls") : qsTr("New call")
-                        cContact.c_STEXT = call["count"] + " " + messageText + " " + mainView.parseTime(call["date"])
+                        cContact.c_STEXT = call["count"] + " " + messageText + " " + mainView.parseTime(Number(call["date"]))
                     }
                 }
 
@@ -746,7 +746,7 @@ Page {
                     kind = "MMS"
                 }
 
-                cThread.c_STEXT = mainView.parseTime(thread["date"]) + " • " + qsTr(kind)
+                cThread.c_STEXT = mainView.parseTime(Number(thread["date"])) + " • " + qsTr(kind)
 
                 modelArr.push(cThread)
             })
@@ -985,21 +985,21 @@ Page {
             if (type === "volla.launcher.threadResponse") {
                 console.log("Collections | onDispatched: " + type)
                 collectionPage.threads = message["threads"]
-                message["threads"].forEach(function (thread, index) {
-                    for (const [threadKey, threadValue] of Object.entries(thread)) {
-                        console.log("Collections | * " + threadKey + ": " + threadValue)
-                    }
-                })
+//                message["threads"].forEach(function (thread, index) {
+//                    for (const [threadKey, threadValue] of Object.entries(thread)) {
+//                        console.log("Collections | * " + threadKey + ": " + threadValue)
+//                    }
+//                })
                 collectionPage.currentCollectionModel.loadData()
                 collectionPage.currentCollectionModel.update(collectionPage.textInput)
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
                 collectionPage.calls = message["calls"]
-                message["calls"].forEach(function (call, index) {
-                    for (const [callKey, callValue] of Object.entries(call)) {
-                        console.log("Collections | * " + callKey + ": " + callValue)
-                    }
-                })
+//                message["calls"].forEach(function (call, index) {
+//                    for (const [callKey, callValue] of Object.entries(call)) {
+//                        console.log("Collections | * " + callKey + ": " + callValue)
+//                    }
+//                })
                 collectionPage.currentCollectionModel.loadData()
                 collectionPage.currentCollectionModel.update(collectionPage.textInput)
             }

@@ -15,7 +15,8 @@ Page {
     property real labelPointSize: 16
     property var iconMap: {
         "com.android.dialer": "/icons/dial-phone@4x.png",
-        "org.smssecure.smssecure": "/icons/message@4x.png",
+        //"org.smssecure.smssecure": "/icons/message@4x.png",
+        "com.android.mms": "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
@@ -61,7 +62,8 @@ Page {
         "com.simplemobiletools.filemanager.pro": "Files",
         "com.aurora.store": "Store",
         "net.osmand.plus": "Maps",
-        "com.volla.launcher": "Settings"
+        "com.volla.launcher": "Settings",
+        "com.android.mms": "Messages"
     }
     property bool unreadMessages: false
     property bool newCalls: false
@@ -83,8 +85,9 @@ Page {
     }
 
     function updateNotifications() {
-        util.getSMSMessages({"read": 0, "match": " "})
-        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", {"new": 1})
+//        util.getSMSMessages({"read": 0, "match": " "})
+        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", {"is_read": 0})
+        AN.SystemDispatcher.dispatch("volla.launcher.threadsCountAction", {"read": 0})
     }
 
     GridView {
@@ -162,8 +165,7 @@ Page {
                 anchors.top: parent.top
                 anchors.topMargin: parent.width * 0.08 // Adjustment
                 width: parent.width
-                text: model.package in appLauncher.labelMap ? qsTr(appLauncher.labelMap[model.package])
-                                                            : model.label
+                text: model.label
                 contentItem: Column {
                     spacing: gridCell.width * 0.25
                     Image {
@@ -322,6 +324,8 @@ Page {
             } catch (e) {
                 console.log("Grid model loading error: " + e)
             }
+
+
         }
 
         function update(text) {
@@ -337,6 +341,8 @@ Page {
 
             for (i = 0; i < modelArr.length; i++) {
                 filteredGridItem = modelArr[i]
+                modelArr[i].label = modelArr[i].package in appLauncher.labelMap ? qsTr(appLauncher.labelMap[modelArr[i].package])
+                                                                                : modelArr[i].label
                 var modelItemName = modelArr[i].label
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
                     //console.log("Add " + modelItemName + " to filtered items")
@@ -363,15 +369,16 @@ Page {
             }
 
             // add new items
-            for (modelItemName in filteredGridDict) {
-                found = existingGridDict.hasOwnProperty(modelItemName)
+            var keys = Object.keys(filteredGridDict).sort()
+            keys.forEach(function(key) {
+                found = existingGridDict.hasOwnProperty(key)
                 if (!found) {
                     // for simplicity, just adding to end instead of corresponding position in original list
-                    filteredGridItem = filteredGridDict[modelItemName]
+                    filteredGridItem = filteredGridDict[key]
                     console.log("Will append " + filteredGridItem.label)
-                    append(filteredGridDict[modelItemName])
+                    append(filteredGridDict[key])
                 }
-            }
+            })
         }
     }
 
@@ -386,6 +393,8 @@ Page {
                 }
             } else if (type === "volla.launcher.callLogResponse") {
                 appLauncher.newCalls = message["callsCount"] > 0
+            } else if (type === "volla.launcher.threadsCountResponse") {
+                appLauncher.unreadMessages = message["threadsCount"] > 0
             }
         }
     }

@@ -58,7 +58,22 @@ Page {
                     headline.text = name
                     currentId = id
                     currentConversationModel = personContentModel
-                    loadConversation({"personId": id})
+
+                    // Get contact by Id
+                    var numbers = new Array
+                    for (var i = 0; i < mainView.contacts.length; i++) {
+                        var contact = mainView.contacts[i]
+                        if (contact["id"] === currentId) {
+                            console.log("Conversation | Found contact " + contact["name"])
+                            if (contact["phone.mobile"] !== undefined) numbers.push(contact["phone.mobile"])
+                            if (contact["phone.work"] !== undefined) numbers.push(contact["phone.work"])
+                            if (contact["phone.home"] !== undefined) numbers.push(contact["phone.home"])
+                            if (contact["phone.other"] !== undefined) numbers.push(contact["phone.other"])
+                            break
+                        }
+                    }
+
+                    loadConversation({"personId": id, "numbers": numbers})
                     loadCalls({"match": name})
                     break;
                 case mainView.conversationMode.Thread:
@@ -260,9 +275,7 @@ Page {
     ListModel {
         id: personContentModel
 
-        property var modelArr: [{m_ID: "0", m_TEXT: "What you think about having lunch together in the restaurant, that opened recently", m_STEXT: "Yesterday 10:30 • SMS", m_IS_SENT: false},
-                                {m_ID: "2", m_TEXT: "Sure, I would like to order a pizza with red wine and a small dessert afterwards", m_STEXT: "Yesterday 10:46 • SMS", m_IS_SENT: true},
-                                {m_ID: "3", m_TEXT: "Look at this nice image", m_STEXT: "Today 14:01 • SMS", m_IS_SENT: false, m_IMAGE: "/images/news-image.png"}]
+        property var modelArr: new Array
 
         function loadData() {
             console.log("Conversation | Load data for person's content")
@@ -273,9 +286,9 @@ Page {
                 cMessage.m_TEXT = message["body"]
 
                 if (message["isMMS"] === true) {
-                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • MMS"
+                    cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • MMS"
                 } else {
-                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • SMS"
+                    cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
                 }
 
                 cMessage.m_IS_SENT = message["isSent"]
@@ -292,7 +305,7 @@ Page {
             conversationPage.calls.forEach(function (call, index) {
                 var cCall = {m_ID: "call." + call["id"]}
 
-                cCall.m_STEXT = mainView.parseTime(call["date"]) + " • Call"
+                cCall.m_STEXT = mainView.parseTime(Number(call["date"])) + " • Call"
                 cCall.m_IS_SENT = call["isSent"]
 
                 modelArr.push(cCall)
@@ -378,9 +391,9 @@ Page {
                 cMessage.m_TEXT = message["body"]
 
                 if (message["isMMS"] === true) {
-                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • MMS"
+                    cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • MMS"
                 } else {
-                    cMessage.m_STEXT = mainView.parseTime(message["date"]) + " • SMS"
+                    cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
                 }
 
                 cMessage.m_IS_SENT = message["isSent"]
@@ -465,11 +478,11 @@ Page {
             if (type === "volla.launcher.conversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.messages = message["messages"]
-                message["messages"].forEach(function (message, index) {
-                    for (const [messageKey, messageValue] of Object.entries(message)) {
-                        console.log("Conversation | * " + messageKey + ": " + messageValue)
-                    }
-                })
+//                message["messages"].forEach(function (message, index) {
+//                    for (const [messageKey, messageValue] of Object.entries(message)) {
+//                        console.log("Conversation | * " + messageKey + ": " + messageValue)
+//                    }
+//                })
                 conversationPage.currentConversationModel.loadData()
                 conversationPage.currentConversationModel.update(conversationPage.textInput)
             } else if (type === "volla.launcher.callConversationResponse") {

@@ -109,7 +109,7 @@ public class ContactWorker {
                                                               new String[]{id},
                                                               null);
                             while (cp.moveToNext()) {
-                                String number = cp.getString(cp.getColumnIndex(Phone.NUMBER));
+                                String number = cp.getString(cp.getColumnIndex(Phone.NUMBER)).replace(" ","");
                                 int numberType = cp.getInt(cp.getColumnIndex(Phone.TYPE));
                                 switch (numberType) {
                                     case Phone.TYPE_HOME:
