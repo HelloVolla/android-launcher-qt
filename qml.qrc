@@ -53,11 +53,5 @@
         <file>icons/radio@4x_104x104px.png</file>
         <file>icons/signal@4x_104x104px.png</file>
         <file>icons/sync@4x_104x104px.png</file>
-        <file>translations/Volla_de.qm</file>
-        <file>translations/Volla_es.qm</file>
-        <file>translations/Volla_fr.qm</file>
-        <file>translations/Volla_nl.qm</file>
-        <file>translations/Volla_ro.qm</file>
-        <file>translations/Volla_se.qm</file>
     </qresource>
 </RCC>
