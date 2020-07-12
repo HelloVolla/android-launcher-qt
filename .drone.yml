@@ -17,7 +17,7 @@ steps:
         - ./.cache/
 
   - name: build-android_arm64_v8a
-    image: a12e/docker-qt:5.12-android_arm64_v8a
+    image: a12e/docker-qt:5.13-android_arm64_v8a
     user: root
     environment:
       CACHE_DIR: ./.cache/
@@ -40,7 +40,7 @@ steps:
       - ./build_package_android ./releases
 
   - name: archive-nightly
-    image: a12e/docker-qt:5.12-android_arm64_v8a
+    image: a12e/docker-qt:5.13-android_arm64_v8a
     when:
       event:
       - cron
@@ -61,7 +61,7 @@ steps:
       - rm $KEY_PATH
 
   - name: archive-release
-    image: a12e/docker-qt:5.12-android_arm64_v8a
+    image: a12e/docker-qt:5.13-android_arm64_v8a
     when:
       event: tag
     environment:
