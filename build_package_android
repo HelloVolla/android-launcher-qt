@@ -10,7 +10,7 @@ RELEASE_DIR=${1:-"$WORKSPACE/releases"}
 RELEASE_DIR="`readlink -fm $RELEASE_DIR`"
 
 #Got the platform from readme of https://github.com/a12e/docker-qt
-SDK_PLATFORM=android-21
+SDK_PLATFORM=android-28
 
 die() {
   echo $@
