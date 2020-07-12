@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 import Qt.labs.settings 1.0
 import QtQml 2.12
+import FileIO 1.0
 
 ApplicationWindow {
     visible: true
@@ -146,6 +147,19 @@ ApplicationWindow {
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.android.dialer"
         property string messageApp: "com.android.mms" // "org.smssecure.smssecure"
+
+        property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
+            {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
+            {"id" : "https://www.theguardian.com/world/rss", "name": "The Guardian", "activated" : true, "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
+        property var defaultActions: [{"id" : actionType.ShowDialer, "name" : "Show Dialer", "activated" : true},
+            {"id" : actionType.OpenCam, "name": "Camera", "activated" : true},
+            {"id" : actionType.ShowCalendar, "name": "Agenda", "activated" : true},
+            {"id" : actionType.ShowGallery, "name": "Gallery", "activated" : true},
+            {"id" : actionType.ShowNotes, "name": "Notes", "activated" : false},
+            {"id" : actionType.CreateEvent, "name": "Create Event", "activated" : false},
+            {"id" : actionType.ShowContacts, "name": "Recent People", "activated" : true},
+            {"id" : actionType.ShowThreads, "name": "Recent Threads", "activated" : true},
+            {"id" : actionType.ShowNews, "name": "Recent News", "activated" : true}]
 
         onCurrentIndexChanged: {
             if (currentIndex === swipeIndex.Apps) {
@@ -345,6 +359,26 @@ ApplicationWindow {
             }
         }
 
+        function getFeeds() {
+            var channels = feeds.read()
+            console.log("MainView | Retrieved feeds: " + channels)
+            return channels.length > 0 ? JSON.parse(channels) : mainView.defaultFeeds
+        }
+
+        function updateFeed(channelId, isActive) {
+            // Todo: implement
+            var channels = getFeeds()
+            for (var i = 0; i < channels.length; i++) {
+                var channel = channels[i]
+                if (channel["id"] === channelId) {
+                    channel["activated"] = isActive
+                    channels[i] = channel
+                    console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                    break
+                }
+            }
+        }
+
         Connections {
             target: AN.SystemDispatcher
             onDispatched: {
@@ -377,7 +411,7 @@ ApplicationWindow {
     Settings {
         id: settings
         property int theme: mainView.theme.Dark
-
+        
         Component.onCompleted: {
             console.log("Current themes: " + Universal.theme + ", " + settings.theme)
             if (Universal.theme !== settings.theme) {
@@ -390,5 +424,13 @@ ApplicationWindow {
         id: toast
         text: qsTr("Not yet supported")
         longDuration: true
+    }
+
+    FileIO {
+        id: feeds
+        source: "feeds.json"
+        onError: {
+            console.log(msg)
+        }
     }
 }

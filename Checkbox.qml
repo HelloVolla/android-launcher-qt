@@ -2,8 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Universal 2.12
-import Qt.labs.settings 1.0
-import AndroidNative 1.0 as AN
 
 CheckBox {
     id: settingsCheckbox
@@ -46,13 +44,16 @@ CheckBox {
     }
 
     onCheckedChanged: {
-        if (!checkedChanged) {
+        console.log("Checkbox | Checked changed for " + text + ", " + checked)
+        if (checkedChanged) {
             checkedChanged = !checkedChanged
-            toast.show()
+            parent.updateSettings(actionId, checked)
+        } else {
+            checkedChanged = true
         }
     }
 
-   Component.onCompleted: {
+    Component.onCompleted: {
         opacity = 1.0
     }
 
@@ -60,11 +61,5 @@ CheckBox {
         NumberAnimation {
             duration: 250
         }
-    }
-
-    AN.Toast {
-        id: toast
-        text: qsTr("Not yet supported")
-        longDuration: true
     }
 }

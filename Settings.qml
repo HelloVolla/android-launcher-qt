@@ -284,10 +284,7 @@ Page {
                     }
 
                     function createCheckboxes() {
-                        // Todo: Replace by settings
-                        var cannels = [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true},
-                                       {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true},
-                                       {"id" : "https://www.theguardian.com/world/rss", "name": "The Guardian", "activated" : true}]
+                        var cannels = feedSettings.feeds
 
                         for (var i = 0; i < cannels.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", newsSettingsColumn)
@@ -295,7 +292,7 @@ Page {
                                 "text": cannels[i]["name"], "checked": cannels[i]["activated"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2}
                             var object = component.createObject(newsSettingsColumn, properties)
                             newsSettingsColumn.newsCheckboxes.push(object)
                         }
@@ -309,12 +306,22 @@ Page {
                         }
                         newsSettingsColumn.newsCheckboxes = new Array
                     }
+
+                    function updateSettings(channelId, active) {
+                        console.log("Settings | Update settings for " + channelId + ", " + active)
+                        mainView.updateFeed(channelId, active)
+                    }
                 }
 
                 Behavior on implicitHeight {
                     NumberAnimation {
                         duration: 250.0
                     }
+                }
+
+                Settings {
+                    id: feedSettings
+                    property var feeds : mainView.defaultFeeds
                 }
             }
 
@@ -358,16 +365,7 @@ Page {
                     }
 
                     function createCheckboxes() {
-                        // Todo: Replace by settings
-                        var shortcuts = [{"id" : mainView.actionType.ShowDialer, "name" : "Show Dialer", "activated" : true},
-                                         {"id" : mainView.actionType.OpenCam, "name": "Camera", "activated" : true},
-                                         {"id" : mainView.actionType.ShowCalendar, "name": "Agenda", "activated" : true},
-                                         {"id" : mainView.actionType.ShowGallery, "name": "Gallery", "activated" : true},
-                                         {"id" : mainView.actionType.ShowNotes, "name": "Notes", "activated" : false},
-                                         {"id" : mainView.actionType.CreateEvent, "name": "Create Event", "activated" : false},
-                                         {"id" : mainView.actionType.ShowContacts, "name": "Recent People", "activated" : true},
-                                         {"id" : mainView.actionType.ShowThreads, "name": "Recent Threads", "activated" : true},
-                                         {"id" : mainView.actionType.ShowNews, "name": "Recent News", "activated" : true}]
+                        var shortcuts = mainView.getFeeds()
 
                         for (var i = 0; i < shortcuts.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsColumn)
@@ -389,12 +387,24 @@ Page {
                         }
                         shortcutSettingsColumn.checkboxes = new Array
                     }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update settings for " + channelId + ", " + active)
+                        mainView.showToast(qsTr("Not yet supported"))
+
+                        // Todo: implement
+                    }
                 }
 
                 Behavior on implicitHeight {
                     NumberAnimation {
                         duration: 250.0
                     }
+                }
+
+                Settings {
+                    id: actionsSettings
+                    property var shortcuts: mainView.defaultShortcuts
                 }
             }
         }

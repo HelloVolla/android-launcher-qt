@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.XmlListModel 2.12
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
+import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 
 Page {
@@ -815,26 +816,24 @@ Page {
     ListModel {
         id: newsModel
 
-        // todo: Read from settings
-        property var rssFeeds: [{"source": "https://www.nzz.ch/startseite.rss", "title": "NZZ", "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
-                                {"source": "https://www.chip.de/rss/rss_topnews.xml", "title": "Chip Online", "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
-                                {"source": "https://www.theguardian.com/world/rss", "title": "The Guardian", "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
-
-        property var modelArr: []
+        property var rssFeeds: new Array
+        property var modelArr: new Array
 
         function loadData() {
             // Iterate over rss feeds to the the first item
+            rssFeeds = mainView.getFeeds() // mainView.defaultFeeds
             rssFeeds.forEach(function (rssFeed, index) {
-                console.log("Collections | Create request for" + rssFeed.source)
+                console.log("Collections | Create request for " + rssFeed.id)
                 var doc = new XMLHttpRequest();
                 doc.onreadystatechange = function() {
                     if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                         console.log("Collections | Received header status: " + doc.status);
                         if (doc.status !== 200) {
-                            mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.title))
+                            mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
                         }
                     } else if (doc.readyState === XMLHttpRequest.DONE) {
-                        var cNews = {c_CHANNEL: rssFeed.source, c_ICON: rssFeed.icon}
+                        // Todo: dynamic icon, maybe from homepage of feed
+                        var cNews = {c_CHANNEL: rssFeed.id, c_ICON: rssFeed.icon}
 
                         var rss = doc.responseXML.documentElement
                         var channel
@@ -846,7 +845,7 @@ Page {
                         }
                         if (channel === undefined) {
                             console.log("Collection | Missing rss channel")
-                            mainView.showToast(qsTr("Invalid RSS feed: ") + rssFeed.title)
+                            mainView.showToast(qsTr("Invalid RSS feed: ") + rssFeed.name)
                             return
                         }
 
@@ -864,7 +863,7 @@ Page {
                         }
                         if (feedItem === undefined) {
                             console.log("Collection | Missing rss feed item")
-                            mainView.showToast(qsTr("Missing RSS item: ") + rssFeed.title)
+                            mainView.showToast(qsTr("Missing RSS item: ") + rssFeed.id)
                             return
                         }
                         for (i = 0; i < feedItem.childNodes.length; ++i) {
@@ -882,6 +881,7 @@ Page {
                             else if (childNode.nodeName === "link") {
                                 cNews.c_ID = textNode.nodeValue
 
+                                // Todo: Store recent property in feed dict of settings
                                 if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
                                     cNews.c_BADGE = true
                                 }
@@ -903,7 +903,7 @@ Page {
                     }
                 }
 
-                doc.open("GET", rssFeed.source);
+                doc.open("GET", rssFeed.id);
                 doc.send();
             })
         }
