@@ -36,7 +36,7 @@ public class ShareUtil {
         String action = intent.getAction();
         String type = intent.getType();
 
-        Log.d(TAG, "Activity: " + activity + ", " + Action: " + action + ", type: " + type);
+        Log.d(TAG, "Activity: " + activity + ", Action: " + action + ", type: " + type);
 
         if (Intent.ACTION_SEND.equals(action) && type == null && "text/plain".equals(type)) {
             String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
