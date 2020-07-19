@@ -821,90 +821,91 @@ Page {
 
         function loadData() {
             // Iterate over rss feeds to the the first item
-            rssFeeds = mainView.getFeeds() // mainView.defaultFeeds
+            rssFeeds = mainView.getFeeds()
             rssFeeds.forEach(function (rssFeed, index) {
-                console.log("Collections | Create request for " + rssFeed.id)
-                var doc = new XMLHttpRequest();
-                doc.onreadystatechange = function() {
-                    if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                        console.log("Collections | Received header status: " + doc.status);
-                        if (doc.status !== 200) {
-                            mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
-                        }
-                    } else if (doc.readyState === XMLHttpRequest.DONE) {
-                        // Todo: dynamic icon, maybe from homepage of feed
-                        var cNews = {c_CHANNEL: rssFeed.id, c_ICON: rssFeed.icon}
+                if (rssFeed.activated === true) {
+                    console.log("Collections | Create request for " + rssFeed.id)
+                    var doc = new XMLHttpRequest();
+                    doc.onreadystatechange = function() {
+                        if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                            console.log("Collections | Received header status: " + doc.status);
+                            if (doc.status !== 200) {
+                                mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
+                            }
+                        } else if (doc.readyState === XMLHttpRequest.DONE) {
+                            // Todo: dynamic icon, maybe from homepage of feed
+                            var cNews = {c_CHANNEL: rssFeed.id, c_ICON: rssFeed.icon}
 
-                        var rss = doc.responseXML.documentElement
-                        var channel
-                        for (var i = 0; i < rss.childNodes.length; ++i) {
-                            if (rss.childNodes[i].nodeName === "channel") {
-                                channel = rss.childNodes[i]
-                                break
-                            }
-                        }
-                        if (channel === undefined) {
-                            console.log("Collection | Missing rss channel")
-                            mainView.showToast(qsTr("Invalid RSS feed: ") + rssFeed.name)
-                            return
-                        }
-
-                        var feedItem
-                        for (i = 0; i < channel.childNodes.length; ++i) {
-                            if (channel.childNodes[i].nodeName === "title") {
-                                var childNode = channel.childNodes[i]
-                                var textNode = childNode.firstChild
-                                cNews.c_STITLE = textNode.nodeValue + " • Feed"
-                            }
-                            if (channel.childNodes[i].nodeName === "item") {
-                                feedItem = channel.childNodes[i]
-                                break
-                            }
-                        }
-                        if (feedItem === undefined) {
-                            console.log("Collection | Missing rss feed item")
-                            mainView.showToast(qsTr("Missing RSS item: ") + rssFeed.id)
-                            return
-                        }
-                        for (i = 0; i < feedItem.childNodes.length; ++i) {
-                            childNode = feedItem.childNodes[i]
-                            textNode = childNode.firstChild
-
-                            if (childNode.nodeName === "title") {
-                                cNews.c_TEXT = textNode.nodeValue
-                            }
-                            else if (childNode.nodeName === "pubDate") {
-                                var date = new Date(textNode.nodeValue)
-                                cNews.c_TSTAMP = date.valueOf()
-                                cNews.c_STEXT = mainView.parseTime(date.valueOf())
-                            }
-                            else if (childNode.nodeName === "link") {
-                                cNews.c_ID = textNode.nodeValue
-
-                                // Todo: Store recent property in feed dict of settings
-                                if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
-                                    cNews.c_BADGE = true
+                            var rss = doc.responseXML.documentElement
+                            var channel
+                            for (var i = 0; i < rss.childNodes.length; ++i) {
+                                if (rss.childNodes[i].nodeName === "channel") {
+                                    channel = rss.childNodes[i]
+                                    break
                                 }
                             }
-                            else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail") {
-                                for (var ii = 0; ii < childNode.attributes.length; ++ii) {
-                                    var attribute = childNode.attributes[ii]
-                                    if (attribute.name === "url") {
-                                        console.log("Collections | Image: " + attribute.value)
-                                        cNews.c_IMAGE = attribute.value
-                                        break
+                            if (channel === undefined) {
+                                console.log("Collection | Missing rss channel")
+                                mainView.showToast(qsTr("Invalid RSS feed: ") + rssFeed.name)
+                                return
+                            }
+
+                            var feedItem
+                            for (i = 0; i < channel.childNodes.length; ++i) {
+                                if (channel.childNodes[i].nodeName === "title") {
+                                    var childNode = channel.childNodes[i]
+                                    var textNode = childNode.firstChild
+                                    cNews.c_STITLE = textNode.nodeValue + " • Feed"
+                                }
+                                if (channel.childNodes[i].nodeName === "item") {
+                                    feedItem = channel.childNodes[i]
+                                    break
+                                }
+                            }
+                            if (feedItem === undefined) {
+                                console.log("Collection | Missing rss feed item")
+                                mainView.showToast(qsTr("Missing RSS item: ") + rssFeed.id)
+                                return
+                            }
+                            for (i = 0; i < feedItem.childNodes.length; ++i) {
+                                childNode = feedItem.childNodes[i]
+                                textNode = childNode.firstChild
+
+                                if (childNode.nodeName === "title") {
+                                    cNews.c_TEXT = textNode.nodeValue
+                                }
+                                else if (childNode.nodeName === "pubDate") {
+                                    var date = new Date(textNode.nodeValue)
+                                    cNews.c_TSTAMP = date.valueOf()
+                                    cNews.c_STEXT = mainView.parseTime(date.valueOf())
+                                }
+                                else if (childNode.nodeName === "link") {
+                                    cNews.c_ID = textNode.nodeValue
+
+                                    // Todo: Store recent property in feed dict of settings
+                                    if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
+                                        cNews.c_BADGE = true
+                                    }
+                                }
+                                else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail") {
+                                    for (var ii = 0; ii < childNode.attributes.length; ++ii) {
+                                        var attribute = childNode.attributes[ii]
+                                        if (attribute.name === "url") {
+                                            console.log("Collections | Image: " + attribute.value)
+                                            cNews.c_IMAGE = attribute.value
+                                            break
+                                        }
                                     }
                                 }
                             }
+
+                            modelArr.push(cNews)
+                            update(collectionPage.textInput)
                         }
-
-                        modelArr.push(cNews)
-                        update(collectionPage.textInput)
                     }
+                    doc.open("GET", rssFeed.id)
+                    doc.send()
                 }
-
-                doc.open("GET", rssFeed.id);
-                doc.send();
             })
         }
 

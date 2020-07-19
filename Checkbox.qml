@@ -9,7 +9,7 @@ CheckBox {
     property double labelFontSize
     property double circleSize
     property var actionId
-    property bool checkedChanged: false
+    property bool activeCheckbox: false
 
     width: parent.width
     text: qsTr("Chip")
@@ -45,11 +45,10 @@ CheckBox {
 
     onCheckedChanged: {
         console.log("Checkbox | Checked changed for " + text + ", " + checked)
-        if (checkedChanged) {
-            checkedChanged = !checkedChanged
+        if (activeCheckbox) {
             parent.updateSettings(actionId, checked)
         } else {
-            checkedChanged = true
+            activeCheckbox = true
         }
     }
 

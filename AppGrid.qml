@@ -249,63 +249,6 @@ Page {
         }
     }
 
-    XmlListModel {
-        id: xmlModel
-        xml: "" // backEnd.getApplist()
-        query: "/root/item"
-
-        XmlRole {
-            name: "label"
-            query: "label/string()"
-        }
-        XmlRole {
-            name: "icon"
-            query: "icon/string()"
-        }
-        XmlRole {
-            name: "package"
-            query: "package/string()"
-        }
-
-        onStatusChanged: {
-            switch (status) {
-                case XmlListModel.Null:
-                    console.log("Xml model null")
-                    break
-                case XmlListModel.Ready:
-                    console.log("Xml model ready")
-                    log()
-                    break
-                case XmlListModel.Loading:
-                    console.log("Xml model loading")
-                    break
-                case XmlListModel.Error:
-                    console.log("Xml model error: " + errorString())
-                    break
-                default:
-                    console.log("Xml model undefined")
-            }
-        }
-
-        function update(text) {
-            if (text.length > 0) {
-                //query = "/root/item[substring(label,1," + text.length + ")='"+ text + "']"
-                query = "/root/item[matches(label,'"+ text + "*','i')]"
-            } else {
-                query = "/root/item"
-            }
-        }
-
-        function log() {
-            console.log("Xml model listing:")
-
-            for (var i = 0; i < xmlModel.count; i++) {
-                var element = xmlModel.get(i)
-                console.log(element.label + ": " + element.package)
-            }
-        }
-    }
-
     BackEnd {
         id: backEnd
     }

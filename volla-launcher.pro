@@ -59,6 +59,7 @@ DISTFILES += \
     android/src/com/volla/launcher/parser/ArticleParser.java \
     android/src/com/volla/launcher/util/AppUtil.java \
     android/src/com/volla/launcher/util/LayoutUtil.java \
+    android/src/com/volla/launcher/util/ShareUtil.java \
     android/src/com/volla/launcher/util/VibrationUtil.java \
     android/src/com/volla/launcher/worker/AccountWorker.java \
     android/src/com/volla/launcher/worker/CallWorker.java \

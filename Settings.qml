@@ -284,7 +284,7 @@ Page {
                     }
 
                     function createCheckboxes() {
-                        var cannels = feedSettings.feeds
+                        var cannels = mainView.getFeeds()
 
                         for (var i = 0; i < cannels.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", newsSettingsColumn)
@@ -309,7 +309,7 @@ Page {
 
                     function updateSettings(channelId, active) {
                         console.log("Settings | Update settings for " + channelId + ", " + active)
-                        mainView.updateFeed(channelId, active)
+                        mainView.updateFeed(channelId, active, mainView.settingsAction.UPDATE)
                     }
                 }
 
@@ -317,11 +317,6 @@ Page {
                     NumberAnimation {
                         duration: 250.0
                     }
-                }
-
-                Settings {
-                    id: feedSettings
-                    property var feeds : mainView.defaultFeeds
                 }
             }
 
@@ -365,7 +360,7 @@ Page {
                     }
 
                     function createCheckboxes() {
-                        var shortcuts = mainView.getFeeds()
+                        var shortcuts = mainView.getActions()
 
                         for (var i = 0; i < shortcuts.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsColumn)
@@ -393,6 +388,7 @@ Page {
                         mainView.showToast(qsTr("Not yet supported"))
 
                         // Todo: implement
+//                        mainView.updateAction(actionId, active)
                     }
                 }
 
@@ -400,11 +396,6 @@ Page {
                     NumberAnimation {
                         duration: 250.0
                     }
-                }
-
-                Settings {
-                    id: actionsSettings
-                    property var shortcuts: mainView.defaultShortcuts
                 }
             }
         }

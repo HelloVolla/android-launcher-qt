@@ -23,6 +23,7 @@ public class LayoutUtil {
 
             public void onDispatched(String type, Map message) {
                 if (type.equals(SET_LAYOUT)) {
+                    Log.d(TAG, "Invoked JAVA setLayout" );
 
                     final Activity activity = QtNative.activity();
 

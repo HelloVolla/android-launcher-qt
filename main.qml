@@ -22,26 +22,21 @@ ApplicationWindow {
        onStateChanged: {
           if (Qt.application.state === Qt.ApplicationActive) {
               // Application go in active state
-              console.log("Application became active")
+              console.log("MainView | Application became active")
               mainView.currentIndex = mainView.swipeIndex.Springboard
-              mainView.loadWallPaper()
-              mainView.updateAppGrid()
-              mainView.loadContacts()
+              // Check shared Text
+              AN.SystemDispatcher.dispatch("volla.launcher.receiveTextAction", {})
+              // Update app grid
+              AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
+              // Load wallpaper
+              AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
+              // Load contacts
+              AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": mainView.lastContactsCheck})
           } else {
               // Application go in suspend state
               console.log("Application became inactive")
           }
        }
-    }
-
-    onActiveChanged: {
-        if (active) {
-            AN.SystemDispatcher.dispatch("volla.launcher.layoutAction", { })
-        }
-    }
-
-    Component.onCompleted: {
-        console.log("MainView | Current locale: " + Qt.locale().name)
     }
 
     SwipeView {
@@ -134,6 +129,11 @@ ApplicationWindow {
             'ConversationOrNewsOrDetails' : 4,
             'Details' : 5
         }
+        property var settingsAction: {
+            'CREATE': 0,
+            'UPDATE': 1,
+            'REMOVE': 2
+        }
 
         property var contacts: new Array
         property double lastContactsCheck: 0
@@ -146,7 +146,7 @@ ApplicationWindow {
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.android.dialer"
-        property string messageApp: "com.android.mms" // "org.smssecure.smssecure"
+        property string messageApp: "com.android.mms"
 
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
             {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
@@ -280,22 +280,9 @@ ApplicationWindow {
             currentIndex++
         }
 
-        function updateAppGrid() {
-            AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
-        }
-
         function showToast(message) {
             toast.text = message
             toast.show()
-        }
-
-        function loadContacts() {
-            console.log("MainView | Will load contacts")
-            AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": mainView.lastContactsCheck})
-        }
-
-        function loadWallPaper() {
-            AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
         }
 
         function switchTheme(theme) {
@@ -361,19 +348,61 @@ ApplicationWindow {
 
         function getFeeds() {
             var channels = feeds.read()
-            console.log("MainView | Retrieved feeds: " + channels)
+            console.log("MainView | Retrieved feeds: " + channels.lenth)
             return channels.length > 0 ? JSON.parse(channels) : mainView.defaultFeeds
         }
 
-        function updateFeed(channelId, isActive) {
-            // Todo: implement
+        function updateFeed(channelId, isActive, sAction) {
             var channels = getFeeds()
-            for (var i = 0; i < channels.length; i++) {
-                var channel = channels[i]
+            var channel
+            var i
+            for (i = 0; i < channels.length; i++) {
+                channel = channels[i]
                 if (channel["id"] === channelId) {
                     channel["activated"] = isActive
-                    channels[i] = channel
-                    console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                    break
+                }
+            }
+            switch (sAction) {
+                case settingsAction.CREATE:
+                    if (channel === undifined) {
+                        channels.push(channel)
+                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                    } else {
+                        showToast(qsTr("You have alresdy subscribed the feed"))
+                    }
+                    break
+                case settingsAction.UPDATE:
+                    if (channel !== undefined) {
+                        channels[i] = channel
+                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                    }
+                    break
+                case settingsAction.REMOVE:
+                    if (channel !== undefined) {
+                        channels.splice(i, 1)
+                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                    }
+                    break
+                default:
+                    break
+            }
+        }
+
+        function getActions() {
+            var actions = shortcuts.read()
+            console.log("MainView | Retrieved shortcuts: " + actions)
+            return actions.length > 0 ? JSON.parse(actions) : mainView.defaultActions
+        }
+
+        function updateAction(actionId, isActive) {
+            var actions = getActions()
+            for (var i = 0; i < actions.length; i++) {
+                var action = channels[i]
+                if (action["id"] === actionId) {
+                    action["activated"] = isActive
+                    actions[i] = action
+                    console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
                     break
                 }
             }
@@ -403,6 +432,43 @@ ApplicationWindow {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                     }
                     mainView.wallpaperId = message["wallpaperId"]
+                } else if (type === 'volla.launcher.receiveTextResponse') {
+                    console.log("MainView | onDispatched: " + type)
+                    var text = message["sharedText"]
+                    var urlregex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
+                    if (urlregex.test(text.trim())) {
+                        var doc = new XMLHttpRequest();
+                        doc.onreadystatechange = function() {
+                            if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                                console.log("Collections | Received header status: " + doc.status);
+                                if (doc.status !== 200) {
+                                    mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
+                                }
+                            } else if (doc.readyState === XMLHttpRequest.DONE) {
+                                // Todo: dynamic icon, maybe from homepage of feed
+                                var rss = doc.responseXML.documentElement
+                                var channel
+                                for (var i = 0; i < rss.childNodes.length; ++i) {
+                                    if (rss.childNodes[i].nodeName === "channel") {
+                                        channel = rss.childNodes[i]
+                                        break
+                                    }
+                                }
+                                if (channel === undefined) {
+                                    console.log("MainView | Missing rss channel")
+                                    mainView.showToast(qsTr("Invalid RSS feed: ") + text)
+                                    return
+                                }
+                                var feed = new Object
+                                // Todo: Get channel name and icon
+
+
+                                mainView.updateFeed(feed, true, mainView.settingsAction.CREATE)
+                            }
+                        }
+                        doc.open("GET", rssFeed.id)
+                        doc.send()
+                    }
                 }
             }
         }
@@ -430,7 +496,15 @@ ApplicationWindow {
         id: feeds
         source: "feeds.json"
         onError: {
-            console.log(msg)
+            console.log("MainView | Feed settings error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: shortcuts
+        source: "shortcuts.json"
+        onError: {
+            console.log("MainView | Shortcut settings error: " + msg)
         }
     }
 }

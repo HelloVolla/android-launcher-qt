@@ -4,12 +4,12 @@
 <context>
     <name>AppGrid</name>
     <message>
-        <location filename="../AppGrid.qml" line="105"/>
+        <location filename="../AppGrid.qml" line="109"/>
         <source>Apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="114"/>
+        <location filename="../AppGrid.qml" line="118"/>
         <source>Filter apps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -55,86 +55,81 @@
 <context>
     <name>Checkbox</name>
     <message>
-        <location filename="../Checkbox.qml" line="17"/>
+        <location filename="../Checkbox.qml" line="15"/>
         <source>Chip</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../Checkbox.qml" line="67"/>
-        <source>Not yet supported</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Collections</name>
     <message>
-        <location filename="../Collections.qml" line="64"/>
-        <location filename="../Collections.qml" line="116"/>
+        <location filename="../Collections.qml" line="65"/>
+        <location filename="../Collections.qml" line="117"/>
         <source>People</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="71"/>
+        <location filename="../Collections.qml" line="72"/>
         <source>Threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="77"/>
+        <location filename="../Collections.qml" line="78"/>
         <source>News</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="130"/>
+        <location filename="../Collections.qml" line="131"/>
         <source>Filter collections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="416"/>
+        <location filename="../Collections.qml" line="417"/>
         <source>Call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="424"/>
+        <location filename="../Collections.qml" line="425"/>
         <source>Send Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="432"/>
+        <location filename="../Collections.qml" line="433"/>
         <source>Send Email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="556"/>
+        <location filename="../Collections.qml" line="557"/>
         <source>Private</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="608"/>
+        <location filename="../Collections.qml" line="609"/>
         <source>New message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="614"/>
+        <location filename="../Collections.qml" line="615"/>
         <source>New calls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="614"/>
+        <location filename="../Collections.qml" line="615"/>
         <source>New call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="737"/>
+        <location filename="../Collections.qml" line="738"/>
         <source>You</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="849"/>
+        <location filename="../Collections.qml" line="848"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="867"/>
+        <location filename="../Collections.qml" line="866"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -142,18 +137,18 @@
 <context>
     <name>Conversation</name>
     <message>
-        <location filename="../Conversation.qml" line="103"/>
+        <location filename="../Conversation.qml" line="118"/>
         <source>Conversation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="117"/>
+        <location filename="../Conversation.qml" line="132"/>
         <source>Filter messages ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="363"/>
-        <location filename="../Conversation.qml" line="458"/>
+        <location filename="../Conversation.qml" line="376"/>
+        <location filename="../Conversation.qml" line="471"/>
         <source>Not yet supported</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,8 +211,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="339"/>
+        <location filename="../Settings.qml" line="341"/>
         <source>Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="388"/>
+        <source>Not yet supported</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -359,34 +359,34 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.qml" line="14"/>
+        <location filename="../main.qml" line="15"/>
         <source>Volla</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="324"/>
+        <location filename="../main.qml" line="340"/>
         <source>Just now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="326"/>
+        <location filename="../main.qml" line="342"/>
         <source>minutes ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="329"/>
-        <location filename="../main.qml" line="331"/>
+        <location filename="../main.qml" line="345"/>
+        <location filename="../main.qml" line="347"/>
         <source>Today</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="335"/>
-        <location filename="../main.qml" line="337"/>
+        <location filename="../main.qml" line="351"/>
+        <location filename="../main.qml" line="353"/>
         <source>Yesterday</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="389"/>
+        <location filename="../main.qml" line="443"/>
         <source>Not yet supported</source>
         <translation type="unfinished"></translation>
     </message>

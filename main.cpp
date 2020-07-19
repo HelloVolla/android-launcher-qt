@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.parser.ArticleParser");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.LayoutUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.AppUtil");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.ShareUtil");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

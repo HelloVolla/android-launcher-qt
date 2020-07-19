@@ -33,6 +33,7 @@ Page {
     }
 
     Component.onCompleted: {
+        AN.SystemDispatcher.dispatch("volla.launcher.layoutAction", { })
         listModel.update()
     }
 
@@ -278,6 +279,11 @@ Page {
                 return urlregex.test(textInput.trim());
             }
 
+            function textInputIsRssFeed() {
+                // Todo: implement
+                return false
+            }
+
             function update() {
                 console.log("Springboard | update model for " + textInput);
 
@@ -319,6 +325,9 @@ Page {
                     }
                 } else if (textInputIsWebAddress()) {
                     filteredSuggestionObj[0] = [qsTr("Open in browser"), mainView.actionType.OpenURL]
+                    if (textInputIsRssFeed()) {
+                        // Todo: implement
+                    }
                 } else if (textInputStartsWithPhoneNumber()) {
                     filteredSuggestionObj[0] = [qsTr("Call"), mainView.actionType.MakeCall]
                 } else if (textInput.length > 1) {

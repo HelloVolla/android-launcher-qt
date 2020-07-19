@@ -23,8 +23,7 @@ public class AppUtil {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map message) {
-                if (type.equals(GET_APP_COUNT)) {
-
+                if (type.equals(GET_APP_COUNT)) {                    
                     final Activity activity = QtNative.activity();
                     final PackageManager pm = activity.getPackageManager();
 
