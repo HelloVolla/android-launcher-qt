@@ -12,18 +12,21 @@
 
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
-    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Volla" android:icon="@drawable/icon">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="Volla" android:theme="@style/AppTheme" android:screenOrientation="portrait" android:launchMode="singleTop">
+    <application android:hardwareAccelerated="true"
+                 android:name="org.qtproject.qt5.android.bindings.QtApplication"
+                 android:label="Volla"
+                 android:icon="@drawable/icon">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc"
+                  android:name="org.qtproject.qt5.android.bindings.QtActivity"
+                  android:label="Volla"
+                  android:theme="@style/AppTheme"
+                  android:screenOrientation="portrait"
+                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
                 <category android:name="android.intent.category.HOME"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
             </intent-filter>
 
             <!-- Application arguments -->
@@ -89,17 +92,26 @@
             <!-- extract android style -->
     </activity>
 
+        <activity android:name="com.volla.launcher.activity.ReceiveTextActivity" >
+                  android:label = "@string/app_name"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+                  <!-- android:theme = "@android:style/Theme.NoDisplay" > -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
     <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
 
     </application>
 
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-<!-- %%INSERT_PERMISSIONS -->
-<uses-permission android:name="android.permission.READ_CONTACTS"/>
-<uses-permission android:name="android.permission.READ_SMS"/>
-<uses-permission android:name="android.permission.READ_CALL_LOG"/>
-
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- %%INSERT_PERMISSIONS -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 </manifest>

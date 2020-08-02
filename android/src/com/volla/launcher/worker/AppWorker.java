@@ -1,6 +1,7 @@
 package com.volla.launcher.worker;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
@@ -18,6 +19,8 @@ import java.io.ByteArrayOutputStream;
 
 public class AppWorker extends org.qtproject.qt5.android.bindings.QtActivity
 {
+    private static final String TAG = "AppWorker";
+
     public AppWorker() {
 
     }

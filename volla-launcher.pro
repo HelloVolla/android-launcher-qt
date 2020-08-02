@@ -56,6 +56,7 @@ HEADERS += \
 
 DISTFILES += \
     LICENSE.txt \
+    android/src/com/volla/launcher/activity/ReceiveTextActivity.java \
     android/src/com/volla/launcher/parser/ArticleParser.java \
     android/src/com/volla/launcher/util/AppUtil.java \
     android/src/com/volla/launcher/util/LayoutUtil.java \

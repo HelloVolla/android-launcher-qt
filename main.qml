@@ -442,7 +442,7 @@ ApplicationWindow {
                             if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                                 console.log("Collections | Received header status: " + doc.status);
                                 if (doc.status !== 200) {
-                                    mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
+                                    mainView.showToast(qsTr("Could not load RSS feed " + text))
                                 }
                             } else if (doc.readyState === XMLHttpRequest.DONE) {
                                 // Todo: dynamic icon, maybe from homepage of feed
@@ -466,8 +466,10 @@ ApplicationWindow {
                                 mainView.updateFeed(feed, true, mainView.settingsAction.CREATE)
                             }
                         }
-                        doc.open("GET", rssFeed.id)
+                        doc.open("GET", text)
                         doc.send()
+                    } else {
+                        console.log("MainView | Invalid RSS feed url")
                     }
                 }
             }
