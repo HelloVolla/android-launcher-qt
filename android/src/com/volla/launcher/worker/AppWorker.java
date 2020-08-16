@@ -61,7 +61,7 @@ public class AppWorker extends org.qtproject.qt5.android.bindings.QtActivity
         for (ResolveInfo ri:availableActivities) {
             Log.d("Found package", ri.activityInfo.packageName);
 
-            // Todo: Remove. Workaround for beta demo purpose
+            // todo: Remove. Workaround for beta demo purpose
             if (!packages.contains(ri.activityInfo.packageName)) {
                 json+="{\n";
                 json+="\"package\": \"" + ri.activityInfo.packageName + "\",\n";

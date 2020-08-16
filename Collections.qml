@@ -91,7 +91,6 @@ Page {
 
     function loadThreads(filter) {
         console.log("Collections | Will load threads")
-        // Todo: Update threads
         collectionPage.threads = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
     }
@@ -700,7 +699,6 @@ Page {
                     Qt.openUrlExternally("mailto:" + item.c_EMAIL)
                     break
                 default:
-                    // Todo: Create dynamic detail page
                     mainView.updateConversationPage(mainView.conversationMode.Person, item.c_ID, item.c_TITLE)
             }
         }
@@ -833,7 +831,6 @@ Page {
                                 mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
                             }
                         } else if (doc.readyState === XMLHttpRequest.DONE) {
-                            // Todo: dynamic icon, maybe from homepage of feed
                             var cNews = {c_CHANNEL: rssFeed.id, c_ICON: rssFeed.icon}
 
                             var rss = doc.responseXML.documentElement
@@ -882,7 +879,7 @@ Page {
                                 else if (childNode.nodeName === "link") {
                                     cNews.c_ID = textNode.nodeValue
 
-                                    // Todo: Store recent property in feed dict of settings
+                                    // todo: Store recent property in feed dict of settings
                                     if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
                                         cNews.c_BADGE = true
                                     }

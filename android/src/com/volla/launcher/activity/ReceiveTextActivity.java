@@ -33,20 +33,40 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
         if (Intent.ACTION_SEND.equals(action) && type != null && "text/plain".equals(type)) {
             String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (sharedText != null) {
+
+                // todo: Check Url, source, save updated settings and send notification
+
                 Map reply = new HashMap();
                 reply.put("sharedText", sharedText );
                 SystemDispatcher.dispatch(GOT_TEXT, reply);
             }
             Log.d(TAG, "Shared text: " +  sharedText);
-            Toast.makeText(this, sharedText, Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "No shared text" );
         }
+    }
 
-        PackageManager pm = this.getPackageManager();
-        Intent app = pm.getLaunchIntentForPackage("com.volla.launcher");
-        startActivity(app);
+    @Override
+    public void onNewIntent(Intent intent) {
+        Log.d(TAG, "onNewIntend() called");
 
-        finish();
+        super.onNewIntent(intent);
+
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        Log.d(TAG, "Intend: " + intent + ", Action: " + action + ", type: " + type);
+
+        if (Intent.ACTION_SEND.equals(action) && type != null && "text/plain".equals(type)) {
+            String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (sharedText != null) {
+                Map reply = new HashMap();
+                reply.put("sharedText", sharedText );
+                SystemDispatcher.dispatch(GOT_TEXT, reply);
+            }
+            Log.d(TAG, "Shared text: " +  sharedText);
+        } else {
+            Log.d(TAG, "No shared text" );
+        }
     }
 }

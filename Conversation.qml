@@ -91,14 +91,12 @@ Page {
 
     function loadConversation(filter) {
         console.log("Conversations | Will load messages")
-        // Todo: Update messages
         messages = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
     }
 
     function loadCalls(filter) {
         console.log("Conversations | Will load calls")
-        // Todo: Update calls
         calls = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.callConversationAction", filter)
     }
@@ -267,7 +265,7 @@ Page {
             }
 
             onClicked: {
-                // Todo
+                // todo: do anything with the selected message
             }
         }
     }

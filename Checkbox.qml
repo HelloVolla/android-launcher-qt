@@ -10,6 +10,8 @@ CheckBox {
     property double circleSize
     property var actionId
     property bool activeCheckbox: false
+    property bool hasRemoveButton: false
+    property int startX: 0
 
     width: parent.width
     text: qsTr("Chip")
@@ -18,12 +20,30 @@ CheckBox {
 
     contentItem: Text {
         text: settingsCheckbox.text
+        elide: Text.ElideRight
+        width: parent.width - leftPadding * 2 - removeButton.width
         leftPadding: settingsCheckbox.indicator.width + settingsCheckbox.spacing
         font.pointSize: labelFontSize
         font.weight: Font.Normal
         color: Universal.foreground
         opacity: settingsCheckbox.checked ? 1.0 : 0.7
         verticalAlignment: Text.AlignVCenter
+    }
+
+    Button {
+        id: removeButton
+        anchors.right: parent.right
+        rightPadding: settingsCheckbox.leftPadding
+        leftPadding: settingsCheckbox.leftPadding
+        flat: true
+        text: "<font color='#808080'>×</font>"
+        font.pointSize: labelFontSize
+        onClicked: {
+            console.log("Checkbox | Remove item from settings: " + settingsCheckbox.text)
+            settingsCheckbox.parent.removeSettings(actionId)
+            settingsCheckbox.destroy()
+        }
+        visible: settingsCheckbox.hasRemoveButton
     }
 
     indicator: Rectangle {
@@ -45,11 +65,11 @@ CheckBox {
 
     onCheckedChanged: {
         console.log("Checkbox | Checked changed for " + text + ", " + checked)
-        if (activeCheckbox) {
+//        if (activeCheckbox) {
             parent.updateSettings(actionId, checked)
-        } else {
-            activeCheckbox = true
-        }
+//        } else {
+//            activeCheckbox = true
+//        }
     }
 
     Component.onCompleted: {

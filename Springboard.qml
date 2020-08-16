@@ -35,6 +35,11 @@ Page {
     Component.onCompleted: {
         AN.SystemDispatcher.dispatch("volla.launcher.layoutAction", { })
         listModel.update()
+        shortcutMenu.updateShortcuts(mainView.getActions())
+    }
+
+    function updateShortcuts(actions) {
+        shortcutMenu.updateShortcuts(actions)
     }
 
     ListView {
@@ -122,7 +127,7 @@ Page {
             function phoneNumberForContact() {
                 var phoneNumber = -1
                 if (selectedObj !== undefined) {
-                    // Todo: Offer selection
+                    // todo: offer selection of phone numbers
                     if (selectedObj["phone.mobile"].length > 0) {
                         phoneNumber = selectedObj["phone.mobile"]
                     } else if (selectedObj["phone.home"].length > 0) {
@@ -141,7 +146,7 @@ Page {
                 var emailAddress
                 if (selectedObj) {
                     console.log("Springboard | Contact " + selectedObj["id"] + " " + selectedObj["name"])
-                    // Todo: Offer selection
+                    // todo: offer selection of email address
                     if (selectedObj["email.home"].length > 0) {
                         emailAddress = selectedObj["email.home"]
                     } else if (selectedObj["email.work"].length > 0) {
@@ -233,9 +238,12 @@ Page {
                         console.log("Springboard | Did open in browser: " + success)
                         textInputArea.text = ""
                         break
+                    case mainView.actionType.AddFeed:
+                        mainView.checkAndAddFeed(textInput.trim())
+                        break
                     case mainView.actionType.CreateNote:
                         console.log("Springboard | Will create note")
-                        // todo create note
+                        // todo: create note
                         var source = "note" + Math.floor(Date.now()) + ".txt"
                         myNote.setSource(source)
                         myNote.write(textInput)
@@ -279,9 +287,8 @@ Page {
                 return urlregex.test(textInput.trim());
             }
 
-            function textInputIsRssFeed() {
-                // Todo: implement
-                return false
+            function textInputCouldBeRssFeed() {
+                return textInput.indexOf("http") == 0 ? textInput.lastIndexOf("/") > 7 : textInput.lastIndexOf("/") > 3
             }
 
             function update() {
@@ -325,8 +332,8 @@ Page {
                     }
                 } else if (textInputIsWebAddress()) {
                     filteredSuggestionObj[0] = [qsTr("Open in browser"), mainView.actionType.OpenURL]
-                    if (textInputIsRssFeed()) {
-                        // Todo: implement
+                    if (textInputCouldBeRssFeed()) {
+                        filteredSuggestionObj[1] = [qsTr("Add feed to collection"), mainView.actionType.AddFeed]
                     }
                 } else if (textInputStartsWithPhoneNumber()) {
                     filteredSuggestionObj[0] = [qsTr("Call"), mainView.actionType.MakeCall]
@@ -426,7 +433,8 @@ Page {
     MouseArea {
         id: shortcutMenu
         width: parent.width
-        height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3 // parent.height / 2 // todo: make dynamic
+        // todo: make dynamic bullet size
+        height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         preventStealing: true
@@ -449,6 +457,10 @@ Page {
             cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             dialerLabel.font.bold = selectedMenuItem === dialerLabel
             dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
+            eventLabel.font.bold = selectedMenuItem === eventLabel
+            eventLabel.font.pointSize = selectedMenuItem === eventLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
+            notesLabel.font.bold = selectedMenuItem === notesLabel
+            notesLabel.font.pointSize = selectedMenuItem === notesLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
         }
 
         onEntered: {
@@ -460,7 +472,7 @@ Page {
                     && mouseY > touchY && mouseY < touchY + touchHeight) {
                 console.log("Springboard | enable menu")
                 //shortcutBackground.visible = true
-                shortcutMenu.height = springBoard.height * 0.6
+                shortcutMenu.height = shortcutColumn.height // springBoard.height * 0.6
                 shortcutBackground.width = roundedShortcutMenu ? parent.width - mainView.innerSpacing * 4 : parent.width
                 shortcutBackground.height = shortcutColumn.height
                 shortcutColumn.opacity = 1
@@ -497,6 +509,8 @@ Page {
             var alPoint = mapFromItem(agendaLabel, 0, 0)
             var clPoint = mapFromItem(cameraLabel, 0, 0)
             var dlPoint = mapFromItem(dialerLabel, 0, 0)
+            var elPoint = mapFromItem(eventLabel, 0, 0)
+            var olPoint = mapFromItem(notesLabel, 0, 0)
 
             if (mouseY > plPoint.y && mouseY < plPoint.y + peopleLabel.height) {
                 selectedMenuItem = peopleLabel
@@ -512,9 +526,44 @@ Page {
                 selectedMenuItem = cameraLabel
             } else if (mouseY > dlPoint.y && mouseY < dlPoint.y + dialerLabel.height) {
                 selectedMenuItem = dialerLabel
+            } else if (mouseY > elPoint.y && mouseY < elPoint.y + eventLabel.height) {
+                selectedMenuItem = eventLabel
+            } else if (mouseY > olPoint.y && mouseY < olPoint.y + notesLabel.height) {
+                selectedMenuItem = notesLabel
             } else {
                 selectedMenuItem = rootMenuButton
             }
+        }
+
+        function updateShortcuts(actions) {
+            actions.forEach(function (action, index) {
+                switch (action.id) {
+                    case mainView.actionType.OpenCam:
+                        cameraLabel.visible = action.activated
+                        break
+                    case mainView.actionType.ShowCalendar:
+                        agendaLabel.visible = action.activated
+                        break
+                    case mainView.actionType.ShowGallery:
+                        galleryLabel.visible = action.activated
+                        break
+                    case mainView.actionType.ShowNotes:
+                        notesLabel.visible = action.activated
+                        break
+                    case mainView.actionType.CreateEvent:
+                        eventLabel.visible = action.activated
+                        break
+                    case mainView.actionType.ShowContacts:
+                        peopleLabel.visible = action.activated
+                        break
+                    case mainView.actionType.ShowThreads:
+                        threadLabel.visible = action.activated
+                        break
+                    case mainView.actionType.ShowNews:
+                        newsLabel.visible = action.activated
+                        break
+                }
+            })
         }
 
         function executeSelection() {
@@ -545,6 +594,12 @@ Page {
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
                 backEnd.runApp(mainView.phoneApp)
+            } else if (selectedMenuItem == notesLabel) {
+                console.log("Springboard | Show notes")
+                backEnd.runApp(mainView.notesApp)
+            } else if (selectedMenuItem == eventLabel) {
+                console.log("Springboard | Create event")
+                AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
             }
         }
 
@@ -586,7 +641,7 @@ Page {
             visible: true // shortcutBackground.visible
             opacity: 0.0
             width: parent.width
-            height: menuheight
+            // height: menuheight
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 
@@ -614,7 +669,25 @@ Page {
             }
             Label {
                 id: agendaLabel
-                text: qsTr("Agenda")
+                text: qsTr("Show Agenda")
+                font.pointSize: mainView.largeFontSize
+                anchors.left: parent.left
+                leftPadding: shortcutColumn.leftDistance
+                bottomPadding: mainView.innerSpacing
+                color: "white"
+            }
+            Label {
+                id: eventLabel
+                text: qsTr("Create Event")
+                font.pointSize: mainView.largeFontSize
+                anchors.left: parent.left
+                leftPadding: shortcutColumn.leftDistance
+                bottomPadding: mainView.innerSpacing
+                color: "white"
+            }
+            Label {
+                id: notesLabel
+                text: qsTr("Show Notes")
                 font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
                 leftPadding: shortcutColumn.leftDistance

@@ -14,7 +14,6 @@ ApplicationWindow {
     height: 1200
     title: qsTr("Volla")
 
-    // Todo: Introduce setting
     // visibility: ApplicationWindow.FullScreen
 
     Connections {
@@ -24,8 +23,6 @@ ApplicationWindow {
               // Application go in active state
               console.log("MainView | Application became active")
               mainView.currentIndex = mainView.swipeIndex.Springboard
-              // Check shared Text
-              AN.SystemDispatcher.dispatch("volla.launcher.receiveTextAction", {})
               // Update app grid
               AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
               // Load wallpaper
@@ -119,7 +116,8 @@ ApplicationWindow {
             'OpenCam': 20012,
             'ShowNotes': 20013,
             'ShowDialer': 20014,
-            'CreatEvent': 20015
+            'CreateEvent': 20015,
+            'AddFeed': 20016
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -147,6 +145,7 @@ ApplicationWindow {
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.android.dialer"
         property string messageApp: "com.android.mms"
+        property string notesApp: "com.simplemobiletools.notes.pro"
 
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
             {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
@@ -309,7 +308,7 @@ ApplicationWindow {
             AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme})
         }
 
-        // Todo: Improve display date and time with third party library
+        // todo: Improve display date and time with third party library
         function parseTime(timeInMillis) {
             var now = new Date()
             var date = new Date(timeInMillis)
@@ -352,34 +351,38 @@ ApplicationWindow {
             return channels.length > 0 ? JSON.parse(channels) : mainView.defaultFeeds
         }
 
-        function updateFeed(channelId, isActive, sAction) {
+        function updateFeed(channelId, isActive, sAction, newChannel) {
+            console.log("MainView | Will update channel: " + channelId + " with properties " + newChannel)
             var channels = getFeeds()
             var channel
+            var matched = false
             var i
             for (i = 0; i < channels.length; i++) {
                 channel = channels[i]
                 if (channel["id"] === channelId) {
+                    matched = true
                     channel["activated"] = isActive
                     break
                 }
             }
             switch (sAction) {
-                case settingsAction.CREATE:
-                    if (channel === undifined) {
-                        channels.push(channel)
+                case mainView.settingsAction.CREATE:
+                    if (matched === false) {
+                        channels.push(newChannel)
                         console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                        showToast(qsTr("New Subscrption: " + channel.name))
                     } else {
                         showToast(qsTr("You have alresdy subscribed the feed"))
                     }
                     break
-                case settingsAction.UPDATE:
-                    if (channel !== undefined) {
+                case mainView.settingsAction.UPDATE:
+                    if (matched === true) {
                         channels[i] = channel
                         console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
                     }
                     break
-                case settingsAction.REMOVE:
-                    if (channel !== undefined) {
+                case mainView.settingsAction.REMOVE:
+                    if (matched === true) {
                         channels.splice(i, 1)
                         console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
                     }
@@ -387,6 +390,87 @@ ApplicationWindow {
                 default:
                     break
             }
+        }
+
+        function checkAndAddFeed(url) {
+            var doc = new XMLHttpRequest();
+            doc.onreadystatechange = function() {
+                if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                    console.log("MainView | Received header status: " + doc.status);
+                    if (doc.status !== 200) {
+                        mainView.showToast(qsTr("Could not load RSS feed " + url))
+                    }
+                } else if (doc.readyState === XMLHttpRequest.DONE) {
+                    if (doc.responseXML === null) {
+                        mainView.showToast(qsTr("Could not load RSS feed " + url))
+                        return
+                    }
+
+                    var rss = doc.responseXML.documentElement
+                    var channel
+                    for (var i = 0; i < rss.childNodes.length; ++i) {
+                        if (rss.childNodes[i].nodeName === "channel") {
+                            channel = rss.childNodes[i]
+                            break
+                        }
+                    }
+                    if (channel === undefined) {
+                        console.log("MainView | Missing rss channel")
+                        mainView.showToast(qsTr("Invalid RSS feed: ") + url)
+                        return
+                    }
+                    var feed = new Object
+
+                    feed.id = url
+                    feed.activated = true
+                    for (i = 0; i < channel.childNodes.length; ++i) {
+                        if (channel.childNodes[i].nodeName === "title") {
+                            var childNode = channel.childNodes[i]
+                            var textNode = childNode.firstChild
+                            feed.name = textNode.nodeValue
+                        }
+                    }
+
+                    var urlPattern = /(.+:\/\/)?([^\/]+)(\/.*)*/i
+                    var urlArr = urlPattern.exec(url)
+                    var baseUrl = "https://" + urlArr[2]
+                    var htmlRequest = new XMLHttpRequest();
+                    htmlRequest.onreadystatechange = function() {
+                        if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                            console.log("MainView | Received header status: " + htmlRequest.status);
+                            if (htmlRequest.status !== 200) {
+                                console.log("MainView | Couldn't load feed homepage. Will take fallback for icon")
+                                feed.icon = baseUrl + "favicon.ico"
+                                mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                            }
+                        } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
+                            var html = htmlRequest.responseText
+                            var pattern = /<link\srel="(apple-touch-)?icon".+>/i
+                            var link = pattern.exec(html)
+                            if (link !== undefined) {
+                                pattern = /href="\S+"/i
+                                link = pattern.exec(link).toString()
+                                var length = link.length - 1
+                                link = link.slice(6, length)
+                                if (!link.startsWith("http")) {
+                                    link = baseUrl + link
+                                }
+                                console.log("MainView | Identified feed icon: " + link)
+                                feed.icon = link
+                            } else {
+                                console.log("MainView | Missing header of feed homepage. Will take fallback for icon")
+                                fedd.icon = baseUrl + "favicon.ico"
+                            }
+
+                            mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                        }
+                    }
+                    htmlRequest.open("GET", baseUrl)
+                    htmlRequest.send()
+                }
+            }
+            doc.open("GET", url)
+            doc.send()
         }
 
         function getActions() {
@@ -398,7 +482,7 @@ ApplicationWindow {
         function updateAction(actionId, isActive) {
             var actions = getActions()
             for (var i = 0; i < actions.length; i++) {
-                var action = channels[i]
+                var action = actions[i]
                 if (action["id"] === actionId) {
                     action["activated"] = isActive
                     actions[i] = action
@@ -406,6 +490,7 @@ ApplicationWindow {
                     break
                 }
             }
+            springboard.children[0].item.updateShortcuts(actions)
         }
 
         Connections {
@@ -437,37 +522,7 @@ ApplicationWindow {
                     var text = message["sharedText"]
                     var urlregex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
                     if (urlregex.test(text.trim())) {
-                        var doc = new XMLHttpRequest();
-                        doc.onreadystatechange = function() {
-                            if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                                console.log("Collections | Received header status: " + doc.status);
-                                if (doc.status !== 200) {
-                                    mainView.showToast(qsTr("Could not load RSS feed " + text))
-                                }
-                            } else if (doc.readyState === XMLHttpRequest.DONE) {
-                                // Todo: dynamic icon, maybe from homepage of feed
-                                var rss = doc.responseXML.documentElement
-                                var channel
-                                for (var i = 0; i < rss.childNodes.length; ++i) {
-                                    if (rss.childNodes[i].nodeName === "channel") {
-                                        channel = rss.childNodes[i]
-                                        break
-                                    }
-                                }
-                                if (channel === undefined) {
-                                    console.log("MainView | Missing rss channel")
-                                    mainView.showToast(qsTr("Invalid RSS feed: ") + text)
-                                    return
-                                }
-                                var feed = new Object
-                                // Todo: Get channel name and icon
-
-
-                                mainView.updateFeed(feed, true, mainView.settingsAction.CREATE)
-                            }
-                        }
-                        doc.open("GET", text)
-                        doc.send()
+                        mainView.checkAndAddFeed(text)
                     } else {
                         console.log("MainView | Invalid RSS feed url")
                     }

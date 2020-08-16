@@ -211,7 +211,6 @@ Page {
                     if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== modeSettingsTitle) {
                         modeSettingsTitle.text = selectedMenuItem.text
 
-                        // Todo: Update settings
                         console.log("Current Theme: " + themeSettings.theme)
                         themeSettings.theme = selectedMenuItem.theme
                         themeSettings.sync()
@@ -292,7 +291,8 @@ Page {
                                 "text": cannels[i]["name"], "checked": cannels[i]["activated"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2}
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "hasRemoveButton": true}
                             var object = component.createObject(newsSettingsColumn, properties)
                             newsSettingsColumn.newsCheckboxes.push(object)
                         }
@@ -310,6 +310,11 @@ Page {
                     function updateSettings(channelId, active) {
                         console.log("Settings | Update settings for " + channelId + ", " + active)
                         mainView.updateFeed(channelId, active, mainView.settingsAction.UPDATE)
+                    }
+
+                    function removeSettings(channelId) {
+                        console.log("Settings | Remove settings for " + channelId)
+                        mainView.updateFeed(channelId, false, mainView.settingsAction.REMOVE)
                     }
                 }
 
@@ -384,11 +389,8 @@ Page {
                     }
 
                     function updateSettings(actionId, active) {
-                        console.log("Settings | Update settings for " + channelId + ", " + active)
-                        mainView.showToast(qsTr("Not yet supported"))
-
-                        // Todo: implement
-//                        mainView.updateAction(actionId, active)
+                        console.log("Settings | Update settings for " + actionId + ", " + active)
+                        mainView.updateAction(actionId, active)
                     }
                 }
 
