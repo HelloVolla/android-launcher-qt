@@ -17,7 +17,8 @@ const QVector<QString> permissions({"android.permission.READ_CONTACTS",
                                     "android.permission.READ_SMS",
                                     "android.permission.READ_CALL_LOG",
                                     "android.permission.READ_EXTERNAL_STORAGE",
-                                    "android.permission.WRITE_EXTERNAL_STORAGE"});
+                                    "android.permission.WRITE_EXTERNAL_STORAGE",
+                                    "android.permission.SET_WALLPAPER"});
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
     Q_UNUSED(vm);

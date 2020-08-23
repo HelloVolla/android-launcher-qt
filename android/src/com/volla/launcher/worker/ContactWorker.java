@@ -25,18 +25,18 @@ import org.qtproject.qt5.android.QtNative;
 
 public class ContactWorker {
 
+    private static final String TAG = "ContactWorker";
+
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map message) {
 
-                Log.d("ContactWorker | onDispatched", type);
-
                 final Activity activity = QtNative.activity();
 
                 if (type.equals("volla.launcher.contactAction")) {
 
-                    Log.d("ContactWorker | onDispatched", "Go");
+                    Log.d(TAG, "get Contacts");
 
                     // Process then dispatch a response back to C++/QML
                     Map responseMessage = new HashMap();

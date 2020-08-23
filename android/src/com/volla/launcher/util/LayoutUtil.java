@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import java.util.Map;
 import java.io.IOException;
@@ -56,26 +57,50 @@ public class LayoutUtil {
                             Window w = activity.getWindow(); // in Activity's onCreate() for instance
                             WindowManager.LayoutParams winParams = w.getAttributes();
                             WallpaperManager wm = WallpaperManager.getInstance(activity);
+                            int wallpaperId;
+                            Configuration validConfig = new Configuration();
+                            validConfig.setToDefaults();
+                            Configuration deltaOnlyConfig = new Configuration();
 
                             if (value > 0) {
-                                // light view
+                                // dark or translucent mode
                                 int flags = w.getDecorView().getSystemUiVisibility();
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
-//                                try {
-                                    int wallpaperId = R.drawable.wallpaper_white;
-                                    Log.d(TAG, "Wallpaper ID is: " + wallpaperId);
-//                                    wm.setResource(wallpaperId, WallpaperManager.FLAG_LOCK);
-//                                } catch (IOException e) {
-//                                    Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
-//                                }
+                                if (value == 1) {
+                                    wallpaperId = R.drawable.wallpaper_black;
+                                } else {
+                                    Log.d(TAG, "Retrieve system wallpaper" );
+                                    wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                                }
+                                deltaOnlyConfig.uiMode = Configuration.UI_MODE_NIGHT_YES;
                             } else {
+                                // light mode
                                 int flags = w.getDecorView().getSystemUiVisibility();
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
-                                //wm.setResource(R.drawable.wallpaper_black, WallpaperManager.FLAG_LOCK);
+                                wallpaperId = R.drawable.wallpaper_white;
+                                deltaOnlyConfig.uiMode = Configuration.UI_MODE_NIGHT_NO;
+                            }
+
+                            if (wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId) {
+                                try {
+                                    if (value == 2) {
+                                        Log.d(TAG, "Clear lock screen wallpaper");
+                                        wm.clear(WallpaperManager.FLAG_LOCK);
+                                    } else {
+                                        wm.setResource(wallpaperId, WallpaperManager.FLAG_LOCK);
+                                    }
+                                } catch (IOException e) {
+                                    Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
+                                }
+                            }
+
+                            if (validConfig.uiMode != deltaOnlyConfig.uiMode) {
+                                Log.d(TAG, "Will update uiMode to " + deltaOnlyConfig.uiMode);
+                                validConfig.updateFrom(deltaOnlyConfig);
                             }
                         }
                     };

@@ -73,6 +73,7 @@ Page {
                     textInputField.placeholderText = "Find thread ..."
                     currentCollectionModel = threadModel
                     collectionPage.loadThreads({})
+                    //collectionPage.loadCalls({"count": maxCalls})
                     break;
                 case mainView.collectionMode.News:
                     headline.text = qsTr("News")

@@ -393,12 +393,14 @@ ApplicationWindow {
         }
 
         function checkAndAddFeed(url) {
+            console.log("MainView | Will check and update feeds")
             var doc = new XMLHttpRequest();
             doc.onreadystatechange = function() {
                 if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                    console.log("MainView | Received header status: " + doc.status);
+                    console.log("MainView | Received header status feed url: " + doc.status);
                     if (doc.status !== 200) {
                         mainView.showToast(qsTr("Could not load RSS feed " + url))
+                        return
                     }
                 } else if (doc.readyState === XMLHttpRequest.DONE) {
                     if (doc.responseXML === null) {
@@ -433,15 +435,19 @@ ApplicationWindow {
 
                     var urlPattern = /(.+:\/\/)?([^\/]+)(\/.*)*/i
                     var urlArr = urlPattern.exec(url)
-                    var baseUrl = "https://" + urlArr[2]
+                    urlArr = urlArr[2].split(".")
+                    var baseUrl = "https://www." + urlArr[urlArr.length - 2] + "." + urlArr[urlArr.length - 1]
+
                     var htmlRequest = new XMLHttpRequest();
                     htmlRequest.onreadystatechange = function() {
                         if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                            console.log("MainView | Received header status: " + htmlRequest.status);
+                            console.log("MainView | Received header status for news homepage: " + htmlRequest.status);
                             if (htmlRequest.status !== 200) {
                                 console.log("MainView | Couldn't load feed homepage. Will take fallback for icon")
-                                feed.icon = baseUrl + "favicon.ico"
+                                // todo: solution for fallback. ico not supported.
+                                feed.icon = baseUrl + "/favicon.ico"
                                 mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                                return
                             }
                         } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
                             var html = htmlRequest.responseText
@@ -463,6 +469,7 @@ ApplicationWindow {
                             }
 
                             mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                            return
                         }
                     }
                     htmlRequest.open("GET", baseUrl)
@@ -513,6 +520,7 @@ ApplicationWindow {
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {
                     console.log("MainView | onDispatched: " + type)
+
                     if (message["wallpaper"] !== undefined) {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                     }
@@ -536,9 +544,11 @@ ApplicationWindow {
         property int theme: mainView.theme.Dark
         
         Component.onCompleted: {
-            console.log("Current themes: " + Universal.theme + ", " + settings.theme)
+            console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme)
+            } else {
+                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme})
             }
         }
     }

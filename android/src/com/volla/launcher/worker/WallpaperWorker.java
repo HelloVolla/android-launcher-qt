@@ -17,7 +17,7 @@ import org.qtproject.qt5.android.QtNative;
 
 public class WallpaperWorker {
 
-    private static final String TAG = "WalpaperWorker";
+    private static final String TAG = "WallpaperWorker";
 
     public static final String GET_WALLPAPER = "volla.launcher.wallpaperAction";
     public static final String GOT_WALLPAPER = "volla.launcher.wallpaperResponse";
@@ -34,6 +34,7 @@ public class WallpaperWorker {
                     Map reply = new HashMap();
 
                     int wallpaperId = wallpaperManager.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                    Log.d(TAG, "Wallpaper ID is: " + wallpaperId);
                     reply.put("wallpaperId", wallpaperId);
 
                     if (!message.get("wallpaperId").equals(wallpaperId)) {

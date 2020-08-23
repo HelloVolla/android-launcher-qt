@@ -262,8 +262,8 @@ Page {
             var jsonStr = backEnd.getApplistAsJSON()
             try {
                 modelArr = JSON.parse(jsonStr)
-                console.log("Grid model length: " + modelArr.length)
-                console.log("Grid model sample: " + modelArr[0].label)
+                console.log("AppGrid | Grid model length: " + modelArr.length)
+                console.log("AppGrid | Grid model sample: " + modelArr[0].label)
                 update(textInput)
             } catch (e) {
                 console.log("Grid model loading error: " + e)
@@ -273,7 +273,7 @@ Page {
         }
 
         function update(text) {
-            console.log("Update model with text input: " + text)
+            console.log("AppGrid | Update model with text input: " + text)
 
             var filteredGridDict = new Object
             var filteredGridItem
@@ -289,7 +289,7 @@ Page {
                                                                                 : modelArr[i].label
                 var modelItemName = modelArr[i].label
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    //console.log("Add " + modelItemName + " to filtered items")
+                    // console.log("Add " + modelItemName + " to filtered items")
                     filteredGridDict[modelItemName] = filteredGridItem
                 }
             }
@@ -319,7 +319,7 @@ Page {
                 if (!found) {
                     // for simplicity, just adding to end instead of corresponding position in original list
                     filteredGridItem = filteredGridDict[key]
-                    console.log("Will append " + filteredGridItem.label)
+                    // console.log("Will append " + filteredGridItem.label)
                     append(filteredGridDict[key])
                 }
             })
