@@ -10,14 +10,14 @@ import FileIO 1.0
 
 ApplicationWindow {
     visible: true
-    width: 640
-    height: 1200
+//    width: 1060
+//    height: 1200
     title: qsTr("Volla")
 
-    // visibility: ApplicationWindow.FullScreen
 
     Connections {
        target: Qt.application
+       // @disable-check M16
        onStateChanged: {
           if (Qt.application.state === Qt.ApplicationActive) {
               // Application go in active state
@@ -203,8 +203,8 @@ ApplicationWindow {
                 item = itemAt(swipeIndex.Collections)
                 while (count > swipeIndex.Collections + 2) removeItem(swipeIndex.Collections + 2)
             }
-            item.children[0].item.updateCollectionPage(mode)
             currentIndex++
+            item.children[0].item.updateCollectionPage(mode)
         }
 
         function updateConversationPage(mode, id, name) {
@@ -217,8 +217,9 @@ ApplicationWindow {
                 while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
             }
             item.children[0].sourceComponent = Qt.createComponent("/Conversation.qml", mainView)
-            item.children[0].item.updateConversationPage(mode, id, name)
             currentIndex++
+            updateSpinner(true)
+            item.children[0].item.updateConversationPage(mode, id, name)
         }
 
         function updateDetailPage(mode, id, author, date) {
@@ -261,8 +262,8 @@ ApplicationWindow {
                 default:
                     console.log("MainView | Unexpected state for detail view request")
             }
-            item.children[0].item.updateDetailPage(mode, id, author, date)
             currentIndex++
+            item.children[0].item.updateDetailPage(mode, id, author, date)
         }
 
         function updateNewsPage(mode, id, name, icon) {
@@ -275,8 +276,8 @@ ApplicationWindow {
                 while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(ConversationOrNewsOrDetails.Collections + 2)
             }
             item.children[0].sourceComponent = Qt.createComponent("/Feed.qml", mainView)
-            item.children[0].item.updateFeedPage(mode, id, name, icon)
             currentIndex++
+            item.children[0].item.updateFeedPage(mode, id, name, icon)
         }
 
         function showToast(message) {
@@ -301,7 +302,7 @@ ApplicationWindow {
                 mainView.backgroundOpacity = 0.3
                 break
             default:
-                console.log("Not supported theme: " + theme)
+                console.log("MainView | Not supported theme: " + theme)
                 break
             }
             mainView.fontColor = Universal.foreground
@@ -500,6 +501,10 @@ ApplicationWindow {
             springboard.children[0].item.updateShortcuts(actions)
         }
 
+        function updateSpinner(shouldRun) {
+            spinnerBackground.visible = shouldRun
+        }
+
         Connections {
             target: AN.SystemDispatcher
             onDispatched: {
@@ -535,6 +540,41 @@ ApplicationWindow {
                         console.log("MainView | Invalid RSS feed url")
                     }
                 }
+            }
+        }
+    }
+
+    Rectangle {
+        id: spinnerBackground
+        anchors.fill: parent
+        visible: false
+        color: Universal.background
+        opacity: 0.5
+        z: 1
+
+        onVisibleChanged: {
+            if (visible) {
+                console.log("MainView | Start spinner")
+            } else {
+                console.log("MainView | Stop spinner")
+            }
+        }
+
+        FastBlur {
+            anchors.fill: parent
+            source: parent
+            radius: 60
+        }
+
+        BusyIndicator {
+            id: spinner
+            height: 50
+            width: 50
+            anchors.centerIn: parent
+            running: spinnerBackground.visible
+
+            onRunningChanged: {
+                console.log("MainView | Spinner running changed to " + running)
             }
         }
     }

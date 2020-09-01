@@ -2,14 +2,16 @@ package com.volla.launcher.util;
 
 import androidnative.SystemDispatcher;
 import android.os.Build;
+import android.os.Binder;
 import android.app.Activity;
 import android.app.WallpaperManager;
+import android.app.UiModeManager;
 import android.util.Log;
+import android.graphics.Color;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import java.util.Map;
 import java.io.IOException;
@@ -54,13 +56,13 @@ public class LayoutUtil {
                     Runnable runnable = new Runnable () {
 
                         public void run() {
-                            Window w = activity.getWindow(); // in Activity's onCreate() for instance
+                            Window w = activity.getWindow();
                             WindowManager.LayoutParams winParams = w.getAttributes();
                             WallpaperManager wm = WallpaperManager.getInstance(activity);
                             int wallpaperId;
-                            Configuration validConfig = new Configuration();
-                            validConfig.setToDefaults();
-                            Configuration deltaOnlyConfig = new Configuration();
+                            UiModeManager umm = (UiModeManager) activity.getSystemService(Context.UI_MODE_SERVICE);
+
+                            Log.d(TAG, "Current mode is " + umm.getNightMode());
 
                             if (value > 0) {
                                 // dark or translucent mode
@@ -69,21 +71,26 @@ public class LayoutUtil {
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
                                 if (value == 1) {
+                                    Log.d(TAG, "Set night mode and black wallpaper");
                                     wallpaperId = R.drawable.wallpaper_black;
                                 } else {
+                                    Log.d(TAG, "Set nidhgt mode and system wallpaper");
                                     Log.d(TAG, "Retrieve system wallpaper" );
                                     wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
                                 }
-                                deltaOnlyConfig.uiMode = Configuration.UI_MODE_NIGHT_YES;
+                                umm.setNightMode(UiModeManager.MODE_NIGHT_YES);
                             } else {
                                 // light mode
+                                Log.d(TAG, "Set light mode and white wallpaper");
                                 int flags = w.getDecorView().getSystemUiVisibility();
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
                                 wallpaperId = R.drawable.wallpaper_white;
-                                deltaOnlyConfig.uiMode = Configuration.UI_MODE_NIGHT_NO;
+                                umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
                             }
+
+                            Log.d(TAG, "Current mode is " + umm.getNightMode());
 
                             if (wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId) {
                                 try {
@@ -96,11 +103,6 @@ public class LayoutUtil {
                                 } catch (IOException e) {
                                     Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
                                 }
-                            }
-
-                            if (validConfig.uiMode != deltaOnlyConfig.uiMode) {
-                                Log.d(TAG, "Will update uiMode to " + deltaOnlyConfig.uiMode);
-                                validConfig.updateFrom(deltaOnlyConfig);
                             }
                         }
                     };

@@ -39,128 +39,136 @@ public class ContactWorker {
                     Log.d(TAG, "get Contacts");
 
                     // Process then dispatch a response back to C++/QML
-                    Map responseMessage = new HashMap();
-                    List contacts = new LinkedList();
 
-                    ContentResolver contentResolver = activity.getContentResolver();
-                    String[] mainQueryProjection = {
-                        ContactsContract.Contacts._ID,
-                        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                        ContactsContract.Contacts.STARRED
-                    };
-                    String mainQuerySelection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ?";
-                    String[] mainQuerySelectionArgs = new String[]{"1"};
-                    String mainQuerySortOrder = String.format("%1$s COLLATE NOCASE", ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+                    Runnable runnable = new Runnable () {
 
-                    Cursor mainQueryCursor = contentResolver.query(
-                                    ContactsContract.Contacts.CONTENT_URI,
-                                    mainQueryProjection,
-                                    mainQuerySelection,
-                                    mainQuerySelectionArgs,
-                                    mainQuerySortOrder);
+                        public void run() {
+                            Map responseMessage = new HashMap();
+                            List contacts = new LinkedList();
 
-                    if (mainQueryCursor != null) {
-                        while (mainQueryCursor.moveToNext()) {
-                            Map contact = new HashMap();
+                            ContentResolver contentResolver = activity.getContentResolver();
+                            String[] mainQueryProjection = {
+                                ContactsContract.Contacts._ID,
+                                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                                ContactsContract.Contacts.STARRED
+                            };
+                            String mainQuerySelection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ?";
+                            String[] mainQuerySelectionArgs = new String[]{"1"};
+                            String mainQuerySortOrder = String.format("%1$s COLLATE NOCASE", ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
 
-                            // id, name, organization, starred, icon
-                            // email.home, email.work, email.mobile
-                            // phone.home, phone.work, email.mobile
+                            Cursor mainQueryCursor = contentResolver.query(
+                                            ContactsContract.Contacts.CONTENT_URI,
+                                            mainQueryProjection,
+                                            mainQuerySelection,
+                                            mainQuerySelectionArgs,
+                                            mainQuerySortOrder);
 
-                            String id = mainQueryCursor.getString(mainQueryCursor.getColumnIndex(ContactsContract.Contacts._ID));
-                            contact.put("id", id);
-                            String name = mainQueryCursor.getString(mainQueryCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
-                            contact.put("name", name);
+                            if (mainQueryCursor != null) {
+                                while (mainQueryCursor.moveToNext()) {
+                                    Map contact = new HashMap();
 
-                            int starred = mainQueryCursor.getInt(mainQueryCursor.getColumnIndex(ContactsContract.Contacts.STARRED));
-                            boolean isStarred = starred == 1 ? true : false;
-                            contact.put("starred", isStarred);
+                                    // id, name, organization, starred, icon
+                                    // email.home, email.work, email.mobile
+                                    // phone.home, phone.work, email.mobile
 
-                            // get the user's email address
-                            Cursor ce = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                                                              null,
-                                                              ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                                                              new String[]{id},
-                                                              null);
-                            while (ce.moveToNext()) {
-                                String address = ce.getString(ce.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                                int addressType = ce.getInt(ce.getColumnIndex(Email.TYPE));
-                                switch (addressType) {
-                                    case Email.TYPE_HOME:
-                                        contact.put("email.home", address);
-                                        break;
-                                    case Email.TYPE_OTHER:
-                                        contact.put("email.mobile", address);
-                                        break;
-                                    case Email.TYPE_WORK:
-                                        contact.put("email.work", address);
-                                        break;
-                                    default:
-                                        contact.put("email.other", address);
-                                        break;
+                                    String id = mainQueryCursor.getString(mainQueryCursor.getColumnIndex(ContactsContract.Contacts._ID));
+                                    contact.put("id", id);
+                                    String name = mainQueryCursor.getString(mainQueryCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+                                    contact.put("name", name);
+
+                                    int starred = mainQueryCursor.getInt(mainQueryCursor.getColumnIndex(ContactsContract.Contacts.STARRED));
+                                    boolean isStarred = starred == 1 ? true : false;
+                                    contact.put("starred", isStarred);
+
+                                    // get the user's email address
+                                    Cursor ce = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                                                                      null,
+                                                                      ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                                                                      new String[]{id},
+                                                                      null);
+                                    while (ce.moveToNext()) {
+                                        String address = ce.getString(ce.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                                        int addressType = ce.getInt(ce.getColumnIndex(Email.TYPE));
+                                        switch (addressType) {
+                                            case Email.TYPE_HOME:
+                                                contact.put("email.home", address);
+                                                break;
+                                            case Email.TYPE_OTHER:
+                                                contact.put("email.mobile", address);
+                                                break;
+                                            case Email.TYPE_WORK:
+                                                contact.put("email.work", address);
+                                                break;
+                                            default:
+                                                contact.put("email.other", address);
+                                                break;
+                                        }
+                                    }
+                                    ce.close();
+
+                                    // get the user's phone number
+                                    Cursor cp = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                                                      null,
+                                                                      ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                                                      new String[]{id},
+                                                                      null);
+                                    while (cp.moveToNext()) {
+                                        String number = cp.getString(cp.getColumnIndex(Phone.NUMBER)).replace(" ","");
+                                        int numberType = cp.getInt(cp.getColumnIndex(Phone.TYPE));
+                                        switch (numberType) {
+                                            case Phone.TYPE_HOME:
+                                                contact.put("phone.home", number);
+                                                break;
+                                            case Phone.TYPE_MOBILE:
+                                                contact.put("phone.mobile", number);
+                                                break;
+                                            case Phone.TYPE_WORK:
+                                                contact.put("phone.work", number);
+                                                break;
+                                            default:
+                                                contact.put("phone.other", number);
+                                                break;
+                                        }
+                                    }
+                                    cp.close();
+
+                                    // get the user's organization
+                                    Cursor co = contentResolver.query(ContactsContract.Data.CONTENT_URI,
+                                                                      null,
+                                                                      ContactsContract.Data.CONTACT_ID + "=? AND " + ContactsContract.Data.MIMETYPE + "=?",
+                                                                      new String[] { id, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE },
+                                                                      null);
+                                    if (co.moveToFirst()) {
+                                        String organization = co.getString(co.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
+                                        contact.put("organization", organization);
+                                    }
+                                    co.close();
+
+                                    // get the user's icon
+                                    Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
+                                    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(contentResolver, contactUri);
+                                    Bitmap bitmap = BitmapFactory.decodeStream(input);
+                                    if (bitmap != null) {
+                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                        byte[] imageBytes = baos.toByteArray();
+                                        String icon = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+                                        contact.put("icon", icon);
+                                    }
+
+                                    contacts.add(contact);
                                 }
-                            }
-                            ce.close();
 
-                            // get the user's phone number
-                            Cursor cp = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                                              null,
-                                                              ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                                              new String[]{id},
-                                                              null);
-                            while (cp.moveToNext()) {
-                                String number = cp.getString(cp.getColumnIndex(Phone.NUMBER)).replace(" ","");
-                                int numberType = cp.getInt(cp.getColumnIndex(Phone.TYPE));
-                                switch (numberType) {
-                                    case Phone.TYPE_HOME:
-                                        contact.put("phone.home", number);
-                                        break;
-                                    case Phone.TYPE_MOBILE:
-                                        contact.put("phone.mobile", number);
-                                        break;
-                                    case Phone.TYPE_WORK:
-                                        contact.put("phone.work", number);
-                                        break;
-                                    default:
-                                        contact.put("phone.other", number);
-                                        break;
-                                }
-                            }
-                            cp.close();
-
-                            // get the user's organization
-                            Cursor co = contentResolver.query(ContactsContract.Data.CONTENT_URI,
-                                                              null,
-                                                              ContactsContract.Data.CONTACT_ID + "=? AND " + ContactsContract.Data.MIMETYPE + "=?",
-                                                              new String[] { id, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE },
-                                                              null);
-                            if (co.moveToFirst()) {
-                                String organization = co.getString(co.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
-                                contact.put("organization", organization);
-                            }
-                            co.close();
-
-                            // get the user's icon
-                            Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
-                            InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(contentResolver, contactUri);
-                            Bitmap bitmap = BitmapFactory.decodeStream(input);
-                            if (bitmap != null) {
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                                byte[] imageBytes = baos.toByteArray();
-                                String icon = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-                                contact.put("icon", icon);
+                                mainQueryCursor.close();
                             }
 
-                            contacts.add(contact);
+                            responseMessage.put("contacts", contacts);
+
+                            SystemDispatcher.dispatch("volla.launcher.contactResponse", responseMessage);
                         }
+                    };
 
-                        mainQueryCursor.close();
-                    }
-
-                    responseMessage.put("contacts", contacts);
-
-                    SystemDispatcher.dispatch("volla.launcher.contactResponse", responseMessage);
+                    activity.runOnUiThread(runnable);
                 }
                 else if (type.equals("volla.launcher.checkContactAction")) {
 

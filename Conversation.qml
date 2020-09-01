@@ -15,6 +15,7 @@ Page {
     property string textInput
     property real widthFactor: 0.9
     property int threadAge: 84000 * 7 // one week in seconds
+    property int threadCount: 0
 
     property int currentConversationMode: 0
     property var currentId: 0
@@ -72,7 +73,7 @@ Page {
                             break
                         }
                     }
-
+                    threadCount = 2
                     loadConversation({"personId": id, "numbers": numbers})
                     loadCalls({"match": name})
                     break;
@@ -80,6 +81,7 @@ Page {
                     headline.text = name
                     currentId = id
                     currentConversationModel = threadContentModel
+                    threadCount = 1
                     loadConversation({"threadId": id})
                     break;
                 default:
@@ -96,7 +98,7 @@ Page {
     }
 
     function loadCalls(filter) {
-        console.log("Conversations | Will load calls")
+        console.log("Conversation | Will load calls")
         calls = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.callConversationAction", filter)
     }
@@ -494,6 +496,11 @@ Page {
                 conversationPage.currentConversationModel.loadData()
                 conversationPage.currentConversationModel.update(conversationPage.textInput)
             }
+            threadCount = threadCount - 1
+            console.log("Conversation | Thread count is " + threadCount)
+//            if (threadCount < 1) {
+//                mainView.updateSpinner(false)
+//            }
         }
     }
 }

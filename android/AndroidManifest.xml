@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.20" android:versionCode="20" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.21" android:versionCode="21" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="27"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -104,4 +104,8 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+
+
+
+
 </manifest>

@@ -211,22 +211,20 @@ Page {
                     if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== modeSettingsTitle) {
                         modeSettingsTitle.text = selectedMenuItem.text
 
-                        console.log("Current Theme: " + themeSettings.theme)
                         themeSettings.theme = selectedMenuItem.theme
                         themeSettings.sync()
-                        console.log("Updated Theme: " + themeSettings.theme)
 
                         switch (themeSettings.theme) {
                             case mainView.theme.Dark:
-                                console.log("Enable dark mode")
+                                console.log("Setting | Enable dark mode")
                                 mainView.switchTheme(mainView.theme.Dark)
                                 break
                             case mainView.theme.Light:
-                                console.log("Enable light mode")
+                                console.log("Setting | Enable light mode")
                                 mainView.switchTheme(mainView.theme.Light)
                                 break
                             case mainView.theme.Translucent:
-                                console.log("Enable translucent mode")
+                                console.log("Setting | Enable translucent mode")
                                 mainView.switchTheme(mainView.theme.Translucent)
                                 break
                             default:

@@ -331,9 +331,11 @@ Page {
         onDispatched: {
             if (type === "volla.launcher.appCountResponse") {
                 if (message["appCount"] !== appLauncher.appCount) {
+                    mainView.updateSpinner(true)
                     appLauncher.updateAppLauncher()
                     console.log("AppGrid | Number of apps: " + message["appCount"], ", " + appLauncher.appCount)
                     appLauncher.appCount = message["appCount"]
+                    mainView.updateSpinner(false)
                 }
             } else if (type === "volla.launcher.callLogResponse") {
                 appLauncher.newCalls = message["callsCount"] > 0

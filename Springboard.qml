@@ -33,7 +33,6 @@ Page {
     }
 
     Component.onCompleted: {
-        AN.SystemDispatcher.dispatch("volla.launcher.layoutAction", { })
         listModel.update()
         shortcutMenu.updateShortcuts(mainView.getActions())
     }
