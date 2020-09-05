@@ -488,19 +488,20 @@ Page {
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.calls = message["calls"]
-                message["calls"].forEach(function (call, index) {
-                    for (const [callKey, callValue] of Object.entries(call)) {
-                        console.log("Collections | * " + callKey + ": " + callValue)
-                    }
-                })
+//                message["calls"].forEach(function (call, index) {
+//                    for (const [callKey, callValue] of Object.entries(call)) {
+//                        console.log("Collections | * " + callKey + ": " + callValue)
+//                    }
+//                })
                 conversationPage.currentConversationModel.loadData()
                 conversationPage.currentConversationModel.update(conversationPage.textInput)
             }
+
             threadCount = threadCount - 1
             console.log("Conversation | Thread count is " + threadCount)
-//            if (threadCount < 1) {
-//                mainView.updateSpinner(false)
-//            }
+            if (threadCount < 1) {
+                mainView.updateSpinner(false)
+            }
         }
     }
 }

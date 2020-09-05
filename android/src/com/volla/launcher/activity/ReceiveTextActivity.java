@@ -12,6 +12,7 @@ import android.content.Context;
 import android.util.Log;
 import android.os.Bundle;
 import android.os.Build;
+import android.content.res.Configuration;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,8 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
+
+        // todo: update night mode setting
 
 //        w.setNavigationBarColor(Color.TRANSPARENT);
 //        w.setStatusBarColor(Color.TRANSPARENT);
@@ -88,6 +91,28 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
             Log.d(TAG, "Shared text: " +  sharedText);
         } else {
             Log.d(TAG, "No shared text" );
+        }
+    }
+
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "On Resume callsed");
+    }
+
+    public void onConfigurationChanged (Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d(TAG, "Configuration change called");
+        // todo: adapt night mode setting
+        int currentNightMode = newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is not active, we're using the light theme
+                Log.d(TAG, "Enable night mode");
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active, we're using dark theme
+                Log.d(TAG, "Enable light mode");
+                break;
         }
     }
 }

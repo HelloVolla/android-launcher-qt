@@ -33,6 +33,7 @@ Page {
                 bottomPadding: mainView.innerSpacing
             }
 
+            // todo: hide until night mode issue is solved
             MouseArea {
                 id: modeSettings
                 width: parent.width
@@ -398,6 +399,8 @@ Page {
                     }
                 }
             }
+
+            // todo: toggle translucent background
         }
     }
 }

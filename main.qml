@@ -507,6 +507,7 @@ ApplicationWindow {
 
         Connections {
             target: AN.SystemDispatcher
+            // @disable-check M16
             onDispatched: {
                 if (type === "volla.launcher.contactResponse") {
                     console.log("MainView | onDispatched: " + type)
@@ -539,6 +540,9 @@ ApplicationWindow {
                     } else {
                         console.log("MainView | Invalid RSS feed url")
                     }
+                } else if (type === "volla.launcher.uiModeResponse") {
+                    // todo: adopt night mode
+
                 }
             }
         }
@@ -593,6 +597,7 @@ ApplicationWindow {
         }
     }
 
+    // @disable-check M300
     AN.Toast {
         id: toast
         text: qsTr("Not yet supported")

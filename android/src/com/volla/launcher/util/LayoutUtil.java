@@ -2,7 +2,6 @@ package com.volla.launcher.util;
 
 import androidnative.SystemDispatcher;
 import android.os.Build;
-import android.os.Binder;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.app.UiModeManager;
@@ -11,8 +10,8 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.content.Intent;
 import android.content.Context;
-import android.graphics.Color;
 import java.util.Map;
 import java.io.IOException;
 import org.qtproject.qt5.android.QtNative;
@@ -90,7 +89,7 @@ public class LayoutUtil {
                                 umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
                             }
 
-                            Log.d(TAG, "Current mode is " + umm.getNightMode());
+                            Log.d(TAG, "Changed mode is " + umm.getNightMode());
 
                             if (wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId) {
                                 try {
@@ -103,6 +102,11 @@ public class LayoutUtil {
                                 } catch (IOException e) {
                                     Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
                                 }
+                                Intent intent = new Intent();
+                                intent.setAction("com.volla.broadcast.UI_MODE");
+                                intent.putExtra("uimode", umm.getNightMode());
+                                intent.putExtra("translucent", value == 2 ? true : false);
+                                activity.sendBroadcast(intent);
                             }
                         }
                     };
