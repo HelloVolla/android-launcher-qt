@@ -595,9 +595,11 @@ Page {
             } else if (selectedMenuItem == cameraLabel) {
                 console.log("Springboard | Show camera")
                 backEnd.runApp(mainView.cameraApp)
+                // AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
-                backEnd.runApp(mainView.phoneApp)
+                // backEnd.runApp(mainView.phoneApp)
+                Qt.openUrlExternally("tel:")
             } else if (selectedMenuItem == notesLabel) {
                 console.log("Springboard | Show notes")
                 backEnd.runApp(mainView.notesApp)

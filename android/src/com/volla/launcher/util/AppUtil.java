@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.content.Intent;
+import android.provider.MediaStore;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -18,13 +19,15 @@ public class AppUtil {
 
     public static final String GET_APP_COUNT = "volla.launcher.appCountAction";
     public static final String GOT_APP_COUNT = "volla.launcher.appCountResponse";
+    public static final String OPEN_CAM = "volla.launcher.camAction";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map message) {
+                final Activity activity = QtNative.activity();
+
                 if (type.equals(GET_APP_COUNT)) {                    
-                    final Activity activity = QtNative.activity();
                     final PackageManager pm = activity.getPackageManager();
 
                     Runnable runnable = new Runnable () {
@@ -42,6 +45,9 @@ public class AppUtil {
                     };
 
                     activity.runOnUiThread(runnable);
+                } else if (type.equals(OPEN_CAM)) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    activity.startActivity(intent);
                 }
             }
         });
