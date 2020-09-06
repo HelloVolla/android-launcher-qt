@@ -28,13 +28,27 @@ public class CallWorker {
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
-            final Activity activity = QtNative.activity();
+            public void onDispatched(String type, Map dmessage) {
 
-            public void onDispatched(String type, Map message) {
+                final Activity activity = QtNative.activity();
+                final Map message = dmessage;
+
                 if (type.equals(GET_CALLS)) {
-                    getCalls(message, GOT_CALLS, activity);
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            getCalls(message, GOT_CALLS, activity);
+                        }
+                    };
+
+                    activity.runOnUiThread(runnable);
                 } else if (type.equals(GET_CONVERSATION)) {
-                    getCalls(message, GOT_CONVERSATION, activity);
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            getCalls(message, GOT_CONVERSATION, activity);
+                        }
+                    };
+
+                    activity.runOnUiThread(runnable);
                 }
             }
         });

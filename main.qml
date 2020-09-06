@@ -143,8 +143,8 @@ ApplicationWindow {
         property string galleryApp: "com.simplemobiletools.gallery.pro"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
-        property string phoneApp: "com.android.dialer"
-        property string messageApp: "com.android.mms"
+        property string phoneApp: "com.simplemobiletools.dialer" // "com.android.dialer"
+        property string messageApp: "com.simplemobiletools.smsmessenger" // "com.android.mms"
         property string notesApp: "com.simplemobiletools.notes.pro"
 
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
@@ -438,6 +438,7 @@ ApplicationWindow {
                     var urlArr = urlPattern.exec(url)
                     urlArr = urlArr[2].split(".")
                     var baseUrl = "https://www." + urlArr[urlArr.length - 2] + "." + urlArr[urlArr.length - 1]
+                    console.log("MainView | base url for icon is " + baseUrl)
 
                     var htmlRequest = new XMLHttpRequest();
                     htmlRequest.onreadystatechange = function() {
@@ -454,8 +455,10 @@ ApplicationWindow {
                             var html = htmlRequest.responseText
                             var pattern = /<link\srel="(apple-touch-)?icon".+>/i
                             var link = pattern.exec(html)
-                            if (link !== undefined) {
+                            if (link !== undefined && link !== null) {
+                                console.log("MainView | Link is " + link)
                                 pattern = /href="\S+"/i
+                                console.log("MainView | Link is " + pattern.exec(link))
                                 link = pattern.exec(link).toString()
                                 var length = link.length - 1
                                 link = link.slice(6, length)
@@ -466,7 +469,7 @@ ApplicationWindow {
                                 feed.icon = link
                             } else {
                                 console.log("MainView | Missing header of feed homepage. Will take fallback for icon")
-                                fedd.icon = baseUrl + "favicon.ico"
+                                // feed.icon = baseUrl + "favicon.ico"
                             }
 
                             mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
@@ -502,7 +505,8 @@ ApplicationWindow {
         }
 
         function updateSpinner(shouldRun) {
-            spinnerBackground.visible = shouldRun
+            //spinnerBackground.visible = shouldRun
+            spinner.running = shouldRun
         }
 
         Connections {
@@ -548,38 +552,16 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
-        id: spinnerBackground
-        anchors.fill: parent
-        visible: false
-        color: Universal.background
-        opacity: 0.5
+    BusyIndicator {
+        id: spinner
+        height: 50
+        width: 50
+        anchors.centerIn: parent
+        running: false
         z: 1
 
-        onVisibleChanged: {
-            if (visible) {
-                console.log("MainView | Start spinner")
-            } else {
-                console.log("MainView | Stop spinner")
-            }
-        }
-
-        FastBlur {
-            anchors.fill: parent
-            source: parent
-            radius: 60
-        }
-
-        BusyIndicator {
-            id: spinner
-            height: 50
-            width: 50
-            anchors.centerIn: parent
-            running: spinnerBackground.visible
-
-            onRunningChanged: {
-                console.log("MainView | Spinner running changed to " + running)
-            }
+        onRunningChanged: {
+            console.log("MainView | Spinner running changed to " + running)
         }
     }
 

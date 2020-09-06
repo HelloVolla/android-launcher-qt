@@ -45,17 +45,26 @@ public class MessageWorker {
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
-            public void onDispatched(String type, Map message) {
+            public void onDispatched(String dtype, Map dmessage) {
 
                 final Activity activity = QtNative.activity();
+                final Map message = dmessage;
+                final String type = dtype;
 
-                if (type.equals(GET_CONVERSATION)) {
-                    getConversation(message, activity);
-                } else if (type.equals(GET_THREADS)) {
-                    getThreads(message, activity);
-                } else if (type.equals(GET_THREADS_COUNT)) {
-                    getThreadsCount(message, activity);
-                }
+                Runnable runnable = new Runnable () {
+
+                    public void run() {
+                        if (type.equals(GET_CONVERSATION)) {
+                            getConversation(message, activity);
+                        } else if (type.equals(GET_THREADS)) {
+                            getThreads(message, activity);
+                        } else if (type.equals(GET_THREADS_COUNT)) {
+                            getThreadsCount(message, activity);
+                        }
+                    }
+                };
+
+                activity.runOnUiThread(runnable);
             }
         });
     }

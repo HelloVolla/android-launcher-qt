@@ -238,7 +238,12 @@ Page {
                         textInputArea.text = ""
                         break
                     case mainView.actionType.AddFeed:
-                        mainView.checkAndAddFeed(textInput.trim())
+                        var feedUrl = textInput.trim()
+                        if (!textInput.startsWith("http")) {
+                            feedUrl = "https://" + feedUrl
+                        }
+                        textInputArea.text = ""
+                        mainView.checkAndAddFeed(feedUrl)
                         break
                     case mainView.actionType.CreateNote:
                         console.log("Springboard | Will create note")

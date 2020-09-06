@@ -121,7 +121,8 @@ Page {
                         id: headerLabel
                         width: header.width - iconSize - headerRow.leftPadding - headerRow.rightPadding - headerRow.spacing
                         text: qsTr("Feed")
-                        clip: true
+                        clip: mainView.backgroundOpacity === 1.0 ? true : false
+                        elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone : Text.ElideRight
                         verticalAlignment: Text.AlignVCenter
                         font.pointSize: mainView.headerFontSize
                         font.weight: Font.Black
@@ -146,6 +147,7 @@ Page {
                                     color: Universal.background
                                 }
                             }
+                            visible: mainView.backgroundOpacity === 1.0
                         }
                     }
                 }

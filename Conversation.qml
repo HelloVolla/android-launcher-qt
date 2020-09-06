@@ -15,7 +15,7 @@ Page {
     property string textInput
     property real widthFactor: 0.9
     property int threadAge: 84000 * 7 // one week in seconds
-    property int threadCount: 0
+    property int operationCount: 0 // number of background operations
 
     property int currentConversationMode: 0
     property var currentId: 0
@@ -73,7 +73,8 @@ Page {
                             break
                         }
                     }
-                    threadCount = 2
+                    operationCount = 2
+                    mainView.updateSpinner(true)
                     loadConversation({"personId": id, "numbers": numbers})
                     loadCalls({"match": name})
                     break;
@@ -81,7 +82,8 @@ Page {
                     headline.text = name
                     currentId = id
                     currentConversationModel = threadContentModel
-                    threadCount = 1
+                    operationCount = 1
+                    mainView.updateSpinner(true)
                     loadConversation({"threadId": id})
                     break;
                 default:
@@ -497,9 +499,9 @@ Page {
                 conversationPage.currentConversationModel.update(conversationPage.textInput)
             }
 
-            threadCount = threadCount - 1
-            console.log("Conversation | Thread count is " + threadCount)
-            if (threadCount < 1) {
+            console.log("Conversation | Operation count is " + threadCount)
+            operationCount = operationCount - 1
+            if (operationCount < 1) {
                 mainView.updateSpinner(false)
             }
         }

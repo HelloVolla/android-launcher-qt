@@ -14,14 +14,13 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
-        "com.android.dialer": "/icons/dial-phone@4x.png",
-        //"org.smssecure.smssecure": "/icons/message@4x.png",
-        "com.android.mms": "/icons/message@4x.png",
+        "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
+        "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
         "com.simplemobiletools.contacts.pro": "/icons/people-contacts-agenda@4x.png",
-        "com.google.android.deskclock": "/icons/clock@4x.png",
+        "com.simplemobiletools.clock": "/icons/clock@4x.png",
         "com.android.settings": "/icons/settings@4x.png",
         "com.simplemobiletools.calendar.pro": "/icons/calendar@4x.png",
         "com.simplemobiletools.filemanager.pro": "/icons/folder@4x.png",
@@ -63,7 +62,7 @@ Page {
         "com.aurora.store": "Store",
         "net.osmand.plus": "Maps",
         "com.volla.launcher": "Settings",
-        "com.android.mms": "Messages"
+        "com.simplemobiletools.smsmessenger": "Messages"
     }
     property bool unreadMessages: false
     property bool newCalls: false
@@ -268,8 +267,6 @@ Page {
             } catch (e) {
                 console.log("Grid model loading error: " + e)
             }
-
-
         }
 
         function update(text) {
@@ -331,12 +328,17 @@ Page {
         onDispatched: {
             if (type === "volla.launcher.appCountResponse") {
                 if (message["appCount"] !== appLauncher.appCount) {
-                    mainView.updateSpinner(true)
-                    appLauncher.updateAppLauncher()
                     console.log("AppGrid | Number of apps: " + message["appCount"], ", " + appLauncher.appCount)
                     appLauncher.appCount = message["appCount"]
-                    mainView.updateSpinner(false)
+                    mainView.updateSpinner(true)
+                    AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
+//                    appLauncher.updateAppLauncher()
                 }
+            } else if (type === "volla.launcher.appResponse") {
+                console.log("AppGrid | " + message["appsCount"] + " app infos received")
+                gridModel.modelArr = message["apps"]
+                gridModel.update(textInput)
+                mainView.updateSpinner(false)
             } else if (type === "volla.launcher.callLogResponse") {
                 appLauncher.newCalls = message["callsCount"] > 0
             } else if (type === "volla.launcher.threadsCountResponse") {

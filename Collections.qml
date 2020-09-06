@@ -20,7 +20,9 @@ Page {
     property var threads: new Array
     property var calls: new Array
     property var threadAge: 86400 * 1000 // one day in milliseconds
+    property int operationCount: 0 // number of background operations
     property int maxCalls: 50
+    property int maxTextLength: 500
 
     property string c_TITLE:     "title"    // large main title, bold
     property string c_STITLE:    "stitle"   // small title above the main, grey
@@ -65,6 +67,8 @@ Page {
                     headline.text = qsTr("People")
                     textInputField.placeholderText = "Find poeple ..."
                     currentCollectionModel = peopleModel
+                    operationCount = 2
+                    mainView.updateSpinner(true)
                     collectionPage.loadThreads({})
                     collectionPage.loadCalls({"count": maxCalls})
                     break;
@@ -72,8 +76,9 @@ Page {
                     headline.text = qsTr("Threads")
                     textInputField.placeholderText = "Find thread ..."
                     currentCollectionModel = threadModel
+                    operationCount = 1
+                    mainView.updateSpinner(true)
                     collectionPage.loadThreads({})
-                    //collectionPage.loadCalls({"count": maxCalls})
                     break;
                 case mainView.collectionMode.News:
                     headline.text = qsTr("News")
@@ -81,6 +86,7 @@ Page {
                     currentCollectionModel = newsModel
                     collectionPage.threads = new Array
                     collectionPage.calls = new Array
+                    mainView.updateSpinner(true)
                     currentCollectionModel.update("")
                     break;
                 default:
@@ -205,7 +211,9 @@ Page {
                         border.color: Universal.foreground
                         opacity: 0.9
                         color: "transparent"
-                        visible: model.c_ICON === undefined && collectionPage.currentCollectionMode === mainView.collectionMode.People
+                        visible: model.c_ICON === undefined
+                                 && (collectionPage.currentCollectionMode === mainView.collectionMode.People
+                                     || collectionPage.currentCollectionMode === mainView.collectionMode.News)
 
                         Label {
                             text: model.c_TITLE !== undefined ? getInitials() : "?"
@@ -217,10 +225,10 @@ Page {
                             opacity: 0.9
                             font.pointSize: mainView.largeFontSize
 
-                            function getInitials() {                      
-                                const namesArray = model.c_TITLE.split(' ');
-                                if (namesArray.length === 1) return `${namesArray[0].charAt(0)}`;
-                                else return `${namesArray[0].charAt(0)}${namesArray[namesArray.length - 1].charAt(0)}`;
+                            function getInitials() {
+                                const namesArray = model.c_TITLE.split(' ')
+                                if (namesArray.length === 1) return `${namesArray[0].charAt(0)}`
+                                else return `${namesArray[0].charAt(0)}${namesArray[namesArray.length - 1].charAt(0)}`
                             }
                         }
                     }
@@ -235,7 +243,6 @@ Page {
                             anchors.fill: contactImage
                             source: contactImage
                             desaturation: 1.0
-
                         }
                     }
                     Image {
@@ -652,7 +659,7 @@ Page {
                 filteredModelItem = modelArr[i]
                 var modelItemName = modelArr[i].c_TITLE
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    console.log("Collections | Add " + modelItemName + " to filtered items")
+                    //console.log("Collections | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
                 }
             }
@@ -771,7 +778,7 @@ Page {
                 filteredModelItem = modelArr[i]
                 var modelItemName = modelArr[i].c_TEXT
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    console.log("Collections | Add " + modelItemName + " to filtered items")
+                    //console.log("Collections | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
                 }
             }
@@ -829,10 +836,15 @@ Page {
                         if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                             console.log("Collections | Received header status: " + doc.status);
                             if (doc.status !== 200) {
+                                mainView.updateSpinner(false)
                                 mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
                             }
                         } else if (doc.readyState === XMLHttpRequest.DONE) {
-                            var cNews = {c_CHANNEL: rssFeed.id, c_ICON: rssFeed.icon}
+                            var cNews = {c_CHANNEL: rssFeed.id}
+
+                            if (rssFeed.icon !== undefined) {
+                                cNews.c_ICON = rssFeed.icon
+                            }
 
                             var rss = doc.responseXML.documentElement
                             var channel
@@ -870,7 +882,11 @@ Page {
                                 textNode = childNode.firstChild
 
                                 if (childNode.nodeName === "title") {
-                                    cNews.c_TEXT = textNode.nodeValue
+                                    if (textNode.nodeValue.length > maxTextLength) {
+                                        cNews.c_TEXT = textNode.nodeValue.slice(0, maxTextLength) + "…"
+                                    } else {
+                                        cNews.c_TEXT = textNode.nodeValue
+                                    }
                                 }
                                 else if (childNode.nodeName === "pubDate") {
                                     var date = new Date(textNode.nodeValue)
@@ -898,6 +914,7 @@ Page {
                             }
 
                             modelArr.push(cNews)
+                            mainView.updateSpinner(false)
                             update(collectionPage.textInput)
                         }
                     }
@@ -930,7 +947,7 @@ Page {
                 filteredModelItem = modelArr[i]
                 var modelItemName = modelArr[i].c_TEXT
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    console.log("Collections | Add " + modelItemName + " to filtered items")
+                    //console.log("Collections | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
                 }
             }
@@ -959,7 +976,7 @@ Page {
                 if (!found) {
                     // for simplicity, just adding to end instead of corresponding position in original list
                     filteredModelItem = filteredModelDict[modelItemName]
-                    console.log("Collections | Will append " + filteredModelItem.c_TEXT)
+                    console.log("Collections | Will append " + filteredModelItem.c_STITLE)
                     append(filteredModelDict[modelItemName])
                 }
             }
@@ -1002,9 +1019,16 @@ Page {
                 collectionPage.currentCollectionModel.loadData()
                 collectionPage.currentCollectionModel.update(collectionPage.textInput)
             }
+
+            console.log("Conversation | Operation count is " + operationCount)
+            operationCount = operationCount - 1
+            if (operationCount < 1) {
+                mainView.updateSpinner(false)
+            }
         }
     }
 
+    // @disable-check M300
     AN.Util {
         id: util
     }

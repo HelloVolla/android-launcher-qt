@@ -27,14 +27,21 @@ public class AppUtil {
                     final Activity activity = QtNative.activity();
                     final PackageManager pm = activity.getPackageManager();
 
-                    Intent i = new Intent(Intent.ACTION_MAIN, null);
-                    i.addCategory(Intent.CATEGORY_LAUNCHER);
-                    List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
+                    Runnable runnable = new Runnable () {
 
-                    Map responseMessage = new HashMap();
-                    responseMessage.put("appCount", availableActivities.size());
+                        public void run() {
+                            Intent i = new Intent(Intent.ACTION_MAIN, null);
+                            i.addCategory(Intent.CATEGORY_LAUNCHER);
+                            List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
 
-                    SystemDispatcher.dispatch(GOT_APP_COUNT, responseMessage);
+                            Map responseMessage = new HashMap();
+                            responseMessage.put("appCount", availableActivities.size());
+
+                            SystemDispatcher.dispatch(GOT_APP_COUNT, responseMessage);
+                        }
+                    };
+
+                    activity.runOnUiThread(runnable);
                 }
             }
         });

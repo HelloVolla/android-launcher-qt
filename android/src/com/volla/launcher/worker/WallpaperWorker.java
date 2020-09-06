@@ -25,25 +25,33 @@ public class WallpaperWorker {
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
-            public void onDispatched(String type, Map message) {
+            public void onDispatched(String type, Map dmessage) {
 
                 final Activity activity = QtNative.activity();
+                final Map message = dmessage;
 
                 if (type.equals(GET_WALLPAPER)) {
-                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(activity);
-                    Map reply = new HashMap();
 
-                    int wallpaperId = wallpaperManager.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
-                    Log.d(TAG, "Wallpaper ID is: " + wallpaperId);
-                    reply.put("wallpaperId", wallpaperId);
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            WallpaperManager wallpaperManager = WallpaperManager.getInstance(activity);
+                            Map reply = new HashMap();
 
-                    if (!message.get("wallpaperId").equals(wallpaperId)) {
-                        Drawable wallpaperDrawable = wallpaperManager.getDrawable();
-                        String wallpaperBitmap = WallpaperWorker.drawableToBase64(wallpaperDrawable);
-                        reply.put("wallpaper", wallpaperBitmap);
-                    }
+                            int wallpaperId = wallpaperManager.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                            Log.d(TAG, "Wallpaper ID is: " + wallpaperId);
+                            reply.put("wallpaperId", wallpaperId);
 
-                    SystemDispatcher.dispatch(GOT_WALLPAPER, reply);
+                            if (!message.get("wallpaperId").equals(wallpaperId)) {
+                                Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+                                String wallpaperBitmap = WallpaperWorker.drawableToBase64(wallpaperDrawable);
+                                reply.put("wallpaper", wallpaperBitmap);
+                            }
+
+                            SystemDispatcher.dispatch(GOT_WALLPAPER, reply);
+                        }
+                    };
+
+                    activity.runOnUiThread(runnable);
                 }
             }
         });

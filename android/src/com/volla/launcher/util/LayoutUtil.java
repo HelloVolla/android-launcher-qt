@@ -102,6 +102,7 @@ public class LayoutUtil {
                                 } catch (IOException e) {
                                     Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
                                 }
+
                                 Intent intent = new Intent();
                                 intent.setAction("com.volla.broadcast.UI_MODE");
                                 intent.putExtra("uimode", umm.getNightMode());

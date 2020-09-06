@@ -13,16 +13,72 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.util.Base64;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.io.ByteArrayOutputStream;
+import org.qtproject.qt5.android.QtNative;
+import androidnative.SystemDispatcher;
 
-public class AppWorker extends org.qtproject.qt5.android.bindings.QtActivity
+public class AppWorker
 {
     private static final String TAG = "AppWorker";
 
-    public AppWorker() {
+    public static final String GET_APPS = "volla.launcher.appAction";
+    public static final String GOT_APPS = "volla.launcher.appResponse";
 
+    static {
+        SystemDispatcher.addListener(new SystemDispatcher.Listener() {
+
+            final Activity activity = QtNative.activity();
+
+            public void onDispatched(String type, Map message) {
+                if (type.equals(GET_APPS)) {
+                    Log.d(TAG, "Get apps action called");
+
+                    Runnable runnable = new Runnable () {
+
+                        public void run() {
+                            ArrayList<Map> appList = new ArrayList();
+
+                            final PackageManager pm = activity.getPackageManager();
+                            final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts", "com.android.gallery3d",
+                                "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk", "com.mediatek.filemanager",
+                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "com.android.quicksearchbox",
+                                "com.android.dialer", "com.android.deskclock", "com.android.mms");
+
+                            Intent i = new Intent(Intent.ACTION_MAIN, null);
+                            i.addCategory(Intent.CATEGORY_LAUNCHER);
+                            List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
+                            appList.ensureCapacity(availableActivities.size());
+
+                            for (ResolveInfo ri:availableActivities) {
+                                Log.d("Found package", ri.activityInfo.packageName);
+
+                                // todo: Remove. Workaround for beta demo purpose
+                                if (!packages.contains(ri.activityInfo.packageName)) {
+                                    Map appInfo = new HashMap();
+                                    appInfo.put("package", ri.activityInfo.packageName);
+                                    appInfo.put("label", String.valueOf(ri.loadLabel(pm)));
+                                    appInfo.put("icon", AppWorker.drawableToBase64(ri.loadIcon(pm)));
+                                    appList.add(appInfo);
+                                }
+                            }
+
+                            Map reply = new HashMap();
+                            reply.put("apps", appList );
+                            reply.put("appsCount", appList.size() );
+                            SystemDispatcher.dispatch(GOT_APPS,reply);
+                        }
+                    };
+
+                    activity.runOnUiThread(runnable);
+                }
+            }
+        });
     }
 
     public static Intent getAppIntent(Activity a, String ID){

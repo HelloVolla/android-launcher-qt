@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.MessageWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.CallWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.WallpaperWorker");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.AppWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.parser.ArticleParser");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.LayoutUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.AppUtil");
