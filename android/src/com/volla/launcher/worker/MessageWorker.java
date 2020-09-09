@@ -64,7 +64,8 @@ public class MessageWorker {
                     }
                 };
 
-                activity.runOnUiThread(runnable);
+                Thread thread = new Thread(runnable);
+                thread.start();
             }
         });
     }

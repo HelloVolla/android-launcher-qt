@@ -134,6 +134,7 @@ ApplicationWindow {
         }
 
         property var contacts: new Array
+        property bool isLoadingContacts: false
         property double lastContactsCheck: 0
         property var wallpaper: ""
         property var wallpaperId: ""
@@ -506,7 +507,9 @@ ApplicationWindow {
 
         function updateSpinner(shouldRun) {
             //spinnerBackground.visible = shouldRun
-            spinner.running = shouldRun
+            if (!(isLoadingContacts && !shouldRun)) {
+                spinner.running = shouldRun
+            }
         }
 
         Connections {
@@ -522,10 +525,14 @@ ApplicationWindow {
 //                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
 //                        }
 //                    });
+                    mainView.isLoadingContacts = false
+                    mainView.updateSpinner(false)
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     if (message["needsSync"]) {
                         console.log("MainView | Need to sync contacts")
+                        mainView.isLoadingContacts = true
+                        mainView.updateSpinner(true)
                         AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {
@@ -558,7 +565,7 @@ ApplicationWindow {
         width: 50
         anchors.centerIn: parent
         running: false
-        z: 1
+        z: 5
 
         onRunningChanged: {
             console.log("MainView | Spinner running changed to " + running)

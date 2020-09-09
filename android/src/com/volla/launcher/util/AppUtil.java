@@ -44,7 +44,10 @@ public class AppUtil {
                         }
                     };
 
-                    activity.runOnUiThread(runnable);
+                    //activity.runOnUiThread(runnable);
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 } else if (type.equals(OPEN_CAM)) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     activity.startActivity(intent);

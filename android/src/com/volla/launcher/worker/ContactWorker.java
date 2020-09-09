@@ -42,7 +42,8 @@ public class ContactWorker {
                         }
                     };
 
-                    activity.runOnUiThread(runnable);
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
                 else if (type.equals("volla.launcher.checkContactAction")) {
                     Runnable runnable = new Runnable () {
@@ -51,7 +52,8 @@ public class ContactWorker {
                         }
                     };
 
-                    activity.runOnUiThread(runnable);
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
 
                 return;

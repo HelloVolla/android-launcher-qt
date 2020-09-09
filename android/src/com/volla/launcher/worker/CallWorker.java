@@ -48,7 +48,8 @@ public class CallWorker {
                         }
                     };
 
-                    activity.runOnUiThread(runnable);
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });
