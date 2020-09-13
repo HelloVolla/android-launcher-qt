@@ -93,6 +93,29 @@ Page {
         }
     }
 
+    function updateListMocel() {
+        console.log("Conversation | Operation count is " + operationCount)
+        operationCount = operationCount - 1
+        if (operationCount < 1) {
+            mainView.updateSpinner(false)
+            conversationPage.currentConversationModel.loadData()
+            conversationPage.currentConversationModel.update(conversationPage.textInput)
+        }
+    }
+
+    function sortListModel() {
+        var n;
+        var i;
+        for (n = 0; n < currentConversationModel.count; n++) {
+            for (i=n+1; i < currentConversationModel.count; i++) {
+                if (currentConversationModel.get(n).m_DATE > currentConversationModel.get(i).m_DATE) {
+                    currentConversationModel.move(i, n, 1);
+                    n = 0;
+                }
+            }
+        }
+    }
+
     function loadConversation(filter) {
         console.log("Conversations | Will load messages")
         messages = new Array
@@ -108,22 +131,48 @@ Page {
     ListView {
         id: listView
         anchors.fill: parent
-        headerPositioning: ListView.PullBackHeader
+        headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
 
         header: Column {
             id: header
             width: parent.width
+            z: 2
             Label {
                 id: headerLabel
                 topPadding: mainView.innerSpacing
                 x: mainView.innerSpacing
                 text: qsTr("Conversation")
+                clip: mainView.backgroundOpacity === 1.0 ? true : false
+                elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone : Text.ElideRight
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
                 Binding {
                     target: conversationPage
                     property: "headline"
                     value: headerLabel
+                }
+                background: Rectangle {
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    border.color: "transparent"
+                }
+                LinearGradient {
+                    id: headerLabelTruncator
+                    height: headerLabel.height
+                    width: headerLabel.width
+                    z : headerLabel.z + 1
+                    start: Qt.point(headerLabel.width - 2 * mainView.innerSpacing,0)
+                    end: Qt.point(headerLabel.width,0)
+                    gradient: Gradient {
+                        GradientStop {
+                            position: 0.0
+                            color: "#00000000"
+                        }
+                        GradientStop {
+                            position: 1.0
+                            color: Universal.background
+                        }
+                    }
+                    visible: mainView.backgroundOpacity === 1.0
                 }
             }
             TextField {
@@ -138,22 +187,19 @@ Page {
                 leftPadding: 0.0
                 rightPadding: 0.0
                 background: Rectangle {
-                    color: "transparent"
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
                     border.color: "transparent"
                 }
-
                 Binding {
                     target: conversationPage
                     property: "textInput"
                     value: textField.displayText.toLowerCase()
                 }
-
                 Binding {
                     target: conversationPage
                     property: "textInputField"
                     value: textField
                 }
-
                 Button {
                     id: deleteButton
                     visible: textField.activeFocus
@@ -172,9 +218,9 @@ Page {
             }
             Rectangle {
                 width: parent.width
-                border.color: "transparent"
-                color: "transparent"
                 height: 1.1
+                color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                border.color: "transparent"
             }
         }
 
@@ -309,13 +355,14 @@ Page {
 
                 cCall.m_STEXT = mainView.parseTime(Number(call["date"])) + " • Call"
                 cCall.m_IS_SENT = call["isSent"]
+                cCall.m_DATE = call["date"]
 
                 modelArr.push(cCall)
             })
 
-            modelArr.sort(function(a,b) {
-                return a.m_DATE - b.m_DATE
-            })
+//            modelArr.sort(function(a,b) {
+//                return a.m_DATE - b.m_DATE
+//            })
         }
 
         function update(text) {
@@ -371,6 +418,8 @@ Page {
                 }
             }
 
+            conversationPage.sortListModel()
+
             listView.positionViewAtEnd()
         }
 
@@ -404,12 +453,14 @@ Page {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 }
 
+                cMessage.m_DATE = message["date"]
+
                 modelArr.push(cMessage)
             })
 
-            modelArr.sort(function(a,b) {
-                return a.m_DATE - b.m_DATE
-            })
+//            modelArr.sort(function(a,b) {
+//                return a.m_DATE - b.m_DATE
+//            })
         }
 
         function update (text) {
@@ -466,6 +517,8 @@ Page {
                 }
             }
 
+            conversationPage.sortListModel()
+
             listView.positionViewAtEnd()
         }
 
@@ -479,14 +532,14 @@ Page {
         onDispatched: {
             if (type === "volla.launcher.conversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
+                conversationPage.messages.push(message["messages"])
                 conversationPage.messages = message["messages"]
 //                message["messages"].forEach(function (message, index) {
 //                    for (const [messageKey, messageValue] of Object.entries(message)) {
 //                        console.log("Conversation | * " + messageKey + ": " + messageValue)
 //                    }
 //                })
-                conversationPage.currentConversationModel.loadData()
-                conversationPage.currentConversationModel.update(conversationPage.textInput)
+                conversationPage.updateListMocel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.calls = message["calls"]
@@ -495,14 +548,7 @@ Page {
 //                        console.log("Collections | * " + callKey + ": " + callValue)
 //                    }
 //                })
-                conversationPage.currentConversationModel.loadData()
-                conversationPage.currentConversationModel.update(conversationPage.textInput)
-            }
-
-            console.log("Conversation | Operation count is " + threadCount)
-            operationCount = operationCount - 1
-            if (operationCount < 1) {
-                mainView.updateSpinner(false)
+                conversationPage.updateListMocel()
             }
         }
     }

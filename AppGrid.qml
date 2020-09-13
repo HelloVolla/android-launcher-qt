@@ -257,16 +257,11 @@ Page {
 
         property var modelArr: []
 
-        function loadModel() {
-            var jsonStr = backEnd.getApplistAsJSON()
-            try {
-                modelArr = JSON.parse(jsonStr)
-                console.log("AppGrid | Grid model length: " + modelArr.length)
-                console.log("AppGrid | Grid model sample: " + modelArr[0].label)
-                update(textInput)
-            } catch (e) {
-                console.log("Grid model loading error: " + e)
-            }
+        function prepareModel() {
+            modelArr.forEach(function(app, i) {
+                modelArr[i].label = modelArr[i].package in appLauncher.labelMap ? qsTr(appLauncher.labelMap[modelArr[i].package])
+                                                                                : modelArr[i].label
+            })
         }
 
         function update(text) {
@@ -280,10 +275,9 @@ Page {
 
             console.log("Model has " + modelArr.length + " elements")
 
+            // filter model
             for (i = 0; i < modelArr.length; i++) {
                 filteredGridItem = modelArr[i]
-                modelArr[i].label = modelArr[i].package in appLauncher.labelMap ? qsTr(appLauncher.labelMap[modelArr[i].package])
-                                                                                : modelArr[i].label
                 var modelItemName = modelArr[i].label
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
                     // console.log("Add " + modelItemName + " to filtered items")
@@ -296,6 +290,7 @@ Page {
                 modelItemName = get(i).label
                 existingGridDict[modelItemName] = true
             }
+
             // remove items no longer in filtered set
             i = 0
             while (i < count) {
@@ -320,6 +315,21 @@ Page {
                     append(filteredGridDict[key])
                 }
             })
+
+            sortModel()
+        }
+
+        function sortModel() {
+            var n;
+            var i;
+            for (n = 0; n < count; n++) {
+                for (i=n+1; i < count; i++) {
+                    if (get(n).label.toLowerCase() > get(i).label.toLowerCase()) {
+                        move(i, n, 1);
+                        n = 0;
+                    }
+                }
+            }
         }
     }
 
@@ -337,6 +347,7 @@ Page {
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
                 gridModel.modelArr = message["apps"]
+                gridModel.prepareModel()
                 gridModel.update(textInput)
                 mainView.updateSpinner(false)
             } else if (type === "volla.launcher.callLogResponse") {

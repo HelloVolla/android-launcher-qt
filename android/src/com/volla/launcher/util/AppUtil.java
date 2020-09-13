@@ -26,9 +26,9 @@ public class AppUtil {
 
             public void onDispatched(String type, Map message) {
                 final Activity activity = QtNative.activity();
+                final PackageManager pm = activity.getPackageManager();
 
                 if (type.equals(GET_APP_COUNT)) {                    
-                    final PackageManager pm = activity.getPackageManager();
 
                     Runnable runnable = new Runnable () {
 
@@ -44,13 +44,20 @@ public class AppUtil {
                         }
                     };
 
-                    //activity.runOnUiThread(runnable);
-
                     Thread thread = new Thread(runnable);
                     thread.start();
                 } else if (type.equals(OPEN_CAM)) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    activity.startActivity(intent);
+                    ResolveInfo cameraInfo  = null;
+                    List<ResolveInfo> pkgList = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+                    if (pkgList != null && pkgList.size() > 0) {
+                        cameraInfo = pkgList.get(0);
+                        Intent cameraApp = pm.getLaunchIntentForPackage(cameraInfo.activityInfo.packageName);
+                        activity.startActivity(cameraApp);
+                    } else {
+
+                    }
                 }
             }
         });

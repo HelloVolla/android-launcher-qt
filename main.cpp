@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("Volla Launcher");
 
     QTranslator myappTranslator;
-    if (myappTranslator.load(QLocale(), QLatin1String("Volla"), QLatin1String("_"), QLatin1String(":/translations")) != 1) {
+    if (myappTranslator.load(QLocale(), QLatin1String("Volla"), QLatin1String("_"), QLatin1String(":/i18n/")) != 1) {
         qDebug() << "FAILED TO LOAD TRANSLATOR for LOCALE" << QLocale();
     }
     app.installTranslator(&myappTranslator);
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
     engine.load(url);
 
-    QtAndroid::hideSplashScreen(300);
+    QtAndroid::hideSplashScreen(150);
 
     for (const QString &permission : permissions){
         auto result = QtAndroid::checkPermission(permission);

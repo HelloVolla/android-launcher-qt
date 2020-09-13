@@ -102,6 +102,38 @@ Page {
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
             }
+            Row {
+                width: parent.width
+                spacing: mainView.innerSpacing
+                Button {
+                    id: openButton
+                    text: qsTr("Open in browser")
+                    font.pointSize: mainView.smallFontSize
+                    visible: title.text.length > 0
+                    rightPadding: mainView.innerSpacing
+                    onClicked: {
+                        console.log("Details | Open article")
+                        Qt.openUrlExternally(detailPage.currentDetailId)
+                    }
+                }
+                Button {
+                    id: shareButton
+                    text: qsTr("Share")
+                    font.pointSize: mainView.smallFontSize
+                    visible: title.text.length > 0
+                    onClicked: {
+                        console.log("Details | Share content")
+                        an.shareContent(  {
+                            mime_type: 'text/plain',
+                            // , uri: single_uri
+                            text: currentDetailId,
+                            subject:  "This is a sample SUBJECT for sharing"
+                            // , package: "com.whatsapp"
+                            // url : "https://volla.online"
+                        }  )
+                    }
+                }
+            }
             Label {
                 id: text
                 width: parent.width - 2 * mainView.innerSpacing
@@ -113,6 +145,7 @@ Page {
 
                 onLinkActivated: Qt.openUrlExternally(link)
             }
+
         }
     }
 
@@ -138,5 +171,10 @@ Page {
                 author.text = currentDetailAuthorAndDate
             }
         }
+    }
+
+    // @disable-check M300
+    AN.Share {
+        id: an
     }
 }

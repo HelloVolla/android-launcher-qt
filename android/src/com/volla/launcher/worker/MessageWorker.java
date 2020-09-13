@@ -118,7 +118,7 @@ public class MessageWorker {
                                 for (int i = 0; i < numbers.size(); i++) {
                                     String number = ( String ) numbers.get(i);
                                     Log.d(TAG, "Compare message address " + address + " with contact number " + number);
-                                    if (number.equals(address)) {
+                                    if (address != null && address.endsWith(number.substring(1))) {
                                         Log.d(TAG, "Match");
                                         matched = true;
                                         threadList.add( thId );
@@ -231,14 +231,13 @@ public class MessageWorker {
                         smsMms.put("body", body);
                         smsMms.put("person", person);
                         smsMms.put("address", address);
-                        smsMms.put("date", Long.toString(d));
                         smsMms.put("read", read == 1 ? true : false);
                         smsMms.put("isSent", type == 2 ? true : false);
-                        smsMms.put("isMMS", isMMS);
 
                         if ("application/vnd.wap.multipart.related".equals(ct_t)) {
                             // it's MMS
                             isMMS = true;
+                            d = d * 1000;
 
                             String selectionPart = "mid=" + message_id;
                             Uri uri = Uri.parse("content://mms/part");
@@ -269,7 +268,17 @@ public class MessageWorker {
                             }
                         }
 
+                        smsMms.put("date", Long.toString(d));
+                        smsMms.put("isMMS", isMMS);
+
+//                        messageList = new ArrayList();
+
                         messageList.add( smsMms );
+
+//                        Map reply = new HashMap();
+//                        reply.put("messages", messageList );
+//                        reply.put("messagesCount", messageList.size() );
+//                        SystemDispatcher.dispatch(GOT_CONVERSATION, reply);
                     }
 
                     if (!cursor.isClosed()) {

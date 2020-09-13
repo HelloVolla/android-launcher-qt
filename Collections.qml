@@ -65,7 +65,7 @@ Page {
             switch (mode) {
                 case mainView.collectionMode.People:
                     headline.text = qsTr("People")
-                    textInputField.placeholderText = "Find poeple ..."
+                    textInputField.placeholderText = qsTr("Find people ...")
                     currentCollectionModel = peopleModel
                     operationCount = 2
                     mainView.updateSpinner(true)
@@ -74,7 +74,7 @@ Page {
                     break;
                 case mainView.collectionMode.Threads:
                     headline.text = qsTr("Threads")
-                    textInputField.placeholderText = "Find thread ..."
+                    textInputField.placeholderText = qsTr("Find thread ...")
                     currentCollectionModel = threadModel
                     operationCount = 1
                     mainView.updateSpinner(true)
@@ -82,7 +82,7 @@ Page {
                     break;
                 case mainView.collectionMode.News:
                     headline.text = qsTr("News")
-                    textInputField.placeholderText = "Find news ..."
+                    textInputField.placeholderText = qsTr("Find news ...")
                     currentCollectionModel = newsModel
                     collectionPage.threads = new Array
                     collectionPage.calls = new Array
@@ -93,6 +93,16 @@ Page {
                     console.log("Collections | Unknown collection mode")
                     break;
             }
+        }
+    }
+
+    function updateListModel() {
+        console.log("Conversation | Operation count is " + operationCount)
+        operationCount = operationCount - 1
+        if (operationCount < 1) {
+            mainView.updateSpinner(false)
+            collectionPage.currentCollectionModel.loadData()
+            collectionPage.currentCollectionModel.update(collectionPage.textInput)
         }
     }
 
@@ -111,11 +121,12 @@ Page {
     ListView {
         id: listView
         anchors.fill: parent
-        headerPositioning: ListView.PullBackHeader
+        headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
 
         header: Column {
             id: header
             width: parent.width
+            z: 2
             Label {
                 id: headerLabel
                 topPadding: mainView.innerSpacing
@@ -123,6 +134,10 @@ Page {
                 text: qsTr("People")
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
+                background: Rectangle {
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    border.color: "transparent"
+                }
                 Binding {
                     target: collectionPage
                     property: "headline"
@@ -141,7 +156,7 @@ Page {
                 leftPadding: 0.0
                 rightPadding: 0.0
                 background: Rectangle {
-                    color: "transparent"
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
                     border.color: "transparent"
                 }
                 Binding {
@@ -172,9 +187,9 @@ Page {
             }
             Rectangle {
                 width: parent.width
-                border.color: "transparent"
-                color: "transparent"
                 height: 1.1
+                color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                border.color: "transparent"
             }
         }
 
@@ -526,6 +541,7 @@ Page {
         property var modelArr: []
         property var contactThreads: new Object
         property var contactCalls: new Object
+
         function loadData() {
             console.log("Collections | Load data for contact collection")
 
@@ -697,8 +713,8 @@ Page {
         function executeSelection(item, type) {
             switch (type) {
                 case mainView.actionType.MakeCall:
-                    //Qt.openUrlExternally("tel:" + item.c_PHONE)
-                    util.makeCall({"number": item.c_PHONE})
+                    Qt.openUrlExternally("tel:" + item.c_PHONE)
+                    // util.makeCall({"number": item.c_PHONE})
                     break
                 case mainView.actionType.SendSMS:
                     Qt.openUrlExternally("sms:" + item.c_PHONE)
@@ -725,10 +741,10 @@ Page {
 
                 function checkMatchigThread(contact) {
                     return (contact["id"] === thread["person"]
-                            || (contact["phone.mobile"] === thread["address"])
-                            || (contact["phone.other"] === thread["address"])
-                            || (contact["phone.work"] === thread["address"])
-                            || (contact["phone.home"] === thread["address"]))
+                            || (contact["phone.mobile"] !== undefined && contact["phone.mobile"].endsWith(thread["address"].slice(3)))
+                            || (contact["phone.other"] !== undefined && contact["phone.other"].endsWith(thread["address"].slice(3)))
+                            || (contact["phone.work"] !== undefined && contact["phone.work"].endsWith(thread["address"].slice(3)))
+                            || (contact["phone.home"] !== undefined && contact["phone.home"].endsWith(thread["address"].slice(3))))
                 }
 
                 var contact = mainView.contacts.find(checkMatchigThread)
@@ -896,7 +912,6 @@ Page {
                                 else if (childNode.nodeName === "link") {
                                     cNews.c_ID = textNode.nodeValue
 
-                                    // todo: Store recent property in feed dict of settings
                                     if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
                                         cNews.c_BADGE = true
                                     }
@@ -931,10 +946,6 @@ Page {
                 loadData()
             }
 
-            modelArr.sort(function(a,b) {
-                return b.c_TSTAMP - a.c_TSTAMP
-            })
-
             var filteredModelDict = new Object
             var filteredModelItem
             var modelItem
@@ -957,6 +968,7 @@ Page {
                 modelItemName = get(i).c_TEXT
                 existingGridDict[modelItemName] = true
             }
+
             // remove items no longer in filtered set
             i = 0
             while (i < count) {
@@ -980,6 +992,21 @@ Page {
                     append(filteredModelDict[modelItemName])
                 }
             }
+
+            sortModel()
+        }
+
+        function sortModel() {
+            var n;
+            var i;
+            for (n = 0; n < count; n++) {
+                for (i=n+1; i < count; i++) {
+                    if (get(n).c_TSTAMP < get(i).c_TSTAMP) {
+                        move(i, n, 1);
+                        n = 0;
+                    }
+                }
+            }
         }
 
         function executeSelection(item, type) {
@@ -988,9 +1015,10 @@ Page {
                 var author = item.c_STITLE.substring(0, n)
                 mainView.updateNewsPage(mainView.feedMode.RSS, item.c_CHANNEL, author, item.c_ICON)
             } else {
-                var n = item.c_STITLE.indexOf("•") - 1
-                var author = item.c_STITLE.substring(0, n)
+                n = item.c_STITLE.indexOf("•") - 1
+                author = item.c_STITLE.substring(0, n)
                 mainView.updateDetailPage(mainView.detailMode.Web, item.c_ID, author, item.c_STEXT)
+                mainView.updateRecentNews(item.c_CHANNEL, item.c_ID)
             }
         }
     }
@@ -1006,8 +1034,7 @@ Page {
 //                        console.log("Collections | * " + threadKey + ": " + threadValue)
 //                    }
 //                })
-                collectionPage.currentCollectionModel.loadData()
-                collectionPage.currentCollectionModel.update(collectionPage.textInput)
+                collectionPage.updateListModel()
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
                 collectionPage.calls = message["calls"]
@@ -1016,14 +1043,7 @@ Page {
 //                        console.log("Collections | * " + callKey + ": " + callValue)
 //                    }
 //                })
-                collectionPage.currentCollectionModel.loadData()
-                collectionPage.currentCollectionModel.update(collectionPage.textInput)
-            }
-
-            console.log("Conversation | Operation count is " + operationCount)
-            operationCount = operationCount - 1
-            if (operationCount < 1) {
-                mainView.updateSpinner(false)
+                collectionPage.updateListModel()
             }
         }
     }

@@ -127,11 +127,11 @@ Page {
                 var phoneNumber = -1
                 if (selectedObj !== undefined) {
                     // todo: offer selection of phone numbers
-                    if (selectedObj["phone.mobile"].length > 0) {
+                    if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
                         phoneNumber = selectedObj["phone.mobile"]
-                    } else if (selectedObj["phone.home"].length > 0) {
+                    } else if (selectedObj["phone.home"] !== undefined && selectedObj["phone.home"].length > 0) {
                         phoneNumber = selectedObj["phone.home"]
-                    } else if (selectedObj["phone.work"].length > 0) {
+                    } else if (selectedObj["phone.work"] !== undefined && selectedObj["phone.work"].length > 0) {
                         phoneNumber = selectedObj["phone.work"]
                     }
                 } else {
@@ -594,8 +594,8 @@ Page {
                 backEnd.runApp(mainView.calendarApp)
             } else if (selectedMenuItem == cameraLabel) {
                 console.log("Springboard | Show camera")
-                backEnd.runApp(mainView.cameraApp)
-                // AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
+                // backEnd.runApp(mainView.cameraApp)
+                AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
                 // backEnd.runApp(mainView.phoneApp)

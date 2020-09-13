@@ -394,6 +394,26 @@ ApplicationWindow {
             }
         }
 
+        function updateRecentNews(channelId, newsId) {
+            console.log("MainView | Will update recent news : " + channelId + " with newa " + newsId)
+            if (channelId === undefined || newsId === undefined) {
+                mainView.showToast(qsTr("Invalid news ID"))
+            }
+            var channels = getFeeds()
+            var channel
+            var matched = false
+            var i
+            for (i = 0; i < channels.length; i++) {
+                channel = channels[i]
+                if (channel["id"] === channelId) {
+                    matched = true
+                    channel["recent"] = newsId
+                    console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                    break
+                }
+            }
+        }
+
         function checkAndAddFeed(url) {
             console.log("MainView | Will check and update feeds")
             var doc = new XMLHttpRequest();

@@ -43,7 +43,6 @@ android {
 OTHER_FILES += \
     android/AndroidManifest.xml \
     android/build.gradle \
-    android/src/com/volla/launcher/worker/AppWorker.java
 
 contains(ANDROID_TARGET_ARCH,x86) {
     ANDROID_PACKAGE_SOURCE_DIR = \
@@ -56,6 +55,7 @@ HEADERS += \
 
 DISTFILES += \
     LICENSE.txt \
+    translations/*.ts \
     android/res/drawable/wallpaper_black.png \
     android/res/drawable/wallpaper_white.png \
     android/src/com/volla/launcher/activity/ReceiveTextActivity.java \
@@ -68,7 +68,8 @@ DISTFILES += \
     android/src/com/volla/launcher/worker/CallWorker.java \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java \
-    android/src/com/volla/launcher/worker/WallpaperWorker.java
+    android/src/com/volla/launcher/worker/WallpaperWorker.java \
+    android/src/com/volla/launcher/worker/AppWorker.java
 
 TRANSLATIONS += \
     translations/Volla_de.ts \
@@ -76,4 +77,8 @@ TRANSLATIONS += \
     translations/Volla_nl.ts \
     translations/Volla_se.ts \
     translations/Volla_ro.ts \
-    translations/Volla_es.ts
+    translations/Volla_es.ts \
+    translations/Volla_bg.ts \
+    translations/Volla_fi.ts \
+    translations/Volla_it.ts \
+    translations/Volla_sk.ts

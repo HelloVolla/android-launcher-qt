@@ -68,13 +68,14 @@ Page {
     ListView {
         id: listView
         anchors.fill: parent
-        headerPositioning: ListView.PullBackHeader
+        headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
 
         header: Rectangle {
             id: header
             width: parent.width
             implicitHeight: headerColumn.height
-            color: "transparent"
+            z: 2
+            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
             Column {
                 id: headerColumn
                 width: parent.width
@@ -90,7 +91,6 @@ Page {
                         sourceSize: Qt.size(headerIconSize, headerIconSize)
                         smooth: true
                         visible: false
-
                         Desaturate {
                             anchors.fill: headerIcon
                             source: headerIcon
@@ -195,9 +195,9 @@ Page {
                 Rectangle {
                     id: headerBottomSpace
                     width: parent.width
-                    border.color: "transparent"
-                    color: "transparent"
                     height: 1.1
+                    color: "transparent"
+                    border.color: "transparent"
                 }
 
             }
