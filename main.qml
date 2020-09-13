@@ -13,7 +13,7 @@ ApplicationWindow {
 //    width: 1060
 //    height: 1200
     title: qsTr("Volla")
-
+//    visibility: "FullScreen"
 
     Connections {
        target: Qt.application

@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
     engine.load(url);
 
-    QtAndroid::hideSplashScreen(150);
+    QtAndroid::hideSplashScreen(100);
 
     for (const QString &permission : permissions){
         auto result = QtAndroid::checkPermission(permission);

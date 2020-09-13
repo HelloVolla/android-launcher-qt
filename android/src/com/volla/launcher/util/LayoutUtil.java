@@ -66,7 +66,8 @@ public class LayoutUtil {
                             if (value > 0) {
                                 // dark or translucent mode
                                 int flags = w.getDecorView().getSystemUiVisibility();
-                                flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                                //flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                                flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
                                 if (value == 1) {
@@ -82,7 +83,8 @@ public class LayoutUtil {
                                 // light mode
                                 Log.d(TAG, "Set light mode and white wallpaper");
                                 int flags = w.getDecorView().getSystemUiVisibility();
-                                flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                                //flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                                flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
                                 wallpaperId = R.drawable.wallpaper_white;

@@ -139,6 +139,7 @@ Page {
             z: 2
             Label {
                 id: headerLabel
+                width: header.width - 2 * mainView.innerSpacing
                 topPadding: mainView.innerSpacing
                 x: mainView.innerSpacing
                 text: qsTr("Conversation")
@@ -146,14 +147,14 @@ Page {
                 elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone : Text.ElideRight
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
+                background: Rectangle {
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    border.color: "transparent"
+                }
                 Binding {
                     target: conversationPage
                     property: "headline"
                     value: headerLabel
-                }
-                background: Rectangle {
-                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
-                    border.color: "transparent"
                 }
                 LinearGradient {
                     id: headerLabelTruncator
