@@ -351,8 +351,10 @@ Page {
                 gridModel.update(textInput)
                 mainView.updateSpinner(false)
             } else if (type === "volla.launcher.callLogResponse") {
+                console.log("AppGrid | Missed calls: " + message["callsCount"])
                 appLauncher.newCalls = message["callsCount"] > 0
             } else if (type === "volla.launcher.threadsCountResponse") {
+                console.log("AppGrid | Unread messages: " + message["threadsCount"])
                 appLauncher.unreadMessages = message["threadsCount"] > 0
             }
         }

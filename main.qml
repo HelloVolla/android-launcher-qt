@@ -9,11 +9,9 @@ import QtQml 2.12
 import FileIO 1.0
 
 ApplicationWindow {
+    id: appWindow
     visible: true
-//    width: 1060
-//    height: 1200
     title: qsTr("Volla")
-//    visibility: "FullScreen"
 
     Connections {
        target: Qt.application
@@ -145,7 +143,7 @@ ApplicationWindow {
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.simplemobiletools.dialer" // "com.android.dialer"
-        property string messageApp: "com.simplemobiletools.smsmessenger" // "com.android.mms"
+        property string messageApp: "com.android.mms" // "com.simplemobiletools.smsmessenger"
         property string notesApp: "com.simplemobiletools.notes.pro"
 
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
@@ -532,6 +530,11 @@ ApplicationWindow {
             }
         }
 
+        function updateVisibility(visibility) {
+            console.log("MainView | Update window visibility to " + visibility)
+            appWindow.visibility = visibility
+        }
+
         Connections {
             target: AN.SystemDispatcher
             // @disable-check M16
@@ -549,7 +552,7 @@ ApplicationWindow {
                     mainView.updateSpinner(false)
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
-                    if (message["needsSync"]) {
+                    if (message["needsSync"] && !mainView.isLoadingContacts) {
                         console.log("MainView | Need to sync contacts")
                         mainView.isLoadingContacts = true
                         mainView.updateSpinner(true)
@@ -595,6 +598,7 @@ ApplicationWindow {
     Settings {
         id: settings
         property int theme: mainView.theme.Dark
+        property bool fullscreen: false
         
         Component.onCompleted: {
             console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
@@ -602,6 +606,9 @@ ApplicationWindow {
                 mainView.switchTheme(settings.theme)
             } else {
                 AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme})
+            }
+            if (fullscreen) {
+                appWindow.visibility = 5
             }
         }
     }

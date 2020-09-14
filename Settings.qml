@@ -398,6 +398,89 @@ Page {
                     }
                 }
             }
+
+            Item {
+                id: deisgnSettings
+                width: parent.width
+                implicitHeight: designSettingsColumn.height
+
+                Column {
+                    id: designSettingsColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+
+                    Button {
+                        id: designSettingsButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * shortcutSettingsButton.padding
+                            text: qsTr("Experimental")
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: shortcutSettingsColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            designSettingsColumn.menuState = !designSettingsColumn.menuState
+                            if (designSettingsColumn.menuState) {
+                                console.log("Settings | Will create checkboxes")
+                                designSettingsColumn.createCheckboxes()
+                            } else {
+                                console.log("Settings | Will destroy checkboxes")
+                                designSettingsColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        var component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        var properties = { "actionId": "fullscreen",
+                                "text": qsTr("Fullscreen"), "checked": designSettings.fullscreen,
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                        var object = component.createObject(designSettingsColumn, properties)
+                        designSettingsColumn.checkboxes.push(object)
+                        console.log("Settings | Checkboxes created")
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < designSettingsColumn.checkboxes.length; i++) {
+                            var checkbox = designSettingsColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        designSettingsColumn.checkboxes = new Array
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update settings for " + actionId + ", " + active)
+                        designSettings.fullscreen = active
+                        designSettings.sync()
+                        if (active) {
+                            mainView.updateVisibility(5)
+                        } else {
+                            mainView.updateVisibility(1)
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
+                }
+
+                Settings {
+                    id: designSettings
+                    property bool fullscreen: false
+                }
+            }
         }
     }
 }

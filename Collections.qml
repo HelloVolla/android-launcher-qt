@@ -130,6 +130,7 @@ Page {
             Label {
                 id: headerLabel
                 topPadding: mainView.innerSpacing
+                width: parent.width - mainView.innerSpacing
                 x: mainView.innerSpacing
                 text: qsTr("People")
                 font.pointSize: mainView.headerFontSize
@@ -400,6 +401,7 @@ Page {
                     }                    
                 }
                 Rectangle {
+                    id: newsIconBox
                     anchors.top: contactBox.top
                     anchors.topMargin: mainView.innerSpacing * 0.5
                     anchors.left: contactBox.left
