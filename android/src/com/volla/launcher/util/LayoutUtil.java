@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.content.Intent;
 import android.content.Context;
+import android.graphics.Color;
 import java.util.Map;
 import java.io.IOException;
 import org.qtproject.qt5.android.QtNative;
@@ -106,9 +107,9 @@ public class LayoutUtil {
                                 }
 
                                 Intent intent = new Intent();
-                                intent.setAction("com.volla.broadcast.UI_MODE");
-                                intent.putExtra("uimode", umm.getNightMode());
-                                intent.putExtra("translucent", value == 2 ? true : false);
+                                intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
+                                // dark or translucent mode => hours Label is White
+                                intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
                                 activity.sendBroadcast(intent);
                             }
                         }
