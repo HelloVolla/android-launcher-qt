@@ -212,7 +212,10 @@ Page {
                         modeSettingsTitle.text = selectedMenuItem.text
 
                         themeSettings.theme = selectedMenuItem.theme
-                        themeSettings.sync()
+
+                        if(themeSettings.sync) {
+                            themeSettings.sync()
+                        }
 
                         switch (themeSettings.theme) {
                             case mainView.theme.Dark:

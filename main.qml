@@ -285,7 +285,9 @@ ApplicationWindow {
         }
 
         function switchTheme(theme) {
-            settings.sync()
+            if (settings.sync) {
+                settings.sync()
+            }
             console.log("MainView | Swith theme to " + theme + ", " + settings.theme)
             switch (theme) {
             case mainView.theme.Dark:
