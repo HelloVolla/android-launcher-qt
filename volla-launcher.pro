@@ -55,6 +55,7 @@ HEADERS += \
 
 DISTFILES += \
     LICENSE.txt \
+    android/src/com/volla/launcher/util/MessageUtil.java \
     translations/*.ts \
     android/res/drawable/wallpaper_black.png \
     android/res/drawable/wallpaper_white.png \

@@ -8,13 +8,12 @@ import AndroidNative 1.0 as AN
 Page {
     id: conversationPage
     anchors.fill: parent
-    topPadding: mainView.innerSpacing
 
     property var headline
     property var textInputField
     property string textInput
     property real widthFactor: 0.9
-    property int threadAge: 84000 * 7 // one week in seconds
+    property int threadAge: 84000 * 14 // two weeks in milli seconds
     property int operationCount: 0 // number of background operations
 
     property int currentConversationMode: 0
@@ -27,6 +26,7 @@ Page {
     property string m_TEXT:      "text"    // large main text, regular
     property string m_STEXT:     "stext"   // small text beyond the main text, grey
     property string m_IMAGE:     "image"   // preview image
+    property string m_PART_IDs:  "partIds" // the ids of mms message parts
     property string m_IS_SENT:   "sent"    // true if the content was sent by user
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
@@ -75,8 +75,8 @@ Page {
                     }
                     operationCount = 2
                     mainView.updateSpinner(true)
-                    loadConversation({"personId": id, "numbers": numbers})
-                    loadCalls({"match": name})
+                    loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge})
+                    loadCalls({"match": name, "age": threadAge})
                     break;
                 case mainView.conversationMode.Thread:
                     headline.text = name
@@ -84,7 +84,7 @@ Page {
                     currentConversationModel = threadContentModel
                     operationCount = 1
                     mainView.updateSpinner(true)
-                    loadConversation({"threadId": id})
+                    loadConversation({"threadId": id, "threadAge": threadAge})
                     break;
                 default:
                     console.log("Conversation | Unknown conversation mode")
@@ -103,6 +103,29 @@ Page {
         }
     }
 
+    function updateImage(messageId, image) {
+        console.log("Conversation | Umdate image of message " + messageId)
+        for (var i = 0; i < currentConversationModel.modelArr.length; i++) {
+            var aMessage = currentConversationModel.modelArr[i]
+            if (aMessage.m_ID === messageId) {
+                console.log("Conversation | Message matched")
+                aMessage.m_IMAGE = "data:image/png;base64," + image
+                currentConversationModel.modelArr[i] = aMessage
+                break
+            }
+        }
+        for (i = 0; i < currentConversationModel.count; i++) {
+            var elem = currentConversationModel.get(i)
+            if (elem.m_ID === messageId) {
+                console.log("Conversation | List element matched")
+                elem.m_IMAGE = "data:image/png;base64," + image
+                currentConversationModel.set(i, elem)
+                break
+            }
+        }
+        listView.positionViewAtEnd()
+    }
+
     function sortListModel() {
         var n;
         var i;
@@ -114,6 +137,8 @@ Page {
                 }
             }
         }
+
+        listView.positionViewAtEnd()
     }
 
     function loadConversation(filter) {
@@ -140,7 +165,7 @@ Page {
             Label {
                 id: headerLabel
                 width: header.width - 2 * mainView.innerSpacing
-                topPadding: mainView.innerSpacing
+                topPadding: mainView.innerSpacing * 2
                 x: mainView.innerSpacing
                 text: qsTr("Conversation")
                 clip: mainView.backgroundOpacity === 1.0 ? true : false
@@ -303,7 +328,7 @@ Page {
                         x: model.m_IS_SENT ? messageBox.width * (1 -  widthFactor) + mainView.innerSpacing : mainView.innerSpacing
                         horizontalAlignment: Image.AlignLeft
                         width: messageBox.width * widthFactor
-                        source: model.m_IMAGE !== undefined ? model.m_IMAGE : ""
+                        source: model.m_IMAGE // !== undefined ? model.m_IMAGE : ""
                         fillMode: Image.PreserveAspectFit
 
                         Desaturate {
@@ -344,6 +369,12 @@ Page {
 
                 if (message["image"] !== undefined) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
+                } else {
+                    cMessage.m_IMAGE = ""
+                }
+
+                if (message["partIds"] !== undefined) {
+                    AN.SystemDispatcher.dispatch("volla.launcher.mmsImageAction", {"messageId": cMessage.m_ID, "partIds": message["partIds"]})
                 }
 
                 cMessage.m_DATE = message["date"]
@@ -360,10 +391,6 @@ Page {
 
                 modelArr.push(cCall)
             })
-
-//            modelArr.sort(function(a,b) {
-//                return a.m_DATE - b.m_DATE
-//            })
         }
 
         function update(text) {
@@ -420,8 +447,6 @@ Page {
             }
 
             conversationPage.sortListModel()
-
-            listView.positionViewAtEnd()
         }
 
         function executeSelection(item, typ) {
@@ -452,16 +477,18 @@ Page {
 
                 if (message["image"] !== undefined) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
+                } else {
+                    cMessage.m_IMAGE = ""
+                }
+
+                if (message["partIds"] !== undefined) {
+                    AN.SystemDispatcher.dispatch("volla.launcher.mmsImageAction", {"messageId": cMessage.m_ID, "partIds": message["partIds"]})
                 }
 
                 cMessage.m_DATE = message["date"]
 
                 modelArr.push(cMessage)
             })
-
-//            modelArr.sort(function(a,b) {
-//                return a.m_DATE - b.m_DATE
-//            })
         }
 
         function update (text) {
@@ -519,8 +546,6 @@ Page {
             }
 
             conversationPage.sortListModel()
-
-            listView.positionViewAtEnd()
         }
 
         function executeSelection(item, type) {
@@ -550,6 +575,11 @@ Page {
 //                    }
 //                })
                 conversationPage.updateListMocel()
+            } else if (type === "volla.launcher.mmsImageResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                if (message["hasImage"]) {
+                    conversationPage.updateImage(message["messageId"], message["image"])
+                }
             }
         }
     }

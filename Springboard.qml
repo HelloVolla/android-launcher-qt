@@ -133,6 +133,10 @@ Page {
                         phoneNumber = selectedObj["phone.home"]
                     } else if (selectedObj["phone.work"] !== undefined && selectedObj["phone.work"].length > 0) {
                         phoneNumber = selectedObj["phone.work"]
+                    } else if (selectedObj["phone.other"] !== undefined && selectedObj["phone.other"].length > 0) {
+                        phoneNumber = selectedObj["phone.other"]
+                    } else {
+                        mainView.showToast(qsTr("Sorry. I couldn't find a phone number for this contact"))
                     }
                 } else {
                     mainView.showToast(qsTr("Sorry. I couldn't identify the contact"))
@@ -160,11 +164,19 @@ Page {
                 return emailAddress
             }
 
+            function textInputStartsWithPhoneNumber() {
+                return /^\+?\d{4,}(\s\S+)?/.test(textInput)
+            }
+
+            function textInputStartWithEmailAddress() {
+                return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}\s\S+/.test(textInput)
+            }
+
             function executeAction(actionValue, actionType, actionObj) {
                 if (actionObj !== undefined) {
-                    console.log(actionValue + ":" + actionType + ":" + actionObj["id"])
+                    console.log("SpringBoard | " + actionValue + ": " + actionType + ":" + actionObj["id"])
                 } else {
-                    console.log(actionValue + ":" + actionType)
+                    console.log("SpringBoard | " + actionValue + ": " + actionType)
                 }
 
                 switch (actionType) {
@@ -174,7 +186,8 @@ Page {
                             phoneNumber = phoneNumberForContact()
                         }
                         console.log("Springboard | Will call " + phoneNumber)
-                        Qt.openUrlExternally("tel:" + phoneNumber)
+                        //Qt.openUrlExternally("tel:" + phoneNumber)
+                        util.makeCall({"number": phoneNumber, "intent": "call"})
                         textInputArea.text = ""
                         break
                     case mainView.actionType.SendSMS:
@@ -189,7 +202,8 @@ Page {
                             mainView.showToast(qsTr("Sorry. Contact has no mobile phone number"))
                         } else {
                             console.log("Springboard | Will send message " + message)
-                            Qt.openUrlExternally("sms:" + phoneNumber + "?body=" + encodeURIComponent(message))
+                            AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": phoneNumber, "text": message})
+                            //Qt.openUrlExternally("sms:" + phoneNumber + "?body=" + encodeURIComponent(message))
                         }
                         textInputArea.text = ""
                         break
@@ -266,121 +280,17 @@ Page {
                 }
             }
 
-            function textInputHasMultiTokens() {
-                return /\S+\s\S+/.test(textInput)
-            }
-
-            function textInputHasMultiLines() {
-                return /\n/.test(textInput)
-            }
-
-            function textInputHasContactPrefix() {
-                return textInput.indexOf("@") === 0
-            }
-
-            function textInputStartsWithPhoneNumber() {
-                return /^\+?\d{4,}(\s\S+)?/.test(textInput)
-            }
-
-            function textInputStartWithEmailAddress() {
-                return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}\s\S+/.test(textInput)
-            }
-
-            function textInputIsWebAddress() {
-                var urlregex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
-                return urlregex.test(textInput.trim());
-            }
-
-            function textInputCouldBeRssFeed() {
-                return textInput.indexOf("http") == 0 ? textInput.lastIndexOf("/") > 7 : textInput.lastIndexOf("/") > 3
-            }
-
             function update() {
                 console.log("Springboard | update model for " + textInput);
 
-                var filteredSuggestionObj = new Array
-                var filteredSuggestion
-                var suggestion
-                var found
-                var i
-
-                if (textInputHasMultiTokens()) {
-                    if (textInputHasContactPrefix()) {
-                        filteredSuggestionObj[0] = [qsTr("Send message"), mainView.actionType.SendSMS]
-                        filteredSuggestionObj[1] = [qsTr("Send email"), mainView.actionType.SendEmail]
-                    } else if (textInputStartsWithPhoneNumber()) {
-                        filteredSuggestionObj[0] = [qsTr("Send message"), mainView.actionType.SendSMS]
-                    } else if (textInputStartWithEmailAddress()) {
-                        filteredSuggestionObj[0] = [qsTr("Send email"), mainView.actionType.SendEmail]
-                    } else if (textInputHasMultiLines()) {
-                        filteredSuggestionObj[0] = [qsTr("Create note"), mainView.actionType.CreateNote]
-                    } else {
-                        filteredSuggestionObj[0] = [qsTr("Create note"), mainView.actionType.CreateNote]
-                        filteredSuggestionObj[1] = [qsTr("Search web"), mainView.actionType.SearchWeb]
-                    }
-                } else if (textInputHasContactPrefix()) {                   
-                    var lastChar = textInput.substring(textInput.length - 1, textInput.length)
-                    console.log("Springboard | last char: " + lastChar)
-                    if (lastChar === " ") {
-                        filteredSuggestionObj[0] = [qsTr("Call"), mainView.actionType.MakeCall]
-                    }
-
-                    var lastToken = textInput.substring(1, textInput.length).toLowerCase()
-                    console.log("Springboard | last token:" + lastToken)
-                    for (i = 0; i < mainView.contacts.length; i++) {
-                        var contact = mainView.contacts[i]
-                        var name = contact["name"].toLowerCase()
-                        if (lastToken.length === 0 || name.includes(lastToken)) {
-                            filteredSuggestionObj[i] = [contact["name"], mainView.actionType.SuggestContact, contact]
-                        }
-                    }
-                } else if (textInputIsWebAddress()) {
-                    filteredSuggestionObj[0] = [qsTr("Open in browser"), mainView.actionType.OpenURL]
-                    if (textInputCouldBeRssFeed()) {
-                        filteredSuggestionObj[1] = [qsTr("Add feed to collection"), mainView.actionType.AddFeed]
-                    }
-                } else if (textInputStartsWithPhoneNumber()) {
-                    filteredSuggestionObj[0] = [qsTr("Call"), mainView.actionType.MakeCall]
-                } else if (textInput.length > 1) {
-                    filteredSuggestionObj[0] = [qsTr("Search web"), mainView.actionType.SearchWeb]
-                } else if (defaultSuggestions) {
-                    filteredSuggestionObj[0] = [qsTr("Make Call"), mainView.actionType.MakeCall]
-                    filteredSuggestionObj[1] = [qsTr("Create Message"), mainView.actionType.SendSMS]
-                    filteredSuggestionObj[2] = [qsTr("Create Mail"), mainView.actionType.SendEmail]
-                    filteredSuggestionObj[3] = [qsTr("Open Cam"), mainView.actionType.OpenCam]
-                    filteredSuggestionObj[4] = [qsTr("Gallery"), swipe.actionType.ShowGallery]
-                    filteredSuggestionObj[5] = [qsTr("Recent people"), swipe.actionType.ShowContacts]
-                    filteredSuggestionObj[6] = [qsTr("Recent threads"), swipe.actionType.ShowThreads]
-                    filteredSuggestionObj[7] = [qsTr("Recent news"), swipe.actionType.ShowNews]
+                if (textInput.length < 1) {
+                    listModel.clear()
+                } else if (!springBoardWorker.isRunning) {
+                    springBoardWorker.sendMessage({
+                        'selectedObj': selectedObj, 'textInput': textInput,
+                        'contacts': mainView.contacts, 'model': listModel, 'actionType': mainView.actionType
+                    })
                 }
-
-                var existingSuggestionObj = new Object
-                for (i = 0; i < count; ++i) {
-                    suggestion = get(i).text
-                    existingSuggestionObj[suggestion] = true
-                }
-
-                // remove items no longer in filtered set
-                i = 0
-                while (i < count) {
-                    suggestion = get(i).text
-                    found = filteredSuggestionObj.hasOwnProperty(suggestion)
-                    if (!found) {
-                        remove(i)
-                    } else {
-                        i++
-                    }
-                }
-
-                // add new items
-                filteredSuggestionObj.forEach(function (item, index) {
-                    found = existingSuggestionObj.hasOwnProperty(item)
-                    if (!found) {
-                        // for simplicity, just adding to end instead of corresponding position in original list
-                        append({ "text": item[0], "action": item[1], "object": item[2] })
-                    }
-                    console.log("Springboard | Append Suggestion: " + item[0])
-                });
             }
         }
 
@@ -412,7 +322,8 @@ Page {
                 function styledText(fullText, highlightedText) {
                     if (fullText && highlightedText) {
                         console.log("Springboard | Will highlight '" + highlightedText + "' in '" + fullText + "'")
-                        return fullText.replace(highlightedText, "<b>" + highlightedText + "</b>");
+                        highlightedText = highlightedText.charAt(0).toUpperCase() + highlightedText.slice(1)
+                        return fullText.replace(highlightedText, "<b>" + highlightedText + "</b>")
                     } else {
                         return fullText;
                     }
@@ -430,6 +341,21 @@ Page {
             source: "myNote.txt"
             onError: {
                 console.log(msg)
+            }
+        }
+
+        // @disable-check M300
+        AN.Util {
+            id: util
+        }
+
+        WorkerScript {
+            id: springBoardWorker
+            source: "scripts/springboard.mjs"
+            property var isRunning: false
+            onMessage: {
+                console.log("Springboard | Message received")
+                isRunning = false
             }
         }
     }

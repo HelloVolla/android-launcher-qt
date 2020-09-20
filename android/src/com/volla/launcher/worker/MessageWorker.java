@@ -39,6 +39,8 @@ public class MessageWorker {
     public static final String GOT_THREADS  = "volla.launcher.threadResponse";
     public static final String GET_THREADS_COUNT = "volla.launcher.threadsCountAction";
     public static final String GOT_THREADS_COUNT  = "volla.launcher.threadsCountResponse";
+    public static final String GET_MMS_IMAGE = "volla.launcher.mmsImageAction";
+    public static final String GOT_MMS_IMAGE  = "volla.launcher.mmsImageResponse";
     public static final String THREAD_ID = Telephony.TextBasedSmsColumns.THREAD_ID;
     public static final String RECIPIENT_IDs = Telephony.ThreadsColumns.RECIPIENT_IDS;
 
@@ -60,6 +62,26 @@ public class MessageWorker {
                             getThreads(message, activity);
                         } else if (type.equals(GET_THREADS_COUNT)) {
                             getThreadsCount(message, activity);
+                        } else if (type.equals(GET_MMS_IMAGE)) {
+                            String messageId = (String) message.get("messageId");
+                            ArrayList<String> partIds = (ArrayList<String>) message.get("partIds");
+                            Map reply = new HashMap();
+                            reply.put("messageId", messageId);
+                            reply.put("hasImage", false);
+                            for (int i = 0; i < partIds.size(); i++) {
+                                String partId = partIds.get(i);
+                                Bitmap bitmap = getMmsImage(partId, activity);
+                                if (bitmap != null) {
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                    byte[] imageBytes = baos.toByteArray();
+                                    String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+                                    reply.put("image", image);
+                                    reply.put("hasImage", true);
+                                    break;
+                                }
+                            }
+                            SystemDispatcher.dispatch(GOT_MMS_IMAGE, reply);
                         }
                     }
                 };
@@ -73,7 +95,7 @@ public class MessageWorker {
     static void getConversation(Map message, Activity activity) {
         Log.d(TAG, "Invoked JAVA getConversation" );
 
-        // params are threadId, age , after, afterId, read , match , count
+        // params are threadId, age , after, afterId, read , match , count, threadAge
 
         ArrayList<Map> messageList = new ArrayList();
 
@@ -213,6 +235,11 @@ public class MessageWorker {
                     int index_type = cursor.getColumnIndex("type");
                     int index_ct_t = cursor.getColumnIndex("ct_t");
 
+                    if ( message.containsKey("threadAge") ) {
+                        int threadAge = (Integer) message.get("threadAge");
+                        cutOffTimeStamp = System.currentTimeMillis() - threadAge * 1000 ;
+                    }
+
                     while (cursor.moveToNext()) {
 
                         String message_id = cursor.getString(index_id);
@@ -242,9 +269,12 @@ public class MessageWorker {
                             String selectionPart = "mid=" + message_id;
                             Uri uri = Uri.parse("content://mms/part");
                             Cursor mmsCursor = activity.getContentResolver().query(uri, null, selectionPart, null, null);
+                            ArrayList<String> partList = new ArrayList();
                             if (mmsCursor.moveToFirst()) {
                                 do {
                                     String partId = mmsCursor.getString(mmsCursor.getColumnIndex("_id"));
+                                    partList.add(partId);
+
                                     String mmsType = mmsCursor.getString(mmsCursor.getColumnIndex("ct"));
                                     if ("text/plain".equals(mmsType) && body == null) {
                                         String data = mmsCursor.getString(mmsCursor.getColumnIndex("_data"));
@@ -256,29 +286,25 @@ public class MessageWorker {
                                         smsMms.put("body", body);
                                     }
 
-                                    Bitmap bitmap = getMmsImage(partId, activity);
-                                    if (bitmap != null) {
-                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                                        byte[] imageBytes = baos.toByteArray();
-                                        String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-                                        smsMms.put("image", image);
-                                    }
+//                                    Bitmap bitmap = getMmsImage(partId, activity);
+//                                    if (bitmap != null) {
+//                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                                        byte[] imageBytes = baos.toByteArray();
+//                                        String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+//                                        smsMms.put("image", image);
+//                                    }
                                 } while (mmsCursor.moveToNext());
+                                smsMms.put("partIds", partList);
                             }
                         }
 
                         smsMms.put("date", Long.toString(d));
                         smsMms.put("isMMS", isMMS);
 
-//                        messageList = new ArrayList();
-
-                        messageList.add( smsMms );
-
-//                        Map reply = new HashMap();
-//                        reply.put("messages", messageList );
-//                        reply.put("messagesCount", messageList.size() );
-//                        SystemDispatcher.dispatch(GOT_CONVERSATION, reply);
+                        if (d - cutOffTimeStamp > 0) {
+                            messageList.add( smsMms );
+                        }
                     }
 
                     if (!cursor.isClosed()) {
@@ -389,12 +415,16 @@ public class MessageWorker {
     static void getThreads(Map message, Activity activity) {
         Log.d(TAG, "Invoked JAVA getThreads" );
 
-        // params are age , read , match , count
+        // params are threadAge
 
         Uri uriThread = Uri.parse("content://mms-sms/conversations?simple=true");
 
         ArrayList<Map> threadlist = new ArrayList();
         long cutOffTimeStamp = 0;
+        if ( message.containsKey("threadAge") ) {
+            int threadAge = (Integer) message.get("threadAge");
+            cutOffTimeStamp = System.currentTimeMillis() - threadAge * 1000 ;
+        }
 
         try {
             Cursor cursor = activity.getContentResolver().query(uriThread, null, null, null , null );
@@ -453,49 +483,53 @@ public class MessageWorker {
                             thread.put("body", body);
                             thread.put("person", person);
                             thread.put("address", address);
-                            thread.put("date", Long.toString(d));
                             thread.put("read", read == 1 ? true : false);
                             thread.put("isSent", type == 2 ? true : false);
-                            thread.put("isMMS", isMMS);
 
                             if ("application/vnd.wap.multipart.related".equals(ct_t)) {
                                 // it's MMS
                                 isMMS = true;
-                                if ("application/vnd.wap.multipart.related".equals(ct_t)) {
-                                    // it's MMS
-                                    isMMS = true;
+                                d = d * 1000;
 
-                                    String selectionPart = "mid=" + message_id;
-                                    Uri uri = Uri.parse("content://mms/part");
-                                    Cursor mmsCursor = activity.getContentResolver().query(uri, null, selectionPart, null, null);
-                                    if (mmsCursor.moveToFirst()) {
-                                        do {
-                                            String partId = mmsCursor.getString(mmsCursor.getColumnIndex("_id"));
-                                            String mmsType = mmsCursor.getString(mmsCursor.getColumnIndex("ct"));
-                                            if ("text/plain".equals(mmsType)) {
-                                                String data = mmsCursor.getString(mmsCursor.getColumnIndex("_data"));
-                                                if (data != null) {
-                                                    body = getMmsText(partId, activity);
-                                                } else {
-                                                    body = mmsCursor.getString(mmsCursor.getColumnIndex("text"));
-                                                }
-                                                thread.put("body", body);
-                                            }
+                                String selectionPart = "mid=" + message_id;
+                                Uri uri = Uri.parse("content://mms/part");
+                                Cursor mmsCursor = activity.getContentResolver().query(uri, null, selectionPart, null, null);
+                                if (mmsCursor.moveToFirst()) {
+                                    do {
+//                                            for (int i = 0; i < mmsCursor.getColumnCount(); i++) {
+//                                                Log.d(mmsCursor.getColumnName(i) + "", mmsCursor.getString(i) + "");
+//                                            }
 
-                                            Bitmap bitmap = getMmsImage(message_id, activity);
-                                            if (bitmap != null) {
-                                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                                                byte[] imageBytes = baos.toByteArray();
-                                                String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-                                                thread.put("image", image);
+                                        String partId = mmsCursor.getString(mmsCursor.getColumnIndex("_id"));
+                                        String mmsType = mmsCursor.getString(mmsCursor.getColumnIndex("ct"));
+                                        if ("text/plain".equals(mmsType)) {
+                                            String data = mmsCursor.getString(mmsCursor.getColumnIndex("_data"));
+                                            if (data != null) {
+                                                body = getMmsText(partId, activity);
+                                            } else {
+                                                body = mmsCursor.getString(mmsCursor.getColumnIndex("text"));
                                             }
-                                        } while (mmsCursor.moveToNext());
-                                    }
+                                            thread.put("body", body);
+                                        }
+
+                                        Bitmap bitmap = getMmsImage(message_id, activity);
+                                        if (bitmap != null) {
+                                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                            byte[] imageBytes = baos.toByteArray();
+                                            String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+                                            thread.put("image", image);
+                                        }
+                                    } while (mmsCursor.moveToNext());
                                 }
-                            }
+                                }
 
-                            threadlist.add( thread );
+                            thread.put("date", Long.toString(d));
+                            thread.put("isMMS", isMMS);
+
+                            if (d - cutOffTimeStamp > 0) {
+                                threadlist.add( thread );
+                            }
                         } while (thCursor.moveToNext());
                     }
 

@@ -8,7 +8,7 @@ import AndroidNative 1.0 as AN
 Page {
     id : feedPage
     anchors.fill: parent
-    topPadding: mainView.innerSpacing
+//    topPadding: mainView.innerSpacing
 
     property var headline
     property var headIcon
@@ -79,9 +79,12 @@ Page {
             Column {
                 id: headerColumn
                 width: parent.width
-                Row {
+
+                property var gradientColer: Universal.background
+
+                Row {                    
                     id: headerRow
-                    topPadding: mainView.innerSpacing
+                    topPadding: mainView.innerSpacing * 2
                     leftPadding: mainView.innerSpacing
                     rightPadding: mainView.innerSpacing
                     spacing: mainView.innerSpacing * 0.75
@@ -144,7 +147,7 @@ Page {
                                 }
                                 GradientStop {
                                     position: 1.0
-                                    color: Universal.background
+                                    color: headerColumn.gradientColer
                                 }
                             }
                             visible: mainView.backgroundOpacity === 1.0
@@ -199,12 +202,11 @@ Page {
                     color: "transparent"
                     border.color: "transparent"
                 }
-
             }
             Rectangle {
                 id: heeaderIconBorder
                 anchors.top: header.top
-                anchors.topMargin: mainView.innerSpacing
+                anchors.topMargin: mainView.innerSpacing * 2
                 anchors.left: header.left
                 anchors.leftMargin: mainView.innerSpacing
                 width: headerIcon.width

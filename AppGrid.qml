@@ -9,13 +9,13 @@ import com.volla.launcher.backend 1.0
 Page {
     id: appLauncher
     anchors.fill: parent
-    topPadding: mainView.innerSpacing
 
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
-        "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
+        //"com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
+        "com.android.mms" : "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
@@ -103,7 +103,7 @@ Page {
             width: parent.width
             Label {
                 id: headerLabel
-                topPadding: mainView.innerSpacing
+                topPadding: mainView.innerSpacing * 2
                 x: mainView.innerSpacing
                 text: qsTr("Apps")
                 font.pointSize: mainView.headerFontSize

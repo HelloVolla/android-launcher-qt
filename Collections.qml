@@ -9,7 +9,6 @@ import AndroidNative 1.0 as AN
 Page {
     id: collectionPage
     anchors.fill: parent
-    topPadding: mainView.innerSpacing
 
     property var headline
     property var textInputField
@@ -19,7 +18,8 @@ Page {
     property var currentCollectionModel: peopleModel
     property var threads: new Array
     property var calls: new Array
-    property var threadAge: 86400 * 1000 // one day in milliseconds
+    property var threadAge: 86400 * 7 // one week in seconds
+    property var messageAge: 86400 * 1000 // one day in milliseconds
     property int operationCount: 0 // number of background operations
     property int maxCalls: 50
     property int maxTextLength: 500
@@ -57,7 +57,7 @@ Page {
     function updateCollectionPage (mode) {
         console.log("Collections | Update collection model: " + mode)
 
-        if (mode !== currentCollectionMode) {
+        // if (mode !== currentCollectionMode) {
             currentCollectionMode = mode
             currentCollectionModel.clear()
             currentCollectionModel.modelArr = new Array
@@ -67,6 +67,7 @@ Page {
                     headline.text = qsTr("People")
                     textInputField.placeholderText = qsTr("Find people ...")
                     currentCollectionModel = peopleModel
+                    currentCollectionModel.modelArr = new Array
                     operationCount = 2
                     mainView.updateSpinner(true)
                     collectionPage.loadThreads({})
@@ -76,14 +77,16 @@ Page {
                     headline.text = qsTr("Threads")
                     textInputField.placeholderText = qsTr("Find thread ...")
                     currentCollectionModel = threadModel
+                    currentCollectionModel.modelArr = new Array
                     operationCount = 1
                     mainView.updateSpinner(true)
-                    collectionPage.loadThreads({})
+                    collectionPage.loadThreads({"threadAge": threadAge})
                     break;
                 case mainView.collectionMode.News:
                     headline.text = qsTr("News")
                     textInputField.placeholderText = qsTr("Find news ...")
                     currentCollectionModel = newsModel
+                    currentCollectionModel.modelArr = new Array
                     collectionPage.threads = new Array
                     collectionPage.calls = new Array
                     mainView.updateSpinner(true)
@@ -93,11 +96,11 @@ Page {
                     console.log("Collections | Unknown collection mode")
                     break;
             }
-        }
+//        }
     }
 
     function updateListModel() {
-        console.log("Conversation | Operation count is " + operationCount)
+        console.log("Collections | Operation count is " + operationCount)
         operationCount = operationCount - 1
         if (operationCount < 1) {
             mainView.updateSpinner(false)
@@ -129,7 +132,7 @@ Page {
             z: 2
             Label {
                 id: headerLabel
-                topPadding: mainView.innerSpacing
+                topPadding: mainView.innerSpacing * 2
                 width: parent.width - mainView.innerSpacing
                 x: mainView.innerSpacing
                 text: qsTr("People")
@@ -463,6 +466,17 @@ Page {
                 Behavior on implicitHeight {
                     NumberAnimation {
                         duration: 250.0
+
+                        property bool wasRunning: false
+
+                        onRunningChanged: {
+                            console.log("Collections: Running changed to " + running)
+                            if (!running && wasRunning && index === listView.count -1) {
+                                console.log("Collections: Scroll to the end")
+                                listView.positionViewAtEnd()
+                            }
+                            wasRunning = running
+                        }
                     }
                 }
             }
@@ -547,15 +561,17 @@ Page {
         function loadData() {
             console.log("Collections | Load data for contact collection")
 
+            var now = new Date()
+
             collectionPage.threads.forEach(function (thread, index) {
-                if ((!thread["read"] || Date.now() - thread["date"] < collectionPage.threadAge) && thread["address"] !== undefined) {
+                if ((!thread["read"] || now.valueOf - thread["date"] > collectionPage.messageAge) && thread["address"] !== undefined) {
                     console.log("Collections | Thread matched: " + thread["id"])
                     contactThreads[thread["address"]] = thread
                 }
             })
 
             collectionPage.calls.forEach(function (call, index) {
-                if ((call["new"] || Date.now() - call["date"] < collectionPage.threadAge) && call["number"] !== undefined) {
+                if ((call["new"] || now.valueOf - call["date"] > collectionPage.threadAge) && call["number"] !== undefined) {
                     if (contactCalls[call["number"]] === undefined) {
                         call["count"] = call["new"] ? 1 : 0
                         contactCalls[call["number"]] = call
@@ -715,8 +731,8 @@ Page {
         function executeSelection(item, type) {
             switch (type) {
                 case mainView.actionType.MakeCall:
-                    Qt.openUrlExternally("tel:" + item.c_PHONE)
-                    // util.makeCall({"number": item.c_PHONE})
+                    // Qt.openUrlExternally("tel:" + item.c_PHONE)
+                    util.makeCall({"number": item.c_PHONE, "intent": "call"})
                     break
                 case mainView.actionType.SendSMS:
                     Qt.openUrlExternally("sms:" + item.c_PHONE)
@@ -742,19 +758,28 @@ Page {
                 var cThread = {c_ID: thread["thread_id"]}
 
                 function checkMatchigThread(contact) {
-                    return (contact["id"] === thread["person"]
-                            || (contact["phone.mobile"] !== undefined && contact["phone.mobile"].endsWith(thread["address"].slice(3)))
-                            || (contact["phone.other"] !== undefined && contact["phone.other"].endsWith(thread["address"].slice(3)))
-                            || (contact["phone.work"] !== undefined && contact["phone.work"].endsWith(thread["address"].slice(3)))
-                            || (contact["phone.home"] !== undefined && contact["phone.home"].endsWith(thread["address"].slice(3))))
+                    var matched = false
+                    try {
+                        matched = (contact["id"] !== undefined && thread["person"] !== undefined && contact["id"] === thread["person"])
+                                  || (contact["phone.mobile"] !== undefined && thread["address"] !== undefined && contact["phone.mobile"].toString().endsWith(thread["address"].slice(3)))
+                                  || (contact["phone.other"] !== undefined && thread["address"] !== undefined && contact["phone.other"].toString().endsWith(thread["address"].slice(3)))
+                                  || (contact["phone.work"] !== undefined && thread["address"] !== undefined && contact["phone.work"].toString().endsWith(thread["address"].slice(3)))
+                                  || (contact["phone.home"] !== undefined && thread["address"] !== undefined && contact["phone.home"].toString().endsWith(thread["address"].slice(3)))
+                    } catch (err) {
+                        console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
+                    }
+
+                    return matched
                 }
 
                 var contact = mainView.contacts.find(checkMatchigThread)
 
                 if (contact !== undefined) {
                     cThread.c_TITLE = contact["name"]
-                } else {
+                } else if (thread["address"] !== undefined) {
                     cThread.c_TITLE = thread["address"]
+                } else {
+                    cThread.c_TITLE = qsTr("You")
                 }
 
                 if (thread["body"] !== undefined) {

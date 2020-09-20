@@ -53,5 +53,6 @@
         <file>icons/radio@4x_104x104px.png</file>
         <file>icons/signal@4x_104x104px.png</file>
         <file>icons/sync@4x_104x104px.png</file>
+        <file>scripts/springboard.mjs</file>
     </qresource>
 </RCC>

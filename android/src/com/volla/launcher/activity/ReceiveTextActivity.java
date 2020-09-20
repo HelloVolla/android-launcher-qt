@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
 import androidnative.SystemDispatcher;
-import android.widget.Toast;
+import android.widget.Toast; 
 
 public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtActivity
 {
@@ -84,45 +84,15 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
         }
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "On Resume called");
         // todo: Adopt ui mode
-
-//        hideSystemUI();
-
-
-//        View decorView = getWindow().getDecorView();
-//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                                      | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                                      | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                                      | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                                      | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                                      | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-//        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-//            @Override
-//            public void onSystemUiVisibilityChange(int visibility) {
-//                // Note that system bars will only be "visible" if none of the
-//                // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
-//                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-//                    //visible
-//                    hideSystemUI();
-//                }
-//            }
-//        });
     }
 
-    public void hideSystemUI() {
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "Prevent closing app");
     }
 }

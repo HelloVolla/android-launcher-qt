@@ -220,15 +220,15 @@ Page {
                         switch (themeSettings.theme) {
                             case mainView.theme.Dark:
                                 console.log("Setting | Enable dark mode")
-                                mainView.switchTheme(mainView.theme.Dark)
+                                mainView.switchTheme(mainView.theme.Dark, true)
                                 break
                             case mainView.theme.Light:
                                 console.log("Setting | Enable light mode")
-                                mainView.switchTheme(mainView.theme.Light)
+                                mainView.switchTheme(mainView.theme.Light, true)
                                 break
                             case mainView.theme.Translucent:
                                 console.log("Setting | Enable translucent mode")
-                                mainView.switchTheme(mainView.theme.Translucent)
+                                mainView.switchTheme(mainView.theme.Translucent, true)
                                 break
                             default:
                                 console.log("Settings | Unknown theme selected: " + themeSettings.theme)
@@ -468,7 +468,7 @@ Page {
                         if (active) {
                             mainView.updateVisibility(5)
                         } else {
-                            mainView.updateVisibility(1)
+                            mainView.updateVisibility(2)
                         }
                     }
                 }
