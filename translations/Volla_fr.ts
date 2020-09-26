@@ -19,17 +19,17 @@
     <message>
         <location filename="../Browser.qml" line="206"/>
         <source>Show Dialer</source>
-        <translation type="unfinished">Montre téléphone</translation>
+        <translation type="unfinished">Montrer téléphone</translation>
     </message>
     <message>
         <location filename="../Browser.qml" line="215"/>
         <source>Open Camera</source>
-        <translation type="unfinished">Ouvris caméra</translation>
+        <translation type="unfinished">Ouvrir caméra</translation>
     </message>
     <message>
         <location filename="../Browser.qml" line="223"/>
         <source>Agenda</source>
-        <translation type="unfinished">Dates</translation>
+        <translation type="unfinished">Agenda</translation>
     </message>
     <message>
         <location filename="../Browser.qml" line="231"/>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../Collections.qml" line="68"/>
         <source>Find people ...</source>
-        <translation type="unfinished">Trouvre contacts</translation>
+        <translation type="unfinished">Trouver quelqu'un </translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="77"/>
@@ -81,7 +81,7 @@
     <message>
         <location filename="../Collections.qml" line="78"/>
         <source>Find thread ...</source>
-        <translation type="unfinished">Touvre conversations</translation>
+        <translation type="unfinished">Trouvrer conversations</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="86"/>
@@ -91,7 +91,7 @@
     <message>
         <location filename="../Collections.qml" line="87"/>
         <source>Find news ...</source>
-        <translation type="unfinished">Touvre nouvelles</translation>
+        <translation type="unfinished">Trouvrer nouvelles</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="156"/>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../Collections.qml" line="460"/>
         <source>Send Email</source>
-        <translation type="unfinished">Envoyer und e-mail</translation>
+        <translation type="unfinished">Envoyer un e-mail</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="598"/>
@@ -121,7 +121,7 @@
     <message>
         <location filename="../Collections.qml" line="650"/>
         <source>New message</source>
-        <translation type="unfinished">Message nouveau</translation>
+        <translation type="unfinished">Nouveau message</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="656"/>
@@ -137,7 +137,7 @@
         <location filename="../Collections.qml" line="782"/>
         <location filename="../Collections.qml" line="787"/>
         <source>You</source>
-        <translation type="unfinished">tu</translation>
+        <translation type="unfinished">Toi</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="902"/>
@@ -166,7 +166,7 @@
         <location filename="../Conversation.qml" line="424"/>
         <location filename="../Conversation.qml" line="517"/>
         <source>Not yet supported</source>
-        <translation type="unfinished">Pas encore soutenu</translation>
+        <translation type="unfinished">Pas encore supporté </translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@
     <message>
         <location filename="../Details.qml" line="35"/>
         <source>Not yet supported</source>
-        <translation type="unfinished">Pas encore soutenu</translation>
+        <translation type="unfinished">Pas encore supporté</translation>
     </message>
     <message>
         <location filename="../Details.qml" line="110"/>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../Feed.qml" line="394"/>
         <source>Not yet supported</source>
-        <translation type="unfinished">Pas encore soutenu</translation>
+        <translation type="unfinished">Pas encore supporté</translation>
     </message>
 </context>
 <context>
@@ -223,7 +223,7 @@
         <location filename="../Settings.qml" line="73"/>
         <location filename="../Settings.qml" line="116"/>
         <source>Light Mode</source>
-        <translation type="unfinished">Mode claire</translation>
+        <translation type="unfinished">Mode clair</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="76"/>
