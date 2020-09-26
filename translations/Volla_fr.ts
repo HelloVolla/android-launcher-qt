@@ -257,7 +257,7 @@
     <message>
         <location filename="../Springboard.qml" line="57"/>
         <source>Springboard</source>
-        <translation type="unfinished">Tremplin</translation>
+        <translation type="unfinished">Accès rapide</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="67"/>
@@ -291,7 +291,7 @@
     </message>
     <message>
         <source>Send email</source>
-        <translation type="obsolete">Envoyer one e-mail</translation>
+        <translation type="obsolete">Envoyer un e-mail</translation>
     </message>
     <message>
         <source>Create note</source>
@@ -299,7 +299,7 @@
     </message>
     <message>
         <source>Search web</source>
-        <translation type="obsolete">rechercher sur internet</translation>
+        <translation type="obsolete">Rechercher sur internet</translation>
     </message>
     <message>
         <source>Call</source>
@@ -323,11 +323,11 @@
     </message>
     <message>
         <source>Create Mail</source>
-        <translation type="obsolete">Créer une e-mail</translation>
+        <translation type="obsolete">Créer un e-mail</translation>
     </message>
     <message>
         <source>Open Cam</source>
-        <translation type="obsolete">Ouvris caméra</translation>
+        <translation type="obsolete">Ouvrir caméra</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="631"/>
@@ -336,7 +336,7 @@
     </message>
     <message>
         <source>Recent people</source>
-        <translation type="obsolete">Contacts</translation>
+        <translation type="obsolete">Contacts récents</translation>
     </message>
     <message>
         <source>Recent threads</source>
@@ -354,17 +354,17 @@
     <message>
         <location filename="../Springboard.qml" line="585"/>
         <source>Show Dialer</source>
-        <translation type="unfinished">Montre téléphone</translation>
+        <translation type="unfinished">Montrer téléphone</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="595"/>
         <source>Open Camera</source>
-        <translation type="unfinished">Ouvris caméra</translation>
+        <translation type="unfinished">Ouvrir caméra</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="604"/>
         <source>Show Agenda</source>
-        <translation type="unfinished">Montre date</translation>
+        <translation type="unfinished">Montre l'agenda</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="613"/>
@@ -374,7 +374,7 @@
     <message>
         <location filename="../Springboard.qml" line="622"/>
         <source>Show Notes</source>
-        <translation type="unfinished">Monte note</translation>
+        <translation type="unfinished">Montrer note</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="640"/>
@@ -389,7 +389,7 @@
     <message>
         <location filename="../Springboard.qml" line="658"/>
         <source>Recent People</source>
-        <translation type="unfinished">Contacts</translation>
+        <translation type="unfinished">Contacts récents</translation>
     </message>
 </context>
 <context>
