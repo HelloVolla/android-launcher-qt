@@ -4,7 +4,6 @@ import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
 import FileIO 1.0
-import com.volla.launcher.backend 1.0
 import AndroidNative 1.0 as AN
 
 Page {
@@ -514,29 +513,23 @@ Page {
                 mainView.updateCollectionPage(mainView.collectionMode.News)
             } else if (selectedMenuItem == galleryLabel) {
                 console.log("Springboard | Show gallery")
-                backEnd.runApp(mainView.galleryApp)
+                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.calendarApp})
             } else if (selectedMenuItem == agendaLabel) {
                 console.log("Springboard | Show agenda")
-                backEnd.runApp(mainView.calendarApp)
+                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.galleryApp})
             } else if (selectedMenuItem == cameraLabel) {
                 console.log("Springboard | Show camera")
-                // backEnd.runApp(mainView.cameraApp)
                 AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
-                // backEnd.runApp(mainView.phoneApp)
                 Qt.openUrlExternally("tel:")
             } else if (selectedMenuItem == notesLabel) {
                 console.log("Springboard | Show notes")
-                backEnd.runApp(mainView.notesApp)
+                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
             } else if (selectedMenuItem == eventLabel) {
                 console.log("Springboard | Create event")
                 AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
             }
-        }
-
-        BackEnd {
-            id: backEnd
         }
 
         Rectangle {

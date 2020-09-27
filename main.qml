@@ -137,6 +137,7 @@ ApplicationWindow {
         property var wallpaper: ""
         property var wallpaperId: ""
         property var backgroundOpacity: 1.0
+        property var backgroundColor: Universal.background
         property var fontColor: Universal.foreground
 
         property string galleryApp: "com.simplemobiletools.gallery.pro"
@@ -158,6 +159,8 @@ ApplicationWindow {
             {"id" : actionType.ShowContacts, "name": "Recent People", "activated" : true},
             {"id" : actionType.ShowThreads, "name": "Recent Threads", "activated" : true},
             {"id" : actionType.ShowNews, "name": "Recent News", "activated" : true}]
+
+        property var timeStamp: 0
 
         onCurrentIndexChanged: {
             if (currentIndex === swipeIndex.Apps) {
@@ -293,20 +296,25 @@ ApplicationWindow {
             case mainView.theme.Dark:
                 Universal.theme = Universal.Dark
                 mainView.backgroundOpacity = 1.0
+                mainView.backgroundColor = "black"
+                mainView.fontColor = "white"
                 break
             case mainView.theme.Light:
                 Universal.theme = Universal.Light
                 mainView.backgroundOpacity = 1.0
+                mainView.backgroundColor = "white"
+                mainView.fontColor = "black"
                 break
             case mainView.theme.Translucent:
                 Universal.theme = Universal.Dark
                 mainView.backgroundOpacity = 0.3
+                mainView.backgroundColor = "transparent"
+                mainView.fontColor = "white"
                 break
             default:
                 console.log("MainView | Not supported theme: " + theme)
                 break
             }
-            mainView.fontColor = Universal.foreground
             AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme})
         }
 
@@ -543,21 +551,34 @@ ApplicationWindow {
             onDispatched: {
                 if (type === "volla.launcher.contactResponse") {
                     console.log("MainView | onDispatched: " + type)
-                    mainView.contacts = message["contacts"]
-                    mainView.lastContactsCheck = new Date().getTime()
+                    console.log("MainView | Contacts " + message["blockStart"] + " to " + message["blockEnd"])
+                    mainView.contacts = mainView.contacts.concat(message["contacts"])
+                    console.log("MainView | New timestamp " + mainView.lastContactsCheck)
 //                    message["contacts"].forEach(function (aContact, index) {
 //                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
 //                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
 //                        }
 //                    });
-                    mainView.isLoadingContacts = false
-                    mainView.updateSpinner(false)
+                    if (mainView.contacts.length === message["contactsCount"]) {
+                        var d = new Date()
+                        console.log("MainView | Did take " + (d.valueOf() - mainView.timeStamp.valueOf()))
+                        mainView.isLoadingContacts = false
+                        mainView.updateSpinner(false)
+                        mainView.lastContactsCheck = new Date().valueOf()
+                        mainView.contacts.sort(function(a, b) {
+                            let x = a["name"].toLowerCase(),
+                                y = b["name"].toLowerCase()
+                            return x === y ? 0 : x > y ? 1 : -1;
+                        })
+                    }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     if (message["needsSync"] && !mainView.isLoadingContacts) {
                         console.log("MainView | Need to sync contacts")
+                        mainView.contacts = new Array
                         mainView.isLoadingContacts = true
                         mainView.updateSpinner(true)
+                        mainView.timeStamp = new Date()
                         AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {

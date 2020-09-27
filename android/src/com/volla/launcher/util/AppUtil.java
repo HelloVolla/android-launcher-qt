@@ -20,19 +20,22 @@ public class AppUtil {
     public static final String GET_APP_COUNT = "volla.launcher.appCountAction";
     public static final String GOT_APP_COUNT = "volla.launcher.appCountResponse";
     public static final String OPEN_CAM = "volla.launcher.camAction";
+    public static final String RUN_APP = "volla.launcher.runAppAction";
+    public static final String OPEN_NOTES = "volla.launcher.notesAction";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
-            public void onDispatched(String type, Map message) {
+            public void onDispatched(String dtype, Map dmessage) {
                 final Activity activity = QtNative.activity();
                 final PackageManager pm = activity.getPackageManager();
+                final Map message = dmessage;
+                final String type = dtype;
 
-                if (type.equals(GET_APP_COUNT)) {                    
+                Runnable runnable = new Runnable () {
 
-                    Runnable runnable = new Runnable () {
-
-                        public void run() {
+                    public void run() {
+                        if (type.equals(GET_APP_COUNT)) {
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
                             i.addCategory(Intent.CATEGORY_LAUNCHER);
                             List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
@@ -41,24 +44,28 @@ public class AppUtil {
                             responseMessage.put("appCount", availableActivities.size());
 
                             SystemDispatcher.dispatch(GOT_APP_COUNT, responseMessage);
+                        } else if (type.equals(OPEN_CAM)) {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            ResolveInfo cameraInfo  = null;
+                            List<ResolveInfo> pkgList = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+                            if (pkgList != null && pkgList.size() > 0) {
+                                cameraInfo = pkgList.get(0);
+                                Intent cameraApp = pm.getLaunchIntentForPackage(cameraInfo.activityInfo.packageName);
+                                activity.startActivity(cameraApp);
+                            } else {
+
+                            }
+                        } else if (type.equals(RUN_APP)) {
+                            String appId = (String) message.get("appId");
+                            Intent app = pm.getLaunchIntentForPackage(appId);
+                            activity.startActivity(app);
                         }
-                    };
-
-                    Thread thread = new Thread(runnable);
-                    thread.start();
-                } else if (type.equals(OPEN_CAM)) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    ResolveInfo cameraInfo  = null;
-                    List<ResolveInfo> pkgList = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-
-                    if (pkgList != null && pkgList.size() > 0) {
-                        cameraInfo = pkgList.get(0);
-                        Intent cameraApp = pm.getLaunchIntentForPackage(cameraInfo.activityInfo.packageName);
-                        activity.startActivity(cameraApp);
-                    } else {
-
                     }
-                }
+                };
+
+                Thread thread = new Thread(runnable);
+                thread.start();
             }
         });
     }

@@ -2,7 +2,6 @@
 #include <QtQuick>
 #include <QtAndroidExtras/QtAndroid>
 
-#include "backend.h"
 #include "fileio.h"
 
 #ifdef Q_OS_ANDROID
@@ -48,7 +47,6 @@ int main(int argc, char *argv[])
     }
     app.installTranslator(&myappTranslator);
 
-    qmlRegisterType<BackEnd>("com.volla.launcher.backend", 1, 0, "BackEnd");
     qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
 
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.ContactWorker");
