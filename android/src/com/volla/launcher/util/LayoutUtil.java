@@ -53,6 +53,15 @@ public class LayoutUtil {
                     final int value = (int) message.get("value");
                     final Activity activity = QtNative.activity();
 
+                    Log.d(TAG, "Will change lock screen clock color for value "
+                                + value + " to " + (value > 0 ? "white" : "black"));
+
+                    Intent intent = new Intent();
+                    intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
+                    intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
+                    activity.sendBroadcast(intent);
+
                     Runnable runnable = new Runnable () {
 
                         public void run() {
@@ -78,7 +87,7 @@ public class LayoutUtil {
                                     Log.d(TAG, "Retrieve system wallpaper" );
                                     wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
                                 }
-                                // umm.setNightMode(UiModeManager.MODE_NIGHT_YES);
+                                umm.setNightMode(UiModeManager.MODE_NIGHT_YES);
                             } else {
                                 // light mode
                                 Log.d(TAG, "Set light mode and white wallpaper");
@@ -87,7 +96,7 @@ public class LayoutUtil {
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
                                 wallpaperId = R.drawable.wallpaper_white;
-                                // umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
+                                umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
                             }
 
                             Log.d(TAG, "Changed system ui mode is " + umm.getNightMode());
@@ -104,16 +113,6 @@ public class LayoutUtil {
                                     Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
                                 }
                             }
-
-                            Log.d(TAG, "Will change lock screen clock color for value "
-                                        + value + " to " + (value > 0 ? "white" : "black"));
-
-                            Intent intent = new Intent();
-                            intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
-                            // dark or translucent mode => hours Label is White
-                            intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
-                            intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
-                            activity.sendBroadcast(intent);
                         }
                     };
 
