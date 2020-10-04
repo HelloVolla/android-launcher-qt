@@ -564,14 +564,14 @@ Page {
             var now = new Date()
 
             collectionPage.threads.forEach(function (thread, index) {
-                if ((!thread["read"] || now.valueOf - thread["date"] > collectionPage.messageAge) && thread["address"] !== undefined) {
+                if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
                     console.log("Collections | Thread matched: " + thread["id"])
                     contactThreads[thread["address"]] = thread
                 }
             })
 
             collectionPage.calls.forEach(function (call, index) {
-                if ((call["new"] || now.valueOf - call["date"] > collectionPage.threadAge) && call["number"] !== undefined) {
+                if ((call["new"] || now.getTime() - call["date"] < collectionPage.threadAge) && call["number"] !== undefined) {
                     if (contactCalls[call["number"]] === undefined) {
                         call["count"] = call["new"] ? 1 : 0
                         contactCalls[call["number"]] = call
@@ -786,10 +786,18 @@ Page {
                     var matched = false
                     try {
                         matched = (contact["id"] !== undefined && thread["person"] !== undefined && contact["id"] === thread["person"])
-                                  || (contact["phone.mobile"] !== undefined && thread["address"] !== undefined && contact["phone.mobile"].toString().endsWith(thread["address"].slice(3)))
-                                  || (contact["phone.other"] !== undefined && thread["address"] !== undefined && contact["phone.other"].toString().endsWith(thread["address"].slice(3)))
-                                  || (contact["phone.work"] !== undefined && thread["address"] !== undefined && contact["phone.work"].toString().endsWith(thread["address"].slice(3)))
-                                  || (contact["phone.home"] !== undefined && thread["address"] !== undefined && contact["phone.home"].toString().endsWith(thread["address"].slice(3)))
+                                  || (contact["phone.mobile"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.mobile"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.mobile"].toString().length - thread["address"].length) < 4)
+                                  || (contact["phone.other"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.other"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.other"].toString().length - thread["address"].length) < 4)
+                                  || (contact["phone.work"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.work"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.work"].toString().length - thread["address"].length) < 4)
+                                  || (contact["phone.home"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 4)
                     } catch (err) {
                         console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
                     }

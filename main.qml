@@ -13,6 +13,8 @@ ApplicationWindow {
     visible: true
     title: qsTr("Volla")
 
+    onClosing: close.accepted = false
+
     Connections {
        target: Qt.application
        // @disable-check M16
@@ -117,6 +119,10 @@ ApplicationWindow {
             'CreateEvent': 20015,
             'AddFeed': 20016
         }
+        property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
+                                  "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
+                                  "MakeCall": qsTr("Call"), "OpenURL": qsTr("Open in browser"),
+                                  "AddFeed": qsTr("Add feed to collection")}
         property var swipeIndex: {
             'Preferences' : 0,
             'Apps' : 1,
@@ -356,7 +362,7 @@ ApplicationWindow {
         }
 
         function getFeeds() {
-            var channels = feeds.read()
+            var channels = feeds.readPrivate()
             console.log("MainView | Retrieved feeds: " + channels.lenth)
             return channels.length > 0 ? JSON.parse(channels) : mainView.defaultFeeds
         }
@@ -379,7 +385,7 @@ ApplicationWindow {
                 case mainView.settingsAction.CREATE:
                     if (matched === false) {
                         channels.push(newChannel)
-                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                        console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
                         showToast(qsTr("New Subscrption: " + channel.name))
                     } else {
                         showToast(qsTr("You have alresdy subscribed the feed"))
@@ -388,13 +394,13 @@ ApplicationWindow {
                 case mainView.settingsAction.UPDATE:
                     if (matched === true) {
                         channels[i] = channel
-                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                        console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
                     }
                     break
                 case mainView.settingsAction.REMOVE:
                     if (matched === true) {
                         channels.splice(i, 1)
-                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                        console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
                     }
                     break
                 default:
@@ -416,7 +422,7 @@ ApplicationWindow {
                 if (channel["id"] === channelId) {
                     matched = true
                     channel["recent"] = newsId
-                    console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
+                    console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
                     break
                 }
             }
@@ -514,7 +520,7 @@ ApplicationWindow {
         }
 
         function getActions() {
-            var actions = shortcuts.read()
+            var actions = shortcuts.readPrivate()
             console.log("MainView | Retrieved shortcuts: " + actions)
             return actions.length > 0 ? JSON.parse(actions) : mainView.defaultActions
         }
@@ -526,7 +532,7 @@ ApplicationWindow {
                 if (action["id"] === actionId) {
                     action["activated"] = isActive
                     actions[i] = action
-                    console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
+                    console.log("MainView | Did store shortcuts: " + shortcuts.writePrivate(JSON.stringify(actions)))
                     break
                 }
             }
@@ -555,8 +561,11 @@ ApplicationWindow {
                     mainView.contacts = mainView.contacts.concat(message["contacts"])
                     console.log("MainView | New timestamp " + mainView.lastContactsCheck)
 //                    message["contacts"].forEach(function (aContact, index) {
-//                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-//                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
+//                        if (aContact["name"] === undefined) {
+//                            console.log("MainView | Invalid contact:")
+//                            for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+//                                console.log("MainView | * " + aContactKey + ": " + aContactValue)
+//                            }
 //                        }
 //                    });
                     if (mainView.contacts.length === message["contactsCount"]) {
@@ -565,8 +574,11 @@ ApplicationWindow {
                         mainView.isLoadingContacts = false
                         mainView.updateSpinner(false)
                         mainView.lastContactsCheck = new Date().valueOf()
+                        mainView.contacts = mainView.contacts.filter(function(contact) {
+                            return contact["name"] !== undefined
+                        })
                         mainView.contacts.sort(function(a, b) {
-                            let x = a["name"].toLowerCase(),
+                            var x = a["name"].toLowerCase(),
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
