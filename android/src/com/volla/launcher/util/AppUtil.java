@@ -60,6 +60,14 @@ public class AppUtil {
                             String appId = (String) message.get("appId");
                             Intent app = pm.getLaunchIntentForPackage(appId);
                             activity.startActivity(app);
+                        } else if (type.equals(OPEN_NOTES)) {
+                            String text = (String) message.get("text");
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+                            sendIntent.setType("text/plain");
+                            sendIntent.setPackage("com.simplemobiletools.notes.pro");
+                            activity.startActivity(sendIntent);
                         }
                     }
                 };

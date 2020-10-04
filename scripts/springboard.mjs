@@ -6,6 +6,7 @@ WorkerScript.onMessage = function(message) {
     var contacts = message.contacts
     var model = message.model
     var actionType = message.actionType
+    var actionName = message.actionName
 
     function phoneNumberForContact() {
         var phoneNumber = -1
@@ -85,23 +86,23 @@ WorkerScript.onMessage = function(message) {
 
     if (textInputHasMultiTokens()) {
         if (textInputHasContactPrefix()) {
-            filteredSuggestionObj[0] = [qsTr("Send message"), actionType.SendSMS]
-            filteredSuggestionObj[1] = [qsTr("Send email"), actionType.SendEmail]
+            filteredSuggestionObj[0] = [actionName.SendSMS, actionType.SendSMS]
+            filteredSuggestionObj[1] = [actionName.SendEmail, actionType.SendEmail]
         } else if (textInputStartsWithPhoneNumber()) {
-            filteredSuggestionObj[0] = [qsTr("Send message"), actionType.SendSMS]
+            filteredSuggestionObj[0] = [actionName.SendSMS, actionType.SendSMS]
         } else if (textInputStartWithEmailAddress()) {
-            filteredSuggestionObj[0] = [qsTr("Send email"), actionType.SendEmail]
+            filteredSuggestionObj[0] = [actionName.SendEmail, actionType.SendEmail]
         } else if (textInputHasMultiLines()) {
-            filteredSuggestionObj[0] = [qsTr("Create note"), actionType.CreateNote]
+            filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
         } else {
-            filteredSuggestionObj[0] = [qsTr("Create note"), actionType.CreateNote]
-            filteredSuggestionObj[1] = [qsTr("Search web"), actionType.SearchWeb]
+            filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
+            filteredSuggestionObj[1] = [actionName.SearchWeb, actionType.SearchWeb]
         }
     } else if (textInputHasContactPrefix()) {
         var lastChar = textInput.substring(textInput.length - 1, textInput.length)
         console.log("Springboard | last char: " + lastChar)
         if (lastChar === " ") {
-            filteredSuggestionObj[0] = [qsTr("Call"), actionType.MakeCall]
+            filteredSuggestionObj[0] = [actionName.MakeCall, actionType.MakeCall]
         }
 
         var lastToken = textInput.substring(1, textInput.length).toLowerCase()
@@ -114,14 +115,14 @@ WorkerScript.onMessage = function(message) {
             }
         }
     } else if (textInputIsWebAddress()) {
-        filteredSuggestionObj[0] = [qsTr("Open in browser"), actionType.OpenURL]
+        filteredSuggestionObj[0] = [actionName.OpenURL, actionType.OpenURL]
         if (textInputCouldBeRssFeed()) {
-            filteredSuggestionObj[1] = [qsTr("Add feed to collection"), actionType.AddFeed]
+            filteredSuggestionObj[1] = [actionName.AddFeed, actionType.AddFeed]
         }
     } else if (textInputStartsWithPhoneNumber()) {
-        filteredSuggestionObj[0] = [qsTr("Call"), actionType.MakeCall]
+        filteredSuggestionObj[0] = [actionName.MakeCall, actionType.MakeCall]
     } else if (textInput.length > 1) {
-        filteredSuggestionObj[0] = [qsTr("Search web"), actionType.SearchWeb]
+        filteredSuggestionObj[0] = [actionName.SearchWeb, actionType.SearchWeb]
     } else if (defaultSuggestions) {
         filteredSuggestionObj[0] = [qsTr("Make Call"), actionType.MakeCall]
         filteredSuggestionObj[1] = [qsTr("Create Message"), actionType.SendSMS]

@@ -363,8 +363,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Message has been sent</source>
-        <translation type="unfinished"></translation>
+        <source>Send message</source>
+        <translation type="unfinished">Inviare messaggio</translation>
+    </message>
+    <message>
+        <source>Send email</source>
+        <translation type="unfinished">Inviare e-mail</translation>
+    </message>
+    <message>
+        <source>Create note</source>
+        <translation type="unfinished">creare una nota</translation>
+    </message>
+    <message>
+        <source>Search web</source>
+        <translation type="unfinished">ricerca su internet</translation>
+    </message>
+    <message>
+        <source>Call</source>
+        <translation type="unfinished">chiamare</translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished">aprire nel browser</translation>
+    </message>
+    <message>
+        <source>Add feed to collection</source>
+        <translation type="unfinished">aggiungere il canale alla collezione</translation>
     </message>
 </context>
 </TS>
