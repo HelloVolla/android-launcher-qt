@@ -126,7 +126,7 @@ ApplicationWindow {
         property var swipeIndex: {
             'Preferences' : 0,
             'Apps' : 1,
-            'Springboard': 2,
+            'Springboard' : 2,
             'Collections' : 3,
             'ConversationOrNewsOrDetails' : 4,
             'Details' : 5
@@ -208,8 +208,10 @@ ApplicationWindow {
                 item.children[0].sourceComponent = Qt.createComponent("/Collections.qml", mainView)
                 addItem(item)
             } else {
+                 while (count > swipeIndex.Collections + 1) {
+                    removeItem(swipeIndex.Collections + 1)
+                }
                 item = itemAt(swipeIndex.Collections)
-                while (count > swipeIndex.Collections + 2) removeItem(swipeIndex.Collections + 2)
             }
             currentIndex++
             item.children[0].item.updateCollectionPage(mode)
@@ -221,8 +223,10 @@ ApplicationWindow {
                 var item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
                 addItem(item)
             } else {
+                while (count > swipeIndex.ConversationOrNewsOrDetails + 1) {
+                    removeItem(swipeIndex.ConversationOrNewsOrDetails + 1)
+                }
                 item = itemAt(swipeIndex.ConversationOrNewsOrDetails)
-                while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
             }
             item.children[0].sourceComponent = Qt.createComponent("/Conversation.qml", mainView)
             currentIndex++
@@ -240,7 +244,9 @@ ApplicationWindow {
                         if (item.children[0].item.objectName !== "detailPage") {
                             console.log("MainView | Create detail page")
                             item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
-                            while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+                            while (count > swipeIndex.ConversationOrNewsOrDetails + 1) {
+                                removeItem(swipeIndex.ConversationOrNewsOrDetails + 1)
+                            }
                         } else {
                             console.log("MainView | Re-use existing detail page")
                         }
@@ -257,7 +263,9 @@ ApplicationWindow {
                         if (item.children[0].item.objectName !== "detailPage") {
                             console.log("MainView | Create detail page")
                             item.children[0].sourceComponent = Qt.createComponent("/Details.qml", mainView)
-                            while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(swipeIndex.ConversationOrNewsOrDetails + 2)
+                            while (count > swipeIndex.Details + 1) {
+                                removeItem(swipeIndex.Details + 1)
+                            }
                         } else {
                             console.log("MainView | Re-use existing detail page")
                         }
@@ -276,12 +284,14 @@ ApplicationWindow {
 
         function updateNewsPage(mode, id, name, icon) {
             console.log("MainView | Will update news page")
-            if (count === swipeIndex.Collections + 1) {
+            if (count === swipeIndex.ConversationOrNewsOrDetails + 1) {
                 var item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
                 addItem(item)
             } else {
+                while (count > swipeIndex.ConversationOrNewsOrDetails + 1) {
+                    removeItem(swipeIndex.ConversationOrNewsOrDetails + 1)
+                }
                 item = itemAt(swipeIndex.ConversationOrNewsOrDetails)
-                while (count > swipeIndex.ConversationOrNewsOrDetails + 2) removeItem(ConversationOrNewsOrDetails.Collections + 2)
             }
             item.children[0].sourceComponent = Qt.createComponent("/Feed.qml", mainView)
             currentIndex++
@@ -355,9 +365,9 @@ ApplicationWindow {
                     return qsTr("Yesterday") + " " + date.getHours() + ":" + date.getMinutes()
                 }
             } else if (date.getMinutes() < 10) {
-                return date.toLocaleDateString() + " " + date.getHours() + ":0" + date.getMinutes()
+                return date.toDateString() + " " + date.getHours() + ":0" + date.getMinutes()
             } else {
-                return date.toLocaleDateString() + " " + date.getHours() + ":" + date.getMinutes()
+                return date.toDateString() + " " + date.getHours() + ":" + date.getMinutes()
             }
         }
 

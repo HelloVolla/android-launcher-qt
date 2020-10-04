@@ -134,18 +134,18 @@
         <translation type="unfinished">Gemiste oproep</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="807"/>
-        <location filename="../Collections.qml" line="812"/>
+        <location filename="../Collections.qml" line="815"/>
+        <location filename="../Collections.qml" line="820"/>
         <source>You</source>
         <translation type="unfinished">u</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="929"/>
+        <location filename="../Collections.qml" line="937"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ongeldig RSS feed</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="947"/>
+        <location filename="../Collections.qml" line="955"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">Ontbrekend rss-bericht</translation>
     </message>
@@ -352,7 +352,7 @@
         <translation type="unfinished">Mijn evenement</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="580"/>
+        <location filename="../Springboard.qml" line="581"/>
         <source>Show Dialer</source>
         <translation type="unfinished">Tonen telefoon</translation>
     </message>
@@ -472,7 +472,7 @@
         <translation type="unfinished">Ongeldig RSS feed</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="648"/>
+        <location filename="../main.qml" line="654"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Nog niet ondersteund</translation>
     </message>

@@ -284,6 +284,7 @@ Page {
                     Label {
                         anchors.left: parent.left
                         id: receivedDate
+                        topPadding: model.m_TEXT === undefined ? mainView.innerSpacing : 0
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
                         bottomPadding: model.m_IMAGE === undefined ? 0 : 6.0
@@ -312,6 +313,7 @@ Page {
                     Label {
                         id: sentDate
                         anchors.right: parent.right
+                        topPadding: model.m_TEXT === undefined ? mainView.innerSpacing : 0
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
                         bottomPadding: model.m_IMAGE === undefined ? 0 : 6.0
@@ -388,6 +390,7 @@ Page {
                 cCall.m_STEXT = mainView.parseTime(Number(call["date"])) + " • Call"
                 cCall.m_IS_SENT = call["isSent"]
                 cCall.m_DATE = call["date"]
+                cCall.m_IMAGE = ""
 
                 modelArr.push(cCall)
             })

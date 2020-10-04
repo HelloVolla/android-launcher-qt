@@ -138,18 +138,18 @@
         <translation type="unfinished">apel pierdut</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="807"/>
-        <location filename="../Collections.qml" line="812"/>
+        <location filename="../Collections.qml" line="815"/>
+        <location filename="../Collections.qml" line="820"/>
         <source>You</source>
         <translation type="unfinished">tu</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="929"/>
+        <location filename="../Collections.qml" line="937"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">invalid RSS feed</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="947"/>
+        <location filename="../Collections.qml" line="955"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">lipsește mesajul RSS</translation>
     </message>
@@ -356,7 +356,7 @@
         <translation type="unfinished">evenimentul meu</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="580"/>
+        <location filename="../Springboard.qml" line="581"/>
         <source>Show Dialer</source>
         <translation type="unfinished">arată telefonul</translation>
     </message>
@@ -480,7 +480,7 @@
         <translation type="unfinished">invalid RSS feed</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="648"/>
+        <location filename="../main.qml" line="654"/>
         <source>Not yet supported</source>
         <translation type="unfinished">încă nu este acceptat</translation>
     </message>

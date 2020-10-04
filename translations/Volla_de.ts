@@ -142,18 +142,18 @@
         <translation type="unfinished">Verpasster Anruf</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="807"/>
-        <location filename="../Collections.qml" line="812"/>
+        <location filename="../Collections.qml" line="815"/>
+        <location filename="../Collections.qml" line="820"/>
         <source>You</source>
         <translation type="unfinished">Du</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="929"/>
+        <location filename="../Collections.qml" line="937"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ungültiger RSS-Feed</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="947"/>
+        <location filename="../Collections.qml" line="955"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">Fehlende RSS-Nachricht</translation>
     </message>
@@ -360,7 +360,7 @@
         <translation type="unfinished">Meine Veranstaltung</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="580"/>
+        <location filename="../Springboard.qml" line="581"/>
         <source>Show Dialer</source>
         <translation type="unfinished">Zeige Telefon</translation>
     </message>
@@ -492,7 +492,7 @@
         <translation type="obsolete">Mitteilung wurde gesendet</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="648"/>
+        <location filename="../main.qml" line="654"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Noch nicht unterstützt</translation>
     </message>

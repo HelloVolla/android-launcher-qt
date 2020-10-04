@@ -61,7 +61,8 @@ Page {
         "com.aurora.store": "Store",
         "net.osmand.plus": "Maps",
         "com.volla.launcher": "Settings",
-        "com.simplemobiletools.smsmessenger": "Messages"
+        "com.simplemobiletools.smsmessenger": "Messages",
+        "com.android.fmradio" : "Radio"
     }
     property bool unreadMessages: false
     property bool newCalls: false
@@ -197,6 +198,7 @@ Page {
                 flat:true
                 background: Rectangle {
                     color: "transparent"
+                    border.color: "transparent"
                 }
                 onClicked: {
                     console.log("App " + model.label + " selected")
@@ -274,25 +276,26 @@ Page {
             for (i = 0; i < modelArr.length; i++) {
                 filteredGridItem = modelArr[i]
                 var modelItemName = modelArr[i].label
+                var modelItemId = modelArr[i].package
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
                     // console.log("Add " + modelItemName + " to filtered items")
-                    filteredGridDict[modelItemName] = filteredGridItem
+                    filteredGridDict[modelItemId] = filteredGridItem
                 }
             }
 
             var existingGridDict = new Object
             for (i = 0; i < count; ++i) {
-                modelItemName = get(i).label
-                existingGridDict[modelItemName] = true
+                modelItemName = get(i).package
+                existingGridDict[modelItemId] = true
             }
 
             // remove items no longer in filtered set
             i = 0
             while (i < count) {
-                modelItemName = get(i).label
-                found = filteredGridDict.hasOwnProperty(modelItemName)
+                modelItemName = get(i).package
+                found = filteredGridDict.hasOwnProperty(modelItemId)
                 if (!found) {
-                    console.log("Remove " + modelItemName)
+                    console.log("Remove " + modelItemId)
                     remove(i)
                 } else {
                     i++

@@ -48,12 +48,12 @@
     </message>
     <message>
         <location filename="../Browser.qml" line="255"/>
-        <source>Recent People</source>
-        <translation type="unfinished">Contactos</translation>
+        <source>Revent People</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recent People</source>
-        <translation type="obsolete">Contactos recientes</translation>
+        <translation type="obsolete">Contactos</translation>
     </message>
 </context>
 <context>
@@ -138,18 +138,18 @@
         <translation type="unfinished">Llamada perdida</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="807"/>
-        <location filename="../Collections.qml" line="812"/>
+        <location filename="../Collections.qml" line="815"/>
+        <location filename="../Collections.qml" line="820"/>
         <source>You</source>
         <translation type="unfinished">Tú</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="929"/>
+        <location filename="../Collections.qml" line="937"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">RSS feed inválido</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="947"/>
+        <location filename="../Collections.qml" line="955"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">Artículo RSS perdido</translation>
     </message>
@@ -356,7 +356,7 @@
         <translation type="unfinished">Mi evento</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="580"/>
+        <location filename="../Springboard.qml" line="581"/>
         <source>Show Dialer</source>
         <translation type="unfinished">Mostrar teléfono</translation>
     </message>
@@ -461,9 +461,13 @@
         <translation type="unfinished">Ayer</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="381"/>
+        <location filename="../main.qml" line="391"/>
+        <source>You have alresdy subscribed the feed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>You have already subscribed the feed</source>
-        <translation type="unfinished">Ya te has suscrito al canal</translation>
+        <translation type="obsolete">Ya te has suscrito al canal</translation>
     </message>
     <message>
         <location filename="../main.qml" line="414"/>
@@ -476,12 +480,11 @@
         <translation type="unfinished">Canal de RSS inválido</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="587"/>
         <source>Message has been sent</source>
-        <translation type="unfinished">Mensaje no enviado</translation>
+        <translation type="obsolete">Mensaje no enviado</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="649"/>
+        <location filename="../main.qml" line="654"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Aun no disponible</translation>
     </message>

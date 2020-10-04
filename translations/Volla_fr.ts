@@ -71,7 +71,7 @@
     <message>
         <location filename="../Collections.qml" line="68"/>
         <source>Find people ...</source>
-        <translation type="unfinished">Trouver quelqu'un </translation>
+        <translation type="unfinished">Trouver quelqu&apos;un </translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="77"/>
@@ -134,18 +134,18 @@
         <translation type="unfinished">Appel manqué</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="807"/>
-        <location filename="../Collections.qml" line="812"/>
+        <location filename="../Collections.qml" line="815"/>
+        <location filename="../Collections.qml" line="820"/>
         <source>You</source>
         <translation type="unfinished">Toi</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="929"/>
+        <location filename="../Collections.qml" line="937"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Flux RSS invalide</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="947"/>
+        <location filename="../Collections.qml" line="955"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">Message RSS manquant</translation>
     </message>
@@ -352,7 +352,7 @@
         <translation type="unfinished">Mon événement</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="580"/>
+        <location filename="../Springboard.qml" line="581"/>
         <source>Show Dialer</source>
         <translation type="unfinished">Composer numéro</translation>
     </message>
@@ -364,7 +364,7 @@
     <message>
         <location filename="../Springboard.qml" line="599"/>
         <source>Show Agenda</source>
-        <translation type="unfinished">Montrer l'agenda</translation>
+        <translation type="unfinished">Montrer l&apos;agenda</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="608"/>
@@ -476,12 +476,11 @@
         <translation type="unfinished">RSS flux invalide</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="587"/>
         <source>Message has been sent</source>
-        <translation type="unfinished">Le message a été envoyé</translation>
+        <translation type="obsolete">Le message a été envoyé</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="649"/>
+        <location filename="../main.qml" line="654"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Pas encore supporté</translation>
     </message>
