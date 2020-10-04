@@ -160,7 +160,7 @@ Page {
                 leftPadding: 0.0
                 rightPadding: 0.0
                 background: Rectangle {
-                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
                 }
                 Binding {
@@ -230,7 +230,7 @@ Page {
                         border.color: Universal.foreground
                         opacity: 0.9
                         color: "transparent"
-                        visible: model.c_ICON === undefined
+                        visible: model.c_ICON === ""
                                  && (collectionPage.currentCollectionMode === mainView.collectionMode.People
                                      || collectionPage.currentCollectionMode === mainView.collectionMode.News)
 
@@ -253,7 +253,7 @@ Page {
                     }
                     Image {
                         id: contactImage
-                        source: model.c_ICON !== undefined ? model.c_ICON : ""
+                        source: model.c_ICON
                         sourceSize: Qt.size(collectionPage.iconSize, collectionPage.iconSize)
                         smooth: true
                         visible: false
@@ -277,7 +277,7 @@ Page {
                         height: collectionPage.iconSize
                         source: contactImage
                         maskSource: contactMask
-                        visible: model.c_ICON !== undefined
+                        visible: model.c_ICON !== ""
                     }
                     Column {
                         id: contactColumn
@@ -564,14 +564,14 @@ Page {
             var now = new Date()
 
             collectionPage.threads.forEach(function (thread, index) {
-                if ((!thread["read"] || now.valueOf - thread["date"] > collectionPage.messageAge) && thread["address"] !== undefined) {
+                if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
                     console.log("Collections | Thread matched: " + thread["id"])
                     contactThreads[thread["address"]] = thread
                 }
             })
 
             collectionPage.calls.forEach(function (call, index) {
-                if ((call["new"] || now.valueOf - call["date"] > collectionPage.threadAge) && call["number"] !== undefined) {
+                if ((call["new"] || now.getTime() - call["date"] < collectionPage.threadAge) && call["number"] !== undefined) {
                     if (contactCalls[call["number"]] === undefined) {
                         call["count"] = call["new"] ? 1 : 0
                         contactCalls[call["number"]] = call
@@ -600,6 +600,9 @@ Page {
 
                 if (contact["icon"] !== undefined) {
                     cContact.c_ICON = "data:image/png;base64," + contact["icon"]
+                } else {
+                    cContact.c_ICON = ""
+                    AN.SystemDispatcher.dispatch("volla.launcher.contactImageAction", {"contactId": contact["id"]})
                 }
 
                 if (contact["phone.mobile"] !== undefined) {
@@ -672,6 +675,28 @@ Page {
                     || (contact["phone.other"] in contactCalls)
                     || (contact["phone.work"] in contactCalls)
                     || (contact["phone.home"] in contactCalls))
+        }
+
+        function updateImage(contactId, contactImage) {
+            console.log("Collections | Umdate image of contact " + contactId)
+            for (var i = 0; i < modelArr.length; i++) {
+                var aContact = modelArr[i]
+                if (aContact.c_ID === contactId) {
+                    console.log("Collections | Contact matched")
+                    aContact.c_ICON = "data:image/png;base64," + contactImage
+                    modelArr[i] = aContact
+                    break
+                }
+            }
+            for (i = 0; i < count; i++) {
+                var elem = get(i)
+                if (elem.c_ID === contactId) {
+                    console.log("Collections | List element matched")
+                    elem.c_ICON = "data:image/png;base64," + contactImage
+                    set(i, elem)
+                    break
+                }
+            }
         }
 
         function update(text) {
@@ -755,16 +780,24 @@ Page {
             console.log("Collections | Load data for thread collection")
 
             collectionPage.threads.forEach(function (thread, index) {
-                var cThread = {c_ID: thread["thread_id"]}
+                var cThread = {c_ID: thread["thread_id"], c_ICON: ""}
 
                 function checkMatchigThread(contact) {
                     var matched = false
                     try {
                         matched = (contact["id"] !== undefined && thread["person"] !== undefined && contact["id"] === thread["person"])
-                                  || (contact["phone.mobile"] !== undefined && thread["address"] !== undefined && contact["phone.mobile"].toString().endsWith(thread["address"].slice(3)))
-                                  || (contact["phone.other"] !== undefined && thread["address"] !== undefined && contact["phone.other"].toString().endsWith(thread["address"].slice(3)))
-                                  || (contact["phone.work"] !== undefined && thread["address"] !== undefined && contact["phone.work"].toString().endsWith(thread["address"].slice(3)))
-                                  || (contact["phone.home"] !== undefined && thread["address"] !== undefined && contact["phone.home"].toString().endsWith(thread["address"].slice(3)))
+                                  || (contact["phone.mobile"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.mobile"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.mobile"].toString().length - thread["address"].length) < 4)
+                                  || (contact["phone.other"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.other"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.other"].toString().length - thread["address"].length) < 4)
+                                  || (contact["phone.work"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.work"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.work"].toString().length - thread["address"].length) < 4)
+                                  || (contact["phone.home"] !== undefined && thread["address"] !== undefined
+                                      && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
+                                      && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 4)
                     } catch (err) {
                         console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
                     }
@@ -887,6 +920,8 @@ Page {
 
                             if (rssFeed.icon !== undefined) {
                                 cNews.c_ICON = rssFeed.icon
+                            } else {
+                                cNews.c_ICON = ""
                             }
 
                             var rss = doc.responseXML.documentElement
@@ -1071,6 +1106,11 @@ Page {
 //                    }
 //                })
                 collectionPage.updateListModel()
+            } else if (type === "volla.launcher.contactImageResponse") {
+                console.log("Collections | onDispatched: " + type)
+                if (message["hasIcon"]) {
+                    peopleModel.updateImage(message["contactId"], message["icon"])
+                }
             }
         }
     }

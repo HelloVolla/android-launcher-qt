@@ -366,8 +366,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Message has been sent</source>
-        <translation type="unfinished"></translation>
+        <source>Send message</source>
+        <translation type="unfinished">Lähetä viesti</translation>
+    </message>
+    <message>
+        <source>Send email</source>
+        <translation type="unfinished">Lähettää sähköpostia</translation>
+    </message>
+    <message>
+        <source>Create note</source>
+        <translation type="unfinished">luo muistiinpano</translation>
+    </message>
+    <message>
+        <source>Search web</source>
+        <translation type="unfinished">Voit etsiä Internetistä</translation>
+    </message>
+    <message>
+        <source>Call</source>
+        <translation type="unfinished">soittaa puhelimella</translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished">Avaa selaimessa</translation>
+    </message>
+    <message>
+        <source>Add feed to collection</source>
+        <translation type="unfinished">lisää kanava kokoelmaan</translation>
     </message>
 </context>
 </TS>

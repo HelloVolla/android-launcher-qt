@@ -4,7 +4,6 @@ import QtQuick.Controls.Universal 2.12
 import QtQuick.XmlListModel 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
-import com.volla.launcher.backend 1.0
 
 Page {
     id: appLauncher
@@ -202,7 +201,7 @@ Page {
                 onClicked: {
                     console.log("App " + model.label + " selected")
                     if (model.package.length > 0) {
-                        backEnd.runApp(model.package)
+                        AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
                     }
                 }
             }
@@ -246,10 +245,6 @@ Page {
                 color:  Universal.accent
             }
         }
-    }
-
-    BackEnd {
-        id: backEnd
     }
 
     ListModel {

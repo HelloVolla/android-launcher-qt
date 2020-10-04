@@ -21,11 +21,23 @@ public class CalendarUtil {
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
-            final Activity activity = QtNative.activity();
+            public void onDispatched(String type, Map dmessage) {
 
-            public void onDispatched(String type, Map message) {
+                final Activity activity = QtNative.activity();
+
                 if (type.equals(CREATE_EVENT)) {
-                    createEvent(message, activity);
+
+                    final Map message = dmessage;
+
+                    Runnable runnable = new Runnable () {
+
+                        public void run() {
+                            createEvent(message, activity);
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });

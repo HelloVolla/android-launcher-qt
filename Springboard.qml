@@ -4,7 +4,6 @@ import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
 import FileIO 1.0
-import com.volla.launcher.backend 1.0
 import AndroidNative 1.0 as AN
 
 Page {
@@ -288,7 +287,8 @@ Page {
                 } else if (!springBoardWorker.isRunning) {
                     springBoardWorker.sendMessage({
                         'selectedObj': selectedObj, 'textInput': textInput,
-                        'contacts': mainView.contacts, 'model': listModel, 'actionType': mainView.actionType
+                        'contacts': mainView.contacts, 'model': listModel, 'actionType': mainView.actionType,
+                        'actionName': mainView.actionName
                     })
                 }
             }
@@ -402,7 +402,7 @@ Page {
                     && mouseY > touchY && mouseY < touchY + touchHeight) {
                 console.log("Springboard | enable menu")
                 //shortcutBackground.visible = true
-                shortcutMenu.height = shortcutColumn.height // springBoard.height * 0.6
+                shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
                 shortcutBackground.width = roundedShortcutMenu ? parent.width - mainView.innerSpacing * 4 : parent.width
                 shortcutBackground.height = shortcutColumn.height
                 shortcutColumn.opacity = 1
@@ -426,7 +426,7 @@ Page {
             shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
             shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             shortcutColumn.opacity = 0
-            shortcutMenu.executeSelection()
+            //shortcutMenu.executeSelection()
             selectedMenuItem = rootMenuButton
             shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         }
@@ -463,7 +463,7 @@ Page {
             } else {
                 selectedMenuItem = rootMenuButton
             }
-        }
+        }        
 
         function updateShortcuts(actions) {
             actions.forEach(function (action, index) {
@@ -501,42 +501,37 @@ Page {
                 return;
             }
 
-            var collectionPage = Qt.createComponent("/Collections.qml", springBoard)
-
             if (selectedMenuItem == peopleLabel) {
                 console.log("Springboard | Show people")
+                var collectionPage = Qt.createComponent("/Collections.qml", springBoard)
                 mainView.updateCollectionPage(mainView.collectionMode.People)
             } else if (selectedMenuItem == threadLabel) {
                 console.log("Springboard | Show threads")
+                collectionPage = Qt.createComponent("/Collections.qml", springBoard)
                 mainView.updateCollectionPage(mainView.collectionMode.Threads)
             } else if (selectedMenuItem == newsLabel) {
                 console.log("Springboard | Show news")
+                collectionPage = Qt.createComponent("/Collections.qml", springBoard)
                 mainView.updateCollectionPage(mainView.collectionMode.News)
             } else if (selectedMenuItem == galleryLabel) {
                 console.log("Springboard | Show gallery")
-                backEnd.runApp(mainView.galleryApp)
+                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.galleryApp})
             } else if (selectedMenuItem == agendaLabel) {
                 console.log("Springboard | Show agenda")
-                backEnd.runApp(mainView.calendarApp)
+                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.calendarApp})
             } else if (selectedMenuItem == cameraLabel) {
                 console.log("Springboard | Show camera")
-                // backEnd.runApp(mainView.cameraApp)
                 AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
-                // backEnd.runApp(mainView.phoneApp)
                 Qt.openUrlExternally("tel:")
             } else if (selectedMenuItem == notesLabel) {
                 console.log("Springboard | Show notes")
-                backEnd.runApp(mainView.notesApp)
+                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
             } else if (selectedMenuItem == eventLabel) {
                 console.log("Springboard | Create event")
                 AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
             }
-        }
-
-        BackEnd {
-            id: backEnd
         }
 
         Rectangle {
@@ -574,6 +569,7 @@ Page {
             opacity: 0.0
             width: parent.width
             // height: menuheight
+            topPadding: mainView.innerSpacing * 1.5
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 
@@ -585,7 +581,6 @@ Page {
                 text: qsTr("Show Dialer")
                 font.pointSize: mainView.largeFontSize
                 anchors.left: parent.left
-                topPadding: mainView.innerSpacing * 1.5
                 leftPadding: shortcutColumn.leftDistance
                 bottomPadding: mainView.innerSpacing
                 color: "white"

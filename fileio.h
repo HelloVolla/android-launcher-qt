@@ -16,6 +16,8 @@ public:
 
     Q_INVOKABLE QString read();
     Q_INVOKABLE bool write(const QString& data);
+    Q_INVOKABLE QString readPrivate();
+    Q_INVOKABLE bool writePrivate(const QString& data);
 
     QString source() { return mSource; }
 

@@ -53,6 +53,15 @@ public class LayoutUtil {
                     final int value = (int) message.get("value");
                     final Activity activity = QtNative.activity();
 
+                    Log.d(TAG, "Will change lock screen clock color for value "
+                                + value + " to " + (value > 0 ? "white" : "black"));
+
+                    Intent intent = new Intent();
+                    intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
+                    intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
+                    activity.sendBroadcast(intent);
+
                     Runnable runnable = new Runnable () {
 
                         public void run() {
@@ -62,12 +71,11 @@ public class LayoutUtil {
                             int wallpaperId;
                             UiModeManager umm = (UiModeManager) activity.getSystemService(Context.UI_MODE_SERVICE);
 
-                            Log.d(TAG, "Current mode is " + umm.getNightMode());
+                            Log.d(TAG, "Current system ui mode is " + umm.getNightMode());
 
                             if (value > 0) {
                                 // dark or translucent mode
                                 int flags = w.getDecorView().getSystemUiVisibility();
-                                //flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
@@ -84,7 +92,6 @@ public class LayoutUtil {
                                 // light mode
                                 Log.d(TAG, "Set light mode and white wallpaper");
                                 int flags = w.getDecorView().getSystemUiVisibility();
-                                //flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
@@ -92,7 +99,7 @@ public class LayoutUtil {
                                 umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
                             }
 
-                            Log.d(TAG, "Changed mode is " + umm.getNightMode());
+                            Log.d(TAG, "Changed system ui mode is " + umm.getNightMode());
 
                             if (wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId) {
                                 try {
@@ -105,12 +112,6 @@ public class LayoutUtil {
                                 } catch (IOException e) {
                                     Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
                                 }
-
-                                Intent intent = new Intent();
-                                intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
-                                // dark or translucent mode => hours Label is White
-                                intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
-                                activity.sendBroadcast(intent);
                             }
                         }
                     };
