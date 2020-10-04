@@ -284,7 +284,7 @@ ApplicationWindow {
 
         function updateNewsPage(mode, id, name, icon) {
             console.log("MainView | Will update news page")
-            if (count === swipeIndex.ConversationOrNewsOrDetails + 1) {
+            if (count === swipeIndex.Collections + 1) {
                 var item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
                 addItem(item)
             } else {
