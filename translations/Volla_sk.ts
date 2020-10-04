@@ -366,8 +366,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Message has been sent</source>
-        <translation type="unfinished"></translation>
+        <source>Send message</source>
+        <translation type="unfinished">Poslať správu</translation>
+    </message>
+    <message>
+        <source>Send email</source>
+        <translation type="unfinished">Poslať email</translation>
+    </message>
+    <message>
+        <source>Create note</source>
+        <translation type="unfinished">Vytvorte poznámku</translation>
+    </message>
+    <message>
+        <source>Search web</source>
+        <translation type="unfinished">Vyhľadávať na internete</translation>
+    </message>
+    <message>
+        <source>Call</source>
+        <translation type="unfinished">hovor</translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished">otvoriť v prehliadači</translation>
+    </message>
+    <message>
+        <source>Add feed to collection</source>
+        <translation type="unfinished">pridať kanál do zbierky</translation>
     </message>
 </context>
 </TS>

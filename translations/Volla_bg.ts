@@ -364,8 +364,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Message has been sent</source>
-        <translation type="unfinished"></translation>
+        <source>Send message</source>
+        <translation type="unfinished">Изпрати съобщение</translation>
+    </message>
+    <message>
+        <source>Send email</source>
+        <translation type="unfinished">Изпратете имейл</translation>
+    </message>
+    <message>
+        <source>Create note</source>
+        <translation type="unfinished">създайте бележка</translation>
+    </message>
+    <message>
+        <source>Search web</source>
+        <translation type="unfinished">За търсене в интернет</translation>
+    </message>
+    <message>
+        <source>Call</source>
+        <translation type="unfinished">повикване</translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished">отвори в браузъра</translation>
+    </message>
+    <message>
+        <source>Add feed to collection</source>
+        <translation type="unfinished">добавете канал към колекцията</translation>
     </message>
 </context>
 </TS>
