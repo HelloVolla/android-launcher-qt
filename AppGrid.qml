@@ -285,7 +285,7 @@ Page {
 
             var existingGridDict = new Object
             for (i = 0; i < count; ++i) {
-                modelItemName = get(i).package
+                modelItemId = get(i).package
                 existingGridDict[modelItemId] = true
             }
 
