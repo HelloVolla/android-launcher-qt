@@ -19,7 +19,7 @@ Page {
     property var threads: new Array
     property var calls: new Array
     property var threadAge: 86400 * 7 // one week in seconds
-    property var messageAge: 86400 * 1000 // one day in milliseconds
+    property var messageAge: 86400 * 5 * 1000 // one day in milliseconds
     property int operationCount: 0 // number of background operations
     property int maxCalls: 50
     property int maxTextLength: 500
@@ -564,6 +564,7 @@ Page {
             var now = new Date()
 
             collectionPage.threads.forEach(function (thread, index) {
+                console.log("Collections | Thread: " + thread["date"])
                 if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
                     console.log("Collections | Thread matched: " + thread["id"])
                     contactThreads[thread["address"]] = thread
@@ -571,7 +572,8 @@ Page {
             })
 
             collectionPage.calls.forEach(function (call, index) {
-                if ((call["new"] || now.getTime() - call["date"] < collectionPage.threadAge) && call["number"] !== undefined) {
+                if ((call["new"] || now.getTime() - call["date"] < collectionPage.messageAge) && call["number"] !== undefined) {
+                    console.log("Collections | Call matched: " + call["number"])
                     if (contactCalls[call["number"]] === undefined) {
                         call["count"] = call["new"] ? 1 : 0
                         contactCalls[call["number"]] = call
@@ -592,7 +594,9 @@ Page {
                     cContact.c_TITLE = contact["organization"]
                 }
 
-                if (contact["organization"] !== undefined && contact["name"] !== undefined) {
+                if (contact["organization"] !== undefined
+                        && contact["organization"].length > 0
+                        && contact["name"] !== undefined) {
                     cContact.c_STEXT = contact["organization"]
                 } else {
                     cContact.c_STEXT = qsTr("Private")

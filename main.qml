@@ -396,7 +396,7 @@ ApplicationWindow {
                     if (matched === false) {
                         channels.push(newChannel)
                         console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
-                        showToast(qsTr("New Subscrption: " + channel.name))
+                        showToast(qsTr("New Subscrption: " + newChannel.name))
                     } else {
                         showToast(qsTr("You have alresdy subscribed the feed"))
                     }

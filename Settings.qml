@@ -316,6 +316,13 @@ Page {
                     function removeSettings(channelId) {
                         console.log("Settings | Remove settings for " + channelId)
                         mainView.updateFeed(channelId, false, mainView.settingsAction.REMOVE)
+                        for (var i = 0; i < newsSettingsColumn.newsCheckboxes.length; i++) {
+                            var checkbox = newsSettingsColumn.newsCheckboxes[i]
+                            if (checkbox.actionId === channelId) {
+                                newsCheckboxes.splice(i, 1)
+                                checkbox.destroy()
+                            }
+                        }
                     }
                 }
 

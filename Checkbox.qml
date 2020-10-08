@@ -41,7 +41,6 @@ CheckBox {
         onClicked: {
             console.log("Checkbox | Remove item from settings: " + settingsCheckbox.text)
             settingsCheckbox.parent.removeSettings(actionId)
-            settingsCheckbox.destroy()
         }
         visible: settingsCheckbox.hasRemoveButton
     }
