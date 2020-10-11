@@ -292,7 +292,7 @@ Page {
             // remove items no longer in filtered set
             i = 0
             while (i < count) {
-                modelItemName = get(i).package
+                modelItemId = get(i).package
                 found = filteredGridDict.hasOwnProperty(modelItemId)
                 if (!found) {
                     console.log("Remove " + modelItemId)
@@ -303,13 +303,13 @@ Page {
             }
 
             // add new items
-            var keys = Object.keys(filteredGridDict).sort()
+            var keys = Object.keys(filteredGridDict)
             keys.forEach(function(key) {
                 found = existingGridDict.hasOwnProperty(key)
                 if (!found) {
                     // for simplicity, just adding to end instead of corresponding position in original list
-                    filteredGridItem = filteredGridDict[key]
-                    // console.log("Will append " + filteredGridItem.label)
+                    // filteredGridItem = filteredGridDict[key]
+                    console.log("Will append " + filteredGridItem.label)
                     append(filteredGridDict[key])
                 }
             })

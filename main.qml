@@ -444,7 +444,10 @@ ApplicationWindow {
             doc.onreadystatechange = function() {
                 if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                     console.log("MainView | Received header status feed url: " + doc.status);
-                    if (doc.status !== 200) {
+                    if (doc.status === 301) {
+
+                    }
+                    else if (doc.status !== 200) {
                         mainView.showToast(qsTr("Could not load RSS feed " + url))
                         return
                     }
