@@ -1,10 +1,12 @@
 package com.volla.launcher.util;
 
 import androidnative.SystemDispatcher;
+import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.util.Log;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.telephony.gsm.SmsManager;
 import java.util.Map;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public class MessageUtil {
 
     public static final String SEND_MESSAGE = "volla.launcher.messageAction";
     public static final String DID_SENT_MESSAGE = "volla.launcher.messageResponse";
+    public static final int PERMISSIONS_REQUEST_SEND_SMS = 123;
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -33,17 +36,27 @@ public class MessageUtil {
                     Runnable runnable = new Runnable () {
 
                         public void run() {
-                            //Getting intent and PendingIntent instance
-                            Intent intent = new Intent(activity.getApplicationContext(), ReceiveTextActivity.class);
-                            PendingIntent pi = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent,0);
+                            if (activity.checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                                Map responseMessage = new HashMap();
 
-                            //Get the SmsManager instance and call the sendTextMessage method to send message
-                            SmsManager sms = SmsManager.getDefault();
-                            sms.sendTextMessage(number, null, text, pi,null);
+                                if (text == null || text.length() < 1) {
+                                    responseMessage.put("sent", false);
+                                } else {
+                                    // Getting intent and PendingIntent instance
+                                    Intent intent = new Intent(activity.getApplicationContext(), ReceiveTextActivity.class);
+                                    PendingIntent pi = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent,0);
 
-                            Map responseMessage = new HashMap();
-                            responseMessage.put("sent", true);
-                            SystemDispatcher.dispatch(DID_SENT_MESSAGE, responseMessage);
+                                    //Get the SmsManager instance and call the sendTextMessage method to send message
+                                    SmsManager sms = SmsManager.getDefault();
+                                    sms.sendTextMessage(number, null, text, pi,null);
+                                    responseMessage.put("sent", true);
+                                }
+
+                                SystemDispatcher.dispatch(DID_SENT_MESSAGE, responseMessage);
+                            } else {
+                                activity.requestPermissions(new String[] { Manifest.permission.SEND_SMS },
+                                                            PERMISSIONS_REQUEST_SEND_SMS);
+                            }
                         }
                     };
 

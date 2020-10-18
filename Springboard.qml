@@ -204,7 +204,7 @@ Page {
                             AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": phoneNumber, "text": message})
                             //Qt.openUrlExternally("sms:" + phoneNumber + "?body=" + encodeURIComponent(message))
                         }
-                        textInputArea.text = ""
+                        // textInputArea.text = ""
                         break
                     case mainView.actionType.SendEmail:
                         idx = textInput.search(/\s/)
@@ -304,6 +304,7 @@ Page {
             color: model.action < 20000 ? "transparent" : Universal.accent
             Button {
                 id: button
+                width: parent.width - mainView.innerSpacing
                 leftPadding: mainView.innerSpacing
                 topPadding: model.index === 0 ? mainView.innerSpacing : 0
                 bottomPadding: model.index === listModel.count - 1 ? mainView.innerSpacing : mainView.innerSpacing / 2
@@ -312,6 +313,7 @@ Page {
                 flat: model.action >= 20000 ? false : true
                 contentItem: Text {
                     text: button.text
+                    elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
                     color: model.action < 20000 ? Universal.foreground : "white"
                 }
@@ -347,6 +349,18 @@ Page {
         // @disable-check M300
         AN.Util {
             id: util
+        }
+
+        Connections {
+            target: AN.SystemDispatcher
+            onDispatched: {
+                if (type === "volla.launcher.messageResponse") {
+                    console.log("Springboard | onDispatched: " + type)
+                    if (message["sent"]) {
+                        textInputArea.text = ""
+                    }
+                }
+            }
         }
 
         WorkerScript {

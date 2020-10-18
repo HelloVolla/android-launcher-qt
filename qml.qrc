@@ -54,5 +54,6 @@
         <file>icons/signal@4x_104x104px.png</file>
         <file>icons/sync@4x_104x104px.png</file>
         <file>scripts/springboard.mjs</file>
+        <file>android/res/drawable/wallpaper_image.png</file>
     </qresource>
 </RCC>

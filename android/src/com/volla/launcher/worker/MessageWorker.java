@@ -1,10 +1,12 @@
 package com.volla.launcher.worker;
 
 import androidnative.SystemDispatcher;
+import android.Manifest;
 import android.app.Activity;
 import android.os.Build;
 import android.content.Intent;
 import android.content.ContentResolver;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.util.Base64;
 import android.net.Uri;
@@ -57,11 +59,33 @@ public class MessageWorker {
 
                     public void run() {
                         if (type.equals(GET_CONVERSATION)) {
-                            getConversation(message, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+                                getConversation(message, activity);
+                            } else {
+                                Map reply = new HashMap();
+                                ArrayList<Map> messageList = new ArrayList();
+                                reply.put("messages", messageList );
+                                reply.put("messagesCount", 0 );
+                                SystemDispatcher.dispatch(GOT_CONVERSATION, reply);
+                            }
                         } else if (type.equals(GET_THREADS)) {
-                            getThreads(message, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+                                getThreads(message, activity);
+                            } else {
+                                Map reply = new HashMap();
+                                ArrayList<Map> threadlist = new ArrayList();
+                                reply.put("threads", threadlist );
+                                reply.put("threadsCount", threadlist.size() );
+                                SystemDispatcher.dispatch(GOT_THREADS, reply);
+                            }
                         } else if (type.equals(GET_THREADS_COUNT)) {
-                            getThreadsCount(message, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+                                getThreadsCount(message, activity);
+                            } else {
+                                Map reply = new HashMap();
+                                reply.put("threadsCount", 0 );
+                                SystemDispatcher.dispatch(GOT_THREADS_COUNT, reply);
+                            }
                         } else if (type.equals(GET_MMS_IMAGE)) {
                             String messageId = (String) message.get("messageId");
                             ArrayList<String> partIds = (ArrayList<String>) message.get("partIds");
@@ -81,6 +105,7 @@ public class MessageWorker {
                                     break;
                                 }
                             }
+
                             SystemDispatcher.dispatch(GOT_MMS_IMAGE, reply);
                         }
                     }

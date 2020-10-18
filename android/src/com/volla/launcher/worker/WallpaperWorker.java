@@ -1,6 +1,8 @@
 package com.volla.launcher.worker;
 
 import androidnative.SystemDispatcher;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.graphics.Bitmap;
@@ -34,17 +36,20 @@ public class WallpaperWorker {
 
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            WallpaperManager wallpaperManager = WallpaperManager.getInstance(activity);
                             Map reply = new HashMap();
 
-                            int wallpaperId = wallpaperManager.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
-                            Log.d(TAG, "Wallpaper ID is: " + wallpaperId);
-                            reply.put("wallpaperId", wallpaperId);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                WallpaperManager wallpaperManager = WallpaperManager.getInstance(activity);
 
-                            if (!message.get("wallpaperId").equals(wallpaperId)) {
-                                Drawable wallpaperDrawable = wallpaperManager.getDrawable();
-                                String wallpaperBitmap = WallpaperWorker.drawableToBase64(wallpaperDrawable);
-                                reply.put("wallpaper", wallpaperBitmap);
+                                int wallpaperId = wallpaperManager.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                                Log.d(TAG, "Wallpaper ID is: " + wallpaperId);
+                                reply.put("wallpaperId", wallpaperId);
+
+                                if (!message.get("wallpaperId").equals(wallpaperId)) {
+                                    Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+                                    String wallpaperBitmap = WallpaperWorker.drawableToBase64(wallpaperDrawable);
+                                    reply.put("wallpaper", wallpaperBitmap);
+                                }
                             }
 
                             SystemDispatcher.dispatch(GOT_WALLPAPER, reply);

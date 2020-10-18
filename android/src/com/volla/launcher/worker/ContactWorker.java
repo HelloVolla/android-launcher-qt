@@ -1,7 +1,9 @@
 package com.volla.launcher.worker;
 
 import androidnative.SystemDispatcher;
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.provider.ContactsContract;
@@ -38,7 +40,9 @@ public class ContactWorker {
                 if (type.equals("volla.launcher.contactAction")) {
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            getContacts(message, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                                getContacts(message, activity);
+                            }
                         }
                     };
 
@@ -48,7 +52,14 @@ public class ContactWorker {
                 else if (type.equals("volla.launcher.checkContactAction")) {
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            checkContacts(message, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                                checkContacts(message, activity);
+                            } else {
+                                Log.d(TAG, "Permissions for contacts not granted");
+                                Map responseMessage = new HashMap();
+                                responseMessage.put("needsSync", false);
+                                SystemDispatcher.dispatch("volla.launcher.checkContactResponse", responseMessage);
+                            }
                         }
                     };
 
@@ -57,7 +68,9 @@ public class ContactWorker {
                 } else if (type.equals("volla.launcher.contactImageAction")) {
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            getContactImage(message, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                                getContactImage(message, activity);
+                            }
                         }
                     };
 
@@ -95,7 +108,7 @@ public class ContactWorker {
             int currentBlock = 0;
             int contactsCount = mainQueryCursor.getCount();
 
-            Log.d(TAG, contactsCount + "contacts found");
+            Log.d(TAG, contactsCount + " contacts found");
 
             class ContactRunnable implements Runnable {
                 int blockStart;
@@ -248,7 +261,7 @@ public class ContactWorker {
     }
 
     static void checkContacts(Map message, Activity activity) {
-        Log.d(TAG, "check Contacts");
+        Log.d(TAG, "check contacts sine " + message.get("timestamp"));
 
         Map responseMessage = new HashMap();
 

@@ -243,7 +243,8 @@ Page {
                             anchors.left: parent.left
                             leftPadding: mainView.innerSpacing
                             rightPadding: mainView.innerSpacing
-                            width: newsBox.width - iconSize - mainView.innerSpacing
+                            width: newsImage.getImageUrl().length > 0 ? newsBox.width - iconSize - mainView.innerSpacing
+                                                     : newsBox.width - mainView.innerSpacing
                             text: model.n_STITLE !== undefined ? model.n_STITLE : ""
                             lineHeight: 1.1
                             font.pointSize: mainView.smallFontSize
@@ -257,11 +258,13 @@ Page {
                             topPadding: model.n_STITLE !== undefined && model.n_STITLE.length > 0 ? mainView.innerSpacing / 2 : 0
                             leftPadding: mainView.innerSpacing
                             rightPadding: mainView.innerSpacing
-                            width: newsBox.width - iconSize - mainView.innerSpacing
+                            width: newsImage.getImageUrl().length > 0 ? newsBox.width - iconSize - mainView.innerSpacing
+                                                     : newsBox.width - mainView.innerSpacing
                             text: model.n_TEXT
                             lineHeight: 1.1
                             font.pointSize: mainView.largeFontSize
                             wrapMode: Text.WordWrap
+                            elide: Text.ElideRight
                         }
                         Label {
                             id: newsDate
@@ -269,7 +272,8 @@ Page {
                             topPadding: mainView.innerSpacing / 2
                             leftPadding: mainView.innerSpacing
                             rightPadding: mainView.innerSpacing
-                            width: newsBox.width - iconSize - mainView.innerSpacing
+                            width: newsImage.getImageUrl().length > 0 ? newsBox.width - iconSize - mainView.innerSpacing
+                                                     : newsBox.width - mainView.innerSpacing
                             text: getDateString()
                             lineHeight: 1.1
                             font.pointSize: mainView.smallFontSize
@@ -308,7 +312,8 @@ Page {
                                 return model.n_IMAGE
                             } else if (model.n_THUMBNAIL !== undefined && model.n_THUMBNAIL.length > 0) {
                                 return model.n_THUMBNAIL
-                            } else if (model.n_ENCLOSURE !== undefined && model.n_ENCLOSURE.length > 0) {
+                            } else if (model.n_ENCLOSURE !== undefined && model.n_ENCLOSURE.length > 0
+                                       && !model.n_ENCLOSURE.endsWith(".mp3")) {
                                 return model.n_ENCLOSURE
                             } else {
                                 return ""

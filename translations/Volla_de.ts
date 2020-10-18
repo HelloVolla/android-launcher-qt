@@ -444,7 +444,7 @@
     <message>
         <location filename="../main.qml" line="125"/>
         <source>Add feed to collection</source>
-        <translation type="unfinished">Füge einen Kanal zur Sammlung hinzu</translation>
+        <translation type="unfinished">Kanal zur Sammlung hinzufügen</translation>
     </message>
     <message>
         <location filename="../main.qml" line="342"/>

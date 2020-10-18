@@ -453,6 +453,7 @@ ApplicationWindow {
                     }
                 } else if (doc.readyState === XMLHttpRequest.DONE) {
                     if (doc.responseXML === null) {
+                        // todo: Impelemnt fallback with text response parsing
                         mainView.showToast(qsTr("Could not load RSS feed " + url))
                         return
                     }
@@ -573,14 +574,14 @@ ApplicationWindow {
                     console.log("MainView | Contacts " + message["blockStart"] + " to " + message["blockEnd"])
                     mainView.contacts = mainView.contacts.concat(message["contacts"])
                     console.log("MainView | New timestamp " + mainView.lastContactsCheck)
-//                    message["contacts"].forEach(function (aContact, index) {
-//                        if (aContact["name"] === undefined) {
-//                            console.log("MainView | Invalid contact:")
-//                            for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-//                                console.log("MainView | * " + aContactKey + ": " + aContactValue)
-//                            }
-//                        }
-//                    });
+                    message["contacts"].forEach(function (aContact, index) {
+                        if (aContact["name"] === undefined) {
+                            console.log("MainView | Invalid contact:")
+                            for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+                                console.log("MainView | * " + aContactKey + ": " + aContactValue)
+                            }
+                        }
+                    });
                     if (mainView.contacts.length === message["contactsCount"]) {
                         var d = new Date()
                         console.log("MainView | Did take " + (d.valueOf() - mainView.timeStamp.valueOf()))
@@ -611,8 +612,10 @@ ApplicationWindow {
 
                     if (message["wallpaper"] !== undefined) {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
+                        mainView.wallpaperId = message["wallpaperId"]
+                    } else {
+                        mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
                     }
-                    mainView.wallpaperId = message["wallpaperId"]
                 } else if (type === 'volla.launcher.receiveTextResponse') {
                     console.log("MainView | onDispatched: " + type)
                     var text = message["sharedText"]
@@ -625,6 +628,11 @@ ApplicationWindow {
                 } else if (type === "volla.launcher.uiModeResponse") {
                     // todo: adopt night mode
 
+                } else if (type === "volla.launcher.messageResponse") {
+                    console.log("MainView | onDispatched: " + type)
+                    if (!message["sent"]) {
+                        mainView.showToast(qsTr("Couldn't send message because of empty test"))
+                    }
                 }
             }
         }

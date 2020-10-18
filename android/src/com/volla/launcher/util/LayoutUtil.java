@@ -1,6 +1,7 @@
 package com.volla.launcher.util;
 
 import androidnative.SystemDispatcher;
+import android.Manifest;
 import android.os.Build;
 import android.app.Activity;
 import android.app.WallpaperManager;
@@ -12,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.content.Intent;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import java.util.Map;
 import java.io.IOException;
@@ -85,7 +87,11 @@ public class LayoutUtil {
                                 } else {
                                     Log.d(TAG, "Set nidhgt mode and system wallpaper");
                                     Log.d(TAG, "Retrieve system wallpaper" );
-                                    wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                                    if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                        wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                                    } else {
+                                        wallpaperId = R.drawable.wallpaper_image;
+                                    }
                                 }
                                 umm.setNightMode(UiModeManager.MODE_NIGHT_YES);
                             } else {
@@ -101,7 +107,8 @@ public class LayoutUtil {
 
                             Log.d(TAG, "Changed system ui mode is " + umm.getNightMode());
 
-                            if (wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId) {
+                            if (activity.checkSelfPermission(Manifest.permission.SET_WALLPAPER) == PackageManager.PERMISSION_GRANTED
+                                && wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId) {
                                 try {
                                     if (value == 2) {
                                         Log.d(TAG, "Clear lock screen wallpaper");

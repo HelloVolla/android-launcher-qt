@@ -92,6 +92,11 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        Log.d(TAG, "Received permission result for request " + requestCode);
+    }
+
+    @Override
     public void onBackPressed() {
         Log.d(TAG, "Prevent closing app");
     }

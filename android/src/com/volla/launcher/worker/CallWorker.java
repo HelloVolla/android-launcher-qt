@@ -1,9 +1,11 @@
 package com.volla.launcher.worker;
 
 import androidnative.SystemDispatcher;
+import android.Manifest;
 import android.app.Activity;
 import android.os.Build;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.provider.CallLog;
 import android.util.Log;
 import android.util.Base64;
@@ -36,7 +38,15 @@ public class CallWorker {
                 if (type.equals(GET_CALLS)) {
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            getCalls(message, GOT_CALLS, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+                                getCalls(message, GOT_CALLS, activity);
+                            } else {
+                                Map reply = new HashMap();
+                                ArrayList<Map> callList = new ArrayList();
+                                reply.put("calls", callList );
+                                reply.put("callsCount", callList.size() );
+                                SystemDispatcher.dispatch(GOT_CALLS, reply);
+                            }
                         }
                     };
 
@@ -44,7 +54,15 @@ public class CallWorker {
                 } else if (type.equals(GET_CONVERSATION)) {
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            getCalls(message, GOT_CONVERSATION, activity);
+                            if (activity.checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+                                getCalls(message, GOT_CONVERSATION, activity);
+                            } else {
+                                Map reply = new HashMap();
+                                ArrayList<Map> callList = new ArrayList();
+                                reply.put("calls", callList );
+                                reply.put("callsCount", callList.size() );
+                                SystemDispatcher.dispatch(GOT_CONVERSATION, reply);
+                            }
                         }
                     };
 
