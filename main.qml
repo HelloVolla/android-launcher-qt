@@ -303,7 +303,7 @@ ApplicationWindow {
             toast.show()
         }
 
-        function switchTheme(theme) {
+        function switchTheme(theme, updateLockScreen) {
             if (settings.sync) {
                 settings.sync()
             }
@@ -331,7 +331,7 @@ ApplicationWindow {
                 console.log("MainView | Not supported theme: " + theme)
                 break
             }
-            AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme})
+            AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": updateLockScreen})
         }
 
         // todo: Improve display date and time with third party library
@@ -613,8 +613,9 @@ ApplicationWindow {
                     if (message["wallpaper"] !== undefined) {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                         mainView.wallpaperId = message["wallpaperId"]
-                    } else {
+                    } else if (message["wallpaperId"] === undefined) {
                         mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
+                        mainView.wallpaperId = "default"
                     }
                 } else if (type === 'volla.launcher.receiveTextResponse') {
                     console.log("MainView | onDispatched: " + type)
@@ -655,17 +656,20 @@ ApplicationWindow {
         id: settings
         property int theme: mainView.theme.Dark
         property bool fullscreen: false
+        property bool firstStart: true
         
         Component.onCompleted: {
             console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
             if (Universal.theme !== settings.theme) {
-                mainView.switchTheme(settings.theme)
+                mainView.switchTheme(settings.theme, firstStart)
             } else {
-                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme})
+                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": firstStart})
             }
             if (fullscreen) {
                 appWindow.visibility = 5
             }
+            firstStart = false
+            settings.sync()
         }
     }
 

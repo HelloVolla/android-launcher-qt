@@ -53,6 +53,7 @@ public class LayoutUtil {
                     activity.runOnUiThread(runnable);
                 } else if (type.equals(SET_COLOR)) {
                     final int value = (int) message.get("value");
+                    final boolean updateLockScreen = (boolean) message.get("updateLockScreen");
                     final Activity activity = QtNative.activity();
 
                     Log.d(TAG, "Will change lock screen clock color for value "
@@ -108,7 +109,9 @@ public class LayoutUtil {
                             Log.d(TAG, "Changed system ui mode is " + umm.getNightMode());
 
                             if (activity.checkSelfPermission(Manifest.permission.SET_WALLPAPER) == PackageManager.PERMISSION_GRANTED
-                                && wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId) {
+                                && wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId
+                                && updateLockScreen) {
+                                Log.d(TAG, "Update lock screen wallpaper");
                                 try {
                                     if (value == 2) {
                                         Log.d(TAG, "Clear lock screen wallpaper");
