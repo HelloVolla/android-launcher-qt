@@ -71,3 +71,7 @@ Thumbs.db
 *.dll
 *.exe
 
+# Build artifacts
+.cache
+build
+releases
