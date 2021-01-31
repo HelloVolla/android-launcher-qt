@@ -139,6 +139,7 @@ Page {
                     topPadding: 0.0
                     anchors.top: parent.top
                     anchors.right: parent.right
+                    visible: textField.displayText !== ""
 
                     onClicked: {
                         textField.text = ""
