@@ -175,13 +175,13 @@ Page {
                 }
                 Button {
                     id: deleteButton
-                    visible: textField.activeFocus
                     text: "<font color='#808080'>×</font>"
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
                     topPadding: 0.0
                     anchors.top: parent.top
                     anchors.right: parent.right
+                    visible: textField.displayText !== ""
 
                     onClicked: {
                         textField.text = ""
@@ -918,7 +918,7 @@ Page {
                             console.log("Collections | Received header status of " + rssFeed.name + ": " + doc.status);
                             if (doc.status !== 200) {
                                 mainView.updateSpinner(false)
-                                mainView.showToast(qsTr("Could not load RSS feed " + rssFeed.name))
+                                mainView.showToast(qsTr("Could not load RSS feed: ") + rssFeed.name)
                             }
                         } else if (doc.readyState === XMLHttpRequest.DONE) {
                             var cNews = {c_CHANNEL: rssFeed.id}

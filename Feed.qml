@@ -181,13 +181,13 @@ Page {
                     }
                     Button {
                         id: deleteButton
-                        visible: textField.activeFocus
                         text: "<font color='#808080'>×</font>"
                         font.pointSize: mainView.largeFontSize * 2
                         flat: true
                         topPadding: 0.0
                         anchors.top: parent.top
                         anchors.right: parent.right
+                        visible: textField.displayText !== ""
 
                         onClicked: {
                             textField.text = ""
