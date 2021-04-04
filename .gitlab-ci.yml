@@ -1,0 +1,13 @@
+image: a12e/docker-qt:5.13-android_arm64_v8a
+
+# Make Project
+assembleDebug:
+  interruptible: true
+  stage: build
+  script:
+    - ./build_package_android ./releases
+    - DATE=$(date +"%Y%m%d")
+  artifacts:
+    paths:
+      - ./releases/
+
