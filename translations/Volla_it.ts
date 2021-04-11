@@ -400,7 +400,7 @@
     </message>
     <message>
         <source>Message sent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Messaggio inviato</translation>
     </message>
 </context>
 </TS>

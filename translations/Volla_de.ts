@@ -476,7 +476,7 @@
     <message>
         <location filename="../main.qml" line="401"/>
         <source>You have alresdy subscribed the feed</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie haben den Feed bereits abonniert</translation>
     </message>
     <message>
         <location filename="../main.qml" line="424"/>
@@ -491,7 +491,7 @@
     <message>
         <location filename="../main.qml" line="637"/>
         <source>Message sent</source>
-        <translation type="Mitteilung gesendet"></translation>
+        <translation>Mitteilung gesendet</translation>
     </message>
     <message>
         <source>You have already subscribed the feed</source>

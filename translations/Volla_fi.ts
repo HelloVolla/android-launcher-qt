@@ -403,7 +403,7 @@
     </message>
     <message>
         <source>Message sent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lähetetty viesti</translation>
     </message>
 </context>
 </TS>

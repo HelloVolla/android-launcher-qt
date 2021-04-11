@@ -166,6 +166,7 @@ Page {
             }
 
             function emailAddressForContact() {
+                validateSelectedObject()
                 var emailAddress
                 if (selectedObj) {
                     console.log("Springboard | Contact " + selectedObj["id"] + " " + selectedObj["name"])
@@ -203,7 +204,6 @@ Page {
                     case mainView.actionType.MakeCall:
                         var phoneNumber = textInput
                         if (!textInputStartsWithPhoneNumber()) {
-                            selectedObj = undefined
                             phoneNumber = phoneNumberForContact()
                         }
                         console.log("Springboard | Will call " + phoneNumber)

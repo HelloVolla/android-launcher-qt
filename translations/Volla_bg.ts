@@ -401,7 +401,7 @@
     </message>
     <message>
         <source>Message sent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изпратено съобщение</translation>
     </message>
 </context>
 </TS>

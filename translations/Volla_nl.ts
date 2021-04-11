@@ -484,7 +484,7 @@
     <message>
         <location filename="../main.qml" line="637"/>
         <source>Message sent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bericht verzonden</translation>
     </message>
     <message>
         <location filename="../main.qml" line="681"/>

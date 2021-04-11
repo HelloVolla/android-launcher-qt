@@ -492,7 +492,7 @@
     <message>
         <location filename="../main.qml" line="637"/>
         <source>Message sent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meddelande skickat</translation>
     </message>
     <message>
         <location filename="../main.qml" line="681"/>
