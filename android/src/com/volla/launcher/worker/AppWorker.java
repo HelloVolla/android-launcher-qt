@@ -47,8 +47,8 @@ public class AppWorker
                             final PackageManager pm = activity.getPackageManager();
                             final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts", "com.android.gallery3d",
                                 "com.android.music", "com.android.inputmethod.latin", "com.android.stk", "com.mediatek.filemanager",
-                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "com.android.quicksearchbox",
-                                "com.android.dialer", "com.android.deskclock"); // , "com.android.fmradio"
+                                "com.android.documentsui", "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control",
+                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.mediatek.gnss.nonframeworklbs");
 
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
                             i.addCategory(Intent.CATEGORY_LAUNCHER);

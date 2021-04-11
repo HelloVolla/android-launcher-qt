@@ -633,6 +633,8 @@ ApplicationWindow {
                     console.log("MainView | onDispatched: " + type)
                     if (!message["sent"]) {
                         mainView.showToast(qsTr("Couldn't send message because of empty test"))
+                    } else {
+                        mainView.showToast(qsTr("Message sent"))
                     }
                 }
             }

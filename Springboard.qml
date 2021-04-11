@@ -123,8 +123,28 @@ Page {
         model: ListModel {
             id: listModel
 
+            function checkContacts(contact) {
+                var fullName = contact["name"].replace(/\s/g, "_")
+                return textInput.indexOf(fullName) == 1
+            }
+
+            function validateSelectedObject() {
+                if (selectedObj === undefined) {
+                    console.log("Try to guess contact")
+                    var i = textInput.indexOf(" ")
+                    var contacts = mainView.contacts.filter(checkContacts)
+
+                    if (contacts.length === 1) {
+                        console.log("Found contact")
+                        selectedObj = contacts[0]
+                    }
+                }
+            }
+
             function phoneNumberForContact() {
+                validateSelectedObject()
                 var phoneNumber = -1
+
                 if (selectedObj !== undefined) {
                     // todo: offer selection of phone numbers
                     if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
@@ -183,6 +203,7 @@ Page {
                     case mainView.actionType.MakeCall:
                         var phoneNumber = textInput
                         if (!textInputStartsWithPhoneNumber()) {
+                            selectedObj = undefined
                             phoneNumber = phoneNumberForContact()
                         }
                         console.log("Springboard | Will call " + phoneNumber)
@@ -276,7 +297,7 @@ Page {
                         textInputArea.text = textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue + " "
                         textInputArea.cursorPosition = textInput.length
                         textInputArea.forceActiveFocus()
-                        springBoard.selectedObj = actionObj
+                        selectedObj = Object.assign({}, actionObj)
                 }
             }
 
@@ -457,23 +478,23 @@ Page {
             var elPoint = mapFromItem(eventLabel, 0, 0)
             var olPoint = mapFromItem(notesLabel, 0, 0)
 
-            if (mouseY > plPoint.y && mouseY < plPoint.y + peopleLabel.height) {
+            if (peopleLabel.visible && mouseY > plPoint.y && mouseY < plPoint.y + peopleLabel.height) {
                 selectedMenuItem = peopleLabel
-            } else if (mouseY > tlPoint.y && mouseY < tlPoint.y + threadLabel.height) {
+            } else if (threadLabel.visible && mouseY > tlPoint.y && mouseY < tlPoint.y + threadLabel.height) {
                 selectedMenuItem = threadLabel
-            } else if (mouseY > nlPoint.y && mouseY < nlPoint.y + newsLabel.height) {
+            } else if (newsLabel.visible && mouseY > nlPoint.y && mouseY < nlPoint.y + newsLabel.height) {
                 selectedMenuItem = newsLabel
-            } else if (mouseY > glPoint.y && mouseY < glPoint.y + galleryLabel.height) {
+            } else if (galleryLabel.visible && mouseY > glPoint.y && mouseY < glPoint.y + galleryLabel.height) {
                 selectedMenuItem = galleryLabel
-            } else if (mouseY > alPoint.y && mouseY < alPoint.y + agendaLabel.height) {
+            } else if (agendaLabel.visible && mouseY > alPoint.y && mouseY < alPoint.y + agendaLabel.height) {
                 selectedMenuItem = agendaLabel
-            } else if (mouseY > clPoint.y && mouseY < clPoint.y + cameraLabel.height) {
+            } else if (cameraLabel.visible && mouseY > clPoint.y && mouseY < clPoint.y + cameraLabel.height) {
                 selectedMenuItem = cameraLabel
-            } else if (mouseY > dlPoint.y && mouseY < dlPoint.y + dialerLabel.height) {
+            } else if (dialerLabel.visible && mouseY > dlPoint.y && mouseY < dlPoint.y + dialerLabel.height) {
                 selectedMenuItem = dialerLabel
-            } else if (mouseY > elPoint.y && mouseY < elPoint.y + eventLabel.height) {
+            } else if (eventLabel.visible && mouseY > elPoint.y && mouseY < elPoint.y + eventLabel.height) {
                 selectedMenuItem = eventLabel
-            } else if (mouseY > olPoint.y && mouseY < olPoint.y + notesLabel.height) {
+            } else if (notesLabel.visible && mouseY > olPoint.y && mouseY < olPoint.y + notesLabel.height) {
                 selectedMenuItem = notesLabel
             } else {
                 selectedMenuItem = rootMenuButton

@@ -52,6 +52,9 @@ Page {
         "com.android.fmradio": "/icons/radio@4x_104x104px.png",
         "at.bitfire.davdroid": "/icons/sync@4x_104x104px.png",
         "org.thoughtcrime.securesms": "/icons/signal@4x_104x104px.png",
+        "de.baumann.weather": "/icons/weather@4x_104x104px.png",
+        "com.simplemobiletools.calculator": "/icons/calculator@4x_104x104px.png",
+        "eu.siacs.conversations": "/icons/xmpp@4x_104x104px.png"
     }
     property var labelMap: {
         "org.mozilla.fennec_fdroid": "Browser",
@@ -62,7 +65,8 @@ Page {
         "net.osmand.plus": "Maps",
         "com.volla.launcher": "Settings",
         "com.simplemobiletools.smsmessenger": "Messages",
-        "com.android.fmradio" : "Radio"
+        "com.android.fmradio" : "Radio",
+        "de.baumann.weather": "Wetter",
     }
     property bool unreadMessages: false
     property bool newCalls: false

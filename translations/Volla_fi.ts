@@ -122,6 +122,10 @@
         <source>Find news ...</source>
         <translation type="unfinished">löytää uutisia</translation>
     </message>
+    <message>
+        <source>Could not load RSS feed: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Conversation</name>
@@ -392,6 +396,14 @@
     <message>
         <source>Add feed to collection</source>
         <translation type="unfinished">lisää kanava kokoelmaan</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t send message because of empty test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Message sent</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

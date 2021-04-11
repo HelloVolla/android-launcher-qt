@@ -102,6 +102,7 @@ WorkerScript.onMessage = function(message) {
         var lastChar = textInput.substring(textInput.length - 1, textInput.length)
         console.log("Springboard | last char: " + lastChar)
         if (lastChar === " ") {
+            // todo: offer selection of phone numbers
             filteredSuggestionObj[0] = [actionName.MakeCall, actionType.MakeCall]
         }
 
