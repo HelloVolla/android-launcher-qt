@@ -398,12 +398,36 @@
         <translation type="unfinished">pridať kanál do zbierky</translation>
     </message>
     <message>
-        <source>Couldn&apos;t send message because of empty test</source>
+        <source>Message sent</source>
+        <translation type="unfinished">Odoslaná správa</translation>
+    </message>
+    <message>
+        <source>Missing message text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Message sent</source>
-        <translation type="unfinished">Odoslaná správa</translation>
+        <source>Generic failure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Null PDU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radio off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Message delivered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Message not delivered</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

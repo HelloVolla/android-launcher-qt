@@ -278,23 +278,23 @@
         <translation type="unfinished">Schreibe etwas</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="139"/>
+        <location filename="../Springboard.qml" line="159"/>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="142"/>
-        <location filename="../Springboard.qml" line="161"/>
+        <location filename="../Springboard.qml" line="162"/>
+        <location filename="../Springboard.qml" line="182"/>
         <source>Sorry. I couldn&apos;t identify the contact</source>
         <translation type="unfinished">Ich konnte den Kontakt leider nicht finden</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="202"/>
+        <location filename="../Springboard.qml" line="223"/>
         <source>Sorry. Contact has no mobile phone number</source>
         <translation type="unfinished">Der Kontakt hat leider keine mobile Telefonnummer</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="232"/>
+        <location filename="../Springboard.qml" line="253"/>
         <source>Sorry. Contact has no email address</source>
         <translation type="unfinished">Der Kontakt hat leider keine E-Mail-Adresse</translation>
     </message>
@@ -343,7 +343,7 @@
         <translation type="obsolete">Öffne Kamera</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="641"/>
+        <location filename="../Springboard.qml" line="662"/>
         <source>Gallery</source>
         <translation type="unfinished">Galerie</translation>
     </message>
@@ -360,32 +360,32 @@
         <translation type="obsolete">Nachrichten</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="548"/>
+        <location filename="../Springboard.qml" line="569"/>
         <source>My event</source>
         <translation type="unfinished">Meine Veranstaltung</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="596"/>
+        <location filename="../Springboard.qml" line="617"/>
         <source>Show Dialer</source>
         <translation type="unfinished">Zeige Telefon</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="605"/>
+        <location filename="../Springboard.qml" line="626"/>
         <source>Open Camera</source>
         <translation type="unfinished">Öffne Kamera</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="614"/>
+        <location filename="../Springboard.qml" line="635"/>
         <source>Show Agenda</source>
         <translation type="unfinished">Zeige Termine</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="623"/>
+        <location filename="../Springboard.qml" line="644"/>
         <source>Create Event</source>
         <translation type="unfinished">Erstelle Ereignis</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="632"/>
+        <location filename="../Springboard.qml" line="653"/>
         <source>Show Notes</source>
         <translation type="unfinished">Zeige Notizen</translation>
     </message>
@@ -394,17 +394,17 @@
         <translation type="obsolete">Termine</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="650"/>
+        <location filename="../Springboard.qml" line="671"/>
         <source>Recent News</source>
         <translation type="unfinished">Nachrichten</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="659"/>
+        <location filename="../Springboard.qml" line="680"/>
         <source>Recent Threads</source>
         <translation type="unfinished">Unterhaltungen</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="668"/>
+        <location filename="../Springboard.qml" line="689"/>
         <source>Recent People</source>
         <translation type="unfinished">Kontakte</translation>
     </message>
@@ -452,44 +452,74 @@
         <translation type="unfinished">Kanal zur Sammlung hinzufügen</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="352"/>
+        <location filename="../main.qml" line="139"/>
+        <source>Missing message text</source>
+        <translation type="unfinished">Fehlender Text</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="141"/>
+        <source>Generic failure</source>
+        <translation type="unfinished">Allgemeiner Fehler</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="142"/>
+        <source>No service</source>
+        <translation type="unfinished">Kein Dienst verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="143"/>
+        <source>Null PDU</source>
+        <translation type="unfinished">Null PDU</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="144"/>
+        <source>Radio off</source>
+        <translation type="unfinished">Kein Netz verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="145"/>
+        <source>Message delivered</source>
+        <translation type="unfinished">Mitteilung gesendet</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="146"/>
+        <source>Message not delivered</source>
+        <translation type="unfinished">Mitteilung nicht gesendet</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="360"/>
         <source>Just now</source>
         <translation type="unfinished">Jetzt</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="354"/>
+        <location filename="../main.qml" line="362"/>
         <source>minutes ago</source>
         <translation type="unfinished">Minuten vorher</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="357"/>
-        <location filename="../main.qml" line="359"/>
+        <location filename="../main.qml" line="365"/>
+        <location filename="../main.qml" line="367"/>
         <source>Today</source>
         <translation type="unfinished">Heute</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="363"/>
-        <location filename="../main.qml" line="365"/>
+        <location filename="../main.qml" line="371"/>
+        <location filename="../main.qml" line="373"/>
         <source>Yesterday</source>
         <translation type="unfinished">Gestern</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="401"/>
+        <location filename="../main.qml" line="409"/>
         <source>You have alresdy subscribed the feed</source>
         <translation>Sie haben den Feed bereits abonniert</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="424"/>
+        <location filename="../main.qml" line="432"/>
         <source>Invalid news ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="635"/>
-        <source>Couldn&apos;t send message because of empty test</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.qml" line="637"/>
+        <location filename="../main.qml" line="140"/>
         <source>Message sent</source>
         <translation>Mitteilung gesendet</translation>
     </message>
@@ -498,7 +528,7 @@
         <translation type="obsolete">Du hast den Kanal bereits abonniert</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="471"/>
+        <location filename="../main.qml" line="479"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ungültiger RSS-Feed</translation>
     </message>
@@ -507,7 +537,7 @@
         <translation type="obsolete">Mitteilung wurde gesendet</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="681"/>
+        <location filename="../main.qml" line="689"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Noch nicht unterstützt</translation>
     </message>

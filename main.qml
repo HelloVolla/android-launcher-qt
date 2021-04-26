@@ -136,6 +136,14 @@ ApplicationWindow {
             'UPDATE': 1,
             'REMOVE': 2
         }
+        property var notifications: { "MissingText": qsTr("Missing message text"),
+                                      "MessageSent": qsTr("Message sent"),
+                                      "GenericFailure": qsTr("Generic failure"),
+                                      "NoService": qsTr("No service"),
+                                      "NullPdu": qsTr("Null PDU"),
+                                      "RadioOff": qsTr("Radio off"),
+                                      "MessageDelivered": qsTr("Message delivered"),
+                                      "MessageNotDelivered": qsTr("Message not delivered")}
 
         property var contacts: new Array
         property bool isLoadingContacts: false
@@ -632,9 +640,9 @@ ApplicationWindow {
                 } else if (type === "volla.launcher.messageResponse") {
                     console.log("MainView | onDispatched: " + type)
                     if (!message["sent"]) {
-                        mainView.showToast(qsTr("Couldn't send message because of empty test"))
+                        mainView.showToast(qsTr(mainView.notifications[message["text"]]))
                     } else {
-                        mainView.showToast(qsTr("Message sent"))
+                        mainView.showToast(qsTr(mainView.notifications[message["text"]]))
                     }
                 }
             }

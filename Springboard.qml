@@ -171,12 +171,14 @@ Page {
                 if (selectedObj) {
                     console.log("Springboard | Contact " + selectedObj["id"] + " " + selectedObj["name"])
                     // todo: offer selection of email address
-                    if (selectedObj["email.home"].length > 0) {
+                    if (selectedObj["email.home"] !== undefined && selectedObj["email.home"].length > 0) {
                         emailAddress = selectedObj["email.home"]
-                    } else if (selectedObj["email.work"].length > 0) {
+                    } else if (selectedObj["email.work"] !== undefined && selectedObj["email.work"].length > 0) {
                         emailAddress = selectedObj["email.work"]
-                    } else if (selectedObj["email.mobile"].length > 0) {
+                    } else if (selectedObj["email.mobile"] !== undefined && selectedObj["email.mobile"].length > 0) {
                         emailAddress = selectedObj["email.mobile"]
+                    } else if (selectedObj["email.other"] !== undefined && selectedObj["email.other"].length > 0) {
+                        emailAddress = selectedObj["email.other"]
                     }
                 } else {
                     mainView.showToast(qsTr("Sorry. I couldn't identify the contact"))
@@ -237,7 +239,8 @@ Page {
                             recipient = emailAddressForContact()
                         }
                         if (recipient !== null) {
-                            message = textInput.substring(idx+1, textInput.length)
+                            message = textInput.substring(idx+1, textInput.length).trim()
+                            console.log("Springboard | Message: " + message)
                             idx = message.indexOf("\n")
                             if (idx > -1) {
                                 var subject = message.substring(0, idx)
