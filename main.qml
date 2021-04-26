@@ -604,6 +604,8 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
+                        // todo: save contacts
+
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
