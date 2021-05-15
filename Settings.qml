@@ -213,7 +213,7 @@ Page {
 
                         themeSettings.theme = selectedMenuItem.theme
 
-                        if(themeSettings.sync) {
+                        if (themeSettings.sync) {
                             themeSettings.sync()
                         }
 

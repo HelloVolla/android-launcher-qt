@@ -162,6 +162,9 @@ Page {
             id: header
             width: parent.width
             z: 2
+
+            property var gradientColer: Universal.background
+
             Label {
                 id: headerLabel
                 width: header.width - 2 * mainView.innerSpacing
@@ -195,7 +198,7 @@ Page {
                         }
                         GradientStop {
                             position: 1.0
-                            color: Universal.background
+                            color: header.gradientColer
                         }
                     }
                     visible: mainView.backgroundOpacity === 1.0

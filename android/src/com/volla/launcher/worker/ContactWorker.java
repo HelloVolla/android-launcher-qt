@@ -261,7 +261,7 @@ public class ContactWorker {
     }
 
     static void checkContacts(Map message, Activity activity) {
-        Log.d(TAG, "check contacts sine " + message.get("timestamp"));
+        Log.d(TAG, "Check contacts since " + (double)message.get("timestamp"));
 
         Map responseMessage = new HashMap();
 

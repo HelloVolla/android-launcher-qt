@@ -288,9 +288,11 @@ Page {
                         // todo: create note
                         var source = "note" + Math.floor(Date.now()) + ".txt"
                         myNote.setSource(source)
-                        myNote.write(textInput)
+                        if (myNote.write(textInput)) {
+                            mainView.showToast(qsTr("You note was successfully stored"))
+                        }
                         console.log( "Springboard | WRITE "+ myNote.write(textInput))
-                        console.log("Springboard | READ " + myNote.read())
+                        // console.log("Springboard | READ " + myNote.read())
                         // Qt.openUrlExternally("content:///storage/emulated/0/Documents/" + source)
                         textInputArea.text = ""
                         break
@@ -368,6 +370,7 @@ Page {
             source: "myNote.txt"
             onError: {
                 console.log(msg)
+                mainView.showToast(msg)
             }
         }
 

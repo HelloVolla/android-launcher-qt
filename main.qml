@@ -28,7 +28,7 @@ ApplicationWindow {
               // Load wallpaper
               AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
               // Load contacts
-              AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": mainView.lastContactsCheck})
+              AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck})
           } else {
               // Application go in suspend state
               console.log("Application became inactive")
@@ -147,7 +147,6 @@ ApplicationWindow {
 
         property var contacts: new Array
         property bool isLoadingContacts: false
-        property double lastContactsCheck: 0
         property var wallpaper: ""
         property var wallpaperId: ""
         property var backgroundOpacity: 1.0
@@ -380,7 +379,7 @@ ApplicationWindow {
         }
 
         function getFeeds() {
-            var channels = feeds.readPrivate()
+            var channels = feeds.read()
             console.log("MainView | Retrieved feeds: " + channels.lenth)
             return channels.length > 0 ? JSON.parse(channels) : mainView.defaultFeeds
         }
@@ -403,7 +402,7 @@ ApplicationWindow {
                 case mainView.settingsAction.CREATE:
                     if (matched === false) {
                         channels.push(newChannel)
-                        console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
+                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
                         showToast(qsTr("New Subscrption: " + newChannel.name))
                     } else {
                         showToast(qsTr("You have alresdy subscribed the feed"))
@@ -412,13 +411,13 @@ ApplicationWindow {
                 case mainView.settingsAction.UPDATE:
                     if (matched === true) {
                         channels[i] = channel
-                        console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
+                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
                     }
                     break
                 case mainView.settingsAction.REMOVE:
                     if (matched === true) {
                         channels.splice(i, 1)
-                        console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
+                        console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
                     }
                     break
                 default:
@@ -440,7 +439,7 @@ ApplicationWindow {
                 if (channel["id"] === channelId) {
                     matched = true
                     channel["recent"] = newsId
-                    console.log("MainView | Did store feeds: " + feeds.writePrivate(JSON.stringify(channels)))
+                    console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
                     break
                 }
             }
@@ -542,7 +541,7 @@ ApplicationWindow {
         }
 
         function getActions() {
-            var actions = shortcuts.readPrivate()
+            var actions = shortcuts.read()
             console.log("MainView | Retrieved shortcuts: " + actions)
             return actions.length > 0 ? JSON.parse(actions) : mainView.defaultActions
         }
@@ -554,7 +553,7 @@ ApplicationWindow {
                 if (action["id"] === actionId) {
                     action["activated"] = isActive
                     actions[i] = action
-                    console.log("MainView | Did store shortcuts: " + shortcuts.writePrivate(JSON.stringify(actions)))
+                    console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
                     break
                 }
             }
@@ -573,6 +572,22 @@ ApplicationWindow {
             appWindow.visibility = visibility
         }
 
+        WorkerScript {
+            id: contactsWorker
+            source: "scripts/contacts.mjs"
+            onMessage: {
+                console.log("MainView | Contacts worker message received: " + messageObject.contacts.length)
+                if (messageObject.contacts.length === 0) {
+                    mainView.timeStamp = new Date()
+                    AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+                } else {
+                    var d = new Date()
+                    console.log("MainView | Read contacts did take " + ((d.valueOf() - mainView.timeStamp.valueOf()) / 1000) + " seconds")
+                    mainView.contacts = messageObject.contacts
+                }
+            }
+        }
+        
         Connections {
             target: AN.SystemDispatcher
             // @disable-check M16
@@ -581,21 +596,22 @@ ApplicationWindow {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | Contacts " + message["blockStart"] + " to " + message["blockEnd"])
                     mainView.contacts = mainView.contacts.concat(message["contacts"])
-                    console.log("MainView | New timestamp " + mainView.lastContactsCheck)
-                    message["contacts"].forEach(function (aContact, index) {
-                        if (aContact["name"] === undefined) {
-                            console.log("MainView | Invalid contact:")
-                            for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-                                console.log("MainView | * " + aContactKey + ": " + aContactValue)
-                            }
-                        }
-                    });
+//                    message["contacts"].forEach(function (aContact, index) {
+//                        if (aContact["name"] === undefined) {
+//                            console.log("MainView | Invalid contact:")
+//                            for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+//                                console.log("MainView | * " + aContactKey + ": " + aContactValue)
+//                            }
+//                        }
+//                    });
                     if (mainView.contacts.length === message["contactsCount"]) {
                         var d = new Date()
-                        console.log("MainView | Did take " + (d.valueOf() - mainView.timeStamp.valueOf()))
+                        console.log("MainView | Retrieving contacts did take " + (d.valueOf() - mainView.timeStamp.valueOf()) + " seconds")
                         mainView.isLoadingContacts = false
                         mainView.updateSpinner(false)
-                        mainView.lastContactsCheck = new Date().valueOf()
+                        settings.lastContactsCheck = new Date().valueOf()
+                        settings.sync()
+                        console.log("MainView | New contact timestamp " + settings.lastContactsCheck)
                         mainView.contacts = mainView.contacts.filter(function(contact) {
                             return contact["name"] !== undefined
                         })
@@ -605,7 +621,7 @@ ApplicationWindow {
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
                         // todo: save contacts
-
+                        console.log("MainView | Did store contacts: " + contactsCache.write(JSON.stringify(mainView.contacts)))
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
@@ -616,6 +632,19 @@ ApplicationWindow {
                         mainView.updateSpinner(true)
                         mainView.timeStamp = new Date()
                         AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+                    } else if (mainView.contacts.length == 0) {
+                        // todo: read contacts
+                        mainView.timeStamp = new Date()
+                        var contactsStr = contactsCache.readPrivate()
+                        console.log("MainView | Did read contacts with length " + contactsStr.length)
+                        contactsWorker.sendMessage({'contactsStr': contactsStr })
+//                        mainView.contacts = contactsStr !== undefined && contactsStr.length > 0 ? JSON.parse(contactsStr) : new Array
+//                        d = new Date()
+//                        console.log("MainView | Read contacts did take " + ((d.valueOf() - mainView.timeStamp.valueOf()) / 1000) + " seconds")
+//                        if (contactsStr.length === 0) {
+//                            mainView.timeStamp = new Date()
+//                            AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+//                        }
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {
                     console.log("MainView | onDispatched: " + type)
@@ -669,6 +698,7 @@ ApplicationWindow {
         property int theme: mainView.theme.Dark
         property bool fullscreen: false
         property bool firstStart: true
+        property double lastContactsCheck: 0
         
         Component.onCompleted: {
             console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
@@ -694,7 +724,7 @@ ApplicationWindow {
 
     FileIO {
         id: feeds
-        source: "feeds.json"
+        source: ".feeds.json"
         onError: {
             console.log("MainView | Feed settings error: " + msg)
         }
@@ -702,9 +732,17 @@ ApplicationWindow {
 
     FileIO {
         id: shortcuts
-        source: "shortcuts.json"
+        source: ".shortcuts.json"
         onError: {
             console.log("MainView | Shortcut settings error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: contactsCache
+        source: "contacts.json"
+        onError: {
+            console.log("MainView | Contacts cache error: " + msg)
         }
     }
 }

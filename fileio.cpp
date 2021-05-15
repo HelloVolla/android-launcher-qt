@@ -54,7 +54,7 @@ QString FileIO::readPrivate()
         return QString();
     }
 
-    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
+    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation).value(0);
     qDebug() << "Data Path: " << mDataPath;
     QDir myDir(mDataPath);
     if (!myDir.exists()) {
@@ -65,7 +65,7 @@ QString FileIO::readPrivate()
         qDebug() << "created directory path" << mDataPath;
     }
 
-    QFile file(mDataPath + "/." + mSource);
+    QFile file(mDataPath + "/" + mSource);
     QString fileContent;
     if ( file.open(QIODevice::ReadOnly) ) {
         QString line;
@@ -116,7 +116,7 @@ bool FileIO::writePrivate(const QString& data)
     if (mSource.isEmpty())
         return false;
 
-    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
+    QString mDataPath = QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation).value(0);
     qDebug() << "Data Path: " << mDataPath;
     QDir myDir(mDataPath);
     if (!myDir.exists()) {
@@ -127,7 +127,7 @@ bool FileIO::writePrivate(const QString& data)
         qDebug() << "created directory path" << mDataPath;
     }
 
-    QFile file(mDataPath + "/." + mSource);
+    QFile file(mDataPath + "/" + mSource);
     if (!file.open(QFile::WriteOnly | QFile::Truncate))
         return false;
 

@@ -58,5 +58,6 @@
         <file>icons/calculator@4x_104x104px.png</file>
         <file>icons/weather@4x_104x104px.png</file>
         <file>icons/xmpp@4x_104x104px.png</file>
+        <file>scripts/contacts.mjs</file>
     </qresource>
 </RCC>
