@@ -88,6 +88,7 @@ WorkerScript.onMessage = function(message) {
 
     if (textInputHasMultiTokens()) {
         if (textInputHasContactPrefix()) {
+            // todo: check availability of mobile phone number and email address
             filteredSuggestionObj[0] = [actionName.SendSMS, actionType.SendSMS]
             filteredSuggestionObj[1] = [actionName.SendEmail, actionType.SendEmail]
         } else if (textInputStartsWithPhoneNumber()) {

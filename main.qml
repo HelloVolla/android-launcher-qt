@@ -621,7 +621,7 @@ ApplicationWindow {
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
                         // todo: save contacts
-                        console.log("MainView | Did store contacts: " + contactsCache.write(JSON.stringify(mainView.contacts)))
+                        console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
