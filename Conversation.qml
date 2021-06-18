@@ -253,6 +253,8 @@ Page {
             }
         }
 
+
+
         model: currentConversationModel
 
         delegate: MouseArea {

@@ -328,6 +328,10 @@
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You note was successfully stored</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>main</name>
@@ -426,6 +430,34 @@
     <message>
         <source>Message not delivered</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Agenda</source>
+        <translation type="unfinished">Събития</translation>
+    </message>
+    <message>
+        <source>Gallery</source>
+        <translation type="unfinished">галерия</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Event</source>
+        <translation type="unfinished">създаване на събитие</translation>
+    </message>
+    <message>
+        <source>Recent People</source>
+        <translation type="unfinished">Контакти</translation>
+    </message>
+    <message>
+        <source>Recent Threads</source>
+        <translation type="unfinished">разговори</translation>
+    </message>
+    <message>
+        <source>Recent News</source>
+        <translation type="unfinished">Новини</translation>
     </message>
 </context>
 </TS>

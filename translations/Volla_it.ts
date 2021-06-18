@@ -327,6 +327,10 @@
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You note was successfully stored</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>main</name>
@@ -425,6 +429,34 @@
     <message>
         <source>Message not delivered</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Agenda</source>
+        <translation type="unfinished">Date</translation>
+    </message>
+    <message>
+        <source>Gallery</source>
+        <translation type="unfinished">Galleria</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Event</source>
+        <translation type="unfinished">creare evento</translation>
+    </message>
+    <message>
+        <source>Recent People</source>
+        <translation type="unfinished">Conversazioni</translation>
+    </message>
+    <message>
+        <source>Recent Threads</source>
+        <translation type="unfinished">Conversazioni</translation>
+    </message>
+    <message>
+        <source>Recent News</source>
+        <translation type="unfinished">Notizie</translation>
     </message>
 </context>
 </TS>

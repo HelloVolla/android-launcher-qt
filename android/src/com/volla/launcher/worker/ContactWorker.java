@@ -291,6 +291,7 @@ public class ContactWorker {
         }
 
         responseMessage.put("needsSync", needsSync);
+        responseMessage.put("newContactsCount", mainQueryCursor.getCount());
 
         SystemDispatcher.dispatch("volla.launcher.checkContactResponse", responseMessage);
     }

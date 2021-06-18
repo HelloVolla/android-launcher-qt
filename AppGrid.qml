@@ -15,6 +15,7 @@ Page {
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
         //"com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
         "com.android.mms" : "/icons/message@4x.png",
+        "com.google.android.apps.messaging" : "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
@@ -25,6 +26,7 @@ Page {
         "com.simplemobiletools.filemanager.pro": "/icons/folder@4x.png",
         "org.telegram.messenger": "/icons/telegram@4x.png",
         "com.android.email": "/icons/email@4x.png",
+        "com.google.android.gm": "/icons/email@4x.png",
         "com.Slack": "/icons/slack@4x.png",
         "com.simplemobiletools.notes.pro": "/icons/notes@4x.png",
         "org.mozilla.fennec_fdroid": "/icons/browser@4x.png",
@@ -58,6 +60,7 @@ Page {
     }
     property var labelMap: {
         "org.mozilla.fennec_fdroid": "Browser",
+        "com.google.android.gm" : "Mail",
         "at.bitfire.davdroid": "Sync",
         "hideme.android.vpn.noPlayStore": "VPN",
         "com.simplemobiletools.filemanager.pro": "Files",
@@ -223,7 +226,11 @@ Page {
                 onClicked: {
                     console.log("App " + model.label + " selected")
                     if (model.package.length > 0) {
+                        // todo: open default dialer for com.simplemobiletools.dialer
                         AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
+                        if (model.package.length === mainView.phoneApp && appLauncher.unreadMessages) {
+                            AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
+                        }
                     }
                 }
             }
@@ -360,7 +367,6 @@ Page {
                     appLauncher.appCount = message["appCount"]
                     mainView.updateSpinner(true)
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
-//                    appLauncher.updateAppLauncher()
                 }
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")

@@ -330,6 +330,10 @@
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You note was successfully stored</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>main</name>
@@ -428,6 +432,34 @@
     <message>
         <source>Message not delivered</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Agenda</source>
+        <translation type="unfinished">Diania</translation>
+    </message>
+    <message>
+        <source>Gallery</source>
+        <translation type="unfinished">galéria</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Event</source>
+        <translation type="unfinished">vytvoriť udalosť</translation>
+    </message>
+    <message>
+        <source>Recent People</source>
+        <translation type="unfinished">kontakty</translation>
+    </message>
+    <message>
+        <source>Recent Threads</source>
+        <translation type="unfinished">Rozhovory</translation>
+    </message>
+    <message>
+        <source>Recent News</source>
+        <translation type="unfinished">Novinky</translation>
     </message>
 </context>
 </TS>

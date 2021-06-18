@@ -28,6 +28,7 @@ ApplicationWindow {
               // Load wallpaper
               AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
               // Load contacts
+              settings.sync()
               AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck})
           } else {
               // Application go in suspend state
@@ -146,6 +147,7 @@ ApplicationWindow {
                                       "MessageNotDelivered": qsTr("Message not delivered")}
 
         property var contacts: new Array
+        property var loadingContacts: new Array
         property bool isLoadingContacts: false
         property var wallpaper: ""
         property var wallpaperId: ""
@@ -163,15 +165,15 @@ ApplicationWindow {
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
             {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
             {"id" : "https://www.theguardian.com/world/rss", "name": "The Guardian", "activated" : true, "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
-        property var defaultActions: [{"id" : actionType.ShowDialer, "name" : "Show Dialer", "activated" : true},
-            {"id" : actionType.OpenCam, "name": "Camera", "activated" : true},
-            {"id" : actionType.ShowCalendar, "name": "Agenda", "activated" : true},
-            {"id" : actionType.ShowGallery, "name": "Gallery", "activated" : true},
-            {"id" : actionType.ShowNotes, "name": "Notes", "activated" : false},
-            {"id" : actionType.CreateEvent, "name": "Create Event", "activated" : false},
-            {"id" : actionType.ShowContacts, "name": "Recent People", "activated" : true},
-            {"id" : actionType.ShowThreads, "name": "Recent Threads", "activated" : true},
-            {"id" : actionType.ShowNews, "name": "Recent News", "activated" : true}]
+        property var defaultActions: [{"id" : actionType.ShowDialer, "name" : qsTr("Show Dialer"), "activated" : true},
+            {"id" : actionType.OpenCam, "name": qsTr("Camera"), "activated" : true},
+            {"id" : actionType.ShowCalendar, "name": qsTr("Agenda"), "activated" : true},
+            {"id" : actionType.ShowGallery, "name": qsTr("Gallery"), "activated" : true},
+            {"id" : actionType.ShowNotes, "name": qsTr("Notes"), "activated" : false},
+            {"id" : actionType.CreateEvent, "name": qsTr("Create Event"), "activated" : false},
+            {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true},
+            {"id" : actionType.ShowThreads, "name": qsTr("Recent Threads"), "activated" : true},
+            {"id" : actionType.ShowNews, "name": qsTr("Recent News"), "activated" : true}]
 
         property var timeStamp: 0
 
@@ -577,10 +579,7 @@ ApplicationWindow {
             source: "scripts/contacts.mjs"
             onMessage: {
                 console.log("MainView | Contacts worker message received: " + messageObject.contacts.length)
-                if (messageObject.contacts.length === 0) {
-                    mainView.timeStamp = new Date()
-                    AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
-                } else {
+                if (messageObject.contacts.length !== 0) {
                     var d = new Date()
                     console.log("MainView | Read contacts did take " + ((d.valueOf() - mainView.timeStamp.valueOf()) / 1000) + " seconds")
                     mainView.contacts = messageObject.contacts
@@ -595,7 +594,7 @@ ApplicationWindow {
                 if (type === "volla.launcher.contactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | Contacts " + message["blockStart"] + " to " + message["blockEnd"])
-                    mainView.contacts = mainView.contacts.concat(message["contacts"])
+                    mainView.loadingContacts = mainView.loadingContacts.concat(message["contacts"])
 //                    message["contacts"].forEach(function (aContact, index) {
 //                        if (aContact["name"] === undefined) {
 //                            console.log("MainView | Invalid contact:")
@@ -604,7 +603,7 @@ ApplicationWindow {
 //                            }
 //                        }
 //                    });
-                    if (mainView.contacts.length === message["contactsCount"]) {
+                    if (mainView.loadingContacts.length === message["contactsCount"]) {
                         var d = new Date()
                         console.log("MainView | Retrieving contacts did take " + (d.valueOf() - mainView.timeStamp.valueOf()) + " seconds")
                         mainView.isLoadingContacts = false
@@ -612,39 +611,35 @@ ApplicationWindow {
                         settings.lastContactsCheck = new Date().valueOf()
                         settings.sync()
                         console.log("MainView | New contact timestamp " + settings.lastContactsCheck)
-                        mainView.contacts = mainView.contacts.filter(function(contact) {
+                        mainView.loadingContacts = mainView.loadingContacts.filter(function(contact) {
                             return contact["name"] !== undefined
                         })
-                        mainView.contacts.sort(function(a, b) {
+                        mainView.loadingContacts.sort(function(a, b) {
                             var x = a["name"].toLowerCase(),
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        // todo: save contacts
+                        mainView.contacts = mainView.loadingContacts
+                        mainView.loadingContacts = new Array
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     if (message["needsSync"] && !mainView.isLoadingContacts) {
                         console.log("MainView | Need to sync contacts")
-                        mainView.contacts = new Array
-                        mainView.isLoadingContacts = true
-                        mainView.updateSpinner(true)
+                        //mainView.showToast("NEED SYNC: " + message["newContactsCount"] + ", " + settings.lastContactsCheck)
+                        if (mainView.contacts.length === 0) {
+                            mainView.loadingContacts = new Array
+                            mainView.isLoadingContacts = true
+                            mainView.updateSpinner(true)
+                        }
                         mainView.timeStamp = new Date()
                         AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
-                    } else if (mainView.contacts.length == 0) {
-                        // todo: read contacts
+                    } else if (mainView.contacts.length === 0 && !mainView.isLoadingContacts) {
                         mainView.timeStamp = new Date()
                         var contactsStr = contactsCache.readPrivate()
                         console.log("MainView | Did read contacts with length " + contactsStr.length)
                         contactsWorker.sendMessage({'contactsStr': contactsStr })
-//                        mainView.contacts = contactsStr !== undefined && contactsStr.length > 0 ? JSON.parse(contactsStr) : new Array
-//                        d = new Date()
-//                        console.log("MainView | Read contacts did take " + ((d.valueOf() - mainView.timeStamp.valueOf()) / 1000) + " seconds")
-//                        if (contactsStr.length === 0) {
-//                            mainView.timeStamp = new Date()
-//                            AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
-//                        }
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {
                     console.log("MainView | onDispatched: " + type)
@@ -698,7 +693,7 @@ ApplicationWindow {
         property int theme: mainView.theme.Dark
         property bool fullscreen: false
         property bool firstStart: true
-        property double lastContactsCheck: 0
+        property double lastContactsCheck: 0.0
         
         Component.onCompleted: {
             console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
