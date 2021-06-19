@@ -12,7 +12,7 @@ import java.util.Map;
 import org.qtproject.qt5.android.QtNative;
 
 public class CallUtil {
-    private static final String TAG = "CallItil";
+    private static final String TAG = "CallUtil";
 
     public static final String UPDATE_CALLS_AS_READ = "volla.launcher.updateCallsAsRead";
 

@@ -70,10 +70,12 @@ DISTFILES += \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java \
     android/src/com/volla/launcher/worker/WallpaperWorker.java \
-    android/src/com/volla/launcher/worker/AppWorker.java
+    android/src/com/volla/launcher/worker/AppWorker.java \
+    translations/Volla_cn.ts
 
 TRANSLATIONS += \
     translations/Volla_de.ts \
+    translations/Volla_cn.ts \
     translations/Volla_fr.ts \
     translations/Volla_nl.ts \
     translations/Volla_se.ts \

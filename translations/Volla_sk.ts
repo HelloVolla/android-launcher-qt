@@ -461,5 +461,13 @@
         <source>Recent News</source>
         <translation type="unfinished">Novinky</translation>
     </message>
+    <message>
+        <source>Show Dialer</source>
+        <translation type="unfinished">Zobraziť telefón</translation>
+    </message>
+    <message>
+        <source>Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -459,5 +459,13 @@
         <source>Recent News</source>
         <translation type="unfinished">Новини</translation>
     </message>
+    <message>
+        <source>Show Dialer</source>
+        <translation type="unfinished">Покажи телефон</translation>
+    </message>
+    <message>
+        <source>Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

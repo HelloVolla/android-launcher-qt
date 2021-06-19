@@ -228,7 +228,7 @@ Page {
                     if (model.package.length > 0) {
                         // todo: open default dialer for com.simplemobiletools.dialer
                         AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
-                        if (model.package.length === mainView.phoneApp && appLauncher.unreadMessages) {
+                        if (model.package === mainView.phoneApp && appLauncher.unreadMessages) {
                             AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
                         }
                     }
