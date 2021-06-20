@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.XmlListModel 2.12
 import QtGraphicalEffects 1.12
+import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 
 Page {
@@ -86,8 +87,10 @@ Page {
         //xmlModel.update(textInput)
     }
 
-    function updateAppLauncher() {
-        gridModel.loadModel()
+    function updateAppLauncher(useColoredAppIcons) {
+        settings.sync()
+        gridView.desaturation = useColoredAppIcons ? 0.0 : 1.0
+        gridView.forceLayout()
     }
 
     function updateNotifications() {
@@ -100,6 +103,8 @@ Page {
         anchors.fill: parent
         cellHeight: parent.width * 0.32
         cellWidth: parent.width * 0.25
+
+        property var desaturation: settings.useColoredIcons ? 0.0 : 1.0
 
         model: gridModel
 
@@ -228,7 +233,8 @@ Page {
                     if (model.package.length > 0) {
                         // todo: open default dialer for com.simplemobiletools.dialer
                         AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
-                        if (model.package === mainView.phoneApp && appLauncher.unreadMessages) {
+                        // As a workaround for a missing feature in the phone app
+                        if (model.package === mainView.phoneApp && appLauncher.newCalls) {
                             AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
                         }
                     }
@@ -238,7 +244,7 @@ Page {
             Desaturate {
                 anchors.fill: gridButton
                 source: gridButton
-                desaturation: 1.0
+                desaturation: gridView.desaturation
             }
 
             LinearGradient {
@@ -370,6 +376,7 @@ Page {
                 }
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
+                settings.sync()
                 gridModel.modelArr = message["apps"]
                 gridModel.prepareModel()
                 gridModel.update(textInput)
@@ -381,6 +388,16 @@ Page {
                 console.log("AppGrid | Unread messages: " + message["threadsCount"])
                 appLauncher.unreadMessages = message["threadsCount"] > 0
             }
+        }
+    }
+
+    Settings {
+        id: settings
+        property bool useColoredIcons: false
+
+        onUseColoredIconsChanged: {
+            console.log("Colered icons settings changed")
+            gridView.desaturation = useColoredIcons ? 0.0 : 1.0
         }
     }
 }

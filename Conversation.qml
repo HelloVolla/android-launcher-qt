@@ -46,6 +46,14 @@ Page {
         currentConversationModel.update("")
     }
 
+    Connections {
+        target: Qt.inputMethod
+
+        onVisibleChanged: {
+            AN.SystemDispatcher.dispatch("volla.launcher.keyboardAction", {})
+        }
+    }
+
     function updateConversationPage (mode, id, name) {
         console.log("Conversation | Update conversation mode: " + mode + " with id " + id)
 
@@ -157,6 +165,7 @@ Page {
         id: listView
         anchors.fill: parent
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
+        footerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
 
         header: Column {
             id: header
@@ -253,7 +262,41 @@ Page {
             }
         }
 
+//        footer: Row {
+//            id: footer
+//            width: parent.width
+//            padding: mainView.innerSpacing
 
+//            property var gradientColer: Universal.background
+
+//            TextArea {
+//                id: textArea
+//                x: mainView.innerSpacing
+//                width: parent.width - mainView.innerSpacing * 2
+//                placeholderText: qsTr("Type your message")
+//                color: mainView.fontColor
+//                placeholderTextColor: "darkgrey"
+//                font.pointSize: mainView.largeFontSize
+//                wrapMode: Text.WordWrap
+//                leftPadding: 0.0
+//                rightPadding: mainView.innerSpacing
+
+//                background: Rectangle {
+//                    color: "transparent"
+//                    border.color: "transparent"
+//                }
+//            }
+//            Button {
+//                id: sendButton
+//                text: "<font color='#808080'>></font>"
+//                font.pointSize: mainView.largeFontSize * 2
+//                flat: true
+//                topPadding: 0.0
+//                anchors.top: parent.top
+//                //anchors.right: parent.right
+//                //visible: textArea.preeditText !== "" || textArea.text !== ""
+//            }
+//        }
 
         model: currentConversationModel
 

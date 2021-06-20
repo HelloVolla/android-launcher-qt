@@ -167,9 +167,6 @@ public class ContactWorker {
                     case Email.TYPE_HOME:
                         contact.put("email.home", address);
                         break;
-                    case Email.TYPE_OTHER:
-                        contact.put("email.mobile", address);
-                        break;
                     case Email.TYPE_WORK:
                         contact.put("email.work", address);
                         break;

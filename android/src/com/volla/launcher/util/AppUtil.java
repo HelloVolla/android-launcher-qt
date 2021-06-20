@@ -20,6 +20,7 @@ public class AppUtil {
     public static final String GET_APP_COUNT = "volla.launcher.appCountAction";
     public static final String GOT_APP_COUNT = "volla.launcher.appCountResponse";
     public static final String OPEN_CAM = "volla.launcher.camAction";
+    public static final String OPEN_DIALER = "volla.launcher.dialerAction";    
     public static final String RUN_APP = "volla.launcher.runAppAction";
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
 
@@ -68,6 +69,8 @@ public class AppUtil {
                             sendIntent.setType("text/plain");
                             sendIntent.setPackage("com.simplemobiletools.notes.pro");
                             activity.startActivity(sendIntent);
+                        } else if (type.equals(OPEN_DIALER)) {
+                            
                         }
                     }
                 };

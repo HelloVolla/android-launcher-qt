@@ -8,49 +8,6 @@ WorkerScript.onMessage = function(message) {
     var actionType = message.actionType
     var actionName = message.actionName
 
-    function phoneNumberForContact() {
-        var phoneNumber = -1
-        if (selectedObj !== undefined) {
-            // todo: offer selection of phone numbers
-            if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
-                phoneNumber = selectedObj["phone.mobile"]
-            } else if (selectedObj["phone.home"] !== undefined && selectedObj["phone.home"].length > 0) {
-                phoneNumber = selectedObj["phone.home"]
-            } else if (selectedObj["phone.work"] !== undefined && selectedObj["phone.work"].length > 0) {
-                phoneNumber = selectedObj["phone.work"]
-            } else if (selectedObj["phone.other"] !== undefined && selectedObj["phone.other"].length > 0) {
-                phoneNumber = selectedObj["phone.other"]
-            } else {
-                toast = qsTr("Sorry. I couldn't find a phone number for this contact")
-            }
-        } else {
-            toast = qsTr("Sorry. I couldn't identify the contact")
-        }
-
-        return phoneNumber
-    }
-
-    function emailAddressForContact() {
-        var emailAddress
-        if (selectedObj) {
-            console.log("Springboard | Contact " + selectedObj["id"] + " " + selectedObj["name"])
-            // todo: offer selection of email address
-            if (selectedObj["email.home"] !== undefined && selectedObj["email.home"].length > 0) {
-                emailAddress = selectedObj["email.home"]
-            } else if (selectedObj["email.work"] !== undefined && selectedObj["email.work"].length > 0) {
-                emailAddress = selectedObj["email.work"]
-            } else if (selectedObj["email.mobile"] !== undefined && selectedObj["email.mobile"].length > 0) {
-                emailAddress = selectedObj["email.mobile"]
-            } else if (selectedObj["email.other"] !== undefined && selectedObj["email.other"].length > 0) {
-                emailAddress = selectedObj["email.other"]
-            }
-        } else {
-            toast = qsTr("Sorry. I couldn't identify the contact")
-        }
-
-        return emailAddress
-    }
-
     function textInputHasMultiTokens() {
         return /\S+\s\S+/.test(textInput)
     }
@@ -77,7 +34,7 @@ WorkerScript.onMessage = function(message) {
     }
 
     function textInputCouldBeRssFeed() {
-        return textInput.indexOf("http") == 0 ? textInput.lastIndexOf("/") > 7 : textInput.lastIndexOf("/") > 3
+        return textInput.indexOf("http") === 0 ? textInput.lastIndexOf("/") > 7 : textInput.lastIndexOf("/") > 3
     }
 
     var filteredSuggestionObj = new Array
@@ -88,9 +45,25 @@ WorkerScript.onMessage = function(message) {
 
     if (textInputHasMultiTokens()) {
         if (textInputHasContactPrefix()) {
-            // todo: check availability of mobile phone number and email address
-            filteredSuggestionObj[0] = [actionName.SendSMS, actionType.SendSMS]
-            filteredSuggestionObj[1] = [actionName.SendEmail, actionType.SendEmail]
+            if (selectedObj !== undefined) {
+                if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
+                    filteredSuggestionObj.push([actionName.SendSMS, actionType.SendSMS])
+                }
+                var emailAddressCount = 0
+                if (selectedObj["email.home"] !== undefined && selectedObj["email.home"].length > 0) {
+                    emailAddressCount++
+                    filteredSuggestionObj.push([actionName.SendEmailToHome, actionType.SendEmailToHome])
+                }
+                if (selectedObj["email.work"] !== undefined && selectedObj["email.work"].length > 0) {
+                    emailAddressCount++
+                    filteredSuggestionObj.push([actionName.SendEmailToWork, actionType.SendEmailToWork])
+                }
+                if (selectedObj["email.other"] !== undefined && selectedObj["email.other"].length > 0) {
+                    filteredSuggestionObj.push([emailAddressCount === 0 ? actionName.SendEmail : actionName.SendEmailToOther, actionType.SendEmailToOther])
+                }
+            } else {
+                console.log("Springboard | Missing selected object")
+            }
         } else if (textInputStartsWithPhoneNumber()) {
             filteredSuggestionObj[0] = [actionName.SendSMS, actionType.SendSMS]
         } else if (textInputStartWithEmailAddress()) {
@@ -105,8 +78,26 @@ WorkerScript.onMessage = function(message) {
         var lastChar = textInput.substring(textInput.length - 1, textInput.length)
         console.log("Springboard | last char: " + lastChar)
         if (lastChar === " ") {
-            // todo: offer selection of phone numbers
-            filteredSuggestionObj[0] = [actionName.MakeCall, actionType.MakeCall]
+            if (selectedObj !== undefined) {
+                var phoneNumberCount = 0
+                if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
+                    phoneNumberCount++
+                    filteredSuggestionObj.push([actionName.MakeCallToMobile, actionType.MakeCallToMobile])
+                }
+                if (selectedObj["phone.home"] !== undefined && selectedObj["phone.home"].length > 0) {
+                    phoneNumberCount++
+                    filteredSuggestionObj.push([actionName.MakeCallToHome, actionType.MakeCallToHome])
+                }
+                if (selectedObj["phone.work"] !== undefined && selectedObj["phone.work"].length > 0) {
+                    phoneNumberCount++
+                    filteredSuggestionObj.push([actionName.MakeCallToWork, actionType.MakeCallToWork])
+                }
+                if (selectedObj["phone.other"] !== undefined && selectedObj["phone.other"].length > 0) {
+                    filteredSuggestionObj.push([phoneNumberCount === 0 ? actionName.MakeCall : actionName.MakeCallToOther, actionType.MakeCallToOther])
+                }
+            } else {
+                console.log("SpringBoard | No contact selected")
+            }
         }
 
         var lastToken = textInput.substring(1, textInput.length).toLowerCase()
@@ -127,15 +118,6 @@ WorkerScript.onMessage = function(message) {
         filteredSuggestionObj[0] = [actionName.MakeCall, actionType.MakeCall]
     } else if (textInput.length > 1) {
         filteredSuggestionObj[0] = [actionName.SearchWeb, actionType.SearchWeb]
-    } else if (defaultSuggestions) {
-        filteredSuggestionObj[0] = [qsTr("Make Call"), actionType.MakeCall]
-        filteredSuggestionObj[1] = [qsTr("Create Message"), actionType.SendSMS]
-        filteredSuggestionObj[2] = [qsTr("Create Mail"), actionType.SendEmail]
-        filteredSuggestionObj[3] = [qsTr("Open Cam"), actionType.OpenCam]
-        filteredSuggestionObj[4] = [qsTr("Gallery"), actionType.ShowGallery]
-        filteredSuggestionObj[5] = [qsTr("Recent people"), actionType.ShowContacts]
-        filteredSuggestionObj[6] = [qsTr("Recent threads"), actionType.ShowThreads]
-        filteredSuggestionObj[7] = [qsTr("Recent news"), actionType.ShowNews]
     }
 
     var existingSuggestionObj = new Object

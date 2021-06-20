@@ -8,6 +8,7 @@ import android.app.WallpaperManager;
 import android.app.UiModeManager;
 import android.util.Log;
 import android.graphics.Color;
+import android.inputmethodservice.KeyboardView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,6 +27,7 @@ public class LayoutUtil {
 
     public static final String SET_LAYOUT = "volla.launcher.layoutAction";
     public static final String SET_COLOR = "volla.launcher.colorAction";
+    public static final String GET_KEYBOARD_HEIGHT = "volla.launcher.keyboardAction";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -127,6 +129,11 @@ public class LayoutUtil {
                     };
 
                     activity.runOnUiThread(runnable);
+                } else if (type.equals(GET_KEYBOARD_HEIGHT)) {
+                    final Activity activity = QtNative.activity();
+                    KeyboardView keyboardView = new KeyboardView(activity.getApplicationContext(), null);
+                    int height = (keyboardView.getKeyboard()).getHeight();
+                    Log.d(TAG, "Keyboard height is " + height);
                 }
             }
         });

@@ -19,16 +19,16 @@ ApplicationWindow {
        target: Qt.application
        // @disable-check M16
        onStateChanged: {
-          if (Qt.application.state === Qt.ApplicationActive) {
+          if (Qt.application.state === Qt.ApplicationActive) {              
               // Application go in active state
               console.log("MainView | Application became active")
-              mainView.currentIndex = mainView.swipeIndex.Springboard
+              settings.sync()
+              mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               // Update app grid
               AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
               // Load wallpaper
               AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
               // Load contacts
-              settings.sync()
               AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck})
           } else {
               // Application go in suspend state
@@ -118,12 +118,23 @@ ApplicationWindow {
             'ShowNotes': 20013,
             'ShowDialer': 20014,
             'CreateEvent': 20015,
-            'AddFeed': 20016
+            'AddFeed': 20016,
+            'MakeCallToMobile': 20017,
+            'MakeCallToWork': 20018,
+            'MakeCallToHome': 20019,
+            'MakeCallToOther': 20020,
+            'SendEmailToHome': 20021,
+            'SendEmailToWork': 20022,
+            'SendEmailToOther': 20023,
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
-                                  "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
-                                  "MakeCall": qsTr("Call"), "OpenURL": qsTr("Open in browser"),
-                                  "AddFeed": qsTr("Add feed to collection")}
+            "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
+            "SendEmailToOther": qsTr("Send other email"), "MakeCall": qsTr("Call"),
+            "MakeCallToMobile": qsTr("Call on cell phone"), "MakeCallToHome": qsTr("Call at home"),
+            "MakeCallToWork": qsTr("Call at work"), "MakeCallToOther": qsTr("Call other phone"),
+            "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
+            "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection")
+        }
         property var swipeIndex: {
             'Preferences' : 0,
             'Apps' : 1,
@@ -574,6 +585,12 @@ ApplicationWindow {
             appWindow.visibility = visibility
         }
 
+        function updateGridView(useColoredAppIcons) {
+            console.log("MainView | Will update app page")
+            var item = itemAt(swipeIndex.Apps)
+            item.children[0].item.updateAppLauncher(useColoredAppIcons)
+        }
+
         WorkerScript {
             id: contactsWorker
             source: "scripts/contacts.mjs"
@@ -693,8 +710,10 @@ ApplicationWindow {
         property int theme: mainView.theme.Dark
         property bool fullscreen: false
         property bool firstStart: true
+        property bool useColoredIcons: false
+        property bool showAppsAtStartup: false
         property double lastContactsCheck: 0.0
-        
+
         Component.onCompleted: {
             console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
             if (Universal.theme !== settings.theme) {

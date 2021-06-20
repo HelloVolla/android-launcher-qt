@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Universal 2.12
 import Qt.labs.settings 1.0
+import AndroidNative 1.0 as AN
 
 Page {
     id: settingsPage
@@ -457,6 +458,18 @@ Page {
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
                         var object = component.createObject(designSettingsColumn, properties)
                         designSettingsColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        properties["actionId"] = "coloredIcons"
+                        properties["text"] = qsTr("Use colored app icons")
+                        properties["checked"] = designSettings.useColoredIcons
+                        object = component.createObject(designSettingsColumn, properties)
+                        designSettingsColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        properties["actionId"] = "startupIndex"
+                        properties["text"] = qsTr("Show apps at startup")
+                        properties["checked"] = designSettings.showAppsAtStartup
+                        object = component.createObject(designSettingsColumn, properties)
+                        designSettingsColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -470,12 +483,22 @@ Page {
 
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
-                        designSettings.fullscreen = active
-                        designSettings.sync()
-                        if (active) {
-                            mainView.updateVisibility(5)
-                        } else {
-                            mainView.updateVisibility(2)
+
+                        if (actionId === "fullscreen") {
+                            designSettings.fullscreen = active
+                            designSettings.sync()
+                            if (active) {
+                                mainView.updateVisibility(5)
+                            } else {
+                                mainView.updateVisibility(2)
+                            }
+                        } else if (actionId === "coloredIcons") {
+                            designSettings.useColoredIcons = active
+                            designSettings.sync()
+                            mainView.updateGridView(active)
+                        } else if (actionId === "startupIndex") {
+                            designSettings.showAppsAtStartup = active
+                            designSettings.sync()
                         }
                     }
                 }
@@ -489,6 +512,8 @@ Page {
                 Settings {
                     id: designSettings
                     property bool fullscreen: false
+                    property bool useColoredIcons: false
+                    property bool showAppsAtStartup: false
                 }
             }
         }

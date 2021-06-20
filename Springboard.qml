@@ -187,6 +187,23 @@ Page {
                 return emailAddress
             }
 
+            function parseAndSendEmail(recipient) {
+                var idx = textInput.search(/\s/)
+                var message = textInput.substring(idx+1, textInput.length).trim()
+                idx = message.indexOf("\n")
+                if (idx > -1) {
+                    var subject = message.substring(0, idx)
+                    var body = message.substring(idx+1, message.length)
+                    message = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body)
+                } else {
+                    body = message.substring(idx+1, message.length)
+                    message = "mailto:" + recipient + "?body=" + encodeURIComponent(body)
+                }
+                console.log("Springboard | Will send email " + message)
+                Qt.openUrlExternally(message)
+                textInputArea.text = ""
+            }
+
             function textInputStartsWithPhoneNumber() {
                 return /^\+?\d{4,}(\s\S+)?/.test(textInput)
             }
@@ -197,7 +214,7 @@ Page {
 
             function executeAction(actionValue, actionType, actionObj) {
                 if (actionObj !== undefined) {
-                    console.log("SpringBoard | " + actionValue + ": " + actionType + ":" + actionObj["id"])
+                    console.log("SpringBoard | " + actionValue + ": " + actionType + ": " + actionObj["id"])
                 } else {
                     console.log("SpringBoard | " + actionValue + ": " + actionType)
                 }
@@ -209,9 +226,44 @@ Page {
                             phoneNumber = phoneNumberForContact()
                         }
                         console.log("Springboard | Will call " + phoneNumber)
-                        //Qt.openUrlExternally("tel:" + phoneNumber)
                         util.makeCall({"number": phoneNumber, "intent": "call"})
                         textInputArea.text = ""
+                        break
+                    case mainView.actionType.MakeCallToMobile:
+                        if (selectedObj !== undefined) {
+                            phoneNumber = selectedObj["phone.mobile"]
+                            util.makeCall({"number": phoneNumber, "intent": "call"})
+                            textInputArea.text = ""
+                        } else {
+                            mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
+                        break
+                    case mainView.actionType.MakeCallToHome:
+                        if (selectedObj !== undefined) {
+                            phoneNumber = selectedObj["phone.home"]
+                            util.makeCall({"number": phoneNumber, "intent": "call"})
+                            textInputArea.text = ""
+                        } else {
+                            mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
+                        break
+                    case mainView.actionType.MakeCallToWork:
+                        if (selectedObj !== undefined) {
+                            phoneNumber = selectedObj["phone.work"]
+                            util.makeCall({"number": phoneNumber, "intent": "call"})
+                            textInputArea.text = ""
+                        } else {
+                            mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
+                        break
+                    case mainView.actionType.MakeCallToOther:
+                        if (selectedObj !== undefined) {
+                            phoneNumber = selectedObj["phone.other"]
+                            util.makeCall({"number": phoneNumber, "intent": "call"})
+                            textInputArea.text = ""
+                        } else {
+                            mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
                         break
                     case mainView.actionType.SendSMS:
                         var idx = textInput.search(/\s/)
@@ -219,16 +271,19 @@ Page {
                         phoneNumber = textInput.substring(0,idx)
                         var message = textInput.substring(idx+1,textInput.length)
                         if (!textInputStartsWithPhoneNumber()) {
-                            phoneNumber = phoneNumberForContact()
+                            if (selectedObj !== undefined) {
+                                phoneNumber = selectedObj["phone.mobile"]
+                            } else {
+                                mainView.showToast(qsTr("Sorry, no contact was selected"))
+                                break
+                            }
                         }
                         if (phoneNumber === -1) {
-                            mainView.showToast(qsTr("Sorry. Contact has no mobile phone number"))
+                            mainView.showToast(qsTr("Sorry, the mobile phone number is unknown"))
                         } else {
                             console.log("Springboard | Will send message " + message)
                             AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": phoneNumber, "text": message})
-                            //Qt.openUrlExternally("sms:" + phoneNumber + "?body=" + encodeURIComponent(message))
                         }
-                        // textInputArea.text = ""
                         break
                     case mainView.actionType.SendEmail:
                         idx = textInput.search(/\s/)
@@ -239,23 +294,31 @@ Page {
                             recipient = emailAddressForContact()
                         }
                         if (recipient !== null) {
-                            message = textInput.substring(idx+1, textInput.length).trim()
-                            console.log("Springboard | Message: " + message)
-                            idx = message.indexOf("\n")
-                            if (idx > -1) {
-                                var subject = message.substring(0, idx)
-                                var body = message.substring(idx+1, message.length)
-                                message = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body)
-                            } else {
-                                body = message.substring(idx+1, message.length)
-                                message = "mailto:" + recipient + "?body=" + encodeURIComponent(body)
-                            }
-                            console.log("Springboard | Will send email " + message)
-                            Qt.openUrlExternally(message)
+                            parseAndSendEmail(recipient)
                         } else {
                             mainView.showToast(qsTr("Sorry. Contact has no email address"))
                         }
-                        textInputArea.text = ""
+                        break
+                    case mainView.actionType.SendEmailToHome:
+                        if (selectedObj !== undefined) {
+                           parseAndSendEmail(selectedObj["email.home"])
+                        } else {
+                           mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
+                        break
+                    case mainView.actionType.SendEmailToWorl:
+                        if (selectedObj !== undefined) {
+                           parseAndSendEmail(selectedObj["email.work"])
+                        } else {
+                           mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
+                        break
+                    case mainView.actionType.SendEmailToOther:
+                        if (selectedObj !== undefined) {
+                           parseAndSendEmail(selectedObj["email.other"])
+                        } else {
+                           mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
                         break
                     case mainView.actionType.SearchWeb:
                         message = encodeURIComponent(textInput)
@@ -289,7 +352,7 @@ Page {
                         var source = "note" + Math.floor(Date.now()) + ".txt"
                         myNote.setSource(source)
                         if (myNote.write(textInput)) {
-                            mainView.showToast(qsTr("You note was successfully stored"))
+                            mainView.showToast(qsTr("Your note was successfully stored"))
                         }
                         console.log( "Springboard | WRITE "+ myNote.write(textInput))
                         // console.log("Springboard | READ " + myNote.read())
@@ -298,11 +361,11 @@ Page {
                         break
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
+                        selectedObj = Object.assign({}, actionObj)
                         actionValue = "@" + actionValue.replace(/\s/g, "_")
                         textInputArea.text = textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue + " "
                         textInputArea.cursorPosition = textInput.length
                         textInputArea.forceActiveFocus()
-                        selectedObj = Object.assign({}, actionObj)
                 }
             }
 

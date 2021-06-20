@@ -205,6 +205,14 @@
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Use colored app icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show apps at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -222,7 +230,7 @@
     </message>
     <message>
         <source>Sorry. Contact has no mobile phone number</source>
-        <translation type="unfinished">За съжаление контактът няма номер на мобилен телефон</translation>
+        <translation type="obsolete">За съжаление контактът няма номер на мобилен телефон</translation>
     </message>
     <message>
         <source>Sorry. Contact has no email address</source>
@@ -329,7 +337,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You note was successfully stored</source>
+        <source>Sorry, no contact was selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sorry, the mobile phone number is unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your note was successfully stored</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -465,6 +481,34 @@
     </message>
     <message>
         <source>Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send home email</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send work email</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send other email</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call on cell phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call at home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call at work</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call other phone</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

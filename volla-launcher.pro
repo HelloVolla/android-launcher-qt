@@ -53,7 +53,6 @@ HEADERS += \
 
 DISTFILES += \
     LICENSE.txt \
-    android/src/com/volla/launcher/util/CallUtil.java \
     translations/*.ts \
     android/res/drawable/wallpaper_black.png \
     android/res/drawable/wallpaper_white.png \
@@ -63,6 +62,7 @@ DISTFILES += \
     android/src/com/volla/launcher/util/AppUtil.java \
     android/src/com/volla/launcher/util/CalendarUtil.java \
     android/src/com/volla/launcher/util/LayoutUtil.java \
+    android/src/com/volla/launcher/util/CallUtil.java \
     android/src/com/volla/launcher/util/VibrationUtil.java \
     android/src/com/volla/launcher/util/MessageUtil.java \
     android/src/com/volla/launcher/worker/AccountWorker.java \
@@ -70,8 +70,7 @@ DISTFILES += \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java \
     android/src/com/volla/launcher/worker/WallpaperWorker.java \
-    android/src/com/volla/launcher/worker/AppWorker.java \
-    translations/Volla_cn.ts
+    android/src/com/volla/launcher/worker/AppWorker.java
 
 TRANSLATIONS += \
     translations/Volla_de.ts \

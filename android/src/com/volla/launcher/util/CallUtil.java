@@ -20,7 +20,6 @@ public class CallUtil {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map dmessage) {
-
                 final Activity activity = QtNative.activity();
                 final Map message = dmessage;
 
@@ -33,7 +32,8 @@ public class CallUtil {
                         }
                     };
 
-                    activity.runOnUiThread(runnable);
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 } 
             }
         });
