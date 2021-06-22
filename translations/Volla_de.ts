@@ -272,7 +272,7 @@
     <message>
         <location filename="../Settings.qml" line="468"/>
         <source>Show apps at startup</source>
-        <translation type="unfinished">Zeit Apps zum Start</translation>
+        <translation type="unfinished">Zeige Apps zum Start</translation>
     </message>
 </context>
 <context>

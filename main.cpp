@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.CalendarUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.MessageUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.CallUtil");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.VibrationUtil");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

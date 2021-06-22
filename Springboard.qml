@@ -9,7 +9,7 @@ import AndroidNative 1.0 as AN
 Page {
     id: springBoard
     anchors.fill: parent
-    topPadding: mainView.innerSpacing
+    //topPadding: mainView.innerSpacing
 
     property string textInput
     property bool textFocus
@@ -43,20 +43,26 @@ Page {
     ListView {
         id: listView
         anchors.fill: parent
-        headerPositioning: ListView.OverlayHeader
+        headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayHeader : ListView.InlineHeader
 
         header: Column {
             id: header
             width: parent.width
+            z: 2
 
             Label {
                 id: headline
-                topPadding: mainView.innerSpacing
+                topPadding: mainView.innerSpacing * 2
                 x: mainView.innerSpacing
                 text: qsTr("Springboard")
+                width: parent.width
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
-                color: mainView.fontColor
+
+                background: Rectangle {
+                    color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                    border.color: "transparent"
+                }
             }
             TextArea {
                 padding: mainView.innerSpacing
@@ -72,7 +78,7 @@ Page {
                 rightPadding: mainView.innerSpacing
 
                 background: Rectangle {
-                    color: "transparent"
+                    color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
                 }
 
@@ -114,8 +120,8 @@ Page {
             }
             Rectangle {
                 width: parent.width
+                color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
                 border.color: "transparent"
-                color: "transparent"
                 height: 1.1
             }
         }
@@ -496,6 +502,10 @@ Page {
             eventLabel.font.pointSize = selectedMenuItem === eventLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
             notesLabel.font.bold = selectedMenuItem === notesLabel
             notesLabel.font.pointSize = selectedMenuItem === notesLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
+
+            if (selectedMenuItem !== rootMenuButton) {
+                //AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"milliseconds": 4})
+            }
         }
 
         onEntered: {
