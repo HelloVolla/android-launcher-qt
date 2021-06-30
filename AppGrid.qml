@@ -165,7 +165,7 @@ Page {
                 color: "transparent"
                 height: 1.1
             }
-            bottomPadding: mainView.innerSpacing / 2
+            //bottomPadding: mainView.innerSpacing / 2
         }
 
         delegate: Rectangle {
@@ -179,7 +179,7 @@ Page {
 
             Rectangle {
                 id: gridCircle
-                anchors.top: parent.top
+                anchors.top: gridButton.top
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: parent.width * 0.6
                 width: parent.width * 0.6
@@ -192,6 +192,7 @@ Page {
                 id: gridButton
                 anchors.top: parent.top
                 anchors.topMargin: parent.width * 0.08 // Adjustment
+                topPadding: mainView.innerSpacing / 2
                 width: parent.width
                 text: model.label
                 contentItem: Column {
@@ -229,16 +230,28 @@ Page {
                     border.color: "transparent"
                 }
                 onClicked: {
-                    console.log("App " + model.label + " selected")
-                    if (model.package.length > 0) {
-                        // todo: open default dialer for com.simplemobiletools.dialer
-                        AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
+                    if (gridView.currentIndex > -1) {
+                        contextMenu.dismiss()
+                        gridView.currentIndex = -1
+                    } else if (model.package.length > 0) {
+                        console.log("App " + model.label + " selected")
                         // As a workaround for a missing feature in the phone app
-                        if (model.package === mainView.phoneApp && appLauncher.newCalls) {
-                            AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
+                        if (model.package === mainView.phoneApp) {
+                            if (appLauncher.newCalls) {
+                                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "log"})
+                                AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
+                            } else {
+                                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp})
+                            }
+                        } else {
+                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
                         }
                     }
                 }
+//                onPressAndHold: {
+//                    gridView.currentIndex = index
+//                    contextMenu.popup(gridCell)
+//                }
             }
 
             Desaturate {
@@ -268,9 +281,7 @@ Page {
 
             Rectangle {
                 id: notificationBadge
-                visible: model.package === mainView.messageApp ? appLauncher.unreadMessages
-                                                               : model.package === mainView.phoneApp ? appLauncher.newCalls
-                                                                                                     : false
+                visible: model.package === mainView.messageApp ? appLauncher.unreadMessages                                                                              : false
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
@@ -278,6 +289,48 @@ Page {
                 height: parent.width * 0.15
                 radius: height * 0.5
                 color:  Universal.accent
+            }
+        }
+    }
+
+    Menu {
+        id: contextMenu
+
+        MenuItem {
+            text: qsTr("Add to shortcuts")
+            font.pointSize: appLauncher.labelPointSize
+            leftPadding: mainView.innerSpacing
+            rightPadding: mainView.innerSpacing
+            topPadding: mainView.innerSpacing
+            background: Rectangle {
+                anchors.fill: parent
+                color: Universal.accent
+            }
+            onClicked: {
+                var idx = gridView.currentIndex
+                console.log("AppGrid | Index " + idx + " selected for shortcuts");
+                var app = gridModel.get(idx)
+                console.log("AppGrid | App " + app["label"] + " selected for shortcuts");
+                gridView.currentIndex = -1
+                mainView.updateAction(app["package"],
+                                      true,
+                                      mainView.settingsAction.CREATE,
+                                      {"id": app["package"], "name": qsTr("Open") + " " + app["label"], "activated": true} )
+            }
+        }
+        MenuItem {
+            text: qsTr("Open App")
+            font.pointSize: appLauncher.labelPointSize
+            leftPadding: mainView.innerSpacing
+            rightPadding: mainView.innerSpacing
+            bottomPadding: mainView.innerSpacing
+            background: Rectangle {
+                anchors.fill: parent
+                color: Universal.accent
+            }
+            onClicked: {
+                gridView.currentIndex = -1
+                mainView.showToast("Will be implemented soon!")
             }
         }
     }

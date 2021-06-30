@@ -11,6 +11,18 @@
         <source>Filter apps</source>
         <translation type="unfinished">Filtrovať aplikácie</translation>
     </message>
+    <message>
+        <source>Add to shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open App</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
@@ -123,6 +135,10 @@
     </message>
     <message>
         <source>Could not load RSS feed: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Contact</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -511,6 +527,22 @@
     </message>
     <message>
         <source>Call other phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Subscrption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have alresdy added the shortcut</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

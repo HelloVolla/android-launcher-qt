@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
+import android.os.Build;
 import android.content.Context;
 import java.util.Map;
 import org.qtproject.qt5.android.QtNative;
@@ -28,10 +29,11 @@ public class VibrationUtil {
 
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            int msec = (Integer) message.get("milliseconds");
-                            Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-                            v.cancel();
-                            v.vibrate(VibrationEffect.createOneShot(msec, VibrationEffect.DEFAULT_AMPLITUDE));
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                                Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                                v.cancel();
+                                v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
+                            }
                         }
                     };
 

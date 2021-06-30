@@ -7,7 +7,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.content.Intent;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
 import android.provider.MediaStore;
+import android.provider.CallLog;
+import android.telecom.TelecomManager;
+import android.content.Context;
+import android.net.Uri;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +29,7 @@ public class AppUtil {
     public static final String OPEN_DIALER = "volla.launcher.dialerAction";    
     public static final String RUN_APP = "volla.launcher.runAppAction";
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
+    public static final String OPEN_CONTACT = "volla.launcher.showContactAction";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -70,7 +77,37 @@ public class AppUtil {
                             sendIntent.setPackage("com.simplemobiletools.notes.pro");
                             activity.startActivity(sendIntent);
                         } else if (type.equals(OPEN_DIALER)) {
-                            
+                            String app = (String) message.get("app");
+
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q || app == null) {
+                                TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+                                app = manger.getDefaultDialerPackage();
+                            }
+
+                            Intent i = pm.getLaunchIntentForPackage(app);
+
+                            String action = (String) message.get("action");
+                            String number = (String) message.get("number");
+
+                            if (action != null && action.equals("dial")) {
+                                i.setAction(Intent.ACTION_DIAL);
+                                if (number != null) {
+                                    i.setData(Uri.parse("tel:" + number));
+                                } else {
+                                    i.setData(Uri.parse("tel:"));
+                                }
+                            } else if (action != null && action.equals("log")) {
+                                i.setAction(Intent.ACTION_VIEW);
+                                i.setType(CallLog.Calls.CONTENT_TYPE);
+                            }
+                            activity.startActivity(i);
+                        } else if (type.equals(OPEN_CONTACT)) {
+                            Log.d(TAG, "Will open contact app");
+                            String contact_id = (String) message.get("contact_id");
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contact_id);
+                            i.setData(uri);
+                            activity.startActivity(i);
                         }
                     }
                 };

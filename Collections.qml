@@ -33,7 +33,7 @@ Page {
     property string c_BADGE:     "badge"    // red dot for unread content children
     property string c_SBADGE:    "sbadge"   // red dot for unread messages
     property string c_PHONE:     "phome"    // recent phone number
-    property string c_IS_MOBILE: "mobile"   // true if phone number is for a cell phone
+    property string c_MOBILE:    "mobile"   // cell phone number
     property string c_EMAIL:     "email"    // recent email address
     property string c_ID:        "id"       // id of the contact, thread or news
     property string c_CHANNEL:   "channel"  // twitter or news channel
@@ -453,7 +453,7 @@ Page {
                         text: qsTr("Send Message")
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
-                        visible: model.c_PHONE !== undefined && model.c_IS_MOBILE
+                        visible: model.c_MOBILE !== undefined
                     }
                     Label {
                         id: emailLabel
@@ -462,6 +462,13 @@ Page {
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                         visible: model.c_EMAIL !== undefined
+                    }
+                    Label {
+                        id: contactLabel
+                        height: mainView.mediumFontSize * 1.2
+                        text: qsTr("Open Contact")
+                        font.pointSize: mainView.mediumFontSize
+                        color: "white"
                     }
                 }
                 Behavior on implicitHeight {
@@ -515,6 +522,7 @@ Page {
                 var plPoint = mapFromItem(callLabel, 0, 0)
                 var mlPoint = mapFromItem(messageLabel, 0, 0)
                 var elPoint = mapFromItem(emailLabel, 0, 0)
+                var clPoint = mapFromItem(contactLabel, 0, 0)
 
                 if (mouseY > plPoint.y && mouseY < plPoint.y + callLabel.height) {
                     selectedMenuItem = callLabel
@@ -522,6 +530,8 @@ Page {
                     selectedMenuItem = messageLabel
                 } else if (mouseY > elPoint.y && mouseY < elPoint.y + emailLabel.height) {
                     selectedMenuItem = emailLabel
+                } else if (mouseY > clPoint.y && mouseY < clPoint.y + contactLabel.height) {
+                    selectedMenuItem = contactLabel
                 } else {
                     selectedMenuItem = contactBox
                 }
@@ -533,6 +543,12 @@ Page {
                 messageLabel.font.pointSize = selectedMenuItem === messageLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
                 emailLabel.font.bold = selectedMenuItem === emailLabel
                 emailLabel.font.pointSize = selectedMenuItem === emailLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
+                contactLabel.font.bold = selectedMenuItem === contactLabel
+                contactLabel.font.pointSize = selectedMenuItem === contactLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
+
+                if (selectedMenuItem !== contactBox) {
+                    AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {})
+                }
             }
 
             function executeSelection() {
@@ -545,6 +561,9 @@ Page {
                 } else if (selectedMenuItem === emailLabel) {
                     console.log("Collections | Send email to " + model.c_TITLE)
                     currentCollectionModel.executeSelection(model, mainView.actionType.SendEmail)
+                } else if (selectedMenuItem === contactLabel) {
+                    console.log("Collections | Open contact of " + model.c_TITLE)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.OpenContact)
                 } else {
                     console.log("Collections | Nothing selected")
                 }
@@ -612,16 +631,13 @@ Page {
 
                 if (contact["phone.mobile"] !== undefined) {
                     cContact.c_PHONE = contact["phone.mobile"]
-                    cContact.c_IS_MOBILE = true
-                } else if (contact["phone.other"] !== undefined) {
-                    cContact.c_PHONE = contact["phone.other"]
-                    cContact.c_IS_MOBILE = false
-                } else if (contact["phone.home"] !== undefined) {
-                    cContact.c_PHONE = contact["phone.home"]
-                    cContact.c_IS_MOBILE = false
+                    cContact.c_MOBILE = contact["phone.mobile"]
                 } else if (contact["phone.work"] !== undefined) {
                     cContact.c_PHONE = contact["phone.work"]
-                    cContact.c_IS_MOBILE = false
+                } else if (contact["phone.home"] !== undefined) {
+                    cContact.c_PHONE = contact["phone.home"]
+                } else if (contact["phone.other"] !== undefined) {
+                    cContact.c_PHONE = contact["phone.other"]
                 }
 
                 if (contact["email.work"] !== undefined) {
@@ -630,8 +646,6 @@ Page {
                     cContact.c_EMAIL = contact["email.home"]
                 } else if (contact["email.other"] !== undefined) {
                     cContact.c_EMAIL = contact["email.other"]
-                } else if (contact["email.mobile"] !== undefined) {
-                    cContact.c_EMAIL = contact["email.mobile"]
                 }
 
                 var thread = contactThreads[contact["phone.mobile"]]
@@ -660,6 +674,8 @@ Page {
                 } else if ((thread !== undefined && call !== undefined && thread["date"] < call["date"])
                         || (thread === undefined && call !== undefined)) {
                     cContact.c_SBADGE = call["new"]
+                    // use the recent phone number
+                    cContact.c_PHONE = call["number"]
                     if (call["new"] === true) {
                         var messageText = (call["count"] > 1) ? qsTr("New calls") : qsTr("New call")
                         cContact.c_STEXT = call["count"] + " " + messageText + " " + mainView.parseTime(Number(call["date"]))
@@ -761,14 +777,16 @@ Page {
         function executeSelection(item, type) {
             switch (type) {
                 case mainView.actionType.MakeCall:
-                    // Qt.openUrlExternally("tel:" + item.c_PHONE)
                     util.makeCall({"number": item.c_PHONE, "intent": "call"})
                     break
                 case mainView.actionType.SendSMS:
-                    Qt.openUrlExternally("sms:" + item.c_PHONE)
+                    Qt.openUrlExternally("sms:" + item.c_MOBILE)
                     break
                 case mainView.actionType.SendEmail:
                     Qt.openUrlExternally("mailto:" + item.c_EMAIL)
+                    break
+                case mainView.actionType.OpenContact:
+                    AN.SystemDispatcher.dispatch("volla.launcher.showContactAction", {"contact_id": item.c_ID})
                     break
                 default:
                     mainView.updateConversationPage(mainView.conversationMode.Person, item.c_ID, item.c_TITLE)

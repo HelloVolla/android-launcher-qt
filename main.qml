@@ -111,21 +111,23 @@ ApplicationWindow {
             'ShowGroup': 20006,
             'ShowDetails': 20007,
             'ShowGallery': 20008,
-            'ShowConacts': 20009,
-            'ShowThreads': 20010,
-            'ShowNews': 20011,
-            'OpenCam': 20012,
-            'ShowNotes': 20013,
-            'ShowDialer': 20014,
-            'CreateEvent': 20015,
-            'AddFeed': 20016,
-            'MakeCallToMobile': 20017,
-            'MakeCallToWork': 20018,
-            'MakeCallToHome': 20019,
-            'MakeCallToOther': 20020,
-            'SendEmailToHome': 20021,
-            'SendEmailToWork': 20022,
-            'SendEmailToOther': 20023,
+            'ShowContacts': 20009,
+            'ShowCalendar' : 20010,
+            'ShowThreads': 20011,
+            'ShowNews': 20012,
+            'OpenCam': 20013,
+            'ShowNotes': 20014,
+            'ShowDialer': 20015,
+            'CreateEvent': 20016,
+            'AddFeed': 20017,
+            'MakeCallToMobile': 20018,
+            'MakeCallToWork': 20019,
+            'MakeCallToHome': 20020,
+            'MakeCallToOther': 20021,
+            'SendEmailToHome': 20022,
+            'SendEmailToWork': 20023,
+            'SendEmailToOther': 20024,
+            'OpenContact' : 20025
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -133,7 +135,8 @@ ApplicationWindow {
             "MakeCallToMobile": qsTr("Call on cell phone"), "MakeCallToHome": qsTr("Call at home"),
             "MakeCallToWork": qsTr("Call at work"), "MakeCallToOther": qsTr("Call other phone"),
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
-            "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection")
+            "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection"),
+            "OpenContact" : qsTr("Open Contact")
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -416,7 +419,7 @@ ApplicationWindow {
                     if (matched === false) {
                         channels.push(newChannel)
                         console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
-                        showToast(qsTr("New Subscrption: " + newChannel.name))
+                        showToast(qsTr("New Subscrption") + ": " + newChannel.name)
                     } else {
                         showToast(qsTr("You have alresdy subscribed the feed"))
                     }
@@ -559,17 +562,57 @@ ApplicationWindow {
             return actions.length > 0 ? JSON.parse(actions) : mainView.defaultActions
         }
 
-        function updateAction(actionId, isActive) {
+        function updateAction(actionId, isActive, sAction, newAction) {
+            console.log("MainView | Will update shortcut: " + actionId + " with properties " + newAction)
             var actions = getActions()
-            for (var i = 0; i < actions.length; i++) {
-                var action = actions[i]
+
+//            for (var i = 0; i < actions.length; i++) {
+//                var action = actions[i]
+//                if (action["id"] === actionId) {
+//                    action["activated"] = isActive
+//                    actions[i] = action
+//                    console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
+//                    break
+//                }
+//            }
+
+            var action
+            var matched = false
+            var i
+            for (i = 0; i < actions.length; i++) {
+                action = actions[i]
                 if (action["id"] === actionId) {
+                    matched = true
                     action["activated"] = isActive
-                    actions[i] = action
-                    console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
                     break
                 }
             }
+            switch (sAction) {
+                case mainView.settingsAction.CREATE:
+                    if (matched === false) {
+                        actions.push(newAction)
+                        console.log("MainView | Did store feeds: " + shortcuts.write(JSON.stringify(actions)))
+                        showToast(qsTr("New shortcut") + ": " + newAction.name)
+                    } else {
+                        showToast(qsTr("You have alresdy added the shortcut"))
+                    }
+                    break
+                case mainView.settingsAction.UPDATE:
+                    if (matched === true) {
+                        actions[i] = action
+                        console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
+                    }
+                    break
+                case mainView.settingsAction.REMOVE:
+                    if (matched === true) {
+                        actions.splice(i, 1)
+                        console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
+                    }
+                    break
+                default:
+                    break
+            }
+
             springboard.children[0].item.updateShortcuts(actions)
         }
 

@@ -382,11 +382,18 @@ Page {
                                 "text": shortcuts[i]["name"], "checked": shortcuts[i]["activated"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "hasRemoveButton": getFilteredShortcuts(mainView.defaultActions, "id", shortcuts[i]["id"]).length === 0 }
                             var object = component.createObject(shortcutSettingsColumn, properties)
                             shortcutSettingsColumn.checkboxes.push(object)
                         }
                         console.log("Settings | Checkboxes created")
+                    }
+
+                    function getFilteredShortcuts(array, key, value) {
+                        return array.filter(function(e) {
+                            return e[key] === value;
+                        });
                     }
 
                     function destroyCheckboxes() {
@@ -399,7 +406,19 @@ Page {
 
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
-                        mainView.updateAction(actionId, active)
+                        mainView.updateAction(actionId, active, mainView.settingsAction.UPDATE)
+                    }
+
+                    function removeSettings(actionId) {
+                        console.log("Settings | Remove settings for " + actionId)
+                        mainView.updateAction(actionId, false, mainView.settingsAction.REMOVE)
+                        for (var i = 0; i < shortcutSettingsColumn.checkboxes.length; i++) {
+                            var checkbox = shortcutSettingsColumn.checkboxes[i]
+                            if (checkbox.actionId === actionId) {
+                                checkboxes.splice(i, 1)
+                                checkbox.destroy()
+                            }
+                        }
                     }
                 }
 

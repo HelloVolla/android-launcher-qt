@@ -504,7 +504,7 @@ Page {
             notesLabel.font.pointSize = selectedMenuItem === notesLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
 
             if (selectedMenuItem !== rootMenuButton) {
-                //AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"milliseconds": 4})
+                AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {})
             }
         }
 
@@ -639,7 +639,8 @@ Page {
                 AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
-                Qt.openUrlExternally("tel:")
+                //Qt.openUrlExternally("tel:")
+                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"action": "dial"})
             } else if (selectedMenuItem == notesLabel) {
                 console.log("Springboard | Show notes")
                 AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
@@ -653,11 +654,8 @@ Page {
             id: shortcutBackground
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
-            //anchors.horizontalCenter: parent.horizontalCenter
             anchors.right: parent.right
             anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
-            //implicitHeight: shortcutColumn.height
-            //width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
             height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
             color: Universal.accent
