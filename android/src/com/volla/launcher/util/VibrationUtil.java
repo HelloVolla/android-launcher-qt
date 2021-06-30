@@ -29,11 +29,11 @@ public class VibrationUtil {
 
                     Runnable runnable = new Runnable () {
                         public void run() {
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                                Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-                                v.cancel();
-                                v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
-                            }
+//                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//                                Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+//                                v.cancel();
+//                                v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
+//                            }
                         }
                     };
 
