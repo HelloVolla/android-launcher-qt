@@ -84,12 +84,14 @@ public class AppUtil {
 //                                app = manger.getDefaultDialerPackage();
 //                            }
 
-                            Intent i = pm.getLaunchIntentForPackage(app);
+                            Intent i = new Intent();
+                            i.setPackage(app);
 
                             String action = (String) message.get("action");
                             String number = (String) message.get("number");
 
                             if (action != null && action.equals("dial")) {
+                                Log.d(TAG, "Will dial");
                                 i.setAction(Intent.ACTION_DIAL);
                                 if (number != null) {
                                     i.setData(Uri.parse("tel:" + number));

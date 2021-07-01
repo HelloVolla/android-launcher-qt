@@ -640,7 +640,7 @@ Page {
             } else if (selectedMenuItem == dialerLabel) {
                 console.log("Springboard | Show dialer")
                 //Qt.openUrlExternally("tel:")
-                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"action": "dial"})
+                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "dial"})
             } else if (selectedMenuItem == notesLabel) {
                 console.log("Springboard | Show notes")
                 AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
