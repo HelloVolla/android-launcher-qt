@@ -79,10 +79,10 @@ public class AppUtil {
                         } else if (type.equals(OPEN_DIALER)) {
                             String app = (String) message.get("app");
 
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q || app == null) {
-                                TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
-                                app = manger.getDefaultDialerPackage();
-                            }
+//                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q || app == null) {
+//                                TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+//                                app = manger.getDefaultDialerPackage();
+//                            }
 
                             Intent i = pm.getLaunchIntentForPackage(app);
 
