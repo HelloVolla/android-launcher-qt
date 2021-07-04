@@ -504,6 +504,7 @@ Page {
             notesLabel.font.pointSize = selectedMenuItem === notesLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
 
             if (selectedMenuItem !== rootMenuButton) {
+                //console.log("Selected menu changed to " + selectedMenuItem.text)
                 AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {})
             }
         }

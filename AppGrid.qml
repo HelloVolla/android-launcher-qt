@@ -281,7 +281,8 @@ Page {
 
             Rectangle {
                 id: notificationBadge
-                visible: model.package === mainView.messageApp ? appLauncher.unreadMessages                                                                              : false
+                visible: model.package === mainView.messageApp ? appLauncher.unreadMessages
+                                                               : model.package === mainView.phoneApp ? appLauncher.newCalls                                                               : false
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5

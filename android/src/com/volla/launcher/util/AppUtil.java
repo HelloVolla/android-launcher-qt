@@ -80,18 +80,21 @@ public class AppUtil {
                             String app = (String) message.get("app");
 
 //                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q || app == null) {
-//                                TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
-//                                app = manger.getDefaultDialerPackage();
+                                TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+                                app = manger.getDefaultDialerPackage();
 //                            }
 
-                            Intent i = new Intent();
-                            i.setPackage(app);
+                            Log.d(TAG, "Dialer package is " + app);
+
+                            Intent i;
 
                             String action = (String) message.get("action");
                             String number = (String) message.get("number");
 
-                            if (action != null && action.equals("dial")) {
+                            if (action != null && action.equals("dial")) {                              
                                 Log.d(TAG, "Will dial");
+                                i = new Intent();
+                                i.setPackage(app);
                                 i.setAction(Intent.ACTION_DIAL);
                                 if (number != null) {
                                     i.setData(Uri.parse("tel:" + number));
@@ -99,8 +102,12 @@ public class AppUtil {
                                     i.setData(Uri.parse("tel:"));
                                 }
                             } else if (action != null && action.equals("log")) {
+                                i = new Intent();
+                                i.setPackage(app);
                                 i.setAction(Intent.ACTION_VIEW);
                                 i.setType(CallLog.Calls.CONTENT_TYPE);
+                            } else {
+                                i = pm.getLaunchIntentForPackage(app);
                             }
                             activity.startActivity(i);
                         } else if (type.equals(OPEN_CONTACT)) {

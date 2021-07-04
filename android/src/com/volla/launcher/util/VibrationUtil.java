@@ -21,8 +21,7 @@ public class VibrationUtil {
 
             public void onDispatched(String type, Map dmessage) {
 
-                if (type.equals(VIBRATE)) {
-//                    Log.d(TAG, "Will vibrate" );
+//                if (type.equals(VIBRATE)) {
 
 //                    final Activity activity = QtNative.activity();
 //                    final Map message = dmessage;
@@ -30,16 +29,19 @@ public class VibrationUtil {
 //                    Runnable runnable = new Runnable () {
 //                        public void run() {
 //                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//                                Log.d(TAG, "Will vibrate" );
 //                                Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+//                                //VibrationEffect ve = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK);
+//                                VibrationEffect ve = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE);
 //                                v.cancel();
-//                                v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
+//                                v.vibrate(ve);
 //                            }
 //                        }
 //                    };
 
 //                    Thread thread = new Thread(runnable);
 //                    thread.start();
-                }
+//                }
             }
         });
     }
