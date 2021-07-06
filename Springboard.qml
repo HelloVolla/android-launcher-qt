@@ -312,7 +312,7 @@ Page {
                            mainView.showToast(qsTr("Sorry, no contact was selected"))
                         }
                         break
-                    case mainView.actionType.SendEmailToWorl:
+                    case mainView.actionType.SendEmailToWork:
                         if (selectedObj !== undefined) {
                            parseAndSendEmail(selectedObj["email.work"])
                         } else {
@@ -338,7 +338,6 @@ Page {
                             var url = textInput.trim()
                         } else {
                             url = "https://" + textInput.trim()
-
                         }
                         var success = Qt.openUrlExternally(url)
                         console.log("Springboard | Did open in browser: " + success)
@@ -503,9 +502,8 @@ Page {
             notesLabel.font.bold = selectedMenuItem === notesLabel
             notesLabel.font.pointSize = selectedMenuItem === notesLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
 
-            if (selectedMenuItem !== rootMenuButton) {
-                //console.log("Selected menu changed to " + selectedMenuItem.text)
-                AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {})
+            if (selectedMenuItem !== rootMenuButton && mainView.useVibration) {
+                AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
             }
         }
 
@@ -558,26 +556,33 @@ Page {
             var elPoint = mapFromItem(eventLabel, 0, 0)
             var olPoint = mapFromItem(notesLabel, 0, 0)
 
+            var selectedItem
+
             if (peopleLabel.visible && mouseY > plPoint.y && mouseY < plPoint.y + peopleLabel.height) {
-                selectedMenuItem = peopleLabel
+                selectedItem = peopleLabel
             } else if (threadLabel.visible && mouseY > tlPoint.y && mouseY < tlPoint.y + threadLabel.height) {
-                selectedMenuItem = threadLabel
+                selectedItem = threadLabel
             } else if (newsLabel.visible && mouseY > nlPoint.y && mouseY < nlPoint.y + newsLabel.height) {
-                selectedMenuItem = newsLabel
+                selectedItem = newsLabel
             } else if (galleryLabel.visible && mouseY > glPoint.y && mouseY < glPoint.y + galleryLabel.height) {
-                selectedMenuItem = galleryLabel
+                selectedItem = galleryLabel
             } else if (agendaLabel.visible && mouseY > alPoint.y && mouseY < alPoint.y + agendaLabel.height) {
-                selectedMenuItem = agendaLabel
+                selectedItem = agendaLabel
             } else if (cameraLabel.visible && mouseY > clPoint.y && mouseY < clPoint.y + cameraLabel.height) {
-                selectedMenuItem = cameraLabel
+                selectedItem = cameraLabel
             } else if (dialerLabel.visible && mouseY > dlPoint.y && mouseY < dlPoint.y + dialerLabel.height) {
-                selectedMenuItem = dialerLabel
+                selectedItem = dialerLabel
             } else if (eventLabel.visible && mouseY > elPoint.y && mouseY < elPoint.y + eventLabel.height) {
-                selectedMenuItem = eventLabel
+                selectedItem = eventLabel
             } else if (notesLabel.visible && mouseY > olPoint.y && mouseY < olPoint.y + notesLabel.height) {
-                selectedMenuItem = notesLabel
+                selectedItem = notesLabel
             } else {
-                selectedMenuItem = rootMenuButton
+                selectedItem = rootMenuButton
+            }
+
+            if (selectedMenuItem !== selectedItem) {
+                console.log("Springboard | Update selected meneu item to " + selectedItem.text)
+                selectedMenuItem = selectedItem
             }
         }        
 

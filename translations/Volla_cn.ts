@@ -228,6 +228,10 @@
         <source>Show apps at startup</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Use haptic menus</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>

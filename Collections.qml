@@ -523,17 +523,21 @@ Page {
                 var mlPoint = mapFromItem(messageLabel, 0, 0)
                 var elPoint = mapFromItem(emailLabel, 0, 0)
                 var clPoint = mapFromItem(contactLabel, 0, 0)
+                var selectedItem
 
                 if (mouseY > plPoint.y && mouseY < plPoint.y + callLabel.height) {
-                    selectedMenuItem = callLabel
+                    selectedItem = callLabel
                 } else if (mouseY > mlPoint.y && mouseY < mlPoint.y + messageLabel.height) {
-                    selectedMenuItem = messageLabel
+                    selectedItem = messageLabel
                 } else if (mouseY > elPoint.y && mouseY < elPoint.y + emailLabel.height) {
-                    selectedMenuItem = emailLabel
+                    selectedItem = emailLabel
                 } else if (mouseY > clPoint.y && mouseY < clPoint.y + contactLabel.height) {
-                    selectedMenuItem = contactLabel
+                    selectedItem = contactLabel
                 } else {
-                    selectedMenuItem = contactBox
+                    selectedItem = contactBox
+                }
+                if (selectedMenuItem !== selectedItem) {
+                    selectedMenuItem = selectedItem
                 }
             }
             onSelectedMenuItemChanged: {
@@ -546,8 +550,8 @@ Page {
                 contactLabel.font.bold = selectedMenuItem === contactLabel
                 contactLabel.font.pointSize = selectedMenuItem === contactLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
 
-                if (selectedMenuItem !== contactBox) {
-                    AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {})
+                if (selectedMenuItem !== contactBox && mainView.useVibration) {
+                    AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": vibrationDuration})
                 }
             }
 

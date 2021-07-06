@@ -168,6 +168,8 @@ ApplicationWindow {
         property var backgroundOpacity: 1.0
         property var backgroundColor: Universal.background
         property var fontColor: Universal.foreground
+        property var vibrationDuration: 50
+        property bool useVibration: settings.useHapticMenus
 
         property string galleryApp: "com.simplemobiletools.gallery.pro"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
@@ -755,6 +757,7 @@ ApplicationWindow {
         property bool firstStart: true
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
+        property bool useHapticMenus: false
         property double lastContactsCheck: 0.0
 
         Component.onCompleted: {

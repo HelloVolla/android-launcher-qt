@@ -14,17 +14,17 @@
         <translation type="unfinished">Filtrează aplicațiile</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="300"/>
+        <location filename="../AppGrid.qml" line="301"/>
         <source>Add to shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="318"/>
+        <location filename="../AppGrid.qml" line="319"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="322"/>
+        <location filename="../AppGrid.qml" line="323"/>
         <source>Open App</source>
         <translation type="unfinished"></translation>
     </message>
@@ -138,43 +138,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="622"/>
+        <location filename="../Collections.qml" line="626"/>
         <source>Private</source>
         <translation type="unfinished">privat</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="672"/>
+        <location filename="../Collections.qml" line="676"/>
         <source>New message</source>
         <translation type="unfinished">mesaj nou</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="680"/>
+        <location filename="../Collections.qml" line="684"/>
         <source>New calls</source>
         <translation type="unfinished">apeluri pierdute</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="680"/>
+        <location filename="../Collections.qml" line="684"/>
         <source>New call</source>
         <translation type="unfinished">apel pierdut</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="838"/>
-        <location filename="../Collections.qml" line="843"/>
+        <location filename="../Collections.qml" line="842"/>
+        <location filename="../Collections.qml" line="847"/>
         <source>You</source>
         <translation type="unfinished">tu</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="939"/>
+        <location filename="../Collections.qml" line="943"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="963"/>
+        <location filename="../Collections.qml" line="967"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">invalid RSS feed</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="981"/>
+        <location filename="../Collections.qml" line="985"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">lipsește mesajul RSS</translation>
     </message>
@@ -261,33 +261,38 @@
         <translation type="unfinished">modul transparent</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="266"/>
+        <location filename="../Settings.qml" line="274"/>
         <source>News Channels</source>
         <translation type="unfinished">canale de știri</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="355"/>
+        <location filename="../Settings.qml" line="363"/>
         <source>Shortcuts</source>
         <translation type="unfinished">comenzi rapide</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="450"/>
+        <location filename="../Settings.qml" line="458"/>
         <source>Experimental</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="474"/>
+        <location filename="../Settings.qml" line="482"/>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="482"/>
+        <location filename="../Settings.qml" line="490"/>
         <source>Use colored app icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="488"/>
+        <location filename="../Settings.qml" line="496"/>
         <source>Show apps at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="502"/>
+        <source>Use haptic menus</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -368,7 +373,7 @@
         <translation type="obsolete">camera deschisa</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="739"/>
+        <location filename="../Springboard.qml" line="745"/>
         <source>Gallery</source>
         <translation type="unfinished">Galerie</translation>
     </message>
@@ -402,52 +407,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="361"/>
+        <location filename="../Springboard.qml" line="360"/>
         <source>Your note was successfully stored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="649"/>
+        <location filename="../Springboard.qml" line="655"/>
         <source>My event</source>
         <translation type="unfinished">evenimentul meu</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="694"/>
+        <location filename="../Springboard.qml" line="700"/>
         <source>Show Dialer</source>
         <translation type="unfinished">arată telefonul</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="703"/>
+        <location filename="../Springboard.qml" line="709"/>
         <source>Open Camera</source>
         <translation type="unfinished">camera deschisa</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="712"/>
+        <location filename="../Springboard.qml" line="718"/>
         <source>Show Agenda</source>
         <translation type="unfinished">arată datele</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="721"/>
+        <location filename="../Springboard.qml" line="727"/>
         <source>Create Event</source>
         <translation type="unfinished">creează eveniment</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="730"/>
+        <location filename="../Springboard.qml" line="736"/>
         <source>Show Notes</source>
         <translation type="unfinished">arată note</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="748"/>
+        <location filename="../Springboard.qml" line="754"/>
         <source>Recent News</source>
         <translation type="unfinished">știri</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="757"/>
+        <location filename="../Springboard.qml" line="763"/>
         <source>Recent Threads</source>
         <translation type="unfinished">Conversații</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="766"/>
+        <location filename="../Springboard.qml" line="772"/>
         <source>Recent People</source>
         <translation type="unfinished">Contacte</translation>
     </message>
@@ -570,84 +575,84 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="182"/>
+        <location filename="../main.qml" line="184"/>
         <source>Show Dialer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="183"/>
+        <location filename="../main.qml" line="185"/>
         <source>Camera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="184"/>
+        <location filename="../main.qml" line="186"/>
         <source>Agenda</source>
         <translation type="unfinished">Evenimente</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="185"/>
+        <location filename="../main.qml" line="187"/>
         <source>Gallery</source>
         <translation type="unfinished">Galerie</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="186"/>
+        <location filename="../main.qml" line="188"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="187"/>
+        <location filename="../main.qml" line="189"/>
         <source>Create Event</source>
         <translation type="unfinished">creează eveniment</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="188"/>
+        <location filename="../main.qml" line="190"/>
         <source>Recent People</source>
         <translation type="unfinished">Contacte</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="189"/>
+        <location filename="../main.qml" line="191"/>
         <source>Recent Threads</source>
         <translation type="unfinished">Conversații</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="190"/>
+        <location filename="../main.qml" line="192"/>
         <source>Recent News</source>
         <translation type="unfinished">știri</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="375"/>
+        <location filename="../main.qml" line="377"/>
         <source>Just now</source>
         <translation type="unfinished">acum</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="377"/>
+        <location filename="../main.qml" line="379"/>
         <source>minutes ago</source>
         <translation type="unfinished">minute înainte</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="380"/>
         <location filename="../main.qml" line="382"/>
+        <location filename="../main.qml" line="384"/>
         <source>Today</source>
         <translation type="unfinished">azi</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="386"/>
         <location filename="../main.qml" line="388"/>
+        <location filename="../main.qml" line="390"/>
         <source>Yesterday</source>
         <translation type="unfinished">ieri</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="422"/>
+        <location filename="../main.qml" line="424"/>
         <source>New Subscrption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="424"/>
+        <location filename="../main.qml" line="426"/>
         <source>You have alresdy subscribed the feed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="447"/>
+        <location filename="../main.qml" line="449"/>
         <source>Invalid news ID</source>
         <translation type="unfinished"></translation>
     </message>
@@ -656,7 +661,7 @@
         <translation type="obsolete">v-ați abonat deja la canal</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="494"/>
+        <location filename="../main.qml" line="496"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">invalid RSS feed</translation>
     </message>
@@ -666,17 +671,17 @@
         <translation type="unfinished">Mesaj trimis</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="595"/>
+        <location filename="../main.qml" line="597"/>
         <source>New shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="597"/>
+        <location filename="../main.qml" line="599"/>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="778"/>
+        <location filename="../main.qml" line="781"/>
         <source>Not yet supported</source>
         <translation type="unfinished">încă nu este acceptat</translation>
     </message>

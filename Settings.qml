@@ -194,17 +194,25 @@ Page {
                     var firstPoint = mapFromItem(darkModeOption, 0, 0)
                     var secondPoint = mapFromItem(lightModeOption, 0, 0)
                     var thirdPoint = mapFromItem(translucentModeOption, 0, 0)
+                    var selectedItem
 
                     if (mouseY > firstPoint.y && mouseY < firstPoint.y + darkModeOption.height) {
-                        selectedMenuItem = darkModeOption
+                        selectedItem = darkModeOption
                     } else if (mouseY > secondPoint.y && mouseY < secondPoint.y + lightModeOption.height) {
-                        selectedMenuItem = lightModeOption
+                        selectedItem = lightModeOption
                     } else if (mouseY > thirdPoint.y && mouseY < thirdPoint.y + translucentModeOption.height) {
-                        selectedMenuItem = translucentModeOption
+                        selectedItem = translucentModeOption
                     } else {
-                        selectedMenuItem = modeSettingsTitle
+                        selectedItem = modeSettingsTitle
+                    }
+                    if (selectedMenuItem !== selectedItem) {
+                        selectedMenuItem = selectedItem
+                        if (selectedMenuItem !== modeSettingsTitle && mainView.useVibration) {
+                            AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
+                        }
                     }
                 }
+
 
                 function executeSelection() {
                     console.log("Settings | Current mode: " + Universal.theme + ", " + themeSettings.theme)
@@ -489,6 +497,12 @@ Page {
                         properties["checked"] = designSettings.showAppsAtStartup
                         object = component.createObject(designSettingsColumn, properties)
                         designSettingsColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        properties["actionId"] = "hapticMenus"
+                        properties["text"] = qsTr("Use haptic menus")
+                        properties["checked"] = designSettings.useHapticMenus
+                        object = component.createObject(designSettingsColumn, properties)
+                        designSettingsColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -518,6 +532,10 @@ Page {
                         } else if (actionId === "startupIndex") {
                             designSettings.showAppsAtStartup = active
                             designSettings.sync()
+                        } else if (actionId === "hapticMenus") {
+                            designSettings.useHapticMenus = active
+                            designSettings.sync()
+                            mainView.useVibration = active
                         }
                     }
                 }
@@ -533,6 +551,7 @@ Page {
                     property bool fullscreen: false
                     property bool useColoredIcons: false
                     property bool showAppsAtStartup: false
+                    property bool useHapticMenus: false
                 }
             }
         }
