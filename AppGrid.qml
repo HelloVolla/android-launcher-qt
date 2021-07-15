@@ -16,6 +16,7 @@ Page {
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
         //"com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
         "com.android.mms" : "/icons/message@4x.png",
+        "com.android.messaging" : "/icons/message@4x.png",
         "com.google.android.apps.messaging" : "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
@@ -57,6 +58,7 @@ Page {
         "org.thoughtcrime.securesms": "/icons/signal@4x_104x104px.png",
         "de.baumann.weather": "/icons/weather@4x_104x104px.png",
         "com.simplemobiletools.calculator": "/icons/calculator@4x_104x104px.png",
+        "com.android.calculator2": "/icons/calculator@4x_104x104px.png",
         "eu.siacs.conversations": "/icons/xmpp@4x_104x104px.png"
     }
     property var labelMap: {
