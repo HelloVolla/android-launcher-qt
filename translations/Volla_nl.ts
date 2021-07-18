@@ -79,7 +79,7 @@
     <name>Collections</name>
     <message>
         <location filename="../Collections.qml" line="67"/>
-        <location filename="../Collections.qml" line="138"/>
+        <location filename="../Collections.qml" line="141"/>
         <source>People</source>
         <translation type="unfinished">Contactpersonen</translation>
     </message>
@@ -109,68 +109,68 @@
         <translation type="unfinished">Zoek nieuws</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="156"/>
+        <location filename="../Collections.qml" line="159"/>
         <source>Filter collections</source>
         <translation type="unfinished">Filter collecties</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="445"/>
+        <location filename="../Collections.qml" line="448"/>
         <source>Call</source>
         <translation type="unfinished">opbellen</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="453"/>
+        <location filename="../Collections.qml" line="456"/>
         <source>Send Message</source>
         <translation type="unfinished">Bericht sturen</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="461"/>
+        <location filename="../Collections.qml" line="464"/>
         <source>Send Email</source>
         <translation type="unfinished">E-mail sturen</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="469"/>
+        <location filename="../Collections.qml" line="472"/>
         <source>Open Contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="626"/>
+        <location filename="../Collections.qml" line="629"/>
         <source>Private</source>
         <translation type="unfinished">privé</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="676"/>
+        <location filename="../Collections.qml" line="679"/>
         <source>New message</source>
         <translation type="unfinished">Nieuwe boodschap</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="684"/>
+        <location filename="../Collections.qml" line="687"/>
         <source>New calls</source>
         <translation type="unfinished">Gemiste oproepen</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="684"/>
+        <location filename="../Collections.qml" line="687"/>
         <source>New call</source>
         <translation type="unfinished">Gemiste oproep</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="842"/>
-        <location filename="../Collections.qml" line="847"/>
+        <location filename="../Collections.qml" line="845"/>
+        <location filename="../Collections.qml" line="850"/>
         <source>You</source>
         <translation type="unfinished">u</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="943"/>
+        <location filename="../Collections.qml" line="946"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="967"/>
+        <location filename="../Collections.qml" line="970"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ongeldig RSS feed</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="985"/>
+        <location filename="../Collections.qml" line="988"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">Ontbrekend rss-bericht</translation>
     </message>
@@ -257,37 +257,57 @@
         <translation type="unfinished">Transparante modus</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="274"/>
+        <location filename="../Settings.qml" line="273"/>
         <source>News Channels</source>
         <translation type="unfinished">Nieuwe berichtkanalen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="363"/>
+        <location filename="../Settings.qml" line="362"/>
         <source>Shortcuts</source>
         <translation type="unfinished">Snelkoppelingen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="458"/>
+        <location filename="../Settings.qml" line="460"/>
+        <source>Search engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="484"/>
+        <source>StartPage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="492"/>
+        <source>DuckDuckGo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="498"/>
+        <source>MetaGer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="559"/>
         <source>Experimental</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="482"/>
+        <location filename="../Settings.qml" line="583"/>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="490"/>
+        <location filename="../Settings.qml" line="591"/>
         <source>Use colored app icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="496"/>
+        <location filename="../Settings.qml" line="597"/>
         <source>Show apps at startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="502"/>
+        <location filename="../Settings.qml" line="603"/>
         <source>Use haptic menus</source>
         <translation type="unfinished"></translation>
     </message>

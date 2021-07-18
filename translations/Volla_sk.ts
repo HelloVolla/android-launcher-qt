@@ -233,6 +233,22 @@
         <source>Use haptic menus</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Search engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StartPage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DuckDuckGo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MetaGer</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>

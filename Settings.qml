@@ -35,21 +35,21 @@ Page {
             }
 
             MouseArea {
-                id: modeSettings
+                id: themeSettingsItem
                 width: parent.width
-                implicitHeight: modeSettingsColumn.height
+                implicitHeight: themeSettingsItemColumn.height
                 preventStealing: true
 
-                property var selectedMenuItem: modeSettingsTitle
+                property var selectedMenuItem: themeSettingsItemTitle
                 property bool menuState: false
                 property double labelOpacity: 0.0
 
                 Column {
-                    id: modeSettingsColumn
+                    id: themeSettingsItemColumn
                     width: parent.width
 
                     Label {
-                        id: modeSettingsTitle
+                        id: themeSettingsItemTitle
 
                         property var theme: themeSettings.theme
 
@@ -57,11 +57,11 @@ Page {
                         width: parent.width
                         text: qsTr("Dark Mode")
                         font.pointSize: mainView.largeFontSize
-                        font.weight: modeSettings.menuState ? Font.Black : Font.Normal
-                        color: modeSettings.menuState ? "white" : Universal.foreground
+                        font.weight: themeSettingsItem.menuState ? Font.Black : Font.Normal
+                        color: themeSettingsItem.menuState ? "white" : Universal.foreground
                         background: Rectangle {
                             anchors.fill: parent
-                            color: modeSettings.menuState === true ? Universal.accent : "transparent"
+                            color: themeSettingsItem.menuState === true ? Universal.accent : "transparent"
                         }
 
                         Component.onCompleted: {
@@ -90,18 +90,18 @@ Page {
                         rightPadding: mainView.innerSpacing
                         bottomPadding: mainView.innerSpacing
                         width: parent.width
-                        visible: modeSettings.menuState
+                        visible: themeSettingsItem.menuState
                         text: qsTr("Dark Mode")
                         contentItem: Text {
                             text: darkModeOption.text
                             font.pointSize: mainView.mediumFontSize
-                            font.weight: modeSettings.selectedMenuItem === darkModeOption ? Font.Black : Font.Normal
+                            font.weight: themeSettingsItem.selectedMenuItem === darkModeOption ? Font.Black : Font.Normal
                             color: "white"
-                            opacity: modeSettings.labelOpacity
+                            opacity: themeSettingsItem.labelOpacity
                         }
                         background: Rectangle {
                             anchors.fill: parent
-                            color: modeSettings.menuState ? Universal.accent : "transparent"
+                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
                         }
                     }
                     Button {
@@ -113,18 +113,18 @@ Page {
                         rightPadding: mainView.innerSpacing
                         bottomPadding: mainView.innerSpacing
                         width: parent.width
-                        visible: modeSettings.menuState
+                        visible: themeSettingsItem.menuState
                         text: qsTr("Light Mode")
                         contentItem: Text {
                             text: lightModeOption.text
                             font.pointSize: mainView.mediumFontSize
-                            font.weight: modeSettings.selectedMenuItem === lightModeOption ? Font.Black : Font.Normal
+                            font.weight: themeSettingsItem.selectedMenuItem === lightModeOption ? Font.Black : Font.Normal
                             color: "white"
-                            opacity: modeSettings.labelOpacity
+                            opacity: themeSettingsItem.labelOpacity
                         }
                         background: Rectangle {
                             anchors.fill: parent
-                            color: modeSettings.menuState ? Universal.accent : "transparent"
+                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
                         }
                     }
                     Button {
@@ -136,18 +136,18 @@ Page {
                         rightPadding: mainView.innerSpacing
                         bottomPadding: mainView.innerSpacing * 2
                         width: parent.width
-                        visible: modeSettings.menuState
+                        visible: themeSettingsItem.menuState
                         text: qsTr("Translucent Mode")
                         contentItem: Text {
                             text: translucentModeOption.text
                             font.pointSize: mainView.mediumFontSize
-                            font.weight: modeSettings.selectedMenuItem === translucentModeOption ? Font.Black : Font.Normal
+                            font.weight: themeSettingsItem.selectedMenuItem === translucentModeOption ? Font.Black : Font.Normal
                             color: "white"
-                            opacity: modeSettings.labelOpacity
+                            opacity: themeSettingsItem.labelOpacity
                         }
                         background: Rectangle {
                             anchors.fill: parent
-                            color: modeSettings.menuState ? Universal.accent : "transparent"
+                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
                         }
                     }
                 }
@@ -156,12 +156,12 @@ Page {
                     NumberAnimation {
                         duration: 250.
                         onRunningChanged: {
-                            if (!running && modeSettings.menuState) {
+                            if (!running && themeSettingsItem.menuState) {
                                 console.log("Settings | Switch on mode options labels")
-                                modeSettings.labelOpacity = 1.0
-                            } else if (running && !modeSettings.menuState) {
+                                themeSettingsItem.labelOpacity = 1.0
+                            } else if (running && !themeSettingsItem.menuState) {
                                 console.log("Settings | Switch off mode option labels")
-                                modeSettings.labelOpacity = 0.0
+                                themeSettingsItem.labelOpacity = 0.0
                             }
                         }
                     }
@@ -203,22 +203,21 @@ Page {
                     } else if (mouseY > thirdPoint.y && mouseY < thirdPoint.y + translucentModeOption.height) {
                         selectedItem = translucentModeOption
                     } else {
-                        selectedItem = modeSettingsTitle
+                        selectedItem = themeSettingsItemTitle
                     }
                     if (selectedMenuItem !== selectedItem) {
                         selectedMenuItem = selectedItem
-                        if (selectedMenuItem !== modeSettingsTitle && mainView.useVibration) {
+                        if (selectedMenuItem !== themeSettingsItemTitle && mainView.useVibration) {
                             AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
                         }
                     }
                 }
 
-
                 function executeSelection() {
                     console.log("Settings | Current mode: " + Universal.theme + ", " + themeSettings.theme)
                     console.log("Settings | Execute mode selection: " + selectedMenuItem.text + ", " + selectedMenuItem.theme)
-                    if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== modeSettingsTitle) {
-                        modeSettingsTitle.text = selectedMenuItem.text
+                    if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== themeSettingsItemTitle) {
+                        themeSettingsItemTitle.text = selectedMenuItem.text
 
                         themeSettings.theme = selectedMenuItem.theme
 
@@ -243,7 +242,7 @@ Page {
                                 console.log("Settings | Unknown theme selected: " + themeSettings.theme)
                         }
 
-                        selectedMenuItem = modeSettingsTitle
+                        selectedMenuItem = themeSettingsItemTitle
                     }
                 }
 
@@ -254,26 +253,26 @@ Page {
             }
 
             Item {
-                id: newsSettings
+                id: newsSettingsItem
                 width: parent.width
-                implicitHeight: newsSettingsColumn.height
+                implicitHeight: newsSettingsItemColumn.height
 
                 Column {
-                    id: newsSettingsColumn
+                    id: newsSettingsItemColumn
                     width: parent.width
 
                     property bool menuState: false
                     property var newsCheckboxes: new Array
 
                     Button {
-                        id: newsSettingsTitle
+                        id: newsSettingsItemTitle
                         width: parent.width
                         padding: mainView.innerSpacing
                         contentItem: Text {
-                            width: parent.width - 2 * newsSettingsTitle.padding
+                            width: parent.width - 2 * newsSettingsItemTitle.padding
                             text: qsTr("News Channels")
                             font.pointSize: mainView.largeFontSize
-                            font.weight: newsSettingsColumn.menuState ? Font.Black : Font.Normal
+                            font.weight: newsSettingsItemColumn.menuState ? Font.Black : Font.Normal
                             color: Universal.foreground
                         }
                         background: Rectangle {
@@ -281,13 +280,13 @@ Page {
                             color: "transparent"
                         }
                         onClicked: {
-                            newsSettingsColumn.menuState = !newsSettingsColumn.menuState
-                            if (newsSettingsColumn.menuState) {
+                            newsSettingsItemColumn.menuState = !newsSettingsItemColumn.menuState
+                            if (newsSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create new checkboxes")
-                                newsSettingsColumn.createCheckboxes()
+                                newsSettingsItemColumn.createCheckboxes()
                             } else {
                                 console.log("Settings | Will destroy new checkboxes")
-                                newsSettingsColumn.destroyCheckboxes()
+                                newsSettingsItemColumn.destroyCheckboxes()
                             }
                         }
                     }
@@ -296,25 +295,25 @@ Page {
                         var cannels = mainView.getFeeds()
 
                         for (var i = 0; i < cannels.length; i++) {
-                            var component = Qt.createComponent("/Checkbox.qml", newsSettingsColumn)
+                            var component = Qt.createComponent("/Checkbox.qml", newsSettingsItemColumn)
                             var properties = { "actionId": cannels[i]["id"],
                                 "text": cannels[i]["name"], "checked": cannels[i]["activated"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": true}
-                            var object = component.createObject(newsSettingsColumn, properties)
-                            newsSettingsColumn.newsCheckboxes.push(object)
+                            var object = component.createObject(newsSettingsItemColumn, properties)
+                            newsSettingsItemColumn.newsCheckboxes.push(object)
                         }
                         console.log("Settings News checkboxes created")
                     }
 
                     function destroyCheckboxes() {
-                        for (var i = 0; i < newsSettingsColumn.newsCheckboxes.length; i++) {
-                            var checkbox = newsSettingsColumn.newsCheckboxes[i]
+                        for (var i = 0; i < newsSettingsItemColumn.newsCheckboxes.length; i++) {
+                            var checkbox = newsSettingsItemColumn.newsCheckboxes[i]
                             checkbox.destroy()
                         }
-                        newsSettingsColumn.newsCheckboxes = new Array
+                        newsSettingsItemColumn.newsCheckboxes = new Array
                     }
 
                     function updateSettings(channelId, active) {
@@ -325,8 +324,8 @@ Page {
                     function removeSettings(channelId) {
                         console.log("Settings | Remove settings for " + channelId)
                         mainView.updateFeed(channelId, false, mainView.settingsAction.REMOVE)
-                        for (var i = 0; i < newsSettingsColumn.newsCheckboxes.length; i++) {
-                            var checkbox = newsSettingsColumn.newsCheckboxes[i]
+                        for (var i = 0; i < newsSettingsItemColumn.newsCheckboxes.length; i++) {
+                            var checkbox = newsSettingsItemColumn.newsCheckboxes[i]
                             if (checkbox.actionId === channelId) {
                                 newsCheckboxes.splice(i, 1)
                                 checkbox.destroy()
@@ -343,26 +342,26 @@ Page {
             }
 
             Item {
-                id: shortcutSettings
+                id: shortcutSettingsItem
                 width: parent.width
-                implicitHeight: shortcutSettingsColumn.height
+                implicitHeight: shortcutSettingsItemColumn.height
 
                 Column {
-                    id: shortcutSettingsColumn
+                    id: shortcutSettingsItemColumn
                     width: parent.width
 
                     property bool menuState: false
                     property var checkboxes: new Array
 
                     Button {
-                        id: shortcutSettingsButton
+                        id: shortcutSettingsItemButton
                         width: parent.width
                         padding: mainView.innerSpacing
                         contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsButton.padding
+                            width: parent.width - 2 * shortcutSettingsItemButton.padding
                             text: qsTr("Shortcuts")
                             font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsColumn.menuState ? Font.Black : Font.Normal
+                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
                             color: Universal.foreground
                         }
                         background: Rectangle {
@@ -370,13 +369,13 @@ Page {
                             color: "transparent"
                         }
                         onClicked: {
-                            shortcutSettingsColumn.menuState = !shortcutSettingsColumn.menuState
-                            if (shortcutSettingsColumn.menuState) {
+                            shortcutSettingsItemColumn.menuState = !shortcutSettingsItemColumn.menuState
+                            if (shortcutSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
-                                shortcutSettingsColumn.createCheckboxes()
+                                shortcutSettingsItemColumn.createCheckboxes()
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
-                                shortcutSettingsColumn.destroyCheckboxes()
+                                shortcutSettingsItemColumn.destroyCheckboxes()
                             }
                         }
                     }
@@ -385,15 +384,15 @@ Page {
                         var shortcuts = mainView.getActions()
 
                         for (var i = 0; i < shortcuts.length; i++) {
-                            var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsColumn)
+                            var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsItemColumn)
                             var properties = { "actionId": shortcuts[i]["id"],
                                 "text": shortcuts[i]["name"], "checked": shortcuts[i]["activated"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": getFilteredShortcuts(mainView.defaultActions, "id", shortcuts[i]["id"]).length === 0 }
-                            var object = component.createObject(shortcutSettingsColumn, properties)
-                            shortcutSettingsColumn.checkboxes.push(object)
+                            var object = component.createObject(shortcutSettingsItemColumn, properties)
+                            shortcutSettingsItemColumn.checkboxes.push(object)
                         }
                         console.log("Settings | Checkboxes created")
                     }
@@ -405,11 +404,11 @@ Page {
                     }
 
                     function destroyCheckboxes() {
-                        for (var i = 0; i < shortcutSettingsColumn.checkboxes.length; i++) {
-                            var checkbox = shortcutSettingsColumn.checkboxes[i]
+                        for (var i = 0; i < shortcutSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = shortcutSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
-                        shortcutSettingsColumn.checkboxes = new Array
+                        shortcutSettingsItemColumn.checkboxes = new Array
                     }
 
                     function updateSettings(actionId, active) {
@@ -420,8 +419,8 @@ Page {
                     function removeSettings(actionId) {
                         console.log("Settings | Remove settings for " + actionId)
                         mainView.updateAction(actionId, false, mainView.settingsAction.REMOVE)
-                        for (var i = 0; i < shortcutSettingsColumn.checkboxes.length; i++) {
-                            var checkbox = shortcutSettingsColumn.checkboxes[i]
+                        for (var i = 0; i < shortcutSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = shortcutSettingsItemColumn.checkboxes[i]
                             if (checkbox.actionId === actionId) {
                                 checkboxes.splice(i, 1)
                                 checkbox.destroy()
@@ -437,27 +436,30 @@ Page {
                 }
             }
 
+            // todo: Add source settings
+
             Item {
-                id: deisgnSettings
+                id: searchSettingsItem
                 width: parent.width
-                implicitHeight: designSettingsColumn.height
+                implicitHeight: searchSettingsItemColumn.height
+                visible: false
 
                 Column {
-                    id: designSettingsColumn
+                    id: searchSettingsItemColumn
                     width: parent.width
 
                     property bool menuState: false
                     property var checkboxes: new Array
 
                     Button {
-                        id: designSettingsButton
+                        id: searchSettingsItemButton
                         width: parent.width
                         padding: mainView.innerSpacing
                         contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsButton.padding
-                            text: qsTr("Experimental")
+                            width: parent.width - 2 * shortcutSettingsItemButton.padding
+                            text: qsTr("Search engines")
                             font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsColumn.menuState ? Font.Black : Font.Normal
+                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
                             color: Universal.foreground
                         }
                         background: Rectangle {
@@ -465,53 +467,152 @@ Page {
                             color: "transparent"
                         }
                         onClicked: {
-                            designSettingsColumn.menuState = !designSettingsColumn.menuState
-                            if (designSettingsColumn.menuState) {
+                            searchSettingsItemColumn.menuState = !searchSettingsItemColumn.menuState
+                            if (searchSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
-                                designSettingsColumn.createCheckboxes()
+                                searchSettingsItemColumn.createCheckboxes()
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
-                                designSettingsColumn.destroyCheckboxes()
+                                searchSettingsItemColumn.destroyCheckboxes()
                             }
                         }
                     }
 
                     function createCheckboxes() {
-                        var component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        var component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        var properties = { "actionId": "startpage",
+                                "text": qsTr("StartPage"), "checked": searchSettings.startpage,
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                        var object = component.createObject(searchSettingsItemColumn, properties)
+                        searchSettingsItemColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
+                        properties["actionId"] = "duckduckgo"
+                        properties["text"] = qsTr("DuckDuckGo")
+                        properties["checked"] = searchSettings.duckduckgo
+                        object = component.createObject(searchSettingsItemColumn, properties)
+                        searchSettingsItemColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "metager"
+                        properties["text"] = qsTr("MetaGer")
+                        properties["checked"] = searchSettings.metager
+                        object = component.createObject(searchSettingsItemColumn, properties)
+                        searchSettingsItemColumn.checkboxes.push(object)
+                        console.log("Settings | Checkboxes created")
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < searchSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = searchSettingsItemColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        searchSettingsItemColumn.checkboxes = new Array
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update settings for " + actionId + ", " + active)
+
+                        if (actionId === "duckduckgo") {
+                            searchSettings.duckduckgo = active
+                        } else if (actionId === "startpage") {
+                            searchSettings.startpage = active
+                        } else if (actionId === "metager") {
+                            searchSettings.metager = active
+                        }
+                        searchSettings.sync()
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
+                }
+
+                Settings {
+                    id: searchSettings
+                    property bool duckduckgo: false
+                    property bool startpage: true
+                    property bool metager: false
+                }
+            }
+
+            Item {
+                id: designSettingsItem
+                width: parent.width
+                implicitHeight: designSettingsItemColumn.height
+
+                Column {
+                    id: designSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+
+                    Button {
+                        id: designSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * shortcutSettingsItemButton.padding
+                            text: qsTr("Experimental")
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            designSettingsItemColumn.menuState = !designSettingsItemColumn.menuState
+                            if (designSettingsItemColumn.menuState) {
+                                console.log("Settings | Will create checkboxes")
+                                designSettingsItemColumn.createCheckboxes()
+                            } else {
+                                console.log("Settings | Will destroy checkboxes")
+                                designSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        var component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         var properties = { "actionId": "fullscreen",
                                 "text": qsTr("Fullscreen"), "checked": designSettings.fullscreen,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
-                        var object = component.createObject(designSettingsColumn, properties)
-                        designSettingsColumn.checkboxes.push(object)
-                        component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        var object = component.createObject(designSettingsItemColumn, properties)
+                        designSettingsItemColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "coloredIcons"
                         properties["text"] = qsTr("Use colored app icons")
                         properties["checked"] = designSettings.useColoredIcons
-                        object = component.createObject(designSettingsColumn, properties)
-                        designSettingsColumn.checkboxes.push(object)
-                        component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        designSettingsItemColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
-                        object = component.createObject(designSettingsColumn, properties)
-                        designSettingsColumn.checkboxes.push(object)
-                        component = Qt.createComponent("/Checkbox.qml", designSettingsColumn)
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        designSettingsItemColumn.checkboxes.push(object)
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "hapticMenus"
                         properties["text"] = qsTr("Use haptic menus")
                         properties["checked"] = designSettings.useHapticMenus
-                        object = component.createObject(designSettingsColumn, properties)
-                        designSettingsColumn.checkboxes.push(object)
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        designSettingsItemColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
                     }
 
                     function destroyCheckboxes() {
-                        for (var i = 0; i < designSettingsColumn.checkboxes.length; i++) {
-                            var checkbox = designSettingsColumn.checkboxes[i]
+                        for (var i = 0; i < designSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = designSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
-                        designSettingsColumn.checkboxes = new Array
+                        designSettingsItemColumn.checkboxes = new Array
                     }
 
                     function updateSettings(actionId, active) {

@@ -113,12 +113,15 @@ Page {
         console.log("Collections | Will load threads")
         collectionPage.threads = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
+
+        // todo: load threads from further source
+        //       address (phone or contact), body (message), date, type
     }
 
     function loadCalls(filter) {
         console.log("Collections | Will load calls")
         collectionPage.calls = new Array
-        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)
+        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)  
     }
 
     ListView {
@@ -551,7 +554,7 @@ Page {
                 contactLabel.font.pointSize = selectedMenuItem === contactLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
 
                 if (selectedMenuItem !== contactBox && mainView.useVibration) {
-                    AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": vibrationDuration})
+                    AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
                 }
             }
 
@@ -815,16 +818,16 @@ Page {
                         matched = (contact["id"] !== undefined && thread["person"] !== undefined && contact["id"] === thread["person"])
                                   || (contact["phone.mobile"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.mobile"].toString().endsWith(thread["address"].slice(3))
-                                      && Math.abs(contact["phone.mobile"].toString().length - thread["address"].length) < 4)
+                                      && Math.abs(contact["phone.mobile"].toString().length - thread["address"].length) < 3)
                                   || (contact["phone.other"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.other"].toString().endsWith(thread["address"].slice(3))
-                                      && Math.abs(contact["phone.other"].toString().length - thread["address"].length) < 4)
+                                      && Math.abs(contact["phone.other"].toString().length - thread["address"].length) < 3)
                                   || (contact["phone.work"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.work"].toString().endsWith(thread["address"].slice(3))
-                                      && Math.abs(contact["phone.work"].toString().length - thread["address"].length) < 4)
+                                      && Math.abs(contact["phone.work"].toString().length - thread["address"].length) < 3)
                                   || (contact["phone.home"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
-                                      && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 4)
+                                      && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 3)
                     } catch (err) {
                         console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
                     }
