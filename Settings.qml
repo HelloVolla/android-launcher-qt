@@ -480,17 +480,17 @@ Page {
 
                     function createCheckboxes() {
                         var component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
-                        var properties = { "actionId": "startpage",
-                                "text": qsTr("StartPage"), "checked": searchSettings.startpage,
+                        var properties = { "actionId": "duckduckgo",
+                                "text": qsTr("DuckDuckGo"), "checked": searchSettings.duckduckgo,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
                         var object = component.createObject(searchSettingsItemColumn, properties)
                         searchSettingsItemColumn.checkboxes.push(object)
                         component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
-                        properties["actionId"] = "duckduckgo"
-                        properties["text"] = qsTr("DuckDuckGo")
-                        properties["checked"] = searchSettings.duckduckgo
+                        properties["actionId"] = "startpage"
+                        properties["text"] = qsTr("StartPage")
+                        properties["checked"] = searchSettings.startpage
                         object = component.createObject(searchSettingsItemColumn, properties)
                         searchSettingsItemColumn.checkboxes.push(object)
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
@@ -513,13 +513,14 @@ Page {
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
 
-                        if (actionId === "duckduckgo") {
-                            searchSettings.duckduckgo = active
-                        } else if (actionId === "startpage") {
-                            searchSettings.startpage = active
-                        } else if (actionId === "metager") {
-                            searchSettings.metager = active
+                        for (var i = 0; i < searchSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = searchSettingsItemColumn.checkboxes[i]
+
                         }
+
+                        searchSettings.duckduckgo = actionId === "duckduckgo" ? active : !active
+                        searchSettings.metager = actionId === "metager" ? active : !active
+                        searchSettings.startpage = actionId === "startpage" ? active : !active
                         searchSettings.sync()
                     }
                 }
@@ -532,8 +533,8 @@ Page {
 
                 Settings {
                     id: searchSettings
-                    property bool duckduckgo: false
-                    property bool startpage: true
+                    property bool duckduckgo: true
+                    property bool startpage: false
                     property bool metager: false
                 }
             }

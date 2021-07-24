@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.3.12" android:versionCode="68" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.3.14" android:versionCode="70" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="26"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
