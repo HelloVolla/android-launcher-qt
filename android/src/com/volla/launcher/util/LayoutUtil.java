@@ -63,9 +63,22 @@ public class LayoutUtil {
 
                     Intent intent = new Intent();
                     intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
-                    intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("", (value > 0 ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("", (value > 0 ? Color.WHITE : Color.BLACK));
                     intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
                     activity.sendBroadcast(intent);
+
+//                    Intent i = new Intent();
+//                    i.setAction("com.simplemobiletools.commons.SHARED_THEME_ACTIVATED");
+//                    i.putExtra("text_color", (value > 0 ? Color.WHITE : Color.BLACK));
+//                    i.putExtra("background_color", (value > 0 ? Color.BLACK : Color.WHITE));
+//                    i.putExtra("primary_color", (value > 0 ? Color.WHITE : Color.BLACK));
+//                    i.putExtra("accent_color", (value > 0 ? Color.WHITE : Color.BLACK));
+//                    i.putExtra("app_icon_color", (value > 0 ? Color.BLACK : Color.WHITE));
+//                    i.putExtra("navigation_bar_color", (value > 0 ? Color.BLACK : Color.WHITE));
+//                    i.putExtra("last_updated_ts", System.currentTimeMillis() / 1000);
+//                    activity.sendBroadcast(i);
 
                     Runnable runnable = new Runnable () {
 

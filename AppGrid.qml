@@ -16,7 +16,7 @@ Page {
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
         //"com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
         "com.android.mms" : "/icons/message@4x.png",
-        "com.android.messaging" : "/icons/message@4x.png",
+        "com.android.messaging": "/icons/message@4x.png",
         "com.google.android.apps.messaging" : "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
@@ -283,8 +283,8 @@ Page {
 
             Rectangle {
                 id: notificationBadge
-                visible: model.package === mainView.messageApp ? appLauncher.unreadMessages
-                                                               : model.package === mainView.phoneApp ? appLauncher.newCalls                                                               : false
+                visible: mainView.messageApp.includes(model.package) ? appLauncher.unreadMessages
+                                                                     : model.package === mainView.phoneApp ? appLauncher.newCalls                                                               : false
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
