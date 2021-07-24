@@ -45,12 +45,13 @@ public class AppWorker
                             ArrayList<Map> appList = new ArrayList();
 
                             final PackageManager pm = activity.getPackageManager();
-                            final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts", "com.android.gallery3d",
-                                "com.android.music", "com.android.inputmethod.latin", "com.android.stk", "com.mediatek.filemanager",
-                                "com.android.documentsui", "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control",
-                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.mediatek.gnss.nonframeworklbs",
-                                "system.volla.startup", "com.volla.startup", "com.aurora.services",
-                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou");
+                            final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts",
+                            "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
+                            "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui",
+                            "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control",
+                            "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock",
+                            "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
+                            "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou");
 
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
                             i.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -111,8 +112,9 @@ public class AppWorker
         String json="[\n";
         final PackageManager pm = a.getPackageManager();
         final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts", "com.android.gallery3d",
-            "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk", "com.mediatek.filemanager",
-            "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "com.android.quicksearchbox");
+            "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk",
+            "com.android.calendar", "com.mediatek.filemanager", "com.mediatek.cellbroadcastreceiver",
+            "com.conena.navigation.gesture.control", "com.android.quicksearchbox");
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
@@ -121,6 +123,7 @@ public class AppWorker
 
             // todo: Remove. Workaround for beta demo purpose
             if (!packages.contains(ri.activityInfo.packageName)) {
+                Log.d("Added package", ri.activityInfo.packageName);
                 json+="{\n";
                 json+="\"package\": \"" + ri.activityInfo.packageName + "\",\n";
                 json+="\"label\": \"" + String.valueOf(ri.loadLabel(pm)) + "\",\n";

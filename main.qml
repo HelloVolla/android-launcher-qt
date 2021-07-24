@@ -177,8 +177,8 @@ ApplicationWindow {
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.simplemobiletools.dialer" // "com.android.dialer"
-        property string messageApp: ["com.android.mms", "com.simplemobiletools.smsmessenger", "com.android.messaging"];
         property string notesApp: "com.simplemobiletools.notes.pro"
+        property var messageApp: ["com.android.mms", "com.simplemobiletools.smsmessenger", "com.android.messaging"];
 
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
             {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
