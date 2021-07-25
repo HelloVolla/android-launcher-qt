@@ -442,7 +442,7 @@ Page {
                 id: searchSettingsItem
                 width: parent.width
                 implicitHeight: searchSettingsItemColumn.height
-                visible: false
+                visible: true
 
                 Column {
                     id: searchSettingsItemColumn
@@ -481,7 +481,7 @@ Page {
                     function createCheckboxes() {
                         var component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         var properties = { "actionId": "duckduckgo",
-                                "text": qsTr("DuckDuckGo"), "checked": searchSettings.duckduckgo,
+                                "text": qsTr("DuckDuckGo"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
@@ -490,13 +490,13 @@ Page {
                         component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
                         properties["actionId"] = "startpage"
                         properties["text"] = qsTr("StartPage")
-                        properties["checked"] = searchSettings.startpage
+                        properties["checked"] = mainView.getSearchMode() === mainView.searchMode.StartPage
                         object = component.createObject(searchSettingsItemColumn, properties)
                         searchSettingsItemColumn.checkboxes.push(object)
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "metager"
                         properties["text"] = qsTr("MetaGer")
-                        properties["checked"] = searchSettings.metager
+                        properties["checked"] = mainView.getSearchMode() === mainView.searchMode.MetaGer
                         object = component.createObject(searchSettingsItemColumn, properties)
                         searchSettingsItemColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
@@ -515,13 +515,18 @@ Page {
 
                         for (var i = 0; i < searchSettingsItemColumn.checkboxes.length; i++) {
                             var checkbox = searchSettingsItemColumn.checkboxes[i]
-
+                            checkbox.activeCheckbox = false
+                            checkbox.checked = checkbox.actionId === actionId && active ? active : !active
+                            checkbox.activeCheckbox = true
                         }
 
-                        searchSettings.duckduckgo = actionId === "duckduckgo" ? active : !active
-                        searchSettings.metager = actionId === "metager" ? active : !active
-                        searchSettings.startpage = actionId === "startpage" ? active : !active
-                        searchSettings.sync()
+                        if (actionId === "duckduckgo" && active) {
+                            mainView.updateSearchMode(mainView.searchMode.Duck)
+                        } else if (actionId === "startpage" && active) {
+                            mainView.updateSearchMode(mainView.searchMode.StartPage)
+                        } else if (actionId === "metager" && active) {
+                            mainView.updateSearchMode(mainView.searchMode.MetaGer)
+                        }
                     }
                 }
 
@@ -529,13 +534,6 @@ Page {
                     NumberAnimation {
                         duration: 250.0
                     }
-                }
-
-                Settings {
-                    id: searchSettings
-                    property bool duckduckgo: true
-                    property bool startpage: false
-                    property bool metager: false
                 }
             }
 

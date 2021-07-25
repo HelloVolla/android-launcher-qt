@@ -9,7 +9,7 @@ CheckBox {
     property double labelFontSize
     property double circleSize
     property var actionId
-    property bool activeCheckbox: false
+    property bool activeCheckbox: true
     property bool hasRemoveButton: false
     property int startX: 0
 
@@ -64,11 +64,11 @@ CheckBox {
 
     onCheckedChanged: {
         console.log("Checkbox | Checked changed for " + text + ", " + checked)
-//        if (activeCheckbox) {
+        if (activeCheckbox) {
             parent.updateSettings(actionId, checked)
-//        } else {
-//            activeCheckbox = true
-//        }
+        } else {
+            activeCheckbox = true
+        }
     }
 
     Component.onCompleted: {

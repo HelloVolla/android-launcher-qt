@@ -329,7 +329,19 @@ Page {
                     case mainView.actionType.SearchWeb:
                         message = encodeURIComponent(textInput)
                         console.log("Springboard | Will search for " + message)
-                        Qt.openUrlExternally("https://duck.com?q=" + message)
+
+                        settings.sync()
+
+                        switch (mainView.getSearchMode()) {
+                        case mainView.searchMode.StartPage:
+                            Qt.openUrlExternally("https://www.startpage.com/do/dsearch?query=" + message)
+                            break
+                        case mainView.searchMode.MetaGer:
+                            Qt.openUrlExternally("https://metager.de/meta/meta.ger3?eingabe=" + message)
+                            break
+                        default:
+                            Qt.openUrlExternally("https://duck.com?q=" + message)
+                        }
                         textInputArea.text = ""
                         break
                     case mainView.actionType.OpenURL:

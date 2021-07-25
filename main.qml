@@ -97,6 +97,11 @@ ApplicationWindow {
             'MMS' : 2,
             'Mail' : 3
         }
+        property var searchMode: {
+            'Duck' : 0,
+            'StartPage' : 1,
+            'MetaGer' : 2
+        }
         property var theme: {
             'Light': 0,
             'Dark': 1,
@@ -620,6 +625,15 @@ ApplicationWindow {
             springboard.children[0].item.updateShortcuts(actions)
         }
 
+        function getSearchMode() {
+            return settings.searchMode
+        }
+
+        function updateSearchMode(searchMode) {
+            settings.searchMode = searchMode
+            settings.sync()
+        }
+
         function updateSpinner(shouldRun) {
             //spinnerBackground.visible = shouldRun
             if (!(isLoadingContacts && !shouldRun)) {
@@ -755,6 +769,7 @@ ApplicationWindow {
     Settings {
         id: settings
         property int theme: mainView.theme.Dark
+        property int searchMode: mainView.searchMode.Duck
         property bool fullscreen: false
         property bool firstStart: true
         property bool useColoredIcons: false
