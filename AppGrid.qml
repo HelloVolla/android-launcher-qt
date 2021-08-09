@@ -250,10 +250,10 @@ Page {
                         }
                     }
                 }
-//                onPressAndHold: {
-//                    gridView.currentIndex = index
-//                    contextMenu.popup(gridCell)
-//                }
+                onPressAndHold: {
+                    gridView.currentIndex = index
+                    contextMenu.popup(gridCell)
+                }
             }
 
             Desaturate {

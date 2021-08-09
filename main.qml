@@ -134,7 +134,8 @@ ApplicationWindow {
             'SendEmailToHome': 20022,
             'SendEmailToWork': 20023,
             'SendEmailToOther': 20024,
-            'OpenContact' : 20025
+            'OpenContact' : 20025,
+            'OpenApp' : 20026
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -574,17 +575,6 @@ ApplicationWindow {
         function updateAction(actionId, isActive, sAction, newAction) {
             console.log("MainView | Will update shortcut: " + actionId + " with properties " + newAction)
             var actions = getActions()
-
-//            for (var i = 0; i < actions.length; i++) {
-//                var action = actions[i]
-//                if (action["id"] === actionId) {
-//                    action["activated"] = isActive
-//                    actions[i] = action
-//                    console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
-//                    break
-//                }
-//            }
-
             var action
             var matched = false
             var i

@@ -276,42 +276,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show Dialer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open Camera</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Agenda</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create Event</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Gallery</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recent News</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recent Threads</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recent People</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sorry, no contact was selected</source>
         <translation type="unfinished"></translation>
     </message>

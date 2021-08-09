@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
+import QtQuick.Window 2.2
 import FileIO 1.0
 import AndroidNative 1.0 as AN
 
@@ -334,7 +335,7 @@ Page {
 
                         switch (mainView.getSearchMode()) {
                         case mainView.searchMode.StartPage:
-                            Qt.openUrlExternally("https://www.startpage.com/do/dsearch?query=" + message)
+                            Qt.openUrlExternally("https://startpage.com/sp/search?query=" + message + "&segment=startpage.volla")
                             break
                         case mainView.searchMode.MetaGer:
                             Qt.openUrlExternally("https://metager.de/meta/meta.ger3?eingabe=" + message)
@@ -485,7 +486,6 @@ Page {
     MouseArea {
         id: shortcutMenu
         width: parent.width
-        // todo: make dynamic bullet size
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -495,24 +495,11 @@ Page {
         property var selectedMenuItem: rootMenuButton
 
         onSelectedMenuItemChanged: {
-            peopleLabel.font.bold = selectedMenuItem === peopleLabel
-            peopleLabel.font.pointSize = selectedMenuItem === peopleLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            threadLabel.font.bold = selectedMenuItem === threadLabel
-            threadLabel.font.pointSize = selectedMenuItem === threadLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            newsLabel.font.bold = selectedMenuItem === newsLabel
-            newsLabel.font.pointSize = selectedMenuItem === newsLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            galleryLabel.font.bold = selectedMenuItem === galleryLabel
-            galleryLabel.font.pointSize = selectedMenuItem === galleryLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            agendaLabel.font.bold = selectedMenuItem === agendaLabel
-            agendaLabel.font.pointSize = selectedMenuItem === agendaLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            cameraLabel.font.bold = selectedMenuItem === cameraLabel
-            cameraLabel.font.pointSize = selectedMenuItem === cameraLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            dialerLabel.font.bold = selectedMenuItem === dialerLabel
-            dialerLabel.font.pointSize = selectedMenuItem === dialerLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            eventLabel.font.bold = selectedMenuItem === eventLabel
-            eventLabel.font.pointSize = selectedMenuItem === eventLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
-            notesLabel.font.bold = selectedMenuItem === notesLabel
-            notesLabel.font.pointSize = selectedMenuItem === notesLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
+            for (var i = 0; i < shortcutColumn.shortcutLabels.length; i++) {
+                var shortcutLabel = shortcutColumn.shortcutLabels[i]
+                shortcutLabel.font.bold = selectedMenuItem === shortcutLabel
+                shortcutLabel.font.pointSize = selectedMenuItem === shortcutLabel ? mainView.largeFontSize * 1.2 : mainView.largeFontSize
+            }
 
             if (selectedMenuItem !== rootMenuButton && mainView.useVibration) {
                 AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
@@ -558,38 +545,15 @@ Page {
         }
 
         onPositionChanged: {
-            var plPoint = mapFromItem(peopleLabel, 0, 0)
-            var tlPoint = mapFromItem(threadLabel, 0, 0)
-            var nlPoint = mapFromItem(newsLabel, 0, 0)
-            var glPoint = mapFromItem(galleryLabel, 0, 0)
-            var alPoint = mapFromItem(agendaLabel, 0, 0)
-            var clPoint = mapFromItem(cameraLabel, 0, 0)
-            var dlPoint = mapFromItem(dialerLabel, 0, 0)
-            var elPoint = mapFromItem(eventLabel, 0, 0)
-            var olPoint = mapFromItem(notesLabel, 0, 0)
+            var selectedItem = rootMenuButton
 
-            var selectedItem
-
-            if (peopleLabel.visible && mouseY > plPoint.y && mouseY < plPoint.y + peopleLabel.height) {
-                selectedItem = peopleLabel
-            } else if (threadLabel.visible && mouseY > tlPoint.y && mouseY < tlPoint.y + threadLabel.height) {
-                selectedItem = threadLabel
-            } else if (newsLabel.visible && mouseY > nlPoint.y && mouseY < nlPoint.y + newsLabel.height) {
-                selectedItem = newsLabel
-            } else if (galleryLabel.visible && mouseY > glPoint.y && mouseY < glPoint.y + galleryLabel.height) {
-                selectedItem = galleryLabel
-            } else if (agendaLabel.visible && mouseY > alPoint.y && mouseY < alPoint.y + agendaLabel.height) {
-                selectedItem = agendaLabel
-            } else if (cameraLabel.visible && mouseY > clPoint.y && mouseY < clPoint.y + cameraLabel.height) {
-                selectedItem = cameraLabel
-            } else if (dialerLabel.visible && mouseY > dlPoint.y && mouseY < dlPoint.y + dialerLabel.height) {
-                selectedItem = dialerLabel
-            } else if (eventLabel.visible && mouseY > elPoint.y && mouseY < elPoint.y + eventLabel.height) {
-                selectedItem = eventLabel
-            } else if (notesLabel.visible && mouseY > olPoint.y && mouseY < olPoint.y + notesLabel.height) {
-                selectedItem = notesLabel
-            } else {
-                selectedItem = rootMenuButton
+            for (var i = 0; i < shortcutColumn.shortcutLabels.length; i++) {
+                var shortcutLabel = shortcutColumn.shortcutLabels[i]
+                var lPoint = mapFromItem(shortcutLabel, 0, 0)
+                if (lPoint.y && mouseY < lPoint.y + shortcutLabel.height) {
+                    selectedItem = shortcutLabel
+                    break
+                }
             }
 
             if (selectedMenuItem !== selectedItem) {
@@ -598,73 +562,116 @@ Page {
             }
         }        
 
-        function updateShortcuts(actions) {
-            actions.forEach(function (action, index) {
-                switch (action.id) {
-                    case mainView.actionType.OpenCam:
-                        cameraLabel.visible = action.activated
-                        break
-                    case mainView.actionType.ShowCalendar:
-                        agendaLabel.visible = action.activated
-                        break
-                    case mainView.actionType.ShowGallery:
-                        galleryLabel.visible = action.activated
-                        break
-                    case mainView.actionType.ShowNotes:
-                        notesLabel.visible = action.activated
-                        break
-                    case mainView.actionType.CreateEvent:
-                        eventLabel.visible = action.activated
-                        break
-                    case mainView.actionType.ShowContacts:
-                        peopleLabel.visible = action.activated
-                        break
-                    case mainView.actionType.ShowThreads:
-                        threadLabel.visible = action.activated
-                        break
-                    case mainView.actionType.ShowNews:
-                        newsLabel.visible = action.activated
-                        break
+        function createShortcuts(shortcuts) {
+            var leftDistance = Screen.width / 4
+            console.log("SpringBoard | Left distance is " + leftDistance)
+            for (var i = 0; i < shortcuts.length; i++) {
+                if (shortcuts[i]["activated"]) {
+                    var component = Qt.createComponent("/Shortcut.qml", shortcutColumn)
+                    var properties = { "actionId": shortcuts[i]["id"],
+                        "text": shortcuts[i]["name"],
+                        "labelFontSize": mainView.largeFontSize,
+                        "leftPadding": leftDistance,
+                        "bottomPadding": mainView.innerSpacing }
+                    var object = component.createObject(shortcutColumn, properties)
+                    shortcutColumn.shortcutLabels.push(object)
                 }
-            })
+            }
+        }
+
+        function destroyShortcuts() {
+            for (var i = 0; i < shortcutColumn.shortcutLabels.length; i++) {
+                var shortcutLabel = shortcutColumn.shortcutLabels[i]
+                shortcutLabel.destroy()
+            }
+            shortcutColumn.shortcutLabels = new Array
+        }
+
+        function updateShortcuts(actions) {
+            destroyShortcuts()
+            createShortcuts(actions)
+
+//            actions.forEach(function (action, index) {
+//                switch (action.id) {
+//                    case mainView.actionType.OpenCam:
+//                        cameraLabel.visible = action.activated
+//                        break
+//                    case mainView.actionType.ShowCalendar:
+//                        agendaLabel.visible = action.activated
+//                        break
+//                    case mainView.actionType.ShowGallery:
+//                        galleryLabel.visible = action.activated
+//                        break
+//                    case mainView.actionType.ShowNotes:
+//                        notesLabel.visible = action.activated
+//                        break
+//                    case mainView.actionType.CreateEvent:
+//                        eventLabel.visible = action.activated
+//                        break
+//                    case mainView.actionType.ShowContacts:
+//                        peopleLabel.visible = action.activated
+//                        break
+//                    case mainView.actionType.ShowThreads:
+//                        threadLabel.visible = action.activated
+//                        break
+//                    case mainView.actionType.ShowNews:
+//                        newsLabel.visible = action.activated
+//                        break
+//                }
+//            })
         }
 
         function executeSelection() {
-            if (shortcutColumn.opacity === 0.0) {
+            console.log("Springboard | Action ID is " + selectedMenuItem.actionId)
+
+            if (shortcutColumn.opacity === 0.0 || selectedMenuItem.actionId === undefined) {
                 return;
             }
 
-            if (selectedMenuItem == peopleLabel) {
-                console.log("Springboard | Show people")
-                var collectionPage = Qt.createComponent("/Collections.qml", springBoard)
-                mainView.updateCollectionPage(mainView.collectionMode.People)
-            } else if (selectedMenuItem == threadLabel) {
-                console.log("Springboard | Show threads")
-                collectionPage = Qt.createComponent("/Collections.qml", springBoard)
-                mainView.updateCollectionPage(mainView.collectionMode.Threads)
-            } else if (selectedMenuItem == newsLabel) {
-                console.log("Springboard | Show news")
-                collectionPage = Qt.createComponent("/Collections.qml", springBoard)
-                mainView.updateCollectionPage(mainView.collectionMode.News)
-            } else if (selectedMenuItem == galleryLabel) {
-                console.log("Springboard | Show gallery")
-                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.galleryApp})
-            } else if (selectedMenuItem == agendaLabel) {
-                console.log("Springboard | Show agenda")
-                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.calendarApp})
-            } else if (selectedMenuItem == cameraLabel) {
-                console.log("Springboard | Show camera")
-                AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
-            } else if (selectedMenuItem == dialerLabel) {
-                console.log("Springboard | Show dialer")
-                //Qt.openUrlExternally("tel:")
-                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "dial"})
-            } else if (selectedMenuItem == notesLabel) {
-                console.log("Springboard | Show notes")
-                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
-            } else if (selectedMenuItem == eventLabel) {
-                console.log("Springboard | Create event")
-                AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
+            switch (selectedMenuItem.actionId) {
+                case mainView.actionType.ShowContacts:
+                    console.log("Springboard | Show people")
+                    var collectionPage = Qt.createComponent("/Collections.qml", springBoard)
+                    mainView.updateCollectionPage(mainView.collectionMode.People)
+                    break
+                case mainView.actionType.ShoewThreads:
+                    console.log("Springboard | Show threads")
+                    collectionPage = Qt.createComponent("/Collections.qml", springBoard)
+                    mainView.updateCollectionPage(mainView.collectionMode.Threads)
+                    break
+                case mainView.actionType.ShowNews:
+                    console.log("Springboard | Show news")
+                    collectionPage = Qt.createComponent("/Collections.qml", springBoard)
+                    mainView.updateCollectionPage(mainView.collectionMode.News)
+                    break
+                case mainView.actionType.ShoeGallery:
+                    console.log("Springboard | Show gallery")
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.galleryApp})
+                    break
+                case mainView.actionType.ShowCalendar:
+                    console.log("Springboard | Show agenda")
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.calendarApp})
+                    break
+                case mainView.actionType.OpenCam:
+                    console.log("Springboard | Show camera")
+                    AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
+                    break
+                case mainView.actionType.ShowDialer:
+                    console.log("Springboard | Show dialer")
+                    AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "dial"})
+                    break
+                case mainView.actionType.ShowNotes:
+                    console.log("Springboard | Show notes")
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
+                    break
+                case mainView.actionType.CreateEvent:
+                    console.log("Springboard | Create event")
+                    AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
+                    break
+                default:
+                    console.log("Springboard | Open App")
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                    break
             }
         }
 
@@ -701,93 +708,12 @@ Page {
             width: parent.width
             // height: menuheight
             topPadding: mainView.innerSpacing * 1.5
+            bottomPadding: mainView.innerSpacing
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 
             property int duration: 200
-            property real leftDistance: parent.width / 4
-
-            Label {
-                id: dialerLabel
-                text: qsTr("Show Dialer")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: cameraLabel
-                text: qsTr("Open Camera")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: agendaLabel
-                text: qsTr("Show Agenda")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: eventLabel
-                text: qsTr("Create Event")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: notesLabel
-                text: qsTr("Show Notes")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: galleryLabel
-                text: qsTr("Gallery")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: newsLabel
-                text: qsTr("Recent News")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: threadLabel
-                text: qsTr("Recent Threads")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing
-                color: "white"
-            }
-            Label {
-                id: peopleLabel
-                text: qsTr("Recent People")
-                font.pointSize: mainView.largeFontSize
-                anchors.left: parent.left
-                leftPadding: shortcutColumn.leftDistance
-                bottomPadding: mainView.innerSpacing * 2
-                color: "white"
-            }
+            property var shortcutLabels: new Array
 
             Behavior on opacity {
                 NumberAnimation {

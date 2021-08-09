@@ -320,7 +320,7 @@
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">galleria</translation>
+        <translation type="obsolete">galleria</translation>
     </message>
     <message>
         <source>Recent people</source>
@@ -340,35 +340,35 @@
     </message>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">näytä puhelin</translation>
+        <translation type="obsolete">näytä puhelin</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">avoin kamera</translation>
+        <translation type="obsolete">avoin kamera</translation>
     </message>
     <message>
         <source>Show Agenda</source>
-        <translation type="unfinished">Näytä päivämäärät</translation>
+        <translation type="obsolete">Näytä päivämäärät</translation>
     </message>
     <message>
         <source>Create Event</source>
-        <translation type="unfinished">luo tapahtuma</translation>
+        <translation type="obsolete">luo tapahtuma</translation>
     </message>
     <message>
         <source>Show Notes</source>
-        <translation type="unfinished">näytä muistiinpanot</translation>
+        <translation type="obsolete">näytä muistiinpanot</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Uutiset</translation>
+        <translation type="obsolete">Uutiset</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">Keskustelut</translation>
+        <translation type="obsolete">Keskustelut</translation>
     </message>
     <message>
         <source>Recent People</source>
-        <translation type="unfinished">yhteystiedot</translation>
+        <translation type="obsolete">yhteystiedot</translation>
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>

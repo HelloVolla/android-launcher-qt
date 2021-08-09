@@ -317,7 +317,7 @@
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">Galleria</translation>
+        <translation type="obsolete">Galleria</translation>
     </message>
     <message>
         <source>Recent people</source>
@@ -337,35 +337,35 @@
     </message>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">mostra il telefono</translation>
+        <translation type="obsolete">mostra il telefono</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">Aprire la telecamera</translation>
+        <translation type="obsolete">Aprire la telecamera</translation>
     </message>
     <message>
         <source>Show Agenda</source>
-        <translation type="unfinished">mostra le date</translation>
+        <translation type="obsolete">mostra le date</translation>
     </message>
     <message>
         <source>Create Event</source>
-        <translation type="unfinished">creare evento</translation>
+        <translation type="obsolete">creare evento</translation>
     </message>
     <message>
         <source>Show Notes</source>
-        <translation type="unfinished">mostra le note</translation>
+        <translation type="obsolete">mostra le note</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Notizie</translation>
+        <translation type="obsolete">Notizie</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">Conversazioni</translation>
+        <translation type="obsolete">Conversazioni</translation>
     </message>
     <message>
         <source>Recent People</source>
-        <translation type="unfinished">Conversazioni</translation>
+        <translation type="obsolete">Conversazioni</translation>
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>

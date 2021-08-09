@@ -318,7 +318,7 @@
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">галерия</translation>
+        <translation type="obsolete">галерия</translation>
     </message>
     <message>
         <source>Recent people</source>
@@ -338,35 +338,35 @@
     </message>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">Покажи телефон</translation>
+        <translation type="obsolete">Покажи телефон</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">отворена камера</translation>
+        <translation type="obsolete">отворена камера</translation>
     </message>
     <message>
         <source>Show Agenda</source>
-        <translation type="unfinished">показват дати</translation>
+        <translation type="obsolete">показват дати</translation>
     </message>
     <message>
         <source>Create Event</source>
-        <translation type="unfinished">създаване на събитие</translation>
+        <translation type="obsolete">създаване на събитие</translation>
     </message>
     <message>
         <source>Show Notes</source>
-        <translation type="unfinished">показват бележки</translation>
+        <translation type="obsolete">показват бележки</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Новини</translation>
+        <translation type="obsolete">Новини</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">разговори</translation>
+        <translation type="obsolete">разговори</translation>
     </message>
     <message>
         <source>Recent People</source>
-        <translation type="unfinished">Контакти</translation>
+        <translation type="obsolete">Контакти</translation>
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>

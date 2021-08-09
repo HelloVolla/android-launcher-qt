@@ -319,7 +319,7 @@
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">galéria</translation>
+        <translation type="obsolete">galéria</translation>
     </message>
     <message>
         <source>Recent people</source>
@@ -339,36 +339,36 @@
     </message>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">Zobraziť telefón</translation>
+        <translation type="obsolete">Zobraziť telefón</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">Otvorte fotoaparát</translation>
+        <translation type="obsolete">Otvorte fotoaparát</translation>
     </message>
     <message>
         <source>Show Agenda</source>
-        <translation type="unfinished">zobraziť dátumy</translation>
+        <translation type="obsolete">zobraziť dátumy</translation>
     </message>
     <message>
         <source>Create Event</source>
-        <translation type="unfinished">vytvoriť udalosť</translation>
+        <translation type="obsolete">vytvoriť udalosť</translation>
     </message>
     <message>
         <source>Show Notes</source>
-        <translation type="unfinished">zobraziť poznámky
+        <translation type="obsolete">zobraziť poznámky
 </translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Novinky</translation>
+        <translation type="obsolete">Novinky</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">Rozhovory</translation>
+        <translation type="obsolete">Rozhovory</translation>
     </message>
     <message>
         <source>Recent People</source>
-        <translation type="unfinished">kontakty</translation>
+        <translation type="obsolete">kontakty</translation>
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
