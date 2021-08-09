@@ -634,7 +634,7 @@ Page {
                     var collectionPage = Qt.createComponent("/Collections.qml", springBoard)
                     mainView.updateCollectionPage(mainView.collectionMode.People)
                     break
-                case mainView.actionType.ShoewThreads:
+                case mainView.actionType.ShowThreads:
                     console.log("Springboard | Show threads")
                     collectionPage = Qt.createComponent("/Collections.qml", springBoard)
                     mainView.updateCollectionPage(mainView.collectionMode.Threads)
