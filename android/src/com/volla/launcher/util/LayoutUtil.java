@@ -15,8 +15,11 @@ import android.view.WindowManager;
 import android.content.Intent;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.ComponentName;
 import android.graphics.Color;
 import java.util.Map;
+import java.util.List;
 import java.io.IOException;
 import org.qtproject.qt5.android.QtNative;
 import com.volla.launcher.R;
@@ -58,27 +61,32 @@ public class LayoutUtil {
                     final boolean updateLockScreen = (boolean) message.get("updateLockScreen");
                     final Activity activity = QtNative.activity();
 
-                    Log.d(TAG, "Will change lock screen clock color for value "
-                                + value + " to " + (value > 0 ? "white" : "black"));
+                    Log.d(TAG, "Will change lock screen clock color for value " + value + " to " + (value > 0 ? "white" : "black"));
 
                     Intent intent = new Intent();
                     intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
-                    intent.putExtra("", (value > 0 ? Color.WHITE : Color.BLACK));
-                    intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
-                    intent.putExtra("", (value > 0 ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
                     intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
                     activity.sendBroadcast(intent);
 
-//                    Intent i = new Intent();
-//                    i.setAction("com.simplemobiletools.commons.SHARED_THEME_ACTIVATED");
-//                    i.putExtra("text_color", (value > 0 ? Color.WHITE : Color.BLACK));
-//                    i.putExtra("background_color", (value > 0 ? Color.BLACK : Color.WHITE));
-//                    i.putExtra("primary_color", (value > 0 ? Color.WHITE : Color.BLACK));
-//                    i.putExtra("accent_color", (value > 0 ? Color.WHITE : Color.BLACK));
-//                    i.putExtra("app_icon_color", (value > 0 ? Color.BLACK : Color.WHITE));
-//                    i.putExtra("navigation_bar_color", (value > 0 ? Color.BLACK : Color.WHITE));
-//                    i.putExtra("last_updated_ts", System.currentTimeMillis() / 1000);
-//                    activity.sendBroadcast(i);
+                    Intent i = new Intent();
+                    i.setAction("com.volla.simpleappstheme.action.CHANGE_COLORS");
+                    i.putExtra("com.volla.simpleappstheme.param.TEXT_COLOR", (value > 0 ? Color.WHITE : Color.BLACK));
+                    i.putExtra("com.volla.simpleappstheme.param.BACKGROUND_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
+                    i.putExtra("com.volla.simpleappstheme.param.PRIMARY_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
+                    i.putExtra("com.volla.simpleappstheme.param.ACCENT_COLOR", (value > 0 ? Color.WHITE : Color.DRGRAY));
+                    i.putExtra("com.volla.simpleappstheme.param.APP_ICON_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
+                    i.putExtra("com.volla.simpleappstheme.param.NAVIGATION_BAR_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
+
+                    PackageManager packageManager = activity.getPackageManager();
+                    List<ResolveInfo> infos = packageManager.queryBroadcastReceivers(i, 0);
+                    for (ResolveInfo info : infos) {
+                        ComponentName cn = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+                        i.setComponent(cn);
+                        activity.sendBroadcast(i);
+                    }
+
+                    activity.sendBroadcast(i);
 
                     Runnable runnable = new Runnable () {
 
