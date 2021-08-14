@@ -71,10 +71,10 @@ public class LayoutUtil {
 
                     Intent i = new Intent();
                     i.setAction("com.volla.simpleappstheme.action.CHANGE_COLORS");
-                    i.putExtra("com.volla.simpleappstheme.param.TEXT_COLOR", (value > 0 ? Color.WHITE : Color.BLACK));
+                    i.putExtra("com.volla.simpleappstheme.param.TEXT_COLOR", (value > 0 ? Color.WHITE : -13421773));
                     i.putExtra("com.volla.simpleappstheme.param.BACKGROUND_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
                     i.putExtra("com.volla.simpleappstheme.param.PRIMARY_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
-                    i.putExtra("com.volla.simpleappstheme.param.ACCENT_COLOR", (value > 0 ? Color.WHITE : Color.DRGRAY));
+                    i.putExtra("com.volla.simpleappstheme.param.ACCENT_COLOR", (value > 0 ? Color.WHITE : Color.BLACK));
                     i.putExtra("com.volla.simpleappstheme.param.APP_ICON_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
                     i.putExtra("com.volla.simpleappstheme.param.NAVIGATION_BAR_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
 
@@ -97,8 +97,6 @@ public class LayoutUtil {
                             int wallpaperId;
                             UiModeManager umm = (UiModeManager) activity.getSystemService(Context.UI_MODE_SERVICE);
 
-                            Log.d(TAG, "Current system ui mode is " + umm.getNightMode());
-
                             if (value > 0) {
                                 // dark or translucent mode
                                 int flags = w.getDecorView().getSystemUiVisibility();
@@ -117,6 +115,8 @@ public class LayoutUtil {
                                         wallpaperId = R.drawable.wallpaper_image;
                                     }
                                 }
+
+                                Log.d(TAG, "Will change system ui mode to " + UiModeManager.MODE_NIGHT_YES);
                                 umm.setNightMode(UiModeManager.MODE_NIGHT_YES);
                             } else {
                                 // light mode
@@ -126,6 +126,8 @@ public class LayoutUtil {
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
                                 wallpaperId = R.drawable.wallpaper_white;
+
+                                Log.d(TAG, "Will change system ui mode to " + UiModeManager.MODE_NIGHT_NO);
                                 umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
                             }
 
