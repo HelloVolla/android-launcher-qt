@@ -113,7 +113,7 @@ public class CallWorker {
 
             if ( message.containsKey("count") ) {
                 int count = (Integer) message.get("count");
-                sortOrder = sortOrder + " limit " +  count ;
+                sortOrder = sortOrder + "limit " +  count ;
             }
 
             String[] selectionArgs = {""};
@@ -125,6 +125,7 @@ public class CallWorker {
             }
 
             Log.d(TAG, "Call filter is : " + filter );
+            Log.d(TAG, "Sort oder is : " + sortOrder );
 
             Cursor cursor;
 
@@ -181,6 +182,8 @@ public class CallWorker {
             }
         } catch (SQLiteException ex) {
             Log.d("SQLiteException", ex.getMessage());
+        } catch (IllegalArgumentException iae) {
+            Log.d("IllegalArgumentException", iae.getMessage());
         }
 
         Map reply = new HashMap();

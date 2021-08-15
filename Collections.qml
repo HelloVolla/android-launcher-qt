@@ -71,7 +71,8 @@ Page {
                     operationCount = 2
                     mainView.updateSpinner(true)
                     collectionPage.loadThreads({})
-                    collectionPage.loadCalls({"count": maxCalls})
+                    collectionPage.loadCalls({"age": threadAge})
+                    //collectionPage.loadCalls({"count": maxCalls})
                     break;
                 case mainView.collectionMode.Threads:
                     headline.text = qsTr("Threads")
