@@ -14,7 +14,7 @@ Page {
     property real labelPointSize: 16
     property var iconMap: {
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
-        //"com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
+        "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
         "com.android.mms" : "/icons/message@4x.png",
         "com.android.messaging": "/icons/message@4x.png",
         "com.google.android.apps.messaging" : "/icons/message@4x.png",
