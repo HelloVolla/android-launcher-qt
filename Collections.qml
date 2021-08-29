@@ -38,6 +38,7 @@ Page {
     property string c_ID:        "id"       // id of the contact, thread or news
     property string c_CHANNEL:   "channel"  // twitter or news channel
     property string c_TSTAMP:    "tstamp"   // timestamp to sort the list
+    property string c_TYPE:      "type"     // rss or atpm feed type
 
     background: Rectangle {
         anchors.fill: parent
@@ -70,9 +71,8 @@ Page {
                     currentCollectionModel.modelArr = new Array
                     operationCount = 2
                     mainView.updateSpinner(true)
-                    collectionPage.loadThreads({})
+                    collectionPage.loadThreads({"age": threadAge})
                     collectionPage.loadCalls({"age": threadAge})
-                    //collectionPage.loadCalls({"count": maxCalls})
                     break;
                 case mainView.collectionMode.Threads:
                     headline.text = qsTr("Threads")
@@ -942,7 +942,7 @@ Page {
                     doc.onreadystatechange = function() {
                         if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                             console.log("Collections | Received header status of " + rssFeed.name + ": " + doc.status);
-                            if (doc.status !== 200) {
+                            if (doc.status >= 400) {
                                 mainView.updateSpinner(false)
                                 mainView.showToast(qsTr("Could not load RSS feed: ") + rssFeed.name)
                             }
@@ -960,10 +960,14 @@ Page {
                             if (doc.responseXML !== null) {
                                 var rss = doc.responseXML.documentElement
                                 var channel
-                                for (var i = 0; i < rss.childNodes.length; ++i) {
-                                    if (rss.childNodes[i].nodeName === "channel") {
-                                        channel = rss.childNodes[i]
-                                        break
+                                if (rss.nodeName === "feed") {
+                                    channel = rss
+                                } else {
+                                    for (var i = 0; i < rss.childNodes.length; ++i) {
+                                        if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
+                                            channel = rss.childNodes[i]
+                                            break
+                                        }
                                     }
                                 }
                                 if (channel === undefined) {
@@ -979,8 +983,10 @@ Page {
                                         var textNode = childNode.firstChild
                                         cNews.c_STITLE = textNode.nodeValue + " • Feed"
                                     }
-                                    if (channel.childNodes[i].nodeName === "item") {
+                                    if (channel.childNodes[i].nodeName === "item" || channel.childNodes[i].nodeName === "entry") {
                                         feedItem = channel.childNodes[i]
+                                        cNews.c_TYPE = channel.childNodes[i].nodeName === "item" ? mainView.feedMode.RSS
+                                                                                                 : mainView.feedMode.Atom
                                         break
                                     }
                                 }
@@ -1000,23 +1006,33 @@ Page {
                                             cNews.c_TEXT = textNode.nodeValue
                                         }
                                     }
-                                    else if (childNode.nodeName === "pubDate") {
-                                        date = new Date(textNode.nodeValue)
+                                    else if (childNode.nodeName === "pubDate" || childNode.nodeName === "published") {
+                                        var date = new Date(textNode.nodeValue)
                                         cNews.c_TSTAMP = date.valueOf()
                                         cNews.c_STEXT = mainView.parseTime(date.valueOf())
                                     }
                                     else if (childNode.nodeName === "link") {
-                                        cNews.c_ID = textNode.nodeValue
-
+                                        if (textNode && textNode.nodeValue !== undefined) {
+                                            cNews.c_ID = textNode.nodeValue
+                                        } else {
+                                            for (var ii = 0; ii < childNode.attributes.length; ++ii) {
+                                                var attribute = childNode.attributes[ii]
+                                                if (attribute.name === "href") {
+                                                    console.log("MainView | Link: " + attribute.value)
+                                                    cNews.c_ID = attribute.value
+                                                    break
+                                                }
+                                            }
+                                        }
                                         if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
                                             cNews.c_BADGE = true
                                         }
                                     }
                                     else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail") {
-                                        for (var ii = 0; ii < childNode.attributes.length; ++ii) {
-                                            var attribute = childNode.attributes[ii]
+                                        for (ii = 0; ii < childNode.attributes.length; ++ii) {
+                                            attribute = childNode.attributes[ii]
                                             if (attribute.name === "url") {
-                                                console.log("Collections | Image: " + attribute.value)
+                                                console.log("MainView | Image: " + attribute.value)
                                                 cNews.c_IMAGE = attribute.value
                                                 break
                                             }
@@ -1024,7 +1040,7 @@ Page {
                                     }
                                 }
                             } else if (doc.responseText !== null) {
-                                console.log("Collections | Use fall bacl for " + rssFeed.name)
+                                console.log("Collections | Use fall back for " + rssFeed.name)
                                 cNews.c_STITLE = rssFeed.name + " • Feed"
 
                                 var xmlString = doc.responseText
@@ -1156,11 +1172,11 @@ Page {
             if (type === mainView.actionType.ShowGroup) {
                 var n = item.c_STITLE.indexOf("•") - 1
                 var author = item.c_STITLE.substring(0, n)
-                mainView.updateNewsPage(mainView.feedMode.RSS, item.c_CHANNEL, author, item.c_ICON)
+                mainView.updateNewsPage(item.c_TYPE, item.c_CHANNEL, author, item.c_ICON)
             } else {
                 n = item.c_STITLE.indexOf("•") - 1
                 author = item.c_STITLE.substring(0, n)
-                mainView.updateDetailPage(mainView.detailMode.Web, item.c_ID, author, item.c_STEXT)
+                mainView.updateDetailPage(mainView.detailMode.Web, item.c_ID, author, item.c_STEXT, item.c_TEXT)
                 mainView.updateRecentNews(item.c_CHANNEL, item.c_ID)
             }
         }

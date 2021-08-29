@@ -89,7 +89,8 @@ ApplicationWindow {
         }
         property var feedMode: {
             'RSS' : 0,
-            'Twitter': 1
+            'Atom' : 1,
+            'Twitter': 2
         }
         property var detailMode: {
             'Web' : 0,
@@ -267,7 +268,7 @@ ApplicationWindow {
             item.children[0].item.updateConversationPage(mode, id, name)
         }
 
-        function updateDetailPage(mode, id, author, date) {
+        function updateDetailPage(mode, id, author, date, title) {
             console.log("MainView | Will update detail page")
             switch (currentIndex) {
                 case swipeIndex.Collections:
@@ -312,7 +313,7 @@ ApplicationWindow {
                     console.log("MainView | Unexpected state for detail view request")
             }
             currentIndex++
-            item.children[0].item.updateDetailPage(mode, id, author, date)
+            item.children[0].item.updateDetailPage(mode, id, author, date, title)
         }
 
         function updateNewsPage(mode, id, name, icon) {
@@ -478,25 +479,28 @@ ApplicationWindow {
                 if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                     console.log("MainView | Received header status feed url: " + doc.status);
                     if (doc.status === 301) {
-
+                        console.log("MainView | Redirect feed url")
                     }
-                    else if (doc.status !== 200) {
+                    else if (doc.status >= 400) {
                         mainView.showToast(qsTr("Could not load RSS feed " + url))
                         return
                     }
                 } else if (doc.readyState === XMLHttpRequest.DONE) {
                     if (doc.responseXML === null) {
-                        // todo: Impelemnt fallback with text response parsing
                         mainView.showToast(qsTr("Could not load RSS feed " + url))
                         return
                     }
 
                     var rss = doc.responseXML.documentElement
                     var channel
-                    for (var i = 0; i < rss.childNodes.length; ++i) {
-                        if (rss.childNodes[i].nodeName === "channel") {
-                            channel = rss.childNodes[i]
-                            break
+                    if (rss.nodeName === "feed") {
+                        channel = rss
+                    } else {
+                        for (var i = 0; i < rss.childNodes.length; ++i) {
+                            if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
+                                channel = rss.childNodes[i]
+                                break
+                            }
                         }
                     }
                     if (channel === undefined) {
@@ -513,7 +517,16 @@ ApplicationWindow {
                             var childNode = channel.childNodes[i]
                             var textNode = childNode.firstChild
                             feed.name = textNode.nodeValue
+                        } else if (channel.childNodes[i].nodeName === "icon") {
+                            childNode = channel.childNodes[i]
+                            textNode = childNode.firstChild
+                            feed.icon = textNode.nodeValue
                         }
+                    }
+
+                    if (feed.icon !== undefined) {
+                        mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                        return
                     }
 
                     var urlPattern = /(.+:\/\/)?([^\/]+)(\/.*)*/i
@@ -551,7 +564,7 @@ ApplicationWindow {
                                 feed.icon = link
                             } else {
                                 console.log("MainView | Missing header of feed homepage. Will take fallback for icon")
-                                // feed.icon = baseUrl + "favicon.ico"
+                                feed.icon = baseUrl + "/favicon.ico"
                             }
 
                             mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)

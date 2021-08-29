@@ -49,6 +49,10 @@ Page {
                     currentFeedModel = rssFeedModel
                     rssFeedModel.source = currentFeedId
                     break;
+                case mainView.feedMode.Atom:
+                    currentFeedModel = atomFeedModel
+                    atomFeedModel.source = currentFeedId
+                    break;
                 case mainView.feedMode.Twitter:
                     currentFeedModel = twitterFeedModel
                     // todo: load tweet data
@@ -330,6 +334,64 @@ Page {
     }
 
     XmlListModel {
+        id: atomFeedModel
+        query: "/feed/entry"
+        namespaceDeclarations: "declare default element namespace 'http://www.w3.org/2005/Atom';"
+
+        property string baseQuery: "//entry"
+
+        XmlRole {
+            name: "n_TEXT"
+            query: "title/string()"
+        }
+//        XmlRole {
+//            name: "n_IMAGE"
+//            query: "*[local-name()='content'][1]/@url/string()"
+//        }
+//        XmlRole {
+//            name: "n_THUMBNAIL"
+//            query: "*[local-name()='thumbnail'][1]/@url/string()"
+//        }
+//        XmlRole {
+//            name: "n_ENCLOSURE"
+//            query: "link/@href/string()"
+//        }
+        XmlRole {
+            name: "n_ID"
+            query: "id/string()"
+        }
+        XmlRole {
+            name: "n_DATE"
+            query: "published/string()"
+        }
+        XmlRole {
+            name: "n_STITLE"
+            query: "author/name/string()"
+        }
+
+        function update(text) {
+            console.log("Feed Page | Update Atom model with '" + text + "'")
+            if (text.length > 0) {
+                query = baseQuery + "[contains(title, '" + text + "')]"
+            } else {
+                query = baseQuery
+            }
+        }
+
+        function dropData() {
+            source = ""
+        }
+
+        function executeSelection(model) {
+            console.log("FeedPage | News selected: " + model.n_ID)
+            var author = model.n_STITLE !== undefined && model.n_STITLE.length > 0 ? headline.text + " • " + model.n_STITLE : headline.text
+            var d = new Date(model.n_DATE)
+            var s = mainView.parseTime(d.valueOf())
+            mainView.updateDetailPage(mainView.detailMode.Web, model.n_ID, author, s, model.n_TEXT)
+        }
+    }
+
+    XmlListModel {
         id: rssFeedModel
         query: "/rss/channel/item"
 
@@ -380,7 +442,9 @@ Page {
         function executeSelection(model) {
             console.log("FeedPage | News selected: " + model.n_ID)
             var author = model.n_STITLE !== undefined && model.n_STITLE.length > 0 ? headline.text + " • " + model.n_STITLE : headline.text
-            mainView.updateDetailPage(mainView.detailMode.Web, model.n_ID, author, model.n_DATE)
+            var d = new Date(model.n_DATE)
+            var s = mainView.parseTime(d.valueOf())
+            mainView.updateDetailPage(mainView.detailMode.Web, model.n_ID, author, s, model.n_TEXT)
         }
     }
 

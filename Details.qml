@@ -13,17 +13,19 @@ Page {
     property var currentDetailMode: 0
     property var currentDetailId
     property var currentDetailAuthorAndDate
+    property var currentTitle
 
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
     }
 
-    function updateDetailPage(mode, id, author, date) {
+    function updateDetailPage(mode, id, author, date, title) {
         console.log("DetailPage | Update detail page: " + id + ", " + mode)
         currentDetailMode = mode
         currentDetailId = id
         currentDetailAuthorAndDate = author !== undefined ? author  + "\n" + date : date
+        currentTitle = title !== undefined ? title : undefined
         resetContent()
 
         switch (mode) {
@@ -49,7 +51,7 @@ Page {
         doc.onreadystatechange = function() {
             if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                 console.log("DetailPage | Received header status: " + doc.status)
-                if (doc.status !== 200) {
+                if (doc.status >= 400) {
                     mainView.showToast(qsTr("Failed to load article with status " + doc.statusText))
                 }
             } else if (doc.readyState === XMLHttpRequest.DONE) {
@@ -158,16 +160,23 @@ Page {
                 console.log("DetailPage | image: " + message.imageUrl)
                 console.log("DetailPage | video: " + message.videoUrl)
 //                console.log("DetailPage | html: " + message.html)
-                title.text = message.title
 
-                var html = message.html.replace("<h1>", "<strong>")
-                html = html.replace("</h1>", "</strong>")
-                html = html.replace(/((<p>){2,})/g, "<p>")
-                html = html.replace(/((<\/p>){2,})/g, "</p>")
-//                console.log("DetailPage | html: " + html)
+                title.text = currentTitle !== undefined ? currentTitle : message.title
 
-                text.text = html
-                image.source = message.imageUrl
+                if (message.html !== undefined) {
+                    var html = message.html.replace("<h1>", "<strong>")
+                    html = html.replace("</h1>", "</strong>")
+                    html = html.replace(/((<p>){2,})/g, "<p>")
+                    html = html.replace(/((<\/p>){2,})/g, "</p>")
+//                    console.log("DetailPage | html: " + html)
+
+                    text.text = html
+                }
+
+                if (message.imageUrl !== undefined) {
+                    image.source = message.imageUrl
+                }
+
                 author.text = currentDetailAuthorAndDate
             }
         }
