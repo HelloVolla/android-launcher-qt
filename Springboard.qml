@@ -644,7 +644,7 @@ Page {
                     collectionPage = Qt.createComponent("/Collections.qml", springBoard)
                     mainView.updateCollectionPage(mainView.collectionMode.News)
                     break
-                case mainView.actionType.ShoeGallery:
+                case mainView.actionType.ShowGallery:
                     console.log("Springboard | Show gallery")
                     AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.galleryApp})
                     break

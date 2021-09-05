@@ -8,7 +8,6 @@ import AndroidNative 1.0 as AN
 Page {
     id : feedPage
     anchors.fill: parent
-//    topPadding: mainView.innerSpacing
 
     property var headline
     property var headIcon
@@ -95,7 +94,10 @@ Page {
                     Image {
                         id: headerIcon
                         source: ""
-                        sourceSize: Qt.size(headerIconSize, headerIconSize)
+                        // sourceSize: Qt.size(headerIconSize, headerIconSize)
+                        width: feedPage.iconSize
+                        height: feedPage.iconSize
+                        fillMode: Image.PreserveAspectFit
                         smooth: true
                         visible: false
                         Desaturate {
@@ -123,6 +125,7 @@ Page {
                         height: headerIconSize
                         source: headerIcon
                         maskSource: headerIconMask
+                        visible: headIcon.source !== undefined
                     }
                     Label {
                         id: headerLabel
@@ -213,12 +216,13 @@ Page {
                 anchors.topMargin: mainView.innerSpacing * 2
                 anchors.left: header.left
                 anchors.leftMargin: mainView.innerSpacing
-                width: headerIcon.width
-                height: headerIcon.height
+                width: headerIconSize
+                height: headerIconSize
                 color: "transparent"
                 border.color: Universal.foreground
                 opacity: 0.7
-                radius: headerIcon.width / 2
+                visible: headIcon.source !== undefined
+                radius: headerIconSize / 2
             }
         }
 
@@ -344,21 +348,13 @@ Page {
             name: "n_TEXT"
             query: "title/string()"
         }
-//        XmlRole {
-//            name: "n_IMAGE"
-//            query: "*[local-name()='content'][1]/@url/string()"
-//        }
-//        XmlRole {
-//            name: "n_THUMBNAIL"
-//            query: "*[local-name()='thumbnail'][1]/@url/string()"
-//        }
-//        XmlRole {
-//            name: "n_ENCLOSURE"
-//            query: "link/@href/string()"
-//        }
+        XmlRole {
+            name: "n_IMAGE"
+            query: "link[@rel='enclosure']/@href/string()"
+        }
         XmlRole {
             name: "n_ID"
-            query: "id/string()"
+            query: "link[@rel='alternate']/@href/string()"
         }
         XmlRole {
             name: "n_DATE"
@@ -444,7 +440,7 @@ Page {
             var author = model.n_STITLE !== undefined && model.n_STITLE.length > 0 ? headline.text + " • " + model.n_STITLE : headline.text
             var d = new Date(model.n_DATE)
             var s = mainView.parseTime(d.valueOf())
-            mainView.updateDetailPage(mainView.detailMode.Web, model.n_ID, author, s, model.n_TEXT)
+            mainView.updateDetailPage(mainView.detailMode.Web, model.n_ID.trim(), author, s, model.n_TEXT)
         }
     }
 

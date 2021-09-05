@@ -517,7 +517,7 @@ ApplicationWindow {
                             var childNode = channel.childNodes[i]
                             var textNode = childNode.firstChild
                             feed.name = textNode.nodeValue
-                        } else if (channel.childNodes[i].nodeName === "icon") {
+                        } else if (channel.childNodes[i].nodeName === "logo") {
                             childNode = channel.childNodes[i]
                             textNode = childNode.firstChild
                             feed.icon = textNode.nodeValue
@@ -548,12 +548,10 @@ ApplicationWindow {
                             }
                         } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
                             var html = htmlRequest.responseText
-                            var pattern = /<link\srel="(apple-touch-)?icon".+>/i
+                            var pattern = /<link\n?.+\n?.*rel="((apple-touch-)|(shortcut\s))?icon"\n?.+\n?.*>/i
                             var link = pattern.exec(html)
                             if (link !== undefined && link !== null) {
-                                console.log("MainView | Link is " + link)
                                 pattern = /href="\S+"/i
-                                console.log("MainView | Link is " + pattern.exec(link))
                                 link = pattern.exec(link).toString()
                                 var length = link.length - 1
                                 link = link.slice(6, length)

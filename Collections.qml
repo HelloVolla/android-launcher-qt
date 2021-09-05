@@ -261,7 +261,9 @@ Page {
                         sourceSize: Qt.size(collectionPage.iconSize, collectionPage.iconSize)
                         smooth: true
                         visible: false
-
+                        width: collectionPage.iconSize
+                        height: collectionPage.iconSize
+                        fillMode: Image.PreserveAspectFit
                         Desaturate {
                             anchors.fill: contactImage
                             source: contactImage
@@ -1011,16 +1013,25 @@ Page {
                                         cNews.c_TSTAMP = date.valueOf()
                                         cNews.c_STEXT = mainView.parseTime(date.valueOf())
                                     }
-                                    else if (childNode.nodeName === "link") {
+                                    else if (childNode.nodeName === "link") {                                        
                                         if (textNode && textNode.nodeValue !== undefined) {
                                             cNews.c_ID = textNode.nodeValue
                                         } else {
+                                            var isImage = false
                                             for (var ii = 0; ii < childNode.attributes.length; ++ii) {
                                                 var attribute = childNode.attributes[ii]
-                                                if (attribute.name === "href") {
-                                                    console.log("MainView | Link: " + attribute.value)
-                                                    cNews.c_ID = attribute.value
-                                                    break
+                                                if (attribute.name === "rel" && attribute.value === "enclosure") {
+                                                    isImage = true
+                                                } else if (attribute.name === "href") {
+                                                    if (isImage) {
+                                                        console.log("MainView | Image: " + attribute.value)
+                                                        cNews.c_IMAGE = attribute.value
+                                                        break
+                                                    } else {
+                                                        console.log("MainView | Link: " + attribute.value)
+                                                        cNews.c_ID = attribute.value
+                                                        break
+                                                    }
                                                 }
                                             }
                                         }
@@ -1032,7 +1043,7 @@ Page {
                                         for (ii = 0; ii < childNode.attributes.length; ++ii) {
                                             attribute = childNode.attributes[ii]
                                             if (attribute.name === "url") {
-                                                console.log("MainView | Image: " + attribute.value)
+                                                console.log("Collections | Image: " + attribute.value)
                                                 cNews.c_IMAGE = attribute.value
                                                 break
                                             }

@@ -83,4 +83,6 @@ TRANSLATIONS += \
     translations/Volla_bg.ts \
     translations/Volla_fi.ts \
     translations/Volla_it.ts \
-    translations/Volla_sk.ts
+    translations/Volla_sk.ts \
+    translations/Volla_jp.ts \
+    translations/Volla_en.ts
