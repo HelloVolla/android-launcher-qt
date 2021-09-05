@@ -394,6 +394,7 @@ Page {
                             var object = component.createObject(shortcutSettingsItemColumn, properties)
                             shortcutSettingsItemColumn.checkboxes.push(object)
                         }
+//                        addButton.visible = true
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -408,6 +409,7 @@ Page {
                             var checkbox = shortcutSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
+//                        addButton.visible = false
                         shortcutSettingsItemColumn.checkboxes = new Array
                     }
 
@@ -432,6 +434,49 @@ Page {
                 Behavior on implicitHeight {
                     NumberAnimation {
                         duration: 250.0
+                    }
+                }
+            }
+
+            Button {
+                id: addButton
+                leftPadding: mainView.innerSpacing + 5.0
+                rightPadding: mainView.innerSpacing
+                bottomPadding: mainView.innerSpacing / 2
+                flat: true
+                text: "+"
+                visible: false
+                onClicked: {
+                    // todo: set correct data
+                    appMenuModel.setData([{text: "Eins"}, {text: "Zwei"}])
+                    appMenu.popup(settingsPage)
+                }
+
+                Menu {
+                    id: appMenu
+
+                    contentItem: ListView {
+                        id: appList
+                        delegate: Button {
+                            width: parent.width
+                            flat: true
+                            text: model.text
+                            onClicked: {
+                                console.log("Settings | Add app tp shortcuts: " + model.text)
+                            }
+                        }
+                        model: shortcutMenuModel
+                    }
+                }
+
+                ListModel {
+                    id: appMenuModel
+                    function setData(data) {
+                        clear()
+                        for (var i = 0; i < data.length; i++) {
+                            append(data[i])
+                        }
+                        appMenu.height = data.length * 20.0
                     }
                 }
             }

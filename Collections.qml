@@ -263,7 +263,8 @@ Page {
                         visible: false
                         width: collectionPage.iconSize
                         height: collectionPage.iconSize
-                        fillMode: Image.PreserveAspectFit
+                        fillMode: collectionPage.currentCollectionMode === mainView.collectionMode.News ? Image.PreserveAspectFit
+                                                                                                        : Image.PreserveAspectCrop
                         Desaturate {
                             anchors.fill: contactImage
                             source: contactImage
