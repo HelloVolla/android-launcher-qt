@@ -55,9 +55,10 @@ ApplicationWindow {
                 source: mainView.wallpaper
             }
             FastBlur {
+                id: fastBlur
                 anchors.fill: backgroundImage
                 source: backgroundImage
-                radius: 60
+                radius: settings.blurEffect
             }
             Rectangle {
                 anchors.fill: parent
@@ -405,6 +406,10 @@ ApplicationWindow {
             }
         }
 
+        function getApps() {
+            return appGrid.children[0].item.getCurrentApps()
+        }
+
         function getFeeds() {
             var channels = feeds.read()
             console.log("MainView | Retrieved feeds: " + channels.lenth)
@@ -589,6 +594,7 @@ ApplicationWindow {
             var action
             var matched = false
             var i
+            var stored = false
             for (i = 0; i < actions.length; i++) {
                 action = actions[i]
                 if (action["id"] === actionId) {
@@ -601,7 +607,8 @@ ApplicationWindow {
                 case mainView.settingsAction.CREATE:
                     if (matched === false) {
                         actions.push(newAction)
-                        console.log("MainView | Did store feeds: " + shortcuts.write(JSON.stringify(actions)))
+                        stored = shortcuts.write(JSON.stringify(actions))
+                        console.log("MainView | Did store feeds: " + stored)
                         showToast(qsTr("New shortcut") + ": " + newAction.name)
                     } else {
                         showToast(qsTr("You have alresdy added the shortcut"))
@@ -610,13 +617,15 @@ ApplicationWindow {
                 case mainView.settingsAction.UPDATE:
                     if (matched === true) {
                         actions[i] = action
-                        console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
+                        stored = shortcuts.write(JSON.stringify(actions))
+                        console.log("MainView | Did store shortcuts: " + stored)
                     }
                     break
                 case mainView.settingsAction.REMOVE:
                     if (matched === true) {
                         actions.splice(i, 1)
-                        console.log("MainView | Did store shortcuts: " + shortcuts.write(JSON.stringify(actions)))
+                        stored = shortcuts.write(JSON.stringify(actions))
+                        console.log("MainView | Did store shortcuts: " + stored)
                     }
                     break
                 default:
@@ -624,6 +633,7 @@ ApplicationWindow {
             }
 
             springboard.children[0].item.updateShortcuts(actions)
+            return stored
         }
 
         function getSearchMode() {
@@ -651,6 +661,10 @@ ApplicationWindow {
             console.log("MainView | Will update app page")
             var item = itemAt(swipeIndex.Apps)
             item.children[0].item.updateAppLauncher(useColoredAppIcons)
+        }
+
+        function updateBlurEffect(blurEffect) {
+            fastBlur.radius = blurEffect
         }
 
         WorkerScript {
@@ -776,6 +790,7 @@ ApplicationWindow {
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
         property bool useHapticMenus: false
+        property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
 
         Component.onCompleted: {

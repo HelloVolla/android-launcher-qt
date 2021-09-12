@@ -100,6 +100,10 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.threadsCountAction", {"read": 0})
     }
 
+    function getCurrentApps() {
+        return gridModel.modelArr
+    }
+
     GridView {
         id: gridView
         anchors.fill: parent

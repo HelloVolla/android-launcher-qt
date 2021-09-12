@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Universal 2.12
@@ -394,8 +395,19 @@ Page {
                             var object = component.createObject(shortcutSettingsItemColumn, properties)
                             shortcutSettingsItemColumn.checkboxes.push(object)
                         }
-//                        addButton.visible = true
+                        addButton.visible = true
                         console.log("Settings | Checkboxes created")
+                    }
+
+                    function addCheckbox(actionId, label) {
+                        var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsItemColumn)
+                        var properties = { "actionId": actionId, "text": label, "checked": true,
+                            "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                            "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                            "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                            "hasRemoveButton": true }
+                        var object = component.createObject(shortcutSettingsItemColumn, properties)
+                        shortcutSettingsItemColumn.checkboxes.push(object)
                     }
 
                     function getFilteredShortcuts(array, key, value) {
@@ -409,7 +421,7 @@ Page {
                             var checkbox = shortcutSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
-//                        addButton.visible = false
+                        addButton.visible = false
                         shortcutSettingsItemColumn.checkboxes = new Array
                     }
 
@@ -440,43 +452,63 @@ Page {
 
             Button {
                 id: addButton
-                leftPadding: mainView.innerSpacing + 5.0
+                leftPadding: mainView.innerSpacing + 6.0
                 rightPadding: mainView.innerSpacing
                 bottomPadding: mainView.innerSpacing / 2
                 flat: true
                 text: "+"
+                font.pointSize: mainView.largeFontSize
                 visible: false
+
                 onClicked: {
-                    // todo: set correct data
-                    appMenuModel.setData([{text: "Eins"}, {text: "Zwei"}])
+                    appMenuModel.setData(mainView.getApps())
                     appMenu.popup(settingsPage)
                 }
 
                 Menu {
                     id: appMenu
 
+                    property double fontSize: mainView.largeFontSoze / 72 * Screen.pixelDensity * 25.4
+
+                    background: Rectangle {
+                        implicitHeight:  contentItem.height
+                        implicitWidth: 200
+                        color: Universal.accent
+                        radius: mainView.innerSpacing
+                    }
+
                     contentItem: ListView {
                         id: appList
                         delegate: Button {
                             width: parent.width
+                            font.pointSize: mainView.mediumFontSize
+                            leftPadding: mainView.innerSpacing
+                            rightPadding: mainView.innerSpacing
+                            topPadding: mainView.innerSpacing
+                            bottomPadding: index === appMenuModel.count - 1 ? mainView.innerSpacing : 0
                             flat: true
-                            text: model.text
+                            text: model.label
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                            }
                             onClicked: {
-                                console.log("Settings | Add app tp shortcuts: " + model.text)
+                                console.log("Settings | App " + model["label"] + " selected for shortcuts");
+                                appMenu.close()
                             }
                         }
-                        model: shortcutMenuModel
+                        model: appMenuModel
                     }
                 }
 
                 ListModel {
                     id: appMenuModel
                     function setData(data) {
+                        console.log("Settings | Menu size is " + data.length)
                         clear()
                         for (var i = 0; i < data.length; i++) {
                             append(data[i])
                         }
-                        appMenu.height = data.length * 20.0
                     }
                 }
             }
@@ -649,6 +681,7 @@ Page {
                         object = component.createObject(designSettingsItemColumn, properties)
                         designSettingsItemColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
+                        blurSlider.visible = true
                     }
 
                     function destroyCheckboxes() {
@@ -657,6 +690,7 @@ Page {
                             checkbox.destroy()
                         }
                         designSettingsItemColumn.checkboxes = new Array
+                        blurSlider.visible = false
                     }
 
                     function updateSettings(actionId, active) {
@@ -697,6 +731,35 @@ Page {
                     property bool useColoredIcons: false
                     property bool showAppsAtStartup: false
                     property bool useHapticMenus: false
+                    property double blurEffect: 60
+                }
+            }
+
+            Slider {
+                id: blurSlider
+                topPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
+                width: parent.width
+                from: 0
+                to: 100
+                value: designSettings.blurEffect
+                visible: false
+
+                handle: Rectangle {
+                    x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
+                    y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
+                    implicitWidth: mainView.largeFontSize
+                    implicitHeight: mainView.largeFontSize
+                    radius: mainView.largeFontSize / 2
+                    color: Universal.accent
+                    border.color: Universal.accent
+                }
+
+                onValueChanged: {
+                    console.log("Settings | Blurr filter chanded to " + value)
+                    designSettings.blurEffect = value
+                    mainView.updateBlurEffect(value)
                 }
             }
         }
