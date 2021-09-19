@@ -681,7 +681,6 @@ Page {
                         object = component.createObject(designSettingsItemColumn, properties)
                         designSettingsItemColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
-                        blurSlider.visible = true
                     }
 
                     function destroyCheckboxes() {
@@ -690,7 +689,6 @@ Page {
                             checkbox.destroy()
                         }
                         designSettingsItemColumn.checkboxes = new Array
-                        blurSlider.visible = false
                     }
 
                     function updateSettings(actionId, active) {
@@ -722,6 +720,14 @@ Page {
                 Behavior on implicitHeight {
                     NumberAnimation {
                         duration: 250.0
+
+                        onRunningChanged: {
+                            console.log("Settings | Running changed to " + running)
+                            if (!running) {
+                                blurLabel.visible = !blurLabel.visible
+                                blurSlider.visible = !blurSlider.visible
+                            }
+                        }
                     }
                 }
 
@@ -735,33 +741,56 @@ Page {
                 }
             }
 
-            Slider {
-                id: blurSlider
-                topPadding: mainView.innerSpacing
-                leftPadding: mainView.innerSpacing
-                rightPadding: mainView.innerSpacing
+            Item {
+                id: blurSettingItem
                 width: parent.width
-                from: 0
-                to: 100
-                value: designSettings.blurEffect
-                visible: false
+                anchors.top: designSettingsItem.bottom
 
-                handle: Rectangle {
-                    x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
-                    y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
-                    implicitWidth: mainView.largeFontSize
-                    implicitHeight: mainView.largeFontSize
-                    radius: mainView.largeFontSize / 2
-                    color: Universal.accent
-                    border.color: Universal.accent
-                }
+                Column {
+                    id: blurSettingItemColumn
+                    width: parent.width
 
-                onValueChanged: {
-                    console.log("Settings | Blurr filter chanded to " + value)
-                    designSettings.blurEffect = value
-                    mainView.updateBlurEffect(value)
+                    Label {
+                        id: blurLabel
+                        topPadding: mainView.innerSpacing
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        text: qsTr("Background blur")
+                        font.pointSize: mainView.mediumFontSize
+                        //visible: false
+                    }
+
+                    Slider {
+                        id: blurSlider
+                        topPadding: mainView.innerSpacing
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        width: parent.width
+                        from: 0
+                        to: 100
+                        value: designSettings.blurEffect
+                        //visible: false
+
+                        handle: Rectangle {
+                            x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
+                            y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
+                            implicitWidth: mainView.largeFontSize
+                            implicitHeight: mainView.largeFontSize
+                            radius: mainView.largeFontSize / 2
+                            color: Universal.accent
+                            border.color: Universal.accent
+                        }
+
+                        onValueChanged: {
+                            console.log("Settings | Blurr filter chanded to " + value)
+                            designSettings.blurEffect = value
+                            mainView.updateBlurEffect(value)
+                        }
+                    }
                 }
             }
+
+
         }
     }
 }

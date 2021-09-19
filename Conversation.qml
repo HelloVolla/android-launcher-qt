@@ -50,7 +50,10 @@ Page {
         target: Qt.inputMethod
 
         onVisibleChanged: {
-            AN.SystemDispatcher.dispatch("volla.launcher.keyboardAction", {})
+            console.log("Conversation | Keyboard visibility is: " + visible)
+            //AN.SystemDispatcher.dispatch("volla.launcher.keyboardAction", {})
+            listView.height = mainView.height * 0.6
+            listView.positionViewAtEnd()
         }
     }
 
@@ -99,7 +102,7 @@ Page {
                     break;
             }
         }
-    }
+   }
 
     function updateListMocel() {
         console.log("Conversation | Operation count is " + operationCount)
@@ -163,9 +166,11 @@ Page {
 
     ListView {
         id: listView
-        anchors.fill: parent
+        anchors.top: parent.top
+        width: parent.width
+        height: parent.height
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
-        footerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
+        footerPositioning: ListView.InlineFooter //  mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
 
         header: Column {
             id: header
@@ -272,7 +277,7 @@ Page {
 //            TextArea {
 //                id: textArea
 //                x: mainView.innerSpacing
-//                width: parent.width - mainView.innerSpacing * 2
+//                width: parent.width - mainView.innerSpacing * 2 - sendButton.width
 //                placeholderText: qsTr("Type your message")
 //                color: mainView.fontColor
 //                placeholderTextColor: "darkgrey"
@@ -285,16 +290,21 @@ Page {
 //                    color: "transparent"
 //                    border.color: "transparent"
 //                }
+
+//                onActiveFocusChanged: {
+//                    console.log("Conversation | On active focus changed to " + activeFocus)
+//                }
 //            }
 //            Button {
 //                id: sendButton
 //                text: "<font color='#808080'>></font>"
-//                font.pointSize: mainView.largeFontSize * 2
+//                font.pointSize: mainView.largeFontSize
 //                flat: true
-//                topPadding: 0.0
-//                anchors.top: parent.top
-//                //anchors.right: parent.right
 //                //visible: textArea.preeditText !== "" || textArea.text !== ""
+//                onClicked: {
+//                    console.log("Conversation | Send button clicked")
+//                    //AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": phoneNumber, "text": message})
+//                }
 //            }
 //        }
 

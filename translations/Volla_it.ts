@@ -248,6 +248,10 @@
         <source>MetaGer</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Background blur</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
