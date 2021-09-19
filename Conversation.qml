@@ -21,6 +21,7 @@ Page {
     property var currentConversationModel: personContentModel
     property var messages: new Array
     property var calls: new Array
+    property var phoneNumber
 
     property string m_ID:        "id"      // the id of the message or content
     property string m_TEXT:      "text"    // large main text, regular
@@ -77,7 +78,10 @@ Page {
                         var contact = mainView.contacts[i]
                         if (contact["id"] === currentId) {
                             console.log("Conversation | Found contact " + contact["name"])
-                            if (contact["phone.mobile"] !== undefined) numbers.push(contact["phone.mobile"])
+                            if (contact["phone.mobile"] !== undefined) {
+                                numbers.push(contact["phone.mobile"])
+                                phoneNumber = contact["phone.mobile"]
+                            }
                             if (contact["phone.work"] !== undefined) numbers.push(contact["phone.work"])
                             if (contact["phone.home"] !== undefined) numbers.push(contact["phone.home"])
                             if (contact["phone.other"] !== undefined) numbers.push(contact["phone.other"])
@@ -170,7 +174,7 @@ Page {
         width: parent.width
         height: parent.height
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
-        footerPositioning: ListView.InlineFooter //  mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
+        footerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
 
         header: Column {
             id: header
@@ -267,46 +271,50 @@ Page {
             }
         }
 
-//        footer: Row {
-//            id: footer
-//            width: parent.width
-//            padding: mainView.innerSpacing
+        footer: Row {
+            id: footer
+            width: parent.width
+            padding: mainView.innerSpacing
+            visible: conversationPage.phoneNumber !== undefined
 
-//            property var gradientColer: Universal.background
+            property var gradientColer: Universal.background
 
-//            TextArea {
-//                id: textArea
-//                x: mainView.innerSpacing
-//                width: parent.width - mainView.innerSpacing * 2 - sendButton.width
-//                placeholderText: qsTr("Type your message")
-//                color: mainView.fontColor
-//                placeholderTextColor: "darkgrey"
-//                font.pointSize: mainView.largeFontSize
-//                wrapMode: Text.WordWrap
-//                leftPadding: 0.0
-//                rightPadding: mainView.innerSpacing
+            TextArea {
+                id: textArea
+                x: mainView.innerSpacing
+                width: parent.width - mainView.innerSpacing * 2 - sendButton.width
+                placeholderText: qsTr("Type your message")
+                color: mainView.fontColor
+                placeholderTextColor: "darkgrey"
+                font.pointSize: mainView.largeFontSize
+                wrapMode: Text.WordWrap
+                leftPadding: 0.0
+                rightPadding: mainView.innerSpacing
 
-//                background: Rectangle {
-//                    color: "transparent"
-//                    border.color: "transparent"
-//                }
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "transparent"
+                }
 
-//                onActiveFocusChanged: {
-//                    console.log("Conversation | On active focus changed to " + activeFocus)
-//                }
-//            }
-//            Button {
-//                id: sendButton
-//                text: "<font color='#808080'>></font>"
-//                font.pointSize: mainView.largeFontSize
-//                flat: true
-//                //visible: textArea.preeditText !== "" || textArea.text !== ""
-//                onClicked: {
-//                    console.log("Conversation | Send button clicked")
-//                    //AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": phoneNumber, "text": message})
-//                }
-//            }
-//        }
+                onActiveFocusChanged: {
+                    console.log("Conversation | On active focus changed to " + activeFocus)
+                }
+            }
+            Button {
+                id: sendButton
+                text: "<font color='#808080'>></font>"
+                font.pointSize: mainView.largeFontSize
+                flat: true
+                //visible: textArea.preeditText !== "" || textArea.text !== ""
+                onClicked: {
+                    console.log("Conversation | Send button clicked")
+                    console.log("Conversation | Number: " + conversationPage.phoneNumber)
+                    console.log("Conversation | Text: " + textArea.text)
+                    AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": conversationPage.phoneNumber, "text": textArea.text})
+                    listView.height = mainView.height
+                }
+            }
+        }
 
         model: currentConversationModel
 
@@ -427,6 +435,10 @@ Page {
 
                 cMessage.m_IS_SENT = message["isSent"]
 
+                if (message["isSent"]) {
+                    conversationPage.phoneNumber = message["address"]
+                }
+
                 if (message["image"] !== undefined) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else {
@@ -535,6 +547,10 @@ Page {
                 }
 
                 cMessage.m_IS_SENT = message["isSent"]
+
+                if (!message["isSent"]) {
+                    conversationPage.phoneNumber = message["address"]
+                }
 
                 if (message["image"] !== undefined) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
