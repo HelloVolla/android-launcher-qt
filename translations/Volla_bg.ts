@@ -13,15 +13,15 @@
     </message>
     <message>
         <source>Add to shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">добавяне към преки пътища</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">отворен</translation>
     </message>
     <message>
         <source>Open App</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">отваряне на приложение</translation>
     </message>
 </context>
 <context>
@@ -134,11 +134,11 @@
     </message>
     <message>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">не може да зареди RSS емисияy</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">отворен контакт</translation>
     </message>
 </context>
 <context>
@@ -168,7 +168,7 @@
     </message>
     <message>
         <source>Share</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">дял</translation>
     </message>
 </context>
 <context>
@@ -215,43 +215,39 @@
     </message>
     <message>
         <source>Experimental</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">експериментален</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">пълен екран</translation>
     </message>
     <message>
         <source>Use colored app icons</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">използване на цветни икони на приложения</translation>
     </message>
     <message>
         <source>Show apps at startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">показване на приложения при стартиране</translation>
     </message>
     <message>
         <source>Use haptic menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">използване на тактилни менюта</translation>
     </message>
     <message>
         <source>Search engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">търсачки</translation>
     </message>
     <message>
         <source>StartPage</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">StartPage</translation>
     </message>
     <message>
         <source>DuckDuckGo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DuckDuckGo</translation>
     </message>
     <message>
         <source>MetaGer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Background blur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MetaGer</translation>
     </message>
 </context>
 <context>
@@ -374,19 +370,19 @@
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">съжалявам. Не успях да намеря телефонен номер за този контакт</translation>
     </message>
     <message>
         <source>Sorry, no contact was selected</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">съжалявам, не е избран контакт</translation>
     </message>
     <message>
         <source>Sorry, the mobile phone number is unknown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">съжалявам, но номерът на мобилния телефон е неизвестен</translation>
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">бележката ви беше успешно съхранена</translation>
     </message>
 </context>
 <context>
@@ -425,7 +421,7 @@
     </message>
     <message>
         <source>Invalid news ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">невалиден идентификатор на новина</translation>
     </message>
     <message>
         <source>Send message</source>
@@ -461,31 +457,31 @@
     </message>
     <message>
         <source>Missing message text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">липсващ текст на съобщението</translation>
     </message>
     <message>
         <source>Generic failure</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">общ отказ</translation>
     </message>
     <message>
         <source>No service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">липса на услуга</translation>
     </message>
     <message>
         <source>Null PDU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">нулев pdu</translation>
     </message>
     <message>
         <source>Radio off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">радиото е изключено</translation>
     </message>
     <message>
         <source>Message delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">доставено съобщение</translation>
     </message>
     <message>
         <source>Message not delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">съобщението не е доставено</translation>
     </message>
     <message>
         <source>Agenda</source>
@@ -497,7 +493,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">бележки</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -521,51 +517,51 @@
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">камера</translation>
     </message>
     <message>
         <source>Send home email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">изпращане на работен имейл</translation>
     </message>
     <message>
         <source>Send work email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">изпращане на работен имейл</translation>
     </message>
     <message>
         <source>Send other email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">изпращане на друга електронна поща</translation>
     </message>
     <message>
         <source>Call on cell phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">обаждане по мобилен телефон</translation>
     </message>
     <message>
         <source>Call at home</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">обаждане вкъщи</translation>
     </message>
     <message>
         <source>Call at work</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">обаждане на работното място</translation>
     </message>
     <message>
         <source>Call other phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">обаждане на друг телефон</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">отворен контакт</translation>
     </message>
     <message>
         <source>New Subscrption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">нов абонамент</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">нов пряк път</translation>
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">вече сте добавили прекия път</translation>
     </message>
 </context>
 </TS>

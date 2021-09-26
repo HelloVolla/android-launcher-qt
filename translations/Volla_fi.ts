@@ -13,15 +13,15 @@
     </message>
     <message>
         <source>Add to shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">lisätä pikanäppäimiin</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">avoin</translation>
     </message>
     <message>
         <source>Open App</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aaa sovellus</translation>
     </message>
 </context>
 <context>
@@ -136,11 +136,11 @@
     </message>
     <message>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ei voinut ladata RSS-syötettä</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">avoin kosketin</translation>
     </message>
 </context>
 <context>
@@ -158,6 +158,10 @@
         <source>Not yet supported</source>
         <translation type="unfinished">ei vielä tuettu</translation>
     </message>
+    <message>
+        <source>Type your message</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -171,7 +175,7 @@
     </message>
     <message>
         <source>Share</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">osake</translation>
     </message>
 </context>
 <context>
@@ -217,38 +221,42 @@
     </message>
     <message>
         <source>Experimental</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kokeellinen</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">koko näytön</translation>
     </message>
     <message>
         <source>Use colored app icons</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">käytä värillisiä sovelluskuvakkeita</translation>
     </message>
     <message>
         <source>Show apps at startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">näytä sovellukset käynnistyksen yhteydessä</translation>
     </message>
     <message>
         <source>Use haptic menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">käyttää haptisia valikoita</translation>
     </message>
     <message>
         <source>Search engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">hakukoneet</translation>
     </message>
     <message>
         <source>StartPage</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">StartPage</translation>
     </message>
     <message>
         <source>DuckDuckGo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DuckDuckGo</translation>
     </message>
     <message>
         <source>MetaGer</source>
+        <translation type="unfinished">MetaGer</translation>
+    </message>
+    <message>
+        <source>Startpage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -376,19 +384,19 @@
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En löytänyt tämän yhteyshenkilön puhelinnumeroa.</translation>
     </message>
     <message>
         <source>Sorry, no contact was selected</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anteeksi, yhteystietoa ei valittu</translation>
     </message>
     <message>
         <source>Sorry, the mobile phone number is unknown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anteeksi, matkapuhelinnumero on tuntematon</translation>
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">muistiinpanosi tallennettiin onnistuneesti</translation>
     </message>
 </context>
 <context>
@@ -427,7 +435,7 @@
     </message>
     <message>
         <source>Invalid news ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">virheellinen uutinen id</translation>
     </message>
     <message>
         <source>Send message</source>
@@ -463,31 +471,31 @@
     </message>
     <message>
         <source>Missing message text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">puuttuva viestiteksti</translation>
     </message>
     <message>
         <source>Generic failure</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">yleinen epäonnistuminen</translation>
     </message>
     <message>
         <source>No service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ei palvelua</translation>
     </message>
     <message>
         <source>Null PDU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">null pdu</translation>
     </message>
     <message>
         <source>Radio off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">radio pois päältä</translation>
     </message>
     <message>
         <source>Message delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">toimitettu viesti</translation>
     </message>
     <message>
         <source>Message not delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">viestiä ei ole toimitettu</translation>
     </message>
     <message>
         <source>Agenda</source>
@@ -499,7 +507,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">muistiinpanot</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -523,51 +531,51 @@
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kamera</translation>
     </message>
     <message>
         <source>Send home email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">muistiinpanot</translation>
     </message>
     <message>
         <source>Send work email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">lähettää työsähköpostia</translation>
     </message>
     <message>
         <source>Send other email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">lähetä muuta sähköpostia</translation>
     </message>
     <message>
         <source>Call on cell phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">puhelu matkapuhelimeen</translation>
     </message>
     <message>
         <source>Call at home</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">soitto kotiin</translation>
     </message>
     <message>
         <source>Call at work</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">puhelu työpaikalle</translation>
     </message>
     <message>
         <source>Call other phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">soittaa toiseen puhelimeen</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">avoin kosketin</translation>
     </message>
     <message>
         <source>New Subscrption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">uusi tilaus</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">uusi pikakuvake</translation>
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">olet jo lisännyt pikakuvakkeen</translation>
     </message>
 </context>
 </TS>

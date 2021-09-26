@@ -13,15 +13,15 @@
     </message>
     <message>
         <source>Add to shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pridať do skratiek</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">otvoriť</translation>
     </message>
     <message>
         <source>Open App</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">otvoriť aplikáciu</translation>
     </message>
 </context>
 <context>
@@ -135,11 +135,11 @@
     </message>
     <message>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sa nepodarilo načítať kanál RSS</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">otvorený kontakt</translation>
     </message>
 </context>
 <context>
@@ -156,6 +156,10 @@
         <source>Not yet supported</source>
         <translation type="unfinished">zatiaľ nie je podporovaná</translation>
     </message>
+    <message>
+        <source>Type your message</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -169,7 +173,7 @@
     </message>
     <message>
         <source>Share</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">zdieľať</translation>
     </message>
 </context>
 <context>
@@ -207,7 +211,7 @@
     </message>
     <message>
         <source>News Channels</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">spravodajské kanály</translation>
     </message>
     <message>
         <source>Shortcuts</source>
@@ -215,38 +219,42 @@
     </message>
     <message>
         <source>Experimental</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">experimentálne</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">na celú obrazovku</translation>
     </message>
     <message>
         <source>Use colored app icons</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">používať farebné ikony aplikácií</translation>
     </message>
     <message>
         <source>Show apps at startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">zobrazenie aplikácií pri spustení</translation>
     </message>
     <message>
         <source>Use haptic menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">používať hmatové ponuky</translation>
     </message>
     <message>
         <source>Search engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vyhľadávače</translation>
     </message>
     <message>
         <source>StartPage</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">StartPage</translation>
     </message>
     <message>
         <source>DuckDuckGo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DuckDuckGo</translation>
     </message>
     <message>
         <source>MetaGer</source>
+        <translation type="unfinished">MetaGer</translation>
+    </message>
+    <message>
+        <source>Startpage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -376,19 +384,19 @@
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Je mi ľúto, ale nenašla som telefónne číslo na tento kontakt</translation>
     </message>
     <message>
         <source>Sorry, no contact was selected</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Je nám ľúto, nebol vybraný žiadny kontakt</translation>
     </message>
     <message>
         <source>Sorry, the mobile phone number is unknown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Je nám ľúto, číslo mobilného telefónu nie je známe</translation>
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vaša poznámka bola úspešne uložená</translation>
     </message>
 </context>
 <context>
@@ -427,7 +435,7 @@
     </message>
     <message>
         <source>Invalid news ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">neplatné ID správy</translation>
     </message>
     <message>
         <source>Send message</source>
@@ -463,31 +471,31 @@
     </message>
     <message>
         <source>Missing message text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chýbajúci text správy</translation>
     </message>
     <message>
         <source>Generic failure</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">všeobecné zlyhanie</translation>
     </message>
     <message>
         <source>No service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">žiadna služba</translation>
     </message>
     <message>
         <source>Null PDU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nulová PDU</translation>
     </message>
     <message>
         <source>Radio off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rádio vypnuté</translation>
     </message>
     <message>
         <source>Message delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">doručená správa</translation>
     </message>
     <message>
         <source>Message not delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">správa nebola doručená</translation>
     </message>
     <message>
         <source>Agenda</source>
@@ -499,7 +507,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">poznámky</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -523,51 +531,51 @@
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">fotoaparát</translation>
     </message>
     <message>
         <source>Send home email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">poslať domov e-mail</translation>
     </message>
     <message>
         <source>Send work email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">poslať pracovný e-mail</translation>
     </message>
     <message>
         <source>Send other email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">poslať iný e-mail</translation>
     </message>
     <message>
         <source>Call on cell phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">volanie na mobilný telefón</translation>
     </message>
     <message>
         <source>Call at home</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">zavolajte domov</translation>
     </message>
     <message>
         <source>Call at work</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">telefonát v práci</translation>
     </message>
     <message>
         <source>Call other phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">zavolajte na iný telefón</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">otvorený kontakt</translation>
     </message>
     <message>
         <source>New Subscrption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nové predplatné</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nová skratka</translation>
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ste už pridali skratku</translation>
     </message>
 </context>
 </TS>

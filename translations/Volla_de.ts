@@ -170,7 +170,7 @@
     <message>
         <location filename="../Collections.qml" line="950"/>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RSS-Feed konnte nicht geladen werden</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="978"/>
@@ -186,18 +186,23 @@
 <context>
     <name>Conversation</name>
     <message>
-        <location filename="../Conversation.qml" line="187"/>
+        <location filename="../Conversation.qml" line="191"/>
         <source>Conversation</source>
         <translation type="unfinished">Unterhaltung</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="226"/>
+        <location filename="../Conversation.qml" line="230"/>
         <source>Filter messages ...</source>
         <translation type="unfinished">Filtere Mitteilungen</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="514"/>
-        <location filename="../Conversation.qml" line="613"/>
+        <location filename="../Conversation.qml" line="286"/>
+        <source>Type your message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Conversation.qml" line="526"/>
+        <location filename="../Conversation.qml" line="629"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Noch nicht unterstützt</translation>
     </message>
@@ -217,7 +222,7 @@
     <message>
         <location filename="../Details.qml" line="123"/>
         <source>Share</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teilen</translation>
     </message>
 </context>
 <context>
@@ -280,24 +285,23 @@
         <translation type="unfinished">Suchmaschinen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="569"/>
         <source>StartPage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../Settings.qml" line="758"/>
-        <source>Background blur</source>
-        <translation type="unfinished">Huntergrundunschärfe</translation>
+        <translation type="obsolete">Startpage</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="561"/>
         <source>DuckDuckGo</source>
+        <translation type="unfinished">DuckDuckGo</translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="569"/>
+        <source>Startpage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="575"/>
         <source>MetaGer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MetaGer</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="635"/>
@@ -323,6 +327,11 @@
         <location filename="../Settings.qml" line="679"/>
         <source>Use haptic menus</source>
         <translation type="unfinished">Verwende haptische Menüs</translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="758"/>
+        <source>Background blur</source>
+        <translation type="unfinished">Hintergrundunschärfe</translation>
     </message>
 </context>
 <context>
@@ -668,27 +677,27 @@
     <message>
         <location filename="../main.qml" line="438"/>
         <source>New Subscrption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neues Abonnemment</translation>
     </message>
     <message>
         <location filename="../main.qml" line="440"/>
         <source>You have alresdy subscribed the feed</source>
-        <translation>Sie haben den Feed bereits abonniert</translation>
+        <translation>Du hast den Feed bereits abonniert</translation>
     </message>
     <message>
         <location filename="../main.qml" line="463"/>
         <source>Invalid news ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ungültige Nachrichten-ID</translation>
     </message>
     <message>
         <location filename="../main.qml" line="612"/>
         <source>New shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neuer Kurzbefehl</translation>
     </message>
     <message>
         <location filename="../main.qml" line="614"/>
         <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Du hast den Kurzbefehl bereits hinzugefügt</translation>
     </message>
     <message>
         <location filename="../main.qml" line="165"/>

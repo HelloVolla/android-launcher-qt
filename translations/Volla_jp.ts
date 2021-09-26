@@ -155,6 +155,10 @@
         <source>Not yet supported</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Type your message</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -221,10 +225,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>StartPage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MetaGer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -246,6 +246,10 @@
     </message>
     <message>
         <source>Use haptic menus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Startpage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

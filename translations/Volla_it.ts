@@ -13,15 +13,15 @@
     </message>
     <message>
         <source>Add to shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aggiungi alle scorciatoie</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aprire</translation>
     </message>
     <message>
         <source>Open App</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aprire l&apos;app</translation>
     </message>
 </context>
 <context>
@@ -134,11 +134,11 @@
     </message>
     <message>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">impossibile caricare i feed rss</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aprire contatto</translation>
     </message>
 </context>
 <context>
@@ -155,6 +155,10 @@
         <source>Not yet supported</source>
         <translation type="unfinished">non ancora supportato</translation>
     </message>
+    <message>
+        <source>Type your message</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -168,7 +172,7 @@
     </message>
     <message>
         <source>Share</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">azione</translation>
     </message>
 </context>
 <context>
@@ -214,38 +218,42 @@
     </message>
     <message>
         <source>Experimental</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sperimentale</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">schermo intero</translation>
     </message>
     <message>
         <source>Use colored app icons</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">utilizzare le icone colorate delle app</translation>
     </message>
     <message>
         <source>Show apps at startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mostrare le app all&apos;avvio</translation>
     </message>
     <message>
         <source>Use haptic menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">utilizzare menu aptici</translation>
     </message>
     <message>
         <source>Search engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">motori di ricerca</translation>
     </message>
     <message>
         <source>StartPage</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">StartPage</translation>
     </message>
     <message>
         <source>DuckDuckGo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DuckDuckGo</translation>
     </message>
     <message>
         <source>MetaGer</source>
+        <translation type="unfinished">MetaGer</translation>
+    </message>
+    <message>
+        <source>Startpage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -373,19 +381,19 @@
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mi dispiace, non sono riuscito a trovare un numero di telefono per questo contatto</translation>
     </message>
     <message>
         <source>Sorry, no contact was selected</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spiacente, nessun contatto è stato selezionato</translation>
     </message>
     <message>
         <source>Sorry, the mobile phone number is unknown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spiacente, il numero di cellulare è sconosciuto</translation>
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">la tua nota è stata memorizzata con successo</translation>
     </message>
 </context>
 <context>
@@ -424,7 +432,7 @@
     </message>
     <message>
         <source>Invalid news ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID notizia non valido</translation>
     </message>
     <message>
         <source>Send message</source>
@@ -460,31 +468,31 @@
     </message>
     <message>
         <source>Missing message text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">testo del messaggio mancante</translation>
     </message>
     <message>
         <source>Generic failure</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">fallimento generico</translation>
     </message>
     <message>
         <source>No service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nessun servizio</translation>
     </message>
     <message>
         <source>Null PDU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pdu nullo</translation>
     </message>
     <message>
         <source>Radio off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">radio spenta</translation>
     </message>
     <message>
         <source>Message delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">messaggio consegnato</translation>
     </message>
     <message>
         <source>Message not delivered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">messaggio non consegnato</translation>
     </message>
     <message>
         <source>Agenda</source>
@@ -496,7 +504,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">note</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -516,55 +524,55 @@
     </message>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mostra combinatore telefonico</translation>
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">telecamera</translation>
     </message>
     <message>
         <source>Send home email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">inviare e-mail a casa</translation>
     </message>
     <message>
         <source>Send work email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">inviare e-mail di lavoro</translation>
     </message>
     <message>
         <source>Send other email</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">invia un&apos;altra email</translation>
     </message>
     <message>
         <source>Call on cell phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chiamare sul cellulare</translation>
     </message>
     <message>
         <source>Call at home</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chiamare a casa</translation>
     </message>
     <message>
         <source>Call at work</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chiamata al lavoro</translation>
     </message>
     <message>
         <source>Call other phone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chiamare altro telefono</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aprire il contatto</translation>
     </message>
     <message>
         <source>New Subscrption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nuovo abbonamento</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nuovo collegamento</translation>
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">hai già aggiunto la scorciatoia</translation>
     </message>
 </context>
 </TS>

@@ -47,16 +47,16 @@ Page {
         currentConversationModel.update("")
     }
 
-    Connections {
-        target: Qt.inputMethod
+//    Connections {
+//        target: Qt.inputMethod
 
-        onVisibleChanged: {
-            console.log("Conversation | Keyboard visibility is: " + visible)
-            //AN.SystemDispatcher.dispatch("volla.launcher.keyboardAction", {})
-            listView.height = mainView.height * 0.6
-            listView.positionViewAtEnd()
-        }
-    }
+//        onVisibleChanged: {
+//            console.log("Conversation | Keyboard visibility is: " + visible)
+//            //AN.SystemDispatcher.dispatch("volla.launcher.keyboardAction", {})
+//            listView.height = mainView.height * 0.6
+//            listView.positionViewAtEnd()
+//        }
+//    }
 
     function updateConversationPage (mode, id, name) {
         console.log("Conversation | Update conversation mode: " + mode + " with id " + id)
@@ -234,7 +234,7 @@ Page {
                 leftPadding: 0.0
                 rightPadding: 0.0
                 background: Rectangle {
-                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
                 }
                 Binding {
@@ -292,12 +292,18 @@ Page {
                 rightPadding: mainView.innerSpacing
 
                 background: Rectangle {
-                    color: "transparent"
+                    color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
                 }
 
                 onActiveFocusChanged: {
                     console.log("Conversation | On active focus changed to " + activeFocus)
+                    if (activeFocus) {
+                        listView.height = mainView.height * 0.6
+                        listView.positionViewAtEnd()
+                    } else {
+                        listView.height = mainView.height
+                    }
                 }
             }
             Button {
@@ -305,13 +311,22 @@ Page {
                 text: "<font color='#808080'>></font>"
                 font.pointSize: mainView.largeFontSize
                 flat: true
+                background: Rectangle {
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    border.color: "transparent"
+                }
                 //visible: textArea.preeditText !== "" || textArea.text !== ""
                 onClicked: {
                     console.log("Conversation | Send button clicked")
                     console.log("Conversation | Number: " + conversationPage.phoneNumber)
                     console.log("Conversation | Text: " + textArea.text)
                     AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": conversationPage.phoneNumber, "text": textArea.text})
-                    listView.height = mainView.height
+
+                    // Todo: Add message to list currentConversationModel
+                    // Todo: Clean up textArea
+
+                    textArea.activeFocus = false
+                    // listView.height = mainView.height
                 }
             }
         }
@@ -329,6 +344,14 @@ Page {
                 width: parent.width
                 implicitHeight: messageColumn.height
 
+                function parseMessage(message) {
+                    var urlRegex = /(((https?:\/\/)|([^\s]+\.))[^\s,]+)/g;
+                    return message.replace(urlRegex, function(url,b,c) {
+                        var url2 = !c.startsWith('http') ?  'http://' + url : url;
+                        return '<a href="' +url2+ '" target="_blank">' + url + '</a>';
+                    })
+                }
+
                 Column {
                     id: messageColumn
                     spacing: 6.0
@@ -341,11 +364,16 @@ Page {
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
                         width: messageBox.width * widthFactor
-                        text: model.m_TEXT !== undefined ? model.m_TEXT : ""
+                        text: model.m_TEXT !== undefined ? messageBox.parseMessage(model.m_TEXT) : ""
+                        linkColor: "lightgrey"
                         lineHeight: 1.1
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         visible: !model.m_IS_SENT && model.m_TEXT !== undefined
+                        onLinkActivated: {
+                            console.log("Conversation | Link clicked: " + link)
+                            Qt.openUrlExternally(link)
+                        }
                     }
                     Label {
                         anchors.left: parent.left
@@ -368,13 +396,18 @@ Page {
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
                         width: messageBox.width * widthFactor
-                        text: model.m_TEXT !== undefined ? model.m_TEXT : ""
+                        text: model.m_TEXT !== undefined ? messageBox.parseMessage(model.m_TEXT) : ""
+                        linkColor: "lightgrey"
                         lineHeight: 1.1
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         opacity: 0.8
                         horizontalAlignment: Text.AlignRight
                         visible: model.m_IS_SENT && model.m_TEXT !== undefined
+                        onLinkActivated: {
+                            console.log("Conversation | Link clicked: " + link)
+                            Qt.openUrlExternally(link)
+                        }
                     }
                     Label {
                         id: sentDate

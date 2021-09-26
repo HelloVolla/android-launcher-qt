@@ -566,7 +566,7 @@ Page {
                         searchSettingsItemColumn.checkboxes.push(object)
                         component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
                         properties["actionId"] = "startpage"
-                        properties["text"] = qsTr("StartPage")
+                        properties["text"] = qsTr("Startpage")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.StartPage
                         object = component.createObject(searchSettingsItemColumn, properties)
                         searchSettingsItemColumn.checkboxes.push(object)

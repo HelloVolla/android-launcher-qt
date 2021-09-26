@@ -303,15 +303,30 @@ Page {
     Menu {
         id: contextMenu
 
+        background: Rectangle {
+            id: menuBackground
+            implicitHeight:  100
+            implicitWidth: 250
+            color: Universal.accent
+            radius: mainView.innerSpacing
+        }
+
         MenuItem {
+            id: addShortCutItem
             text: qsTr("Add to shortcuts")
             font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: background.width
+                text: addShortCutItem.text
+                font: addShortCutItem.font
+                horizontalAlignment: Text.AlignHCenter
+            }
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
             topPadding: mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
-                color: Universal.accent
+                color: "transparent"
             }
             onClicked: {
                 var idx = gridView.currentIndex
@@ -326,18 +341,36 @@ Page {
             }
         }
         MenuItem {
-            text: qsTr("Open App")
+            id: openAppItem
             font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: background.width
+                text: qsTr("Open App")
+                horizontalAlignment: Text.AlignHCenter
+            }
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
             bottomPadding: mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
-                color: Universal.accent
+                color: "transparent"
             }
             onClicked: {
+                var idx = gridView.currentIndex
+                console.log("AppGrid | Index " + idx + " selected for shortcuts");
+                var app = gridModel.get(idx)
+                console.log("AppGrid | App " + app["label"] + " selected to open");
                 gridView.currentIndex = -1
-                mainView.showToast("Will be implemented soon!")
+                if (app.package === mainView.phoneApp) {
+                    if (appLauncher.newCalls) {
+                        AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "log"})
+                        AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
+                    } else {
+                        AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp})
+                    }
+                } else {
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": app.package})
+                }
             }
         }
     }
