@@ -60,5 +60,6 @@
         <file>icons/xmpp@4x_104x104px.png</file>
         <file>scripts/contacts.mjs</file>
         <file>Shortcut.qml</file>
+        <file>icons/send_icon_light.png</file>
     </qresource>
 </RCC>

@@ -303,10 +303,12 @@ Page {
     Menu {
         id: contextMenu
 
+        property double menuWidth: 250.0
+
         background: Rectangle {
             id: menuBackground
             implicitHeight:  100
-            implicitWidth: 250
+            implicitWidth: contextMenu.menuWidth
             color: Universal.accent
             radius: mainView.innerSpacing
         }
@@ -316,7 +318,7 @@ Page {
             text: qsTr("Add to shortcuts")
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
-                width: background.width
+                width: contextMenu.menuWidth
                 text: addShortCutItem.text
                 font: addShortCutItem.font
                 horizontalAlignment: Text.AlignHCenter
@@ -344,7 +346,7 @@ Page {
             id: openAppItem
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
-                width: background.width
+                width: contextMenu.menuWidth
                 text: qsTr("Open App")
                 horizontalAlignment: Text.AlignHCenter
             }

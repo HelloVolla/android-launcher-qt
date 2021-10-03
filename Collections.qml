@@ -5,6 +5,7 @@ import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
+import FileIO 1.0
 
 Page {
     id: collectionPage
@@ -112,7 +113,13 @@ Page {
 
     function loadThreads(filter) {
         console.log("Collections | Will load threads")
-        collectionPage.threads = new Array
+        try {
+            collectionPage.threads = threadCache.readPrivate()
+            collectionPage.updateListModel()
+        } catch (e) {
+            collectionPage.threads = new Array
+            console.log("Collections | Error reading thread cache: " + e)
+        }
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
 
         // todo: load threads from further source
@@ -121,7 +128,12 @@ Page {
 
     function loadCalls(filter) {
         console.log("Collections | Will load calls")
-        collectionPage.calls = new Array
+        try {
+            collectionPage.calls = callLogCache.readPrivate()
+            collectionPage.updateListModel()
+        } catch (e) {
+            collectionPage.calls = new Array
+        }
         AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)  
     }
 
@@ -1200,6 +1212,7 @@ Page {
             if (type === "volla.launcher.threadResponse") {
                 console.log("Collections | onDispatched: " + type)
                 collectionPage.threads = message["threads"]
+                threadCache.write(message["threads"])
 //                message["threads"].forEach(function (thread, index) {
 //                    for (const [threadKey, threadValue] of Object.entries(thread)) {
 //                        console.log("Collections | * " + threadKey + ": " + threadValue)
@@ -1209,6 +1222,7 @@ Page {
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
                 collectionPage.calls = message["calls"]
+                callLogCache.writePrivate(message["calls"])
 //                message["calls"].forEach(function (call, index) {
 //                    for (const [callKey, callValue] of Object.entries(call)) {
 //                        console.log("Collections | * " + callKey + ": " + callValue)
@@ -1227,5 +1241,21 @@ Page {
     // @disable-check M300
     AN.Util {
         id: util
+    }
+
+    FileIO {
+        id: threadCache
+        source: "threads.json"
+        onError: {
+            console.log("Collections | Thread cache error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: callLogCache
+        source: "calls.json"
+        onError: {
+            console.log("Collections | Call log cache error: " + msg)
+        }
     }
 }

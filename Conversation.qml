@@ -277,8 +277,6 @@ Page {
             padding: mainView.innerSpacing
             visible: conversationPage.phoneNumber !== undefined
 
-            property var gradientColer: Universal.background
-
             TextArea {
                 id: textArea
                 x: mainView.innerSpacing
@@ -303,30 +301,48 @@ Page {
                         listView.positionViewAtEnd()
                     } else {
                         listView.height = mainView.height
+                        listView.positionViewAtEnd()
                     }
                 }
             }
             Button {
                 id: sendButton
-                text: "<font color='#808080'>></font>"
-                font.pointSize: mainView.largeFontSize
+                anchors.bottom: footer.bottomPadding
+                bottomPadding: 0
+                rightPadding: 0
                 flat: true
+                enabled: textArea.text.length > 0
+                height: mainView.innerSpacing * 1.2
+                width: mainView.innerSpacing * 2
+                opacity: enabled ? 1.0 : 0.3
+                contentItem: Image {
+                    id: sendIcon
+                    source: Qt.resolvedUrl("/icons/send_icon_light.png")
+                    fillMode: Image.PreserveAspectFit
+
+                    ColorOverlay {
+                        anchors.fill: sendIcon
+                        source: sendIcon
+                        color: mainView.fontColor
+                    }
+                }
                 background: Rectangle {
                     color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
                     border.color: "transparent"
                 }
-                //visible: textArea.preeditText !== "" || textArea.text !== ""
                 onClicked: {
                     console.log("Conversation | Send button clicked")
                     console.log("Conversation | Number: " + conversationPage.phoneNumber)
                     console.log("Conversation | Text: " + textArea.text)
                     AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": conversationPage.phoneNumber, "text": textArea.text})
 
-                    // Todo: Add message to list currentConversationModel
-                    // Todo: Clean up textArea
-
+                    // Todo: Only add message to list currentConversationModel, if massage was successfully sent.
+                    var d = new Date()
+                    currentConversationModel.append(
+                                {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • SMS",
+                                 "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf()})
+                    textArea.text = ""
                     textArea.activeFocus = false
-                    // listView.height = mainView.height
                 }
             }
         }
