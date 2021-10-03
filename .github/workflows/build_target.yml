@@ -1,0 +1,78 @@
+name: Build Volla Launcher
+
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - '*'
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    outputs:
+      uid_gid: ${{ steps.get-user.outputs.uid_gid }}
+    steps:
+      - id: get-user
+        run: echo "::set-output name=uid_gid::$(id -u):$(id -g)"
+
+  build:
+    needs: configure
+    runs-on: ubuntu-latest
+    container:
+      image: a12e/docker-qt:5.13-android_arm64_v8a
+      options: --user ${{ needs.configure.outputs.uid_gid }}
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            build/cache
+          key: ${{ runner.os }}-${{ hashFiles('**/*.pri') }}
+
+      - name: Build Apk
+        env:
+          ANDROID_KEYSTORE_FILE_CONTENTS: ${{ secrets.ANDROID_KEYSTORE_FILE_CONTENTS }}
+          ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+        run: |
+          export CACHE_DIR=build/cache
+          export M2_HOME=`realpath -m $CACHE_DIR/.m2`
+          export MAVEN_HOME=`realpath -m $CACHE_DIR/.m2`
+          export GRADLE_USER_HOME=`realpath -m $CACHE_DIR/.gradle`
+          export VERSION=`git describe --tags || git rev-parse --short HEAD`
+          export TIMESTAMP=`date +%Y%m%d%H%M`
+          export BUILD_ID="$VERSION-$TIMESTAMP"
+          mkdir -p $MAVEN_HOME
+          mkdir -p $GRADLE_USER_HOME
+          mkdir -p releases
+          ./build_package_android ./releases
+
+      - name: Upload Apk to Nightly Repository
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'drone'
+          server: 'volla.tech'
+          ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
+          local_path: './releases/*.apk'
+          remote_path: '/builds/nightly/volla/android-launcher-qt/'
+          args: '-o CheckHostIP=no -o StrictHostKeyChecking=no'
+
+      - name: Upload Apk to Release Repository
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'drone'
+          server: 'volla.tech'
+          ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
+          local_path: './releases/*.apk'
+          remote_path: '/builds/release/volla/android-launcher-qt/'
+          args: '-o CheckHostIP=no -o StrictHostKeyChecking=no'
