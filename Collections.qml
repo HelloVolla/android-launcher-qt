@@ -51,54 +51,47 @@ Page {
         currentCollectionModel.update(textInput)
     }
 
-    Component.onCompleted: {  
-        textInput.text = ""
-        currentCollectionModel.update("")
-    }
-
     function updateCollectionPage (mode) {
         console.log("Collections | Update collection model: " + mode)
 
-        // if (mode !== currentCollectionMode) {
-            currentCollectionMode = mode
-            currentCollectionModel.clear()
-            currentCollectionModel.modelArr = new Array
+        currentCollectionMode = mode
+        currentCollectionModel.clear()
+        currentCollectionModel.modelArr = new Array
 
-            switch (mode) {
-                case mainView.collectionMode.People:
-                    headline.text = qsTr("People")
-                    textInputField.placeholderText = qsTr("Find people ...")
-                    currentCollectionModel = peopleModel
-                    currentCollectionModel.modelArr = new Array
-                    operationCount = 2
-                    mainView.updateSpinner(true)
-                    collectionPage.loadThreads({"age": threadAge})
-                    collectionPage.loadCalls({"age": threadAge})
-                    break;
-                case mainView.collectionMode.Threads:
-                    headline.text = qsTr("Threads")
-                    textInputField.placeholderText = qsTr("Find thread ...")
-                    currentCollectionModel = threadModel
-                    currentCollectionModel.modelArr = new Array
-                    operationCount = 1
-                    mainView.updateSpinner(true)
-                    collectionPage.loadThreads({"threadAge": threadAge})
-                    break;
-                case mainView.collectionMode.News:
-                    headline.text = qsTr("News")
-                    textInputField.placeholderText = qsTr("Find news ...")
-                    currentCollectionModel = newsModel
-                    currentCollectionModel.modelArr = new Array
-                    collectionPage.threads = new Array
-                    collectionPage.calls = new Array
-                    mainView.updateSpinner(true)
-                    currentCollectionModel.update("")
-                    break;
-                default:
-                    console.log("Collections | Unknown collection mode")
-                    break;
-            }
-//        }
+        switch (mode) {
+            case mainView.collectionMode.People:
+                headline.text = qsTr("People")
+                textInputField.placeholderText = qsTr("Find people ...")
+                currentCollectionModel = peopleModel
+                currentCollectionModel.modelArr = new Array
+                operationCount = 2
+                mainView.updateSpinner(true)
+                collectionPage.loadThreads({"age": threadAge})
+                collectionPage.loadCalls({"age": threadAge})
+                break;
+            case mainView.collectionMode.Threads:
+                headline.text = qsTr("Threads")
+                textInputField.placeholderText = qsTr("Find thread ...")
+                currentCollectionModel = threadModel
+                currentCollectionModel.modelArr = new Array
+                operationCount = 1
+                mainView.updateSpinner(true)
+                collectionPage.loadThreads({"age": threadAge})
+                break;
+            case mainView.collectionMode.News:
+                headline.text = qsTr("News")
+                textInputField.placeholderText = qsTr("Find news ...")
+                currentCollectionModel = newsModel
+                currentCollectionModel.modelArr = new Array
+                collectionPage.threads = new Array
+                collectionPage.calls = new Array
+                mainView.updateSpinner(true)
+                currentCollectionModel.update("")
+                break;
+            default:
+                console.log("Collections | Unknown collection mode")
+                break;
+        }
     }
 
     function updateListModel() {
@@ -113,27 +106,13 @@ Page {
 
     function loadThreads(filter) {
         console.log("Collections | Will load threads")
-        try {
-            collectionPage.threads = threadCache.readPrivate()
-            collectionPage.updateListModel()
-        } catch (e) {
-            collectionPage.threads = new Array
-            console.log("Collections | Error reading thread cache: " + e)
-        }
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
-
         // todo: load threads from further source
         //       address (phone or contact), body (message), date, type
     }
 
     function loadCalls(filter) {
         console.log("Collections | Will load calls")
-        try {
-            collectionPage.calls = callLogCache.readPrivate()
-            collectionPage.updateListModel()
-        } catch (e) {
-            collectionPage.calls = new Array
-        }
         AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)  
     }
 
@@ -726,8 +705,8 @@ Page {
             for (var i = 0; i < modelArr.length; i++) {
                 var aContact = modelArr[i]
                 if (aContact.c_ID === contactId) {
-                    console.log("Collections | Contact matched")
-                    aContact.c_ICON = "data:image/png;base64," + contactImage
+                    console.log("Collections | Contact in list model matched")
+                    aContact.c_ICON = contactImage
                     modelArr[i] = aContact
                     break
                 }
@@ -735,9 +714,18 @@ Page {
             for (i = 0; i < count; i++) {
                 var elem = get(i)
                 if (elem.c_ID === contactId) {
-                    console.log("Collections | List element matched")
+                    console.log("Collections | Contact in list view matched")
                     elem.c_ICON = "data:image/png;base64," + contactImage
                     set(i, elem)
+                    break
+                }
+            }
+            for (i = 0; i < mainView.contacts.length; i++) {
+                aContact = mainView.contacts[i]
+                if (aContact["id"] === contactId) {
+                    console.log("Collections | Contact in contacts matched")
+                    aContact["icon"] = contactImage
+                    mainView.contacts[i] = aContact
                     break
                 }
             }
@@ -1212,22 +1200,10 @@ Page {
             if (type === "volla.launcher.threadResponse") {
                 console.log("Collections | onDispatched: " + type)
                 collectionPage.threads = message["threads"]
-                threadCache.write(message["threads"])
-//                message["threads"].forEach(function (thread, index) {
-//                    for (const [threadKey, threadValue] of Object.entries(thread)) {
-//                        console.log("Collections | * " + threadKey + ": " + threadValue)
-//                    }
-//                })
                 collectionPage.updateListModel()
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
                 collectionPage.calls = message["calls"]
-                callLogCache.writePrivate(message["calls"])
-//                message["calls"].forEach(function (call, index) {
-//                    for (const [callKey, callValue] of Object.entries(call)) {
-//                        console.log("Collections | * " + callKey + ": " + callValue)
-//                    }
-//                })
                 collectionPage.updateListModel()
             } else if (type === "volla.launcher.contactImageResponse") {
                 console.log("Collections | onDispatched: " + type)
@@ -1244,7 +1220,7 @@ Page {
     }
 
     FileIO {
-        id: threadCache
+        id: threadsCache
         source: "threads.json"
         onError: {
             console.log("Collections | Thread cache error: " + msg)
@@ -1252,10 +1228,10 @@ Page {
     }
 
     FileIO {
-        id: callLogCache
+        id: callsCache
         source: "calls.json"
         onError: {
-            console.log("Collections | Call log cache error: " + msg)
+            console.log("Collections | Calls cache error: " + msg)
         }
     }
 }

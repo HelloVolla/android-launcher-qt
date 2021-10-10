@@ -77,6 +77,7 @@ Page {
                 wrapMode: Text.WordWrap
                 leftPadding: 0.0
                 rightPadding: mainView.innerSpacing
+                inputMethodHints: Qt.ImhEmailCharactersOnly
 
                 background: Rectangle {
                     color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
@@ -338,7 +339,7 @@ Page {
                             Qt.openUrlExternally("https://startpage.com/sp/search?query=" + message + "&segment=startpage.volla")
                             break
                         case mainView.searchMode.MetaGer:
-                            Qt.openUrlExternally("https://metager.de/meta/meta.ger3?eingabe=" + message)
+                            Qt.openUrlExternally("https://metager.de/meta/meta.ger3?eingabe=" + message + "&ref=hellovolla")
                             break
                         default:
                             Qt.openUrlExternally("https://duck.com?q=" + message)

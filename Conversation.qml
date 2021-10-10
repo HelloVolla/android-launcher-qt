@@ -42,22 +42,6 @@ Page {
         currentConversationModel.update(textInput)
     }
 
-    Component.onCompleted: {
-        textInput.text = ""
-        currentConversationModel.update("")
-    }
-
-//    Connections {
-//        target: Qt.inputMethod
-
-//        onVisibleChanged: {
-//            console.log("Conversation | Keyboard visibility is: " + visible)
-//            //AN.SystemDispatcher.dispatch("volla.launcher.keyboardAction", {})
-//            listView.height = mainView.height * 0.6
-//            listView.positionViewAtEnd()
-//        }
-//    }
-
     function updateConversationPage (mode, id, name) {
         console.log("Conversation | Update conversation mode: " + mode + " with id " + id)
 
@@ -271,78 +255,86 @@ Page {
             }
         }
 
-        footer: Row {
-            id: footer
+        footer: Rectangle {
             width: parent.width
-            padding: mainView.innerSpacing
-            visible: conversationPage.phoneNumber !== undefined
+            implicitHeight: footer.height
+            color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+            border.color: "transparent"
+            z: 2
 
-            TextArea {
-                id: textArea
-                x: mainView.innerSpacing
-                width: parent.width - mainView.innerSpacing * 2 - sendButton.width
-                placeholderText: qsTr("Type your message")
-                color: mainView.fontColor
-                placeholderTextColor: "darkgrey"
-                font.pointSize: mainView.largeFontSize
-                wrapMode: Text.WordWrap
-                leftPadding: 0.0
-                rightPadding: mainView.innerSpacing
+            Row {
+                id: footer
+                width: parent.width
+                padding: mainView.innerSpacing
+                visible: conversationPage.phoneNumber !== undefined
 
-                background: Rectangle {
-                    color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-                    border.color: "transparent"
-                }
+                TextArea {
+                    id: textArea
+                    x: mainView.innerSpacing
+                    width: parent.width - mainView.innerSpacing * 2 - sendButton.width
+                    placeholderText: qsTr("Type your message")
+                    color: mainView.fontColor
+                    placeholderTextColor: "darkgrey"
+                    font.pointSize: mainView.largeFontSize
+                    wrapMode: Text.WordWrap
+                    leftPadding: 0.0
+                    rightPadding: mainView.innerSpacing
 
-                onActiveFocusChanged: {
-                    console.log("Conversation | On active focus changed to " + activeFocus)
-                    if (activeFocus) {
-                        listView.height = mainView.height * 0.6
-                        listView.positionViewAtEnd()
-                    } else {
-                        listView.height = mainView.height
-                        listView.positionViewAtEnd()
+                    background: Rectangle {
+                        color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                        border.color: "transparent"
+                    }
+
+                    onActiveFocusChanged: {
+                        console.log("Conversation | On active focus changed to " + activeFocus)
+                        if (activeFocus) {
+                            listView.height = mainView.height * 0.6
+                            listView.positionViewAtEnd()
+                        } else {
+                            listView.height = mainView.height
+                            listView.positionViewAtEnd()
+                        }
                     }
                 }
-            }
-            Button {
-                id: sendButton
-                anchors.bottom: footer.bottomPadding
-                bottomPadding: 0
-                rightPadding: 0
-                flat: true
-                enabled: textArea.text.length > 0
-                height: mainView.innerSpacing * 1.2
-                width: mainView.innerSpacing * 2
-                opacity: enabled ? 1.0 : 0.3
-                contentItem: Image {
-                    id: sendIcon
-                    source: Qt.resolvedUrl("/icons/send_icon_light.png")
-                    fillMode: Image.PreserveAspectFit
+                Button {
+                    id: sendButton
+                    anchors.bottom: footer.bottomPadding
+                    bottomPadding: 0
+                    rightPadding: 0
+                    flat: true
+                    enabled: textArea.text.length > 0
+                    height: mainView.innerSpacing * 1.2
+                    width: mainView.innerSpacing * 2
+                    opacity: enabled ? 1.0 : 0.3
+                    contentItem: Image {
+                        id: sendIcon
+                        source: Qt.resolvedUrl("/icons/send_icon_light.png")
+                        fillMode: Image.PreserveAspectFit
 
-                    ColorOverlay {
-                        anchors.fill: sendIcon
-                        source: sendIcon
-                        color: mainView.fontColor
+                        ColorOverlay {
+                            anchors.fill: sendIcon
+                            source: sendIcon
+                            color: mainView.fontColor
+                        }
                     }
-                }
-                background: Rectangle {
-                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
-                    border.color: "transparent"
-                }
-                onClicked: {
-                    console.log("Conversation | Send button clicked")
-                    console.log("Conversation | Number: " + conversationPage.phoneNumber)
-                    console.log("Conversation | Text: " + textArea.text)
-                    AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": conversationPage.phoneNumber, "text": textArea.text})
+                    background: Rectangle {
+                        color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                        border.color: "transparent"
+                    }
+                    onClicked: {
+                        console.log("Conversation | Send button clicked")
+                        console.log("Conversation | Number: " + conversationPage.phoneNumber)
+                        console.log("Conversation | Text: " + textArea.text)
+                        AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": conversationPage.phoneNumber, "text": textArea.text})
 
-                    // Todo: Only add message to list currentConversationModel, if massage was successfully sent.
-                    var d = new Date()
-                    currentConversationModel.append(
-                                {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • SMS",
-                                 "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf()})
-                    textArea.text = ""
-                    textArea.activeFocus = false
+                        // Todo: Only add message to list currentConversationModel, if massage was successfully sent.
+                        var d = new Date()
+                        currentConversationModel.append(
+                                    {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • SMS",
+                                     "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf()})
+                        textArea.text = ""
+                        textArea.activeFocus = false
+                    }
                 }
             }
         }
