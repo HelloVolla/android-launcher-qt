@@ -400,7 +400,7 @@ public class MessageWorker {
                selectionArgs[0] = '%' + match + '%' ;
             }
 
-            Log.d(TAG, "Call filter is : " + filter );
+            Log.d(TAG, "Thread filter is : " + filter );
 
             Cursor cursor;
 
@@ -442,17 +442,23 @@ public class MessageWorker {
 
         // params are threadAge
 
+        ArrayList<Map> threadlist = new ArrayList();
+
         Uri uriThread = Uri.parse("content://mms-sms/conversations?simple=true");
 
-        ArrayList<Map> threadlist = new ArrayList();
+        String filter = " 1=1 " ;
         long cutOffTimeStamp = 0;
-        if ( message.containsKey("threadAge") ) {
-            int threadAge = (Integer) message.get("threadAge");
-            cutOffTimeStamp = System.currentTimeMillis() - threadAge * 1000 ;
+
+        if ( message.containsKey("age") ) {
+            int threadAge = (Integer) message.get("age");
+            cutOffTimeStamp = System.currentTimeMillis() - threadAge * 1000;
+            filter = filter + " and date >= " + cutOffTimeStamp ;
         }
 
+        Log.d(TAG, "Thread filter is : " + filter );
+
         try {
-            Cursor cursor = activity.getContentResolver().query(uriThread, null, null, null , null );
+            Cursor cursor = activity.getContentResolver().query(uriThread, null, filter, null , null );
 
             int mesgCount = cursor.getCount();
             Log.d(TAG,  "ThreadsCount = " + mesgCount );
@@ -470,6 +476,11 @@ public class MessageWorker {
                     String thId = cursor.getString(index_thread_id);
                     Uri thUri = Uri.parse("content://mms-sms/conversations/" + thId + "/");
                     String thFilter = " 1=1 ";
+                    if ( message.containsKey("age") ) {
+                        int threadAge = (Integer) message.get("age");
+                        cutOffTimeStamp = System.currentTimeMillis() - threadAge * 1000;
+                        filter = filter + " and date >= " + cutOffTimeStamp ;
+                    }
                     String[] thProjection = new String[] { "_id", "address", "date", "body", "person", "read", "ct_t", "type" };
                     String[] thSelectionArgs = {""};
                     String thSortOrder  = " date desc limit 1";

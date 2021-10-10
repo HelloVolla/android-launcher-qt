@@ -202,6 +202,8 @@ ApplicationWindow {
             {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true}]
 
         property var timeStamp: 0
+        property var lastCheckOfThreads: 0
+        property var lastCheckOfCalls: 0
 
         onCurrentIndexChanged: {
             if (currentIndex === swipeIndex.Apps) {

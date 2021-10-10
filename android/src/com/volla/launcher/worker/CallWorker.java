@@ -89,7 +89,7 @@ public class CallWorker {
             String filter = " 1=1 " ;
 
             if ( message.containsKey("age") ) {
-                int   age = (Integer) message.get("age");   // age in seconds
+                int age = (Integer) message.get("age");   // age in seconds
                 cutOffTimeStamp = System.currentTimeMillis() - age * 1000 ;
                 filter = filter + " and date >= " + cutOffTimeStamp ;
             }
