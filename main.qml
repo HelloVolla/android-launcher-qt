@@ -204,6 +204,8 @@ ApplicationWindow {
         property var timeStamp: 0
         property var lastCheckOfThreads: 0
         property var lastCheckOfCalls: 0
+        property var redirectCount: 0
+        property var maxRedirectCount: 1
 
         onCurrentIndexChanged: {
             if (currentIndex === swipeIndex.Apps) {
@@ -486,15 +488,24 @@ ApplicationWindow {
                 if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                     console.log("MainView | Received header status feed url: " + doc.status);
                     if (doc.status === 301) {
-                        console.log("MainView | Redirect feed url")
+                        var redirectUrl = doc.getResponseHeader("Location")
+                        console.log("MainView | Redirect to " + redirectUrl)
+                        if (maxRedirectCount - redirectCount > 0) {
+                            redirectCount = redirectCount + 1
+                            checkAndAddFeed(redirectUrl)
+                        } else {
+                            redirectCount = 0
+                            mainView.showToast(qsTr("Error because of too much redirects"))
+                        }
+                        return
                     }
                     else if (doc.status >= 400) {
-                        mainView.showToast(qsTr("Could not load RSS feed " + url))
+                        mainView.showToast(qsTr("Could not load feed " + url))
                         return
                     }
                 } else if (doc.readyState === XMLHttpRequest.DONE) {
                     if (doc.responseXML === null) {
-                        mainView.showToast(qsTr("Could not load RSS feed " + url))
+                        mainView.showToast(qsTr("Could not load feed " + url))
                         return
                     }
 
@@ -536,12 +547,7 @@ ApplicationWindow {
                         return
                     }
 
-                    var urlPattern = /(.+:\/\/)?([^\/]+)(\/.*)*/i
-                    var urlArr = urlPattern.exec(url)
-                    urlArr = urlArr[2].split(".")
-                    var baseUrl = "https://www." + urlArr[urlArr.length - 2] + "." + urlArr[urlArr.length - 1]
-                    console.log("MainView | base url for icon is " + baseUrl)
-
+                    var baseUrl = getBaseUrl(url)
                     var htmlRequest = new XMLHttpRequest();
                     htmlRequest.onreadystatechange = function() {
                         if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
@@ -555,23 +561,7 @@ ApplicationWindow {
                             }
                         } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
                             var html = htmlRequest.responseText
-                            var pattern = /<link\n?.+\n?.*rel="((apple-touch-)|(shortcut\s))?icon"\n?.+\n?.*>/i
-                            var link = pattern.exec(html)
-                            if (link !== undefined && link !== null) {
-                                pattern = /href="\S+"/i
-                                link = pattern.exec(link).toString()
-                                var length = link.length - 1
-                                link = link.slice(6, length)
-                                if (!link.startsWith("http")) {
-                                    link = baseUrl + link
-                                }
-                                console.log("MainView | Identified feed icon: " + link)
-                                feed.icon = link
-                            } else {
-                                console.log("MainView | Missing header of feed homepage. Will take fallback for icon")
-                                feed.icon = baseUrl + "/favicon.ico"
-                            }
-
+                            feed.icon = getFavicon(baseUrl, html)
                             mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
                             return
                         }
@@ -582,6 +572,34 @@ ApplicationWindow {
             }
             doc.open("GET", url)
             doc.send()
+        }
+
+        function getBaseUrl(url) {
+            var urlPattern = /(.+:\/\/)?([^\/]+)(\/.*)*/i
+            var urlArr = urlPattern.exec(url)
+            urlArr = urlArr[2].split(".")
+            var baseUrl = "https://www." + urlArr[urlArr.length - 2] + "." + urlArr[urlArr.length - 1]
+            console.log("MainView | base url for icon is " + baseUrl)
+            return baseUrl
+        }
+
+        function getFavicon(baseUrl, pageSource) {
+            var pattern = /<link\n?.+\n?.*rel="((apple-touch-)|(shortcut\s))?icon"\n?.+\n?.*>/i
+            var link = pattern.exec(html)
+            if (link !== undefined && link !== null) {
+                pattern = /href="\S+"/i
+                link = pattern.exec(link).toString()
+                var length = link.length - 1
+                link = link.slice(6, length)
+                if (!link.startsWith("http")) {
+                    link = baseUrl + link
+                }
+                console.log("MainView | Identified feed icon: " + link)
+                return link
+            } else {
+                console.log("MainView | Missing header of feed homepage. Will take fallback for icon")
+                return baseUrl + "/favicon.ico"
+            }
         }
 
         function getActions() {
@@ -610,7 +628,7 @@ ApplicationWindow {
                     if (matched === false) {
                         actions.push(newAction)
                         stored = shortcuts.write(JSON.stringify(actions))
-                        console.log("MainView | Did store feeds: " + stored)
+                        console.log("MainView | Did store Shortcut: " + stored)
                         showToast(qsTr("New shortcut") + ": " + newAction.name)
                     } else {
                         showToast(qsTr("You have alresdy added the shortcut"))

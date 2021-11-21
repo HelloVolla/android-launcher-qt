@@ -23,6 +23,18 @@
         <source>Open App</source>
         <translation type="unfinished">aprire l&apos;app</translation>
     </message>
+    <message>
+        <source>Remove Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pinned shortcut already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
@@ -573,6 +585,10 @@
     <message>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished">hai già aggiunto la scorciatoia</translation>
+    </message>
+    <message>
+        <source>Error because of too much redirects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

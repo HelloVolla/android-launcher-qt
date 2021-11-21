@@ -23,6 +23,18 @@
         <source>Open App</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Remove Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pinned shortcut already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
@@ -472,6 +484,10 @@
     </message>
     <message>
         <source>Not yet supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error because of too much redirects</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

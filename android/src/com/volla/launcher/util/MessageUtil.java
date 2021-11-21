@@ -12,12 +12,20 @@ import android.content.BroadcastReceiver;
 import android.content.pm.PackageManager;
 import android.telephony.gsm.SmsManager;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import org.qtproject.qt5.android.QtNative;
-import com.volla.launcher.activity.ReceiveTextActivity;
+import com.klinker.android.send_message.Settings;
+import com.klinker.android.send_message.Transaction;
+import com.klinker.android.send_message.Message;
 
 public class MessageUtil {
 
@@ -41,13 +49,36 @@ public class MessageUtil {
 
                     final String number = (String) message.get("number");
                     final String text = (String) message.get("text");
+                    final String attachmentUrl = (String) message.get("attachmentUrl");
 
                     Runnable runnable = new Runnable () {
 
                         public void run() {
                             if (activity.checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
 
-                                if (text == null || text.length() < 1) {
+                                //========= Exprimental ================
+
+                                if (attachmentUrl != null) {
+
+                                    Settings settings = new Settings();
+                                    settings.setUseSystemSending(true);
+                                    Transaction transaction = new Transaction(activity, settings);
+                                    Message message = new Message(text, number);
+                                    try {
+                                        InputStream input = new URL(attachmentUrl).openStream();
+                                        Bitmap bitmap = BitmapFactory.decodeStream(input);
+                                        message.setImage(bitmap);
+                                    } catch (MalformedURLException ue) {
+                                        Log.e(TAG, ue.getMessage());
+                                    } catch (IOException ioe) {
+                                        Log.e(TAG, ioe.getMessage());
+                                    }
+                                    transaction.sendNewMessage(message, Thread.currentThread().getId());
+                                }
+
+                                // =====================================
+
+                                else if (text == null || text.length() < 1) {
                                     Map responseMessage = new HashMap();
                                     responseMessage.put("sent", false);
                                     responseMessage.put("text", "MissingText");
