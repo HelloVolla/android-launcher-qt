@@ -7,6 +7,7 @@ import android.content.pm.LauncherApps;
 import android.content.Context;
 import android.util.Log;
 import android.os.UserHandle;
+import android.widget.Toast;
 import java.util.Map;
 import java.util.List;
 import java.util.LinkedList;
@@ -66,6 +67,15 @@ public class ShortcutUtil {
         String shortcutId = (String) message.get("shortcutId");
         List<String> shortcutList = new LinkedList<String>();
         shortcutList.add(shortcutId);
-        shortcutManager.removeLongLivedShortcuts(shortcutList);
+        try {
+            shortcutManager.disableShortcuts(shortcutList);
+        } catch (IllegalStateException ise) {
+            Log.d(TAG, ise.getMessage());
+            Toast.makeText(activity, ise.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        } catch (IllegalArgumentException iae) {
+            Log.d(TAG, iae.getMessage());
+            Toast.makeText(activity, iae.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+
+        }
     }
 }
