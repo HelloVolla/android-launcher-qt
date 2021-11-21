@@ -670,8 +670,13 @@ Page {
                     AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
                     break
                 default:
-                    console.log("Springboard | Open App")
-                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                    console.log("Springboard | Open app or shortcut")
+                    if (selectedMenuItem.actionId.startsWith("http")) {
+                        // Workaround for web shortcuts
+                        Qt.openUrlExternally(selectedMenuItem.actionId)
+                    } else {
+                        AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                    }
                     break
             }
         }

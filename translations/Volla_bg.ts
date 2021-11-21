@@ -23,6 +23,18 @@
         <source>Open App</source>
         <translation type="unfinished">отваряне на приложение</translation>
     </message>
+    <message>
+        <source>Remove Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pinned shortcut already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
@@ -155,6 +167,10 @@
         <source>Not yet supported</source>
         <translation type="unfinished">все още не се поддържа</translation>
     </message>
+    <message>
+        <source>Type your message</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -239,7 +255,7 @@
     </message>
     <message>
         <source>StartPage</source>
-        <translation type="unfinished">StartPage</translation>
+        <translation type="obsolete">StartPage</translation>
     </message>
     <message>
         <source>DuckDuckGo</source>
@@ -248,6 +264,14 @@
     <message>
         <source>MetaGer</source>
         <translation type="unfinished">MetaGer</translation>
+    </message>
+    <message>
+        <source>Startpage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background blur</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -562,6 +586,10 @@
     <message>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished">вече сте добавили прекия път</translation>
+    </message>
+    <message>
+        <source>Error because of too much redirects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

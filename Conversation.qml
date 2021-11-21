@@ -12,6 +12,7 @@ Page {
     property var headline
     property var textInputField
     property string textInput
+    property string attachmentUrl: imagePicker,imageUrl
     property real widthFactor: 0.9
     property int threadAge: 84000 * 14 // two weeks in milli seconds
     property int operationCount: 0 // number of background operations
@@ -268,10 +269,22 @@ Page {
                 padding: mainView.innerSpacing
                 visible: conversationPage.phoneNumber !== undefined
 
+                Button {
+                    id:plusButton
+                    flat:true
+                    text: conversationPage.attachmentUrl === undefined || conversationPage.attachmentUrl.length === 0 ? "+" : "-"
+                    onClicked: {
+                        if (text === "+") {
+                            imagePicker.pickImage()
+                        } else {
+                            imagePicker.imageUrl = ""
+                        }
+                    }
+                }
                 TextArea {
                     id: textArea
                     x: mainView.innerSpacing
-                    width: parent.width - mainView.innerSpacing * 2 - sendButton.width
+                    width: parent.width - mainView.innerSpacing * 2 - sendButton.width - plusButton.width
                     placeholderText: qsTr("Type your message")
                     color: mainView.fontColor
                     placeholderTextColor: "darkgrey"
@@ -699,6 +712,15 @@ Page {
                     conversationPage.updateImage(message["messageId"], message["image"])
                 }
             }
+        }
+    }
+
+    // @disable-check M300
+    AN.ImagePicker {
+        id: imagePicker
+        onReady: {
+            console.log("Conversation | Image selection received: " + imageUrl)
+            conversationPage.attachmentUrl = imageUrl
         }
     }
 }
