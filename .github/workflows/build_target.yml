@@ -61,6 +61,7 @@ jobs:
         with:
           username: 'drone'
           server: 'volla.tech'
+          port: 2222
           ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
           local_path: './releases/*.apk'
           remote_path: '/builds/nightly/volla/android-launcher-qt/'
@@ -72,6 +73,7 @@ jobs:
         with:
           username: 'drone'
           server: 'volla.tech'
+          port: 2222
           ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
           local_path: './releases/*.apk'
           remote_path: '/builds/release/volla/android-launcher-qt/'
