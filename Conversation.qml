@@ -275,11 +275,14 @@ Page {
                     text: conversationPage.attachmentUrl === undefined || conversationPage.attachmentUrl.length === 0 ? "+" : "-"
                     onClicked: {
                         if (text === "+") {
+                            mainView.keepLastIndex = true
                             imagePicker.pickImage()
                         } else {
                             imagePicker.imageUrl = ""
                         }
                     }
+
+
                 }
                 TextArea {
                     id: textArea

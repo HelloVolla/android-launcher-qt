@@ -50,13 +50,21 @@ public class ShortcutsWorker {
 
                             for (int i = 0; i < shortcutInfos.size(); i++) {
                                 ShortcutInfo shortcutInfo = shortcutInfos.get(i);
-                                Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
-                                Map pinnedShortcut = new HashMap();
-                                pinnedShortcut.put("shortcutId", shortcutInfo.getId() );
-                                pinnedShortcut.put("package", shortcutInfo.getPackage() );
-                                pinnedShortcut.put("label", shortcutInfo.getShortLabel().toString() );
-                                pinnedShortcut.put("icon", drawableToBase64(shortcutIcon) );
-                                pinnedShortcuts.add(pinnedShortcut);
+                                if (shortcutInfo.isEnabled()) {
+                                    Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
+                                    Map pinnedShortcut = new HashMap();
+                                    pinnedShortcut.put("shortcutId", shortcutInfo.getId() );
+                                    pinnedShortcut.put("package", shortcutInfo.getPackage() );
+                                    pinnedShortcut.put("label", shortcutInfo.getShortLabel().toString() );
+                                    pinnedShortcut.put("icon", drawableToBase64(shortcutIcon) );
+                                    pinnedShortcuts.add(pinnedShortcut);
+                                    Log.d(TAG, "Shortcut found:");
+                                    Log.d(TAG, "immutable: " + shortcutInfo.isImmutable());
+                                    Log.d(TAG, "id: " + shortcutInfo.getId());
+                                    Log.d(TAG, "package: " + shortcutInfo.getPackage());
+                                    Log.d(TAG, "label: " + shortcutInfo.getShortLabel().toString());
+                                    Log.d(TAG, "icon: " + pinnedShortcut.get("icon"));
+                                }
                             }
 
                             Map responseMessage = new HashMap();

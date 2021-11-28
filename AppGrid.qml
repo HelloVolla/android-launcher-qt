@@ -211,7 +211,7 @@ Page {
                         id: buttonIcon
                         anchors.left: parent.left
                         anchors.leftMargin: gridCell.width * 0.25
-                        source: (model.package in appLauncher.iconMap) && model.shortcutId === undefined
+                        source: model.package in appLauncher.iconMap && model.shortcutId === undefined
                                 ? Qt.resolvedUrl(appLauncher.iconMap[model.package]) : "data:image/png;base64," + model.icon
                         width: gridButton.width * 0.35
                         height: gridButton.width * 0.35
@@ -318,7 +318,7 @@ Page {
 
         background: Rectangle {
             id: menuBackground
-            implicitHeight: contextMenu.isPinnedShortcut ? 130 : 100
+            height: contextMenu.isPinnedShortcut ? 150 : 110
             implicitWidth: contextMenu.menuWidth
             color: Universal.accent
             radius: mainView.innerSpacing
@@ -342,12 +342,14 @@ Page {
                 color: "transparent"
             }
             onClicked: {
-                console.log("AppGrid | App " + app["label"] + " selected for shortcuts");
+                console.log("AppGrid | App " + contextMenu.app["label"] + " selected for shortcuts");
                 gridView.currentIndex = -1
-                mainView.updateAction(app["itemId"],
+                mainView.updateAction(contextMenu.app["itemId"],
                                       true,
                                       mainView.settingsAction.CREATE,
-                                      {"id": app["itemId"], "name": qsTr("Open") + " " + app["label"], "activated": true} )
+                                      {"id": contextMenu.app["itemId"],
+                                       "name": qsTr("Open") + " " + contextMenu.app["label"],
+                                       "activated": true} )
             }
         }
         MenuItem {
@@ -365,9 +367,13 @@ Page {
                 color: "transparent"
             }
             onClicked: {
-                console.log("AppGrid | App " + app["label"] + " selected to open");
+                console.log("AppGrid | App " + contextMenu.
+                            app["label"] + " selected to open");
                 gridView.currentIndex = -1
-                if (app.package === mainView.phoneApp) {
+                if (contextMenu.isPinnedShortcut) {
+                    AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
+                                                 {"shortcutId": contextMenu.app["itemId"], "package": contextMenu.app["package"]})
+                } else if (contextMenu.app.package === mainView.phoneApp) {
                     if (appLauncher.newCalls) {
                         AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "log"})
                         AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
@@ -375,7 +381,7 @@ Page {
                         AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp})
                     }
                 } else {
-                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": app.package})
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": contextMenu.app["package"]})
                 }
             }
         }
@@ -396,9 +402,11 @@ Page {
             }
             visible: contextMenu.isPinnedShortcut
             onClicked: {
-                console.log("AppGrid | App " + app["label"] + " selected to remove a shortcut");
+                console.log("AppGrid | App " + contextMenu.app.shortcutId + " selected to remove a shortcut");
                 gridView.currentIndex = -1
-                AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": model.shortcutId})
+                var shortcutId = contextMenu.app["itemId"]
+                gridModel.removePinnedShortcut(shortcutId)
+                AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": shortcutId})
             }
         }
     }
@@ -406,9 +414,9 @@ Page {
     ListModel {
         id: gridModel
 
-        property var apps: []
-        property var pinnedShortcuts: []
-        property var modelArr: []
+        property var apps: new Array
+        property var pinnedShortcuts: new Array
+        property var modelArr: new Array
 
         function prepareModel() {
             modelArr = apps.concat(pinnedShortcuts)
@@ -487,6 +495,14 @@ Page {
                 }
             }
         }
+
+        function removePinnedShortcut(shorcutId) {
+            pinnedShortcuts = pinnedShortcuts.filter(function(item) {
+                return item.itemId !== shorcutId
+            })
+            prepareModel()
+            update(textInput)
+        }
     }
 
     Connections {
@@ -519,6 +535,10 @@ Page {
                 })
                 if (!isExistingShortcut) {
                     mainView.showToast(qsTr("New pinned shortcut: " + message.shortcutId))
+                    var shortcut = {"shorcutId": message["shortctId"],
+                                    "package": message["package"],
+                                    "label": message["label"],
+                                    "icon": message["icon"]}
                     gridModel.pinnedShortcuts.push(message)
                     gridModel.prepareModel()
                     gridModel.update(textInput)
@@ -528,7 +548,6 @@ Page {
             } else if (type === "volla.launcher.gotShortcuts") {
                 console.log("AppGrid | Pinned shortcuts received: " + message["pinnedShortcuts"].length)
                 if (message["pinnedShortcuts"].length > 0) {
-                    console.log("AppGrid | Icon: " + message["pinnedShortcuts"][0].icon)
                     gridModel.pinnedShortcuts = message["pinnedShortcuts"]
                     gridModel.prepareModel()
                     gridModel.update(textInput)
