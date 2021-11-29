@@ -25,15 +25,15 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rimuovi dalle scorciatoie</translation>
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">la scorciatoia esiste già</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Apri scorciatoie</translation>
     </message>
 </context>
 <context>
@@ -210,19 +210,19 @@
     </message>
     <message>
         <source>Dark Mode</source>
-        <translation type="unfinished">modo oscuro</translation>
+        <translation type="unfinished">tema oscuro</translation>
     </message>
     <message>
         <source>Light Mode</source>
-        <translation type="unfinished">modo luminoso</translation>
+        <translation type="unfinished">tema luminoso</translation>
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="unfinished">modo transparente</translation>
+        <translation type="unfinished">tema transparente</translation>
     </message>
     <message>
         <source>News Channels</source>
-        <translation type="unfinished">Canali di notizie</translation>
+        <translation type="unfinished">fonti delle notizie</translation>
     </message>
     <message>
         <source>Shortcuts</source>
@@ -416,7 +416,7 @@
     </message>
     <message>
         <source>Just now</source>
-        <translation type="unfinished">ora</translation>
+        <translation type="unfinished">adesso</translation>
     </message>
     <message>
         <source>minutes ago</source>
