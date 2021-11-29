@@ -58,12 +58,12 @@ public class ShortcutsWorker {
                                     pinnedShortcut.put("label", shortcutInfo.getShortLabel().toString() );
                                     pinnedShortcut.put("icon", drawableToBase64(shortcutIcon) );
                                     pinnedShortcuts.add(pinnedShortcut);
-                                    Log.d(TAG, "Shortcut found:");
-                                    Log.d(TAG, "immutable: " + shortcutInfo.isImmutable());
-                                    Log.d(TAG, "id: " + shortcutInfo.getId());
-                                    Log.d(TAG, "package: " + shortcutInfo.getPackage());
-                                    Log.d(TAG, "label: " + shortcutInfo.getShortLabel().toString());
-                                    Log.d(TAG, "icon: " + pinnedShortcut.get("icon"));
+//                                    Log.d(TAG, "Shortcut found:");
+//                                    Log.d(TAG, "immutable: " + shortcutInfo.isImmutable());
+//                                    Log.d(TAG, "id: " + shortcutInfo.getId());
+//                                    Log.d(TAG, "package: " + shortcutInfo.getPackage());
+//                                    Log.d(TAG, "label: " + shortcutInfo.getShortLabel().toString());
+//                                    Log.d(TAG, "icon: " + pinnedShortcut.get("icon"));
                                 }
                             }
 
