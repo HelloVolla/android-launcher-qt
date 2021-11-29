@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>Filter apps</source>
-        <translation type="unfinished">Filtrare le applicazioni</translation>
+        <translation type="unfinished">Filtra le applicazioni</translation>
     </message>
     <message>
         <source>Add to shortcuts</source>
@@ -17,11 +17,11 @@
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished">aprire</translation>
+        <translation type="unfinished">apri</translation>
     </message>
     <message>
         <source>Open App</source>
-        <translation type="unfinished">aprire l&apos;app</translation>
+        <translation type="unfinished">apri l&apos;app</translation>
     </message>
     <message>
         <source>Remove Shortcut</source>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">Aprire la telecamera</translation>
+        <translation type="unfinished">Apri la fotocamera</translation>
     </message>
     <message>
         <source>Agenda</source>
@@ -94,15 +94,15 @@
     </message>
     <message>
         <source>Call</source>
-        <translation type="unfinished">chiamare</translation>
+        <translation type="unfinished">chiama</translation>
     </message>
     <message>
         <source>Send Message</source>
-        <translation type="unfinished">Inviare messaggio</translation>
+        <translation type="unfinished">Invia messaggio</translation>
     </message>
     <message>
         <source>Send Email</source>
-        <translation type="unfinished">Inviare e-mail</translation>
+        <translation type="unfinished">Invia e-mail</translation>
     </message>
     <message>
         <source>Private</source>
@@ -150,7 +150,7 @@
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished">aprire contatto</translation>
+        <translation type="unfinished">apri contatto</translation>
     </message>
 </context>
 <context>
@@ -161,7 +161,7 @@
     </message>
     <message>
         <source>Filter messages ...</source>
-        <translation type="unfinished">Filtra messagios</translation>
+        <translation type="unfinished">Filtra messaggio</translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -180,7 +180,7 @@
     </message>
     <message>
         <source>Open in browser</source>
-        <translation type="unfinished">aprire nel browser</translation>
+        <translation type="unfinished">apri nel browser</translation>
     </message>
     <message>
         <source>Share</source>
@@ -238,15 +238,15 @@
     </message>
     <message>
         <source>Use colored app icons</source>
-        <translation type="unfinished">utilizzare le icone colorate delle app</translation>
+        <translation type="unfinished">utilizza le icone colorate delle app</translation>
     </message>
     <message>
         <source>Show apps at startup</source>
-        <translation type="unfinished">mostrare le app all&apos;avvio</translation>
+        <translation type="unfinished">mostra le app all&apos;avvio</translation>
     </message>
     <message>
         <source>Use haptic menus</source>
-        <translation type="unfinished">utilizzare menu aptici</translation>
+        <translation type="unfinished">utilizza i menu aptici</translation>
     </message>
     <message>
         <source>Search engines</source>
@@ -277,7 +277,7 @@
     <name>Springboard</name>
     <message>
         <source>Springboard</source>
-        <translation type="unfinished">Trampolino di lancio</translation>
+        <translation type="unfinished">Launcher</translation>
     </message>
     <message>
         <source>Type anything</source>
@@ -297,15 +297,15 @@
     </message>
     <message>
         <source>Send message</source>
-        <translation type="obsolete">Inviare messaggio</translation>
+        <translation type="obsolete">Invia messaggio</translation>
     </message>
     <message>
         <source>Send email</source>
-        <translation type="obsolete">Inviare e-mail</translation>
+        <translation type="obsolete">Invia e-mail</translation>
     </message>
     <message>
         <source>Create note</source>
-        <translation type="obsolete">creare una nota</translation>
+        <translation type="obsolete">crea una nota</translation>
     </message>
     <message>
         <source>Search web</source>
@@ -313,7 +313,7 @@
     </message>
     <message>
         <source>Call</source>
-        <translation type="obsolete">chiamare</translation>
+        <translation type="obsolete">chiama</translation>
     </message>
     <message>
         <source>Open in browser</source>
@@ -325,11 +325,11 @@
     </message>
     <message>
         <source>Make Call</source>
-        <translation type="obsolete">chiamare</translation>
+        <translation type="obsolete">chiama</translation>
     </message>
     <message>
         <source>Create Message</source>
-        <translation type="obsolete">creare un messaggio</translation>
+        <translation type="obsolete">crea un messaggio</translation>
     </message>
     <message>
         <source>Create Mail</source>
@@ -431,7 +431,7 @@
         <translation type="unfinished">leri</translation>
     </message>
     <message>
-        <source>You have alresdy subscribed the feed</source>
+        <source>You have already subscribed the feed</source>
         <translation type="unfinished">sei già abbonato al canale</translation>
     </message>
     <message>
@@ -448,15 +448,15 @@
     </message>
     <message>
         <source>Send message</source>
-        <translation type="unfinished">Inviare messaggio</translation>
+        <translation type="unfinished">Invia messaggio</translation>
     </message>
     <message>
         <source>Send email</source>
-        <translation type="unfinished">Inviare e-mail</translation>
+        <translation type="unfinished">Invia e-mail</translation>
     </message>
     <message>
         <source>Create note</source>
-        <translation type="unfinished">creare una nota</translation>
+        <translation type="unfinished">crea una nota</translation>
     </message>
     <message>
         <source>Search web</source>
@@ -464,7 +464,7 @@
     </message>
     <message>
         <source>Call</source>
-        <translation type="unfinished">chiamare</translation>
+        <translation type="unfinished">chiama</translation>
     </message>
     <message>
         <source>Open in browser</source>
@@ -520,7 +520,7 @@
     </message>
     <message>
         <source>Create Event</source>
-        <translation type="unfinished">creare evento</translation>
+        <translation type="unfinished">crea evento</translation>
     </message>
     <message>
         <source>Recent People</source>
@@ -544,11 +544,11 @@
     </message>
     <message>
         <source>Send home email</source>
-        <translation type="unfinished">inviare e-mail a casa</translation>
+        <translation type="unfinished">invia e-mail a casa</translation>
     </message>
     <message>
         <source>Send work email</source>
-        <translation type="unfinished">inviare e-mail di lavoro</translation>
+        <translation type="unfinished">invia e-mail di lavoro</translation>
     </message>
     <message>
         <source>Send other email</source>
@@ -556,11 +556,11 @@
     </message>
     <message>
         <source>Call on cell phone</source>
-        <translation type="unfinished">chiamare sul cellulare</translation>
+        <translation type="unfinished">chiama sul cellulare</translation>
     </message>
     <message>
         <source>Call at home</source>
-        <translation type="unfinished">chiamare a casa</translation>
+        <translation type="unfinished">chiama a casa</translation>
     </message>
     <message>
         <source>Call at work</source>
@@ -568,7 +568,7 @@
     </message>
     <message>
         <source>Call other phone</source>
-        <translation type="unfinished">chiamare altro telefono</translation>
+        <translation type="unfinished">chiama altro telefono</translation>
     </message>
     <message>
         <source>Open Contact</source>
@@ -588,7 +588,7 @@
     </message>
     <message>
         <source>Error because of too much redirects</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Errore perché ci sono troppi redirect</translation>
     </message>
 </context>
 </TS>
