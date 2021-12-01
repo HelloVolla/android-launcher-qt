@@ -83,13 +83,12 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
                 reply.put("label", shortcutInfo.getShortLabel().toString() );
                 reply.put("icon", drawableToBase64(shortcutIcon) );
 
-                SystemDispatcher.dispatch(GOT_SHORTCUT, reply);
+//                SystemDispatcher.dispatch(GOT_SHORTCUT, reply);
+//                boolean success = pinItemRequest.accept();
 
-                boolean success = pinItemRequest.accept();
-
-                Log.d(TAG, "New shortcut: " + shortcutInfo.getId());
-                Log.d(TAG, "Shortcut is accepted: " + success);
-                //Toast.makeText(this, "New Shorcut " + shortcutInfo.getId(), Toast.LENGTH_LONG).show();
+//                Log.d(TAG, "New shortcut: " + shortcutInfo.getId());
+//                Log.d(TAG, "Shortcut is accepted: " + success);
+                Toast.makeText(this, "Not implemented, yet", Toast.LENGTH_LONG).show();
 
             } else {
                 Log.w(TAG, "Not valid pin item request");

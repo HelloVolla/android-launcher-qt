@@ -23,7 +23,11 @@ ApplicationWindow {
               // Application go in active state
               console.log("MainView | Application became active")
               settings.sync()
-              mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+              if (mainView.keepLastIndex) {
+                  mainView.keepLastIndex = false
+              } else {
+                  mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+              }
               // Update app grid
               AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
               // Load wallpaper
@@ -206,6 +210,7 @@ ApplicationWindow {
         property var lastCheckOfCalls: 0
         property var redirectCount: 0
         property var maxRedirectCount: 1
+        property bool keepLastIndex: false
 
         onCurrentIndexChanged: {
             if (currentIndex === swipeIndex.Apps) {
@@ -497,15 +502,17 @@ ApplicationWindow {
                             redirectCount = 0
                             mainView.showToast(qsTr("Error because of too much redirects"))
                         }
-                        return
+                        doc.abort()
                     }
                     else if (doc.status >= 400) {
-                        mainView.showToast(qsTr("Could not load feed " + url))
-                        return
+                        redirectCount = 0
+                        mainView.showToast(qsTr("Could not load feed: " + doc.statusText))
+                        doc.abort()
                     }
                 } else if (doc.readyState === XMLHttpRequest.DONE) {
                     if (doc.responseXML === null) {
-                        mainView.showToast(qsTr("Could not load feed " + url))
+                        console.log("MainView | No valid XML for feed: " + doc.responseText)
+                        mainView.showToast(qsTr("Could not load a valid feed"))
                         return
                     }
 
@@ -585,7 +592,7 @@ ApplicationWindow {
 
         function getFavicon(baseUrl, pageSource) {
             var pattern = /<link\n?.+\n?.*rel="((apple-touch-)|(shortcut\s))?icon"\n?.+\n?.*>/i
-            var link = pattern.exec(html)
+            var link = pattern.exec(pageSource)
             if (link !== undefined && link !== null) {
                 pattern = /href="\S+"/i
                 link = pattern.exec(link).toString()
