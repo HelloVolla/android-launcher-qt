@@ -73,7 +73,10 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
         } else if (intent.hasExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST)) {
             LauncherApps.PinItemRequest pinItemRequest = intent.getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST);
             if (pinItemRequest.getRequestType() == PinItemRequest.REQUEST_TYPE_SHORTCUT) {
+                boolean success = pinItemRequest.accept();
+                Log.d(TAG, "Shortcut is accepted: " + success);
                 ShortcutInfo shortcutInfo = pinItemRequest.getShortcutInfo();
+                Log.d(TAG, "New shortcut: " + shortcutInfo.getId());
                 LauncherApps launcher = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
                 Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
 
@@ -83,13 +86,12 @@ public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtAc
                 reply.put("label", shortcutInfo.getShortLabel().toString() );
                 reply.put("icon", drawableToBase64(shortcutIcon) );
 
-//                SystemDispatcher.dispatch(GOT_SHORTCUT, reply);
-//                boolean success = pinItemRequest.accept();
-
-//                Log.d(TAG, "New shortcut: " + shortcutInfo.getId());
-//                Log.d(TAG, "Shortcut is accepted: " + success);
-                Toast.makeText(this, "Not implemented, yet", Toast.LENGTH_LONG).show();
-
+                Log.d(TAG, "Shortcut Id: " + reply.get("shortcutId"));
+                Log.d(TAG, "Shortcut Id: " + reply.get("package"));
+                Log.d(TAG, "Shortcut Id: " + reply.get("label"));
+                Log.d(TAG, "Shortcut Id: " + reply.get("icon"));
+                SystemDispatcher.dispatch(GOT_SHORTCUT, reply);
+                //Toast.makeText(this, "Not implemented, yet", Toast.LENGTH_LONG).show();
             } else {
                 Log.w(TAG, "Not valid pin item request");
             }

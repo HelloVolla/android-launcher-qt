@@ -12,7 +12,7 @@ Page {
     property var headline
     property var textInputField
     property string textInput
-    property string attachmentUrl: imagePicker,imageUrl
+    property string attachmentUrl: imagePicker.imageUrl
     property real widthFactor: 0.9
     property int threadAge: 84000 * 14 // two weeks in milli seconds
     property int operationCount: 0 // number of background operations
@@ -272,8 +272,8 @@ Page {
                 Button {
                     id:plusButton
                     flat:true
+                    text: "+"
                     visible: false
-                    text: conversationPage.attachmentUrl === undefined || conversationPage.attachmentUrl.length === 0 ? "+" : "-"
                     onClicked: {
                         if (text === "+") {
                             mainView.keepLastIndex = true
@@ -315,7 +315,6 @@ Page {
                 }
                 Button {
                     id: sendButton
-                    anchors.bottom: footer.bottomPadding
                     bottomPadding: 0
                     rightPadding: 0
                     flat: true
@@ -354,6 +353,8 @@ Page {
                     }
                 }
             }
+
+
         }
 
         model: currentConversationModel
@@ -722,9 +723,10 @@ Page {
     // @disable-check M300
     AN.ImagePicker {
         id: imagePicker
+        multiple: false
+
         onReady: {
-            console.log("Conversation | Image selection received: " + imageUrl)
-            conversationPage.attachmentUrl = imageUrl
+            console.log("Conversation | Image selection received")
         }
     }
 }
