@@ -5,6 +5,7 @@ import QtQuick.XmlListModel 2.12
 import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
+import FileIO 1.0
 
 Page {
     id: appLauncher
@@ -407,6 +408,7 @@ Page {
                 var shortcutId = contextMenu.app["itemId"]
                 gridModel.removePinnedShortcut(shortcutId)
                 AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": shortcutId})
+                disabledPinnedShortcuts.disableShortcut(shortcutId)
             }
         }
     }
@@ -419,11 +421,11 @@ Page {
         property var modelArr: new Array
 
         function prepareModel() {
-            modelArr = apps.concat(pinnedShortcuts)
+            modelArr = pinnedShortcuts.concat(apps)
             modelArr.forEach(function(app, i) {
-                modelArr[i].label = modelArr[i].package in appLauncher.labelMap && modelArr[i].shortcutId === undefined
-                        ? qsTr(appLauncher.labelMap[modelArr[i].package]) : modelArr[i].label
-                modelArr[i].itemId = modelArr[i].shortcutId !== undefined ? modelArr[i].shortcutId : modelArr[i].package
+                modelArr[i].label = app.package in appLauncher.labelMap && app.shortcutId === undefined
+                        ? qsTr(appLauncher.labelMap[app.package]) : app.label
+                modelArr[i].itemId = app.shortcutId !== undefined ? app.shortcutId : app.package
             })
         }
 
@@ -474,9 +476,9 @@ Page {
                 found = existingGridDict.hasOwnProperty(key)
                 if (!found) {
                     // for simplicity, just adding to end instead of corresponding position in original list
-                    // filteredGridItem = filteredGridDict[key]
-                    console.log("Will append " + filteredGridItem.label)
-                    append(filteredGridDict[key])
+                    filteredGridItem = filteredGridDict[key]
+                    // console.log("Will append " + filteredGridItem.label)
+                    append(filteredGridItem)
                 }
             })
 
@@ -530,25 +532,44 @@ Page {
                 appLauncher.unreadMessages = message["threadsCount"] > 0
             } else if (type === "volla.launcher.receivedShortcut") {
                 console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
+
                 var isExistingShortcut = gridModel.modelArr.some( function(app) {
                     return app.shorcutId !== undefined && app.shortcutId === message.shortcutId && app.package === message.package
                 })
                 if (!isExistingShortcut) {
                     mainView.showToast(qsTr("New pinned shortcut: " + message.shortcutId))
-                    var shortcut = {"shorcutId": message["shortctId"],
+                    var shortcut = {"shortcutId": message["shortcutId"],
                                     "package": message["package"],
                                     "label": message["label"],
                                     "icon": message["icon"]}
-                    gridModel.pinnedShortcuts.push(message)
+
+                    mainView.showToast(shortcut["shortcutId"]);
+
+                    gridModel.pinnedShortcuts.push(shortcut)
                     gridModel.prepareModel()
                     gridModel.update(textInput)
+
+                    var disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
+
+                    var i = disabledShortcutIds.indexOf(shortcut["shortcutId"])
+                    if (i >= 0) {
+                        disabledShortcutIds.splice(i, 1)
+                        disabledPinnedShortcuts.saveShortcutIds(disabledShortcutIds)
+                    }
                 } else {
                     mainView.showToast(qsTr("Pinned shortcut already exists"))
                 }
             } else if (type === "volla.launcher.gotShortcuts") {
                 console.log("AppGrid | Pinned shortcuts received: " + message["pinnedShortcuts"].length)
                 if (message["pinnedShortcuts"].length > 0) {
-                    gridModel.pinnedShortcuts = message["pinnedShortcuts"]
+                    disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
+                    console.debug("AppGrid | Disabled shortcuts " + disabledShortcutIds.length)
+                    for (i = 0; i < message["pinnedShortcuts"].length; i++) {
+                        shortcut = message["pinnedShortcuts"][i]
+                        if (disabledShortcutIds.indexOf(shortcut["shortcutId"]) < 0) {
+                            gridModel.pinnedShortcuts.push(shortcut)
+                        }
+                    }
                     gridModel.prepareModel()
                     gridModel.update(textInput)
                 }
@@ -563,6 +584,35 @@ Page {
         onUseColoredIconsChanged: {
             console.log("Colered icons settings changed")
             gridView.desaturation = useColoredIcons ? 0.0 : 1.0
+        }
+    }
+
+    FileIO {
+        id: disabledPinnedShortcuts
+        source: "dusabledShorcuts.json"
+        onError: {
+            console.log("AppGrid | Disabled contacts store error: " + msg)
+        }
+        function getShortcutIds() {
+            var shortcutIds = readPrivate()
+            if (shortcutIds !== undefined && shortcutIds.length > 0) {
+                return JSON.parse(shortcutIds)
+            } else {
+                return new Array
+            }
+        }
+        function saveShortcutIds(shortcutIds) {
+            writePrivate(JSON.stringify(shortcutIds))
+        }
+        function disableShortcut(shortcutId) {
+            var shortcutIds = readPrivate()
+            if (shortcutIds !== undefined && shortcutIds.length > 0) {
+                shortcutIds = JSON.parse(shortcutIds)
+            } else {
+                shortcutIds = new Array
+            }
+            shortcutIds.push(shortcutId)
+            saveShortcutIds(shortcutIds)
         }
     }
 }

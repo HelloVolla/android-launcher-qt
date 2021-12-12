@@ -25,6 +25,10 @@ ApplicationWindow {
               settings.sync()
               if (mainView.keepLastIndex) {
                   mainView.keepLastIndex = false
+//                  if (mainView.currentIndex === mainView.swipeIndex.ConversationOrNewsOrDetails) {
+//                      var item = mainView.itemAt(mainView.swipeIndex.ConversationOrNewsOrDetails)
+//                      item.children[0].item.checkImageUrl()
+//                  }
               } else {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
@@ -34,8 +38,6 @@ ApplicationWindow {
               AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
               // Load contacts
               AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck})
-
-              // todo: Call workerscript to check new contacts
           } else {
               // Application go in suspend state
               console.log("Application became inactive")
