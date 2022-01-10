@@ -245,10 +245,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Experimental</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Fullscreen</source>
         <translation></translation>
     </message>
@@ -267,6 +263,14 @@
     <message>
         <source>Background blur</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display and menus</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -489,6 +493,10 @@
     <message>
         <source>Not yet supported</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Could not load a valid feed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

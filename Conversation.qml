@@ -277,13 +277,13 @@ Page {
                     onClicked: {
                         if (text === "+") {
                             mainView.keepLastIndex = true
-                            imagePicker.pickImage()
+                            console.log("Start Image Picker")
+                            imagePicker.takePhoto()
                         } else {
+                            text = "+"
                             imagePicker.imageUrl = ""
                         }
                     }
-
-
                 }
                 TextArea {
                     id: textArea
@@ -305,7 +305,7 @@ Page {
                     onActiveFocusChanged: {
                         console.log("Conversation | On active focus changed to " + activeFocus)
                         if (activeFocus) {
-                            listView.height = mainView.height * 0.6
+                            listView.height = mainWindow.visibility === 5 ? mainView.height * 0.62 : mainView.height * 0.6
                             listView.positionViewAtEnd()
                         } else {
                             listView.height = mainView.height
@@ -354,7 +354,13 @@ Page {
                 }
             }
 
-
+            Image {
+                id: attachment
+                source: imagePicker.imageUrl // Qt.resolvedUrl("/images/InstagramPlaceholder.png") //
+                width: parent.width
+                anchors.top: footer.bottom
+                fillMode: Image.PreserveAspectFit
+            }
         }
 
         model: currentConversationModel

@@ -229,10 +229,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Experimental</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -266,6 +262,14 @@
     </message>
     <message>
         <source>Background blur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display and menus</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -488,6 +492,10 @@
     </message>
     <message>
         <source>Error because of too much redirects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not load a valid feed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

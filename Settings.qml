@@ -494,6 +494,21 @@ Page {
                             }
                             onClicked: {
                                 console.log("Settings | App " + model["label"] + " selected for shortcuts");
+                                mainView.updateAction(
+                                            model["itemId"], true, mainView.settingsAction.CREATE,
+                                            {"id": model["itemId"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
+                                appMenuModel.append(
+                                            {"id": model["itemId"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
+
+                                var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsItemColumn)
+                                var properties = { "actionId": model["itemId"],
+                                    "text": qsTr("Open") + " " + model["label"], "checked": true,
+                                    "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                    "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                    "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                    "hasRemoveButton": true }
+                                var object = component.createObject(shortcutSettingsItemColumn, properties)
+                                shortcutSettingsItemColumn.checkboxes.push(object)
                                 appMenu.close()
                             }
                         }
@@ -632,7 +647,7 @@ Page {
                         padding: mainView.innerSpacing
                         contentItem: Text {
                             width: parent.width - 2 * shortcutSettingsItemButton.padding
-                            text: qsTr("Experimental")
+                            text: qsTr("Display and menus")
                             font.pointSize: mainView.largeFontSize
                             font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
                             color: Universal.foreground

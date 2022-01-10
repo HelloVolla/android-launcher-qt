@@ -13,6 +13,8 @@ ApplicationWindow {
     visible: true
     title: qsTr("Volla")
 
+    property ApplicationWindow mainWindow : appWindow
+
     onClosing: close.accepted = false
 
     Connections {
