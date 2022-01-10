@@ -21,7 +21,7 @@ import org.qtproject.qt5.android.QtNative;
 
 public class AppUtil {
 
-    private static final String TAG = "LayoutUtil";
+    private static final String TAG = "AppUtil";
 
     public static final String GET_APP_COUNT = "volla.launcher.appCountAction";
     public static final String GOT_APP_COUNT = "volla.launcher.appCountResponse";

@@ -230,7 +230,7 @@
     </message>
     <message>
         <source>Experimental</source>
-        <translation type="unfinished">sperimentale</translation>
+        <translation type="obsolete">sperimentale</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -270,6 +270,14 @@
     </message>
     <message>
         <source>Background blur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished">apri</translation>
+    </message>
+    <message>
+        <source>Display and menus</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -432,7 +440,7 @@
     </message>
     <message>
         <source>You have already subscribed the feed</source>
-        <translation type="unfinished">sei già abbonato al canale</translation>
+        <translation type="obsolete">sei già abbonato al canale</translation>
     </message>
     <message>
         <source>Invalid RSS feed: </source>
@@ -589,6 +597,14 @@
     <message>
         <source>Error because of too much redirects</source>
         <translation type="unfinished">Errore perché ci sono troppi redirect</translation>
+    </message>
+    <message>
+        <source>You have alresdy subscribed the feed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not load a valid feed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
