@@ -2,6 +2,7 @@ package com.volla.launcher.util;
 
 import androidnative.SystemDispatcher;
 import android.Manifest;
+import android.os.Build;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.util.Log;
@@ -14,6 +15,8 @@ import android.telephony.gsm.SmsManager;
 import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +29,8 @@ import org.qtproject.qt5.android.QtNative;
 import com.klinker.android.send_message.Settings;
 import com.klinker.android.send_message.Transaction;
 import com.klinker.android.send_message.Message;
+import com.klinker.android.send_message.Utils;
+import com.volla.launcher.util.MMSManager;
 
 public class MessageUtil {
 
@@ -60,20 +65,59 @@ public class MessageUtil {
 
                                 if (attachmentUrl != null) {
 
-                                    Settings settings = new Settings();
-                                    settings.setUseSystemSending(true);
-                                    Transaction transaction = new Transaction(activity, settings);
-                                    Message message = new Message(text, number);
+                                    Log.d(TAG, "Will send MMS to " + number);
+                                    Log.d(TAG, "Build: " + getSystemProperty("ro.lineage.build.version"));
+
+//                                    if (getSystemProperty("ro.lineage.build.version").equals("10")) {
+//                                        Uri uri = Uri.parse(attachmentUrl);
+//                                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+//                                        intent.setData(Uri.parse("smsto:" + number));
+//                                        intent.putExtra("sms_body", text);
+//                                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+//                                        if (intent.resolveActivity(activity.getPackageManager()) != null) {
+//                                            activity.startActivity(intent);
+//                                        }
+
+//                                        return;
+//                                    }
+
+                                    MMSManager mmsm = MMSManager.getInstance(activity);
+
+                                    Message message = new Message(text, "01772448379");
+                                    message.setFromAddress(Utils.getMyPhoneNumber(activity));
+                                    message.setSave(false);
+                                    Uri uri = Uri.parse("content://mms-sms/conversations/");
+                                    message.setMessageUri(uri);
                                     try {
                                         InputStream input = new URL(attachmentUrl).openStream();
                                         Bitmap bitmap = BitmapFactory.decodeStream(input);
+                                        Log.d(TAG, "Bitmap: " + bitmap.getHeight() + ", " + bitmap.getWidth());
+
+                                        int bytes = bitmap.getAllocationByteCount();
+                                        Log.d(TAG, "Bitmap: " + (bytes / 1024) );
+
+                                        int maxHeight = 640;
+                                        int maxWidth = 640;
+
+                                        if (bitmap.getHeight() > maxHeight || bitmap.getWidth() > maxWidth) {
+                                            float scale = Math.min(((float)maxHeight / bitmap.getWidth()), ((float)maxWidth / bitmap.getHeight()));
+
+                                            Matrix matrix = new Matrix();
+                                            matrix.postScale(scale, scale);
+
+                                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                                            bytes = bitmap.getAllocationByteCount();
+
+                                            Log.d(TAG, "Scaled Bitmap: " + (bytes / 1024) );
+                                        }
+
                                         message.setImage(bitmap);
+                                        mmsm.sendMMS(number, text, bitmap);
                                     } catch (MalformedURLException ue) {
                                         Log.e(TAG, ue.getMessage());
                                     } catch (IOException ioe) {
                                         Log.e(TAG, ioe.getMessage());
                                     }
-                                    transaction.sendNewMessage(message, Thread.currentThread().getId());
                                 }
 
                                 // =====================================
@@ -148,7 +192,7 @@ public class MessageUtil {
                                                 break;
                                             }
 
-                                        SystemDispatcher.dispatch(DID_SENT_MESSAGE, responseMessage);
+                                            SystemDispatcher.dispatch(DID_SENT_MESSAGE, responseMessage);
 
                                         }
                                     };
@@ -180,5 +224,18 @@ public class MessageUtil {
                 }
             }
         });
+    }
+
+    static String getSystemProperty(String key) {
+        String value = null;
+
+        try {
+            value = (String) Class.forName("android.os.SystemProperties")
+                    .getMethod("get", String.class).invoke(null, key);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+
+        return value;
     }
 }

@@ -15,6 +15,8 @@ ApplicationWindow {
 
     property ApplicationWindow mainWindow : appWindow
 
+    property bool isActive: false
+
     onClosing: close.accepted = false
 
     Connections {
@@ -22,15 +24,17 @@ ApplicationWindow {
        // @disable-check M16
        onStateChanged: {
           if (Qt.application.state === Qt.ApplicationActive) {              
+              if (isActive) return
+              isActive = true
               // Application go in active state
               console.log("MainView | Application became active")
               settings.sync()
               if (mainView.keepLastIndex) {
+                  if (mainView.currentIndex === mainView.swipeIndex.ConversationOrNewsOrDetails) {
+                      console.log("MainView | Switch to conversation page")
+                      mainView.currentIndex = mainView.swipeIndex.ConversationOrNewsOrDetails
+                  }
                   mainView.keepLastIndex = false
-//                  if (mainView.currentIndex === mainView.swipeIndex.ConversationOrNewsOrDetails) {
-//                      var item = mainView.itemAt(mainView.swipeIndex.ConversationOrNewsOrDetails)
-//                      item.children[0].item.checkImageUrl()
-//                  }
               } else {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
@@ -43,6 +47,7 @@ ApplicationWindow {
           } else {
               // Application go in suspend state
               console.log("Application became inactive")
+              isActive = false
           }
        }
     }
@@ -789,6 +794,7 @@ ApplicationWindow {
 
                 } else if (type === "volla.launcher.messageResponse") {
                     console.log("MainView | onDispatched: " + type)
+                    console.log("MainView | message: " + message["text"] + ", " + mainView.notifications[message["text"]])
                     if (!message["sent"]) {
                         mainView.showToast(qsTr(mainView.notifications[message["text"]]))
                     } else {

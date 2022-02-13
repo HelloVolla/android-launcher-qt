@@ -624,12 +624,12 @@
     <message>
         <location filename="../main.qml" line="176"/>
         <source>Message delivered</source>
-        <translation type="unfinished">Mitteilung gesendet</translation>
+        <translation type="unfinished">Mitteilung ausgeliefert</translation>
     </message>
     <message>
         <location filename="../main.qml" line="177"/>
         <source>Message not delivered</source>
-        <translation type="unfinished">Mitteilung nicht gesendet</translation>
+        <translation type="unfinished">Mitteilung nicht ausgeliefert</translation>
     </message>
     <message>
         <location filename="../main.qml" line="200"/>

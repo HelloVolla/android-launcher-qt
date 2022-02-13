@@ -61,5 +61,10 @@
         <file>scripts/contacts.mjs</file>
         <file>Shortcut.qml</file>
         <file>icons/send_icon_light.png</file>
+        <file>icons/attachment@4x.png</file>
+        <file>icons/check@4x.png</file>
+        <file>icons/link@4x.png</file>
+        <file>icons/pin@4x.png</file>
+        <file>icons/trash@4x.png</file>
     </qresource>
 </RCC>
