@@ -54,6 +54,8 @@ HEADERS += \
 DISTFILES += \
     LICENSE.txt \
     android/src/com/volla/launcher/activity/AddShortcutActivity.java \
+    android/src/com/volla/launcher/util/MMSManager.java \
+    android/src/com/volla/launcher/util/Settings.java \
     android/src/com/volla/launcher/util/ShortcutUtil.java \
     android/src/com/volla/launcher/worker/ShortcutsWorker.java \
     translations/*.ts \

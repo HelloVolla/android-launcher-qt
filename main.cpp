@@ -17,10 +17,12 @@ const QVector<QString> permissions({"android.permission.READ_CONTACTS",
                                     "android.permission.SEND_SMS",
                                     "android.permission.READ_CALL_LOG",
                                     "android.permission.WRITE_CALL_LOG",
+                                    "android.permission.WRITE_SMS",
                                     "android.permission.READ_EXTERNAL_STORAGE",
                                     "android.permission.WRITE_EXTERNAL_STORAGE",
                                     "android.permission.SET_WALLPAPER",
-                                    "android.permission.CALL_PHONE"});
+                                    "android.permission.CALL_PHONE",
+                                    "android.permission.WRITE_APN_SETTINGS" });
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
     Q_UNUSED(vm);

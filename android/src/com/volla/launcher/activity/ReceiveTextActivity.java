@@ -30,9 +30,10 @@ import java.util.List;
 import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 import androidnative.SystemDispatcher;
+import androidnative.AndroidNativeActivity;
 import android.widget.Toast; 
 
-public class ReceiveTextActivity extends org.qtproject.qt5.android.bindings.QtActivity
+public class ReceiveTextActivity extends AndroidNativeActivity
 {
     private static final String TAG = "ReceiveTextActivity";
 

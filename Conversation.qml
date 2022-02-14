@@ -104,7 +104,7 @@ Page {
     }
 
     function updateImage(messageId, image) {
-        console.log("Conversation | Umdate image of message " + messageId)
+        console.log("Conversation | Update image of message " + messageId)
         for (var i = 0; i < currentConversationModel.modelArr.length; i++) {
             var aMessage = currentConversationModel.modelArr[i]
             if (aMessage.m_ID === messageId) {
@@ -257,109 +257,140 @@ Page {
         }
 
         footer: Rectangle {
+            id: footer
             width: parent.width
-            implicitHeight: footer.height
+            implicitHeight: messageRow.height + attachment.height
             color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
             border.color: "transparent"
             z: 2
 
-            Row {
-                id: footer
-                width: parent.width
-                padding: mainView.innerSpacing
-                visible: conversationPage.phoneNumber !== undefined
-
-                Button {
-                    id:plusButton
-                    flat:true
-                    text: "+"
-                    visible: false
-                    onClicked: {
-                        if (text === "+") {
-                            mainView.keepLastIndex = true
-                            console.log("Start Image Picker")
-                            imagePicker.takePhoto()
-                        } else {
-                            text = "+"
-                            imagePicker.imageUrl = ""
-                        }
-                    }
-                }
-                TextArea {
-                    id: textArea
-                    x: mainView.innerSpacing
-                    width: parent.width - mainView.innerSpacing * 2 - sendButton.width - plusButton.width
-                    placeholderText: qsTr("Type your message")
-                    color: mainView.fontColor
-                    placeholderTextColor: "darkgrey"
-                    font.pointSize: mainView.largeFontSize
-                    wrapMode: Text.WordWrap
-                    leftPadding: 0.0
-                    rightPadding: mainView.innerSpacing
-
-                    background: Rectangle {
-                        color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-                        border.color: "transparent"
-                    }
-
-                    onActiveFocusChanged: {
-                        console.log("Conversation | On active focus changed to " + activeFocus)
-                        if (activeFocus) {
-                            listView.height = mainWindow.visibility === 5 ? mainView.height * 0.62 : mainView.height * 0.6
-                            listView.positionViewAtEnd()
-                        } else {
-                            listView.height = mainView.height
-                            listView.positionViewAtEnd()
-                        }
-                    }
-                }
-                Button {
-                    id: sendButton
-                    bottomPadding: 0
-                    rightPadding: 0
-                    flat: true
-                    enabled: textArea.text.length > 0
-                    height: mainView.innerSpacing * 1.2
-                    width: mainView.innerSpacing * 2
-                    opacity: enabled ? 1.0 : 0.3
-                    contentItem: Image {
-                        id: sendIcon
-                        source: Qt.resolvedUrl("/icons/send_icon_light.png")
-                        fillMode: Image.PreserveAspectFit
-
-                        ColorOverlay {
-                            anchors.fill: sendIcon
-                            source: sendIcon
-                            color: mainView.fontColor
-                        }
-                    }
-                    background: Rectangle {
-                        color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
-                        border.color: "transparent"
-                    }
-                    onClicked: {
-                        console.log("Conversation | Send button clicked")
-                        console.log("Conversation | Number: " + conversationPage.phoneNumber)
-                        console.log("Conversation | Text: " + textArea.text)
-                        AN.SystemDispatcher.dispatch("volla.launcher.messageAction", {"number": conversationPage.phoneNumber, "text": textArea.text})
-
-                        // Todo: Only add message to list currentConversationModel, if massage was successfully sent.
-                        var d = new Date()
-                        currentConversationModel.append(
-                                    {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • SMS",
-                                     "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf()})
-                        textArea.text = ""
-                        textArea.activeFocus = false
-                    }
+            Behavior on implicitHeight {
+                NumberAnimation {
+                    duration: 250.0
                 }
             }
 
-            Image {
-                id: attachment
-                source: imagePicker.imageUrl // Qt.resolvedUrl("/images/InstagramPlaceholder.png") //
+            Column {
                 width: parent.width
-                anchors.top: footer.bottom
-                fillMode: Image.PreserveAspectFit
+
+                Row {
+                    id: messageRow
+                    width: parent.width
+                    padding: mainView.innerSpacing
+                    visible: conversationPage.phoneNumber !== undefined
+
+                    Button {
+                        id:attachmentButton
+                        flat:true
+                        contentItem: Image {
+                            id: attachmentIcon
+                            source: imagePicker.imageUrl === "" ? Qt.resolvedUrl("/icons/attachment@4x.png") :
+                                                                  Qt.resolvedUrl("/icons/trash@4x.png")
+                            fillMode: Image.PreserveAspectFit
+
+                            ColorOverlay {
+                                anchors.fill: sendIcon
+                                source: sendIcon
+                                color: mainView.fontColor
+                            }
+                        }
+                        onClicked: {
+                            if (imagePicker.imageUrl === "") {
+                                mainView.keepLastIndex = true
+                                console.log("Conversation | Pick image")
+                                imagePicker.pickImage()
+                            } else {
+                                imagePicker.imageUrl = ""
+                            }
+                        }
+                    }
+                    TextArea {
+                        id: textArea
+                        x: mainView.innerSpacing
+                        width: messageRow.width - (mainView.innerSpacing * 2) - sendButton.width - attachmentButton.width
+                        placeholderText: qsTr("Type your message")
+                        color: mainView.fontColor
+                        placeholderTextColor: "darkgrey"
+                        font.pointSize: mainView.largeFontSize
+                        wrapMode: Text.WordWrap
+                        leftPadding: 0.0
+                        rightPadding: mainView.innerSpacing
+
+                        background: Rectangle {
+                            color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                            border.color: "transparent"
+                        }
+
+                        onActiveFocusChanged: {
+                            console.log("Conversation | On active focus changed to " + activeFocus)
+                            if (activeFocus) {
+                                listView.height = mainWindow.visibility === 5 ? mainView.height * 0.62 : mainView.height * 0.6
+                                listView.positionViewAtEnd()
+                            } else {
+                                listView.height = mainView.height
+                                listView.positionViewAtEnd()
+                            }
+                        }
+                    }
+                    Button {
+                        id: sendButton
+                        flat: true
+                        enabled: textArea.text.length > 0
+                        height: mainView.innerSpacing * 1.2
+                        width: mainView.innerSpacing * 2
+                        opacity: enabled ? 1.0 : 0.3
+                        contentItem: Image {
+                            id: sendIcon
+                            source: Qt.resolvedUrl("/icons/send_icon_light.png")
+                            fillMode: Image.PreserveAspectFit
+
+                            ColorOverlay {
+                                anchors.fill: sendIcon
+                                source: sendIcon
+                                color: mainView.fontColor
+                            }
+                        }
+                        background: Rectangle {
+                            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                            border.color: "transparent"
+                        }
+                        onClicked: {
+                            console.log("Conversation | Send button clicked")
+                            console.log("Conversation | Number: " + conversationPage.phoneNumber)
+                            console.log("Conversation | Text: " + textArea.text)
+                            console.log("Conversation | Image: " + imagePicker.imageUrl)
+                            AN.SystemDispatcher.dispatch(
+                                        "volla.launcher.messageAction",
+                                        {"number": conversationPage.phoneNumber, "text": textArea.text,
+                                         "attachmentUrl": imagePicker.imageUrl} )
+
+                            // Todo: Only add message to list currentConversationModel, if massage was successfully sent.
+                            var d = new Date()
+                            currentConversationModel.append(
+                                        {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • SMS",
+                                         "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
+                            textArea.text = ""
+                            textArea.focus = false
+                            imagePicker.imageUrl = ""
+                            listView.positionViewAtEnd()
+                        }
+                    }
+                }
+
+                Row {
+                    id: attachment
+                    width: parent.width
+                    leftPadding: mainView.innerSpacing + attachmentButton.width
+                    rightPadding: mainView.innerSpacing + sendButton.width
+
+                    Image {
+                        source: imagePicker.imageUrl
+                        width: 100
+                        height: 100
+                        visible: imagePicker.imageUrl !== ""
+                        fillMode: Image.PreserveAspectCrop
+                    }
+                }
             }
         }
 
