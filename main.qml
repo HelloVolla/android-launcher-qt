@@ -703,6 +703,24 @@ ApplicationWindow {
             fastBlur.radius = blurEffect
         }
 
+        function resetLauncher() {
+            // 1. settings
+            AN.SystemDispatcher.dispatch("volla.launcher.resetAction", {})
+
+            // 2. contacts
+            mainView.contacts = new Array
+            mainView.loadingContacts = new Array
+            mainView.isLoadingContacts = true
+            mainView.updateSpinner(true)
+            mainView.timeStamp = new Date()
+
+            // 3. feeds
+            feeds.write(JSON.stringify(defaultFeeds))
+
+            // 4. shortcuts
+            shortcuts.write(JSON.stringify(defaultActions))
+        }
+
         WorkerScript {
             id: contactsWorker
             source: "scripts/contacts.mjs"
@@ -748,7 +766,7 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        mainView.contacts = mainView.loadingContacts
+                        mainView.contacts = [...mainView.loadingContacts]
                         mainView.loadingContacts = new Array
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                     }

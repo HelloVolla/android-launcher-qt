@@ -804,6 +804,8 @@ Page {
                     }
                 }
             }
+
+            // todo: Add reset button
         }
     }
 }

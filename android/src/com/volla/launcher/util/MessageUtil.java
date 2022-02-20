@@ -68,18 +68,19 @@ public class MessageUtil {
                                     Log.d(TAG, "Will send MMS to " + number);
                                     Log.d(TAG, "Build: " + getSystemProperty("ro.lineage.build.version"));
 
-//                                    if (getSystemProperty("ro.lineage.build.version").equals("10")) {
-//                                        Uri uri = Uri.parse(attachmentUrl);
-//                                        Intent intent = new Intent(Intent.ACTION_SENDTO);
-//                                        intent.setData(Uri.parse("smsto:" + number));
-//                                        intent.putExtra("sms_body", text);
-//                                        intent.putExtra(Intent.EXTRA_STREAM, uri);
-//                                        if (intent.resolveActivity(activity.getPackageManager()) != null) {
-//                                            activity.startActivity(intent);
-//                                        }
+                                    if (getSystemProperty("ro.lineage.build.version").equals("10")) {
+                                        Uri uri = Uri.parse(attachmentUrl);
+                                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                                        intent.setData(Uri.parse("smsto:" + number));
+                                        intent.putExtra("sms_body", text);
+                                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                                        intent.setType("image/*");
+                                        if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                                            activity.startActivity(intent);
+                                        }
 
-//                                        return;
-//                                    }
+                                        return;
+                                    }
 
                                     MMSManager mmsm = MMSManager.getInstance(activity);
 

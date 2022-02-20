@@ -2,6 +2,7 @@ package com.volla.launcher.util;
 
 import androidnative.SystemDispatcher;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.util.Log;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
@@ -30,6 +31,7 @@ public class AppUtil {
     public static final String RUN_APP = "volla.launcher.runAppAction";
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
     public static final String OPEN_CONTACT = "volla.launcher.showContactAction";
+    public static final String RESET_LAUNCHER = "volla.launcher.resetAction";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -117,6 +119,9 @@ public class AppUtil {
                             Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contact_id);
                             i.setData(uri);
                             activity.startActivity(i);
+                        } else if (type.equals(RESET_LAUNCHER)) {
+                            Log.d(TAG, "Will reset launcher");
+                            ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
                         }
                     }
                 };

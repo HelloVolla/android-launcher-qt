@@ -108,7 +108,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        Log.d(TAG, "Received permission result for request " + requestCode);
+        Log.d(TAG, "Received permission result " + grantResults[0] + " for permission " + String.join(",", permissions));
     }
 
     @Override
