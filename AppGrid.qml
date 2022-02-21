@@ -531,21 +531,26 @@ Page {
                 console.log("AppGrid | Unread messages: " + message["threadsCount"])
                 appLauncher.unreadMessages = message["threadsCount"] > 0
             } else if (type === "volla.launcher.receivedShortcut") {
-                console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
+                //console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
 
                 var isExistingShortcut = gridModel.modelArr.some( function(app) {
                     return app.shorcutId !== undefined && app.shortcutId === message.shortcutId && app.package === message.package
                 })
                 if (!isExistingShortcut) {
-                    mainView.showToast(qsTr("New pinned shortcut: " + message.shortcutId))
+                    //mainView.showToast(qsTr("New pinned shortcut: " + message.shortcutId))
                     var shortcut = {"shortcutId": message["shortcutId"],
                                     "package": message["package"],
                                     "label": message["label"],
                                     "icon": message["icon"]}
 
-                    mainView.showToast(shortcut["shortcutId"]);
+                    //mainView.showToast(shortcut["shortcutId"]);
+
+                    if (shortcut["shortcutId"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Id")
+                    if (shortcut["icon"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Icin")
 
                     gridModel.pinnedShortcuts.push(shortcut)
+                    gridModel.clear()
+                    gridModel.modelArr = new Array
                     gridModel.prepareModel()
                     gridModel.update(textInput)
 
