@@ -1,6 +1,8 @@
 package com.volla.launcher.activity;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.app.AlarmManager ;
 import android.content.pm.PackageManager;
 import android.content.pm.LauncherApps;
 import android.content.pm.LauncherApps.PinItemRequest;
@@ -40,11 +42,28 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     public static final String GOT_TEXT = "volla.launcher.receiveTextResponse";
     public static final String GOT_SHORTCUT = "volla.launcher.receivedShortcut";
 
+    public static ReceiveTextActivity instance;
+
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreated() called");
+
+        // Workaround for blank activity
+        // https://forum.qt.io/topic/90189/android-e-qt-java-surface-1-not-found/2
+        if (instance != null) {
+            Log.d(TAG, "App is already running... this won't work");
+            Intent mStartActivity = new Intent(this, ReceiveTextActivity.class);
+            int mPendingIntentId = 123456;
+            PendingIntent mPendingIntent = PendingIntent.getActivity(
+                this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+            System.exit(0);
+        }
+        instance = this;
+        Log.d(TAG, "Android activity created");
 
         Window w = getWindow(); // in Activity's onCreate() for instance
         WindowManager.LayoutParams winParams = w.getAttributes();
