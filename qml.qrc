@@ -60,7 +60,7 @@
         <file>icons/xmpp@4x_104x104px.png</file>
         <file>scripts/contacts.mjs</file>
         <file>Shortcut.qml</file>
-        <file>icons/send_icon_light.png</file>
+        <file>icons/send_icon_light@4x.png</file>
         <file>icons/attachment@4x.png</file>
         <file>icons/check@4x.png</file>
         <file>icons/link@4x.png</file>

@@ -772,7 +772,6 @@ Page {
                         rightPadding: mainView.innerSpacing
                         text: qsTr("Background blur")
                         font.pointSize: mainView.mediumFontSize
-                        //visible: false
                     }
 
                     Slider {
@@ -806,6 +805,120 @@ Page {
             }
 
             // todo: Add reset button
+            Item {
+                id: resetSettingsItem
+                width: parent.width
+                implicitHeight: resetSettingsItemColumn.height
+                visible: false // under construction
+
+                Column {
+                    id: resetSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+
+                    Button {
+                        id: resetSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * resetSettingsItemButton.padding
+                            text: qsTr("Reset options")
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: resetSettingsItemColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            resetSettingsItemColumn.menuState = !resetSettingsItemColumn.menuState
+                        }
+                    }
+
+                    Button {
+                        id: resetNewsButton
+                        flat: true
+                        visible: resetSettingsItemColumn.menuState
+                        topPadding: mainView.innerSpacing / 2
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding:mainView.innerSpacing
+                        leftInset: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * resetSettingsItemButton.padding
+                            text: qsTr("Reset news feeds")
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: Universal.foreground
+                            border.width: 1
+                        }
+                        onClicked: {
+
+                        }
+                    }
+
+                    Button {
+                        flat: true
+                        visible: resetSettingsItemColumn.menuState
+                        topPadding: mainView.innerSpacing / 2
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding:mainView.innerSpacing
+                        topInset: mainView.innerSpacing / 2
+                        leftInset: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * resetSettingsItemButton.padding
+                            text: qsTr("Reset shorcuts feeds")
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: Universal.foreground
+                            border.width: 1
+                        }
+                        onClicked: {
+
+                        }
+                    }
+
+                    Button {
+                        flat: true
+                        visible: resetSettingsItemColumn.menuState
+                        topPadding: mainView.innerSpacing / 2
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding:mainView.innerSpacing
+                        topInset: mainView.innerSpacing / 2
+                        leftInset: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * resetSettingsItemButton.padding
+                            text: qsTr("Reset app data")
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: Universal.foreground
+                            border.width: 1
+                        }
+                        onClicked: {
+
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -273,12 +273,14 @@ Page {
             Row {
                 id: messageRow
                 width: parent.width
-                padding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
                 visible: conversationPage.phoneNumber !== undefined
 
                 Button {
                     id:attachmentButton
                     flat:true
+                    bottomPadding: 10
                     anchors.bottom: parent.bottom
                     contentItem: Image {
                         id: attachmentIcon
@@ -311,7 +313,6 @@ Page {
                     width: parent.width - (2 * mainView.innerSpacing) - sendButton.width - attachmentButton.width
                     leftPadding: conversationPage.innerSmallSpacing
                     rightPadding: conversationPage.innerSmallSpacing
-                    bottomPadding: 0
                     anchors.bottom: parent.bottom
 
                     TextArea {
@@ -333,7 +334,7 @@ Page {
                         onActiveFocusChanged: {
                             console.log("Conversation | On active focus changed to " + activeFocus)
                             if (activeFocus) {
-                                listView.height = mainWindow.visibility === 5 ? mainView.height * 0.6 :
+                                listView.height = mainWindow.visibility === 5 ? mainView.height * 0.6 + innerSmallSpacing * 2 :
                                                                                 mainView.height * 0.65
                                 listView.positionViewAtEnd()
                             } else {
@@ -345,7 +346,7 @@ Page {
                     Row {
                         id: attachment
                         width: parent.width
-                        topPadding: imagePicker.imageUrl !== "" ? innerSmallSpacing * 2 : innerSmallSpacing
+                        topPadding: innerSmallSpacing * 2
                         bottomPadding: imagePicker.imageUrl !== "" ? innerSmallSpacing : 0
 
                         Image {
@@ -368,14 +369,13 @@ Page {
                     id: sendButton
                     flat: true
                     anchors.bottom: parent.bottom
+                    bottomPadding: 10
                     enabled: textArea.text.length > 0
-                    //height: mainView.innerSpacing * 1.2
-                    width: mainView.innerSpacing * 2
                     opacity: enabled ? 1.0 : 0.3
                     contentItem: Image {
                         id: sendIcon
                         verticalAlignment: Image.AlignBottom
-                        source: Qt.resolvedUrl("/icons/send_icon_light.png")
+                        source: Qt.resolvedUrl("/icons/send_icon_light@4x.png")
                         fillMode: Image.PreserveAspectFit
 
                         ColorOverlay {
