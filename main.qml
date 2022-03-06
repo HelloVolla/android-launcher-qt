@@ -46,7 +46,7 @@ ApplicationWindow {
               AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck})
           } else {
               // Application go in suspend state
-              console.log("Application became inactive")
+              console.log("MainView | Application became inactive")
               isActive = false
           }
        }
@@ -703,22 +703,24 @@ ApplicationWindow {
             fastBlur.radius = blurEffect
         }
 
+        function resetActions() {
+            shortcuts.write(JSON.stringify(defaultActions))
+            showToast(qsTr("Reset successful"))
+        }
+
+        function resetFeeds() {
+            feeds.write(JSON.stringify(defaultFeeds))
+            showToast(qsTr("Reset successful"))
+        }
+
         function resetLauncher() {
-            // 1. settings
             AN.SystemDispatcher.dispatch("volla.launcher.resetAction", {})
 
-            // 2. contacts
             mainView.contacts = new Array
             mainView.loadingContacts = new Array
             mainView.isLoadingContacts = true
             mainView.updateSpinner(true)
             mainView.timeStamp = new Date()
-
-            // 3. feeds
-            feeds.write(JSON.stringify(defaultFeeds))
-
-            // 4. shortcuts
-            shortcuts.write(JSON.stringify(defaultActions))
         }
 
         WorkerScript {
@@ -817,6 +819,14 @@ ApplicationWindow {
                         mainView.showToast(qsTr(mainView.notifications[message["text"]]))
                     } else {
                         mainView.showToast(qsTr(mainView.notifications[message["text"]]))
+                    }
+                } else if (type === "volla.launcher.uiModeChanged") {
+                    if (message["uiMode"] !== settings.theme) {
+                        if (message["uiMode"] === mainView.theme.Light) {
+                            mainView.switchTheme(mainView.theme.Light, (settings.theme !== mainView.theme.Translucent))
+                        } else if (message["uiMode"] === mainView.theme.Dark && settings.theme !== mainView.theme.Translucent) {
+                            mainView.switchTheme(mainView.theme.Dark, true)
+                        }
                     }
                 }
             }

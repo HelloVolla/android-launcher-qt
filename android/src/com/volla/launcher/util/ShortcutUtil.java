@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.LinkedList;
 import org.qtproject.qt5.android.QtNative;
 
-
 public class ShortcutUtil {
 
     private static final String TAG = "ShortcutsUtils";

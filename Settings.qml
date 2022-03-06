@@ -756,64 +756,52 @@ Page {
                 }
             }
 
-            Item {
-                id: blurSettingItem
+            Label {
+                id: blurLabel
+                topPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
+                text: qsTr("Background blur")
+                font.pointSize: mainView.mediumFontSize
+            }
+
+            Slider {
+                id: blurSlider
+                topPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
                 width: parent.width
-                anchors.top: designSettingsItem.bottom
+                from: 0
+                to: 100
+                value: designSettings.blurEffect
 
-                Column {
-                    id: blurSettingItemColumn
-                    width: parent.width
+                handle: Rectangle {
+                    x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
+                    y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
+                    implicitWidth: mainView.largeFontSize
+                    implicitHeight: mainView.largeFontSize
+                    radius: mainView.largeFontSize / 2
+                    color: Universal.accent
+                    border.color: Universal.accent
+                }
 
-                    Label {
-                        id: blurLabel
-                        topPadding: mainView.innerSpacing
-                        leftPadding: mainView.innerSpacing
-                        rightPadding: mainView.innerSpacing
-                        text: qsTr("Background blur")
-                        font.pointSize: mainView.mediumFontSize
-                    }
-
-                    Slider {
-                        id: blurSlider
-                        topPadding: mainView.innerSpacing
-                        leftPadding: mainView.innerSpacing
-                        rightPadding: mainView.innerSpacing
-                        width: parent.width
-                        from: 0
-                        to: 100
-                        value: designSettings.blurEffect
-                        //visible: false
-
-                        handle: Rectangle {
-                            x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
-                            y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
-                            implicitWidth: mainView.largeFontSize
-                            implicitHeight: mainView.largeFontSize
-                            radius: mainView.largeFontSize / 2
-                            color: Universal.accent
-                            border.color: Universal.accent
-                        }
-
-                        onValueChanged: {
-                            console.log("Settings | Blurr filter chanded to " + value)
-                            designSettings.blurEffect = value
-                            mainView.updateBlurEffect(value)
-                        }
-                    }
+                onValueChanged: {
+                    console.log("Settings | Blurr filter chanded to " + value)
+                    designSettings.blurEffect = value
+                    mainView.updateBlurEffect(value)
                 }
             }
 
-            // todo: Add reset button
             Item {
                 id: resetSettingsItem
                 width: parent.width
+
                 implicitHeight: resetSettingsItemColumn.height
-                visible: false // under construction
 
                 Column {
                     id: resetSettingsItemColumn
                     width: parent.width
+                    spacing: mainView.innerSpacing / 2
 
                     property bool menuState: false
 
@@ -840,12 +828,13 @@ Page {
                     Button {
                         id: resetNewsButton
                         flat: true
+                        highlighted: true
                         visible: resetSettingsItemColumn.menuState
+                        x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
-                        bottomPadding:mainView.innerSpacing
-                        leftInset: mainView.innerSpacing
+                        bottomPadding:mainView.innerSpacing / 2
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reset news feeds")
@@ -854,25 +843,33 @@ Page {
                             color: Universal.foreground
                         }
                         background: Rectangle {
+                            id: resetNewsButtonBackground
                             anchors.fill: parent
                             color: "transparent"
                             border.color: Universal.foreground
                             border.width: 1
                         }
+                        onPressed: {
+                            resetNewsButtonBackground.color = Universal.accent
+                        }
                         onClicked: {
-
+                            resetNewsButtonBackground.color = "transparent"
+                            newsSettingsItemColumn.menuState = false
+                            newsSettingsItemColumn.destroyCheckboxes()
+                            mainView.resetFeeds()
                         }
                     }
 
                     Button {
+                        id: reseetShortcutsButton
                         flat: true
+                        highlighted: true
                         visible: resetSettingsItemColumn.menuState
+                        x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
-                        bottomPadding:mainView.innerSpacing
-                        topInset: mainView.innerSpacing / 2
-                        leftInset: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing / 2
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reset shorcuts feeds")
@@ -881,41 +878,60 @@ Page {
                             color: Universal.foreground
                         }
                         background: Rectangle {
+                            id: reseetShortcutsButtonBackground
                             anchors.fill: parent
                             color: "transparent"
                             border.color: Universal.foreground
                             border.width: 1
                         }
+                        onPressed: {
+                            reseetShortcutsButtonBackground.color = Universal.accent
+                        }
                         onClicked: {
-
+                            reseetShortcutsButtonBackground.color = "transparent"
+                            shortcutSettingsItemColumn.menuState = false
+                            shortcutSettingsItemColumn.destroyCheckboxes()
+                            mainView.resetActions()
                         }
                     }
 
                     Button {
+                        id: resetLauncherButton
                         flat: true
+                        highlighted: true
                         visible: resetSettingsItemColumn.menuState
+                        x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
-                        bottomPadding:mainView.innerSpacing
-                        topInset: mainView.innerSpacing / 2
-                        leftInset: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing / 2
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
-                            text: qsTr("Reset app data")
+                            text: qsTr("Reset this app")
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
                         }
                         background: Rectangle {
+                            id: reseetLauncherButtonBackground
                             anchors.fill: parent
                             color: "transparent"
                             border.color: Universal.foreground
                             border.width: 1
                         }
-                        onClicked: {
-
+                        onPressed: {
+                            reseetLauncherButtonBackground.color = Universal.accent
                         }
+                        onClicked: {
+                            reseetLauncherButtonBackground.color = "transparent"
+                            mainView.resetLauncher()
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
                     }
                 }
             }
