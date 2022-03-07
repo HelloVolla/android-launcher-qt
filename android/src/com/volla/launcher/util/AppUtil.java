@@ -3,6 +3,8 @@ package com.volla.launcher.util;
 import androidnative.SystemDispatcher;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.util.Log;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
@@ -19,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import org.qtproject.qt5.android.QtNative;
+import com.volla.launcher.activity.ReceiveTextActivity;
 
 public class AppUtil {
 
@@ -121,7 +124,16 @@ public class AppUtil {
                             activity.startActivity(i);
                         } else if (type.equals(RESET_LAUNCHER)) {
                             Log.d(TAG, "Will reset launcher");
+                            // https://stackoverflow.com/questions/4856955/how-to-programmatically-clear-application-data
                             ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
+
+//                            Intent mStartActivity = new Intent(activity, ReceiveTextActivity.class);
+//                            int mPendingIntentId = 123456;
+//                            PendingIntent mPendingIntent = PendingIntent.getActivity(
+//                                activity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+//                            AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
+//                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+//                            System.exit(0);
                         }
                     }
                 };

@@ -41,6 +41,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
 
     public static final String GOT_TEXT = "volla.launcher.receiveTextResponse";
     public static final String GOT_SHORTCUT = "volla.launcher.receivedShortcut";
+    public static final String UIMODE_CHANGED = "volla.launcher.uiModeChanged";
 
     public static ReceiveTextActivity instance;
 
@@ -128,6 +129,30 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         Log.d(TAG, "Received permission result " + grantResults[0] + " for permission " + String.join(",", permissions));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        Log.d(TAG, "Config changed");
+
+        int currentNightMode = newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        Map message = new HashMap();
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is not active, we're using the light theme
+                Log.d(TAG, "Night mode enabled");
+                message.put("uiMode", 0 );
+                SystemDispatcher.dispatch(UIMODE_CHANGED, message);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active, we're using dark theme
+                Log.d(TAG, "Light mode enabled");
+                message.put("uiMode", 1 );
+                SystemDispatcher.dispatch(UIMODE_CHANGED, message);
+                break;
+        }
     }
 
     @Override

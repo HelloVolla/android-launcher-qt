@@ -272,6 +272,22 @@
         <source>Display and menus</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Reset options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset news feeds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset shorcuts feeds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset this app</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -496,6 +512,10 @@
     </message>
     <message>
         <source>Could not load a valid feed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset successful</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -278,18 +278,19 @@ Page {
                 visible: conversationPage.phoneNumber !== undefined
 
                 Button {
-                    id:attachmentButton
+                    id:attachmentButtonAdd
                     flat:true
+                    visible: imagePicker.imageUrl === ""
                     bottomPadding: 10
                     anchors.bottom: parent.bottom
                     contentItem: Image {
-                        id: attachmentIcon
+                        id: attachmentIconAdd
                         source: Qt.resolvedUrl("/icons/attachment@4x.png")
                         fillMode: Image.PreserveAspectFit
 
                         ColorOverlay {
-                            anchors.fill: attachmentIcon
-                            source: attachmentIcon
+                            anchors.fill: attachmentIconAdd
+                            source: attachmentIconAdd
                             color: mainView.fontColor
                         }
                     }
@@ -302,15 +303,39 @@ Page {
                             mainView.keepLastIndex = true
                             console.log("Conversation | Pick image")
                             imagePicker.pickImage()
-                        } else {
-                            imagePicker.imageUrl = ""
                         }
+                    }
+                }
+
+                Button {
+                    id: attachmentButtonRmmove
+                    flat:true
+                    bottomPadding: 10
+                    visible: imagePicker.imageUrl !== ""
+                    anchors.bottom: parent.bottom
+                    contentItem: Image {
+                        id: attachmentIconRemove
+                        source: Qt.resolvedUrl("/icons/trash@4x.png")
+                        fillMode: Image.PreserveAspectFit
+
+                        ColorOverlay {
+                            anchors.fill: attachmentIconRemove
+                            source: attachmentIconRemove
+                            color: mainView.fontColor
+                        }
+                    }
+                    background: Rectangle {
+                        color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                        border.color: "transparent"
+                    }
+                    onClicked: {
+                        imagePicker.imageUrl = ""
                     }
                 }
 
                 Column {
                     id: contentColumn
-                    width: parent.width - (2 * mainView.innerSpacing) - sendButton.width - attachmentButton.width
+                    width: parent.width - (2 * mainView.innerSpacing) - sendButton.width - attachmentButtonAdd.width
                     leftPadding: conversationPage.innerSmallSpacing
                     rightPadding: conversationPage.innerSmallSpacing
                     anchors.bottom: parent.bottom
@@ -356,11 +381,6 @@ Page {
                             height: parent.width / 3
                             visible: imagePicker.imageUrl !== ""
                             fillMode: Image.PreserveAspectCrop
-
-                            onVisibleChanged: {
-                                attachmentIcon.source = visible ? Qt.resolvedUrl("/icons/trash@4x.png") :
-                                                                  Qt.resolvedUrl("/icons/attachment@4x.png")
-                            }
                         }
                     }
                 }

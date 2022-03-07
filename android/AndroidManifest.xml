@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.9.2" android:versionCode="95" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.9.3" android:versionCode="96" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="26"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -92,26 +92,26 @@
             <!-- extract android style -->
     </activity>
 
-    <activity android:name="com.volla.launcher.activity.AddShortcutActivity" android:theme="@style/Theme.Transparent" android:launchMode="singleInstance" android:exported="true" android:label="Volla">
-        <intent-filter>
-            <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT"/>
-        </intent-filter>
-        <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
-    </activity>
+        <activity android:name="com.volla.launcher.activity.AddShortcutActivity" android:theme="@style/Theme.Transparent" android:launchMode="singleInstance" android:exported="true" android:label="Volla">
+            <intent-filter>
+                <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT"/>
+            </intent-filter>
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+        </activity>
 
-    <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
-    <service android:name="com.android.mms.transaction.TransactionService">
-        <!-- Background running -->
-        <meta-data android:name="android.app.background_running" android:value="true"/>
-        <!-- Background running -->
-    </service>
+        <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
+        <service android:name="com.android.mms.transaction.TransactionService">
+            <!-- Background running -->
+            <meta-data android:name="android.app.background_running" android:value="true"/>
+            <!-- Background running -->
+        </service>
 
-    <receiver android:name="com.klinker.android.send_message.SentReceiver" android:taskAffinity="com.volla.launcher.SMS_SENT"/>
+        <receiver android:name="com.klinker.android.send_message.SentReceiver" android:taskAffinity="com.volla.launcher.SMS_SENT"/>
 
-    <receiver android:name="com.klinker.android.send_message.DeliveredReceiver" android:taskAffinity="com.volla.launcher.SMS_DELIVERED"/>
+        <receiver android:name="com.klinker.android.send_message.DeliveredReceiver" android:taskAffinity="com.volla.launcher.SMS_DELIVERED"/>
 
-    <!-- Your custom receiver which is child of com.klinker.android.send_message.MmsSentReceiver -->
-    <receiver android:name="com.klinker.android.send_message.MmsSentReceiver" android:taskAffinity="com.klinker.android.messaging.MMS_SENT"/>
+        <!-- Your custom receiver which is child of com.klinker.android.send_message.MmsSentReceiver -->
+        <receiver android:name="com.klinker.android.send_message.MmsSentReceiver" android:taskAffinity="com.klinker.android.messaging.MMS_SENT"/>
 
     </application>
 
@@ -125,11 +125,8 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
-<uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
-<uses-permission android:name="android.permission.VIBRATE"/>
-
-
-
-<uses-permission android:name="android.permission.WRITE_SMS"/>
-<uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
+    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
 </manifest>
