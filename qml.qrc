@@ -66,5 +66,8 @@
         <file>icons/link@4x.png</file>
         <file>icons/pin@4x.png</file>
         <file>icons/trash@4x.png</file>
+        <file>Note.qml</file>
+        <file>utils/JSONListModel.qml</file>
+        <file>utils/jsonpath.js</file>
     </qresource>
 </RCC>

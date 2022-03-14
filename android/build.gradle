@@ -6,7 +6,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'    }
+        classpath 'com.android.tools.build:gradle:3.2.0'
+    }
 }
 
 repositories {
@@ -16,9 +17,9 @@ repositories {
 }
 
 allprojects {
-  repositories {
-    mavenCentral()
-  }
+    repositories {
+        mavenCentral()
+    }
 }
 
 apply plugin: 'com.android.application'

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import org.qtproject.qt5.android.QtNative;
+//import lineageos.childmode.ChildModeManager;
 import com.volla.launcher.activity.ReceiveTextActivity;
 
 public class AppUtil {
@@ -35,6 +36,10 @@ public class AppUtil {
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
     public static final String OPEN_CONTACT = "volla.launcher.showContactAction";
     public static final String RESET_LAUNCHER = "volla.launcher.resetAction";
+    public static final String TOGGLE_SECURITY_MODE = "volla.launcher.securityModeAction";
+    public static final String SECURITY_MODE_RESULT = "volla.launcher.securityModeResponse";
+    public static final String GET_SECURITY_STATE = "volla.launcher.securityStateAction";
+    public static final String GOT_SECURITY_STATE = "volla.launcher.securityStateResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -127,14 +132,39 @@ public class AppUtil {
                             // https://stackoverflow.com/questions/4856955/how-to-programmatically-clear-application-data
                             ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
 
-//                            Intent mStartActivity = new Intent(activity, ReceiveTextActivity.class);
-//                            int mPendingIntentId = 123456;
-//                            PendingIntent mPendingIntent = PendingIntent.getActivity(
-//                                activity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-//                            AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
-//                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-//                            System.exit(0);
-                        }
+                            Intent mStartActivity = new Intent(activity, ReceiveTextActivity.class);
+                            int mPendingIntentId = 123456;
+                            PendingIntent mPendingIntent = PendingIntent.getActivity(
+                                activity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                            AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                            System.exit(0);
+                          }
+//                        } else if (type.equals(TOGGLE_SECURITY_MODE)) {
+//                            String password = (String) message.get("password");
+//                            boolean activate = (boolean) message.get("activate");
+
+//                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+
+//                            Map reply = new HashMap();
+
+//                            if (childModeManager.validatePassword(password)) {
+//                                childModeManager.activate(false);
+//                                reply.put("succeeded", true );
+//                                reply.put("activate", activate );
+//                            } else {
+//                                reply.put("succeeded", false );
+//                                reply.put("error", "Wrong password" );
+//                            }
+
+//                            SystemDispatcher.dispatch(SECURITY_MODE_RESULT, reply);
+//                        } else if (type.equals(GET_SECURITY_STATE)) {
+//                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+
+//                            Map reply = new HashMap();
+//                            reply.put("isActive", childModeManager.isActivate() );
+//                            SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
+//                        }
                     }
                 };
 

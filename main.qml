@@ -95,7 +95,8 @@ ApplicationWindow {
         property var collectionMode : {
             'People' : 0,
             'Threads' : 1,
-            'News' : 2
+            'News' : 2,
+            'Notes' : 3
         }
         property var conversationMode: {
             'Person' : 0,
@@ -222,8 +223,15 @@ ApplicationWindow {
         property bool keepLastIndex: false
 
         onCurrentIndexChanged: {
-            if (currentIndex === swipeIndex.Apps) {
-                appGrid.children[0].item.updateNotifications()
+            switch (currentIndex) {
+                case swipeIndex.Apps:
+                    appGrid.children[0].item.updateNotifications()
+                    break
+                case swipeIndex.Settings:
+                    AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction")
+                    break
+                default:
+                    // Nothing to do
             }
         }
 

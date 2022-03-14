@@ -253,6 +253,261 @@ Page {
                 }
             }
 
+            MouseArea {
+                id: securitySettingsItem
+                width: parent.width
+                implicitHeight: securitySettingsItemColumn.height
+                preventStealing: true
+
+                property var selectedMenuItem: securitySettingsItemTitle
+                property bool menuState: false
+                property double labelOpacity: 0.0
+
+                Column {
+                    id: securitySettingsItemColumn
+                    width: parent.width
+
+                    Button {
+                        id: securitySettingsItemTitle
+
+                        property var isActiveSecurityMode: false
+
+                        enabled: false
+                        padding: mainView.innerSpacing
+                        width: parent.width
+                        text: qsTr("Security mode is OFF")
+                        contentItem: Row {
+                            Text {
+                                text: securitySettingsItemTitle.text
+                                font.pointSize: mainView.largeFontSize
+                                font.weight: securitySettingsItem.menuState ? Font.Black : Font.Normal
+                                color: securitySettingsItem.menuState ? "white" : Universal.foreground
+                            }
+//                            Image {
+//                                id: name
+//                                source: "file"
+//                            }
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
+                        }
+                    }
+                    Button {
+                        id: securityModeOffOption
+
+                        property var isActiveSecurityMode: false
+
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing
+                        width: parent.width
+                        visible: securitySettingsItem.menuState
+                        text: qsTr("Security mode is OFF")
+                        contentItem: Text {
+                            text: securityModeOffOption.text
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: securitySettingsItem.selectedMenuItem === securityModeOffOption ? Font.Black : Font.Normal
+                            color: "white"
+                            opacity: securitySettingsItem.labelOpacity
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: securitySettingsItem.menuState ? Universal.accent : "transparent"
+                        }
+                    }
+                    Button {
+                        id: securityModeOnOption
+
+                        property var isActiveSecurityMode: true
+
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing
+                        width: parent.width
+                        visible: securitySettingsItem.menuState
+                        text: qsTr("Security mode if ON")
+                        contentItem: Row {
+                            Text {
+                                text: securityModeOnOption.text
+                                font.pointSize: mainView.mediumFontSize
+                                font.weight: securitySettingsItem.selectedMenuItem === securityModeOnOption ? Font.Black : Font.Normal
+                                color: "white"
+                                opacity: securitySettingsItem.labelOpacity
+                            }
+//                            Image {
+//                                source: "file"
+//                            }
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: securitySettingsItem.menuState ? Universal.accent : "transparent"
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.
+                        onRunningChanged: {
+                            if (!running && securitySettingsItem.menuState) {
+                                console.log("Settings | Switch on security options labels")
+                                securitySettingsItem.labelOpacity = 1.0
+                            } else if (running && !securitySettingsItem.menuState) {
+                                console.log("Settings | Switch off security option labels")
+                                securitySettingsItem.labelOpacity = 0.0
+                            }
+                        }
+                    }
+                }
+
+                Behavior on labelOpacity {
+                    NumberAnimation {
+                        duration: 250
+                    }
+                }
+
+                onEntered: {
+                    console.log("Settings | mouse entered")
+                    preventStealing = !preventStealing
+                    menuState = true
+                }
+                onCanceled: {
+                    console.log("Settings | mouse cancelled")
+                    preventStealing = !preventStealing
+                    menuState = false
+                    executeSelection()
+                }
+                onExited: {
+                    console.log("Settings | mouse exited")
+                    preventStealing = !preventStealing
+                    menuState = false
+                    executeSelection()
+                }
+                onMouseYChanged: {
+                    var firstPoint = mapFromItem(securityModeOffOption, 0, 0)
+                    var secondPoint = mapFromItem(securityModeOnOption, 0, 0)
+                    var selectedItem
+
+                    if (mouseY > firstPoint.y && mouseY < firstPoint.y + securityModeOffOption.height) {
+                        selectedItem = securityModeOffOption
+                    } else if (mouseY > secondPoint.y && mouseY < secondPoint.y + securityModeOnOption.height) {
+                        selectedItem = securityModeOnOption
+                    } else {
+                        selectedItem = securitySettingsItemTitle
+                    }
+                    if (selectedMenuItem !== selectedItem) {
+                        selectedMenuItem = selectedItem
+                        if (selectedMenuItem !== securitySettingsItemTitle && mainView.useVibration) {
+                            AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
+                        }
+                    }
+                }
+
+                function executeSelection() {
+                    console.log("Settings | Current mode: " + Universal.theme + ", " + themeSettings.theme)
+                    console.log("Settings | Execute mode selection: " + selectedMenuItem.text + ", " + selectedMenuItem.isActiveSecurityMode)
+                    if (securitySettingsItemTitle.text !== selectedMenuItem.text
+                            && selectedMenuItem !== securitySettingsItemTitle) {
+                        passwordDialog.open()
+                    }
+                }
+
+                Dialog {
+                    id: passwordDialog
+
+                    anchors.centerIn: parent
+                    implicitHeight: dialogColumn.height
+                    width: 300
+                    //title: qsTr("Enter password")
+                    modal: true
+                    dim: false
+
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: #5b5b5b
+                        border.color: "transparent"
+                        radius: mainView.innerSpacing
+                    }
+
+                    contentItem: Column {
+                        id: dialogColumn
+                        spacing: mainView.innerSpacing
+
+                        Label {
+                            text: qsTr("Enter password")
+                            color: mainView.fontColor
+                            font.pointSize: mainView.mediumFontSize
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "transparent"
+                            }
+                        }
+
+                        TextField {
+                            id: passwordField
+                            echoMode: TextField.Password
+                            width: parent.width
+                            color: mainView.fontColor
+                            placeholderTextColor: "darkgrey"
+                            font.pointSize: mainView.mediumFontSize
+                            background: Rectangle {
+                                color: mainView.backgroundColor
+                                border.color: "transparent"
+                            }
+                        }
+
+                        Row {
+                            width: parent.width
+                            spacing: mainView.innerSpacing
+
+                            Button {
+                                flat: true
+                                width: parent.width / 2 - mainView.innerSpacing
+                                text: qsTr("Cancel")
+                            }
+
+                            Button {
+                                width: parent.width / 2 - mainView.innerSpacing * 3
+                                flat: true
+                                text: qsTr("Ok")
+                            }
+                        }
+                    }
+
+                    //standardButtons: Dialog.Ok | Dialog.Cancel
+
+                    onAccepted: {
+                        AN.SystemDispatcher.dispatch(
+                                    "volla.launcher.securityModeAction",
+                                    {"password": passwordField.text,
+                                     "activate": securitySettingsItem.selectedMenuItem === securityModeOnOption})
+                    }
+                    onRejected: {
+                        securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
+                    }
+                }
+
+                Connections {
+                    target: AN.SystemDispatcher
+
+                    onDispatched: {
+                        if (type === "volla.launcher.securityModeResponse") {
+                            if (message["succeeded"]) {
+                                securitySettingsItemTitle.text = selectedMenuItem.text
+                                securitySettings.isActiveSecurityMode = selectedMenuItem.isActiveSecurityMode
+                                securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
+                            } else {
+                                mainView.showToast(qsTr("Wrong password"))
+                            }
+                        } else if (type === "volla.launcher.securityStateResponse") {
+                            securitySettingsItemTitle.text = message["isActive"] ? securityModeOnOption.text
+                                                                                 : securityModeOffOption.text
+                        }
+                    }
+                }
+            }
+
             Item {
                 id: newsSettingsItem
                 width: parent.width

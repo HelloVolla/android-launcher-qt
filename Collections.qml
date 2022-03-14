@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 import FileIO 1.0
+import "util"
 
 Page {
     id: collectionPage
@@ -924,7 +925,7 @@ Page {
             }
         }
 
-        function executeSelection(item, typ) {
+        function executeSelection(item, type) {
             mainView.updateConversationPage(mainView.conversationMode.Thread, item.c_ID, item.c_TITLE)
         }
     }
@@ -1194,6 +1195,31 @@ Page {
         }
     }
 
+    JSONListModel {
+        id: notesModel
+
+        function loadData() {
+            var jsonFile = notesFile.read()
+            if (jsonFile.length > 0) {
+                json = JSON.parse(jsonFile)
+                query = "$.notes.note[*]"
+            } else {
+                console.debug("Collections", "Notes file is empty")
+            }
+        }
+
+        function update(text) {
+            if (json.lengh > 0) {
+                query = text.length > 0 ? "$.notes.note[?(0.text contains '" + text + "')]" : "$.notes.note[*]"
+            }
+        }
+
+        function executeSelection(item, type) {
+            // todo open note
+
+        }
+    }
+
     Connections {
         target: AN.SystemDispatcher
         onDispatched: {
@@ -1214,7 +1240,6 @@ Page {
         }
     }
 
-    // @disable-check M300
     AN.Util {
         id: util
     }
@@ -1232,6 +1257,14 @@ Page {
         source: "calls.json"
         onError: {
             console.log("Collections | Calls cache error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: notesFile
+        source: ".notes.json"
+        onError: {
+            console.log("Collections | Notes file error: " + msg)
         }
     }
 }
