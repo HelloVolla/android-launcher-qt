@@ -23,7 +23,7 @@ Page {
     function updateDetailPage(mode, id, author, date, title) {
         console.log("DetailPage | Update detail page: " + id + ", " + mode)
         currentDetailMode = mode
-        currentDetailId = id
+        currentDetailId = id !== undefined ? id : Date.now()
         currentDetailAuthorAndDate = author !== undefined ? author  + "\n" + date : date
         currentTitle = title !== undefined ? title : undefined
         resetContent()
@@ -31,6 +31,9 @@ Page {
         switch (mode) {
         case mainView.detailMode.Web:
             prepareWebArticleView(id)
+            break
+        case mainView.detailMode.Note:
+            prepareNoteView(title)
             break
         default:
             console.log("DetailPage | Mode not yet implemented")
@@ -43,9 +46,11 @@ Page {
         author.text = ""
         image.source = ""
         text.text = ""
+        //notePad.text = ""
+        dummy.visible = false
     }
 
-    function prepareWebArticleView (url) {
+    function prepareWebArticleView(url) {
         console.log("Will send XMLHTTPRequest for " + url)
         var doc = new XMLHttpRequest();
         doc.onreadystatechange = function() {
@@ -66,6 +71,72 @@ Page {
         }
         doc.open("GET", url)
         doc.send()
+    }
+
+    function prepareNoteView(note) {
+        console.log("Details | note: " + note)
+        //notePad.text = "#" + note
+        dummy.visible = true
+        if (note === undefined) {
+            dummyImage.source = Qt.resolvedUrl("images/02.Notes_Screen.png")
+            detailPage.currentDetailId = "02.Notes"
+        } else {
+            dummyImage.source = Qt.resolvedUrl("images/05.Notes_Screen.png")
+            detailPage.currentDetailId = "05.Notes"
+        }
+    }
+
+    Button {
+        id: dummy
+        flat: true
+        anchors.fill: parent
+        display: AbstractButton.IconOnly
+        z:2
+        visible: false
+
+        background: Rectangle {
+            color: "transparent"
+            border.color: "transparent"
+        }
+
+        contentItem: Image {
+            id: dummyImage
+            anchors.top: parent.top
+            fillMode: Image.PreserveAspectFit
+            cache: false
+        }
+
+        onClicked: {
+            console.log("Details | Dummy clicked: " + detailPage.currentDetailId)
+            if (detailPage.currentDetailId === "02.Notes") {
+                dummyImage.source = Qt.resolvedUrl("images/03.Notes_Screen.png")
+                detailPage.currentDetailId = "03.Notes"
+            } else if (detailPage.currentDetailId === "03.Notes") {
+                dummyImage.source = Qt.resolvedUrl("images/04.Notes_Screen.png")
+                detailPage.currentDetailId = "04.Notes"
+            } else if (detailPage.currentDetailId === "04.Notes") {
+                dummyImage.source = Qt.resolvedUrl("images/05.Notes_Screen.png")
+                detailPage.currentDetailId = "05.Notes"
+            } else if (detailPage.currentDetailId === "05.Notes") {
+                dummyImage.source = Qt.resolvedUrl("images/01.Grid_cleanup_Screen.png")
+                detailPage.currentDetailId = "01.Cleanup"
+            } else if (detailPage.currentDetailId === "01.Cleanup") {
+                dummyImage.source = Qt.resolvedUrl("images/02.Grid_cleanup_Screen.png")
+                detailPage.currentDetailId = "02.Cleanup"
+            } else if (detailPage.currentDetailId === "02.Cleanup") {
+                dummyImage.source = Qt.resolvedUrl("images/02.Grid_groups_Screen.png")
+                detailPage.currentDetailId = "02.Groups"
+            } else if (detailPage.currentDetailId === "01.Groups") {
+                dummyImage.source = Qt.resolvedUrl("images/02.Grid_groups_Screen.png")
+                detailPage.currentDetailId = "02.Groups"
+            } else if (detailPage.currentDetailId === "02.Groups") {
+                dummyImage.source = Qt.resolvedUrl("images/03.Grid_groups_Screen.png")
+                detailPage.currentDetailId = "03.Groups"
+            } else if (detailPage.currentDetailId === "03.Groups") {
+                dummyImage.source = Qt.resolvedUrl("images/02.Notes_Screen.png")
+                detailPage.currentDetailId = "02.Notes"
+            }
+        }
     }
 
     Flickable {
@@ -148,7 +219,16 @@ Page {
                 onLinkActivated: Qt.openUrlExternally(link)
             }
 
+//            TextEdit {
+//                id: notePad
+//                width: parent.width
+//                height: 850
+//                textFormat: TextEdit.AutoText
+////                Layout.fillWidth: true
+////                textFormat: TextEdit.MarkdownText
+//            }
         }
+
     }
 
     Connections {

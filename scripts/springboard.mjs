@@ -37,6 +37,12 @@ WorkerScript.onMessage = function(message) {
         return textInput.indexOf("http") === 0 ? textInput.lastIndexOf("/") > 7 : textInput.lastIndexOf("/") > 3
     }
 
+    function textInputCouldBeEvent() {
+        // todo: refine. It's just a demo for now
+        var eventRregex = /^(Tomorrow)|(Next\sTuesday)/
+        return eventRregex.test(textInput.trim());
+    }
+
     var filteredSuggestionObj = new Array
     var filteredSuggestion
     var suggestion
@@ -48,6 +54,8 @@ WorkerScript.onMessage = function(message) {
             if (selectedObj !== undefined) {
                 if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
                     filteredSuggestionObj.push([actionName.SendSMS, actionType.SendSMS])
+                    // todo: refactor
+                    filteredSuggestionObj.push([actionName.SendSignal, actionType.SendSignal])
                 }
                 var emailAddressCount = 0
                 if (selectedObj["email.home"] !== undefined && selectedObj["email.home"].length > 0) {
@@ -70,6 +78,8 @@ WorkerScript.onMessage = function(message) {
             filteredSuggestionObj[0] = [actionName.SendEmail, actionType.SendEmail]
         } else if (textInputHasMultiLines()) {
             filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
+        } else if (textInputCouldBeEvent()) {
+            filteredSuggestionObj[0] = [actionName.CreateEvent, actionType.CreateEvent]
         } else {
             filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
             filteredSuggestionObj[1] = [actionName.SearchWeb, actionType.SearchWeb]

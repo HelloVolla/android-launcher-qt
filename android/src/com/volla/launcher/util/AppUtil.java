@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import org.qtproject.qt5.android.QtNative;
-//import lineageos.childmode.ChildModeManager;
+import lineageos.childmode.ChildModeManager;
 import com.volla.launcher.activity.ReceiveTextActivity;
 
 public class AppUtil {
@@ -40,6 +40,8 @@ public class AppUtil {
     public static final String SECURITY_MODE_RESULT = "volla.launcher.securityModeResponse";
     public static final String GET_SECURITY_STATE = "volla.launcher.securityStateAction";
     public static final String GOT_SECURITY_STATE = "volla.launcher.securityStateResponse";
+    public static final String GET_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordAction";
+    public static final String GOT_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -89,10 +91,8 @@ public class AppUtil {
                         } else if (type.equals(OPEN_DIALER)) {
                             String app = (String) message.get("app");
 
-//                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q || app == null) {
-                                TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
-                                app = manger.getDefaultDialerPackage();
-//                            }
+                            TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+                            app = manger.getDefaultDialerPackage();
 
                             Log.d(TAG, "Dialer package is " + app);
 
@@ -139,32 +139,46 @@ public class AppUtil {
                             AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
                             mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                             System.exit(0);
-                          }
-//                        } else if (type.equals(TOGGLE_SECURITY_MODE)) {
-//                            String password = (String) message.get("password");
-//                            boolean activate = (boolean) message.get("activate");
+                        } else if (type.equals(TOGGLE_SECURITY_MODE)) {
+                            boolean activate = (boolean) message.get("activate");
 
-//                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+                            Map reply = new HashMap();
 
-//                            Map reply = new HashMap();
+                            if (activate) {
+                                if (!childModeManager.isPasswortSet()) {
+                                    String password = (String) message.get("password");
+                                    childModeManager.setPassword(password);
+                                }
+                                childModeManager.activate(activate);
+                                reply.put("succeeded", true);
+                                reply.put("activate", activate);
+                            } else {
+                                String password = (String) message.get("password");
+                                if (childModeManager.validatePassword(password)) {
+                                    childModeManager.activate(activate);
+                                    reply.put("succeeded", true );
+                                    reply.put("activate", activate );
+                                } else {
+                                    reply.put("succeeded", false );
+                                    reply.put("error", "Wrong password" );
+                                }
+                            }
 
-//                            if (childModeManager.validatePassword(password)) {
-//                                childModeManager.activate(false);
-//                                reply.put("succeeded", true );
-//                                reply.put("activate", activate );
-//                            } else {
-//                                reply.put("succeeded", false );
-//                                reply.put("error", "Wrong password" );
-//                            }
+                            SystemDispatcher.dispatch(SECURITY_MODE_RESULT, reply);
+                        } else if (type.equals(GET_SECURITY_STATE)) {
+                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
 
-//                            SystemDispatcher.dispatch(SECURITY_MODE_RESULT, reply);
-//                        } else if (type.equals(GET_SECURITY_STATE)) {
-//                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+                            Map reply = new HashMap();
+                            reply.put("isActive", childModeManager.isActivate() );
+                            SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
+                        } else if (type.equals(GET_IS_SECURITY_PW_SET)) {
+                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
 
-//                            Map reply = new HashMap();
-//                            reply.put("isActive", childModeManager.isActivate() );
-//                            SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
-//                        }
+                            Map reply = new HashMap();
+                            reply.put("isPasswordSet", childModeManager.isPasswortSet() );
+                            SystemDispatcher.dispatch(GOT_IS_SECURITY_PW_SET, reply);
+                        }
                     }
                 };
 

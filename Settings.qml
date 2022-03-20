@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Universal 2.12
+import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 
@@ -279,18 +280,34 @@ Page {
                         contentItem: Row {
                             Text {
                                 text: securitySettingsItemTitle.text
+                                width: parent.width - securitySettingsItemTitleIcon.width - mainView.innerSpacing
                                 font.pointSize: mainView.largeFontSize
                                 font.weight: securitySettingsItem.menuState ? Font.Black : Font.Normal
                                 color: securitySettingsItem.menuState ? "white" : Universal.foreground
                             }
-//                            Image {
-//                                id: name
-//                                source: "file"
-//                            }
+                            Image {
+                                id: securitySettingsItemTitleIcon
+                                source: Qt.resolvedUrl("icons/lock@2x.png")
+                                visible: false
+
+                                ColorOverlay {
+                                    anchors.fill: securitySettingsItemTitleIcon
+                                    source: securitySettingsItemTitleIcon
+                                    color: mainView.fontColor
+                                }
+                            }
                         }
                         background: Rectangle {
                             anchors.fill: parent
                             color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
+                        }
+
+                        Component.objectName: {
+                            AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
+                        }
+
+                        onTextChanged: {
+                            securitySettingsItemTitleIcon.visible = text === securityModeOnOption.text
                         }
                     }
                     Button {
@@ -326,18 +343,20 @@ Page {
                         bottomPadding: mainView.innerSpacing
                         width: parent.width
                         visible: securitySettingsItem.menuState
-                        text: qsTr("Security mode if ON")
+                        text: qsTr("Security mode is ON")
                         contentItem: Row {
                             Text {
                                 text: securityModeOnOption.text
+                                width: parent.width - securityModeOnOptionIcon.width - mainView.innerSpacing
                                 font.pointSize: mainView.mediumFontSize
                                 font.weight: securitySettingsItem.selectedMenuItem === securityModeOnOption ? Font.Black : Font.Normal
                                 color: "white"
                                 opacity: securitySettingsItem.labelOpacity
                             }
-//                            Image {
-//                                source: "file"
-//                            }
+                            Image {
+                                id: securityModeOnOptionIcon
+                                source: Qt.resolvedUrl("icons/lock@2x.png")
+                            }
                         }
                         background: Rectangle {
                             anchors.fill: parent
@@ -405,11 +424,15 @@ Page {
                 }
 
                 function executeSelection() {
-                    console.log("Settings | Current mode: " + Universal.theme + ", " + themeSettings.theme)
-                    console.log("Settings | Execute mode selection: " + selectedMenuItem.text + ", " + selectedMenuItem.isActiveSecurityMode)
-                    if (securitySettingsItemTitle.text !== selectedMenuItem.text
-                            && selectedMenuItem !== securitySettingsItemTitle) {
-                        passwordDialog.open()
+                    console.log("Settings | Execute mode selection: " + selectedMenuItem.text)
+                    if (securitySettingsItemTitle.text !== selectedMenuItem.text) {
+                        if (selectedMenuItem.text === securityModeOnOption.text) {
+                            // Check, if password is set
+                            AN.SystemDispatcher.dispatch("volla.launcher.checkSecurityPasswordAction", {})
+                        } else if (selectedMenuItem.text === securityModeOffOption.text) {
+                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                            passwordDialog.open()
+                        }
                     }
                 }
 
@@ -417,17 +440,26 @@ Page {
                     id: passwordDialog
 
                     anchors.centerIn: parent
-                    implicitHeight: dialogColumn.height
-                    width: 300
-                    //title: qsTr("Enter password")
+                    implicitHeight: dialogTitle.height + passwordField.height + okButton.height + 4 * mainView.innerSpacing
+                    width: parent.width - mainView.innerSpacing * 4
                     modal: true
                     dim: false
 
+                    property var backgroundColor: "#292929"
+
                     background: Rectangle {
                         anchors.fill: parent
-                        color: #5b5b5b
+                        color: passwordDialog.backgroundColor
                         border.color: "transparent"
-                        radius: mainView.innerSpacing
+                        radius: mainView.innerSpacing / 2
+                    }
+
+                    enter: Transition {
+                         NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
+                    }
+
+                    exit: Transition {
+                        NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
                     }
 
                     contentItem: Column {
@@ -435,6 +467,7 @@ Page {
                         spacing: mainView.innerSpacing
 
                         Label {
+                            id: dialogTitle
                             text: qsTr("Enter password")
                             color: mainView.fontColor
                             font.pointSize: mainView.mediumFontSize
@@ -462,29 +495,58 @@ Page {
                             spacing: mainView.innerSpacing
 
                             Button {
+                                id: cancelButton
                                 flat: true
-                                width: parent.width / 2 - mainView.innerSpacing
+                                padding: mainView.innerSpacing / 2
+                                width: parent.width / 2 - mainView.innerSpacing / 2
                                 text: qsTr("Cancel")
+
+                                contentItem: Text {
+                                    text: cancelButton.text
+                                    color: mainView.fontColor
+                                    font.pointSize: mainView.mediumFontSize
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
+
+                                background: Rectangle {
+                                    color: "transparent"
+                                    border.color: "gray"
+                                }
+
+                                onClicked: {
+                                    securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
+                                    passwordDialog.close()
+                                }
                             }
 
                             Button {
-                                width: parent.width / 2 - mainView.innerSpacing * 3
+                                id: okButton
+                                width: parent.width / 2 - mainView.innerSpacing / 2
+                                padding: mainView.innerSpacing / 2
                                 flat: true
                                 text: qsTr("Ok")
+
+                                contentItem: Text {
+                                    text: okButton.text
+                                    color: mainView.fontColor
+                                    font.pointSize: mainView.mediumFontSize
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
+
+                                background: Rectangle {
+                                    color: "transparent"
+                                    border.color: "gray"
+                                }
+
+                                onClicked: {
+                                    AN.SystemDispatcher.dispatch(
+                                                "volla.launcher.securityModeAction",
+                                                {"password": passwordField.text,
+                                                 "activate": securitySettingsItem.selectedMenuItem === securityModeOnOption})
+                                    passwordDialog.close()
+                                }
                             }
                         }
-                    }
-
-                    //standardButtons: Dialog.Ok | Dialog.Cancel
-
-                    onAccepted: {
-                        AN.SystemDispatcher.dispatch(
-                                    "volla.launcher.securityModeAction",
-                                    {"password": passwordField.text,
-                                     "activate": securitySettingsItem.selectedMenuItem === securityModeOnOption})
-                    }
-                    onRejected: {
-                        securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
                     }
                 }
 
@@ -494,15 +556,25 @@ Page {
                     onDispatched: {
                         if (type === "volla.launcher.securityModeResponse") {
                             if (message["succeeded"]) {
-                                securitySettingsItemTitle.text = selectedMenuItem.text
-                                securitySettings.isActiveSecurityMode = selectedMenuItem.isActiveSecurityMode
+                                securitySettingsItemTitle.text = securitySettingsItem.selectedMenuItem.text
+                                securitySettingsItemTitle.isActiveSecurityMode = securitySettingsItem.selectedMenuItem.isActiveSecurityMode
                                 securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
+                                AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
                             } else {
+                                securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
                                 mainView.showToast(qsTr("Wrong password"))
                             }
                         } else if (type === "volla.launcher.securityStateResponse") {
-                            securitySettingsItemTitle.text = message["isActive"] ? securityModeOnOption.text
-                                                                                 : securityModeOffOption.text
+                            securitySettingsItemTitle.text = message["isActive"]  ? securityModeOnOption.text
+                                                                                  : securityModeOffOption.text
+                        } else if (type === "volla.launcher.checkSecurityPasswordResponse") {
+                            console.log("Settings | Password is set: " + message["isPasswordSet"])
+                            if (message["isPasswordSet"]) {
+                                AN.SystemDispatcher.dispatch("volla.launcher.securityModeAction", {"activate": true})
+                            } else {
+                                passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                                passwordDialog.open()
+                            }
                         }
                     }
                 }
@@ -1050,7 +1122,6 @@ Page {
             Item {
                 id: resetSettingsItem
                 width: parent.width
-
                 implicitHeight: resetSettingsItemColumn.height
 
                 Column {

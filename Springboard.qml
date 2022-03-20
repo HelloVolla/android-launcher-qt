@@ -379,6 +379,16 @@ Page {
                         // Qt.openUrlExternally("content:///storage/emulated/0/Documents/" + source)
                         textInputArea.text = ""
                         break
+                    case mainView.actionType.CreateEvent:
+                        // todo: implement
+                        textInputArea.text = ""
+                        mainView.showToast("Event added to calendar")
+                        break
+                    case mainView.actionType.SendSignal:
+                        // todo: implement
+                        textInputArea.text = ""
+                        mainView.showToast("Signal message sent")
+                        break
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         selectedObj = Object.assign({}, actionObj)
@@ -664,7 +674,8 @@ Page {
                     break
                 case mainView.actionType.ShowNotes:
                     console.log("Springboard | Show notes")
-                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
+                    //AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
+                    mainView.updateCollectionPage(mainView.collectionMode.Notes)
                     break
                 case mainView.actionType.CreateEvent:
                     console.log("Springboard | Create event")

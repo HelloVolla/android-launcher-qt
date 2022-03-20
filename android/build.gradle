@@ -46,6 +46,10 @@ android {
 
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
+    defaultConfig {
+        minSdkVersion = 28
+    }
+
     buildToolsVersion androidBuildToolsVersion
 
     sourceSets {

@@ -6,7 +6,6 @@ import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 import FileIO 1.0
-import "util"
 
 Page {
     id: collectionPage
@@ -87,6 +86,16 @@ Page {
                 collectionPage.threads = new Array
                 collectionPage.calls = new Array
                 mainView.updateSpinner(true)
+                currentCollectionModel.update("")
+                break;
+            case mainView.collectionMode.Notes:
+                headline.text = qsTr("Notes")
+                textInputField.placeholderText = qsTr("Find note ...")
+                currentCollectionModel = notesModel
+                collectionPage.threads = new Array
+                collectionPage.calls = new Array
+                mainView.updateSpinner(true)
+                currentCollectionModel.loadData()
                 currentCollectionModel.update("")
                 break;
             default:
@@ -249,7 +258,7 @@ Page {
                     }
                     Image {
                         id: contactImage
-                        source: model.c_ICON
+                        source: model.c_ICON !== undefined ? model.c_ICON : ""
                         sourceSize: Qt.size(collectionPage.iconSize, collectionPage.iconSize)
                         smooth: true
                         visible: false
@@ -282,7 +291,8 @@ Page {
                         id: contactColumn
                         spacing: 3.0
 
-                        property real columnWidth: collectionPage.currentCollectionMode === mainView.collectionMode.Threads ?
+                        property real columnWidth: collectionPage.currentCollectionMode === mainView.collectionMode.Threads
+                                                   || collectionPage.currentCollectionMode === mainView.collectionMode.Notes ?
                                                        contactBox.width - mainView.innerSpacing * 2 - contactRow.spacing
                                                      : contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
                         property var gradientColer: Universal.background
@@ -1195,28 +1205,123 @@ Page {
         }
     }
 
-    JSONListModel {
+    ListModel {
         id: notesModel
 
+        property var modelArr: new Array
+
         function loadData() {
-            var jsonFile = notesFile.read()
-            if (jsonFile.length > 0) {
-                json = JSON.parse(jsonFile)
-                query = "$.notes.note[*]"
-            } else {
-                console.debug("Collections", "Notes file is empty")
+            var rawNotes = mainView.getNotes()
+            console.log("Collections | Did load " + rawNotes.length + " raw notes")
+            for (var i = 0; i < rawNotes.length; i++) {
+                var rawNote = rawNotes[i]
+                var note = {"c_ID": rawNote["id"]}
+                console.log("Collection | Timestamp: " + rawNote.date)
+                note.c_STEXT = mainView.parseTime(rawNote.date)
+                console.log("Collection | Date: " + note.c_STEXT)
+                var titleEnd = rawNote.content.indexOf("\n")
+                note.c_TEXT = titleEnd > 0 && titleEnd < mainView.maxTitleLength ?
+                            rawNote.content.slice(0, titleEnd) : titleEnd > mainView.maxTitleLength ?
+                                rawNote.content.slice(0, mainView.maxTitleLength) + "..." : rawNote.content
+                note.c_CONTENT = rawNote.content
+                note.c_ICON = ""
+                modelArr.push(note)
             }
+            mainView.updateSpinner(false)
         }
 
-        function update(text) {
-            if (json.lengh > 0) {
-                query = text.length > 0 ? "$.notes.note[?(0.text contains '" + text + "')]" : "$.notes.note[*]"
+        function update (text) {
+            console.log("Collections | Update model with text input: " + text)
+
+            if (modelArr.length === 0) {
+                loadData()
+            }
+
+            var filteredModelDict = new Object
+            var filteredModelItem
+            var modelItem
+            var found
+            var i
+
+            console.log("Collections | Model has " + modelArr.length + " elements")
+
+            for (i = 0; i < modelArr.length; i++) {
+                filteredModelItem = modelArr[i]
+                var modelItemID = filteredModelItem.c_ID
+                var modelItemConent = filteredModelItem.c_CONTENT
+                if (text.length === 0 || modelItemConent.toLowerCase().includes(text.toLowerCase())) {
+                    filteredModelDict[modelItemID] = filteredModelItem
+                }
+            }
+
+            var existingGridDict = new Object
+            for (i = 0; i < count; ++i) {
+                modelItemID = get(i).c_ID
+                existingGridDict[modelItemID] = true
+            }
+
+            // Remove items no longer in filtered set
+            i = 0
+            while (i < count) {
+                modelItemID = get(i).c_ID
+                found = filteredModelDict.hasOwnProperty(modelItemID)
+                if (!found) {
+                    console.log("Collections | Remove note " + modelItemID)
+                    remove(i)
+                } else {
+                    i++
+                }
+            }
+
+            // Add new items
+            for (modelItemID in filteredModelDict) {
+                found = existingGridDict.hasOwnProperty(modelItemID)
+                if (!found) {
+                    // for simplicity, just adding to end instead of corresponding position in original list
+                    filteredModelItem = filteredModelDict[modelItemID]
+                    console.log("Collections | Will append note " + filteredModelItem.c_ID)
+                    append(filteredModelDict[modelItemID])
+                }
             }
         }
 
         function executeSelection(item, type) {
-            // todo open note
+            mainView.updateDetailPage(mainView.detailMode.Note, item.c_ID, "", item.c_STEXT, item.c_CONTENT)
+        }
+    }
 
+    Button {
+        id: addNoteButton
+        flat: true
+        visible: currentCollectionMode === mainView.collectionMode.Notes
+        z: 2
+        width: mainView.innerSpacing * 2
+        height: mainView.innerSpacing * 2
+
+        anchors.right: parent.right
+        anchors.rightMargin: mainView.innerSpacing * 2
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: mainView.innerSpacing * 2
+
+        background: Rectangle {
+            id: backgroundRec
+            color: mainView.fontColor
+            opacity: 0.2
+            border.color: "transparent"
+            radius: mainView.innerSpacing
+        }
+
+        icon.source: Qt.resolvedUrl("icons/notes@4x.png")
+
+        onPressed: {
+            backgroundRec.color = Universal.accent
+            opacity: 1.0
+        }
+
+        onClicked: {
+            backgroundRec.color = mainView.fontColor
+            opacity: 0.2
+            mainView.updateDetailPage(mainView.detailMode.Note, "")
         }
     }
 
@@ -1240,6 +1345,7 @@ Page {
         }
     }
 
+    // @disable-check M300
     AN.Util {
         id: util
     }
@@ -1260,11 +1366,4 @@ Page {
         }
     }
 
-    FileIO {
-        id: notesFile
-        source: ".notes.json"
-        onError: {
-            console.log("Collections | Notes file error: " + msg)
-        }
-    }
 }

@@ -111,7 +111,8 @@ ApplicationWindow {
             'Web' : 0,
             'Twitter' : 1,
             'MMS' : 2,
-            'Mail' : 3
+            'Mail' : 3,
+            'Note' : 4
         }
         property var searchMode: {
             'Duck' : 0,
@@ -151,7 +152,8 @@ ApplicationWindow {
             'SendEmailToWork': 20023,
             'SendEmailToOther': 20024,
             'OpenContact' : 20025,
-            'OpenApp' : 20026
+            'OpenApp' : 20026,
+            'SendSignal' : 20027
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -160,7 +162,8 @@ ApplicationWindow {
             "MakeCallToWork": qsTr("Call at work"), "MakeCallToOther": qsTr("Call other phone"),
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
             "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection"),
-            "OpenContact" : qsTr("Open Contact")
+            "OpenContact" : qsTr("Open Contact"), "ShowNotes": qsTr("Show Notes"), "SendSignal" : qsTr("Send Signal message"),
+            "CreateEvent" : qsTr("Add to Calender")
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -194,6 +197,7 @@ ApplicationWindow {
         property var fontColor: Universal.foreground
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
+        property int maxTitleLength: 120
 
         property string galleryApp: "com.simplemobiletools.gallery.pro"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
@@ -210,7 +214,7 @@ ApplicationWindow {
             {"id" : actionType.ShowGallery, "name": qsTr("Gallery"), "activated" : true},
             {"id" : actionType.ShowCalendar, "name": qsTr("Agenda"), "activated" : true},
             {"id" : actionType.CreateEvent, "name": qsTr("Create Event"), "activated" : false},
-            {"id" : actionType.ShowNotes, "name": qsTr("Notes"), "activated" : false},
+            {"id" : actionType.ShowNotes, "name": qsTr("Show Notes"), "activated" : true},
             {"id" : actionType.ShowNews, "name": qsTr("Recent News"), "activated" : true},
             {"id" : actionType.ShowThreads, "name": qsTr("Recent Threads"), "activated" : true},
             {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true}]
@@ -226,9 +230,6 @@ ApplicationWindow {
             switch (currentIndex) {
                 case swipeIndex.Apps:
                     appGrid.children[0].item.updateNotifications()
-                    break
-                case swipeIndex.Settings:
-                    AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction")
                     break
                 default:
                     // Nothing to do
@@ -689,6 +690,15 @@ ApplicationWindow {
             settings.sync()
         }
 
+        function getNotes() {
+            var noteStr = notes.read()
+            return noteStr.length > 0 ? JSON.parse(noteStr) : new Array
+        }
+
+        function updateNotes(id, note) {
+            // todo
+        }
+
         function updateSpinner(shouldRun) {
             //spinnerBackground.visible = shouldRun
             if (!(isLoadingContacts && !shouldRun)) {
@@ -901,6 +911,14 @@ ApplicationWindow {
         source: ".shortcuts.json"
         onError: {
             console.log("MainView | Shortcut settings error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: notes
+        source: ".notes.json"
+        onError: {
+            console.log("Collections | Notes file error: " + msg)
         }
     }
 
