@@ -37,6 +37,16 @@ ApplicationWindow {
                   mainView.keepLastIndex = false
               } else {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+                  switch (mainView.currentIndex) {
+                  case mainView.swipeIndex.Apps:
+                     mainView.itemAt(mainView.swipeIndex.Apps).children[0].active = true
+                      break
+                  case mainView.swipeIndex.Springboard:
+                      mainView.itemAt(mainView.swipeIndex.Springboard).children[0].active = true
+                      break
+                  default:
+                      // Nothing to do
+                  }
               }
               // Update app grid
               AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
