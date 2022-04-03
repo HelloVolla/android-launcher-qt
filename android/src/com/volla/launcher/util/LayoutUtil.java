@@ -104,7 +104,7 @@ public class LayoutUtil {
                                 int flags = w.getDecorView().getSystemUiVisibility();
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                                //w.getDecorView().setSystemUiVisibility(flags);
+                                w.getDecorView().setSystemUiVisibility(flags);
                                 if (value == 1) {
                                     Log.d(TAG, "Set night mode and black wallpaper");
                                     wallpaperId = R.drawable.wallpaper_black;
@@ -126,7 +126,7 @@ public class LayoutUtil {
                                 int flags = w.getDecorView().getSystemUiVisibility();
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                                //w.getDecorView().setSystemUiVisibility(flags);
+                                w.getDecorView().setSystemUiVisibility(flags);
                                 wallpaperId = R.drawable.wallpaper_white;
 
                                 Log.d(TAG, "Will change system ui mode to " + UiModeManager.MODE_NIGHT_NO);

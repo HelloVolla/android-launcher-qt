@@ -72,13 +72,16 @@ public class ReceiveTextActivity extends AndroidNativeActivity
         w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       */
         Window window = getWindow();
-        window.setNavigationBarColor(Color.TRANSPARENT);
-        window.setStatusBarColor(Color.TRANSPARENT ) ;
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setNavigationBarColor(Color.TRANSPARENT);
+            window.setStatusBarColor(Color.TRANSPARENT ) ;
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setDecorFitsSystemWindows(false);
             window.setStatusBarContrastEnforced(false);
             window.setNavigationBarContrastEnforced(false);
+        } else {
+            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
 
     }
