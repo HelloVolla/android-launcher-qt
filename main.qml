@@ -741,6 +741,14 @@ ApplicationWindow {
             mainView.timeStamp = new Date()
         }
 
+        function resetContacts() {
+            mainView.loadingContacts = new Array
+            mainView.isLoadingContacts = true
+            mainView.updateSpinner(true)
+            mainView.timeStamp = new Date()
+            AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+        }
+
         WorkerScript {
             id: contactsWorker
             source: "scripts/contacts.mjs"
@@ -786,7 +794,7 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        mainView.contacts = [...mainView.loadingContacts]
+                        mainView.contacts = mainView.loadingContacts.slice()
                         mainView.loadingContacts = new Array
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                     }

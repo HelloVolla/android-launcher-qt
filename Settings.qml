@@ -1233,7 +1233,7 @@ Page {
                         bottomPadding: mainView.innerSpacing / 2
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
-                            text: qsTr("Reset this app")
+                            text: qsTr("Reset contacts")
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
@@ -1250,7 +1250,7 @@ Page {
                         }
                         onClicked: {
                             reseetLauncherButtonBackground.color = "transparent"
-                            mainView.resetLauncher()
+                            mainView.resetContacts()
                         }
                     }
                 }

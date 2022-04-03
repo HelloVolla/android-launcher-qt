@@ -35,7 +35,6 @@ Page {
     Component.onCompleted: {
         listModel.update()
         shortcutMenu.updateShortcuts(mainView.getActions())
-        if (mainView.currentIndex === mainView.swipeIndex.Springboard) springBoard.forceActiveFocus()
     }
 
     function updateShortcuts(actions) {
