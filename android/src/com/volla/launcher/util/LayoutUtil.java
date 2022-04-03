@@ -28,7 +28,6 @@ public class LayoutUtil {
 
     private static final String TAG = "LayoutUtil";
 
-    public static final String SET_LAYOUT = "volla.launcher.layoutAction";
     public static final String SET_COLOR = "volla.launcher.colorAction";
     public static final String GET_KEYBOARD_HEIGHT = "volla.launcher.keyboardAction";
 
@@ -36,29 +35,7 @@ public class LayoutUtil {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map message) {
-                if (type.equals(SET_LAYOUT)) {
-                    Log.d(TAG, "Invoked JAVA setLayout" );
-
-                    final Activity activity = QtNative.activity();
-
-                    Runnable runnable = new Runnable () {
-
-                        public void run() {
-                           /*
-                            Window w = activity.getWindow(); // in Activity's onCreate() for instance
-                            WindowManager.LayoutParams winParams = w.getAttributes();
-
-                            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                            }
-                            */
-                        }
-                    };
-
-                    activity.runOnUiThread(runnable);
-                } else if (type.equals(SET_COLOR)) {
+                if (type.equals(SET_COLOR)) {
                     final int value = (int) message.get("value");
                     final boolean updateLockScreen = (boolean) message.get("updateLockScreen");
                     final Activity activity = QtNative.activity();

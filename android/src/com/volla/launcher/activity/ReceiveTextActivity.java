@@ -65,12 +65,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
         }
         instance = this;
         Log.d(TAG, "Android activity created");
-        /*
-        Window w = getWindow(); // in Activity's onCreate() for instance
-        WindowManager.LayoutParams winParams = w.getAttributes();
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      */
+
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setNavigationBarColor(Color.TRANSPARENT);

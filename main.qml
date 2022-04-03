@@ -37,16 +37,6 @@ ApplicationWindow {
                   mainView.keepLastIndex = false
               } else {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
-                  switch (mainView.currentIndex) {
-                  case mainView.swipeIndex.Apps:
-                     mainView.itemAt(mainView.swipeIndex.Apps).children[0].active = true
-                      break
-                  case mainView.swipeIndex.Springboard:
-                      mainView.itemAt(mainView.swipeIndex.Springboard).children[0].active = true
-                      break
-                  default:
-                      // Nothing to do
-                  }
               }
               // Update app grid
               AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
@@ -733,6 +723,14 @@ ApplicationWindow {
             mainView.timeStamp = new Date()
         }
 
+        function resetContacts() {
+            mainView.loadingContacts = new Array
+            mainView.isLoadingContacts = true
+            mainView.updateSpinner(true)
+            mainView.timeStamp = new Date()
+            AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+        }
+
         WorkerScript {
             id: contactsWorker
             source: "scripts/contacts.mjs"
@@ -778,7 +776,7 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        mainView.contacts = [...mainView.loadingContacts]
+                        mainView.contacts = mainView.loadingContacts.slice()
                         mainView.loadingContacts = new Array
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                     }
