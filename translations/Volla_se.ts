@@ -324,7 +324,7 @@
     </message>
     <message>
         <location filename="../Settings.qml" line="910"/>
-        <source>Reset this app</source>
+        <source>Reset contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -379,23 +379,23 @@
 <context>
     <name>Springboard</name>
     <message>
-        <location filename="../Springboard.qml" line="59"/>
+        <location filename="../Springboard.qml" line="58"/>
         <source>Springboard</source>
         <translation type="unfinished">Språngbrädan</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="74"/>
+        <location filename="../Springboard.qml" line="73"/>
         <source>Type anything</source>
         <translation type="unfinished">Skriva någonting</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="168"/>
+        <location filename="../Springboard.qml" line="167"/>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation type="unfinished">Tyvärr kunde jag inte hitta ett telefonnummer för denna kontakt</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="171"/>
-        <location filename="../Springboard.qml" line="193"/>
+        <location filename="../Springboard.qml" line="170"/>
+        <location filename="../Springboard.qml" line="192"/>
         <source>Sorry. I couldn&apos;t identify the contact</source>
         <translation type="unfinished">Tyvärr kunde jag inte hitta kontakten</translation>
     </message>
@@ -404,7 +404,7 @@
         <translation type="obsolete">Tyvärr har kontakten inget mobilnummer</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="308"/>
+        <location filename="../Springboard.qml" line="307"/>
         <source>Sorry. Contact has no email address</source>
         <translation type="unfinished">Tyvärr har kontakten ingen e-postadress</translation>
     </message>
@@ -469,29 +469,29 @@
         <translation type="obsolete">Aktuella nyheter</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="247"/>
-        <location filename="../Springboard.qml" line="256"/>
-        <location filename="../Springboard.qml" line="265"/>
-        <location filename="../Springboard.qml" line="274"/>
-        <location filename="../Springboard.qml" line="286"/>
-        <location filename="../Springboard.qml" line="315"/>
-        <location filename="../Springboard.qml" line="322"/>
-        <location filename="../Springboard.qml" line="329"/>
+        <location filename="../Springboard.qml" line="246"/>
+        <location filename="../Springboard.qml" line="255"/>
+        <location filename="../Springboard.qml" line="264"/>
+        <location filename="../Springboard.qml" line="273"/>
+        <location filename="../Springboard.qml" line="285"/>
+        <location filename="../Springboard.qml" line="314"/>
+        <location filename="../Springboard.qml" line="321"/>
+        <location filename="../Springboard.qml" line="328"/>
         <source>Sorry, no contact was selected</source>
         <translation type="unfinished">Det var ingen kontakt utvald</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="291"/>
+        <location filename="../Springboard.qml" line="290"/>
         <source>Sorry, the mobile phone number is unknown</source>
         <translation type="unfinished">Tyvärr är telefonnummret okänd</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="375"/>
+        <location filename="../Springboard.qml" line="374"/>
         <source>Your note was successfully stored</source>
         <translation type="unfinished">Din anteckning har sparats</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="671"/>
+        <location filename="../Springboard.qml" line="670"/>
         <source>My event</source>
         <translation type="unfinished">Mitt evenemang</translation>
     </message>
@@ -768,7 +768,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="871"/>
+        <location filename="../main.qml" line="888"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Stöds ännu inte</translation>
     </message>

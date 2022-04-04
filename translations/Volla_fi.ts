@@ -296,7 +296,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reset this app</source>
+        <source>Reset contacts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
