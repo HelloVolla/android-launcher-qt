@@ -324,7 +324,7 @@
     </message>
     <message>
         <location filename="../Settings.qml" line="910"/>
-        <source>Reset contacts</source>
+        <source>Reload contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -379,23 +379,23 @@
 <context>
     <name>Springboard</name>
     <message>
-        <location filename="../Springboard.qml" line="58"/>
+        <location filename="../Springboard.qml" line="57"/>
         <source>Springboard</source>
         <translation>Springplank</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="73"/>
+        <location filename="../Springboard.qml" line="72"/>
         <source>Type anything</source>
         <translation>Schrijf iets</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="167"/>
+        <location filename="../Springboard.qml" line="166"/>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation>Sorry. Ik kon geen telefoonnummer vinden voor dit contact.</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="170"/>
-        <location filename="../Springboard.qml" line="192"/>
+        <location filename="../Springboard.qml" line="169"/>
+        <location filename="../Springboard.qml" line="191"/>
         <source>Sorry. I couldn&apos;t identify the contact</source>
         <translation>Sorry. Ik kon het contact niet vinden</translation>
     </message>
@@ -404,7 +404,7 @@
         <translation type="obsolete">Sorry. De contactpersoon heeft geen mobiel telefoonnummer</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="307"/>
+        <location filename="../Springboard.qml" line="306"/>
         <source>Sorry. Contact has no email address</source>
         <translation>Sorry. De contactpersoon heeft geen e-mailadres</translation>
     </message>
@@ -469,29 +469,29 @@
         <translation type="obsolete">Recent nieuws</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="246"/>
-        <location filename="../Springboard.qml" line="255"/>
-        <location filename="../Springboard.qml" line="264"/>
-        <location filename="../Springboard.qml" line="273"/>
-        <location filename="../Springboard.qml" line="285"/>
-        <location filename="../Springboard.qml" line="314"/>
-        <location filename="../Springboard.qml" line="321"/>
-        <location filename="../Springboard.qml" line="328"/>
+        <location filename="../Springboard.qml" line="245"/>
+        <location filename="../Springboard.qml" line="254"/>
+        <location filename="../Springboard.qml" line="263"/>
+        <location filename="../Springboard.qml" line="272"/>
+        <location filename="../Springboard.qml" line="284"/>
+        <location filename="../Springboard.qml" line="313"/>
+        <location filename="../Springboard.qml" line="320"/>
+        <location filename="../Springboard.qml" line="327"/>
         <source>Sorry, no contact was selected</source>
         <translation>Sorry, er was geen contact geselecteerd</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="290"/>
+        <location filename="../Springboard.qml" line="289"/>
         <source>Sorry, the mobile phone number is unknown</source>
         <translation>Sorry, het mobiele nummer is onbekend</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="374"/>
+        <location filename="../Springboard.qml" line="373"/>
         <source>Your note was successfully stored</source>
         <translation>Uw notitie werd succesvol opgeslagen</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="670"/>
+        <location filename="../Springboard.qml" line="669"/>
         <source>My event</source>
         <translation>Mijn evenement</translation>
     </message>
@@ -772,7 +772,7 @@
         <translation type="vanished">Je hebt de snelkoppeling al toegevoegd</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="888"/>
+        <location filename="../main.qml" line="887"/>
         <source>Not yet supported</source>
         <translation>Nog niet ondersteund</translation>
     </message>
