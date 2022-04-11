@@ -328,8 +328,12 @@
     </message>
     <message>
         <location filename="../Settings.qml" line="910"/>
+        <source>Reload contacts</source>
+        <translation type="unfinished">Kontakte neu laden</translation>
+    </message>
+    <message>
         <source>Reset contacts</source>
-        <translation type="unfinished">Kontakte zurücksetzen</translation>
+        <translation type="obsolete">Kontakte zurücksetzen</translation>
     </message>
     <message>
         <source>Reset this app</source>
@@ -387,23 +391,23 @@
 <context>
     <name>Springboard</name>
     <message>
-        <location filename="../Springboard.qml" line="58"/>
+        <location filename="../Springboard.qml" line="57"/>
         <source>Springboard</source>
         <translation>Sprungbrett</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="73"/>
+        <location filename="../Springboard.qml" line="72"/>
         <source>Type anything</source>
         <translation type="unfinished">Schreibe etwas</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="167"/>
+        <location filename="../Springboard.qml" line="166"/>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation type="unfinished">Ich konnte keine Telefonnummer für den Kontakt finden</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="170"/>
-        <location filename="../Springboard.qml" line="192"/>
+        <location filename="../Springboard.qml" line="169"/>
+        <location filename="../Springboard.qml" line="191"/>
         <source>Sorry. I couldn&apos;t identify the contact</source>
         <translation type="unfinished">Ich konnte den Kontakt leider nicht finden</translation>
     </message>
@@ -412,7 +416,7 @@
         <translation type="obsolete">Der Kontakt hat leider keine mobile Telefonnummer</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="307"/>
+        <location filename="../Springboard.qml" line="306"/>
         <source>Sorry. Contact has no email address</source>
         <translation type="unfinished">Der Kontakt hat leider keine E-Mail-Adresse</translation>
     </message>
@@ -477,29 +481,29 @@
         <translation type="obsolete">Nachrichten</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="246"/>
-        <location filename="../Springboard.qml" line="255"/>
-        <location filename="../Springboard.qml" line="264"/>
-        <location filename="../Springboard.qml" line="273"/>
-        <location filename="../Springboard.qml" line="285"/>
-        <location filename="../Springboard.qml" line="314"/>
-        <location filename="../Springboard.qml" line="321"/>
-        <location filename="../Springboard.qml" line="328"/>
+        <location filename="../Springboard.qml" line="245"/>
+        <location filename="../Springboard.qml" line="254"/>
+        <location filename="../Springboard.qml" line="263"/>
+        <location filename="../Springboard.qml" line="272"/>
+        <location filename="../Springboard.qml" line="284"/>
+        <location filename="../Springboard.qml" line="313"/>
+        <location filename="../Springboard.qml" line="320"/>
+        <location filename="../Springboard.qml" line="327"/>
         <source>Sorry, no contact was selected</source>
         <translation type="unfinished">Sie haben leider keinen Kontakt ausgewählt</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="290"/>
+        <location filename="../Springboard.qml" line="289"/>
         <source>Sorry, the mobile phone number is unknown</source>
         <translation type="unfinished">Die Mobilfunknummer ist leider unbekannt</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="374"/>
+        <location filename="../Springboard.qml" line="373"/>
         <source>Your note was successfully stored</source>
         <translation type="unfinished">Ihre Notiz wurde erfolgreich gespeichert</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="670"/>
+        <location filename="../Springboard.qml" line="669"/>
         <source>My event</source>
         <translation type="unfinished">Meine Veranstaltung</translation>
     </message>
@@ -784,7 +788,7 @@
         <translation type="obsolete">Mitteilung wurde gesendet</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="888"/>
+        <location filename="../main.qml" line="887"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Noch nicht unterstützt</translation>
     </message>
