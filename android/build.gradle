@@ -27,6 +27,7 @@ apply plugin: 'com.android.application'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'com.chimbori.crux:crux:2.2.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     compile 'com.klinkerapps:android-smsmms:5.2.6'
 }
 

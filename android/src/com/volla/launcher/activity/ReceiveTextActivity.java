@@ -34,6 +34,13 @@ import java.io.ByteArrayOutputStream;
 import androidnative.SystemDispatcher;
 import androidnative.AndroidNativeActivity;
 import android.widget.Toast; 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import com.volla.launcher.R;
 
 public class ReceiveTextActivity extends AndroidNativeActivity
 {
@@ -42,8 +49,9 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     public static final String GOT_TEXT = "volla.launcher.receiveTextResponse";
     public static final String GOT_SHORTCUT = "volla.launcher.receivedShortcut";
     public static final String UIMODE_CHANGED = "volla.launcher.uiModeChanged";
-
+    private ImageChangeBroadcastReceiver imageChangeBroadcastReceiver;
     public static ReceiveTextActivity instance;
+    private String channel_d;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -70,6 +78,17 @@ public class ReceiveTextActivity extends AndroidNativeActivity
         WindowManager.LayoutParams winParams = w.getAttributes();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        imageChangeBroadcastReceiver = new ImageChangeBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.volla.notificationlistenerexample");
+        registerReceiver(imageChangeBroadcastReceiver,intentFilter);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(imageChangeBroadcastReceiver);
     }
 
     @Override
@@ -184,5 +203,41 @@ public class ReceiveTextActivity extends AndroidNativeActivity
          bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
          byte[] imageBytes = baos.toByteArray();
          return Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+    }
+
+    private void createNotification(){
+        Log.d("Arvindvolla", "Creating Notification");
+        NotificationManager notificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new NotificationCompat.Builder(this,channel_d)
+                .setContentTitle("My Notification")
+                .setSmallIcon(R.drawable.notification_logo)
+                .setAutoCancel(true)
+                .setContentTitle("Default notification")
+                .setContentText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+                .setDefaults(Notification.DEFAULT_LIGHTS| Notification.DEFAULT_SOUND)
+                .setTicker("Hearty365")
+                .build();
+        notificationManager.notify("Arvind", 1, notification);
+    }
+
+
+    public class ImageChangeBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int receivedNotificationCode = intent.getIntExtra("Notification Code",-1);
+             channel_d = intent.getStringExtra("channel_d");
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+               NotificationChannel channel = new NotificationChannel(channel_d,"VollaLauncher",
+                        NotificationManager.IMPORTANCE_HIGH);
+                NotificationManager manager = (NotificationManager)
+                        context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if(manager != null){
+                    manager.createNotificationChannel(channel);
+                }
+
+            }
+            createNotification();
+        }
     }
 }
