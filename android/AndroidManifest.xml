@@ -16,7 +16,7 @@
 
         <!-- org.qtproject.qt5.android.bindings.QtActivity -->
 
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|uiMode" android:name="com.volla.launcher.activity.ReceiveTextActivity" android:label="Volla" android:theme="@style/AppTheme" android:screenOrientation="portrait" android:launchMode="singleInstance" android:taskAffinity="" android:windowSoftInputMode="adjustResize">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|uiMode" android:name="com.volla.launcher.activity.ReceiveTextActivity" android:label="Volla" android:theme="@style/AppTheme" android:screenOrientation="portrait" android:launchMode="singleTask" android:taskAffinity="" android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
