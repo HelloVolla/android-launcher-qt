@@ -302,7 +302,7 @@ Page {
                             color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
                         }
 
-                        Component.objectName: {
+                        Component.onCompleted: {
                             AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
                         }
 

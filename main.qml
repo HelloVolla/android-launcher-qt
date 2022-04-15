@@ -765,7 +765,8 @@ ApplicationWindow {
         }
 
         function resetContacts() {
-            mainView.loadingContacts = new Array
+            mainView.contacts.length = 0
+            mainView.loadingContacts.length = 0
             mainView.isLoadingContacts = true
             mainView.updateSpinner(true)
             mainView.timeStamp = new Date()
@@ -817,8 +818,8 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        mainView.contacts = mainView.loadingContacts.slice()
-                        mainView.loadingContacts = new Array
+                        mainView.contacts.concat(mainView.loadingContacts.slice())
+                        mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
