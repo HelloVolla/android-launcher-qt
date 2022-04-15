@@ -10,7 +10,6 @@ import AndroidNative 1.0 as AN
 Page {
     id: springBoard
     anchors.fill: parent
-    //topPadding: mainView.innerSpacing
 
     property string textInput
     property bool textFocus

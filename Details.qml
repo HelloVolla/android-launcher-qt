@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtWebView 1.12
+import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 
 Page {
@@ -12,12 +13,88 @@ Page {
 
     property var currentDetailMode: 0
     property var currentDetailId
-    property var currentDetailAuthorAndDate
+    property var currentDetailAuthorAndDate: ""
     property var currentTitle
 
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
+    }
+
+    header: Rectangle {
+        id: detailPageHeader
+        width: parent.width
+        implicitHeight: headerRow.height
+        color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+        border.color: "transparent"
+        visible: currentDetailMode === mainView.detailMode.Note
+
+        Row {
+            id: headerRow
+            width: parent.width
+            topPadding: mainView.innerSpacing * 2
+            leftPadding: mainView.innerSpacing
+            rightPadding: mainView.innerSpacing
+
+            Label {
+                id: dateLabel
+                width: parent.width - 2 * mainView.innerSpacing - pinButton.width - trashButton.width
+                height: pinButton.height
+                text: detailPage.currentDetailAuthorAndDate
+                font.pointSize: mainView.mediumFontSize
+                color: mainView.fontColor
+                opacity: 0.6
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Button {
+                id: pinButton
+                flat: true
+                contentItem: Image {
+                    id: pinButtonIcon
+                    opacity: 0.6
+                    source: Qt.resolvedUrl("/icons/pin@4x.png")
+                    fillMode: Image.PreserveAspectFit
+
+                    ColorOverlay {
+                        anchors.fill: pinButtonIcon
+                        source: pinButtonIcon
+                        color: mainView.fontColor
+                    }
+                }
+                background: Rectangle {
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    border.color: "transparent"
+                }
+                onClicked: {
+                    // todo: Pin note
+                }
+            }
+
+            Button {
+                id: trashButton
+                flat:true
+                contentItem: Image {
+                    id: trashButtonIcon
+                    source: Qt.resolvedUrl("/icons/trash@4x.png")
+                    fillMode: Image.PreserveAspectFit
+                    opacity: 0.6
+
+                    ColorOverlay {
+                        anchors.fill: trashButtonIcon
+                        source: trashButtonIcon
+                        color: mainView.fontColor
+                    }
+                }
+                background: Rectangle {
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    border.color: "transparent"
+                }
+                onClicked: {
+                    mainView.removeNote(detailPage.currentDetailId)
+                }
+            }
+        }
     }
 
     function updateDetailPage(mode, id, author, date, title) {
@@ -46,8 +123,7 @@ Page {
         author.text = ""
         image.source = ""
         text.text = ""
-        //notePad.text = ""
-        dummy.visible = false
+        edit.text = ""
     }
 
     function prepareWebArticleView(url) {
@@ -73,70 +149,34 @@ Page {
         doc.send()
     }
 
-    function prepareNoteView(note) {
+    function prepareNoteView(note, curserPosition) {
         console.log("Details | note: " + note)
-        //notePad.text = "#" + note
-        dummy.visible = true
-        if (note === undefined) {
-            dummyImage.source = Qt.resolvedUrl("images/02.Notes_Screen.png")
-            detailPage.currentDetailId = "02.Notes"
-        } else {
-            dummyImage.source = Qt.resolvedUrl("images/05.Notes_Screen.png")
-            detailPage.currentDetailId = "05.Notes"
-        }
-    }
+        var styledText = note.slice()
 
-    Button {
-        id: dummy
-        flat: true
-        anchors.fill: parent
-        display: AbstractButton.IconOnly
-        z:2
-        visible: false
+        var urlRegex = /(((https?:\/\/)|([^\s]+\.))[^\s,]+)/g;
+        styledText = styledText.replace(urlRegex, function(url,b,c) {
+            var url2 = !c.startsWith('http') ?  'http://' + url : url;
+            return '<a href="' +url2+ '" target="_blank">' + url + '</a>';
+        })
 
-        background: Rectangle {
-            color: "transparent"
-            border.color: "transparent"
-        }
+        styledText = styledText.replace(/^### (.*$)/gim, '<h3><$1</h3>') // h3 tag
+                               .replace(/^## (.*$)/gim, '<h2>$1</h2>') // h2 tag
+                               .replace(/^# (.*$)/gim, '<h1>$1</h1>') // h1 tag
+                               //.replace(/^(.*)\n/gi, '<h1>$1</h1>')
+                               .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>') // bold text
+                               .replace(/\*(.*)\*/gim, '<i>$1</i>') // italic text
+                               .replace(/^\* (.*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">- $1</p>') // unsorted list
+                               .replace(/^([0-9]+\. .*)/gim, '<p style=\"margin-left:16px;text-indent:-16px;\">$1</p>') // ordered list
+                               .replace(/^(.*$)/gim, '<p>$1</p>')
+                               .trim()
 
-        contentItem: Image {
-            id: dummyImage
-            anchors.top: parent.top
-            fillMode: Image.PreserveAspectFit
-            cache: false
-        }
+        console.log("Details | styled text: " + styledText)
 
-        onClicked: {
-            console.log("Details | Dummy clicked: " + detailPage.currentDetailId)
-            if (detailPage.currentDetailId === "02.Notes") {
-                dummyImage.source = Qt.resolvedUrl("images/03.Notes_Screen.png")
-                detailPage.currentDetailId = "03.Notes"
-            } else if (detailPage.currentDetailId === "03.Notes") {
-                dummyImage.source = Qt.resolvedUrl("images/04.Notes_Screen.png")
-                detailPage.currentDetailId = "04.Notes"
-            } else if (detailPage.currentDetailId === "04.Notes") {
-                dummyImage.source = Qt.resolvedUrl("images/05.Notes_Screen.png")
-                detailPage.currentDetailId = "05.Notes"
-            } else if (detailPage.currentDetailId === "05.Notes") {
-                dummyImage.source = Qt.resolvedUrl("images/01.Grid_cleanup_Screen.png")
-                detailPage.currentDetailId = "01.Cleanup"
-            } else if (detailPage.currentDetailId === "01.Cleanup") {
-                dummyImage.source = Qt.resolvedUrl("images/02.Grid_cleanup_Screen.png")
-                detailPage.currentDetailId = "02.Cleanup"
-            } else if (detailPage.currentDetailId === "02.Cleanup") {
-                dummyImage.source = Qt.resolvedUrl("images/02.Grid_groups_Screen.png")
-                detailPage.currentDetailId = "02.Groups"
-            } else if (detailPage.currentDetailId === "01.Groups") {
-                dummyImage.source = Qt.resolvedUrl("images/02.Grid_groups_Screen.png")
-                detailPage.currentDetailId = "02.Groups"
-            } else if (detailPage.currentDetailId === "02.Groups") {
-                dummyImage.source = Qt.resolvedUrl("images/03.Grid_groups_Screen.png")
-                detailPage.currentDetailId = "03.Groups"
-            } else if (detailPage.currentDetailId === "03.Groups") {
-                dummyImage.source = Qt.resolvedUrl("images/02.Notes_Screen.png")
-                detailPage.currentDetailId = "02.Notes"
-            }
-        }
+        edit.text = styledText
+
+        console.log("Details | Plain text: " + edit.getText(0, edit.length))
+
+        if (curserPosition !== undefined) edit.cursorPosition = curserPosition
     }
 
     Flickable {
@@ -144,7 +184,9 @@ Page {
         width: parent.width
         height: parent.height
         contentWidth: parent.width
-        contentHeight: detailColumn.height
+        contentHeight: detailColumn.height + edit.height
+
+        //----- news content -----------------
 
         Column {
             id: detailColumn
@@ -218,17 +260,62 @@ Page {
 
                 onLinkActivated: Qt.openUrlExternally(link)
             }
-
-//            TextEdit {
-//                id: notePad
-//                width: parent.width
-//                height: 850
-//                textFormat: TextEdit.AutoText
-////                Layout.fillWidth: true
-////                textFormat: TextEdit.MarkdownText
-//            }
         }
 
+        //----- note contet -----------------
+
+        function ensureVisible(r) {
+            if (contentX >= r.x)
+                contentX = r.x;
+            else if (contentX+width <= r.x+r.width)
+                contentX = r.x+r.width-width;
+            if (contentY >= r.y)
+                contentY = r.y;
+            else if (contentY+height <= r.y+r.height)
+                contentY = r.y+r.height-height;
+        }
+
+        TextArea {
+            id: edit
+            width: parent.width
+            //height: 800
+            anchors.top: parent.top
+            color: mainView.fontColor
+            padding: mainView.innerSpacing
+            font.pointSize: mainView.largeFontSize
+            wrapMode: TextEdit.Wrap
+            textFormat: Text.RichText
+            verticalAlignment: Text.AlignTop
+            background: Rectangle {
+                color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                border.color: "transparent"
+            }
+
+            onCursorRectangleChanged: detailFlickable.ensureVisible(cursorRectangle)
+
+            onCursorPositionChanged: {
+                // Todo parse text
+                console.log("Details | Curser postion changed to " + edit.cursorPosition)
+                if (cursorPosition > 0) {
+
+                }
+            }
+
+            onFocusChanged: {
+                // Save text
+                console.log("Details | Focus changed")
+                //mainView.updateNote(detailPage.currentDetailId, edit.getText())
+            }
+
+            onHoveredLinkChanged: {
+
+            }
+
+            onLinkActivated: {
+                console.log("Details | Link clicked: " + link)
+                Qt.openUrlExternally(link)
+            }
+        }
     }
 
     Connections {

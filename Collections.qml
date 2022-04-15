@@ -1286,7 +1286,7 @@ Page {
         }
 
         function executeSelection(item, type) {
-            mainView.updateDetailPage(mainView.detailMode.Note, item.c_ID, "", item.c_STEXT, item.c_CONTENT)
+            mainView.updateDetailPage(mainView.detailMode.Note, item.c_ID, undefined, item.c_STEXT, item.c_CONTENT)
         }
     }
 

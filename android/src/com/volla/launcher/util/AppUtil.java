@@ -141,12 +141,13 @@ public class AppUtil {
                             System.exit(0);
                         } else if (type.equals(TOGGLE_SECURITY_MODE)) {
                             boolean activate = (boolean) message.get("activate");
+                            boolean keepPassword = (boolean) message.get("keepPassword");
 
                             ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
                             Map reply = new HashMap();
 
                             if (activate) {
-                                if (!childModeManager.isPasswortSet()) {
+                                if (!childModeManager.isPasswortSet() || !keepPassword) {
                                     String password = (String) message.get("password");
                                     childModeManager.setPassword(password);
                                 }

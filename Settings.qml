@@ -431,6 +431,8 @@ Page {
                             AN.SystemDispatcher.dispatch("volla.launcher.checkSecurityPasswordAction", {})
                         } else if (selectedMenuItem.text === securityModeOffOption.text) {
                             passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                            passwordDialog.definePasswordMode = false
+                            passwordDialog.isPasswordSet = true
                             passwordDialog.open()
                         }
                     }
@@ -440,12 +442,26 @@ Page {
                     id: passwordDialog
 
                     anchors.centerIn: parent
-                    implicitHeight: dialogTitle.height + passwordField.height + okButton.height + 4 * mainView.innerSpacing
+//                    implicitHeight: dialogTitle.height + passwordField.height +
+//                                    dialogLabel.height + confirmationField.height +
+//                                    keepPasswordCheckBox.height + okButton.height +
+//                                    mainView.innerSpacing * 2
                     width: parent.width - mainView.innerSpacing * 4
                     modal: true
                     dim: false
 
                     property var backgroundColor: "#292929"
+                    property bool definePasswordMode: false
+                    property bool isPasswordSet: false
+
+                    onOpened: {
+                        passwordField.text = ""
+                        confirmationField.text = ""
+                        height: dialogTitle.height + passwordField.height +
+                                dialogLabel.height + confirmationField.height +
+                                keepPasswordCheckBox.height + okButton.height +
+                                mainView.innerSpacing * 2
+                    }
 
                     background: Rectangle {
                         anchors.fill: parent
@@ -464,13 +480,13 @@ Page {
 
                     contentItem: Column {
                         id: dialogColumn
-                        spacing: mainView.innerSpacing
 
                         Label {
                             id: dialogTitle
                             text: qsTr("Enter password")
                             color: mainView.fontColor
                             font.pointSize: mainView.mediumFontSize
+                            bottomPadding: mainView.innerSpacing
                             background: Rectangle {
                                 color: "transparent"
                                 border.color: "transparent"
@@ -490,8 +506,54 @@ Page {
                             }
                         }
 
+                        Label {
+                            id: dialogLabel
+                            text: qsTr("Repeat password")
+                            color: mainView.fontColor
+                            topPadding: mainView.innerSpacing
+                            bottomPadding: mainView.innerSpacing
+                            font.pointSize: mainView.mediumFontSize
+                            visible: passwordDialog.definePasswordMode
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "transparent"
+                            }
+                        }
+
+                        TextField {
+                            id: confirmationField
+                            echoMode: TextField.Password
+                            width: parent.width
+                            color: mainView.fontColor
+                            placeholderTextColor: "darkgrey"
+                            font.pointSize: mainView.mediumFontSize
+                            visible: passwordDialog.definePasswordMode
+                            background: Rectangle {
+                                color: mainView.backgroundColor
+                                border.color: "transparent"
+                            }
+                        }
+
+                        CheckBox {
+                            id: keepPasswordCheckBox
+                            width: parent.width
+                            topPadding: mainView.innerSpacing
+                            text: qsTr("Keep existing Password")
+                            checked: passwordDialog.isPasswordSet
+                            visible: passwordDialog.definePasswordMode
+                            contentItem: Text {
+                                text: keepPasswordCheckBox.text
+                                wrapMode: Text.WordWrap
+                                width: parent.width - leftPadding
+                                leftPadding: 2 * mainView.innerSpacing
+                                color: mainView.fontColor
+                                font.pointSize: mainView.mediumFontSize
+                            }
+                        }
+
                         Row {
                             width: parent.width
+                            topPadding: mainView.innerSpacing
                             spacing: mainView.innerSpacing
 
                             Button {
@@ -539,11 +601,17 @@ Page {
                                 }
 
                                 onClicked: {
-                                    AN.SystemDispatcher.dispatch(
-                                                "volla.launcher.securityModeAction",
-                                                {"password": passwordField.text,
-                                                 "activate": securitySettingsItem.selectedMenuItem === securityModeOnOption})
-                                    passwordDialog.close()
+                                    if (passwordDialog.definePasswordMode && !keepPasswordCheckBox.checked
+                                            && passwordField.text !== confirmationField.text) {
+                                        mainView.showToast(qsTr("Wrong password confirmation"))
+                                    } else {
+                                        AN.SystemDispatcher.dispatch(
+                                                    "volla.launcher.securityModeAction",
+                                                    {"password": passwordField.text,
+                                                     "keepPassword": keepPasswordCheckBox.checked,
+                                                     "activate": securitySettingsItem.selectedMenuItem === securityModeOnOption})
+                                        passwordDialog.close()
+                                    }
                                 }
                             }
                         }
@@ -569,12 +637,10 @@ Page {
                                                                                   : securityModeOffOption.text
                         } else if (type === "volla.launcher.checkSecurityPasswordResponse") {
                             console.log("Settings | Password is set: " + message["isPasswordSet"])
-                            if (message["isPasswordSet"]) {
-                                AN.SystemDispatcher.dispatch("volla.launcher.securityModeAction", {"activate": true})
-                            } else {
-                                passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
-                                passwordDialog.open()
-                            }
+                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                            passwordDialog.definePasswordMode = true
+                            passwordDialog.isPasswordSet = message["isPasswordSet"]
+                            passwordDialog.open()
                         }
                     }
                 }
@@ -1233,7 +1299,7 @@ Page {
                         bottomPadding: mainView.innerSpacing / 2
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
-                            text: qsTr("Reset contacts")
+                            text: qsTr("Reload contacts")
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground

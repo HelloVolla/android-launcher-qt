@@ -695,12 +695,35 @@ ApplicationWindow {
             return noteStr.length > 0 ? JSON.parse(noteStr) : new Array
         }
 
-        function updateNotes(id, note) {
-            // todo
+        function updateNote(id, content, pinned) {
+            var notesArr = mainView.getNotes()
+            var note = notesArr.filter(function checkId(noteToCheck) {
+                return noteToCheck["id"] === id
+            })
+            if (note !== undefined) {
+                note["content"] = content
+                note["date"] = new Date().valueOf()
+            } else {
+                note["id"] = new Date().valueOf()
+                note["content"] = content
+                note["date"] = new Date().valueOf()
+            }
+            notes.write(JSON.stringify(notesArr))
+        }
+
+        function removeNote(id) {
+            var notesArr = mainView.getNotes()
+            var index = notesArr.findIndex( element => {
+                if (element.id === id) {
+                    return true;
+                }
+            })
+            notesDict = notesArr.slice(index, 1)
+            notes.write(JSON.stringify(notesArr))
+            updateCollectionPage(mainView.collectionMode.Notes)
         }
 
         function updateSpinner(shouldRun) {
-            //spinnerBackground.visible = shouldRun
             if (!(isLoadingContacts && !shouldRun)) {
                 spinner.running = shouldRun
             }

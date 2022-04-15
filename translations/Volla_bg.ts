@@ -294,7 +294,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reset contacts</source>
+        <source>Reload contacts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
