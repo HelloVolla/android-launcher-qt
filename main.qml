@@ -296,7 +296,7 @@ ApplicationWindow {
             item.children[0].item.updateConversationPage(mode, id, name)
         }
 
-        function updateDetailPage(mode, id, author, date, title) {
+        function updateDetailPage(mode, id, author, date, title, hasBadge) {
             console.log("MainView | Will update detail page")
             switch (currentIndex) {
                 case swipeIndex.Collections:
@@ -341,7 +341,7 @@ ApplicationWindow {
                     console.log("MainView | Unexpected state for detail view request")
             }
             currentIndex++
-            item.children[0].item.updateDetailPage(mode, id, author, date, title)
+            item.children[0].item.updateDetailPage(mode, id, author, date, title, hasBadge)
         }
 
         function updateNewsPage(mode, id, name, icon) {
@@ -703,10 +703,12 @@ ApplicationWindow {
             if (note !== undefined) {
                 note["content"] = content
                 note["date"] = new Date().valueOf()
+                note["pinned"] = pinned
             } else {
                 note["id"] = new Date().valueOf()
                 note["content"] = content
                 note["date"] = new Date().valueOf()
+                note["pinned"] = false
             }
             notes.write(JSON.stringify(notesArr))
         }

@@ -15,6 +15,7 @@ Page {
     property var currentDetailId
     property var currentDetailAuthorAndDate: ""
     property var currentTitle
+    property var currentDetailHasBadge: false
 
     background: Rectangle {
         anchors.fill: parent
@@ -36,9 +37,19 @@ Page {
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
 
+            Rectangle {
+                id: pinBadge
+                visible: detailPage.currentDetailHasBadge
+                width: mainView.smallFontSize * 0.6
+                height: mainView.smallFontSize * 0.6
+                y: mainView.smallFontSize * 0.3
+                radius: height * 0.5
+                color: Universal.accent
+            }
             Label {
                 id: dateLabel
-                width: parent.width - 2 * mainView.innerSpacing - pinButton.width - trashButton.width
+                leftPadding: 0.8
+                width: parent.width - 2 * mainView.innerSpacing - pinButton.width - trashButton.width - pinBadge.width
                 height: pinButton.height
                 text: detailPage.currentDetailAuthorAndDate
                 font.pointSize: mainView.mediumFontSize
@@ -67,7 +78,8 @@ Page {
                     border.color: "transparent"
                 }
                 onClicked: {
-                    // todo: Pin note
+                    detailPage.currentDetailHasBadge = !detailPage.currentDetailHasBadge
+                    mainView.updateNote(detailPage.currentDetailId, detailEdit.getText(0, detailEdit.length), detailPage.currentDetailHasBadge)
                 }
             }
 
@@ -97,24 +109,27 @@ Page {
         }
     }
 
-    function updateDetailPage(mode, id, author, date, title) {
+    function updateDetailPage(mode, id, author, date, title, hasBadge) {
         console.log("DetailPage | Update detail page: " + id + ", " + mode)
         currentDetailMode = mode
         currentDetailId = id !== undefined ? id : Date.now()
         currentDetailAuthorAndDate = author !== undefined ? author  + "\n" + date : date
         currentTitle = title !== undefined ? title : undefined
+        currentDetailHasBadge = hasBadge !== undefined ? hasBadge : false
+        detailColumn.visible = currentDetailMode === mainView.detailMode.Web
+        detailEdit.visible = currentDetailMode === mainView.detailMode.Note
         resetContent()
 
         switch (mode) {
-        case mainView.detailMode.Web:
-            prepareWebArticleView(id)
-            break
-        case mainView.detailMode.Note:
-            prepareNoteView(title)
-            break
-        default:
-            console.log("DetailPage | Mode not yet implemented")
-            mainView.showToast(qsTr("Not yet supported"))
+            case mainView.detailMode.Web:
+                prepareWebArticleView(id)
+                break
+            case mainView.detailMode.Note:
+                prepareNoteView(title)
+                break
+            default:
+                console.log("DetailPage | Mode not yet implemented")
+                mainView.showToast(qsTr("Not yet supported"))
         }
     }
 
@@ -123,7 +138,7 @@ Page {
         author.text = ""
         image.source = ""
         text.text = ""
-        edit.text = ""
+        detailEdit.text = ""
     }
 
     function prepareWebArticleView(url) {
@@ -150,7 +165,7 @@ Page {
     }
 
     function prepareNoteView(note, curserPosition) {
-        console.log("Details | note: " + note)
+        console.log("Details | Process note " + currentDetailId)
         var styledText = note.slice()
 
         var urlRegex = /(((https?:\/\/)|([^\s]+\.))[^\s,]+)/g;
@@ -162,7 +177,7 @@ Page {
         styledText = styledText.replace(/^### (.*$)/gim, '<h3><$1</h3>') // h3 tag
                                .replace(/^## (.*$)/gim, '<h2>$1</h2>') // h2 tag
                                .replace(/^# (.*$)/gim, '<h1>$1</h1>') // h1 tag
-                               //.replace(/^(.*)\n/gi, '<h1>$1</h1>')
+                               .replace(/^(.*$)/im, '<h1>$1</h1>')
                                .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>') // bold text
                                .replace(/\*(.*)\*/gim, '<i>$1</i>') // italic text
                                .replace(/^\* (.*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">- $1</p>') // unsorted list
@@ -170,13 +185,9 @@ Page {
                                .replace(/^(.*$)/gim, '<p>$1</p>')
                                .trim()
 
-        console.log("Details | styled text: " + styledText)
+        detailEdit.text = styledText
 
-        edit.text = styledText
-
-        console.log("Details | Plain text: " + edit.getText(0, edit.length))
-
-        if (curserPosition !== undefined) edit.cursorPosition = curserPosition
+        if (curserPosition !== undefined) detailEdit.cursorPosition = curserPosition
     }
 
     Flickable {
@@ -184,7 +195,7 @@ Page {
         width: parent.width
         height: parent.height
         contentWidth: parent.width
-        contentHeight: detailColumn.height + edit.height
+        contentHeight: detailColumn.height + detailEdit.height
 
         //----- news content -----------------
 
@@ -275,40 +286,51 @@ Page {
                 contentY = r.y+r.height-height;
         }
 
-        TextArea {
-            id: edit
+        TextEdit {
+            id: detailEdit
             width: parent.width
-            //height: 800
             anchors.top: parent.top
             color: mainView.fontColor
-            padding: mainView.innerSpacing
+            topPadding: 0
+            textMargin: mainView.innerSpacing
             font.pointSize: mainView.largeFontSize
             wrapMode: TextEdit.Wrap
             textFormat: Text.RichText
             verticalAlignment: Text.AlignTop
-            background: Rectangle {
-                color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-                border.color: "transparent"
-            }
+//            background: Rectangle {
+//                color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+//                border.color: "transparent"
+//            }
+
+            property bool isBlocked: false
+            property int lastCurserPosition: 0
 
             onCursorRectangleChanged: detailFlickable.ensureVisible(cursorRectangle)
 
             onCursorPositionChanged: {
-                // Todo parse text
-                console.log("Details | Curser postion changed to " + edit.cursorPosition)
-                if (cursorPosition > 0) {
-
+                // Todo parse and save text
+                console.log("Details | Curser postion changed to " + detailEdit.cursorPosition)
+                if (!isBlocked) {
+                    isBlocked = true
+                    lastCurserPosition = detailEdit.cursorPosition
+                    detailPage.prepareNoteView(detailEdit.getText(0, detailEdit.length), detailEdit.cursorPosition)
                 }
+                if (lastCurserPosition === detailEdit.cursorPosition) isBlocked = false
             }
 
-            onFocusChanged: {
-                // Save text
-                console.log("Details | Focus changed")
-                //mainView.updateNote(detailPage.currentDetailId, edit.getText())
+            onLineCountChanged: {
+                console.log("Details | Line count changed to " + detailEdit.lineCount)
             }
 
-            onHoveredLinkChanged: {
-
+            onActiveFocusChanged: {
+                console.log("Details | Active focus changed")
+                //mainView.updateNote(detailPage.currentDetailId, detailEdit.getText())
+                if (activeFocus) {
+                    detailFlickable.height = mainWindow.visibility === 5 ?
+                                mainView.height * 0.6 : mainView.height * 0.65
+                } else {
+                    detailFlickable.height = mainView.height
+                }
             }
 
             onLinkActivated: {

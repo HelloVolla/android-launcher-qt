@@ -1218,6 +1218,7 @@ Page {
                 var note = {"c_ID": rawNote["id"]}
                 console.log("Collection | Timestamp: " + rawNote.date)
                 note.c_STEXT = mainView.parseTime(rawNote.date)
+                note.c_TSTAMP = rawNote.date
                 console.log("Collection | Date: " + note.c_STEXT)
                 var titleEnd = rawNote.content.indexOf("\n")
                 note.c_TEXT = titleEnd > 0 && titleEnd < mainView.maxTitleLength ?
@@ -1225,6 +1226,7 @@ Page {
                                 rawNote.content.slice(0, mainView.maxTitleLength) + "..." : rawNote.content
                 note.c_CONTENT = rawNote.content
                 note.c_ICON = ""
+                note.c_SBADGE = rawNote.pinned
                 modelArr.push(note)
             }
             mainView.updateSpinner(false)
@@ -1283,10 +1285,25 @@ Page {
                     append(filteredModelDict[modelItemID])
                 }
             }
+
+            sortModel()
+        }
+
+        function sortModel() {
+            var n;
+            var i;
+            for (n = 0; n < count; n++) {
+                for (i=n+1; i < count; i++) {
+                    if ((!get(n).c_SBADGE && get(i).c_SBADGE) || get(n).c_TSTAMP < get(i).c_TSTAMP) {
+                        move(i, n, 1);
+                        n = 0;
+                    }
+                }
+            }
         }
 
         function executeSelection(item, type) {
-            mainView.updateDetailPage(mainView.detailMode.Note, item.c_ID, undefined, item.c_STEXT, item.c_CONTENT)
+            mainView.updateDetailPage(mainView.detailMode.Note, item.c_ID, undefined, item.c_STEXT, item.c_CONTENT, item.c_SBADGE)
         }
     }
 
