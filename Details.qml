@@ -25,7 +25,7 @@ Page {
     header: Rectangle {
         id: detailPageHeader
         width: parent.width
-        implicitHeight: headerRow.height
+        height: pinButton.height + mainView.innerSpacing
         color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
         border.color: "transparent"
         visible: currentDetailMode === mainView.detailMode.Note
@@ -36,16 +36,18 @@ Page {
             topPadding: mainView.innerSpacing * 2
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
+            bottomPadding: mainView.innerSpacing
 
             Rectangle {
                 id: pinBadge
                 visible: detailPage.currentDetailHasBadge
                 width: mainView.smallFontSize * 0.6
                 height: mainView.smallFontSize * 0.6
-                y: mainView.smallFontSize * 0.3
+                y: (pinButton.height + pinBadge.height) * 0.5
                 radius: height * 0.5
                 color: Universal.accent
             }
+
             Label {
                 id: dateLabel
                 leftPadding: 0.8
@@ -79,7 +81,8 @@ Page {
                 }
                 onClicked: {
                     detailPage.currentDetailHasBadge = !detailPage.currentDetailHasBadge
-                    mainView.updateNote(detailPage.currentDetailId, detailEdit.getText(0, detailEdit.length), detailPage.currentDetailHasBadge)
+                    mainView.updateNote(detailPage.currentDetailId,
+                                        detailEdit.getText(0, detailEdit.text.length), detailPage.currentDetailHasBadge)
                 }
             }
 
@@ -181,6 +184,7 @@ Page {
                                .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>') // bold text
                                .replace(/\*(.*)\*/gim, '<i>$1</i>') // italic text
                                .replace(/^\* (.*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">- $1</p>') // unsorted list
+                               .replace(/^- (.*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">- $1</p>') // unsorted list
                                .replace(/^([0-9]+\. .*)/gim, '<p style=\"margin-left:16px;text-indent:-16px;\">$1</p>') // ordered list
                                .replace(/^(.*$)/gim, '<p>$1</p>')
                                .trim()
@@ -193,9 +197,11 @@ Page {
     Flickable {
         id: detailFlickable
         width: parent.width
-        height: parent.height
-        contentWidth: parent.width
-        contentHeight: detailColumn.height + detailEdit.height
+        height: parent.height - header.height
+        contentWidth: edit.paintedWidth
+        contentHeight: edit.paintedHeight
+//        contentWidth: parent.width
+//        contentHeight: detailColumn.height + detailEdit.height
 
         //----- news content -----------------
 
@@ -286,10 +292,9 @@ Page {
                 contentY = r.y+r.height-height;
         }
 
-        TextEdit {
+        TextArea {
             id: detailEdit
             width: parent.width
-            anchors.top: parent.top
             color: mainView.fontColor
             topPadding: 0
             textMargin: mainView.innerSpacing
@@ -297,10 +302,10 @@ Page {
             wrapMode: TextEdit.Wrap
             textFormat: Text.RichText
             verticalAlignment: Text.AlignTop
-//            background: Rectangle {
-//                color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-//                border.color: "transparent"
-//            }
+            background: Rectangle {
+                color:  mainView.backgroundOpacity === 1.0 ? "blue" : "transparent"
+                border.color: "transparent"
+            }
 
             property bool isBlocked: false
             property int lastCurserPosition: 0
@@ -313,22 +318,18 @@ Page {
                 if (!isBlocked) {
                     isBlocked = true
                     lastCurserPosition = detailEdit.cursorPosition
-                    detailPage.prepareNoteView(detailEdit.getText(0, detailEdit.length), detailEdit.cursorPosition)
+                    console.log("Details | Extracted text: " + detailEdit.getText(0, detailEdit.text.length))
+                    detailPage.prepareNoteView(detailEdit.getText(0, detailEdit.text.length), detailEdit.cursorPosition)
                 }
                 if (lastCurserPosition === detailEdit.cursorPosition) isBlocked = false
             }
 
-            onLineCountChanged: {
-                console.log("Details | Line count changed to " + detailEdit.lineCount)
-            }
-
             onActiveFocusChanged: {
                 console.log("Details | Active focus changed")
-                //mainView.updateNote(detailPage.currentDetailId, detailEdit.getText())
                 if (activeFocus) {
-                    detailFlickable.height = mainWindow.visibility === 5 ?
-                                mainView.height * 0.6 : mainView.height * 0.65
+                    detailFlickable.height = mainWindow.visibility === 5 ? mainView.height * 0.55 : mainView.height * 0.5
                 } else {
+                    //mainView.updateNote(detailPage.currentDetailId, detailEdit.getText())
                     detailFlickable.height = mainView.height
                 }
             }
