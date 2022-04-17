@@ -1339,7 +1339,7 @@ Page {
             backgroundRec.color = mainView.fontColor
             opacity: 0.2
             var d = new Date
-            mainView.updateDetailPage(mainView.detailMode.Note, d.valueOf(), undefined, mainView.parseTime(d), new String)
+            mainView.updateDetailPage(mainView.detailMode.Note, d.valueOf(), undefined, mainView.parseTime(d), new String, false)
         }
     }
 

@@ -320,16 +320,19 @@ Page {
                     lastCurserPosition = detailEdit.cursorPosition
                     var plainText = detailEdit.text.replace(/p, li \{ white-space: pre-wrap; \}/gim, '').replace(/<[^>]+>/g, '').trim()
                     detailPage.prepareNoteView(plainText, detailEdit.cursorPosition)
+                    mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
                 }
                 if (lastCurserPosition === detailEdit.cursorPosition) isBlocked = false
             }
 
             onActiveFocusChanged: {
-                console.log("Details | Active focus changed")
+                console.log("Details | Active focus changed to " + activeFocus)
                 if (activeFocus) {
-                    detailFlickable.height = mainWindow.visibility === 5 ? mainView.height * 0.42 : mainView.height * 0.46
+                    detailFlickable.height = mainView.height * 0.46
                 } else {
-                    //mainView.updateNote(detailPage.currentDetailId, detailEdit.getText())
+                    var plainText = detailEdit.text.replace(/p, li \{ white-space: pre-wrap; \}/gim, '').replace(/<[^>]+>/g, '').trim()
+                    mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
+                    isBlocked = true
                     detailFlickable.height = mainView.height
                 }
             }
