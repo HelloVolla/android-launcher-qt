@@ -9,7 +9,6 @@ Page {
     id: detailPage
     objectName: "detailPage"
     anchors.fill: parent
-    topPadding: mainView.innerSpacing
 
     property var currentDetailMode: 0
     property var currentDetailId
@@ -25,8 +24,10 @@ Page {
     header: Rectangle {
         id: detailPageHeader
         width: parent.width
-        height: pinButton.height + mainView.innerSpacing
-        color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+        height: pinButton.height + 2.5 * mainView.innerSpacing
+        z: 2
+        color: mainView.backgroundColor
+        opacity: mainView.backgroundOpacity === 1.0 ? 1.0 : 0.6
         border.color: "transparent"
         visible: currentDetailMode === mainView.detailMode.Note
 
@@ -36,21 +37,20 @@ Page {
             topPadding: mainView.innerSpacing * 2
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
-            bottomPadding: mainView.innerSpacing
 
             Rectangle {
                 id: pinBadge
                 visible: detailPage.currentDetailHasBadge
                 width: mainView.smallFontSize * 0.6
-                height: mainView.smallFontSize * 0.6
-                y: (pinButton.height + pinBadge.height) * 0.5
+                height: mainView.smallFontSize * 0.6         
+                y: (pinButton.height - pinBadge.height) * 0.5
                 radius: height * 0.5
                 color: Universal.accent
             }
 
             Label {
                 id: dateLabel
-                leftPadding: 0.8
+                leftPadding: 8.0
                 width: parent.width - 2 * mainView.innerSpacing - pinButton.width - trashButton.width - pinBadge.width
                 height: pinButton.height
                 text: detailPage.currentDetailAuthorAndDate
@@ -177,14 +177,14 @@ Page {
             return '<a href="' +url2+ '" target="_blank">' + url + '</a>';
         })
 
-        styledText = styledText.replace(/^### (.*$)/gim, '<h3><$1</h3>') // h3 tag
-                               .replace(/^## (.*$)/gim, '<h2>$1</h2>') // h2 tag
-                               .replace(/^# (.*$)/gim, '<h1>$1</h1>') // h1 tag
-                               .replace(/^(.*$)/im, '<h1>$1</h1>')
-                               .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>') // bold text
-                               .replace(/\*(.*)\*/gim, '<i>$1</i>') // italic text
-                               .replace(/^\* (.*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">- $1</p>') // unsorted list
-                               .replace(/^- (.*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">- $1</p>') // unsorted list
+        styledText = styledText.replace(/^(### .*$)/gim, '<h3><$1</h3>') // h3 tag
+                               .replace(/^(## .*$)/gim, '<h2>$1</h2>') // h2 tag
+                               .replace(/^(# .*$)/gim, '<h1>$1</h1>') // h1 tag
+                               .replace(/^(.*$)/im, '<p style=\"font-size:36pt;font-weight:bold\">$1</p>') // trailing tect
+                               .replace(/(\*\*.*\*\*)/gim, '<b>$1</b>') // bold text
+                               .replace(/(\*.*\*)/gim, '<i>$1</i>') // italic text
+                               .replace(/^(\* .*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">$1</p>') // unsorted list
+                               .replace(/^(- .*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">$1</p>') // unsorted list
                                .replace(/^([0-9]+\. .*)/gim, '<p style=\"margin-left:16px;text-indent:-16px;\">$1</p>') // ordered list
                                .replace(/^(.*$)/gim, '<p>$1</p>')
                                .trim()
@@ -197,11 +197,9 @@ Page {
     Flickable {
         id: detailFlickable
         width: parent.width
-        height: parent.height - header.height
-        contentWidth: edit.paintedWidth
-        contentHeight: edit.paintedHeight
-//        contentWidth: parent.width
-//        contentHeight: detailColumn.height + detailEdit.height
+        height: parent.height
+        contentWidth: parent.width
+        contentHeight: detailEdit.height
 
         //----- news content -----------------
 
@@ -216,6 +214,7 @@ Page {
                 width: parent.width - 2 * mainView.innerSpacing
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
+                topPadding: mainView.innerSpacing
                 color: Universal.foreground
                 wrapMode: Text.WordWrap
             }
@@ -296,8 +295,9 @@ Page {
             id: detailEdit
             width: parent.width
             color: mainView.fontColor
-            topPadding: 0
-            textMargin: mainView.innerSpacing
+            leftPadding: mainView.innerSpacing
+            rightPadding: mainView.innerSpacing
+            bottomPadding: mainView.innerSpacing
             font.pointSize: mainView.largeFontSize
             wrapMode: TextEdit.Wrap
             textFormat: Text.RichText
@@ -307,7 +307,7 @@ Page {
                 border.color: "transparent"
             }
 
-            property bool isBlocked: false
+            property bool isBlocked: true
             property int lastCurserPosition: 0
 
             onCursorRectangleChanged: detailFlickable.ensureVisible(cursorRectangle)
@@ -318,8 +318,8 @@ Page {
                 if (!isBlocked) {
                     isBlocked = true
                     lastCurserPosition = detailEdit.cursorPosition
-                    console.log("Details | Extracted text: " + detailEdit.getText(0, detailEdit.text.length))
-                    detailPage.prepareNoteView(detailEdit.getText(0, detailEdit.text.length), detailEdit.cursorPosition)
+                    var plainText = detailEdit.text.replace(/p, li \{ white-space: pre-wrap; \}/gim, '').replace(/<[^>]+>/g, '').trim()
+                    detailPage.prepareNoteView(plainText, detailEdit.cursorPosition)
                 }
                 if (lastCurserPosition === detailEdit.cursorPosition) isBlocked = false
             }
@@ -327,7 +327,7 @@ Page {
             onActiveFocusChanged: {
                 console.log("Details | Active focus changed")
                 if (activeFocus) {
-                    detailFlickable.height = mainWindow.visibility === 5 ? mainView.height * 0.55 : mainView.height * 0.5
+                    detailFlickable.height = mainWindow.visibility === 5 ? mainView.height * 0.42 : mainView.height * 0.46
                 } else {
                     //mainView.updateNote(detailPage.currentDetailId, detailEdit.getText())
                     detailFlickable.height = mainView.height

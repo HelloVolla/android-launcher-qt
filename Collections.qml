@@ -1338,7 +1338,8 @@ Page {
         onClicked: {
             backgroundRec.color = mainView.fontColor
             opacity: 0.2
-            mainView.updateDetailPage(mainView.detailMode.Note, "")
+            var d = new Date
+            mainView.updateDetailPage(mainView.detailMode.Note, d.valueOf(), undefined, mainView.parseTime(d), new String)
         }
     }
 
@@ -1347,12 +1348,18 @@ Page {
         onDispatched: {
             if (type === "volla.launcher.threadResponse") {
                 console.log("Collections | onDispatched: " + type)
-                collectionPage.threads = message["threads"]
-                collectionPage.updateListModel()
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    collectionPage.threads = message["threads"]
+                    collectionPage.updateListModel()
+                }
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
-                collectionPage.calls = message["calls"]
-                collectionPage.updateListModel()
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    collectionPage.calls = message["calls"]
+                    collectionPage.updateListModel()
+                }
             } else if (type === "volla.launcher.contactImageResponse") {
                 console.log("Collections | onDispatched: " + type)
                 if (message["hasIcon"]) {
@@ -1382,5 +1389,4 @@ Page {
             console.log("Collections | Calls cache error: " + msg)
         }
     }
-
 }

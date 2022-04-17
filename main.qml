@@ -720,8 +720,10 @@ ApplicationWindow {
                     return true;
                 }
             })
-            notesDict = notesArr.slice(index, 1)
-            notes.write(JSON.stringify(notesArr))
+            if (index > -1) {
+                notesDict = notesArr.slice(index, 1)
+                notes.write(JSON.stringify(notesArr))
+            }
             updateCollectionPage(mainView.collectionMode.Notes)
         }
 
