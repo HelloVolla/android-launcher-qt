@@ -184,8 +184,8 @@ ApplicationWindow {
                                       "MessageDelivered": qsTr("Message delivered"),
                                       "MessageNotDelivered": qsTr("Message not delivered")}
 
-        property var contacts: new Array
-        property var loadingContacts: new Array
+        property var contacts: []
+        property var loadingContacts: []
         property bool isLoadingContacts: false
         property var wallpaper: ""
         property var wallpaperId: ""
@@ -754,14 +754,6 @@ ApplicationWindow {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | Contacts " + message["blockStart"] + " to " + message["blockEnd"])
                     mainView.loadingContacts = mainView.loadingContacts.concat(message["contacts"])
-//                    message["contacts"].forEach(function (aContact, index) {
-//                        if (aContact["name"] === undefined) {
-//                            console.log("MainView | Invalid contact:")
-//                            for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-//                                console.log("MainView | * " + aContactKey + ": " + aContactValue)
-//                            }
-//                        }
-//                    });
                     if (mainView.loadingContacts.length === message["contactsCount"]) {
                         var d = new Date()
                         console.log("MainView | Retrieving contacts did take " + (d.valueOf() - mainView.timeStamp.valueOf()) + " seconds")
@@ -778,7 +770,7 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        mainView.contacts.concat(mainView.loadingContacts.slice())
+                        mainView.contacts = mainView.loadingContacts.slice()
                         mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                     }
@@ -786,9 +778,8 @@ ApplicationWindow {
                     console.log("MainView | onDispatched: " + type)
                     if (message["needsSync"] && !mainView.isLoadingContacts) {
                         console.log("MainView | Need to sync contacts")
-                        //mainView.showToast("NEED SYNC: " + message["newContactsCount"] + ", " + settings.lastContactsCheck)
                         if (mainView.contacts.length === 0) {
-                            mainView.loadingContacts = new Array
+                            mainView.loadingContacts = []
                             mainView.isLoadingContacts = true
                             mainView.updateSpinner(true)
                         }
