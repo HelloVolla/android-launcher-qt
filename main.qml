@@ -26,6 +26,7 @@ ApplicationWindow {
           if (Qt.application.state === Qt.ApplicationActive) {              
               if (isActive) return
               isActive = true
+              appWindow.visible = true
               // Application go in active state
               console.log("MainView | Application became active")
               settings.sync()
