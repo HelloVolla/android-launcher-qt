@@ -12,8 +12,8 @@ public class SignalUtil {
 
     private static final String TAG = "SignalUtil";
 
-    public static final String GET_SIGNAL_MESSAGES = "volla.launcher.signalMessagesAction";
-    public static final String GOT_SIGNAL_MESSAGES = "volla.launcher.signalMessagesResponse";
+    public static final String SEND_SIGNAL_MESSAGES = "volla.launcher.signalSendMessageAction";
+    public static final String DID_SEND_SIGNAL_MESSAGES = "volla.launcher.signalSendMessagesResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -22,8 +22,8 @@ public class SignalUtil {
                 final Activity activity = QtNative.activity();
                 final Map message = dmessage;
 
-                if (type.equals(GET_SIGNAL_MESSAGES)) {
-                    // todo: implement
+                if (type.equals(SEND_SIGNAL_MESSAGES)) {
+                    // todo: implement (use a separate thread)
                 }
             }
         });

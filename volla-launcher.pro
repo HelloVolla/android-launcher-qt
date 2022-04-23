@@ -59,6 +59,7 @@ DISTFILES += \
     android/src/com/volla/launcher/util/ShortcutUtil.java \
     android/src/com/volla/launcher/util/SignalUtil.java \
     android/src/com/volla/launcher/worker/ShortcutsWorker.java \
+    android/src/com/volla/launcher/worker/SignalWorker.java \
     translations/*.ts \
     android/res/drawable/wallpaper_black.png \
     android/res/drawable/wallpaper_white.png \
