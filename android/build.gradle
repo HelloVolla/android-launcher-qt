@@ -29,6 +29,10 @@ dependencies {
     implementation 'com.chimbori.crux:crux:2.2.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     compile 'com.klinkerapps:android-smsmms:5.2.6'
+     def room_version = "2.4.2"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }
 
 android {
@@ -49,6 +53,7 @@ android {
 
     defaultConfig {
         minSdkVersion = 28
+	 applicationId "com.volla.launcher"
     }
 
     buildToolsVersion androidBuildToolsVersion

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import android.app.Person;
 import androidx.core.app.RemoteInput;
 
 
@@ -26,6 +29,8 @@ import com.volla.launcher.models.Action;
 import com.volla.launcher.models.NotificationIds;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -54,7 +59,7 @@ public class NotificationUtils {
         return false;
     }
 
-    
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getMessage(Bundle extras) {
         Log.d("NOTIFICATIONUTILS", "Getting message from extras..");
         Log.d("Text", "" + extras.getCharSequence(Notification.EXTRA_TEXT));
@@ -74,7 +79,7 @@ public class NotificationUtils {
             return null;
     }
 
-   
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getExtended(Bundle extras, ViewGroup v) {
         Log.d("NOTIFICATIONUTILS", "Getting message from extras..");
 
@@ -113,6 +118,20 @@ public class NotificationUtils {
         views.reapply(context.getApplicationContext(), localView);
         return localView;
 
+    }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static Icon getLargeIcon(Bundle extras) {
+       return  (Icon) extras.get(Notification.EXTRA_LARGE_ICON);
+    }
+    public static Person getMessagingUser(Bundle extras) {
+        return  (Person) extras.get(Notification.EXTRA_MESSAGING_PERSON);
+    }
+    public static ArrayList<Person> getPeopleList(Bundle extras) {
+        Log.e("Arvind Test", "Test " + extras.getParcelableArrayList(Notification.EXTRA_PEOPLE_LIST).size());
+        Person p = (Person) extras.getParcelableArrayList(Notification.EXTRA_PEOPLE_LIST).get(0);
+        Log.e("Arvind", "Person " + p.getName() + " " + p.getUri() + " " + p.getKey());
+        ArrayList<Person> persons = extras.getParcelableArrayList(Notification.EXTRA_PEOPLE_LIST);
+        return persons;
     }
 
     public static String getTitle(ViewGroup localView) {
@@ -175,6 +194,7 @@ public class NotificationUtils {
         return msg.trim();
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getTitle(Bundle extras) {
         Log.d("NOTIFICATIONUTILS", "Getting title from extras..");
         String msg = extras.getString(Notification.EXTRA_TITLE);

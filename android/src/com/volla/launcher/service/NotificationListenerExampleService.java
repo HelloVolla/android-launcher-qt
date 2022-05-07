@@ -1,7 +1,9 @@
 package com.volla.launcher.service;
 
 import android.app.PendingIntent;
+import android.app.Person;
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -9,11 +11,13 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.volla.launcher.models.Action;
 import com.volla.launcher.utils.NotificationUtils;
 
+import java.util.ArrayList;
 /**
  * MIT License
  *
@@ -59,6 +63,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         return super.onBind(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
         //NotificationListenerExampleService.this.cancelAllNotifications();
@@ -66,18 +71,23 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         if(notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
             my_custom = sbn;
             String extras = sbn.toString();
-
+            NotificationListenerExampleService.this.cancelAllNotifications();
             Log.d("ArvindVolla", extras);
             Bundle bundle = sbn.getNotification().extras;
             for (String key : bundle.keySet()) {
                 Object value = bundle.get(key);
-                //Log.d("ArvindVolla sbn  key: ",key+ "  :: value:"+ bundle.getString(key));
+                Log.d("ArvindVolla sbn  key: ", key + "  :: value:" + (value == null ? "null" : value.toString()));
                 //Log.d("ArvindVolla sbn value: ",value.toString());
             }
             Bundle extras_1 = NotificationCompat.getExtras(sbn.getNotification());
             String title = NotificationUtils.getTitle(extras_1);
             String msg = NotificationUtils.getMessage(extras_1);
-            Log.d("ArvindVolla", "Ignoring potential duplicate from " + sbn.getPackageName() + ":\n" + title + "\n" + msg);
+            Icon bitmap = NotificationUtils.getLargeIcon(extras_1);
+            ArrayList<android.app.Person> persons = NotificationUtils.getPeopleList(extras_1);
+            for (Person p : persons) {
+                Log.e("Arvind", "Person " + p.getName() + " " + p.getUri() + " " + p.getKey());
+            }
+            //Log.d("ArvindVolla", "Ignoring potential duplicate from " + sbn.getPackageName() + ":\n" + title + "\n" + msg);
 
 
             Action action = NotificationUtils.getQuickReplyAction(sbn.getNotification(), getPackageName());
@@ -97,11 +107,15 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             String channel_id;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 channel_id = sbn.getNotification().getChannelId();
+                Log.e("Arvind extra", channel_id);
 
                 //if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE){
                 Intent intent = new Intent("com.volla.notificationlistenerexample");
+                Bundle bundle_1 = new Bundle();
+                sbn.getNotification().extras.putBundle("android.car.EXTENSIONS", bundle_1);
                 intent.putExtra("Notification Code", notificationCode);
                 intent.putExtra("channel_d", channel_id);
+                intent.setAction("com.volla.notificationlistenerexample");
                 //intent.putExtra("my_noti",sbn.getNotification());
                 sendBroadcast(intent);
             }
