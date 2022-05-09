@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.qtproject.qt5.android.QtNative;
 import com.chimbori.crux.articles.ArticleExtractor;
 import com.chimbori.crux.articles.Article;
+import org.jsoup.nodes.Document;
 
 public class ArticleParser {
 
