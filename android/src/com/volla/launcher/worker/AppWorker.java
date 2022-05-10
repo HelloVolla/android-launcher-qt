@@ -53,20 +53,41 @@ public class AppWorker
                             "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
                             "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou");
 
+                            // TODO: ONLY FOR DEVELOPMENT PURPOSE
+                            final List<String> mostUsed = Arrays.asList("com.android.dialer", "com.mediatek.camera",
+                            "com.simplemobiletools.dialer", "com.simplemobiletools.gallery.pro", "com.android.messaging",
+                            "org.mozilla.fennec_fdroid", "com.simplemobiletools.gallery.pro", "com.simplemobiletools.calendar.pro");
+
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
                             i.addCategory(Intent.CATEGORY_LAUNCHER);
                             List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
                             appList.ensureCapacity(availableActivities.size());
 
                             for (ResolveInfo ri:availableActivities) {
-                                Log.d("Found package", ri.activityInfo.packageName);
+                                Log.d(TAG, "Found package " + ri.activityInfo.packageName);
 
-                                // todo: Remove. Workaround for beta demo purpose
+                                // TODO: Remove. Workaround for beta demo purpose
                                 if (!packages.contains(ri.activityInfo.packageName)) {
                                     Map appInfo = new HashMap();
                                     appInfo.put("package", ri.activityInfo.packageName);
                                     appInfo.put("label", String.valueOf(ri.loadLabel(pm)));
                                     appInfo.put("icon", AppWorker.drawableToBase64(ri.loadIcon(pm)));
+
+                                    try {
+                                        ApplicationInfo applicationInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
+                                        int appCategory = applicationInfo.category;
+                                        appInfo.put("category", (String) ApplicationInfo.getCategoryTitle(activity, appCategory));
+                                    } catch (Exception e) {
+                                        Log.w(TAG, "Unknown package name: " + e.toString());
+                                    }
+
+                                    // TODO: NEEDS TO BE REPLACED BY REAL DATA
+                                    if (mostUsed.contains(ri.activityInfo.packageName)) {
+                                        appInfo.put("statistic", 10);
+                                    } else {
+                                        appInfo.put("statistic", 0);
+                                    }
+
                                     appList.add(appInfo);
                                 }
                             }

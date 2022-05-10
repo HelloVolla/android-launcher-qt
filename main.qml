@@ -434,7 +434,7 @@ ApplicationWindow {
         }
 
         function getApps() {
-            return appGrid.children[0].item.getCurrentApps()
+            return appGrid.children[0].item.getAllApps()
         }
 
         function getFeeds() {
@@ -805,7 +805,7 @@ ApplicationWindow {
 //                                console.log("MainView | * " + aContactKey + ": " + aContactValue)
 //                            }
 //                        }
-//                    });
+//                    })
                     if (mainView.loadingContacts.length === message["contactsCount"]) {
                         var d = new Date()
                         console.log("MainView | Retrieving contacts did take " + (d.valueOf() - mainView.timeStamp.valueOf()) + " seconds")

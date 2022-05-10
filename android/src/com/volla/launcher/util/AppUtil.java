@@ -168,11 +168,18 @@ public class AppUtil {
 
                             SystemDispatcher.dispatch(SECURITY_MODE_RESULT, reply);
                         } else if (type.equals(GET_SECURITY_STATE)) {
-                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
-
-                            Map reply = new HashMap();
-                            reply.put("isActive", childModeManager.isActivate() );
-                            SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
+                            try {
+                                ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+                                Map reply = new HashMap();
+                                reply.put("isActive", childModeManager.isActivate() );
+                                SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
+                            } catch (Exception e) {
+                                Map reply = new HashMap();
+                                reply.put("isActive", "false" );
+                                reply.put("error", "Not installed" );
+                                Log.d(TAG, e.toString());
+                                SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
+                            }
                         } else if (type.equals(GET_IS_SECURITY_PW_SET)) {
                             ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
 

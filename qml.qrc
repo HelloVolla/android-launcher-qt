@@ -74,5 +74,6 @@
         <file>images/03.Notes_Screen.png</file>
         <file>images/04.Notes_Screen.png</file>
         <file>images/05.Notes_Screen.png</file>
+        <file>AppGroup.qml</file>
     </qresource>
 </RCC>
