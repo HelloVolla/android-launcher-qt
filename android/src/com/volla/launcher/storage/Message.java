@@ -12,6 +12,8 @@ public class Message {
     public int id;
 
     @ColumnInfo
+    public String uuid;
+    @ColumnInfo
     public String title;
 
     @ColumnInfo
@@ -21,5 +23,7 @@ public class Message {
     public String largeIcon;
 
     @ColumnInfo
-    public String channelId;
+    public String message;
+    @ColumnInfo
+    public String notification;
 }

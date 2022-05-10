@@ -15,9 +15,15 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.volla.launcher.models.Action;
-import com.volla.launcher.utils.NotificationUtils;
+import com.volla.launcher.models.Notification;
+import com.volla.launcher.models.NotificationData;
+import com.volla.launcher.storage.Message;
+import com.volla.launcher.storage.MessageDao;
+import com.volla.launcher.util.NotificationUtils;
+import com.volla.launcher.util.VollaLauncher;
 
 import java.util.ArrayList;
+import java.util.UUID;
 /**
  * MIT License
  *
@@ -70,6 +76,18 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         int notificationCode = matchNotificationCode(sbn);
         if(notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
             my_custom = sbn;
+            Log.e("Arvind", sbn.getUser().toString());
+            final Message message = new Message();
+            NotificationData notificationData = new NotificationData();
+            notificationData.id = sbn.getId();
+            notificationData.key = sbn.getKey();
+            notificationData.userHandle = sbn.getUser().describeContents();
+            com.volla.launcher.models.Notification notification = new Notification();
+            notification.channel = sbn.getNotification().getChannelId();
+            notification.shortcut= sbn.getNotification().getShortcutId();
+            notification.sortKey = sbn.getNotification().getSortKey();
+            notificationData.notification = notification;
+            Log.e("Arvind", "Test JSON" + notificationData.toJson());
             String extras = sbn.toString();
             NotificationListenerExampleService.this.cancelAllNotifications();
             Log.d("ArvindVolla", extras);
@@ -87,10 +105,22 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             for (Person p : persons) {
                 Log.e("Arvind", "Person " + p.getName() + " " + p.getUri() + " " + p.getKey());
             }
+            message.uuid = UUID.randomUUID().toString();
+            message.largeIcon = extras_1.getString(android.app.Notification.EXTRA_LARGE_ICON);
+            message.notification = notification.toJson();
+            message.title = extras_1.getString(android.app.Notification.EXTRA_TITLE);
+            message.selfDisplayName = extras_1.getString(android.app.Notification.EXTRA_SELF_DISPLAY_NAME);
+            final MessageDao messageDao = ((VollaLauncher)getApplication()).getMessageDatabase().messageDao();
+            ((VollaLauncher)getApplication()).getMessageDatabase().runInTransaction(new Runnable() {
+                @Override
+                public void run() {
+                    messageDao.insertMessage(message);
+                }
+            });
             //Log.d("ArvindVolla", "Ignoring potential duplicate from " + sbn.getPackageName() + ":\n" + title + "\n" + msg);
 
 
-            Action action = NotificationUtils.getQuickReplyAction(sbn.getNotification(), getPackageName());
+//            Action action = NotificationUtils.getQuickReplyAction(sbn.getNotification(), getPackageName());
       /*
         if (action != null) {
             Log.i("ArvindVolla", "success");

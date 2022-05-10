@@ -1,4 +1,4 @@
-package com.volla.launcher.utils;
+package com.volla.launcher.util;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
