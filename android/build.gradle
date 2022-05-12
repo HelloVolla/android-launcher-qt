@@ -22,6 +22,11 @@ allprojects {
     }
 }
 
+compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+}
+
 apply plugin: 'com.android.application'
 
 dependencies {
@@ -32,8 +37,12 @@ dependencies {
      def room_version = "2.4.2"
 
     implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.paging:paging-runtime:3.1.1"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation "androidx.room:room-rxjava3:$room_version"
 }
 
 android {
