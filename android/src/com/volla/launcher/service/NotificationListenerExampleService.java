@@ -1,7 +1,6 @@
 package com.volla.launcher.service;
 
 import android.app.PendingIntent;
-import android.app.Person;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.os.Build;
@@ -17,12 +16,10 @@ import androidx.core.app.NotificationCompat;
 import com.volla.launcher.models.Action;
 import com.volla.launcher.models.Notification;
 import com.volla.launcher.models.NotificationData;
+import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.storage.Message;
-import com.volla.launcher.storage.MessageDao;
-import com.volla.launcher.util.NotificationUtils;
-import com.volla.launcher.util.VollaLauncher;
+import com.volla.launcher.utils.NotificationUtils;
 
-import java.util.ArrayList;
 import java.util.UUID;
 /**
  * MIT License
@@ -63,9 +60,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     }
 
     private StatusBarNotification my_custom;
+    private MessageRepository repository;
 
     @Override
     public IBinder onBind(Intent intent) {
+        repository = new MessageRepository(getApplication());
         return super.onBind(intent);
     }
 
@@ -76,8 +75,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         int notificationCode = matchNotificationCode(sbn);
         if(notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
             my_custom = sbn;
-            Log.e("Arvind", sbn.getUser().toString());
-            final Message message = new Message();
+
+            Message message = new Message();
             NotificationData notificationData = new NotificationData();
             notificationData.id = sbn.getId();
             notificationData.key = sbn.getKey();
@@ -87,7 +86,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             notification.shortcut= sbn.getNotification().getShortcutId();
             notification.sortKey = sbn.getNotification().getSortKey();
             notificationData.notification = notification;
-            Log.e("Arvind", "Test JSON" + notificationData.toJson());
+
             String extras = sbn.toString();
             NotificationListenerExampleService.this.cancelAllNotifications();
             Log.d("ArvindVolla", extras);
@@ -101,22 +100,20 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             String title = NotificationUtils.getTitle(extras_1);
             String msg = NotificationUtils.getMessage(extras_1);
             Icon bitmap = NotificationUtils.getLargeIcon(extras_1);
-            ArrayList<android.app.Person> persons = NotificationUtils.getPeopleList(extras_1);
-            for (Person p : persons) {
-                Log.e("Arvind", "Person " + p.getName() + " " + p.getUri() + " " + p.getKey());
-            }
+
             message.uuid = UUID.randomUUID().toString();
-            message.largeIcon = extras_1.getString(android.app.Notification.EXTRA_LARGE_ICON);
-            message.notification = notification.toJson();
+            message.largeIcon = sbn.getNotification().getLargeIcon().toString();
+            message.notification = notificationData.toJson();
             message.title = extras_1.getString(android.app.Notification.EXTRA_TITLE);
             message.selfDisplayName = extras_1.getString(android.app.Notification.EXTRA_SELF_DISPLAY_NAME);
-            final MessageDao messageDao = ((VollaLauncher)getApplication()).getMessageDatabase().messageDao();
-            ((VollaLauncher)getApplication()).getMessageDatabase().runInTransaction(new Runnable() {
-                @Override
-                public void run() {
-                    messageDao.insertMessage(message);
-                }
-            });
+            message.text = NotificationUtils.getMessage(extras_1);
+            message.timeStamp = System.currentTimeMillis();
+            repository.insertMessage(message);
+
+            message = null;
+            notification = null;
+            notificationData = null;
+
             //Log.d("ArvindVolla", "Ignoring potential duplicate from " + sbn.getPackageName() + ":\n" + title + "\n" + msg);
 
 
@@ -135,20 +132,20 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         */
             Log.d("ArvindVolla extra", String.valueOf(sbn.getNotification().extras));
             String channel_id;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                channel_id = sbn.getNotification().getChannelId();
-                Log.e("Arvind extra", channel_id);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                channel_id = sbn.getNotification().getChannelId();
+//                Log.e("Krishna extra", channel_id);
 
                 //if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE){
-                Intent intent = new Intent("com.volla.notificationlistenerexample");
-                Bundle bundle_1 = new Bundle();
-                sbn.getNotification().extras.putBundle("android.car.EXTENSIONS", bundle_1);
-                intent.putExtra("Notification Code", notificationCode);
-                intent.putExtra("channel_d", channel_id);
-                intent.setAction("com.volla.notificationlistenerexample");
+//                Intent intent = new Intent("com.volla.notificationlistenerexample");
+//                Bundle bundle_1 = new Bundle();
+//                sbn.getNotification().extras.putBundle("android.car.EXTENSIONS", bundle_1);
+//                intent.putExtra("Notification Code", notificationCode);
+//                intent.putExtra("channel_d", channel_id);
+//                intent.setAction("com.volla.notificationlistenerexample");
                 //intent.putExtra("my_noti",sbn.getNotification());
-                sendBroadcast(intent);
-            }
+//                sendBroadcast(intent);
+//            }
         }
         //}
     }

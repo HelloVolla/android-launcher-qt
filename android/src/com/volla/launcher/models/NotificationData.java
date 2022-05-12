@@ -14,7 +14,7 @@ public class NotificationData {
         return new GsonBuilder().create().toJson(this, NotificationData.class);
     }
 
-    public NotificationData fromJson(String json) {
+    public static NotificationData fromJson(String json) {
         Gson gson = new Gson();
         return gson.fromJson(json, NotificationData.class);
     }
