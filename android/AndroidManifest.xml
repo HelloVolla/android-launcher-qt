@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0.1" android:versionCode="201" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0.2" android:versionCode="202" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="29"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -129,7 +129,9 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
-<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
     <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
     <uses-permission android:name="android.permission.MANAGE_APP_OPS_MODES"/>
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
+
 </manifest>

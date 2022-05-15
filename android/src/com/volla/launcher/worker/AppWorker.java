@@ -1,11 +1,16 @@
 package com.volla.launcher.worker;
 
 import android.app.Activity;
+import android.app.usage.UsageStatsManager;
+import android.app.usage.UsageStats;
+import android.app.AppOpsManager;
+import android.provider.Settings;
 import android.os.Bundle;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.io.ByteArrayOutputStream;
 import org.qtproject.qt5.android.QtNative;
 import androidnative.SystemDispatcher;
@@ -46,17 +52,28 @@ public class AppWorker
 
                             final PackageManager pm = activity.getPackageManager();
                             final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts",
-                            "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
-                            "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui",
-                            "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control",
-                            "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock",
-                            "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
-                            "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou");
+                                "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
+                                "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui",
+                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control",
+                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock",
+                                "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
+                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou");
 
-                            // TODO: ONLY FOR DEVELOPMENT PURPOSE
                             final List<String> mostUsed = Arrays.asList("com.android.dialer", "com.mediatek.camera",
-                            "com.simplemobiletools.dialer", "com.simplemobiletools.gallery.pro", "com.android.messaging",
-                            "org.mozilla.fennec_fdroid", "com.simplemobiletools.gallery.pro", "com.simplemobiletools.calendar.pro");
+                                "com.simplemobiletools.dialer", "com.simplemobiletools.gallery.pro", "com.android.messaging",
+                                "org.mozilla.fennec_fdroid", "com.simplemobiletools.gallery.pro", "com.simplemobiletools.calendar.pro");
+
+                            List<UsageStats> queryUsageStats = new LinkedList();
+
+                            if (checkUsagePermission(activity)) {
+                                long startTime = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000);
+                                long endTime = System.currentTimeMillis();
+
+                                UsageStatsManager usageStatsManager = (UsageStatsManager)activity.getSystemService(Context.USAGE_STATS_SERVICE);
+                                queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
+
+                                Log.d(TAG, "Usage stats entries: " + queryUsageStats.size());
+                            }
 
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
                             i.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -64,9 +81,8 @@ public class AppWorker
                             appList.ensureCapacity(availableActivities.size());
 
                             for (ResolveInfo ri:availableActivities) {
-                                Log.d(TAG, "Found package " + ri.activityInfo.packageName);
+                                //Log.d(TAG, "Found package " + ri.activityInfo.packageName);
 
-                                // TODO: Remove. Workaround for beta demo purpose
                                 if (!packages.contains(ri.activityInfo.packageName)) {
                                     Map appInfo = new HashMap();
                                     appInfo.put("package", ri.activityInfo.packageName);
@@ -81,13 +97,18 @@ public class AppWorker
                                         Log.w(TAG, "Unknown package name: " + e.toString());
                                     }
 
-                                    // TODO: NEEDS TO BE REPLACED BY REAL DATA
+                                    long timeInForeground = 0;
+
+                                    for (UsageStats us : queryUsageStats) {
+                                        if (us.getPackageName() == ri.activityInfo.packageName) {
+                                            timeInForeground = us.getTotalTimeInForeground();
+                                        }
+                                    }
                                     if (mostUsed.contains(ri.activityInfo.packageName)) {
-                                        appInfo.put("statistic", 10);
-                                    } else {
-                                        appInfo.put("statistic", 0);
+                                        timeInForeground = timeInForeground + 10; // fall back for missing stats
                                     }
 
+                                    appInfo.put("statistic", timeInForeground);
                                     appList.add(appInfo);
                                 }
                             }
@@ -103,6 +124,23 @@ public class AppWorker
                 }
             }
         });
+    }
+
+    public static boolean checkUsagePermission(Activity activity) {
+        AppOpsManager appOps = (AppOpsManager)activity.getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow("android:get_usage_stats", android.os.Process.myUid(), activity.getPackageName());
+        boolean granted;
+        if (mode == AppOpsManager.MODE_DEFAULT) {
+            granted = (activity.checkCallingOrSelfPermission(android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED);
+        } else {
+            granted = (mode == AppOpsManager.MODE_ALLOWED);
+        }
+        if (!granted) {
+            Log.d(TAG, "App usage statistic access is not granted");
+//            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+//            activity.startActivityForResult(intent, 2);
+        }
+        return granted;
     }
 
     public static Intent getAppIntent(Activity a, String ID){

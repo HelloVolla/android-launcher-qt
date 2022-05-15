@@ -141,6 +141,15 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            // TODO: Re-check statistic permission
+            Log.d(TAG, "Result for permission request: " + resultCode);
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 

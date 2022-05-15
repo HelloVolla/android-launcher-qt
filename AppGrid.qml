@@ -73,13 +73,14 @@ Page {
         "com.volla.launcher": "Settings",
         "com.simplemobiletools.smsmessenger": "Messages",
         "com.android.fmradio" : "Radio",
-        "de.baumann.weather": "Wetter",
+        "de.baumann.weather": "Wetter"
     }
 
     property var appGroups: [] // QML elements with app grids
 
     property int appCount: 0
     property int selectedGroup: 0
+    property int maxAppCount: 12
 
     background: Rectangle {
         anchors.fill: parent
@@ -87,10 +88,11 @@ Page {
     }
 
     onTextInputChanged: {
-        console.log("AppGrid | Text input changed")
-//        for (var appGroup in appLauncher.appGroups) {
-//            appGroup.filterApps(textInput)
-//        }
+        console.log("AppGrid | Text input changed: " + appLauncher.textInput)
+        for (var i = 0; i < appLauncher.appGroups.length; i++) {
+            var appGroup = appLauncher.appGroups[i]
+            appGroup.textInput = appLauncher.textInput
+        }
     }
 
     function updateAppLauncher(useColoredAppIcons) {
@@ -121,9 +123,12 @@ Page {
             else if (a.label < b.label) return -1
             else return 0
         })
-        if (apps.length > 8) {
-            groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0, 7) } )
-            groupedApps.push( { "groupLabel": qsTr("Other apps"), "apps": apps.slice(8) } )
+
+        // todo: Implement category grouping
+
+        if (apps.length > appLauncher.maxAppCount) {
+            groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0, appLauncher.maxAppCount) } )
+            groupedApps.push( { "groupLabel": qsTr("apps"), "apps": apps.slice(appLauncher.maxAppCount + 1) } )
         } else {
             groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
         }
@@ -132,16 +137,24 @@ Page {
 
     function createAppGroups(groupedApps) {
         console.log("AppGrid | Will greate app groups for " + groupedApps.length + " groups.")
+        if (appLauncher.labelMap !== undefined )
+            console.log("AppGrid | Label map has " + Object.keys(appLauncher.labelMap).length + " elemens.")
+        else
+            console.log("AppGrid | Label map is undefined")
         groupedApps.forEach(function(appGroupInfos, index) {
+            console.log("AppGrid | Will create group " + index)
             var component = Qt.createComponent("/AppGroup.qml", appLauncherColumn)
             var properties = { "groupLabel": appGroupInfos["groupLabel"],
-                               "apps": appGroupInfos["apps"],
                                "groupIndex": index,
                                "selectedGroupIndex": appLauncher.selectedGroup,
                                "textInput": appLauncher.textInput,
                                "iconMap": appLauncher.iconMap,
                                "labelMap": appLauncher.labelMap,
-                               "backgroundOpacity": mainView.backgroundOpacity }
+                               "labelPointSize": appLauncher.labelPointSize,
+                               "headerPointSize": mainView.mediumFontSize,
+                               "innerSpacing": mainView.innerSpacing,
+                               "backgroundOpacity": mainView.backgroundOpacity,
+                               "apps": appGroupInfos["apps"]}
             if (component.status !== Component.Ready) {
                 if (component.status === Component.Error)
                     console.debug("AppGrid | Error: "+ component.errorString() );
@@ -217,11 +230,12 @@ Page {
             }
 
             function showGroup(groupIndex) {
+                console.log("AppGrid | Will show group " + groupIndex)
                 appLauncher.selectedGroup = groupIndex
-//                for (var i = 0; i < appGroups.length; i++) {
-//                    var appGroup = appGroups[i]
-//                    appGroup.showApps(i === groupIndex)
-//                }
+                for (var i = 0; i < appGroups.length; i++) {
+                    var appGroup = appGroups[i]
+                    appGroup.showApps(i === groupIndex)
+                }
             }
 
             function openContextMenu(app, gridCell) {

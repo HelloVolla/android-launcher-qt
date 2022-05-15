@@ -14,10 +14,11 @@ Item {
     property string groupLabel
     property string messageApp
     property string phoneApp
-    property string textInput
+    property string textInput: ""
 
     property double innerSpacing
     property double labelPointSize
+    property double headerPointSize
     property double backgroundOpacity
     property double desaturation: 1.0
 
@@ -27,10 +28,10 @@ Item {
     property bool unreadMessages: false
     property bool newCalls: false
 
-    property var iconMap: new Object
-    property var labelMap: new Object
-    property var apps: new Array
-    property var pinnedShortcuts: new Array
+    property var iconMap: ({})
+    property var labelMap: ({})
+    property var apps: []
+    property var pinnedShortcuts: []
 
     onTextInputChanged: {
         console.log("AppGroup | onTextInputChanged")
@@ -47,10 +48,10 @@ Item {
 
     onPinnedShortcutsChanged: {
         console.log("AppGroup | onPinnedShortcutsChanged")
-//        groupModel.clear()
-//        groupModel.modelArr = new Array
-//        groupModel.prepareModel()
-//        groupModel.update(groupItem.textInput)
+        groupModel.clear()
+        groupModel.modelArr = new Array
+        groupModel.prepareModel()
+        groupModel.update(groupItem.textInput)
     }
 
     onDesaturationChanged: {
@@ -58,11 +59,13 @@ Item {
     }
 
     onSelectedGroupIndexChanged: {
+        console.log("AppGroup | Selected group changed to " + selectedGroupIndex)
         groupGrid.visible = groupIndex === selectedGroupIndex
     }
 
     function showApps(appsShouldBeVisible) {
         groupGrid.visible = appsShouldBeVisible
+        groupHeader.visible = !appsShouldBeVisible
     }
 
     function removePinnedShortcut(shorcutId) {
@@ -76,16 +79,30 @@ Item {
     Column {
         id: groupColumn
         width: parent.width
+        topPadding: groupItem.groupIndex > 0 ? groupItem.innerSpacing : 0
 
         Button {
             id: groupHeader
             anchors.horizontalCenter: parent.horizontalCenter
             flat: true
             text: groupItem.groupLabel
+            contentItem: Label {
+                text: groupHeader.text
+                padding: groupItem.innerSpacing / 2
+                color: Universal.foreground
+                opacity: 0.5
+                font.pointSize: groupItem.headerPointSize
+            }
             visible: groupItem.groupIndex > 0
+            background: Rectangle {
+                color: "transparent"
+                border.color: Universal.foreground
+                opacity: 0.5
+                radius: height / 2
+            }
 
             onClicked: {
-                parent.showGroup(groupItem.groupIndex)
+                groupItem.parent.showGroup(groupItem.groupIndex)
             }
         }
 
@@ -93,15 +110,11 @@ Item {
             id: groupGrid
             width: parent.width
             height: contentHeight
+            topMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing : 0
+            bottomMargin: groupItem.innerSpacing
             cellHeight: parent.width * 0.32
             cellWidth: parent.width * 0.25
-            visible: true // groupItem.groupIndex === groupItem.selectedGroupIndex
-
-//            Component.onCompleted: {
-//                console.log("AppGroup | GridView is Ready")
-//                groupModel.prepareModel()
-//                groupModel.update(groupItem.textInput)
-//            }
+            visible: groupItem.groupIndex === groupItem.selectedGroupIndex
 
             model: groupModel
 
@@ -131,7 +144,7 @@ Item {
                     id: gridButton
                     anchors.top: parent.top
                     anchors.topMargin: parent.width * 0.08 // Adjustment
-                    topPadding: mainView.innerSpacing / 2
+                    topPadding: groupItem.innerSpacing / 2
                     width: parent.width
                     text: model.label
                     contentItem: Column {
@@ -156,7 +169,8 @@ Item {
                             id: buttonLabel
                             anchors.horizontalCenter: parent.horizontalCenter
                             width: gridButton.width - groupItem.innerSpacing
-                            horizontalAlignment: contentWidth > gridButton.width - mainView.innerSpacing ? Text.AlignLeft : Text.AlignHCenter
+                            horizontalAlignment: contentWidth > gridButton.width - groupItem.innerSpacing ? Text.AlignLeft
+                                                                                                          : Text.AlignHCenter
                             text: gridButton.text
                             font.pointSize: groupItem.labelPointSize
                             clip: groupItem.backgroundOpacity === 1.0 ? true : false
@@ -175,12 +189,12 @@ Item {
                         } else if (model.package.length > 0) {
                             console.log("App " + model.label + " selected")
                             // As a workaround for a missing feature in the phone app
-                            if (model.package === mainView.phoneApp) {
+                            if (model.package === groupItem.phoneApp) {
                                 if (groupItem.newCalls) {
-                                    AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "log"})
+                                    AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": groupItem.phoneApp, "action": "log"})
                                     AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
                                 } else {
-                                    AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp})
+                                    AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": groupItem.phoneApp})
                                 }
                             } else if (model.shortcutId !== undefined) {
                                 AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
@@ -241,8 +255,12 @@ Item {
 
             property var modelArr: new Array
 
-            // Call this method, if apps or shortcuts habe been changed
+            // Call this method, if apps or shortcuts have been changed
             function prepareModel() {
+                if (labelMap !== undefined )
+                    console.log("AppGroup | Label map has " + Object.keys(groupItem.labelMap).length + " elemens.")
+                else
+                    console.log("AppGroup | Label map is undefined")
                 modelArr = groupItem.pinnedShortcuts.concat(groupItem.apps)
                 modelArr.forEach(function(app, i) {
                     modelArr[i].label = app.package in groupItem.labelMap && app.shortcutId === undefined
@@ -299,10 +317,13 @@ Item {
                     if (!found) {
                         // for simplicity, just adding to end instead of corresponding position in original list
                         filteredGridItem = filteredGridDict[key]
-                        console.log("AppGroup | Will append " + key)
+                        console.log("AppGroup | Will append " + key + ", " + filteredGridItem.category)
                         append(filteredGridItem)
                     }
                 })
+
+                groupHeader.text = groupItem.groupLabel === "apps" ? "+" + count + " apps" : groupItem.groupLabel
+                groupItem.visible = count > 0
 
                 sortModel()
             }
