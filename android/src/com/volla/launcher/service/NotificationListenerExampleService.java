@@ -18,7 +18,7 @@ import com.volla.launcher.models.Notification;
 import com.volla.launcher.models.NotificationData;
 import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.storage.Message;
-import com.volla.launcher.utils.NotificationUtils;
+import com.volla.launcher.util.NotificationUtils;
 
 import java.util.UUID;
 /**

@@ -22,10 +22,7 @@ allprojects {
     }
 }
 
-compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-}
+
 
 apply plugin: 'com.android.application'
 
@@ -37,9 +34,8 @@ dependencies {
      def room_version = "2.4.2"
 
     implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.paging:paging-runtime:3.1.1"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.2.4'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
     implementation "androidx.room:room-rxjava3:$room_version"
@@ -65,6 +61,10 @@ android {
         minSdkVersion = 28
 	 applicationId "com.volla.launcher"
     }
+compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+}
 
     buildToolsVersion androidBuildToolsVersion
 

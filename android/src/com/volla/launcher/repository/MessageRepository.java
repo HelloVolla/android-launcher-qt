@@ -4,8 +4,6 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.paging.DataSource;
-import androidx.paging.LivePagedListBuilder;
 
 import com.volla.launcher.storage.Message;
 import com.volla.launcher.storage.MessageDao;

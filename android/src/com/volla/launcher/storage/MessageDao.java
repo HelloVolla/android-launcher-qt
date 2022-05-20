@@ -1,6 +1,5 @@
 package com.volla.launcher.storage;
 
-import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -14,8 +13,8 @@ public interface MessageDao {
 
     @Query("SELECT * FROM messages WHERE title = :title ORDER BY timeStamp DESC LIMIT 2 OFFSET :pageSize")
     Maybe<List<Message>> getAllMessageBySender(String title, int pageSize); // working
-    @Query("SELECT * FROM messages")
-    DataSource.Factory<Integer, Message> getAllMessageBySender();
+    //@Query("SELECT * FROM messages")
+    //DataSource.Factory<Integer, Message> getAllMessageBySender();
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertMessage(Message message); // working
     @Query("SELECT * FROM messages ORDER BY timeStamp DESC")
