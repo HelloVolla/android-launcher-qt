@@ -32,6 +32,78 @@ public class Message {
     public String notification;
     @ColumnInfo
     public Long timeStamp;
+
+public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSelfDisplayName() {
+        return selfDisplayName;
+    }
+
+    public void setSelfDisplayName(String selfDisplayName) {
+        this.selfDisplayName = selfDisplayName;
+    }
+
+    public String getLargeIcon() {
+        return largeIcon;
+    }
+
+    public void setLargeIcon(String largeIcon) {
+        this.largeIcon = largeIcon;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getNotification() {
+        return notification;
+    }
+
+    public void setNotification(String notification) {
+        this.notification = notification;
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
     public NotificationData getNotificationData() {
         return NotificationData.fromJson(notification);
     }

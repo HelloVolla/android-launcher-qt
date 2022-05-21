@@ -21,6 +21,6 @@ public interface MessageDao {
     Maybe<List<Message>> getAllMessages(); //working
     @Query("SELECT * FROM messages WHERE title IN ('Thanos Gupta', 'Arvind Yadav') GROUP BY title ORDER BY timeStamp ASC ")
     Maybe<List<Message>> getMessageListBySender();
-    @Query("SELECT title FROM messages GROUP BY title ORDER BY title ASC")
-    Maybe<List<String>> getAllSendersName(); // working
+    @Query("SELECT * FROM messages GROUP BY title ORDER BY title ASC")
+    Maybe<List<Message>> getAllSendersName(); // working
 }

@@ -32,7 +32,7 @@ public class MainViewModel extends AndroidViewModel {
         return repository.getAllMessageBySender(title, pageSize);
     }
 
-    public Maybe<List<String>> getAllSendersName() {
+    public Maybe<List<Message>> getAllSendersName() {
         return repository.getAllSendersName();
     }
 

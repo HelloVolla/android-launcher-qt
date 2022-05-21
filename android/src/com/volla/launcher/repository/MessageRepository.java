@@ -34,7 +34,7 @@ public class MessageRepository {
         return messageDao.getAllMessageBySender(title, pageSize).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
     }
 
-    public Maybe<List<String>> getAllSendersName() {
+    public Maybe<List<Message>> getAllSendersName() {
         return messageDao.getAllSendersName().observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
     }
 
