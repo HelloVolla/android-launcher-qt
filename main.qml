@@ -236,6 +236,10 @@ ApplicationWindow {
             }
         }
 
+        onBackgroundOpacityChanged: {
+            updateGridView(undefined, backgroundOpacity)
+        }
+
         Item {
             id: settingsPage
 
@@ -738,10 +742,10 @@ ApplicationWindow {
             appWindow.visibility = visibility
         }
 
-        function updateGridView(useColoredAppIcons) {
+        function updateGridView(useColoredAppIcons, backgroundOpacity) {
             console.log("MainView | Will update app page")
             var item = itemAt(swipeIndex.Apps)
-            item.children[0].item.updateAppLauncher(useColoredAppIcons)
+            item.children[0].item.updateAppLauncher(useColoredAppIcons, backgroundOpacity)
         }
 
         function updateBlurEffect(blurEffect) {

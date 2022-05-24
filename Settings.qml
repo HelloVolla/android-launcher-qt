@@ -635,6 +635,7 @@ Page {
                         } else if (type === "volla.launcher.securityStateResponse") {
                             securitySettingsItemTitle.text = message["isActive"]  ? securityModeOnOption.text
                                                                                   : securityModeOffOption.text
+                            securitySettingsItem.visible = message["error"] === undefined
                         } else if (type === "volla.launcher.checkSecurityPasswordResponse") {
                             console.log("Settings | Password is set: " + message["isPasswordSet"])
                             passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
@@ -969,7 +970,7 @@ Page {
                                 "text": qsTr("DuckDuckGo"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
                         var object = component.createObject(searchSettingsItemColumn, properties)
                         searchSettingsItemColumn.checkboxes.push(object)
                         component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
@@ -1086,6 +1087,10 @@ Page {
                         properties["actionId"] = "hapticMenus"
                         properties["text"] = qsTr("Use haptic menus")
                         properties["checked"] = designSettings.useHapticMenus
+                        if (component.status !== Component.Ready) {
+                            if (component.status === Component.Error)
+                                console.debug("AppGrid | Error: "+ component.errorString() );
+                        }
                         object = component.createObject(designSettingsItemColumn, properties)
                         designSettingsItemColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
@@ -1145,7 +1150,7 @@ Page {
                     property bool useColoredIcons: false
                     property bool showAppsAtStartup: false
                     property bool useHapticMenus: false
-                    property double blurEffect: 60
+                    property double blurEffect: 30
                 }
             }
 

@@ -35,37 +35,45 @@
         <source>Open Shortcut</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Most used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>apps</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">Zobraziť telefón</translation>
+        <translation type="obsolete">Zobraziť telefón</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">Otvorte fotoaparát
+        <translation type="obsolete">Otvorte fotoaparát
 </translation>
     </message>
     <message>
         <source>Agenda</source>
-        <translation type="unfinished">Diania</translation>
+        <translation type="obsolete">Diania</translation>
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">galéria</translation>
+        <translation type="obsolete">galéria</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Novinky</translation>
+        <translation type="obsolete">Novinky</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">Rozhovory</translation>
+        <translation type="obsolete">Rozhovory</translation>
     </message>
     <message>
         <source>Revent People</source>
-        <translation type="unfinished">kontakty</translation>
+        <translation type="obsolete">kontakty</translation>
     </message>
 </context>
 <context>
@@ -152,6 +160,14 @@
     <message>
         <source>Open Contact</source>
         <translation type="unfinished">otvorený kontakt</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">poznámky</translation>
+    </message>
+    <message>
+        <source>Find note ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -297,6 +313,42 @@
         <source>Reload contacts</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Security mode is OFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Security mode is ON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep existing Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password confirmation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -432,7 +484,43 @@
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished">vaša poznámka bola úspešne uložená</translation>
+        <translation type="obsolete">vaša poznámka bola úspešne uložená</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New note saved</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -543,7 +631,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">poznámky</translation>
+        <translation type="obsolete">poznámky</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -623,6 +711,19 @@
     </message>
     <message>
         <source>Reset successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Notes</source>
+        <translation type="unfinished">zobraziť poznámky
+</translation>
+    </message>
+    <message>
+        <source>Send Signal message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -6,7 +6,8 @@ WorkerScript.onMessage = function(message) {
     var contacts = message.contacts
     var model = message.model
     var actionType = message.actionType
-    var actionName = message.actionName
+    var actionName = message.actionName   
+    var eventRegex = message.eventRegex
 
     function textInputHasMultiTokens() {
         return /\S+\s\S+/.test(textInput)
@@ -38,9 +39,13 @@ WorkerScript.onMessage = function(message) {
     }
 
     function textInputCouldBeEvent() {
-        // todo: refine. It's just a demo for now
-        var eventRregex = /^(Tomorrow)|(Next\sTuesday)/
-        return eventRregex.test(textInput.trim());
+        // Geman style
+        var pattern1 = /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
+
+        // US style
+        var pattern2 = /^(\d{2,4})\/(\d{1,2})\/(\d{1,2})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
+        console.log("Springboard | Regex: " + eventRegex)
+        return pattern1.test(textInput.trim()) || pattern2.test(textInput.trim()) || eventRegex.test(textInput.trim())
     }
 
     var filteredSuggestionObj = new Array
@@ -76,13 +81,14 @@ WorkerScript.onMessage = function(message) {
             filteredSuggestionObj[0] = [actionName.SendSMS, actionType.SendSMS]
         } else if (textInputStartWithEmailAddress()) {
             filteredSuggestionObj[0] = [actionName.SendEmail, actionType.SendEmail]
-        } else if (textInputHasMultiLines()) {
-            filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
         } else if (textInputCouldBeEvent()) {
             filteredSuggestionObj[0] = [actionName.CreateEvent, actionType.CreateEvent]
-        } else {
+            filteredSuggestionObj[1] = [actionName.CreateNote, actionType.CreateNote]
+        } else if (textInputHasMultiLines()) {
             filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
-            filteredSuggestionObj[1] = [actionName.SearchWeb, actionType.SearchWeb]
+        } else {
+            filteredSuggestionObj[0] = [actionName.SearchWeb, actionType.SearchWeb]
+            filteredSuggestionObj[1] = [actionName.CreateNote, actionType.CreateNote]
         }
     } else if (textInputHasContactPrefix()) {
         var lastChar = textInput.substring(textInput.length - 1, textInput.length)

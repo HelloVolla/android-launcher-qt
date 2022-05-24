@@ -95,11 +95,17 @@ Page {
         }
     }
 
-    function updateAppLauncher(useColoredAppIcons) {
+    function updateAppLauncher(useColoredAppIcons, backgroundOpacity) {
         settings.sync()
         for (var i = 0; i < appLauncher.appGroups.length; i++) {
             var appGroup = appLauncher.appGroups[i]
-            appGroup.desaturation = useColoredAppIcons ? 0.0 : 1.0
+            if (useColoredAppIcons !== undefined) {
+                appGroup.desaturation = useColoredAppIcons ? 0.0 : 1.0
+            }
+            if (backgroundOpacity !== undefined) {
+                appGroup.backgroundOpacity = backgroundOpacity
+            }
+
         }
     }
 
@@ -110,8 +116,9 @@ Page {
 
     function getAllApps() {
         var allApps = new Array
-        for (var appGroup in appLauncher.appGroups) {
-            allApps = allApps.concat(appGroup.apps)
+         for (var i = 0; i < appLauncher.appGroups.length; i++) {
+             var appGroup = appLauncher.appGroups[i]
+             allApps = allApps.concat(appGroup.apps)
         }
         return allApps
     }
@@ -150,6 +157,8 @@ Page {
                                "textInput": appLauncher.textInput,
                                "iconMap": appLauncher.iconMap,
                                "labelMap": appLauncher.labelMap,
+                               "phoneApp": mainView.phoneApp,
+                               "messageApp": mainView.messageApp,
                                "labelPointSize": appLauncher.labelPointSize,
                                "headerPointSize": mainView.mediumFontSize,
                                "innerSpacing": mainView.innerSpacing,

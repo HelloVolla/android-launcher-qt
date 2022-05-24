@@ -35,36 +35,44 @@
         <source>Open Shortcut</source>
         <translation type="unfinished">Apri scorciatoie</translation>
     </message>
+    <message>
+        <source>Most used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>apps</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">Mostra telefono</translation>
+        <translation type="obsolete">Mostra telefono</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">Apri la fotocamera</translation>
+        <translation type="obsolete">Apri la fotocamera</translation>
     </message>
     <message>
         <source>Agenda</source>
-        <translation type="unfinished">Date</translation>
+        <translation type="obsolete">Date</translation>
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">Galleria</translation>
+        <translation type="obsolete">Galleria</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Notizie</translation>
+        <translation type="obsolete">Notizie</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">Conversazioni</translation>
+        <translation type="obsolete">Conversazioni</translation>
     </message>
     <message>
         <source>Revent People</source>
-        <translation type="unfinished">Contatti</translation>
+        <translation type="obsolete">Contatti</translation>
     </message>
 </context>
 <context>
@@ -151,6 +159,14 @@
     <message>
         <source>Open Contact</source>
         <translation type="unfinished">apri contatto</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">note</translation>
+    </message>
+    <message>
+        <source>Find note ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -296,6 +312,42 @@
         <source>Reload contacts</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Security mode is OFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Security mode is ON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep existing Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password confirmation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -429,7 +481,43 @@
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished">la tua nota è stata memorizzata con successo</translation>
+        <translation type="obsolete">la tua nota è stata memorizzata con successo</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New note saved</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -540,7 +628,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">note</translation>
+        <translation type="obsolete">note</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -624,6 +712,18 @@
     </message>
     <message>
         <source>Reset successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Notes</source>
+        <translation type="unfinished">mostra le note</translation>
+    </message>
+    <message>
+        <source>Send Signal message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

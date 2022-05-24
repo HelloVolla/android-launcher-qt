@@ -35,36 +35,44 @@
         <source>Open Shortcut</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Most used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>apps</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">Покажи телефон</translation>
+        <translation type="obsolete">Покажи телефон</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">отворена камера</translation>
+        <translation type="obsolete">отворена камера</translation>
     </message>
     <message>
         <source>Agenda</source>
-        <translation type="unfinished">Събития</translation>
+        <translation type="obsolete">Събития</translation>
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">галерия</translation>
+        <translation type="obsolete">галерия</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Новини</translation>
+        <translation type="obsolete">Новини</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">разговори</translation>
+        <translation type="obsolete">разговори</translation>
     </message>
     <message>
         <source>Revent People</source>
-        <translation type="unfinished">Контакти</translation>
+        <translation type="obsolete">Контакти</translation>
     </message>
 </context>
 <context>
@@ -151,6 +159,14 @@
     <message>
         <source>Open Contact</source>
         <translation type="unfinished">отворен контакт</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">бележки</translation>
+    </message>
+    <message>
+        <source>Find note ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -297,6 +313,42 @@
         <source>Reload contacts</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Security mode is OFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Security mode is ON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep existing Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password confirmation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -430,7 +482,43 @@
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished">бележката ви беше успешно съхранена</translation>
+        <translation type="obsolete">бележката ви беше успешно съхранена</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New note saved</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -541,7 +629,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">бележки</translation>
+        <translation type="obsolete">бележки</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -621,6 +709,18 @@
     </message>
     <message>
         <source>Reset successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Notes</source>
+        <translation type="unfinished">показват бележки</translation>
+    </message>
+    <message>
+        <source>Send Signal message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
