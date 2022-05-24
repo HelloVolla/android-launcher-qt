@@ -59,7 +59,8 @@ WorkerScript.onMessage = function(message) {
             if (selectedObj !== undefined) {
                 if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
                     filteredSuggestionObj.push([actionName.SendSMS, actionType.SendSMS])
-                    // todo: refactor
+                }
+                if (selectedObj["phone.signal"] !== undefined && selectedObj["phone.signal"].length > 0) {
                     filteredSuggestionObj.push([actionName.SendSignal, actionType.SendSignal])
                 }
                 var emailAddressCount = 0
@@ -110,6 +111,9 @@ WorkerScript.onMessage = function(message) {
                 }
                 if (selectedObj["phone.other"] !== undefined && selectedObj["phone.other"].length > 0) {
                     filteredSuggestionObj.push([phoneNumberCount === 0 ? actionName.MakeCall : actionName.MakeCallToOther, actionType.MakeCallToOther])
+                }
+                if (selectedObj["phone.signal"] !== undefined && selectedObj["phone.signal"].length > 0) {
+                    filteredSuggestionObj.push([actionName.OpenSignalContact, actionType.OpenSignalContact])
                 }
             } else {
                 console.log("SpringBoard | No contact selected")

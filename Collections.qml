@@ -40,6 +40,7 @@ Page {
     property string c_CHANNEL:   "channel"  // twitter or news channel
     property string c_TSTAMP:    "tstamp"   // timestamp to sort the list
     property string c_TYPE:      "type"     // rss or atpm feed type
+    property string c_SIGNAL:    "signal"   // has a signal account
 
     background: Rectangle {
         anchors.fill: parent
@@ -479,6 +480,14 @@ Page {
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                     }
+                    Label {
+                        id: openSignalContactLabel
+                        height: mainView.mediumFontSize * 1.2
+                        text: qsTr("Open in Signal")
+                        font.pointSize: mainView.mediumFontSize
+                        color: "white"
+                        visible: model.c_SIGNAL !== undefined
+                    }
                 }
                 Behavior on implicitHeight {
                     NumberAnimation {
@@ -532,6 +541,7 @@ Page {
                 var mlPoint = mapFromItem(messageLabel, 0, 0)
                 var elPoint = mapFromItem(emailLabel, 0, 0)
                 var clPoint = mapFromItem(contactLabel, 0, 0)
+                var sgPoint = mapFromItem(openSignalContactLabel, 0, 0)
                 var selectedItem
 
                 if (mouseY > plPoint.y && mouseY < plPoint.y + callLabel.height) {
@@ -542,6 +552,8 @@ Page {
                     selectedItem = emailLabel
                 } else if (mouseY > clPoint.y && mouseY < clPoint.y + contactLabel.height) {
                     selectedItem = contactLabel
+                } else if (mouseY > sgPoint.y && mouseY < sgPoint.y + openSignalContactLabel.height) {
+                    selectedItem = openSignalContactLabel
                 } else {
                     selectedItem = contactBox
                 }
@@ -558,6 +570,8 @@ Page {
                 emailLabel.font.pointSize = selectedMenuItem === emailLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
                 contactLabel.font.bold = selectedMenuItem === contactLabel
                 contactLabel.font.pointSize = selectedMenuItem === contactLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
+                openSignalContactLabel.font.bold = selectedMenuItem === openSignalContactLabel
+                openSignalContactLabel.font.pointSize = selectedMenuItem === openSignalContactLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
 
                 if (selectedMenuItem !== contactBox && mainView.useVibration) {
                     AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
@@ -577,6 +591,9 @@ Page {
                 } else if (selectedMenuItem === contactLabel) {
                     console.log("Collections | Open contact of " + model.c_TITLE)
                     currentCollectionModel.executeSelection(model, mainView.actionType.OpenContact)
+                } else if (selectedMenuItem === openSignalContactLabel) {
+                    console.log("Collections | Open contact in Signal" + model.c_TITLE)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.OpenSignalContact)
                 } else {
                     console.log("Collections | Nothing selected")
                 }
@@ -652,7 +669,9 @@ Page {
                 } else if (contact["phone.other"] !== undefined) {
                     cContact.c_PHONE = contact["phone.other"]
                 }
-
+                if (contact["phone.signal"] !== undefined) {
+                    cContact.c_SIGNAL = contact["phone.signal"]
+                }
                 if (contact["email.work"] !== undefined) {
                     cContact.c_EMAIL = contact["email.work"]
                 } else if (contact["email.home"] !== undefined) {
@@ -809,6 +828,9 @@ Page {
                     break
                 case mainView.actionType.OpenContact:
                     AN.SystemDispatcher.dispatch("volla.launcher.showContactAction", {"contact_id": item.c_ID})
+                    break
+                case mainView.actionType.OpenSignalContact:
+                    Qt.openUrlExternally("sgnl://signal.me/#p/" + item.c_SIGNAL)
                     break
                 default:
                     mainView.updateConversationPage(mainView.conversationMode.Person, item.c_ID, item.c_TITLE)

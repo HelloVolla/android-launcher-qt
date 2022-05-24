@@ -215,6 +215,21 @@ public class ContactWorker {
             }
             co.close();
 
+            // get the user's signal number
+            Cursor cs = contentResolver.query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    new String[]{ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+                            ContactsContract.CommonDataKinds.Phone.NUMBER,
+                            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME},
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =? AND account_type=?",
+                    new String[]{id, "org.thoughtcrime.securesms"}, null);
+
+            if (cs.moveToFirst()) {
+                String signal_number = cs.getString(cs.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                contact.put("phone.signal", signal_number);
+            }
+            cs.close();
+
             blockEnd = i;
 
             contacts.add(contact);

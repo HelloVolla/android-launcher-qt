@@ -468,6 +468,11 @@ Page {
                         textInputArea.text = ""
                         mainView.showToast("Signal message sent")
                         break
+                    case mainView.actionType.OpenContactInSignal:
+                        phoneNumber = selectedObj["phone.signal"]
+                        Qt.openUrlExternally("sgnl://signal.me/#p/" + phoneNumber)
+                        textInputArea.text = ""
+                        break;
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         selectedObj = Object.assign({}, actionObj)

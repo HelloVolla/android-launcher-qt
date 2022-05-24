@@ -153,7 +153,8 @@ ApplicationWindow {
             'SendEmailToOther': 20024,
             'OpenContact' : 20025,
             'OpenApp' : 20026,
-            'SendSignal' : 20027
+            'SendSignal' : 20027,
+            'OpenSignalContact' : 20028
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -163,7 +164,7 @@ ApplicationWindow {
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
             "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection"),
             "OpenContact" : qsTr("Open Contact"), "ShowNotes": qsTr("Show Notes"), "SendSignal" : qsTr("Send Signal message"),
-            "CreateEvent" : qsTr("Add to Calender")
+            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal")
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -186,7 +187,6 @@ ApplicationWindow {
                                       "RadioOff": qsTr("Radio off"),
                                       "MessageDelivered": qsTr("Message delivered"),
                                       "MessageNotDelivered": qsTr("Message not delivered")}
-
         property var contacts: new Array
         property var loadingContacts: new Array
         property bool isLoadingContacts: false
