@@ -169,9 +169,19 @@ public class AppUtil {
                             SystemDispatcher.dispatch(SECURITY_MODE_RESULT, reply);
                         } else if (type.equals(GET_SECURITY_STATE)) {
                             try {
+                                Intent childModeSettings = pm.getLaunchIntentForPackage("com.volla.childmodesettings");
+                                boolean available = true;
+                                try {
+                                    // check if available
+                                    pm.getPackageInfo("com.volla.childmodesettings", 0);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    // if not available set available as false
+                                    available = false;
+                                }
                                 ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
                                 Map reply = new HashMap();
                                 reply.put("isActive", childModeManager.isActivate() );
+                                reply.put("isInstalled", available);
                                 SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
                             } catch (Exception e) {
                                 Map reply = new HashMap();

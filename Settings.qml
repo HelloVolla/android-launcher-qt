@@ -633,9 +633,10 @@ Page {
                                 mainView.showToast(qsTr("Wrong password"))
                             }
                         } else if (type === "volla.launcher.securityStateResponse") {
+                            console.log("Settings | Security state: " + message["isActive"] + ", " + message["error"])
                             securitySettingsItemTitle.text = message["isActive"]  ? securityModeOnOption.text
                                                                                   : securityModeOffOption.text
-                            securitySettingsItem.visible = message["error"] === undefined
+                            securitySettingsItem.visible = message["error"] === undefined && message["isInstalled"]
                         } else if (type === "volla.launcher.checkSecurityPasswordResponse") {
                             console.log("Settings | Password is set: " + message["isPasswordSet"])
                             passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"

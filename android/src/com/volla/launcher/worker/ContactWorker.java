@@ -226,7 +226,7 @@ public class ContactWorker {
 
             if (cs.moveToFirst()) {
                 String signal_number = cs.getString(cs.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                contact.put("phone.signal", signal_number);
+                contact.put("phone.signal", signal_number.replace(" ", ""));
             }
             cs.close();
 

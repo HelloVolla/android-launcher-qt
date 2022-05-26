@@ -468,8 +468,9 @@ Page {
                         textInputArea.text = ""
                         mainView.showToast("Signal message sent")
                         break
-                    case mainView.actionType.OpenContactInSignal:
+                    case mainView.actionType.OpenSignalContact:
                         phoneNumber = selectedObj["phone.signal"]
+                        console.log("Springboard | Will show contact " + phoneNumber + " in Signal")
                         Qt.openUrlExternally("sgnl://signal.me/#p/" + phoneNumber)
                         textInputArea.text = ""
                         break;

@@ -63,7 +63,7 @@ public class MessageUtil {
 
                                 //========= Exprimental ================
 
-                                if (attachmentUrl != null) {
+                                if (attachmentUrl != null || attachmentUrl.length() == 0) {
 
                                     Log.d(TAG, "Will send MMS to " + number);
                                     Log.d(TAG, "Build: " + getSystemProperty("ro.lineage.build.version"));
