@@ -89,11 +89,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
             String extras = sbn.toString();
             NotificationListenerExampleService.this.cancelAllNotifications();
-            Log.d("ArvindVolla", extras);
+            Log.d("VollaNotification extras", extras);
             Bundle bundle = sbn.getNotification().extras;
             for (String key : bundle.keySet()) {
                 Object value = bundle.get(key);
-                Log.d("ArvindVolla sbn  key: ", key + "  :: value:" + (value == null ? "null" : value.toString()));
+                Log.d("VollaNotification sbn  key: ", key + "  :: value:" + (value == null ? "null" : value.toString()));
                 //Log.d("ArvindVolla sbn value: ",value.toString());
             }
             Bundle extras_1 = NotificationCompat.getExtras(sbn.getNotification());
@@ -108,6 +108,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             message.selfDisplayName = extras_1.getString(android.app.Notification.EXTRA_SELF_DISPLAY_NAME);
             message.text = NotificationUtils.getMessage(extras_1);
             message.timeStamp = System.currentTimeMillis();
+            Log.d("VollaNotification Inserting data into db","");
             repository.insertMessage(message);
 
             message = null;
@@ -130,7 +131,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             Log.i("ArvindVolla", "not success");
         }
         */
-            Log.d("ArvindVolla extra", String.valueOf(sbn.getNotification().extras));
+            Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
             String channel_id;
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                channel_id = sbn.getNotification().getChannelId();

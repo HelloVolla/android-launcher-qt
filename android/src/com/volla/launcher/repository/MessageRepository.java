@@ -2,7 +2,7 @@ package com.volla.launcher.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
-
+import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.volla.launcher.storage.Message;
@@ -49,7 +49,9 @@ public class MessageRepository {
 //    }
 
     public void insertMessage(Message message) {
+        Log.d("VollaNotification Inserting repository data","");
         messageDao.insertMessage(message).observeOn(Schedulers.io()).subscribeOn(Schedulers.io()).subscribe();
+        Log.d("VollaNotification repository data inserted","");
     }
 
 }

@@ -29,6 +29,7 @@ public class SignalWorker {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map dmessage) {
+                Log.d("VollaNotification on Dispatcher",type);
                 final Activity activity = QtNative.activity();
                 final Map message = dmessage;
                 ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(QtNative.activity().getApplication());
@@ -38,6 +39,7 @@ public class SignalWorker {
                     // todo: implement (use a separate thread)
                 } else if (type.equals(GET_SIGNAL_THREADS)) {
                     // todo: implement (use a separate thread)
+                    Log.d("VollaNotification called retriveMessageThreads","");
                     retriveMessageThreads(message, activity);
                 }
             }
@@ -48,6 +50,7 @@ public class SignalWorker {
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
         ArrayList<Map> messageList = new ArrayList();
         String threadId = (String) message.get("threadAge");
+        Log.d("VollaNotification  retriving Message Threads","");
         repository.getAllSendersName().subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
@@ -70,6 +73,7 @@ public class SignalWorker {
             result.put("messages", messageList );
             result.put("messagesCount", messageList.size() );
             SystemDispatcher.dispatch(GOT_SIGNAL_THREADS, result);
+            Log.d("VollaNotification Threads dispatched","");
         });
     }
 }
