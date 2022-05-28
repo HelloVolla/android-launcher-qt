@@ -237,7 +237,7 @@ ApplicationWindow {
         }
 
         onBackgroundOpacityChanged: {
-            updateGridView(undefined, backgroundOpacity)
+            updateGridView("backgroundOpacity", backgroundOpacity)
         }
 
         Item {
@@ -737,19 +737,28 @@ ApplicationWindow {
             }
         }
 
-        function updateVisibility(visibility) {
-            console.log("MainView | Update window visibility to " + visibility)
-            appWindow.visibility = visibility
-        }
-
-        function updateGridView(useColoredAppIcons, backgroundOpacity) {
-            console.log("MainView | Will update app page")
+        function updateGridView(key, value) {
             var item = itemAt(swipeIndex.Apps)
-            item.children[0].item.updateAppLauncher(useColoredAppIcons, backgroundOpacity)
+            item.children[0].item.updateAppLauncher(key, value)
         }
 
-        function updateBlurEffect(blurEffect) {
-            fastBlur.radius = blurEffect
+        function updateSettings(key, value) {
+            if (key === "blurEffect") {
+                settings.blurEffect = value
+                fastBlur.radius = value
+            } else if (key === "fullscreen") {
+                settings.fullscreen = value
+                if (value) {
+                    appWindow.visibility = 5
+                } else {
+                    appWindow.visibility = 2
+                }
+            } else if (key === "useHapticMenus") {
+                settings.useHapticMenus = value
+                mainView.useVibration = value
+            } else if (key === "showAppsAtStartup") {
+                settings.showAppsAtStartup = value
+            }
         }
 
         function resetActions() {
@@ -842,7 +851,6 @@ ApplicationWindow {
                         mainView.timeStamp = new Date()
                         var contactsStr = contactsCache.readPrivate()
                         console.log("MainView | Did read contacts with length " + contactsStr.length)
-                        console.log("MainView | Raw contacts string: " + contactsStr)
                         contactsWorker.sendMessage({'contactsStr': contactsStr })
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {

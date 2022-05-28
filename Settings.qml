@@ -21,10 +21,31 @@ Page {
         anchors.fill: parent
         contentWidth: parent.width
         contentHeight: settingsColumn.height
-
         Column {
             id: settingsColumn
             width: parent.width
+
+            function closeAllItemsExcept(item) {
+                if (item !== newsSettingsItemColumn && newsSettingsItemColumn.newsCheckboxes.length > 0) {
+                    newsSettingsItemColumn.menuState = false
+                    newsSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== shortcutSettingsItemColumn && shortcutSettingsItemColumn.checkboxes.length > 0) {
+                    shortcutSettingsItemColumn.menuState = false
+                    shortcutSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== searchSettingsItemColumn && searchSettingsItemColumn.checkboxes.length > 0) {
+                    searchSettingsItemColumn.menuState = false
+                    searchSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== designSettingsItemColumn && designSettingsItemColumn.checkboxes.length > 0) {
+                    designSettingsItemColumn.menuState = false
+                    designSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== resetSettingsItemColumn && resetSettingsItemColumn.menuState) {
+                    resetSettingsItemColumn.menuState = false
+                }
+            }
 
             Label {
                 id: headerLabel
@@ -680,6 +701,7 @@ Page {
                             if (newsSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create new checkboxes")
                                 newsSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(newsSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy new checkboxes")
                                 newsSettingsItemColumn.destroyCheckboxes()
@@ -693,12 +715,13 @@ Page {
                         for (var i = 0; i < cannels.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", newsSettingsItemColumn)
                             var properties = { "actionId": cannels[i]["id"],
-                                "text": cannels[i]["name"], "checked": cannels[i]["activated"],
+                                "text": cannels[i]["name"], "activeCheckbox": false, "checked": cannels[i]["activated"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": true}
                             var object = component.createObject(newsSettingsItemColumn, properties)
+                            object.activeCheckbox = true
                             newsSettingsItemColumn.newsCheckboxes.push(object)
                         }
                         console.log("Settings News checkboxes created")
@@ -769,6 +792,7 @@ Page {
                             if (shortcutSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
                                 shortcutSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(shortcutSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
                                 shortcutSettingsItemColumn.destroyCheckboxes()
@@ -788,10 +812,12 @@ Page {
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": getFilteredShortcuts(mainView.defaultActions, "id", shortcuts[i]["id"]).length === 0 }
                             var object = component.createObject(shortcutSettingsItemColumn, properties)
+                            object.activeCheckbox = true
                             shortcutSettingsItemColumn.checkboxes.push(object)
                         }
                         addButton.visible = true
                         console.log("Settings | Checkboxes created")
+
                     }
 
                     function addCheckbox(actionId, label) {
@@ -802,6 +828,7 @@ Page {
                             "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                             "hasRemoveButton": true }
                         var object = component.createObject(shortcutSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         shortcutSettingsItemColumn.checkboxes.push(object)
                     }
 
@@ -958,6 +985,7 @@ Page {
                             if (searchSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
                                 searchSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(searchSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
                                 searchSettingsItemColumn.destroyCheckboxes()
@@ -973,18 +1001,23 @@ Page {
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
                         var object = component.createObject(searchSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
                         properties["actionId"] = "startpage"
                         properties["text"] = qsTr("Startpage")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.StartPage
                         object = component.createObject(searchSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "metager"
                         properties["text"] = qsTr("MetaGer")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.MetaGer
                         object = component.createObject(searchSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
                     }
@@ -1056,6 +1089,7 @@ Page {
                             if (designSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
                                 designSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(designSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
                                 designSettingsItemColumn.destroyCheckboxes()
@@ -1071,29 +1105,49 @@ Page {
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
                         var object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "coloredIcons"
                         properties["text"] = qsTr("Use colored app icons")
                         properties["checked"] = designSettings.useColoredIcons
                         object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
                         object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "hapticMenus"
                         properties["text"] = qsTr("Use haptic menus")
                         properties["checked"] = designSettings.useHapticMenus
-                        if (component.status !== Component.Ready) {
-                            if (component.status === Component.Error)
-                                console.debug("AppGrid | Error: "+ component.errorString() );
-                        }
                         object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "useGroupedApps"
+                        properties["text"] = qsTr("Show grouped apps")
+                        properties["checked"] = designSettings.useGroupedApps
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "useCategories"
+                        properties["text"] = qsTr("Use app categories")
+                        properties["checked"] = designSettings.useCategories
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -1111,22 +1165,27 @@ Page {
                         if (actionId === "fullscreen") {
                             designSettings.fullscreen = active
                             designSettings.sync()
-                            if (active) {
-                                mainView.updateVisibility(5)
-                            } else {
-                                mainView.updateVisibility(2)
-                            }
+                            mainView.updateSettings("fullscreen", active)
                         } else if (actionId === "coloredIcons") {
                             designSettings.useColoredIcons = active
                             designSettings.sync()
-                            mainView.updateGridView(active)
+                            mainView.updateGridView("coloredIcons", active)
                         } else if (actionId === "startupIndex") {
                             designSettings.showAppsAtStartup = active
                             designSettings.sync()
+                            mainView.updateSettings("showAppsAtStartup", active)
                         } else if (actionId === "hapticMenus") {
                             designSettings.useHapticMenus = active
                             designSettings.sync()
-                            mainView.useVibration = active
+                            mainView.updateSettings("useHapticMenus", active)
+                        } else if (actionId === "useGroupedApps") {
+                            designSettings.useGroupedApps = active
+                            designSettings.sync()
+                            mainView.updateGridView("useGroupedApps", active)
+                        } else if (actionId === "useCategories") {
+                            designSettings.useCategories = active
+                            designSettings.sync()
+                            mainView.updateGridView("useCategories", active)
                         }
                     }
                 }
@@ -1149,8 +1208,10 @@ Page {
                     id: designSettings
                     property bool fullscreen: false
                     property bool useColoredIcons: false
+                    property bool useGroupedApps: true
+                    property bool useCategories: true
                     property bool showAppsAtStartup: false
-                    property bool useHapticMenus: false
+                    property bool useHapticMenus: true
                     property double blurEffect: 30
                 }
             }
@@ -1187,7 +1248,7 @@ Page {
                 onValueChanged: {
                     console.log("Settings | Blurr filter chanded to " + value)
                     designSettings.blurEffect = value
-                    mainView.updateBlurEffect(value)
+                    mainView.updateSettings("blurEffect", value)
                 }
             }
 
@@ -1220,6 +1281,7 @@ Page {
                         }
                         onClicked: {
                             resetSettingsItemColumn.menuState = !resetSettingsItemColumn.menuState
+                            settingsColumn.closeAllItemsExcept(resetSettingsItemColumn)
                         }
                     }
 
@@ -1329,7 +1391,7 @@ Page {
 
                 Behavior on implicitHeight {
                     NumberAnimation {
-                        duration: 250.0
+                        duration: 1000.0
                     }
                 }
             }

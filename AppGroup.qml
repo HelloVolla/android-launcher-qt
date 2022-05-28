@@ -34,12 +34,12 @@ Item {
     property var pinnedShortcuts: []
 
     onTextInputChanged: {
-        console.log("AppGroup | onTextInputChanged")
+        console.log("AppGroup " + groupIndex + " | onTextInputChanged")
         groupModel.update(groupItem.textInput)
     }
 
     onAppsChanged: {
-        console.log("AppGroup | onAppsChanged")
+        console.log("AppGroup " + groupIndex + " | onAppsChanged")
         groupModel.clear()
         groupModel.modelArr = new Array
         groupModel.prepareModel()
@@ -47,7 +47,7 @@ Item {
     }
 
     onPinnedShortcutsChanged: {
-        console.log("AppGroup | onPinnedShortcutsChanged")
+        console.log("AppGroup " + groupIndex + " | onPinnedShortcutsChanged")
         groupModel.clear()
         groupModel.modelArr = new Array
         groupModel.prepareModel()
@@ -59,8 +59,9 @@ Item {
     }
 
     onSelectedGroupIndexChanged: {
-        console.log("AppGroup | Selected group changed to " + selectedGroupIndex)
-        groupGrid.visible = groupIndex === selectedGroupIndex
+        console.log("AppGroup " + groupIndex + " | Selected group changed to " + selectedGroupIndex)
+        groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
+                                         groupItem.innerSpacing / 2 : groupItem.innerSpacing
     }
 
     function showApps(appsShouldBeVisible) {
@@ -79,8 +80,8 @@ Item {
     Column {
         id: groupColumn
         width: parent.width
-        topPadding: groupItem.groupIndex > 0 ? groupItem.innerSpacing : 0
-
+        topPadding: groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
+                                                     groupItem.innerSpacing / 2 : groupItem.innerSpacing
         Button {
             id: groupHeader
             anchors.horizontalCenter: parent.horizontalCenter
@@ -93,7 +94,7 @@ Item {
                 opacity: 0.5
                 font.pointSize: groupItem.headerPointSize
             }
-            visible: groupItem.groupIndex > 0
+            visible: !groupGrid.visible
             background: Rectangle {
                 color: "transparent"
                 border.color: Universal.foreground
@@ -106,12 +107,27 @@ Item {
             }
         }
 
+        Label {
+            id: groupHeader2
+            anchors.horizontalCenter: parent.horizontalCenter
+            padding: groupItem.innerSpacing / 2
+            visible: groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
+            text: groupHeader.text
+            color: Universal.foreground
+            opacity: 0.5
+            font.pointSize: groupItem.labelPointSize
+            background: Rectangle {
+                color: "transparent"
+                border.color: "transparent"
+            }
+        }
+
         GridView {
             id: groupGrid
             width: parent.width
             height: contentHeight
-            topMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing : 0
-            bottomMargin: groupItem.innerSpacing
+            topMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing / 2 : 0
+            //bottomMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing / 2 : 0
             cellHeight: parent.width * 0.32
             cellWidth: parent.width * 0.25
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
@@ -248,6 +264,12 @@ Item {
                     color:  Universal.accent
                 }
             }
+
+            Behavior on contentHeight {
+                NumberAnimation {
+                    duration: 250.0
+                }
+            }
         }
 
         ListModel {
@@ -257,10 +279,6 @@ Item {
 
             // Call this method, if apps or shortcuts have been changed
             function prepareModel() {
-                if (labelMap !== undefined )
-                    console.log("AppGroup | Label map has " + Object.keys(groupItem.labelMap).length + " elemens.")
-                else
-                    console.log("AppGroup | Label map is undefined")
                 modelArr = groupItem.pinnedShortcuts.concat(groupItem.apps)
                 modelArr.forEach(function(app, i) {
                     modelArr[i].label = app.package in groupItem.labelMap && app.shortcutId === undefined
@@ -271,7 +289,7 @@ Item {
 
             // Call this method to update the grid content
             function update(text) {
-                console.log("AppGroup | Update model with text input: " + text)
+                console.log("AppGroup " + groupIndex + " | Update model with text input: " + text)
 
                 var filteredGridDict = new Object
                 var filteredGridItem
@@ -279,7 +297,7 @@ Item {
                 var found
                 var i
 
-                console.log("AppGroup | Model " + groupItem.groupLabel + " has " + modelArr.length + " elements")
+                console.log("AppGroup " + groupIndex + " | Model " + groupItem.groupLabel + " has " + modelArr.length + " elements")
 
                 // filter model
                 for (i = 0; i < modelArr.length; i++) {
@@ -317,12 +335,13 @@ Item {
                     if (!found) {
                         // for simplicity, just adding to end instead of corresponding position in original list
                         filteredGridItem = filteredGridDict[key]
-                        console.log("AppGroup | Will append " + key + ", " + filteredGridItem.category)
+                        console.log("AppGroup " + groupIndex + " | Will append " + key + ", " + filteredGridItem.category)
                         append(filteredGridItem)
                     }
                 })
 
-                groupHeader.text = groupItem.groupLabel === "apps" ? "+" + count + " apps" : groupItem.groupLabel
+                groupHeader.text = groupItem.groupLabel.toLowerCase() === "apps" ? "+" + count + " " + groupItem.groupLabel
+                                                                                 : groupItem.groupLabel
                 groupItem.visible = count > 0
 
                 sortModel()
@@ -346,10 +365,10 @@ Item {
             target: AN.SystemDispatcher
             onDispatched: {
                 if (type === "volla.launcher.callLogResponse") {
-                    console.log("AppGrid | Missed calls: " + message["callsCount"])
+                    console.log("AppGroup " + groupIndex + " | Missed calls: " + message["callsCount"])
                     groupItem.newCalls = message["callsCount"] > 0
                 } else if (type === "volla.launcher.threadsCountResponse") {
-                    console.log("AppGrid | Unread messages: " + message["threadsCount"])
+                    console.log("AppGroup " + groupIndex + " | Unread messages: " + message["threadsCount"])
                     groupItem.unreadMessages = message["threadsCount"] > 0
                 }
             }

@@ -95,17 +95,34 @@ Page {
         }
     }
 
-    function updateAppLauncher(useColoredAppIcons, backgroundOpacity) {
-        settings.sync()
-        for (var i = 0; i < appLauncher.appGroups.length; i++) {
-            var appGroup = appLauncher.appGroups[i]
-            if (useColoredAppIcons !== undefined) {
-                appGroup.desaturation = useColoredAppIcons ? 0.0 : 1.0
+    function updateAppLauncher(key, value) {
+        console.log("AppGrid | Will update app launcher: " + key + ", " + value)
+        if (key === "backgroundopacity") {
+            for (var i = 0; i < appLauncher.appGroups.length; i++) {
+                var appGroup = appLauncher.appGroups[i]
+                if (backgroundOpacity !== undefined) {
+                    appGroup.backgroundOpacity = backgroundOpacity
+                }
             }
-            if (backgroundOpacity !== undefined) {
-                appGroup.backgroundOpacity = backgroundOpacity
-            }
+        } else if (key === "useCategories") {
+            settings.useCategories = value
 
+            if (settings.useGroupedApps) {
+                var apps = getAllApps()
+                appLauncher.destroyAppGroups()
+                appLauncher.createAppGroups(getGroupedApps(apps))
+            }
+        } else if (key === "useGroupedApps") {
+            settings.useGroupedApps = value
+            apps = getAllApps()
+            appLauncher.destroyAppGroups()
+            appLauncher.createAppGroups(getGroupedApps(apps))
+        } else if (key === "useColoredIcons") {
+            settings.useColoredIcons = value
+            for (i = 0; i < appLauncher.appGroups.length; i++) {
+                appGroup = appLauncher.appGroups[i]
+                appGroup.desaturation = value ? 0.0 : 1.0
+            }
         }
     }
 
@@ -125,29 +142,52 @@ Page {
 
     function getGroupedApps(apps) {
         var groupedApps = new Array
-        apps.sort(function(a, b) {
-            if (a.label > b.label) return 1
-            else if (a.label < b.label) return -1
-            else return 0
-        })
 
-        // todo: Implement category grouping
+        if (settings.useGroupedApps) {
+            apps.sort(function(a, b) {
+                if (a.statistic > b.statistic) return 1
+                else if (a.statistic < b.statistic) return -1
+                else return 0
+            })
 
-        if (apps.length > appLauncher.maxAppCount) {
-            groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0, appLauncher.maxAppCount) } )
-            groupedApps.push( { "groupLabel": qsTr("apps"), "apps": apps.slice(appLauncher.maxAppCount + 1) } )
+            if (apps.length > appLauncher.maxAppCount) {
+                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0, appLauncher.maxAppCount) } )
+
+                if (settings.useCategories) {
+                    var remainingApps = apps.slice(appLauncher.maxAppCount)
+                    remainingApps.sort(function(a, b) {
+                        if (a.category > b.category) return 1
+                        else if (a.category < b.category) return -1
+                        else return 0
+                    })
+                    var groupLabel
+                    var someApps
+                    for (var i = 0; i < remainingApps.length; i++) {
+                        var app = remainingApps[i]
+                        var category = app.category !== "" ? app.category : qsTr("Other apps")
+                        if (category !== groupLabel) {
+                            if (groupLabel !== undefined) groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                            groupLabel = category
+                            someApps = new Array
+                        }
+                        someApps.push(app)
+                    }
+                    groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                } else {
+                    groupedApps.push( { "groupLabel": qsTr("apps"), "apps": apps.slice(appLauncher.maxAppCount) } )
+                }
+            } else {
+                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
+            }
         } else {
             groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
         }
+
         return groupedApps
     }
 
     function createAppGroups(groupedApps) {
-        console.log("AppGrid | Will greate app groups for " + groupedApps.length + " groups.")
-        if (appLauncher.labelMap !== undefined )
-            console.log("AppGrid | Label map has " + Object.keys(appLauncher.labelMap).length + " elemens.")
-        else
-            console.log("AppGrid | Label map is undefined")
+        console.log("AppGrid | Will create app grids for " + groupedApps.length + " groups.")
         groupedApps.forEach(function(appGroupInfos, index) {
             console.log("AppGrid | Will create group " + index)
             var component = Qt.createComponent("/AppGroup.qml", appLauncherColumn)
@@ -163,6 +203,7 @@ Page {
                                "headerPointSize": mainView.mediumFontSize,
                                "innerSpacing": mainView.innerSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
+                               "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
                                "apps": appGroupInfos["apps"]}
             if (component.status !== Component.Ready) {
                 if (component.status === Component.Error)
@@ -171,6 +212,14 @@ Page {
             var object = component.createObject(appLauncherColumn, properties)
             appLauncher.appGroups.push(object)
         })
+    }
+
+    function destroyAppGroups() {
+        for (var i = 0; i < appLauncher.appGroups.length; i++) {
+            var appGroup = appLauncher.appGroups[i]
+            appGroup.destroy()
+        }
+        appLauncher.appGroups = new Array
     }
 
     Flickable {
@@ -244,6 +293,7 @@ Page {
                 for (var i = 0; i < appGroups.length; i++) {
                     var appGroup = appGroups[i]
                     appGroup.showApps(i === groupIndex)
+                    appGroup.selectedGroupIndex = groupIndex
                 }
             }
 
@@ -443,11 +493,8 @@ Page {
     Settings {
         id: settings
         property bool useColoredIcons: false
-
-        onUseColoredIconsChanged: {
-            console.log("Colered icons settings changed")
-            gridView.desaturation = useColoredIcons ? 0.0 : 1.0
-        }
+        property bool useGroupedApps: true
+        property bool useCategories: true
     }
 
     FileIO {

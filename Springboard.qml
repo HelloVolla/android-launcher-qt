@@ -465,8 +465,11 @@ Page {
                         break
                     case mainView.actionType.SendSignal:
                         // todo: implement
+                        idx = textInput.search(/\s/)
+                        message = textInput.substring(idx+1, textInput.length)
+                        phoneNumber = selectedObj["phone.signal"]
+                        AN.SystemDispatcher.dispatch("volla.launcher.signalIntentAction", {"number": phoneNumber, "text": message})
                         textInputArea.text = ""
-                        mainView.showToast("Signal message sent")
                         break
                     case mainView.actionType.OpenSignalContact:
                         phoneNumber = selectedObj["phone.signal"]
@@ -661,7 +664,6 @@ Page {
 
         function createShortcuts(shortcuts) {
             var leftDistance = Screen.width / 4
-            console.log("SpringBoard | Left distance is " + leftDistance)
             for (var i = 0; i < shortcuts.length; i++) {
                 if (shortcuts[i]["activated"]) {
                     var component = Qt.createComponent("/Shortcut.qml", shortcutColumn)

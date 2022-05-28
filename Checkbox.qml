@@ -9,7 +9,7 @@ CheckBox {
     property double labelFontSize
     property double circleSize
     property var actionId
-    property bool activeCheckbox: true
+    property bool activeCheckbox: false
     property bool hasRemoveButton: false
     property bool isToggle: false
     property int startX: 0
@@ -72,8 +72,6 @@ CheckBox {
             } else {
                 parent.updateSettings(actionId, checked)
             }
-        } else {
-            activeCheckbox = true
         }
     }
 

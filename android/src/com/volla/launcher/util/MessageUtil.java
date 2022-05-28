@@ -36,6 +36,9 @@ public class MessageUtil {
 
     private static final String TAG = "MessageUtil";
 
+    public static final String SEND_SIGNAL_MESSAGE = "volla.launcher.signalIntentAction";
+    public static final String DID_SENT_SIGNAL_MESSAGE = "volla.launcher.signalIntentResponse";
+
     public static final String SEND_MESSAGE = "volla.launcher.messageAction";
     public static final String DID_SENT_MESSAGE = "volla.launcher.messageResponse";
 
@@ -216,6 +219,29 @@ public class MessageUtil {
                             } else {
                                 activity.requestPermissions(new String[] { Manifest.permission.SEND_SMS },
                                                             PERMISSIONS_REQUEST_SEND_SMS);
+                            }
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                } else if (type.equals(SEND_SIGNAL_MESSAGE)) {
+
+                    final String number = (String) message.get("number");
+                    final String text = (String) message.get("text");
+
+                    Runnable runnable = new Runnable () {
+
+                        public void run() {
+
+                            Log.d(TAG, "Will send Signal message to " + number);
+
+                            Intent intent = new Intent(Intent.ACTION_SENDTO);
+                            intent.setPackage("org.thoughtcrime.securesms");
+                            intent.setData(Uri.parse("smsto:" + number));
+                            intent.putExtra("sms_body", text);
+                            if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                                activity.startActivity(intent);
                             }
                         }
                     };

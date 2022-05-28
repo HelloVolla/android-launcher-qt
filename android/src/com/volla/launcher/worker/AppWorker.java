@@ -92,7 +92,11 @@ public class AppWorker
                                     try {
                                         ApplicationInfo applicationInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
                                         int appCategory = applicationInfo.category;
-                                        appInfo.put("category", (String) ApplicationInfo.getCategoryTitle(activity, appCategory));
+                                        if (appCategory > -1) {
+                                            appInfo.put("category", (String) ApplicationInfo.getCategoryTitle(activity, appCategory));
+                                        } else {
+                                            appInfo.put("category", "");
+                                        }
                                     } catch (Exception e) {
                                         Log.w(TAG, "Unknown package name: " + e.toString());
                                     }
