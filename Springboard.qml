@@ -16,6 +16,7 @@ Page {
     property real menuheight: mainView.largeFontSize * 7 + mainView.innerSpacing * 10.5
     property var textInputArea
     property var selectedObj
+    property var headline
 
     property var eventGlossar: [qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"), qsTr("Thursday"), qsTr("Friday"),
                                 qsTr("Saturday"), qsTr("Sunday"), qsTr("tomorrow")]
@@ -51,6 +52,10 @@ Page {
         shortcutMenu.updateShortcuts(actions)
     }
 
+    function updateHeadlineColor() {
+        springBoard.headline.color = mainView.fontColor
+    }
+
     ListView {
         id: listView
         anchors.fill: parent
@@ -73,6 +78,12 @@ Page {
                 background: Rectangle {
                     color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
+                }
+
+                Binding {
+                    target: springBoard
+                    property: "headline"
+                    value: headline
                 }
             }
             TextArea {

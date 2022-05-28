@@ -1264,6 +1264,39 @@ Page {
 
                     property bool menuState: false
 
+                    onMenuStateChanged: {
+                        if (resetSettingsItemColumn.menuState) {
+                            resetNewsButton.visible = true
+                            timer.setTimeout(function(){
+                                reseetShortcutsButton.visible = true
+                                timer.setTimeout(function(){
+                                    resetLauncherButton.visible = true}, 50)
+                            }, 50)
+                        } else {
+                            resetLauncherButton.visible = false
+                            timer.setTimeout(function(){
+                                reseetShortcutsButton.visible = false
+                                timer.setTimeout(function(){
+                                    resetNewsButton.visible = false}, 50)
+                            }, 50)
+                        }
+                    }
+
+                    Timer {
+                        id: timer
+                        function setTimeout(cb, delayTime) {
+                            timer.interval = delayTime
+                            timer.repeat = false
+                            timer.triggered.connect(cb)
+                            timer.triggered.connect(function release () {
+                                timer.triggered.disconnect(cb) // This is important
+                                timer.triggered.disconnect(release) // This is important as well
+                            })
+                            timer.start()
+                        }
+                    }
+
+
                     Button {
                         id: resetSettingsItemButton
                         width: parent.width
@@ -1289,7 +1322,7 @@ Page {
                         id: resetNewsButton
                         flat: true
                         highlighted: true
-                        visible: resetSettingsItemColumn.menuState
+                        visible: false
                         x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
@@ -1314,8 +1347,6 @@ Page {
                         }
                         onClicked: {
                             resetNewsButtonBackground.color = "transparent"
-                            newsSettingsItemColumn.menuState = false
-                            newsSettingsItemColumn.destroyCheckboxes()
                             mainView.resetFeeds()
                         }
                     }
@@ -1324,7 +1355,7 @@ Page {
                         id: reseetShortcutsButton
                         flat: true
                         highlighted: true
-                        visible: resetSettingsItemColumn.menuState
+                        visible: false
                         x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
@@ -1349,8 +1380,6 @@ Page {
                         }
                         onClicked: {
                             reseetShortcutsButtonBackground.color = "transparent"
-                            shortcutSettingsItemColumn.menuState = false
-                            shortcutSettingsItemColumn.destroyCheckboxes()
                             mainView.resetActions()
                         }
                     }
@@ -1359,7 +1388,7 @@ Page {
                         id: resetLauncherButton
                         flat: true
                         highlighted: true
-                        visible: resetSettingsItemColumn.menuState
+                        visible: false
                         x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
@@ -1391,7 +1420,7 @@ Page {
 
                 Behavior on implicitHeight {
                     NumberAnimation {
-                        duration: 1000.0
+                        duration: 250.0
                     }
                 }
             }

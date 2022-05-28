@@ -397,6 +397,8 @@ ApplicationWindow {
                 console.log("MainView | Not supported theme: " + theme)
                 break
             }
+            var item = itemAt(swipeIndex.Springboard)
+            item.children[0].item.updateHeadlineColor()
             AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": updateLockScreen})
         }
 
@@ -519,12 +521,12 @@ ApplicationWindow {
                         console.log("MainView | Redirect to " + redirectUrl)
                         if (maxRedirectCount - redirectCount > 0) {
                             redirectCount = redirectCount + 1
-                            checkAndAddFeed(redirectUrl)
+                            //checkAndAddFeed(redirectUrl)
                         } else {
                             redirectCount = 0
                             mainView.showToast(qsTr("Error because of too much redirects"))
+                            doc.abort()
                         }
-                        doc.abort()
                     }
                     else if (doc.status >= 400) {
                         redirectCount = 0
@@ -535,68 +537,68 @@ ApplicationWindow {
                     if (doc.responseXML === null) {
                         console.log("MainView | No valid XML for feed: " + doc.responseText)
                         mainView.showToast(qsTr("Could not load a valid feed"))
-                        return
-                    }
-
-                    var rss = doc.responseXML.documentElement
-                    var channel
-                    if (rss.nodeName === "feed") {
-                        channel = rss
+                        doc.abort()
                     } else {
-                        for (var i = 0; i < rss.childNodes.length; ++i) {
-                            if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
-                                channel = rss.childNodes[i]
-                                break
+                        var rss = doc.responseXML.documentElement
+                        var channel
+                        if (rss.nodeName === "feed") {
+                            channel = rss
+                        } else {
+                            for (var i = 0; i < rss.childNodes.length; ++i) {
+                                if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
+                                    channel = rss.childNodes[i]
+                                    break
+                                }
                             }
                         }
-                    }
-                    if (channel === undefined) {
-                        console.log("MainView | Missing rss channel")
-                        mainView.showToast(qsTr("Invalid RSS feed: ") + url)
-                        return
-                    }
-                    var feed = new Object
-
-                    feed.id = url
-                    feed.activated = true
-                    for (i = 0; i < channel.childNodes.length; ++i) {
-                        if (channel.childNodes[i].nodeName === "title") {
-                            var childNode = channel.childNodes[i]
-                            var textNode = childNode.firstChild
-                            feed.name = textNode.nodeValue
-                        } else if (channel.childNodes[i].nodeName === "logo") {
-                            childNode = channel.childNodes[i]
-                            textNode = childNode.firstChild
-                            feed.icon = textNode.nodeValue
+                        if (channel === undefined) {
+                            console.log("MainView | Missing rss channel")
+                            mainView.showToast(qsTr("Invalid RSS feed: ") + url)
+                            return
                         }
-                    }
+                        var feed = new Object
 
-                    if (feed.icon !== undefined) {
-                        mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
-                        return
-                    }
-
-                    var baseUrl = getBaseUrl(url)
-                    var htmlRequest = new XMLHttpRequest();
-                    htmlRequest.onreadystatechange = function() {
-                        if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                            console.log("MainView | Received header status for news homepage: " + htmlRequest.status);
-                            if (htmlRequest.status !== 200) {
-                                console.log("MainView | Couldn't load feed homepage. Will take fallback for icon")
-                                // todo: solution for fallback. ico not supported.
-                                feed.icon = baseUrl + "/favicon.ico"
-                                mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
-                                return
+                        feed.id = url
+                        feed.activated = true
+                        for (i = 0; i < channel.childNodes.length; ++i) {
+                            if (channel.childNodes[i].nodeName === "title") {
+                                var childNode = channel.childNodes[i]
+                                var textNode = childNode.firstChild
+                                feed.name = textNode.nodeValue
+                            } else if (channel.childNodes[i].nodeName === "logo") {
+                                childNode = channel.childNodes[i]
+                                textNode = childNode.firstChild
+                                feed.icon = textNode.nodeValue
                             }
-                        } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
-                            var html = htmlRequest.responseText
-                            feed.icon = getFavicon(baseUrl, html)
+                        }
+
+                        if (feed.icon !== undefined) {
                             mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
                             return
                         }
+
+                        var baseUrl = getBaseUrl(url)
+                        var htmlRequest = new XMLHttpRequest();
+                        htmlRequest.onreadystatechange = function() {
+                            if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                                console.log("MainView | Received header status for news homepage: " + htmlRequest.status);
+                                if (htmlRequest.status !== 200) {
+                                    console.log("MainView | Couldn't load feed homepage. Will take fallback for icon")
+                                    // todo: solution for fallback. ico not supported.
+                                    feed.icon = baseUrl + "/favicon.ico"
+                                    mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                                    return
+                                }
+                            } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
+                                var html = htmlRequest.responseText
+                                feed.icon = getFavicon(baseUrl, html)
+                                mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                                return
+                            }
+                        }
+                        htmlRequest.open("GET", baseUrl)
+                        htmlRequest.send()
                     }
-                    htmlRequest.open("GET", baseUrl)
-                    htmlRequest.send()
                 }
             }
             doc.open("GET", url)
@@ -759,6 +761,7 @@ ApplicationWindow {
             } else if (key === "showAppsAtStartup") {
                 settings.showAppsAtStartup = value
             }
+            settings.sync()
         }
 
         function resetActions() {
