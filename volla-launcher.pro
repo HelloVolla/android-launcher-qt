@@ -72,11 +72,27 @@ DISTFILES += \
     android/src/com/volla/launcher/util/CallUtil.java \
     android/src/com/volla/launcher/util/VibrationUtil.java \
     android/src/com/volla/launcher/util/MessageUtil.java \
+    android/src/com/volla/launcher/util/NotificationUtils.java \
+    android/src/com/volla/launcher/util/VersionUtils.java \
+    android/src/com/volla/launcher/util/VollaLauncher.java \
     android/src/com/volla/launcher/worker/CallWorker.java \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java \
     android/src/com/volla/launcher/worker/WallpaperWorker.java \
-    android/src/com/volla/launcher/worker/AppWorker.java
+    android/src/com/volla/launcher/worker/AppWorker.java \
+    android/src/com/volla/launcher/worker/SignalWorker.java \
+    android/src/com/volla/launcher/models/Action.java \
+    android/src/com/volla/launcher/models/Notification.java \
+    android/src/com/volla/launcher/models/NotificationData.java \
+    android/src/com/volla/launcher/models/NotificationIds.java \
+    android/src/com/volla/launcher/repository/MainViewModel.java \
+    android/src/com/volla/launcher/repository/MessageRepository.java \
+    android/src/com/volla/launcher/service/NotificationListenerExampleService.java \
+    android/src/com/volla/launcher/storage/Message.java \
+    android/src/com/volla/launcher/storage/MessageDao.java \
+    android/src/com/volla/launcher/storage/MessageDatabase.java \
+    android/src/com/volla/launcher/storage/Users.java \
+    android/src/com/volla/launcher/storage/UsersDao.java
 
 TRANSLATIONS += \
     translations/Volla_de.ts \

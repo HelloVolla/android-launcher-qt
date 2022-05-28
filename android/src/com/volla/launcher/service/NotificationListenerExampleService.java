@@ -18,6 +18,7 @@ import com.volla.launcher.models.Notification;
 import com.volla.launcher.models.NotificationData;
 import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.storage.Message;
+import com.volla.launcher.storage.Users;
 import com.volla.launcher.util.NotificationUtils;
 
 import java.util.UUID;
@@ -87,32 +88,54 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             notification.sortKey = sbn.getNotification().getSortKey();
             notificationData.notification = notification;
 
-            String extras = sbn.toString();
+            //String extras = sbn.toString();
             NotificationListenerExampleService.this.cancelAllNotifications();
-            Log.d("ArvindVolla", extras);
+            //Log.d("ArvindVolla", extras);
             Bundle bundle = sbn.getNotification().extras;
             for (String key : bundle.keySet()) {
                 Object value = bundle.get(key);
-                Log.d("ArvindVolla sbn  key: ", key + "  :: value:" + (value == null ? "null" : value.toString()));
+                Log.d("VollaNotification sbn  key: ", key + "  :: value:" + (value == null ? "null" : value.toString()));
                 //Log.d("ArvindVolla sbn value: ",value.toString());
             }
-            Bundle extras_1 = NotificationCompat.getExtras(sbn.getNotification());
-            String title = NotificationUtils.getTitle(extras_1);
-            String msg = NotificationUtils.getMessage(extras_1);
-            Icon bitmap = NotificationUtils.getLargeIcon(extras_1);
+            Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
+            long timeInMillis = System.currentTimeMillis();
+            String uuid = UUID.randomUUID().toString();
+            String largeIcon = sbn.getNotification().getLargeIcon().toString();
+            String title = NotificationUtils.getTitle(extras);
+            String notificationStr = notificationData.toJson();
 
-            message.uuid = UUID.randomUUID().toString();
-            message.largeIcon = sbn.getNotification().getLargeIcon().toString();
-            message.notification = notificationData.toJson();
-            message.title = extras_1.getString(android.app.Notification.EXTRA_TITLE);
-            message.selfDisplayName = extras_1.getString(android.app.Notification.EXTRA_SELF_DISPLAY_NAME);
-            message.text = NotificationUtils.getMessage(extras_1);
-            message.timeStamp = System.currentTimeMillis();
+
+            //Icon bitmap = NotificationUtils.getLargeIcon(extras);
+            message.uuid = uuid;
+            message.largeIcon = largeIcon;
+            message.notification = notificationStr;
+            message.title = title;
+            message.selfDisplayName = extras.getString(android.app.Notification.EXTRA_SELF_DISPLAY_NAME);
+            message.text = NotificationUtils.getMessage(extras);
+            message.timeStamp = timeInMillis;
+			Log.d("VollaNotification Inserting data into db","");
             repository.insertMessage(message);
 
+            Users users = new Users();
+            users.uuid = uuid;
+            users.body = NotificationUtils.getMessage(extras);
+            users.user_name = title;
+            users.user_contact_number = "";
+            users.read = false;
+            users.isSent = false;
+            users.notification = notificationStr;
+            users.largeIcon = largeIcon;
+            users.timeStamp = timeInMillis;
+            
+            
+           
+            repository.insertUser(users);
             message = null;
             notification = null;
             notificationData = null;
+            uuid = null;
+            largeIcon = null;
+            title = null;
 
             //Log.d("ArvindVolla", "Ignoring potential duplicate from " + sbn.getPackageName() + ":\n" + title + "\n" + msg);
 
@@ -130,7 +153,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             Log.i("ArvindVolla", "not success");
         }
         */
-            Log.d("ArvindVolla extra", String.valueOf(sbn.getNotification().extras));
+            Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
             String channel_id;
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                channel_id = sbn.getNotification().getChannelId();
