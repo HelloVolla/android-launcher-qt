@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.volla.launcher.storage.Message;
+import com.volla.launcher.storage.Users;
 
 import java.util.List;
 
@@ -36,6 +37,12 @@ public class MainViewModel extends AndroidViewModel {
         return repository.getAllSendersName();
     }
 
+    public Maybe<List<Users>> getAllUsers() {
+        return repository.getAllUsers();
+    }
+    public Maybe<Users> getReplyNotification(String uuid) {
+        return repository.getReplyNotification(uuid);
+    }
 //    public DataSource.Factory<Integer, Message>  getAllMessageBySender() {
 //        return repository.getAllMessageBySender();
 //    }

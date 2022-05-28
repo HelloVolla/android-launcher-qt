@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.repository.MainViewModel;
 import com.volla.launcher.storage.Message;
+import com.volla.launcher.storage.Users;
 
 public class SignalWorker {
 
@@ -51,29 +52,29 @@ public class SignalWorker {
         ArrayList<Map> messageList = new ArrayList();
         String threadId = (String) message.get("threadAge");
         Log.d("VollaNotification  retriving Message Threads","");
-        repository.getAllSendersName().subscribe(it -> {
-            for (Message m : it) {
+        repository.getAllUsers().subscribe(it -> {
+            for (Users m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
                 reply.put("thread_id", m.getUuid());
-                reply.put("body", m.getText());
-                reply.put("person", m.getTitle());
+                reply.put("body", m.getBody());
+                reply.put("person", m.getUser_name());
                 reply.put("address", "7653456789");
                 reply.put("date", m.getTimeStamp());
-                reply.put("read", true);
-                reply.put("isSent", true);
+                reply.put("read", m.getRead());
+                reply.put("isSent", m.getSent());
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
 
-                Log.e("ThreadMessage", "Sender Name: " + m);
-                Log.e("ThreadMessage", m.getNotificationData().toJson());
+                Log.e("VollaNotification ThreadMessage", "Sender Name: " + m);
+                Log.e("VollaNotification ThreadMessage JSON", m.getNotificationData().toJson());
                 messageList.add(reply);
             }
             Map result = new HashMap();
             result.put("messages", messageList );
-            result.put("messagesCount", messageList.size() );
+            result.put("messagesCount", messageList.size());
             SystemDispatcher.dispatch(GOT_SIGNAL_THREADS, result);
-            Log.d("VollaNotification Threads dispatched","");
+            Log.d("VollaNotification Threads dispatched",result.toString());
         });
     }
 }

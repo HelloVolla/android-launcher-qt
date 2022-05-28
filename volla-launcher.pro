@@ -90,7 +90,9 @@ DISTFILES += \
     android/src/com/volla/launcher/service/NotificationListenerExampleService.java \
     android/src/com/volla/launcher/storage/Message.java \
     android/src/com/volla/launcher/storage/MessageDao.java \
-    android/src/com/volla/launcher/storage/MessageDatabase.java
+    android/src/com/volla/launcher/storage/MessageDatabase.java \
+    android/src/com/volla/launcher/storage/Users.java \
+    android/src/com/volla/launcher/storage/UsersDao.java
 
 TRANSLATIONS += \
     translations/Volla_de.ts \
