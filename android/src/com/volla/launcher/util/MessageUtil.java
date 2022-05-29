@@ -63,7 +63,7 @@ public class MessageUtil {
 
                                 //========= Exprimental ================
 
-                                if (attachmentUrl != null || attachmentUrl.length() == 0) {
+                                if (attachmentUrl != null && attachmentUrl.length() > 0) {
 
                                     Log.d(TAG, "Will send MMS to " + number);
                                     Log.d(TAG, "Build: " + getSystemProperty("ro.lineage.build.version"));
@@ -115,9 +115,9 @@ public class MessageUtil {
                                         message.setImage(bitmap);
                                         mmsm.sendMMS(number, text, bitmap);
                                     } catch (MalformedURLException ue) {
-                                        Log.e(TAG, ue.getMessage());
+                                        Log.e(TAG, "MalformedURLException: " + ue.getMessage());
                                     } catch (IOException ioe) {
-                                        Log.e(TAG, ioe.getMessage());
+                                        Log.e(TAG, "IOException " + ioe.getMessage());
                                     }
                                 }
 
