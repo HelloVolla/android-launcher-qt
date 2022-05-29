@@ -65,7 +65,7 @@ Page {
                 textInputField.placeholderText = qsTr("Find people ...")
                 currentCollectionModel = peopleModel
                 currentCollectionModel.modelArr = new Array
-                operationCount = 2
+                operationCount = 3
                 mainView.updateSpinner(true)
                 collectionPage.loadThreads({"age": threadAge})
                 collectionPage.loadCalls({"age": threadAge})
@@ -75,7 +75,7 @@ Page {
                 textInputField.placeholderText = qsTr("Find thread ...")
                 currentCollectionModel = threadModel
                 currentCollectionModel.modelArr = new Array
-                operationCount = 1
+                operationCount = 2
                 mainView.updateSpinner(true)
                 collectionPage.loadThreads({"age": threadAge})
                 break;
@@ -117,14 +117,17 @@ Page {
 
     function loadThreads(filter) {
         console.log("Collections | Will load threads")
+        collectionPage.threads = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
         // todo: load threads from further source
         //       address (phone or contact), body (message), date, type
+        AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
     function loadCalls(filter) {
         console.log("Collections | Will load calls")
-        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)  
+        collectionPage.calls = new Array
+        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)
     }
 
     ListView {
@@ -725,6 +728,7 @@ Page {
                     || (contact["phone.work"] in contactThreads)
                     || (contact["phone.home"] in contactThreads)
                     || (contact["phone.mobile"] in contactCalls)
+                    || (contact["phone.signal"] in contactCalls)
                     || (contact["phone.other"] in contactCalls)
                     || (contact["phone.work"] in contactCalls)
                     || (contact["phone.home"] in contactCalls))
@@ -915,7 +919,7 @@ Page {
             var found
             var i
 
-            console.log("Collections | Model has " + modelArr.length + "elements")
+            console.log("Collections | Model has " + modelArr.length + " elements")
 
             for (i = 0; i < modelArr.length; i++) {
                 filteredModelItem = modelArr[i]
@@ -1372,14 +1376,26 @@ Page {
                 console.log("Collections | onDispatched: " + type)
                 if (currentCollectionMode === mainView.collectionMode.People
                         || currentCollectionMode === mainView.collectionMode.Threads) {
-                    collectionPage.threads = message["threads"]
+                    collectionPage.threads = collectionPage.threads.concat(message["threads"])
+                    collectionPage.updateListModel()
+                }
+            } else if (type === "volla.launcher.signalThreadsResponse") {
+                console.log("Collections | onDispatched: " + type)
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    message["messages"].forEach(function (aThread, index) {
+                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
+                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
+                        }
+                    })
+                    collectionPage.threads = collectionPage.threads.concat(message["messages"])
                     collectionPage.updateListModel()
                 }
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
                 if (currentCollectionMode === mainView.collectionMode.People
                         || currentCollectionMode === mainView.collectionMode.Threads) {
-                    collectionPage.calls = message["calls"]
+                    collectionPage.calls = collectionPage.calls.concat(message["calls"])
                     collectionPage.updateListModel()
                 }
             } else if (type === "volla.launcher.contactImageResponse") {

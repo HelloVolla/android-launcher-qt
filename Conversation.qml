@@ -142,9 +142,13 @@ Page {
     }
 
     function loadConversation(filter) {
-        console.log("Conversations | Will load messages")
+        console.log("Conversation | Will load messages")
         messages = new Array
-        AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
+        if (isNaN(filter["threadId"])) {
+            AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
+        } else {
+            AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
+        }
     }
 
     function loadCalls(filter) {
@@ -769,17 +773,25 @@ Page {
         onDispatched: {
             if (type === "volla.launcher.conversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
-                conversationPage.messages.push(message["messages"])
-                conversationPage.messages = message["messages"]
+                conversationPage.messages = conversationPage.messages.concat(message["messages"])
 //                message["messages"].forEach(function (message, index) {
 //                    for (const [messageKey, messageValue] of Object.entries(message)) {
 //                        console.log("Conversation | * " + messageKey + ": " + messageValue)
 //                    }
 //                })
                 conversationPage.updateListMocel()
+            } else if (type === "volla.launcher.signalMessagesResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                conversationPage.messages = conversationPage.messages.concat(message["messages"])
+                message["messages"].forEach(function (message, index) {
+                    for (const [messageKey, messageValue] of Object.entries(message)) {
+                        console.log("Conversation | * " + messageKey + ": " + messageValue)
+                    }
+                })
+                conversationPage.updateListMocel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
-                conversationPage.calls = message["calls"]
+                conversationPage.calls = conversationPage.calls.concat(message["calls"])
 //                message["calls"].forEach(function (call, index) {
 //                    for (const [callKey, callValue] of Object.entries(call)) {
 //                        console.log("Collections | * " + callKey + ": " + callValue)
