@@ -1209,7 +1209,7 @@ Page {
                     property bool fullscreen: false
                     property bool useColoredIcons: false
                     property bool useGroupedApps: true
-                    property bool useCategories: true
+                    property bool useCategories: false
                     property bool showAppsAtStartup: false
                     property bool useHapticMenus: true
                     property double blurEffect: 30

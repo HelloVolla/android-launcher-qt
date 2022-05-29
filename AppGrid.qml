@@ -108,12 +108,14 @@ Page {
             settings.useCategories = value
 
             if (settings.useGroupedApps) {
+                appLauncher.selectedGroup = 0
                 var apps = getAllApps()
                 appLauncher.destroyAppGroups()
                 appLauncher.createAppGroups(getGroupedApps(apps))
             }
         } else if (key === "useGroupedApps") {
             settings.useGroupedApps = value
+            appLauncher.selectedGroup = 0
             apps = getAllApps()
             appLauncher.destroyAppGroups()
             appLauncher.createAppGroups(getGroupedApps(apps))

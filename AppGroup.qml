@@ -12,7 +12,7 @@ Item {
     implicitHeight: groupColumn.height
 
     property string groupLabel
-    property string messageApp
+    property var messageApp
     property string phoneApp
     property string textInput: ""
 
