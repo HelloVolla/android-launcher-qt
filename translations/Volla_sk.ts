@@ -43,6 +43,10 @@
         <source>apps</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Other apps</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
@@ -167,6 +171,10 @@
     </message>
     <message>
         <source>Find note ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in Signal</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -347,6 +355,14 @@
     </message>
     <message>
         <source>Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show grouped apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use app categories</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -724,6 +740,10 @@
     </message>
     <message>
         <source>Add to Calender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show in Signal</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
