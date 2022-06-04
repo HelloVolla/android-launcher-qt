@@ -9,10 +9,10 @@ import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
-
+import android.graphics.Bitmap;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-
+import java.io.ByteArrayOutputStream;
 import com.volla.launcher.models.Action;
 import com.volla.launcher.models.Notification;
 import com.volla.launcher.models.NotificationData;
@@ -153,24 +153,29 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             Log.i("ArvindVolla", "not success");
         }
         */
-            Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
-            String channel_id;
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                channel_id = sbn.getNotification().getChannelId();
-//                Log.e("Krishna extra", channel_id);
 
-                //if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE){
-//                Intent intent = new Intent("com.volla.notificationlistenerexample");
-//                Bundle bundle_1 = new Bundle();
-//                sbn.getNotification().extras.putBundle("android.car.EXTENSIONS", bundle_1);
-//                intent.putExtra("Notification Code", notificationCode);
-//                intent.putExtra("channel_d", channel_id);
-//                intent.setAction("com.volla.notificationlistenerexample");
-                //intent.putExtra("my_noti",sbn.getNotification());
-//                sendBroadcast(intent);
-//            }
+           try {
+                Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
+                String channel_id;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    channel_id = sbn.getNotification().getChannelId();
+                    Log.d("VollaNotification  channel_id: ", channel_id);
+
+                    //if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE){
+                    Intent intent = new Intent("com.volla.launcher.notification");
+                    intent.putExtra("Notification Code", notificationCode);
+                    intent.putExtra("channel_d", channel_id);
+                    intent.setAction("com.volla.launcher.notification");
+                    //intent.putExtra("largeIcon", bitmapData);
+                    intent.putExtra("title", NotificationUtils.getTitle(extras));
+                    intent.putExtra("body", NotificationUtils.getMessage(extras));
+                    sendBroadcast(intent);
+                    }
+            } catch(Exception e){
+                e.printStackTrace();
+                Log.e("NotificationsPlugin", "Error retrieving icon");
+            }
         }
-        //}
     }
 
     @Override
@@ -181,7 +186,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             if(activeNotifications != null && activeNotifications.length > 0) {
                 for (int i = 0; i < activeNotifications.length; i++) {
                     if (notificationCode == matchNotificationCode(activeNotifications[i])) {
-                        Intent intent = new  Intent("com.volla.notificationlistenerexample");
+                        Intent intent = new  Intent("com.volla.launcher.notification");
                         intent.putExtra("Notification Code", notificationCode);
                         sendBroadcast(intent);
                         break;

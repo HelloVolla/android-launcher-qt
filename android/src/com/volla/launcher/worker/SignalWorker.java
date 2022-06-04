@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import android.content.Intent;
 import java.util.LinkedList;
 import org.qtproject.qt5.android.QtNative;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,6 +17,7 @@ import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.repository.MainViewModel;
 import com.volla.launcher.storage.Message;
 import com.volla.launcher.storage.Users;
+import androidx.core.app.NotificationManagerCompat;
 
 public class SignalWorker {
 
@@ -35,14 +37,15 @@ public class SignalWorker {
                 final Activity activity = QtNative.activity();
                 final Map message = dmessage;
                 ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(QtNative.activity().getApplication());
-                
 
                 if (type.equals(GET_SIGNAL_MESSAGES)) {
                      Log.d("VollaNotification calling RetrieveMessageConversations","");
+                    checkPermission(activity);
                     retrieveMessageConversations(message, activity);
                 } else if (type.equals(GET_SIGNAL_THREADS)) {
                     // todo: implement (use a separate thread)
                     Log.d("VollaNotification called retriveMessageThreads","");
+                     checkPermission(activity);
                     retriveMessageThreads(message, activity);
                 }
             }
@@ -116,4 +119,11 @@ public class SignalWorker {
             Log.d("VollaNotification Threads dispatched",result.toString());
         });
     }
+
+   static void checkPermission(Activity activity){
+      if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {        //ask for permission
+             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+             activity.startActivity(intent);
+        }
+   }
 }

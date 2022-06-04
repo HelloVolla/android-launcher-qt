@@ -41,6 +41,8 @@ import android.content.BroadcastReceiver;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import com.volla.launcher.R;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class ReceiveTextActivity extends AndroidNativeActivity
 {
@@ -49,7 +51,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     public static final String GOT_TEXT = "volla.launcher.receiveTextResponse";
     public static final String GOT_SHORTCUT = "volla.launcher.receivedShortcut";
     public static final String UIMODE_CHANGED = "volla.launcher.uiModeChanged";
-    private ImageChangeBroadcastReceiver imageChangeBroadcastReceiver;
+    private NotificationBroadcastReceiver notificationBroadcastReceiver;
     public static ReceiveTextActivity instance;
     private String channel_d;
 
@@ -87,12 +89,17 @@ public class ReceiveTextActivity extends AndroidNativeActivity
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
 
+        notificationBroadcastReceiver = new NotificationBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.volla.launcher.notification");
+        registerReceiver(notificationBroadcastReceiver, intentFilter);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(imageChangeBroadcastReceiver);
+        unregisterReceiver(notificationBroadcastReceiver);
     }
 
     @Override
@@ -218,26 +225,30 @@ public class ReceiveTextActivity extends AndroidNativeActivity
          return Base64.encodeToString(imageBytes, Base64.NO_WRAP);
     }
 
-    private void createNotification(){
+    private void createNotification(Intent intent){
         Log.d("Arvindvolla", "Creating Notification");
+        //Bitmap largeIcon = null;
+        //largeIcon = BitmapFactory.decodeByteArray(intent.getByteArrayExtra("largeIcon"), 96,96);
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new NotificationCompat.Builder(this,channel_d)
-                .setContentTitle("My Notification")
-                .setSmallIcon(R.drawable.notification_logo)
+                .setSmallIcon(R.drawable.icon)
                 .setAutoCancel(true)
-                .setContentTitle("Default notification")
-                .setContentText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+                .setContentTitle(intent.getStringExtra("title"))
+                .setContentText(intent.getStringExtra("body"))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
                 .setDefaults(Notification.DEFAULT_LIGHTS| Notification.DEFAULT_SOUND)
-                .setTicker("Hearty365")
+                .setTicker("Message")
+                .setPriority(Notification.PRIORITY_HIGH)
                 .build();
-        notificationManager.notify("Arvind", 1, notification);
+        notificationManager.notify("VollaOS", 1, notification);
     }
 
 
-    public class ImageChangeBroadcastReceiver extends BroadcastReceiver {
+    public class NotificationBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("Arvindvolla", "Received Notification Broadcast");
             int receivedNotificationCode = intent.getIntExtra("Notification Code",-1);
              channel_d = intent.getStringExtra("channel_d");
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -250,7 +261,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
                 }
 
             }
-            createNotification();
+            createNotification(intent);
         }
     }
 }
