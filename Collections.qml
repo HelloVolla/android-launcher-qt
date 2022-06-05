@@ -869,9 +869,7 @@ Page {
                                   || (contact["phone.home"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
                                       && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 3)
-
-                                  // TODO: NEEDS TO BE TESTED
-                                  || (contact["id"] !== undefined && contact["id"].toString() === thread["address"].toString())
+                                  || (contact["name"].toString() === thread["person"].toString())
                     } catch (err) {
                         console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
                     }

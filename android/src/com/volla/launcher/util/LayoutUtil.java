@@ -138,18 +138,18 @@ public class LayoutUtil {
 
                     activity.runOnUiThread(runnable);
                 } else if (type.equals(GET_NAVBAR_HEIGHT)) {
-                final Activity activity = QtNative.activity();
+                    final Activity activity = QtNative.activity();
 
-                Runnable runnable = new Runnable () {
-                    public void run() {
-                        Map responseMessage = new HashMap();
-                        responseMessage.put("height", getNavigationBarSize(activity));
-                        SystemDispatcher.dispatch(GOT_NAVBAR_HEIGHT, responseMessage);
-                    }
-                };
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            Map responseMessage = new HashMap();
+                            responseMessage.put("height", getNavigationBarSize(activity));
+                            SystemDispatcher.dispatch(GOT_NAVBAR_HEIGHT, responseMessage);
+                        }
+                    };
 
-                Thread thread = new Thread(runnable);
-                thread.start();
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });

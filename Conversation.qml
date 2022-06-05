@@ -95,7 +95,7 @@ Page {
                     }
                     operationCount = 2
                     mainView.updateSpinner(true)
-                    loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge})
+                    loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge, "person": name})
                     loadCalls({"match": name, "age": threadAge})
                     break;
                 case mainView.conversationMode.Thread:
@@ -814,7 +814,6 @@ Page {
                 }
             } else if (type === "volla.launcher.navBarResponse") {
                 console.log("Conversation | onDispatched: " + type)
-                console.log("Conversation | navigation bar height: " + message["height"] + ", " + message["height"] / Screen.pixelDensity)
                 conversationPage.navBarHeight = message["height"] / Screen.pixelDensity
             }
         }
