@@ -30,6 +30,10 @@ Page {
                     newsSettingsItemColumn.menuState = false
                     newsSettingsItemColumn.destroyCheckboxes()
                 }
+                if (item !== sourceSettingsItemColumn && sourceSettingsItemColumn.checkboxes.length > 0) {
+                    sourceSettingsItemColumn.menuState = false
+                    sourceSettingsItemColumn.destroyCheckboxes()
+                }
                 if (item !== shortcutSettingsItemColumn && shortcutSettingsItemColumn.checkboxes.length > 0) {
                     shortcutSettingsItemColumn.menuState = false
                     shortcutSettingsItemColumn.destroyCheckboxes()
@@ -951,6 +955,82 @@ Page {
             }
 
             // todo: Add source settings
+            Item {
+                id: sourceSettingsItem
+                width: parent.width
+                implicitHeight: sourceSettingsItemColumn.height
+                visible: true
+
+                Column {
+                    id: sourceSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+
+                    Button {
+                        id: sourceSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * sourceSettingsItemButton.padding
+                            text: qsTr("Source settings")
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: sourceSettingsItemColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            sourceSettingsItemColumn.menuState = !sourceSettingsItemColumn.menuState
+                            if (sourceSettingsItemColumn.menuState) {
+                                console.log("Settings | Will create checkboxes")
+                                sourceSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(sourceSettingsItemColumn)
+                            } else {
+                                console.log("Settings | Will destroy checkboxes")
+                                sourceSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        var component = Qt.createComponent("/Checkbox.qml", sourceSettingsItemColumn)
+                        var properties = { "actionId": "signal",
+                                "text": qsTr("Signal"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
+                        var object = component.createObject(sourceSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        sourceSettingsItemColumn.checkboxes.push(object)
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < sourceSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = sourceSettingsItemColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        sourceSettingsItemColumn.checkboxes = new Array
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update settings for " + actionId + ", " + active)
+
+                        if (actionId === "Signal" && active) {
+                            // todo
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
+                }
+            }
 
             Item {
                 id: searchSettingsItem
