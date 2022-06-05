@@ -119,8 +119,8 @@ Page {
         console.log("Collections | Will load threads")
         collectionPage.threads = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
-        // todo: load threads from further source
-        //       address (phone or contact), body (message), date, type
+        // load threads from further source
+        // address (phone or contact), body (message), date, type
         AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
@@ -869,6 +869,9 @@ Page {
                                   || (contact["phone.home"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
                                       && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 3)
+
+                                  // TODO: NEEDS TO BE TESTED
+                                  || (contact["id"] !== undefined && contact["id"].toString() === thread["address"].toString())
                     } catch (err) {
                         console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
                     }

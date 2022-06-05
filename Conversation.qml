@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Window 2.2
 import QtQuick.XmlListModel 2.12
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
@@ -15,6 +16,7 @@ Page {
     property string attachmentUrl: imagePicker.imageUrl
     property real widthFactor: 0.9
     property real innerSmallSpacing: 6.0
+    property real navBarHeight: 0
     property int threadAge: 84000 * 14 // two weeks in milli seconds
     property int operationCount: 0 // number of background operations
     property int currentConversationMode: 0
@@ -36,6 +38,24 @@ Page {
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
+    }
+
+    Connections {
+        target: Qt.inputMethod
+
+        onKeyboardRectangleChanged: {
+            console.log("Conversation | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
+
+            var delta = Qt.inputMethod.keyboardRectangle.height === 0
+                    ? 0 : mainWindow.visibility === 5 ? conversationPage.navBarHeight + 45 : conversationPage.navBarHeight // estimated navigation bar height
+
+            listView.height = Screen.desktopAvailableHeight - Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio - delta
+            listView.positionViewAtEnd()
+        }
+    }
+
+    Component.onCompleted: {
+        AN.SystemDispatcher.dispatch("volla.launcher.navBarAction", {})
     }
 
     onTextInputChanged: {
@@ -163,7 +183,7 @@ Page {
         width: parent.width
         height: parent.height
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
-        footerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
+        footerPositioning: ListView.OverlayFooter  // mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
 
         header: Column {
             id: header
@@ -264,8 +284,9 @@ Page {
             id: footer
             width: parent.width
             implicitHeight: mainWindow.visibility === 5 ? messageRow.height : messageRow.height + 2 * mainView.innerSpacing
-            color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-            border.color: "transparent"
+            color: Universal.background //mainView.backgroundColor // mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+            opacity: mainView.backgroundOpacity
+            border.color: Universal.background
             z: 2
 
             Behavior on implicitHeight {
@@ -358,18 +379,6 @@ Page {
                         background: Rectangle {
                             color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                             border.color: "transparent"
-                        }
-
-                        onActiveFocusChanged: {
-                            console.log("Conversation | On active focus changed to " + activeFocus)
-                            if (activeFocus) {
-                                listView.height = mainWindow.visibility === 5 ? mainView.height * 0.6 + innerSmallSpacing * 2 :
-                                                                                mainView.height * 0.65
-                                listView.positionViewAtEnd()
-                            } else {
-                                listView.height = mainView.height
-                                listView.positionViewAtEnd()
-                            }
                         }
                     }
                     Row {
@@ -803,6 +812,10 @@ Page {
                 if (message["hasImage"]) {
                     conversationPage.updateImage(message["messageId"], message["image"])
                 }
+            } else if (type === "volla.launcher.navBarResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                console.log("Conversation | navigation bar height: " + message["height"] + ", " + message["height"] / Screen.pixelDensity)
+                conversationPage.navBarHeight = message["height"] / Screen.pixelDensity
             }
         }
     }

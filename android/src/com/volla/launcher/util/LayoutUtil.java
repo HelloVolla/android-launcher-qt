@@ -12,15 +12,20 @@ import android.inputmethodservice.KeyboardView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.Display;
 import android.content.Intent;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.ComponentName;
 import android.graphics.Color;
+import android.graphics.Point;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import org.qtproject.qt5.android.QtNative;
 import com.volla.launcher.R;
 
@@ -29,7 +34,8 @@ public class LayoutUtil {
     private static final String TAG = "LayoutUtil";
 
     public static final String SET_COLOR = "volla.launcher.colorAction";
-    public static final String GET_KEYBOARD_HEIGHT = "volla.launcher.keyboardAction";
+    public static final String GET_NAVBAR_HEIGHT = "volla.launcher.navBarAction";
+    public static final String GOT_NAVBAR_HEIGHT = "volla.launcher.navBarResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -131,13 +137,28 @@ public class LayoutUtil {
                     };
 
                     activity.runOnUiThread(runnable);
-                } else if (type.equals(GET_KEYBOARD_HEIGHT)) {
-                    final Activity activity = QtNative.activity();
-                    KeyboardView keyboardView = new KeyboardView(activity.getApplicationContext(), null);
-                    int height = (keyboardView.getKeyboard()).getHeight();
-                    Log.d(TAG, "Keyboard height is " + height);
+                } else if (type.equals(GET_NAVBAR_HEIGHT)) {
+                final Activity activity = QtNative.activity();
+
+                Runnable runnable = new Runnable () {
+                    public void run() {
+                        Map responseMessage = new HashMap();
+                        responseMessage.put("height", getNavigationBarSize(activity));
+                        SystemDispatcher.dispatch(GOT_NAVBAR_HEIGHT, responseMessage);
+                    }
+                };
+
+                Thread thread = new Thread(runnable);
+                thread.start();
                 }
             }
         });
     }
+
+    public static int getNavigationBarSize(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        return resources.getDimensionPixelSize(resourceId);
+    }
+
 }

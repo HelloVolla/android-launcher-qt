@@ -97,7 +97,7 @@ Page {
 
     function updateAppLauncher(key, value) {
         console.log("AppGrid | Will update app launcher: " + key + ", " + value)
-        if (key === "backgroundopacity") {
+        if (key === "backgroundOpacity") {
             for (var i = 0; i < appLauncher.appGroups.length; i++) {
                 var appGroup = appLauncher.appGroups[i]
                 if (backgroundOpacity !== undefined) {
@@ -146,11 +146,7 @@ Page {
         var groupedApps = new Array
 
         if (settings.useGroupedApps) {
-            apps.sort(function(a, b) {
-                if (a.statistic > b.statistic) return 1
-                else if (a.statistic < b.statistic) return -1
-                else return 0
-            })
+            apps.sort(function(a, b) { return b["statistic"] - a["statistic"] })
 
             if (apps.length > appLauncher.maxAppCount) {
                 groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0, appLauncher.maxAppCount) } )

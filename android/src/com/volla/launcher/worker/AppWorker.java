@@ -112,7 +112,9 @@ public class AppWorker
                                         timeInForeground = timeInForeground + 10; // fall back for missing stats
                                     }
 
-                                    appInfo.put("statistic", timeInForeground);
+                                    //Log.d(TAG, "Statistic: " + timeInForeground);
+
+                                    appInfo.put("statistic", (int)timeInForeground);
                                     appList.add(appInfo);
                                 }
                             }
