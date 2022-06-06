@@ -365,6 +365,14 @@
         <source>Use app categories</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Source settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
