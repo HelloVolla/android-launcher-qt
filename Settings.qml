@@ -907,13 +907,16 @@ Page {
                         id: appList
                         delegate: Button {
                             width: parent.width
-                            font.pointSize: mainView.mediumFontSize
                             leftPadding: mainView.innerSpacing
                             rightPadding: mainView.innerSpacing
                             topPadding: mainView.innerSpacing
                             bottomPadding: index === appMenuModel.count - 1 ? mainView.innerSpacing : 0
                             flat: true
-                            text: model.label
+                            contentItem: Text {
+                                text: model.label
+                                font.pointSize: mainView.mediumFontSize
+                                elide: Text.ElideRight
+                            }
                             background: Rectangle {
                                 anchors.fill: parent
                                 color: "transparent"
