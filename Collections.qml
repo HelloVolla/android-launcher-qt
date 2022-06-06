@@ -899,6 +899,8 @@ Page {
 
                 if (thread["isMMS"]) {
                     kind = "MMS"
+                } else if (thread["isSignal"]) {
+                    kind = "Signal"
                 }
 
                 cThread.c_STEXT = mainView.parseTime(Number(thread["date"])) + " • " + qsTr(kind)
@@ -1385,6 +1387,7 @@ Page {
                 if (currentCollectionMode === mainView.collectionMode.People
                         || currentCollectionMode === mainView.collectionMode.Threads) {
                     message["messages"].forEach(function (aThread, index) {
+                        aThread["isSignal"] = true
                         for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
                             console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
                         }

@@ -177,6 +177,11 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.callConversationAction", filter)
     }
 
+    function lastMessageIsFromSignal() {
+        var lastMessage = conversationPage.currentConversationModel.get(conversationPage.currentConversationModel.count - 1)
+        return lastMessage.m_STEXT.includes("Signal")
+    }
+
     ListView {
         id: listView
         anchors.top: parent.top
@@ -426,16 +431,28 @@ Page {
                         console.log("Conversation | Number: " + conversationPage.phoneNumber)
                         console.log("Conversation | Text: " + textArea.text)
                         console.log("Conversation | Image: " + imagePicker.imageUrl)
-                        AN.SystemDispatcher.dispatch(
-                                    "volla.launcher.messageAction",
-                                    {"number": conversationPage.phoneNumber, "text": textArea.text,
-                                     "attachmentUrl": imagePicker.imageUrl} )
 
-                        // Todo: Only add message to list currentConversationModel, if massage was successfully sent.
                         var d = new Date()
+                        var kind = imagePicker.imageUrl !== undefined && imagePicker.imageUrl.length > 0 ? "MMS" : "SMS"
+
+                        if (conversationPage.lastMessageIsFromSignal()) {
+                            kind = "Signal"
+                            if (conversationPage.conversationMode.Thread) {
+                                AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction",
+                                    {"threadId": conversationPage.currentId, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
+                            } else {
+                                AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction",
+                                    {"person": conversationPage.headline.text, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
+                            }
+                        } else {
+                            AN.SystemDispatcher.dispatch("volla.launcher.messageAction",
+                               {"number": conversationPage.phoneNumber, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
+                        }
+
+                        // Todo: Only add message to list view, if massage was successfully sent.
                         currentConversationModel.append(
-                                    {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • SMS",
-                                     "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
+                            {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • " + kind,
+                             "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
                         textArea.text = ""
                         textArea.focus = false
                         imagePicker.imageUrl = ""
@@ -574,7 +591,9 @@ Page {
 
                 cMessage.m_TEXT = message["body"]
 
-                if (message["isMMS"] === true) {
+                if (message["isSignal"] === true) {
+                    cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • Signal"
+                } else if (message["isMMS"] === true) {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • MMS"
                 } else {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
@@ -791,12 +810,13 @@ Page {
                 conversationPage.updateListMocel()
             } else if (type === "volla.launcher.signalMessagesResponse") {
                 console.log("Conversation | onDispatched: " + type)
-                conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 message["messages"].forEach(function (message, index) {
+                    message["isSignal"] = true
                     for (const [messageKey, messageValue] of Object.entries(message)) {
                         console.log("Conversation | * " + messageKey + ": " + messageValue)
                     }
                 })
+                conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 conversationPage.updateListMocel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
