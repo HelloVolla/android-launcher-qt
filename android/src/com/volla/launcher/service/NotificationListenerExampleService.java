@@ -3,6 +3,7 @@ package com.volla.launcher.service;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,6 +21,8 @@ import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.storage.Message;
 import com.volla.launcher.storage.Users;
 import com.volla.launcher.util.NotificationUtils;
+import com.volla.launcher.util.ImagesHelper;
+import java.io.ByteArrayOutputStream;
 
 import java.util.UUID;
 /**
@@ -159,6 +162,15 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 String channel_id;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     channel_id = sbn.getNotification().getChannelId();
+                    Icon icon = sbn.getNotification().getLargeIcon();
+                    Drawable drawable = icon.loadDrawable(getApplication());
+                    Bitmap appIcon = ImagesHelper.drawableToBitmap(drawable);
+                    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                    if (appIcon.getWidth() > 128) {
+                        appIcon = Bitmap.createScaledBitmap(appIcon, 96, 96, true);
+                    }
+                    appIcon.compress(Bitmap.CompressFormat.PNG, 90, outStream);
+                    byte[] bitmapData = outStream.toByteArray();
                     Log.d("VollaNotification  channel_id: ", channel_id);
 
                     //if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE){
@@ -166,7 +178,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                     intent.putExtra("Notification Code", notificationCode);
                     intent.putExtra("channel_d", channel_id);
                     intent.setAction("com.volla.launcher.notification");
-                    //intent.putExtra("largeIcon", bitmapData);
+                    intent.putExtra("largeIcon", bitmapData);
                     intent.putExtra("title", NotificationUtils.getTitle(extras));
                     intent.putExtra("body", NotificationUtils.getMessage(extras));
                     sendBroadcast(intent);

@@ -227,8 +227,9 @@ public class ReceiveTextActivity extends AndroidNativeActivity
 
     private void createNotification(Intent intent){
         Log.d("Arvindvolla", "Creating Notification");
-        //Bitmap largeIcon = null;
-        //largeIcon = BitmapFactory.decodeByteArray(intent.getByteArrayExtra("largeIcon"), 96,96);
+        Bitmap largeIcon = null;
+        byte [] bitMapByte = intent.getByteArrayExtra("largeIcon");
+        largeIcon = BitmapFactory.decodeByteArray(bitMapByte, 0,bitMapByte.length);
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new NotificationCompat.Builder(this,channel_d)
@@ -236,7 +237,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
                 .setAutoCancel(true)
                 .setContentTitle(intent.getStringExtra("title"))
                 .setContentText(intent.getStringExtra("body"))
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
+                .setLargeIcon(largeIcon)
                 .setDefaults(Notification.DEFAULT_LIGHTS| Notification.DEFAULT_SOUND)
                 .setTicker("Message")
                 .setPriority(Notification.PRIORITY_HIGH)
