@@ -23,7 +23,7 @@ import com.volla.launcher.storage.Users;
 import com.volla.launcher.util.NotificationUtils;
 import com.volla.launcher.util.ImagesHelper;
 import java.io.ByteArrayOutputStream;
-
+import android.util.Base64;
 import java.util.UUID;
 /**
  * MIT License
@@ -103,12 +103,19 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
             long timeInMillis = System.currentTimeMillis();
             String uuid = UUID.randomUUID().toString();
-            String largeIcon = sbn.getNotification().getLargeIcon().toString();
             String title = NotificationUtils.getTitle(extras);
             String notificationStr = notificationData.toJson();
 
-
-            //Icon bitmap = NotificationUtils.getLargeIcon(extras);
+            Icon icon = sbn.getNotification().getLargeIcon();
+            Drawable drawable = icon.loadDrawable(getApplication());
+            Bitmap appIcon = ImagesHelper.drawableToBitmap(drawable);
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            if (appIcon.getWidth() > 128) {
+                 appIcon = Bitmap.createScaledBitmap(appIcon, 96, 96, true);
+            }
+            appIcon.compress(Bitmap.CompressFormat.PNG, 90, outStream);
+            byte[] bitmapData = outStream.toByteArray();
+            String largeIcon = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
             message.uuid = uuid;
             message.largeIcon = largeIcon;
             message.notification = notificationStr;
@@ -140,39 +147,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             largeIcon = null;
             title = null;
 
-            //Log.d("ArvindVolla", "Ignoring potential duplicate from " + sbn.getPackageName() + ":\n" + title + "\n" + msg);
-
-
-//            Action action = NotificationUtils.getQuickReplyAction(sbn.getNotification(), getPackageName());
-      /*
-        if (action != null) {
-            Log.i("ArvindVolla", "success");
-            try {
-                action.sendReply(getApplicationContext(), "Hello Arvind");
-            } catch (PendingIntent.CanceledException e) {
-                Log.i("ArvindVolla", "CRAP " + e.toString());
-            }
-        } else {
-            Log.i("ArvindVolla", "not success");
-        }
-        */
 
            try {
                 Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
                 String channel_id;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     channel_id = sbn.getNotification().getChannelId();
-                    Icon icon = sbn.getNotification().getLargeIcon();
-                    Drawable drawable = icon.loadDrawable(getApplication());
-                    Bitmap appIcon = ImagesHelper.drawableToBitmap(drawable);
-                    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                    if (appIcon.getWidth() > 128) {
-                        appIcon = Bitmap.createScaledBitmap(appIcon, 96, 96, true);
-                    }
-                    appIcon.compress(Bitmap.CompressFormat.PNG, 90, outStream);
-                    byte[] bitmapData = outStream.toByteArray();
                     Log.d("VollaNotification  channel_id: ", channel_id);
-
                     //if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE){
                     Intent intent = new Intent("com.volla.launcher.notification");
                     intent.putExtra("Notification Code", notificationCode);

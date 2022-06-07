@@ -102,14 +102,14 @@ public class SignalWorker {
                 reply.put("body", m.getBody());
                 reply.put("person", m.getUser_name());
                 reply.put("address", "7653456789");
-                reply.put("date", m.getTimeStamp());
+                reply.put("date", m.getTimeStamp().toString());
                 reply.put("read", m.getRead());
                 reply.put("isSent", m.getSent());
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
 
                 Log.e("VollaNotification ThreadMessage", "Sender Name: " + m);
-                Log.e("VollaNotification ThreadMessage JSON", m.getNotificationData().toJson());
+                Log.e("VollaNotification ThreadMessage JSON", reply.toString());
                 messageList.add(reply);
             }
             Map result = new HashMap();
