@@ -54,21 +54,20 @@ public class SignalWorker {
 
 
     static void retrieveMessageConversations(Map message, Activity activity){
-        Log.d("VollaNotification  retriving message conversation","");
+        Log.d("VollaNotification  retriving message conversation",""+message.toString());
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
         ArrayList<Map> messageList = new ArrayList();
-        String personId = (String) message.get("personId");
+        String person = (String) message.get("person");
         String threadId = (String) message.get("threadId");
-        List numbers = (List) message.get("numbers");
         int   age = (Integer) message.get("threadAge");
 
 
         
-        repository.getAllMessageBySender(personId,1).subscribe(it -> {
+        repository.getAllMessageBySender(person,1).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
-                //reply.put("thread_id", m.getUuid());
+                reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
                 reply.put("address", "7653456789");
