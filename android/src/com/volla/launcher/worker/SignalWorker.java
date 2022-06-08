@@ -71,7 +71,7 @@ public class SignalWorker {
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
                 reply.put("address", "7653456789");
-                reply.put("date", m.getTimeStamp());
+                reply.put("date", m.getTimeStamp().toString());
                 reply.put("read", "false");
                 reply.put("isSent", "false");
                 reply.put("image", m.getLargeIcon());
