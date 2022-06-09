@@ -37,15 +37,15 @@
     </message>
     <message>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">I più utilizzati</translation>
     </message>
     <message>
         <source>apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">apps</translation>
     </message>
     <message>
         <source>Other apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Altre applicazioni</translation>
     </message>
 </context>
 <context>
@@ -138,27 +138,27 @@
     </message>
     <message>
         <source>Invalid RSS feed: </source>
-        <translation type="unfinished">feed RSS non valido</translation>
+        <translation type="unfinished">feed RSS non valido: </translation>
     </message>
     <message>
         <source>Missing RSS item: </source>
-        <translation type="unfinished">messaggio RSS mancante</translation>
+        <translation type="unfinished">messaggio RSS mancante: </translation>
     </message>
     <message>
         <source>Find people ...</source>
-        <translation type="unfinished">Trova contatti</translation>
+        <translation type="unfinished">Trova contatti ...</translation>
     </message>
     <message>
         <source>Find thread ...</source>
-        <translation type="unfinished">Trova conversazioni</translation>
+        <translation type="unfinished">Trova conversazioni ...</translation>
     </message>
     <message>
         <source>Find news ...</source>
-        <translation type="unfinished">trova notizie</translation>
+        <translation type="unfinished">trova notizie ...</translation>
     </message>
     <message>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished">impossibile caricare i feed rss</translation>
+        <translation type="unfinished">impossibile caricare i feed rss: </translation>
     </message>
     <message>
         <source>Open Contact</source>
@@ -170,11 +170,11 @@
     </message>
     <message>
         <source>Find note ...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trova la nota ...</translation>
     </message>
     <message>
         <source>Open in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aperto nel segnale</translation>
     </message>
 </context>
 <context>
@@ -185,7 +185,7 @@
     </message>
     <message>
         <source>Filter messages ...</source>
-        <translation type="unfinished">Filtra messaggio</translation>
+        <translation type="unfinished">Filtra messaggio ...</translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -193,14 +193,14 @@
     </message>
     <message>
         <source>Type your message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Digitare il messaggio</translation>
     </message>
 </context>
 <context>
     <name>Details</name>
     <message>
         <source>Not yet supported</source>
-        <translation type="unfinished">non ancora supportato</translation>
+        <translation type="unfinished">Non ancora supportato</translation>
     </message>
     <message>
         <source>Open in browser</source>
@@ -290,11 +290,11 @@
     </message>
     <message>
         <source>Startpage</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Startpage</translation>
     </message>
     <message>
         <source>Background blur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sfocatura dello sfondo</translation>
     </message>
     <message>
         <source>Open</source>
@@ -302,75 +302,75 @@
     </message>
     <message>
         <source>Display and menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Display e menu</translation>
     </message>
     <message>
         <source>Reset options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opzioni di reset</translation>
     </message>
     <message>
         <source>Reset news feeds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset shorcuts feeds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Azzeramento dei feed di notizie</translation>
     </message>
     <message>
         <source>Reload contacts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ricarica i contatti</translation>
     </message>
     <message>
         <source>Security mode is OFF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La modalità di sicurezza è disattivata</translation>
     </message>
     <message>
         <source>Security mode is ON</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La modalità di sicurezza è attiva</translation>
     </message>
     <message>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inserire la password</translation>
     </message>
     <message>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ripetere la password</translation>
     </message>
     <message>
         <source>Keep existing Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mantenere la password esistente</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Annullamento</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Wrong password confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Conferma password errata</translation>
     </message>
     <message>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Password sbagliata</translation>
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Show grouped apps</translation>
     </message>
     <message>
         <source>Use app categories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utilizzare le categorie delle app</translation>
     </message>
     <message>
         <source>Source settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impostazioni della fonte</translation>
     </message>
     <message>
         <source>Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Signal</translation>
+    </message>
+    <message>
+        <source>Reset shorcuts</source>
+        <translation type="unfinished">Azzeramento delle scorciatoie</translation>
     </message>
 </context>
 <context>
@@ -509,39 +509,39 @@
     </message>
     <message>
         <source>Monday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lunedì</translation>
     </message>
     <message>
         <source>Tuesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Martedì</translation>
     </message>
     <message>
         <source>Wednesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mercoledì</translation>
     </message>
     <message>
         <source>Thursday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Giovedì</translation>
     </message>
     <message>
         <source>Friday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Venerdì</translation>
     </message>
     <message>
         <source>Saturday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saturday</translation>
     </message>
     <message>
         <source>Sunday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sunday</translation>
     </message>
     <message>
         <source>tomorrow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">domani</translation>
     </message>
     <message>
         <source>New note saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nuova nota salvata</translation>
     </message>
 </context>
 <context>
@@ -572,7 +572,7 @@
     </message>
     <message>
         <source>Invalid RSS feed: </source>
-        <translation type="unfinished">RSS feed non valido</translation>
+        <translation type="unfinished">RSS feed non valido: </translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -728,15 +728,15 @@
     </message>
     <message>
         <source>You have alresdy subscribed the feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hai già sottoscritto il feed</translation>
     </message>
     <message>
         <source>Could not load a valid feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impossibile caricare un feed valido</translation>
     </message>
     <message>
         <source>Reset successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Azzeramento riuscito</translation>
     </message>
     <message>
         <source>Show Notes</source>
@@ -744,15 +744,15 @@
     </message>
     <message>
         <source>Send Signal message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inviare un messaggio di segnale</translation>
     </message>
     <message>
         <source>Add to Calender</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aggiungi al calendario</translation>
     </message>
     <message>
         <source>Show in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostra in Segnale</translation>
     </message>
 </context>
 </TS>

@@ -274,10 +274,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reset shorcuts feeds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Reload contacts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -331,6 +327,10 @@
     </message>
     <message>
         <source>Signal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset shorcuts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

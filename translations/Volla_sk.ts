@@ -25,27 +25,27 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odstránenie skratky</translation>
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pripnutá skratka už existuje</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Otvoriť skratku</translation>
     </message>
     <message>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Najpoužívanejšie</translation>
     </message>
     <message>
         <source>apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">apps</translation>
     </message>
     <message>
         <source>Other apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ostatné aplikácie</translation>
     </message>
 </context>
 <context>
@@ -139,27 +139,27 @@
     </message>
     <message>
         <source>Invalid RSS feed: </source>
-        <translation type="unfinished">neplatný kanál RSS</translation>
+        <translation type="unfinished">neplatný kanál RSS: </translation>
     </message>
     <message>
         <source>Missing RSS item: </source>
-        <translation type="unfinished">chýba správa RSS</translation>
+        <translation type="unfinished">chýba správa RSS: </translation>
     </message>
     <message>
         <source>Find people ...</source>
-        <translation type="unfinished">nájsť kontakty</translation>
+        <translation type="unfinished">nájsť kontakty ...</translation>
     </message>
     <message>
         <source>Find thread ...</source>
-        <translation type="unfinished">nájsť zábavu</translation>
+        <translation type="unfinished">nájsť zábavu ...</translation>
     </message>
     <message>
         <source>Find news ...</source>
-        <translation type="unfinished">nájsť správy</translation>
+        <translation type="unfinished">nájsť správy ...</translation>
     </message>
     <message>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished">sa nepodarilo načítať kanál RSS</translation>
+        <translation type="unfinished">sa nepodarilo načítať kanál RSS: </translation>
     </message>
     <message>
         <source>Open Contact</source>
@@ -171,7 +171,7 @@
     </message>
     <message>
         <source>Find note ...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nájdite si poznámku ...</translation>
     </message>
     <message>
         <source>Open in Signal</source>
@@ -186,7 +186,7 @@
     </message>
     <message>
         <source>Filter messages ...</source>
-        <translation type="unfinished">filtrovať správy</translation>
+        <translation type="unfinished">filtrovať správy ...</translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -194,7 +194,7 @@
     </message>
     <message>
         <source>Type your message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zadajte svoju správu</translation>
     </message>
 </context>
 <context>
@@ -220,7 +220,7 @@
     </message>
     <message>
         <source>Filter news ...</source>
-        <translation type="unfinished">filtrovať správy</translation>
+        <translation type="unfinished">filtrovať správy ...</translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -291,11 +291,11 @@
     </message>
     <message>
         <source>Startpage</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Startpage</translation>
     </message>
     <message>
         <source>Background blur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rozmazanie pozadia</translation>
     </message>
     <message>
         <source>Open</source>
@@ -303,75 +303,75 @@
     </message>
     <message>
         <source>Display and menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Displej a ponuky</translation>
     </message>
     <message>
         <source>Reset options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Možnosti resetovania</translation>
     </message>
     <message>
         <source>Reset news feeds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset shorcuts feeds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obnovenie informačných kanálov</translation>
     </message>
     <message>
         <source>Reload contacts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opätovné načítanie kontaktov</translation>
     </message>
     <message>
         <source>Security mode is OFF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bezpečnostný režim je vypnutý</translation>
     </message>
     <message>
         <source>Security mode is ON</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bezpečnostný režim je zapnutý</translation>
     </message>
     <message>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zadajte heslo</translation>
     </message>
     <message>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opakovanie hesla</translation>
     </message>
     <message>
         <source>Keep existing Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zachovať existujúce heslo</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zrušiť</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Wrong password confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Potvrdenie nesprávneho hesla</translation>
     </message>
     <message>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nesprávne heslo</translation>
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zobrazenie zoskupených aplikácií</translation>
     </message>
     <message>
         <source>Use app categories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Používanie kategórií aplikácií</translation>
     </message>
     <message>
         <source>Source settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nastavenie zdroja</translation>
     </message>
     <message>
         <source>Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Signal</translation>
+    </message>
+    <message>
+        <source>Reset shorcuts</source>
+        <translation type="unfinished">Obnovenie skratiek</translation>
     </message>
 </context>
 <context>
@@ -512,39 +512,39 @@
     </message>
     <message>
         <source>Monday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pondelok</translation>
     </message>
     <message>
         <source>Tuesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utorok</translation>
     </message>
     <message>
         <source>Wednesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wednesday</translation>
     </message>
     <message>
         <source>Thursday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Štvrtok</translation>
     </message>
     <message>
         <source>Friday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Piatok</translation>
     </message>
     <message>
         <source>Saturday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sobota</translation>
     </message>
     <message>
         <source>Sunday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nedeľa</translation>
     </message>
     <message>
         <source>tomorrow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">zajtra</translation>
     </message>
     <message>
         <source>New note saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uložená nová poznámka</translation>
     </message>
 </context>
 <context>
@@ -727,15 +727,15 @@
     </message>
     <message>
         <source>Error because of too much redirects</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chyba z dôvodu príliš veľkého počtu presmerovaní</translation>
     </message>
     <message>
         <source>Could not load a valid feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nepodarilo sa načítať platný zdroj</translation>
     </message>
     <message>
         <source>Reset successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obnovenie úspešné</translation>
     </message>
     <message>
         <source>Show Notes</source>
@@ -744,15 +744,15 @@
     </message>
     <message>
         <source>Send Signal message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odoslanie signálnej správy</translation>
     </message>
     <message>
         <source>Add to Calender</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pridať do kalendára</translation>
     </message>
     <message>
         <source>Show in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zobraziť v časti Signál</translation>
     </message>
 </context>
 </TS>

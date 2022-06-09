@@ -620,7 +620,8 @@ Page {
                 console.log("Collections | Thread: " + thread["date"])
                 if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
                     console.log("Collections | Thread matched: " + thread["id"])
-                    contactThreads[thread["address"]] = thread
+                    if (thread["isSignal"]) contactThreads[thread["person"]] = thread
+                    else contactThreads[thread["address"]] = thread
                 }
             })
 
@@ -724,9 +725,11 @@ Page {
         function checkStarredOrRecent(contact) {
             return (contact["starred"] === true
                     || (contact["phone.mobile"] in contactThreads)
+                    || (contact["phone.signal"] in contactThreads)
                     || (contact["phone.other"] in contactThreads)
                     || (contact["phone.work"] in contactThreads)
                     || (contact["phone.home"] in contactThreads)
+                    || (contact["name"] in contactThreads)
                     || (contact["phone.mobile"] in contactCalls)
                     || (contact["phone.signal"] in contactCalls)
                     || (contact["phone.other"] in contactCalls)

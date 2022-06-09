@@ -1446,7 +1446,7 @@ Page {
                         bottomPadding: mainView.innerSpacing / 2
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
-                            text: qsTr("Reset shorcuts feeds")
+                            text: qsTr("Reset shorcuts")
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground

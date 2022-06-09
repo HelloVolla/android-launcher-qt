@@ -821,11 +821,11 @@ Page {
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.calls = conversationPage.calls.concat(message["calls"])
-//                message["calls"].forEach(function (call, index) {
-//                    for (const [callKey, callValue] of Object.entries(call)) {
-//                        console.log("Collections | * " + callKey + ": " + callValue)
-//                    }
-//                })
+                message["calls"].forEach(function (call, index) {
+                    for (const [callKey, callValue] of Object.entries(call)) {
+                        console.log("Collections | * " + callKey + ": " + callValue)
+                    }
+                })
                 conversationPage.updateListMocel()
             } else if (type === "volla.launcher.mmsImageResponse") {
                 console.log("Conversation | onDispatched: " + type)
