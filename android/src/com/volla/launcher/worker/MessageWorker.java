@@ -311,14 +311,14 @@ public class MessageWorker {
                                         smsMms.put("body", body);
                                     }
 
-//                                    Bitmap bitmap = getMmsImage(partId, activity);
-//                                    if (bitmap != null) {
-//                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//                                        byte[] imageBytes = baos.toByteArray();
-//                                        String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-//                                        smsMms.put("image", image);
-//                                    }
+                                    Bitmap bitmap = getMmsImage(partId, activity);
+                                    if (bitmap != null) {
+                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                        byte[] imageBytes = baos.toByteArray();
+                                        String image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+                                        smsMms.put("image", image);
+                                    }
                                 } while (mmsCursor.moveToNext());
                                 smsMms.put("partIds", partList);
                             }

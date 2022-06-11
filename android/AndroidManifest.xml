@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.9.11" android:versionCode="104" android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="26"/>
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0.11" android:versionCode="211" android:installLocation="auto">
+    <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="29"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -106,6 +106,11 @@
             <!-- Background running -->
         </service>
 
+        <service android:name="com.volla.launcher.service.NotificationListenerExampleService" android:label="Volla" android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" android:exported="false">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService"/>
+            </intent-filter>
+        </service>
         <receiver android:name="com.klinker.android.send_message.SentReceiver" android:taskAffinity="com.volla.launcher.SMS_SENT"/>
 
         <receiver android:name="com.klinker.android.send_message.DeliveredReceiver" android:taskAffinity="com.volla.launcher.SMS_DELIVERED"/>
@@ -129,4 +134,11 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
+    <uses-permission android:name="android.permission.MANAGE_APP_OPS_MODES"/>
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
+
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.ACCESS_NOTIFICATIONS"/>
 </manifest>

@@ -40,6 +40,7 @@ Page {
     property string c_CHANNEL:   "channel"  // twitter or news channel
     property string c_TSTAMP:    "tstamp"   // timestamp to sort the list
     property string c_TYPE:      "type"     // rss or atpm feed type
+    property string c_SIGNAL:    "signal"   // has a signal account
 
     background: Rectangle {
         anchors.fill: parent
@@ -64,7 +65,7 @@ Page {
                 textInputField.placeholderText = qsTr("Find people ...")
                 currentCollectionModel = peopleModel
                 currentCollectionModel.modelArr = new Array
-                operationCount = 2
+                operationCount = 3
                 mainView.updateSpinner(true)
                 collectionPage.loadThreads({"age": threadAge})
                 collectionPage.loadCalls({"age": threadAge})
@@ -74,7 +75,7 @@ Page {
                 textInputField.placeholderText = qsTr("Find thread ...")
                 currentCollectionModel = threadModel
                 currentCollectionModel.modelArr = new Array
-                operationCount = 1
+                operationCount = 2
                 mainView.updateSpinner(true)
                 collectionPage.loadThreads({"age": threadAge})
                 break;
@@ -86,6 +87,16 @@ Page {
                 collectionPage.threads = new Array
                 collectionPage.calls = new Array
                 mainView.updateSpinner(true)
+                currentCollectionModel.update("")
+                break;
+            case mainView.collectionMode.Notes:
+                headline.text = qsTr("Notes")
+                textInputField.placeholderText = qsTr("Find note ...")
+                currentCollectionModel = notesModel
+                collectionPage.threads = new Array
+                collectionPage.calls = new Array
+                mainView.updateSpinner(true)
+                currentCollectionModel.loadData()
                 currentCollectionModel.update("")
                 break;
             default:
@@ -106,14 +117,17 @@ Page {
 
     function loadThreads(filter) {
         console.log("Collections | Will load threads")
+        collectionPage.threads = new Array
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
-        // todo: load threads from further source
-        //       address (phone or contact), body (message), date, type
+        // load threads from further source
+        // address (phone or contact), body (message), date, type
+        AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
     function loadCalls(filter) {
         console.log("Collections | Will load calls")
-        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)  
+        collectionPage.calls = new Array
+        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", filter)
     }
 
     ListView {
@@ -248,7 +262,7 @@ Page {
                     }
                     Image {
                         id: contactImage
-                        source: model.c_ICON
+                        source: model.c_ICON !== undefined ? model.c_ICON : ""
                         sourceSize: Qt.size(collectionPage.iconSize, collectionPage.iconSize)
                         smooth: true
                         visible: false
@@ -281,7 +295,8 @@ Page {
                         id: contactColumn
                         spacing: 3.0
 
-                        property real columnWidth: collectionPage.currentCollectionMode === mainView.collectionMode.Threads ?
+                        property real columnWidth: collectionPage.currentCollectionMode === mainView.collectionMode.Threads
+                                                   || collectionPage.currentCollectionMode === mainView.collectionMode.Notes ?
                                                        contactBox.width - mainView.innerSpacing * 2 - contactRow.spacing
                                                      : contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
                         property var gradientColer: Universal.background
@@ -468,6 +483,14 @@ Page {
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                     }
+                    Label {
+                        id: openSignalContactLabel
+                        height: mainView.mediumFontSize * 1.2
+                        text: qsTr("Open in Signal")
+                        font.pointSize: mainView.mediumFontSize
+                        color: "white"
+                        visible: model.c_SIGNAL !== undefined
+                    }
                 }
                 Behavior on implicitHeight {
                     NumberAnimation {
@@ -521,6 +544,7 @@ Page {
                 var mlPoint = mapFromItem(messageLabel, 0, 0)
                 var elPoint = mapFromItem(emailLabel, 0, 0)
                 var clPoint = mapFromItem(contactLabel, 0, 0)
+                var sgPoint = mapFromItem(openSignalContactLabel, 0, 0)
                 var selectedItem
 
                 if (mouseY > plPoint.y && mouseY < plPoint.y + callLabel.height) {
@@ -531,6 +555,8 @@ Page {
                     selectedItem = emailLabel
                 } else if (mouseY > clPoint.y && mouseY < clPoint.y + contactLabel.height) {
                     selectedItem = contactLabel
+                } else if (mouseY > sgPoint.y && mouseY < sgPoint.y + openSignalContactLabel.height) {
+                    selectedItem = openSignalContactLabel
                 } else {
                     selectedItem = contactBox
                 }
@@ -547,6 +573,8 @@ Page {
                 emailLabel.font.pointSize = selectedMenuItem === emailLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
                 contactLabel.font.bold = selectedMenuItem === contactLabel
                 contactLabel.font.pointSize = selectedMenuItem === contactLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
+                openSignalContactLabel.font.bold = selectedMenuItem === openSignalContactLabel
+                openSignalContactLabel.font.pointSize = selectedMenuItem === openSignalContactLabel ? mainView.mediumFontSize * 1.2 : mainView.mediumFontSize
 
                 if (selectedMenuItem !== contactBox && mainView.useVibration) {
                     AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
@@ -566,6 +594,9 @@ Page {
                 } else if (selectedMenuItem === contactLabel) {
                     console.log("Collections | Open contact of " + model.c_TITLE)
                     currentCollectionModel.executeSelection(model, mainView.actionType.OpenContact)
+                } else if (selectedMenuItem === openSignalContactLabel) {
+                    console.log("Collections | Open contact in Signal" + model.c_TITLE)
+                    currentCollectionModel.executeSelection(model, mainView.actionType.OpenSignalContact)
                 } else {
                     console.log("Collections | Nothing selected")
                 }
@@ -589,7 +620,8 @@ Page {
                 console.log("Collections | Thread: " + thread["date"])
                 if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
                     console.log("Collections | Thread matched: " + thread["id"])
-                    contactThreads[thread["address"]] = thread
+                    if (thread["isSignal"]) contactThreads[thread["person"]] = thread
+                    else contactThreads[thread["address"]] = thread
                 }
             })
 
@@ -641,7 +673,9 @@ Page {
                 } else if (contact["phone.other"] !== undefined) {
                     cContact.c_PHONE = contact["phone.other"]
                 }
-
+                if (contact["phone.signal"] !== undefined) {
+                    cContact.c_SIGNAL = contact["phone.signal"]
+                }
                 if (contact["email.work"] !== undefined) {
                     cContact.c_EMAIL = contact["email.work"]
                 } else if (contact["email.home"] !== undefined) {
@@ -691,10 +725,13 @@ Page {
         function checkStarredOrRecent(contact) {
             return (contact["starred"] === true
                     || (contact["phone.mobile"] in contactThreads)
+                    || (contact["phone.signal"] in contactThreads)
                     || (contact["phone.other"] in contactThreads)
                     || (contact["phone.work"] in contactThreads)
                     || (contact["phone.home"] in contactThreads)
+                    || (contact["name"] in contactThreads)
                     || (contact["phone.mobile"] in contactCalls)
+                    || (contact["phone.signal"] in contactCalls)
                     || (contact["phone.other"] in contactCalls)
                     || (contact["phone.work"] in contactCalls)
                     || (contact["phone.home"] in contactCalls))
@@ -799,6 +836,9 @@ Page {
                 case mainView.actionType.OpenContact:
                     AN.SystemDispatcher.dispatch("volla.launcher.showContactAction", {"contact_id": item.c_ID})
                     break
+                case mainView.actionType.OpenSignalContact:
+                    Qt.openUrlExternally("sgnl://signal.me/#p/" + item.c_SIGNAL)
+                    break
                 default:
                     mainView.updateConversationPage(mainView.conversationMode.Person, item.c_ID, item.c_TITLE)
             }
@@ -832,6 +872,7 @@ Page {
                                   || (contact["phone.home"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
                                       && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 3)
+                                  || (contact["name"].toString() === thread["person"].toString())
                     } catch (err) {
                         console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
                     }
@@ -861,6 +902,8 @@ Page {
 
                 if (thread["isMMS"]) {
                     kind = "MMS"
+                } else if (thread["isSignal"]) {
+                    kind = "Signal"
                 }
 
                 cThread.c_STEXT = mainView.parseTime(Number(thread["date"])) + " • " + qsTr(kind)
@@ -882,7 +925,7 @@ Page {
             var found
             var i
 
-            console.log("Collections | Model has " + modelArr.length + "elements")
+            console.log("Collections | Model has " + modelArr.length + " elements")
 
             for (i = 0; i < modelArr.length; i++) {
                 filteredModelItem = modelArr[i]
@@ -924,7 +967,7 @@ Page {
             }
         }
 
-        function executeSelection(item, typ) {
+        function executeSelection(item, type) {
             mainView.updateConversationPage(mainView.conversationMode.Thread, item.c_ID, item.c_TITLE)
         }
     }
@@ -1194,17 +1237,174 @@ Page {
         }
     }
 
+    ListModel {
+        id: notesModel
+
+        property var modelArr: new Array
+
+        function loadData() {
+            var rawNotes = mainView.getNotes()
+            console.log("Collections | Did load " + rawNotes.length + " raw notes")
+            for (var i = 0; i < rawNotes.length; i++) {
+                var rawNote = rawNotes[i]
+                var note = {"c_ID": rawNote["id"]}
+                console.log("Collection | Timestamp: " + rawNote.date)
+                note.c_STEXT = mainView.parseTime(rawNote.date)
+                note.c_TSTAMP = rawNote.date
+                console.log("Collection | Date: " + note.c_STEXT)
+                var titleEnd = rawNote.content.indexOf("\n")
+                note.c_TEXT = titleEnd > 0 && titleEnd < mainView.maxTitleLength ?
+                            rawNote.content.slice(0, titleEnd) : titleEnd > mainView.maxTitleLength ?
+                                rawNote.content.slice(0, mainView.maxTitleLength) + "..." : rawNote.content
+                note.c_CONTENT = rawNote.content
+                note.c_ICON = ""
+                note.c_SBADGE = rawNote.pinned
+                modelArr.push(note)
+            }
+            mainView.updateSpinner(false)
+        }
+
+        function update (text) {
+            console.log("Collections | Update model with text input: " + text)
+
+            if (modelArr.length === 0) {
+                loadData()
+            }
+
+            var filteredModelDict = new Object
+            var filteredModelItem
+            var modelItem
+            var found
+            var i
+
+            console.log("Collections | Model has " + modelArr.length + " elements")
+
+            for (i = 0; i < modelArr.length; i++) {
+                filteredModelItem = modelArr[i]
+                var modelItemID = filteredModelItem.c_ID
+                var modelItemConent = filteredModelItem.c_CONTENT
+                if (text.length === 0 || modelItemConent.toLowerCase().includes(text.toLowerCase())) {
+                    filteredModelDict[modelItemID] = filteredModelItem
+                }
+            }
+
+            var existingGridDict = new Object
+            for (i = 0; i < count; ++i) {
+                modelItemID = get(i).c_ID
+                existingGridDict[modelItemID] = true
+            }
+
+            // Remove items no longer in filtered set
+            i = 0
+            while (i < count) {
+                modelItemID = get(i).c_ID
+                found = filteredModelDict.hasOwnProperty(modelItemID)
+                if (!found) {
+                    console.log("Collections | Remove note " + modelItemID)
+                    remove(i)
+                } else {
+                    i++
+                }
+            }
+
+            // Add new items
+            for (modelItemID in filteredModelDict) {
+                found = existingGridDict.hasOwnProperty(modelItemID)
+                if (!found) {
+                    // for simplicity, just adding to end instead of corresponding position in original list
+                    filteredModelItem = filteredModelDict[modelItemID]
+                    console.log("Collections | Will append note " + filteredModelItem.c_ID)
+                    append(filteredModelDict[modelItemID])
+                }
+            }
+
+            sortModel()
+        }
+
+        function sortModel() {
+            var n;
+            var i;
+            for (n = 0; n < count; n++) {
+                for (i=n+1; i < count; i++) {
+                    if ((!get(n).c_SBADGE && get(i).c_SBADGE) || get(n).c_TSTAMP < get(i).c_TSTAMP) {
+                        move(i, n, 1);
+                        n = 0;
+                    }
+                }
+            }
+        }
+
+        function executeSelection(item, type) {
+            mainView.updateDetailPage(mainView.detailMode.Note, item.c_ID, undefined, item.c_STEXT, item.c_CONTENT, item.c_SBADGE)
+        }
+    }
+
+    Button {
+        id: addNoteButton
+        flat: true
+        visible: currentCollectionMode === mainView.collectionMode.Notes
+        z: 2
+        width: mainView.innerSpacing * 2
+        height: mainView.innerSpacing * 2
+
+        anchors.right: parent.right
+        anchors.rightMargin: mainView.innerSpacing * 2
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: mainView.innerSpacing * 2
+
+        background: Rectangle {
+            id: backgroundRec
+            color: mainView.fontColor
+            opacity: 0.2
+            border.color: "transparent"
+            radius: mainView.innerSpacing
+        }
+
+        icon.source: Qt.resolvedUrl("icons/notes@4x.png")
+
+        onPressed: {
+            backgroundRec.color = Universal.accent
+            opacity: 1.0
+        }
+
+        onClicked: {
+            backgroundRec.color = mainView.fontColor
+            opacity: 0.2
+            var d = new Date
+            mainView.updateDetailPage(mainView.detailMode.Note, d.valueOf(), undefined, mainView.parseTime(d), new String, false)
+        }
+    }
+
     Connections {
         target: AN.SystemDispatcher
         onDispatched: {
             if (type === "volla.launcher.threadResponse") {
                 console.log("Collections | onDispatched: " + type)
-                collectionPage.threads = message["threads"]
-                collectionPage.updateListModel()
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    collectionPage.threads = collectionPage.threads.concat(message["threads"])
+                    collectionPage.updateListModel()
+                }
+            } else if (type === "volla.launcher.signalThreadsResponse") {
+                console.log("Collections | onDispatched: " + type)
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    message["messages"].forEach(function (aThread, index) {
+                        aThread["isSignal"] = true
+                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
+                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
+                        }
+                    })
+                    collectionPage.threads = collectionPage.threads.concat(message["messages"])
+                    collectionPage.updateListModel()
+                }
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
-                collectionPage.calls = message["calls"]
-                collectionPage.updateListModel()
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    collectionPage.calls = collectionPage.calls.concat(message["calls"])
+                    collectionPage.updateListModel()
+                }
             } else if (type === "volla.launcher.contactImageResponse") {
                 console.log("Collections | onDispatched: " + type)
                 if (message["hasIcon"]) {

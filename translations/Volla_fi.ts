@@ -33,38 +33,50 @@
     </message>
     <message>
         <source>Open Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avaa pikakuvake</translation>
+    </message>
+    <message>
+        <source>Most used</source>
+        <translation type="unfinished">Eniten käytetyt</translation>
+    </message>
+    <message>
+        <source>apps</source>
+        <translation type="unfinished">apps</translation>
+    </message>
+    <message>
+        <source>Other apps</source>
+        <translation type="unfinished">Muut sovellukset</translation>
     </message>
 </context>
 <context>
     <name>Browser</name>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">näytä puhelin</translation>
+        <translation type="obsolete">näytä puhelin</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">avoin kamera</translation>
+        <translation type="obsolete">avoin kamera</translation>
     </message>
     <message>
         <source>Agenda</source>
-        <translation type="unfinished">Tapahtumat</translation>
+        <translation type="obsolete">Tapahtumat</translation>
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">galleria</translation>
+        <translation type="obsolete">galleria</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Uutiset</translation>
+        <translation type="obsolete">Uutiset</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">Keskustelut</translation>
+        <translation type="obsolete">Keskustelut</translation>
     </message>
     <message>
         <source>Revent People</source>
-        <translation type="unfinished">yhteystiedot</translation>
+        <translation type="obsolete">yhteystiedot</translation>
     </message>
 </context>
 <context>
@@ -127,32 +139,43 @@
     </message>
     <message>
         <source>Invalid RSS feed: </source>
-        <translation type="unfinished">virheellinen RSS-syöte
-</translation>
+        <translation type="unfinished">virheellinen RSS-syöte: </translation>
     </message>
     <message>
         <source>Missing RSS item: </source>
-        <translation type="unfinished">puuttuu RSS-viesti</translation>
+        <translation type="unfinished">puuttuu RSS-viesti: </translation>
     </message>
     <message>
         <source>Find people ...</source>
-        <translation type="unfinished">löytää yhteystietoja</translation>
+        <translation type="unfinished">löytää yhteystietoja ...</translation>
     </message>
     <message>
         <source>Find thread ...</source>
-        <translation type="unfinished">löytää viihdettä</translation>
+        <translation type="unfinished">löytää viihdettä ...</translation>
     </message>
     <message>
         <source>Find news ...</source>
-        <translation type="unfinished">löytää uutisia</translation>
+        <translation type="unfinished">löytää uutisia ...</translation>
     </message>
     <message>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished">ei voinut ladata RSS-syötettä</translation>
+        <translation type="unfinished">ei voinut ladata RSS-syötettä: </translation>
     </message>
     <message>
         <source>Open Contact</source>
         <translation type="unfinished">avoin kosketin</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">muistiinpanot</translation>
+    </message>
+    <message>
+        <source>Find note ...</source>
+        <translation type="unfinished">Etsi huomautus ...</translation>
+    </message>
+    <message>
+        <source>Open in Signal</source>
+        <translation type="unfinished">Avaa signaalissa</translation>
     </message>
 </context>
 <context>
@@ -172,14 +195,14 @@
     </message>
     <message>
         <source>Type your message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjoita viestisi</translation>
     </message>
 </context>
 <context>
     <name>Details</name>
     <message>
         <source>Not yet supported</source>
-        <translation type="unfinished">ei vielä tuettu</translation>
+        <translation type="unfinished">Ei vielä tuettu</translation>
     </message>
     <message>
         <source>Open in browser</source>
@@ -198,7 +221,7 @@
     </message>
     <message>
         <source>Filter news ...</source>
-        <translation type="unfinished">suodata uutisia</translation>
+        <translation type="unfinished">suodata uutisia ...</translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -269,11 +292,11 @@
     </message>
     <message>
         <source>Startpage</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Startpage</translation>
     </message>
     <message>
         <source>Background blur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taustan sumentaminen</translation>
     </message>
     <message>
         <source>Open</source>
@@ -281,23 +304,75 @@
     </message>
     <message>
         <source>Display and menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Näyttö ja valikot</translation>
     </message>
     <message>
         <source>Reset options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nollaa vaihtoehdot</translation>
     </message>
     <message>
         <source>Reset news feeds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset shorcuts feeds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nollaa uutissyötteet</translation>
     </message>
     <message>
         <source>Reload contacts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lataa yhteystiedot uudelleen</translation>
+    </message>
+    <message>
+        <source>Security mode is OFF</source>
+        <translation type="unfinished">Turvatila on OFF</translation>
+    </message>
+    <message>
+        <source>Security mode is ON</source>
+        <translation type="unfinished">Turvatila on päällä</translation>
+    </message>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished">Syötä salasana</translation>
+    </message>
+    <message>
+        <source>Repeat password</source>
+        <translation type="unfinished">Toista salasana</translation>
+    </message>
+    <message>
+        <source>Keep existing Password</source>
+        <translation type="unfinished">Säilytä nykyinen salasana</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Peruuta</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
+        <source>Wrong password confirmation</source>
+        <translation type="unfinished">Väärä salasanan vahvistus</translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished">Väärä salasana</translation>
+    </message>
+    <message>
+        <source>Show grouped apps</source>
+        <translation type="unfinished">Näytä ryhmitellyt sovellukset</translation>
+    </message>
+    <message>
+        <source>Use app categories</source>
+        <translation type="unfinished">Käytä sovelluskategorioita</translation>
+    </message>
+    <message>
+        <source>Source settings</source>
+        <translation type="unfinished">Lähteen asetukset</translation>
+    </message>
+    <message>
+        <source>Signal</source>
+        <translation type="unfinished">Signal</translation>
+    </message>
+    <message>
+        <source>Reset shorcuts</source>
+        <translation type="unfinished">Pikavalintojen nollaaminen</translation>
     </message>
 </context>
 <context>
@@ -432,7 +507,43 @@
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished">muistiinpanosi tallennettiin onnistuneesti</translation>
+        <translation type="obsolete">muistiinpanosi tallennettiin onnistuneesti</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation type="unfinished">Maanantai</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation type="unfinished">Tiistai</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation type="unfinished">Keskiviikko</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation type="unfinished">Torstai</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation type="unfinished">Perjantai</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation type="unfinished">Lauantai</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation type="unfinished">Sunnuntai</translation>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation type="unfinished">huomenna</translation>
+    </message>
+    <message>
+        <source>New note saved</source>
+        <translation type="unfinished">Uusi muistiinpano tallennettu</translation>
     </message>
 </context>
 <context>
@@ -543,7 +654,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">muistiinpanot</translation>
+        <translation type="obsolete">muistiinpanot</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -615,15 +726,31 @@
     </message>
     <message>
         <source>Error because of too much redirects</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Virhe, koska liikaa uudelleenohjauksia</translation>
     </message>
     <message>
         <source>Could not load a valid feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kelvollista syötettä ei voitu ladata</translation>
     </message>
     <message>
         <source>Reset successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nollaus onnistui</translation>
+    </message>
+    <message>
+        <source>Show Notes</source>
+        <translation type="unfinished">näytä muistiinpanot</translation>
+    </message>
+    <message>
+        <source>Send Signal message</source>
+        <translation type="unfinished">Lähetä signaaliviesti</translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
+        <translation type="unfinished">Lisää kalenteriin</translation>
+    </message>
+    <message>
+        <source>Show in Signal</source>
+        <translation type="unfinished">Näytä signaalissa</translation>
     </message>
 </context>
 </TS>

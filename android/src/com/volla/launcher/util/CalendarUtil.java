@@ -3,6 +3,7 @@ package com.volla.launcher.util;
 import androidnative.SystemDispatcher;
 import android.app.Activity;
 import android.content.Intent;
+import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.util.Log;
 import org.qtproject.qt5.android.QtNative;
@@ -47,21 +48,21 @@ public class CalendarUtil {
         Log.d(TAG, "Invoked JAVA createEvent" );
 
         Calendar calendarEvent = Calendar.getInstance();
-        Intent intent = new Intent(Intent.ACTION_EDIT);
-        intent.setType("vnd.android.cursor.item/event");
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setData(Events.CONTENT_URI);
 
         if ( message.containsKey("beginTime") ) {
-            intent.putExtra(Events.DTSTART, (Integer)message.get("beginTime") * 1000);
+            intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, ((Double)message.get("beginTime")).longValue());
         }
 
         if ( message.containsKey("endTime") ) {
-            intent.putExtra(Events.DTEND, (Integer)message.get("endTime") * 1000);
+            intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, ((Double)message.get("endTime")).longValue());
         }
 
         if ( message.containsKey("allDay") ) {
-            intent.putExtra("allDay", (boolean)message.get("allDay"));
+            intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, (boolean)message.get("allDay"));
         } else {
-            intent.putExtra(Events.ALL_DAY, false);
+            intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false);
         }
 
         if ( message.containsKey("title") ) {

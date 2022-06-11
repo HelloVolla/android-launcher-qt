@@ -16,6 +16,11 @@ Page {
     property real menuheight: mainView.largeFontSize * 7 + mainView.innerSpacing * 10.5
     property var textInputArea
     property var selectedObj
+    property var headline
+
+    property var eventGlossar: [qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"), qsTr("Thursday"), qsTr("Friday"),
+                                qsTr("Saturday"), qsTr("Sunday"), qsTr("tomorrow")]
+    property var eventRegex
 
     property bool defaultSuggestions: false
     property bool dotShortcut: true
@@ -34,10 +39,21 @@ Page {
     Component.onCompleted: {
         listModel.update()
         shortcutMenu.updateShortcuts(mainView.getActions())
+        var eventRegexStr = "^("
+        for (var i = 0; i < eventGlossar.length; i++) {
+            eventRegexStr = eventRegexStr.concat(eventGlossar[i])
+            if (i < eventGlossar.length - 1) eventRegexStr = eventRegexStr.concat("|")
+        }
+        eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S.*)")
+        eventRegex = new RegExp(eventRegexStr, "gim")
     }
 
     function updateShortcuts(actions) {
         shortcutMenu.updateShortcuts(actions)
+    }
+
+    function updateHeadlineColor() {
+        springBoard.headline.color = mainView.fontColor
     }
 
     ListView {
@@ -62,6 +78,12 @@ Page {
                 background: Rectangle {
                     color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
+                }
+
+                Binding {
+                    target: springBoard
+                    property: "headline"
+                    value: headline
                 }
             }
             TextArea {
@@ -209,6 +231,83 @@ Page {
                 console.log("Springboard | Will send email " + message)
                 Qt.openUrlExternally(message)
                 textInputArea.text = ""
+            }
+
+            function parseAndSaveEvent() {
+                var d = new Date()
+                var pattern1 = /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
+                var pattern2 = /^(\d{2,4})\/(\d{1,2})\/(\d{1,2})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
+                if (eventRegex.test(textInput)) {
+                    var day = d.getDay()
+                    var plannedDay = eventGlossar.indexOf(textInput.replace(eventRegex, '$1'))
+                    var daysToAdd = plannedDay > day ? plannedDay - day : 7 - plannedDay
+                    if (plannedDay === 8) daysToAdd = 1
+                    var eventDate = new Date()
+                    eventDate.setDate(eventDate.getDate() + daysToAdd)
+                    var year = eventDate.getFullYear()
+                    var date = eventDate.getDate()
+                    var month = eventDate.getMonth()
+                    var beginhour = textInput.replace(eventRegex, '$2') !== "" ?
+                                parseInt(textInput.replace(eventRegex, '$2').split(":")[0]) : -1
+                    var beginMinute = beginhour > - 1 && textInput.replace(eventRegex, '$2').split(":")[1] !== undefined ?
+                                parseInt(textInput.replace(eventRegex, '$2').split(":")[1]) : 0
+                    var endHour = textInput.replace(eventRegex, '$3') !== "" ?
+                                parseInt(textInput.replace(eventRegex, '$3').split(":")[0]) : -1
+                    var endMinute = beginhour > - 1 && textInput.replace(eventRegex, '$3').split(":")[1] !== undefined ?
+                                parseInt(textInput.replace(eventRegex, '$3').split(":")[1]) : 0
+                    if (beginhour > -1 && endHour < 0) {
+                        endHour = beginhour + 1
+                        endMinute = beginMinute
+                    }
+                    if (textInput.replace(eventRegex, '$4').toLocaleLowerCase() === "pm") {
+                        beginhour = beginhour + 12
+                        endHour = endHour + 12
+                    }
+                    var allDay = beginhour < 0
+                    var title = textInput.replace(eventRegex, '$5').split("\n",2)[0]
+                    var description = textInput.replace(eventRegex, '$5').split("\n",2)[1] !== undefined ?
+                                textInput.replace(eventRegex, '$5').split("\n",2)[1] : ""
+                } else {
+                    var pattern = pattern1.test(textInput) ? pattern1 : pattern2
+                    date = parseInt(textInput.replace(pattern, '$1'))
+                    month = parseInt(textInput.replace(pattern, '$2')) - 1
+                    year = textInput.replace(pattern, '$3') === "" ?
+                                d.getFullYear() : parseInt(textInput.replace(pattern, '$3'))
+                    if (year < 100) year = 2000 + year
+                    beginhour = textInput.replace(pattern, '$4') !== "" ?
+                                parseInt(textInput.replace(pattern, '$4').split(":")[0]) : -1
+                    beginMinute = beginhour > - 1 && textInput.replace(pattern, '$4').split(":")[1] !== undefined ?
+                                parseInt(textInput.replace(pattern, '$4').split(":")[1]) : 0
+                    endHour = textInput.replace(pattern, '$5') !== "" ?
+                                parseInt(textInput.replace(pattern, '$5').split(":")[0]) : -1
+                    endMinute = beginhour > - 1 && textInput.replace(pattern, '$5').split(":")[1] !== undefined ?
+                                parseInt(textInput.replace(pattern, '$5').split(":")[1]) : 0
+                    if (beginhour > -1 && endHour < 0) {
+                        endHour = beginhour + 1
+                        endMinute = beginMinute
+                    }
+                    if (textInput.replace(pattern, '$6').toLocaleLowerCase() === "pm") {
+                        beginhour = beginhour + 12
+                        endHour = endHour + 12
+                    }
+                    allDay = beginhour < 0
+                    title = textInput.replace(pattern, '$7').split("\n",2)[0]
+                    description = textInput.replace(pattern, '$7').split("\n",2)[1] !== undefined ?
+                                textInput.replace(pattern, '$7').split("\n",2)[1] : ""
+                }
+
+                if (!allDay) {
+                    var beginTime = new Date(year, month, date, beginhour, beginMinute, 0 , 0)
+                    console.log("Springboard | Start date: " + beginTime)
+                    var endTime = new Date(year, month, date, endHour, endMinute, 0 , 0)
+                    console.log("Springboard | End date: " + endTime)
+                    AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {
+                          "beginTime": beginTime.valueOf(), "endTime": endTime.valueOf(), "allDay": allDay,
+                          "title": title, "description": description})
+                } else {
+                    AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {
+                          "allDay": allDay, "title": title, "description": description})
+                }
             }
 
             function textInputStartsWithPhoneNumber() {
@@ -366,17 +465,29 @@ Page {
                         break
                     case mainView.actionType.CreateNote:
                         console.log("Springboard | Will create note")
-                        // todo: create note
-                        var source = "note" + Math.floor(Date.now()) + ".txt"
-                        myNote.setSource(source)
-                        if (myNote.write(textInput)) {
-                            mainView.showToast(qsTr("Your note was successfully stored"))
-                        }
-                        console.log( "Springboard | WRITE "+ myNote.write(textInput))
-                        // console.log("Springboard | READ " + myNote.read())
-                        // Qt.openUrlExternally("content:///storage/emulated/0/Documents/" + source)
+                        mainView.updateNote(undefined, textInputArea.text)
+                        textInputArea.text = ""
+                        mainView.showToast(qsTr("New note saved"))
+                        break
+                    case mainView.actionType.CreateEvent:
+                        parseAndSaveEvent()
+                        textInputArea.text = ""
+                        mainView.showToast("Event added to calendar")                       
+                        break
+                    case mainView.actionType.SendSignal:
+                        // todo: implement
+                        idx = textInput.search(/\s/)
+                        message = textInput.substring(idx+1, textInput.length)
+                        phoneNumber = selectedObj["phone.signal"]
+                        AN.SystemDispatcher.dispatch("volla.launcher.signalIntentAction", {"number": phoneNumber, "text": message})
                         textInputArea.text = ""
                         break
+                    case mainView.actionType.OpenSignalContact:
+                        phoneNumber = selectedObj["phone.signal"]
+                        console.log("Springboard | Will show contact " + phoneNumber + " in Signal")
+                        Qt.openUrlExternally("sgnl://signal.me/#p/" + phoneNumber)
+                        textInputArea.text = ""
+                        break;
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         selectedObj = Object.assign({}, actionObj)
@@ -396,7 +507,7 @@ Page {
                     springBoardWorker.sendMessage({
                         'selectedObj': selectedObj, 'textInput': textInput,
                         'contacts': mainView.contacts, 'model': listModel, 'actionType': mainView.actionType,
-                        'actionName': mainView.actionName
+                        'actionName': mainView.actionName, 'eventRegex': eventRegex
                     })
                 }
             }
@@ -564,7 +675,6 @@ Page {
 
         function createShortcuts(shortcuts) {
             var leftDistance = Screen.width / 4
-            console.log("SpringBoard | Left distance is " + leftDistance)
             for (var i = 0; i < shortcuts.length; i++) {
                 if (shortcuts[i]["activated"]) {
                     var component = Qt.createComponent("/Shortcut.qml", shortcutColumn)
@@ -590,35 +700,6 @@ Page {
         function updateShortcuts(actions) {
             destroyShortcuts()
             createShortcuts(actions)
-
-//            actions.forEach(function (action, index) {
-//                switch (action.id) {
-//                    case mainView.actionType.OpenCam:
-//                        cameraLabel.visible = action.activated
-//                        break
-//                    case mainView.actionType.ShowCalendar:
-//                        agendaLabel.visible = action.activated
-//                        break
-//                    case mainView.actionType.ShowGallery:
-//                        galleryLabel.visible = action.activated
-//                        break
-//                    case mainView.actionType.ShowNotes:
-//                        notesLabel.visible = action.activated
-//                        break
-//                    case mainView.actionType.CreateEvent:
-//                        eventLabel.visible = action.activated
-//                        break
-//                    case mainView.actionType.ShowContacts:
-//                        peopleLabel.visible = action.activated
-//                        break
-//                    case mainView.actionType.ShowThreads:
-//                        threadLabel.visible = action.activated
-//                        break
-//                    case mainView.actionType.ShowNews:
-//                        newsLabel.visible = action.activated
-//                        break
-//                }
-//            })
         }
 
         function executeSelection() {
@@ -662,7 +743,8 @@ Page {
                     break
                 case mainView.actionType.ShowNotes:
                     console.log("Springboard | Show notes")
-                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
+                    //AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.notesApp})
+                    mainView.updateCollectionPage(mainView.collectionMode.Notes)
                     break
                 case mainView.actionType.CreateEvent:
                     console.log("Springboard | Create event")

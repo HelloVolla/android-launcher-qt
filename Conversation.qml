@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Window 2.2
 import QtQuick.XmlListModel 2.12
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
@@ -15,6 +16,7 @@ Page {
     property string attachmentUrl: imagePicker.imageUrl
     property real widthFactor: 0.9
     property real innerSmallSpacing: 6.0
+    property real navBarHeight: 0
     property int threadAge: 84000 * 14 // two weeks in milli seconds
     property int operationCount: 0 // number of background operations
     property int currentConversationMode: 0
@@ -36,6 +38,24 @@ Page {
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
+    }
+
+    Connections {
+        target: Qt.inputMethod
+
+        onKeyboardRectangleChanged: {
+            console.log("Conversation | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
+
+            var delta = Qt.inputMethod.keyboardRectangle.height === 0
+                    ? 0 : mainWindow.visibility === 5 ? conversationPage.navBarHeight + 45 : conversationPage.navBarHeight // estimated navigation bar height
+
+            listView.height = Screen.desktopAvailableHeight - Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio - delta
+            listView.positionViewAtEnd()
+        }
+    }
+
+    Component.onCompleted: {
+        AN.SystemDispatcher.dispatch("volla.launcher.navBarAction", {})
     }
 
     onTextInputChanged: {
@@ -75,7 +95,7 @@ Page {
                     }
                     operationCount = 2
                     mainView.updateSpinner(true)
-                    loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge})
+                    loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge, "person": name})
                     loadCalls({"match": name, "age": threadAge})
                     break;
                 case mainView.conversationMode.Thread:
@@ -142,9 +162,13 @@ Page {
     }
 
     function loadConversation(filter) {
-        console.log("Conversations | Will load messages")
+        console.log("Conversation | Will load messages")
         messages = new Array
-        AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
+        if (isNaN(filter["threadId"])) {
+            AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
+        } else {
+            AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
+        }
     }
 
     function loadCalls(filter) {
@@ -153,13 +177,18 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.callConversationAction", filter)
     }
 
+    function lastMessageIsFromSignal() {
+        var lastMessage = conversationPage.currentConversationModel.get(conversationPage.currentConversationModel.count - 1)
+        return lastMessage.m_STEXT.includes("Signal")
+    }
+
     ListView {
         id: listView
         anchors.top: parent.top
         width: parent.width
         height: parent.height
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
-        footerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
+        footerPositioning: ListView.OverlayFooter  // mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
 
         header: Column {
             id: header
@@ -260,8 +289,9 @@ Page {
             id: footer
             width: parent.width
             implicitHeight: mainWindow.visibility === 5 ? messageRow.height : messageRow.height + 2 * mainView.innerSpacing
-            color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-            border.color: "transparent"
+            color: Universal.background //mainView.backgroundColor // mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+            opacity: mainView.backgroundOpacity
+            border.color: Universal.background
             z: 2
 
             Behavior on implicitHeight {
@@ -355,18 +385,6 @@ Page {
                             color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                             border.color: "transparent"
                         }
-
-                        onActiveFocusChanged: {
-                            console.log("Conversation | On active focus changed to " + activeFocus)
-                            if (activeFocus) {
-                                listView.height = mainWindow.visibility === 5 ? mainView.height * 0.6 + innerSmallSpacing * 2 :
-                                                                                mainView.height * 0.65
-                                listView.positionViewAtEnd()
-                            } else {
-                                listView.height = mainView.height
-                                listView.positionViewAtEnd()
-                            }
-                        }
                     }
                     Row {
                         id: attachment
@@ -413,16 +431,28 @@ Page {
                         console.log("Conversation | Number: " + conversationPage.phoneNumber)
                         console.log("Conversation | Text: " + textArea.text)
                         console.log("Conversation | Image: " + imagePicker.imageUrl)
-                        AN.SystemDispatcher.dispatch(
-                                    "volla.launcher.messageAction",
-                                    {"number": conversationPage.phoneNumber, "text": textArea.text,
-                                     "attachmentUrl": imagePicker.imageUrl} )
 
-                        // Todo: Only add message to list currentConversationModel, if massage was successfully sent.
                         var d = new Date()
+                        var kind = imagePicker.imageUrl !== undefined && imagePicker.imageUrl.length > 0 ? "MMS" : "SMS"
+
+                        if (conversationPage.lastMessageIsFromSignal()) {
+                            kind = "Signal"
+                            if (conversationPage.conversationMode.Thread) {
+                                AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction",
+                                    {"threadId": conversationPage.currentId, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
+                            } else {
+                                AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction",
+                                    {"person": conversationPage.headline.text, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
+                            }
+                        } else {
+                            AN.SystemDispatcher.dispatch("volla.launcher.messageAction",
+                               {"number": conversationPage.phoneNumber, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
+                        }
+
+                        // Todo: Only add message to list view, if massage was successfully sent.
                         currentConversationModel.append(
-                                    {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • SMS",
-                                     "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
+                            {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • " + kind,
+                             "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
                         textArea.text = ""
                         textArea.focus = false
                         imagePicker.imageUrl = ""
@@ -561,7 +591,9 @@ Page {
 
                 cMessage.m_TEXT = message["body"]
 
-                if (message["isMMS"] === true) {
+                if (message["isSignal"] === true) {
+                    cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • Signal"
+                } else if (message["isMMS"] === true) {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • MMS"
                 } else {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
@@ -769,28 +801,40 @@ Page {
         onDispatched: {
             if (type === "volla.launcher.conversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
-                conversationPage.messages.push(message["messages"])
-                conversationPage.messages = message["messages"]
+                conversationPage.messages = conversationPage.messages.concat(message["messages"])
 //                message["messages"].forEach(function (message, index) {
 //                    for (const [messageKey, messageValue] of Object.entries(message)) {
 //                        console.log("Conversation | * " + messageKey + ": " + messageValue)
 //                    }
 //                })
                 conversationPage.updateListMocel()
+            } else if (type === "volla.launcher.signalMessagesResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                message["messages"].forEach(function (message, index) {
+                    message["isSignal"] = true
+                    for (const [messageKey, messageValue] of Object.entries(message)) {
+                        console.log("Conversation | * " + messageKey + ": " + messageValue)
+                    }
+                })
+                conversationPage.messages = conversationPage.messages.concat(message["messages"])
+                conversationPage.updateListMocel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
-                conversationPage.calls = message["calls"]
-//                message["calls"].forEach(function (call, index) {
-//                    for (const [callKey, callValue] of Object.entries(call)) {
-//                        console.log("Collections | * " + callKey + ": " + callValue)
-//                    }
-//                })
+                conversationPage.calls = conversationPage.calls.concat(message["calls"])
+                message["calls"].forEach(function (call, index) {
+                    for (const [callKey, callValue] of Object.entries(call)) {
+                        console.log("Collections | * " + callKey + ": " + callValue)
+                    }
+                })
                 conversationPage.updateListMocel()
             } else if (type === "volla.launcher.mmsImageResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 if (message["hasImage"]) {
                     conversationPage.updateImage(message["messageId"], message["image"])
                 }
+            } else if (type === "volla.launcher.navBarResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                conversationPage.navBarHeight = message["height"] / Screen.pixelDensity
             }
         }
     }

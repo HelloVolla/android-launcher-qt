@@ -6,7 +6,8 @@ WorkerScript.onMessage = function(message) {
     var contacts = message.contacts
     var model = message.model
     var actionType = message.actionType
-    var actionName = message.actionName
+    var actionName = message.actionName   
+    var eventRegex = message.eventRegex
 
     function textInputHasMultiTokens() {
         return /\S+\s\S+/.test(textInput)
@@ -37,6 +38,16 @@ WorkerScript.onMessage = function(message) {
         return textInput.indexOf("http") === 0 ? textInput.lastIndexOf("/") > 7 : textInput.lastIndexOf("/") > 3
     }
 
+    function textInputCouldBeEvent() {
+        // Geman style
+        var pattern1 = /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
+
+        // US style
+        var pattern2 = /^(\d{2,4})\/(\d{1,2})\/(\d{1,2})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
+        console.log("Springboard | Regex: " + eventRegex)
+        return pattern1.test(textInput.trim()) || pattern2.test(textInput.trim()) || eventRegex.test(textInput.trim())
+    }
+
     var filteredSuggestionObj = new Array
     var filteredSuggestion
     var suggestion
@@ -48,6 +59,9 @@ WorkerScript.onMessage = function(message) {
             if (selectedObj !== undefined) {
                 if (selectedObj["phone.mobile"] !== undefined && selectedObj["phone.mobile"].length > 0) {
                     filteredSuggestionObj.push([actionName.SendSMS, actionType.SendSMS])
+                }
+                if (selectedObj["phone.signal"] !== undefined && selectedObj["phone.signal"].length > 0) {
+                    filteredSuggestionObj.push([actionName.SendSignal, actionType.SendSignal])
                 }
                 var emailAddressCount = 0
                 if (selectedObj["email.home"] !== undefined && selectedObj["email.home"].length > 0) {
@@ -68,11 +82,14 @@ WorkerScript.onMessage = function(message) {
             filteredSuggestionObj[0] = [actionName.SendSMS, actionType.SendSMS]
         } else if (textInputStartWithEmailAddress()) {
             filteredSuggestionObj[0] = [actionName.SendEmail, actionType.SendEmail]
+        } else if (textInputCouldBeEvent()) {
+            filteredSuggestionObj[0] = [actionName.CreateEvent, actionType.CreateEvent]
+            filteredSuggestionObj[1] = [actionName.CreateNote, actionType.CreateNote]
         } else if (textInputHasMultiLines()) {
             filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
         } else {
-            filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
-            filteredSuggestionObj[1] = [actionName.SearchWeb, actionType.SearchWeb]
+            filteredSuggestionObj[0] = [actionName.SearchWeb, actionType.SearchWeb]
+            filteredSuggestionObj[1] = [actionName.CreateNote, actionType.CreateNote]
         }
     } else if (textInputHasContactPrefix()) {
         var lastChar = textInput.substring(textInput.length - 1, textInput.length)
@@ -94,6 +111,9 @@ WorkerScript.onMessage = function(message) {
                 }
                 if (selectedObj["phone.other"] !== undefined && selectedObj["phone.other"].length > 0) {
                     filteredSuggestionObj.push([phoneNumberCount === 0 ? actionName.MakeCall : actionName.MakeCallToOther, actionType.MakeCallToOther])
+                }
+                if (selectedObj["phone.signal"] !== undefined && selectedObj["phone.signal"].length > 0) {
+                    filteredSuggestionObj.push([actionName.OpenSignalContact, actionType.OpenSignalContact])
                 }
             } else {
                 console.log("SpringBoard | No contact selected")

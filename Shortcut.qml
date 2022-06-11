@@ -8,6 +8,7 @@ Label {
     font.pointSize: labelFontSize
     anchors.left: parent.left
     color: "white"
+    elide: Text.ElideRight
 
     property var actionId
     property double labelFontSize

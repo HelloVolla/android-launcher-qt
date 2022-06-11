@@ -22,7 +22,10 @@ const QVector<QString> permissions({"android.permission.READ_CONTACTS",
                                     "android.permission.WRITE_EXTERNAL_STORAGE",
                                     "android.permission.SET_WALLPAPER",
                                     "android.permission.CALL_PHONE",
-                                    "android.permission.WRITE_APN_SETTINGS" });
+                                    "android.permission.WRITE_APN_SETTINGS",
+                                    "android.permission.MANAGE_APP_OPS_MODES",
+                                    "android.permission.CHANGE_COMPONENT_ENABLED_STATE",
+                                    "android.permission.QUERY_ALL_PACKAGES"});
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
     Q_UNUSED(vm);
@@ -66,6 +69,8 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.CallUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.VibrationUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.ShortcutUtil");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.SignalUtil");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.SignalWorker");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

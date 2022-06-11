@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import org.qtproject.qt5.android.QtNative;
+import lineageos.childmode.ChildModeManager;
 import com.volla.launcher.activity.ReceiveTextActivity;
 
 public class AppUtil {
@@ -35,6 +36,12 @@ public class AppUtil {
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
     public static final String OPEN_CONTACT = "volla.launcher.showContactAction";
     public static final String RESET_LAUNCHER = "volla.launcher.resetAction";
+    public static final String TOGGLE_SECURITY_MODE = "volla.launcher.securityModeAction";
+    public static final String SECURITY_MODE_RESULT = "volla.launcher.securityModeResponse";
+    public static final String GET_SECURITY_STATE = "volla.launcher.securityStateAction";
+    public static final String GOT_SECURITY_STATE = "volla.launcher.securityStateResponse";
+    public static final String GET_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordAction";
+    public static final String GOT_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -84,10 +91,8 @@ public class AppUtil {
                         } else if (type.equals(OPEN_DIALER)) {
                             String app = (String) message.get("app");
 
-//                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q || app == null) {
-                                TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
-                                app = manger.getDefaultDialerPackage();
-//                            }
+                            TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+                            app = manger.getDefaultDialerPackage();
 
                             Log.d(TAG, "Dialer package is " + app);
 
@@ -127,13 +132,70 @@ public class AppUtil {
                             // https://stackoverflow.com/questions/4856955/how-to-programmatically-clear-application-data
                             ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
 
-//                            Intent mStartActivity = new Intent(activity, ReceiveTextActivity.class);
-//                            int mPendingIntentId = 123456;
-//                            PendingIntent mPendingIntent = PendingIntent.getActivity(
-//                                activity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-//                            AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
-//                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-//                            System.exit(0);
+                            Intent mStartActivity = new Intent(activity, ReceiveTextActivity.class);
+                            int mPendingIntentId = 123456;
+                            PendingIntent mPendingIntent = PendingIntent.getActivity(
+                                activity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                            AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                            System.exit(0);
+                        } else if (type.equals(TOGGLE_SECURITY_MODE)) {
+                            boolean activate = (boolean) message.get("activate");
+                            boolean keepPassword = (boolean) message.get("keepPassword");
+
+                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+                            Map reply = new HashMap();
+
+                            if (activate) {
+                                if (!childModeManager.isPasswortSet() || !keepPassword) {
+                                    String password = (String) message.get("password");
+                                    childModeManager.setPassword(password);
+                                }
+                                childModeManager.activate(activate);
+                                reply.put("succeeded", true);
+                                reply.put("activate", activate);
+                            } else {
+                                String password = (String) message.get("password");
+                                if (childModeManager.validatePassword(password)) {
+                                    childModeManager.activate(activate);
+                                    reply.put("succeeded", true );
+                                    reply.put("activate", activate );
+                                } else {
+                                    reply.put("succeeded", false );
+                                    reply.put("error", "Wrong password" );
+                                }
+                            }
+
+                            SystemDispatcher.dispatch(SECURITY_MODE_RESULT, reply);
+                        } else if (type.equals(GET_SECURITY_STATE)) {
+                            try {
+                                Intent childModeSettings = pm.getLaunchIntentForPackage("com.volla.childmodesettings");
+                                boolean available = true;
+                                try {
+                                    // check if available
+                                    pm.getPackageInfo("com.volla.childmodesettings", 0);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    // if not available set available as false
+                                    available = false;
+                                }
+                                ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+                                Map reply = new HashMap();
+                                reply.put("isActive", childModeManager.isActivate() );
+                                reply.put("isInstalled", available);
+                                SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
+                            } catch (Exception e) {
+                                Map reply = new HashMap();
+                                reply.put("isActive", "false" );
+                                reply.put("error", "Not installed" );
+                                Log.d(TAG, e.toString());
+                                SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
+                            }
+                        } else if (type.equals(GET_IS_SECURITY_PW_SET)) {
+                            ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+
+                            Map reply = new HashMap();
+                            reply.put("isPasswordSet", childModeManager.isPasswortSet() );
+                            SystemDispatcher.dispatch(GOT_IS_SECURITY_PW_SET, reply);
                         }
                     }
                 };
