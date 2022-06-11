@@ -22,23 +22,12 @@ allprojects {
     }
 }
 
-
-
 apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'com.chimbori.crux:crux:2.2.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
     compile 'com.klinkerapps:android-smsmms:5.2.6'
-     def room_version = "2.4.2"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    implementation 'com.google.code.gson:gson:2.2.4'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
-    implementation "androidx.room:room-rxjava3:$room_version"
 }
 
 android {

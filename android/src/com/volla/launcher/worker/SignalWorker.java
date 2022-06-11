@@ -12,12 +12,6 @@ import java.util.ArrayList;
 import android.content.Intent;
 import java.util.LinkedList;
 import org.qtproject.qt5.android.QtNative;
-import androidx.lifecycle.ViewModelProvider;
-import com.volla.launcher.repository.MessageRepository;
-import com.volla.launcher.repository.MainViewModel;
-import com.volla.launcher.storage.Message;
-import com.volla.launcher.storage.Users;
-import androidx.core.app.NotificationManagerCompat;
 
 public class SignalWorker {
 
@@ -33,96 +27,26 @@ public class SignalWorker {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
             public void onDispatched(String type, Map dmessage) {
-                Log.d("VollaNotification on Dispatcher",type);
+
                 final Activity activity = QtNative.activity();
                 final Map message = dmessage;
-                ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(QtNative.activity().getApplication());
 
                 if (type.equals(GET_SIGNAL_MESSAGES)) {
-                     Log.d("VollaNotification calling RetrieveMessageConversations","");
-                    checkPermission(activity);
-                    retrieveMessageConversations(message, activity);
+                    // todo: implement (use a separate thread)
+                    Log.d(TAG, "Rerieve Signal conversaion called");
+                    Map reply = new HashMap();
+                    ArrayList<Map> conversation = new ArrayList();
+                    reply.put("messages", conversation );
+                    SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, reply);
                 } else if (type.equals(GET_SIGNAL_THREADS)) {
                     // todo: implement (use a separate thread)
-                    Log.d("VollaNotification called retriveMessageThreads","");
-                     checkPermission(activity);
-                    retriveMessageThreads(message, activity);
+                    Log.d(TAG, "Retrieve Signal threads called");
+                    Map reply = new HashMap();
+                    ArrayList<Map> threads = new ArrayList();
+                    reply.put("messages", threads );
+                    SystemDispatcher.dispatch(GOT_SIGNAL_THREADS, reply);
                 }
             }
         });
     }
-
-
-    static void retrieveMessageConversations(Map message, Activity activity){
-        Log.d("VollaNotification  retriving message conversation",""+message.toString());
-        MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
-        ArrayList<Map> messageList = new ArrayList();
-        String person = (String) message.get("person");
-        String threadId = (String) message.get("threadId");
-        int   age = (Integer) message.get("threadAge");
-
-
-        
-        repository.getAllMessageBySender(person,1).subscribe(it -> {
-            for (Message m : it) {
-                Map reply = new HashMap();
-                reply.put("id", m.getId());
-                reply.put("thread_id", m.getUuid());
-                reply.put("body", m.getTitle());
-                reply.put("person", m.getSelfDisplayName());
-                reply.put("address", "7653456789");
-                reply.put("date", m.getTimeStamp().toString());
-                reply.put("read", "false");
-                reply.put("isSent", "false");
-                reply.put("image", m.getLargeIcon());
-                reply.put("attachments", "");
-
-                Log.e("VollaNotification retriving message conversation", "Sender Name: " + m);
-                Log.e("VollaNotification retriving message conversation JSON", m.getNotificationData().toJson());
-                messageList.add(reply);
-            }
-            Map result = new HashMap();
-            result.put("messages", messageList );
-            result.put("messagesCount", messageList.size());
-            SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
-            Log.d("VollaNotification Threads dispatched",result.toString());
-        });
-    }
-    static void retriveMessageThreads(Map message, Activity activity){
-        MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
-        ArrayList<Map> messageList = new ArrayList();
-        String threadId = (String) message.get("threadAge");
-        Log.d("VollaNotification  retriving Message Threads","");
-        repository.getAllUsers().subscribe(it -> {
-            for (Users m : it) {
-                Map reply = new HashMap();
-                reply.put("id", m.getId());
-                reply.put("thread_id", m.getUuid());
-                reply.put("body", m.getBody());
-                reply.put("person", m.getUser_name());
-                reply.put("address", "7653456789");
-                reply.put("date", m.getTimeStamp().toString());
-                reply.put("read", m.getRead());
-                reply.put("isSent", m.getSent());
-                reply.put("image", m.getLargeIcon());
-                reply.put("attachments", "");
-
-                Log.e("VollaNotification ThreadMessage", "Sender Name: " + m);
-                Log.e("VollaNotification ThreadMessage JSON", reply.toString());
-                messageList.add(reply);
-            }
-            Map result = new HashMap();
-            result.put("messages", messageList );
-            result.put("messagesCount", messageList.size());
-            SystemDispatcher.dispatch(GOT_SIGNAL_THREADS, result);
-            Log.d("VollaNotification Threads dispatched",result.toString());
-        });
-    }
-
-   static void checkPermission(Activity activity){
-      if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {        //ask for permission
-             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-             activity.startActivity(intent);
-        }
-   }
 }
