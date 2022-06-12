@@ -126,7 +126,10 @@ public class AppWorker
                         }
                     };
 
-                    activity.runOnUiThread(runnable);
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+
+                    // activity.runOnUiThread(runnable);
                 }
             }
         });
