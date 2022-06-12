@@ -128,8 +128,6 @@ public class AppWorker
 
                     Thread thread = new Thread(runnable);
                     thread.start();
-
-                    // activity.runOnUiThread(runnable);
                 }
             }
         });
