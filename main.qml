@@ -262,6 +262,7 @@ ApplicationWindow {
             id: springboard
 
             Loader {
+                id: springboardLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/Springboard.qml", mainView)
             }
@@ -838,6 +839,9 @@ ApplicationWindow {
                         mainView.contacts = mainView.contacts.concat(mainView.loadingContacts.slice())
                         mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
+                        springboardLoader.active = false
+                        springboardLoader.sourceComponent = Qt.createComponent("/Springboard.qml", mainView)
+                        springboardLoader.active = active
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
@@ -876,8 +880,7 @@ ApplicationWindow {
                         console.log("MainView | Invalid RSS feed url")
                     }
                 } else if (type === "volla.launcher.uiModeResponse") {
-                    // todo: adopt night mode
-
+                    mainView.switchTheme(message["uiMode"], false)
                 } else if (type === "volla.launcher.messageResponse") {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | message: " + message["text"] + ", " + mainView.notifications[message["text"]])
