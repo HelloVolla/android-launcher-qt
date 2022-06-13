@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.9.11" android:versionCode="104" android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="26"/>
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0.13" android:versionCode="213" android:installLocation="auto">
+    <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="29"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -16,7 +16,7 @@
 
         <!-- org.qtproject.qt5.android.bindings.QtActivity -->
 
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|uiMode" android:name="com.volla.launcher.activity.ReceiveTextActivity" android:label="Volla" android:theme="@style/AppTheme" android:screenOrientation="portrait" android:launchMode="singleTask" android:taskAffinity="" android:windowSoftInputMode="adjustResize">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|uiMode" android:name="com.volla.launcher.activity.ReceiveTextActivity" android:label="Volla" android:theme="@style/AppTheme" android:screenOrientation="portrait" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
@@ -129,4 +129,9 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
+    <uses-permission android:name="android.permission.MANAGE_APP_OPS_MODES"/>
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 </manifest>

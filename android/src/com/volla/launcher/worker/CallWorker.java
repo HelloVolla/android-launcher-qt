@@ -124,9 +124,6 @@ public class CallWorker {
                selectionArgs[0] = '%' + match + '%' ;
             }
 
-            Log.d(TAG, "Call filter is : " + filter );
-            Log.d(TAG, "Sort oder is : " + sortOrder );
-
             Cursor cursor;
 
             if (selectionArgs[0].length() > 0) {

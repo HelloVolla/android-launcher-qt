@@ -26,7 +26,6 @@ ApplicationWindow {
           if (Qt.application.state === Qt.ApplicationActive) {              
               if (isActive) return
               isActive = true
-              appWindow.visible = true
               // Application go in active state
               console.log("MainView | Application became active")
               settings.sync()
@@ -96,7 +95,8 @@ ApplicationWindow {
         property var collectionMode : {
             'People' : 0,
             'Threads' : 1,
-            'News' : 2
+            'News' : 2,
+            'Notes' : 3
         }
         property var conversationMode: {
             'Person' : 0,
@@ -111,7 +111,8 @@ ApplicationWindow {
             'Web' : 0,
             'Twitter' : 1,
             'MMS' : 2,
-            'Mail' : 3
+            'Mail' : 3,
+            'Note' : 4
         }
         property var searchMode: {
             'Duck' : 0,
@@ -151,7 +152,9 @@ ApplicationWindow {
             'SendEmailToWork': 20023,
             'SendEmailToOther': 20024,
             'OpenContact' : 20025,
-            'OpenApp' : 20026
+            'OpenApp' : 20026,
+            'SendSignal' : 20027,
+            'OpenSignalContact' : 20028
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -160,7 +163,8 @@ ApplicationWindow {
             "MakeCallToWork": qsTr("Call at work"), "MakeCallToOther": qsTr("Call other phone"),
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
             "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection"),
-            "OpenContact" : qsTr("Open Contact")
+            "OpenContact" : qsTr("Open Contact"), "ShowNotes": qsTr("Show Notes"), "SendSignal" : qsTr("Send Signal message"),
+            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal")
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -183,9 +187,8 @@ ApplicationWindow {
                                       "RadioOff": qsTr("Radio off"),
                                       "MessageDelivered": qsTr("Message delivered"),
                                       "MessageNotDelivered": qsTr("Message not delivered")}
-
-        property var contacts: []
-        property var loadingContacts: []
+        property var contacts: new Array
+        property var loadingContacts: new Array
         property bool isLoadingContacts: false
         property var wallpaper: ""
         property var wallpaperId: ""
@@ -194,6 +197,7 @@ ApplicationWindow {
         property var fontColor: Universal.foreground
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
+        property int maxTitleLength: 120
 
         property string galleryApp: "com.simplemobiletools.gallery.pro"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
@@ -210,7 +214,7 @@ ApplicationWindow {
             {"id" : actionType.ShowGallery, "name": qsTr("Gallery"), "activated" : true},
             {"id" : actionType.ShowCalendar, "name": qsTr("Agenda"), "activated" : true},
             {"id" : actionType.CreateEvent, "name": qsTr("Create Event"), "activated" : false},
-            {"id" : actionType.ShowNotes, "name": qsTr("Notes"), "activated" : false},
+            {"id" : actionType.ShowNotes, "name": qsTr("Show Notes"), "activated" : true},
             {"id" : actionType.ShowNews, "name": qsTr("Recent News"), "activated" : true},
             {"id" : actionType.ShowThreads, "name": qsTr("Recent Threads"), "activated" : true},
             {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true}]
@@ -223,9 +227,17 @@ ApplicationWindow {
         property bool keepLastIndex: false
 
         onCurrentIndexChanged: {
-            if (currentIndex === swipeIndex.Apps) {
-                appGrid.children[0].item.updateNotifications()
+            switch (currentIndex) {
+                case swipeIndex.Apps:
+                    appGrid.children[0].item.updateNotifications()
+                    break
+                default:
+                    // Nothing to do
             }
+        }
+
+        onBackgroundOpacityChanged: {
+            updateGridView("backgroundOpacity", backgroundOpacity)
         }
 
         Item {
@@ -250,6 +262,7 @@ ApplicationWindow {
             id: springboard
 
             Loader {
+                id: springboardLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/Springboard.qml", mainView)
             }
@@ -288,7 +301,7 @@ ApplicationWindow {
             item.children[0].item.updateConversationPage(mode, id, name)
         }
 
-        function updateDetailPage(mode, id, author, date, title) {
+        function updateDetailPage(mode, id, author, date, title, hasBadge) {
             console.log("MainView | Will update detail page")
             switch (currentIndex) {
                 case swipeIndex.Collections:
@@ -333,7 +346,7 @@ ApplicationWindow {
                     console.log("MainView | Unexpected state for detail view request")
             }
             currentIndex++
-            item.children[0].item.updateDetailPage(mode, id, author, date, title)
+            item.children[0].item.updateDetailPage(mode, id, author, date, title, hasBadge)
         }
 
         function updateNewsPage(mode, id, name, icon) {
@@ -385,6 +398,8 @@ ApplicationWindow {
                 console.log("MainView | Not supported theme: " + theme)
                 break
             }
+            var item = itemAt(swipeIndex.Springboard)
+            item.children[0].item.updateHeadlineColor()
             AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": updateLockScreen})
         }
 
@@ -426,7 +441,7 @@ ApplicationWindow {
         }
 
         function getApps() {
-            return appGrid.children[0].item.getCurrentApps()
+            return appGrid.children[0].item.getAllApps()
         }
 
         function getFeeds() {
@@ -507,12 +522,12 @@ ApplicationWindow {
                         console.log("MainView | Redirect to " + redirectUrl)
                         if (maxRedirectCount - redirectCount > 0) {
                             redirectCount = redirectCount + 1
-                            checkAndAddFeed(redirectUrl)
+                            //checkAndAddFeed(redirectUrl)
                         } else {
                             redirectCount = 0
                             mainView.showToast(qsTr("Error because of too much redirects"))
+                            doc.abort()
                         }
-                        doc.abort()
                     }
                     else if (doc.status >= 400) {
                         redirectCount = 0
@@ -523,68 +538,68 @@ ApplicationWindow {
                     if (doc.responseXML === null) {
                         console.log("MainView | No valid XML for feed: " + doc.responseText)
                         mainView.showToast(qsTr("Could not load a valid feed"))
-                        return
-                    }
-
-                    var rss = doc.responseXML.documentElement
-                    var channel
-                    if (rss.nodeName === "feed") {
-                        channel = rss
+                        doc.abort()
                     } else {
-                        for (var i = 0; i < rss.childNodes.length; ++i) {
-                            if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
-                                channel = rss.childNodes[i]
-                                break
+                        var rss = doc.responseXML.documentElement
+                        var channel
+                        if (rss.nodeName === "feed") {
+                            channel = rss
+                        } else {
+                            for (var i = 0; i < rss.childNodes.length; ++i) {
+                                if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
+                                    channel = rss.childNodes[i]
+                                    break
+                                }
                             }
                         }
-                    }
-                    if (channel === undefined) {
-                        console.log("MainView | Missing rss channel")
-                        mainView.showToast(qsTr("Invalid RSS feed: ") + url)
-                        return
-                    }
-                    var feed = new Object
-
-                    feed.id = url
-                    feed.activated = true
-                    for (i = 0; i < channel.childNodes.length; ++i) {
-                        if (channel.childNodes[i].nodeName === "title") {
-                            var childNode = channel.childNodes[i]
-                            var textNode = childNode.firstChild
-                            feed.name = textNode.nodeValue
-                        } else if (channel.childNodes[i].nodeName === "logo") {
-                            childNode = channel.childNodes[i]
-                            textNode = childNode.firstChild
-                            feed.icon = textNode.nodeValue
+                        if (channel === undefined) {
+                            console.log("MainView | Missing rss channel")
+                            mainView.showToast(qsTr("Invalid RSS feed: ") + url)
+                            return
                         }
-                    }
+                        var feed = new Object
 
-                    if (feed.icon !== undefined) {
-                        mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
-                        return
-                    }
-
-                    var baseUrl = getBaseUrl(url)
-                    var htmlRequest = new XMLHttpRequest();
-                    htmlRequest.onreadystatechange = function() {
-                        if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                            console.log("MainView | Received header status for news homepage: " + htmlRequest.status);
-                            if (htmlRequest.status !== 200) {
-                                console.log("MainView | Couldn't load feed homepage. Will take fallback for icon")
-                                // todo: solution for fallback. ico not supported.
-                                feed.icon = baseUrl + "/favicon.ico"
-                                mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
-                                return
+                        feed.id = url
+                        feed.activated = true
+                        for (i = 0; i < channel.childNodes.length; ++i) {
+                            if (channel.childNodes[i].nodeName === "title") {
+                                var childNode = channel.childNodes[i]
+                                var textNode = childNode.firstChild
+                                feed.name = textNode.nodeValue
+                            } else if (channel.childNodes[i].nodeName === "logo") {
+                                childNode = channel.childNodes[i]
+                                textNode = childNode.firstChild
+                                feed.icon = textNode.nodeValue
                             }
-                        } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
-                            var html = htmlRequest.responseText
-                            feed.icon = getFavicon(baseUrl, html)
+                        }
+
+                        if (feed.icon !== undefined) {
                             mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
                             return
                         }
+
+                        var baseUrl = getBaseUrl(url)
+                        var htmlRequest = new XMLHttpRequest();
+                        htmlRequest.onreadystatechange = function() {
+                            if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                                console.log("MainView | Received header status for news homepage: " + htmlRequest.status);
+                                if (htmlRequest.status !== 200) {
+                                    console.log("MainView | Couldn't load feed homepage. Will take fallback for icon")
+                                    // todo: solution for fallback. ico not supported.
+                                    feed.icon = baseUrl + "/favicon.ico"
+                                    mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                                    return
+                                }
+                            } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
+                                var html = htmlRequest.responseText
+                                feed.icon = getFavicon(baseUrl, html)
+                                mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                                return
+                            }
+                        }
+                        htmlRequest.open("GET", baseUrl)
+                        htmlRequest.send()
                     }
-                    htmlRequest.open("GET", baseUrl)
-                    htmlRequest.send()
                 }
             }
             doc.open("GET", url)
@@ -682,26 +697,72 @@ ApplicationWindow {
             settings.sync()
         }
 
+        function getNotes() {
+            var noteStr = notes.read()
+            return noteStr.length > 0 ? JSON.parse(noteStr) : new Array
+        }
+
+        function updateNote(id, content, pinned) {
+            var notesArr = mainView.getNotes()
+            var note = notesArr.filter(function checkId(noteToCheck) {
+                return noteToCheck["id"] === id
+            })
+            if (note !== undefined) {
+                note["content"] = content
+                note["date"] = new Date().valueOf()
+                note["pinned"] = pinned
+            } else {
+                note["id"] = new Date().valueOf()
+                note["content"] = content
+                note["date"] = new Date().valueOf()
+                note["pinned"] = false
+            }
+            notes.write(JSON.stringify(notesArr))
+        }
+
+        function removeNote(id) {
+            var notesArr = mainView.getNotes()
+            var index = notesArr.findIndex( element => {
+                if (element.id === id) {
+                    return true;
+                }
+            })
+            if (index > -1) {
+                notesDict = notesArr.slice(index, 1)
+                notes.write(JSON.stringify(notesArr))
+            }
+            updateCollectionPage(mainView.collectionMode.Notes)
+        }
+
         function updateSpinner(shouldRun) {
-            //spinnerBackground.visible = shouldRun
             if (!(isLoadingContacts && !shouldRun)) {
                 spinner.running = shouldRun
             }
         }
 
-        function updateVisibility(visibility) {
-            console.log("MainView | Update window visibility to " + visibility)
-            appWindow.visibility = visibility
-        }
-
-        function updateGridView(useColoredAppIcons) {
-            console.log("MainView | Will update app page")
+        function updateGridView(key, value) {
             var item = itemAt(swipeIndex.Apps)
-            item.children[0].item.updateAppLauncher(useColoredAppIcons)
+            item.children[0].item.updateAppLauncher(key, value)
         }
 
-        function updateBlurEffect(blurEffect) {
-            fastBlur.radius = blurEffect
+        function updateSettings(key, value) {
+            if (key === "blurEffect") {
+                settings.blurEffect = value
+                fastBlur.radius = value
+            } else if (key === "fullscreen") {
+                settings.fullscreen = value
+                if (value) {
+                    appWindow.visibility = 5
+                } else {
+                    appWindow.visibility = 2
+                }
+            } else if (key === "useHapticMenus") {
+                settings.useHapticMenus = value
+                mainView.useVibration = value
+            } else if (key === "showAppsAtStartup") {
+                settings.showAppsAtStartup = value
+            }
+            settings.sync()
         }
 
         function resetActions() {
@@ -754,6 +815,11 @@ ApplicationWindow {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | Contacts " + message["blockStart"] + " to " + message["blockEnd"])
                     mainView.loadingContacts = mainView.loadingContacts.concat(message["contacts"])
+//                    message["contacts"].forEach(function (aContact, index) {
+//                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
+//                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
+//                        }
+//                    })
                     if (mainView.loadingContacts.length === message["contactsCount"]) {
                         var d = new Date()
                         console.log("MainView | Retrieving contacts did take " + (d.valueOf() - mainView.timeStamp.valueOf()) + " seconds")
@@ -770,16 +836,19 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        mainView.contacts = mainView.loadingContacts.slice()
+                        mainView.contacts = mainView.contacts.concat(mainView.loadingContacts.slice())
                         mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
+                        springboardLoader.active = false
+                        springboardLoader.sourceComponent = Qt.createComponent("/Springboard.qml", mainView)
+                        springboardLoader.active = active
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     if (message["needsSync"] && !mainView.isLoadingContacts) {
                         console.log("MainView | Need to sync contacts")
                         if (mainView.contacts.length === 0) {
-                            mainView.loadingContacts = []
+                            mainView.loadingContacts = new Array
                             mainView.isLoadingContacts = true
                             mainView.updateSpinner(true)
                         }
@@ -811,8 +880,7 @@ ApplicationWindow {
                         console.log("MainView | Invalid RSS feed url")
                     }
                 } else if (type === "volla.launcher.uiModeResponse") {
-                    // todo: adopt night mode
-
+                    mainView.switchTheme(message["uiMode"], false)
                 } else if (type === "volla.launcher.messageResponse") {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | message: " + message["text"] + ", " + mainView.notifications[message["text"]])
@@ -894,6 +962,14 @@ ApplicationWindow {
         source: ".shortcuts.json"
         onError: {
             console.log("MainView | Shortcut settings error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: notes
+        source: ".notes.json"
+        onError: {
+            console.log("Collections | Notes file error: " + msg)
         }
     }
 

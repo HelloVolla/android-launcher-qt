@@ -6,7 +6,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'    }
+        classpath 'com.android.tools.build:gradle:3.2.0'
+    }
 }
 
 repositories {
@@ -16,9 +17,9 @@ repositories {
 }
 
 allprojects {
-  repositories {
-    mavenCentral()
-  }
+    repositories {
+        mavenCentral()
+    }
 }
 
 apply plugin: 'com.android.application'
@@ -43,9 +44,19 @@ android {
      * Changing them manually might break the compilation!
      *******************************************************/
 
-    compileSdkVersion 31
+    compileSdkVersion 30
 
-    buildToolsVersion "31.0.0"
+    defaultConfig {
+
+        minSdkVersion = 30
+	 applicationId "com.volla.launcher"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildToolsVersion androidBuildToolsVersion
 
     sourceSets {
         main {

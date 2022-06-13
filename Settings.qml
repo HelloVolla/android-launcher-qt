@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Universal 2.12
+import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 
@@ -20,10 +21,35 @@ Page {
         anchors.fill: parent
         contentWidth: parent.width
         contentHeight: settingsColumn.height
-
         Column {
             id: settingsColumn
             width: parent.width
+
+            function closeAllItemsExcept(item) {
+                if (item !== newsSettingsItemColumn && newsSettingsItemColumn.newsCheckboxes.length > 0) {
+                    newsSettingsItemColumn.menuState = false
+                    newsSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== sourceSettingsItemColumn && sourceSettingsItemColumn.checkboxes.length > 0) {
+                    sourceSettingsItemColumn.menuState = false
+                    sourceSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== shortcutSettingsItemColumn && shortcutSettingsItemColumn.checkboxes.length > 0) {
+                    shortcutSettingsItemColumn.menuState = false
+                    shortcutSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== searchSettingsItemColumn && searchSettingsItemColumn.checkboxes.length > 0) {
+                    searchSettingsItemColumn.menuState = false
+                    searchSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== designSettingsItemColumn && designSettingsItemColumn.checkboxes.length > 0) {
+                    designSettingsItemColumn.menuState = false
+                    designSettingsItemColumn.destroyCheckboxes()
+                }
+                if (item !== resetSettingsItemColumn && resetSettingsItemColumn.menuState) {
+                    resetSettingsItemColumn.menuState = false
+                }
+            }
 
             Label {
                 id: headerLabel
@@ -253,6 +279,400 @@ Page {
                 }
             }
 
+            MouseArea {
+                id: securitySettingsItem
+                width: parent.width
+                implicitHeight: securitySettingsItemColumn.height
+                preventStealing: true
+
+                property var selectedMenuItem: securitySettingsItemTitle
+                property bool menuState: false
+                property double labelOpacity: 0.0
+
+                Column {
+                    id: securitySettingsItemColumn
+                    width: parent.width
+
+                    Button {
+                        id: securitySettingsItemTitle
+
+                        property var isActiveSecurityMode: false
+
+                        enabled: false
+                        padding: mainView.innerSpacing
+                        width: parent.width
+                        text: qsTr("Security mode is OFF")
+                        contentItem: Row {
+                            Text {
+                                text: securitySettingsItemTitle.text
+                                width: parent.width - securitySettingsItemTitleIcon.width - mainView.innerSpacing
+                                font.pointSize: mainView.largeFontSize
+                                font.weight: securitySettingsItem.menuState ? Font.Black : Font.Normal
+                                color: securitySettingsItem.menuState ? "white" : Universal.foreground
+                            }
+                            Image {
+                                id: securitySettingsItemTitleIcon
+                                source: Qt.resolvedUrl("icons/lock@2x.png")
+                                visible: false
+
+                                ColorOverlay {
+                                    anchors.fill: securitySettingsItemTitleIcon
+                                    source: securitySettingsItemTitleIcon
+                                    color: mainView.fontColor
+                                }
+                            }
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
+                        }
+
+                        Component.onCompleted: {
+                            AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
+                        }
+
+                        onTextChanged: {
+                            securitySettingsItemTitleIcon.visible = text === securityModeOnOption.text
+                        }
+                    }
+                    Button {
+                        id: securityModeOffOption
+
+                        property var isActiveSecurityMode: false
+
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing
+                        width: parent.width
+                        visible: securitySettingsItem.menuState
+                        text: qsTr("Security mode is OFF")
+                        contentItem: Text {
+                            text: securityModeOffOption.text
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: securitySettingsItem.selectedMenuItem === securityModeOffOption ? Font.Black : Font.Normal
+                            color: "white"
+                            opacity: securitySettingsItem.labelOpacity
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: securitySettingsItem.menuState ? Universal.accent : "transparent"
+                        }
+                    }
+                    Button {
+                        id: securityModeOnOption
+
+                        property var isActiveSecurityMode: true
+
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing
+                        width: parent.width
+                        visible: securitySettingsItem.menuState
+                        text: qsTr("Security mode is ON")
+                        contentItem: Row {
+                            Text {
+                                text: securityModeOnOption.text
+                                width: parent.width - securityModeOnOptionIcon.width - mainView.innerSpacing
+                                font.pointSize: mainView.mediumFontSize
+                                font.weight: securitySettingsItem.selectedMenuItem === securityModeOnOption ? Font.Black : Font.Normal
+                                color: "white"
+                                opacity: securitySettingsItem.labelOpacity
+                            }
+                            Image {
+                                id: securityModeOnOptionIcon
+                                source: Qt.resolvedUrl("icons/lock@2x.png")
+                            }
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: securitySettingsItem.menuState ? Universal.accent : "transparent"
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.
+                        onRunningChanged: {
+                            if (!running && securitySettingsItem.menuState) {
+                                console.log("Settings | Switch on security options labels")
+                                securitySettingsItem.labelOpacity = 1.0
+                            } else if (running && !securitySettingsItem.menuState) {
+                                console.log("Settings | Switch off security option labels")
+                                securitySettingsItem.labelOpacity = 0.0
+                            }
+                        }
+                    }
+                }
+
+                Behavior on labelOpacity {
+                    NumberAnimation {
+                        duration: 250
+                    }
+                }
+
+                onEntered: {
+                    console.log("Settings | mouse entered")
+                    preventStealing = !preventStealing
+                    menuState = true
+                }
+                onCanceled: {
+                    console.log("Settings | mouse cancelled")
+                    preventStealing = !preventStealing
+                    menuState = false
+                    executeSelection()
+                }
+                onExited: {
+                    console.log("Settings | mouse exited")
+                    preventStealing = !preventStealing
+                    menuState = false
+                    executeSelection()
+                }
+                onMouseYChanged: {
+                    var firstPoint = mapFromItem(securityModeOffOption, 0, 0)
+                    var secondPoint = mapFromItem(securityModeOnOption, 0, 0)
+                    var selectedItem
+
+                    if (mouseY > firstPoint.y && mouseY < firstPoint.y + securityModeOffOption.height) {
+                        selectedItem = securityModeOffOption
+                    } else if (mouseY > secondPoint.y && mouseY < secondPoint.y + securityModeOnOption.height) {
+                        selectedItem = securityModeOnOption
+                    } else {
+                        selectedItem = securitySettingsItemTitle
+                    }
+                    if (selectedMenuItem !== selectedItem) {
+                        selectedMenuItem = selectedItem
+                        if (selectedMenuItem !== securitySettingsItemTitle && mainView.useVibration) {
+                            AN.SystemDispatcher.dispatch("volla.launcher.vibrationAction", {"duration": mainView.vibrationDuration})
+                        }
+                    }
+                }
+
+                function executeSelection() {
+                    console.log("Settings | Execute mode selection: " + selectedMenuItem.text)
+                    if (securitySettingsItemTitle.text !== selectedMenuItem.text) {
+                        if (selectedMenuItem.text === securityModeOnOption.text) {
+                            // Check, if password is set
+                            AN.SystemDispatcher.dispatch("volla.launcher.checkSecurityPasswordAction", {})
+                        } else if (selectedMenuItem.text === securityModeOffOption.text) {
+                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                            passwordDialog.definePasswordMode = false
+                            passwordDialog.isPasswordSet = true
+                            passwordDialog.open()
+                        }
+                    }
+                }
+
+                Dialog {
+                    id: passwordDialog
+
+                    anchors.centerIn: parent
+//                    implicitHeight: dialogTitle.height + passwordField.height +
+//                                    dialogLabel.height + confirmationField.height +
+//                                    keepPasswordCheckBox.height + okButton.height +
+//                                    mainView.innerSpacing * 2
+                    width: parent.width - mainView.innerSpacing * 4
+                    modal: true
+                    dim: false
+
+                    property var backgroundColor: "#292929"
+                    property bool definePasswordMode: false
+                    property bool isPasswordSet: false
+
+                    onOpened: {
+                        passwordField.text = ""
+                        confirmationField.text = ""
+                        height: dialogTitle.height + passwordField.height +
+                                dialogLabel.height + confirmationField.height +
+                                keepPasswordCheckBox.height + okButton.height +
+                                mainView.innerSpacing * 2
+                    }
+
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: passwordDialog.backgroundColor
+                        border.color: "transparent"
+                        radius: mainView.innerSpacing / 2
+                    }
+
+                    enter: Transition {
+                         NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
+                    }
+
+                    exit: Transition {
+                        NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
+                    }
+
+                    contentItem: Column {
+                        id: dialogColumn
+
+                        Label {
+                            id: dialogTitle
+                            text: qsTr("Enter password")
+                            color: mainView.fontColor
+                            font.pointSize: mainView.mediumFontSize
+                            bottomPadding: mainView.innerSpacing
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "transparent"
+                            }
+                        }
+
+                        TextField {
+                            id: passwordField
+                            echoMode: TextField.Password
+                            width: parent.width
+                            color: mainView.fontColor
+                            placeholderTextColor: "darkgrey"
+                            font.pointSize: mainView.mediumFontSize
+                            background: Rectangle {
+                                color: mainView.backgroundColor
+                                border.color: "transparent"
+                            }
+                        }
+
+                        Label {
+                            id: dialogLabel
+                            text: qsTr("Repeat password")
+                            color: mainView.fontColor
+                            topPadding: mainView.innerSpacing
+                            bottomPadding: mainView.innerSpacing
+                            font.pointSize: mainView.mediumFontSize
+                            visible: passwordDialog.definePasswordMode
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "transparent"
+                            }
+                        }
+
+                        TextField {
+                            id: confirmationField
+                            echoMode: TextField.Password
+                            width: parent.width
+                            color: mainView.fontColor
+                            placeholderTextColor: "darkgrey"
+                            font.pointSize: mainView.mediumFontSize
+                            visible: passwordDialog.definePasswordMode
+                            background: Rectangle {
+                                color: mainView.backgroundColor
+                                border.color: "transparent"
+                            }
+                        }
+
+                        CheckBox {
+                            id: keepPasswordCheckBox
+                            width: parent.width
+                            topPadding: mainView.innerSpacing
+                            text: qsTr("Keep existing Password")
+                            checked: passwordDialog.isPasswordSet
+                            visible: passwordDialog.definePasswordMode
+                            contentItem: Text {
+                                text: keepPasswordCheckBox.text
+                                wrapMode: Text.WordWrap
+                                width: parent.width - leftPadding
+                                leftPadding: 2 * mainView.innerSpacing
+                                color: mainView.fontColor
+                                font.pointSize: mainView.mediumFontSize
+                            }
+                        }
+
+                        Row {
+                            width: parent.width
+                            topPadding: mainView.innerSpacing
+                            spacing: mainView.innerSpacing
+
+                            Button {
+                                id: cancelButton
+                                flat: true
+                                padding: mainView.innerSpacing / 2
+                                width: parent.width / 2 - mainView.innerSpacing / 2
+                                text: qsTr("Cancel")
+
+                                contentItem: Text {
+                                    text: cancelButton.text
+                                    color: mainView.fontColor
+                                    font.pointSize: mainView.mediumFontSize
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
+
+                                background: Rectangle {
+                                    color: "transparent"
+                                    border.color: "gray"
+                                }
+
+                                onClicked: {
+                                    securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
+                                    passwordDialog.close()
+                                }
+                            }
+
+                            Button {
+                                id: okButton
+                                width: parent.width / 2 - mainView.innerSpacing / 2
+                                padding: mainView.innerSpacing / 2
+                                flat: true
+                                text: qsTr("Ok")
+
+                                contentItem: Text {
+                                    text: okButton.text
+                                    color: mainView.fontColor
+                                    font.pointSize: mainView.mediumFontSize
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
+
+                                background: Rectangle {
+                                    color: "transparent"
+                                    border.color: "gray"
+                                }
+
+                                onClicked: {
+                                    if (passwordDialog.definePasswordMode && !keepPasswordCheckBox.checked
+                                            && passwordField.text !== confirmationField.text) {
+                                        mainView.showToast(qsTr("Wrong password confirmation"))
+                                    } else {
+                                        AN.SystemDispatcher.dispatch(
+                                                    "volla.launcher.securityModeAction",
+                                                    {"password": passwordField.text,
+                                                     "keepPassword": keepPasswordCheckBox.checked,
+                                                     "activate": securitySettingsItem.selectedMenuItem === securityModeOnOption})
+                                        passwordDialog.close()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Connections {
+                    target: AN.SystemDispatcher
+
+                    onDispatched: {
+                        if (type === "volla.launcher.securityModeResponse") {
+                            if (message["succeeded"]) {
+                                securitySettingsItemTitle.text = securitySettingsItem.selectedMenuItem.text
+                                securitySettingsItemTitle.isActiveSecurityMode = securitySettingsItem.selectedMenuItem.isActiveSecurityMode
+                                securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
+                                AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
+                            } else {
+                                securitySettingsItem.selectedMenuItem = securitySettingsItemTitle
+                                mainView.showToast(qsTr("Wrong password"))
+                            }
+                        } else if (type === "volla.launcher.securityStateResponse") {
+                            console.log("Settings | Security state: " + message["isActive"] + ", " + message["error"])
+                            securitySettingsItemTitle.text = message["isActive"]  ? securityModeOnOption.text
+                                                                                  : securityModeOffOption.text
+                            securitySettingsItem.visible = message["error"] === undefined && message["isInstalled"]
+                        } else if (type === "volla.launcher.checkSecurityPasswordResponse") {
+                            console.log("Settings | Password is set: " + message["isPasswordSet"])
+                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                            passwordDialog.definePasswordMode = true
+                            passwordDialog.isPasswordSet = message["isPasswordSet"]
+                            passwordDialog.open()
+                        }
+                    }
+                }
+            }
+
             Item {
                 id: newsSettingsItem
                 width: parent.width
@@ -285,6 +705,7 @@ Page {
                             if (newsSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create new checkboxes")
                                 newsSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(newsSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy new checkboxes")
                                 newsSettingsItemColumn.destroyCheckboxes()
@@ -298,12 +719,13 @@ Page {
                         for (var i = 0; i < cannels.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", newsSettingsItemColumn)
                             var properties = { "actionId": cannels[i]["id"],
-                                "text": cannels[i]["name"], "checked": cannels[i]["activated"],
+                                "text": cannels[i]["name"], "activeCheckbox": false, "checked": cannels[i]["activated"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": true}
                             var object = component.createObject(newsSettingsItemColumn, properties)
+                            object.activeCheckbox = true
                             newsSettingsItemColumn.newsCheckboxes.push(object)
                         }
                         console.log("Settings News checkboxes created")
@@ -374,6 +796,7 @@ Page {
                             if (shortcutSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
                                 shortcutSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(shortcutSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
                                 shortcutSettingsItemColumn.destroyCheckboxes()
@@ -393,10 +816,12 @@ Page {
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": getFilteredShortcuts(mainView.defaultActions, "id", shortcuts[i]["id"]).length === 0 }
                             var object = component.createObject(shortcutSettingsItemColumn, properties)
+                            object.activeCheckbox = true
                             shortcutSettingsItemColumn.checkboxes.push(object)
                         }
                         addButton.visible = true
                         console.log("Settings | Checkboxes created")
+
                     }
 
                     function addCheckbox(actionId, label) {
@@ -407,6 +832,7 @@ Page {
                             "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                             "hasRemoveButton": true }
                         var object = component.createObject(shortcutSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         shortcutSettingsItemColumn.checkboxes.push(object)
                     }
 
@@ -481,13 +907,16 @@ Page {
                         id: appList
                         delegate: Button {
                             width: parent.width
-                            font.pointSize: mainView.mediumFontSize
                             leftPadding: mainView.innerSpacing
                             rightPadding: mainView.innerSpacing
                             topPadding: mainView.innerSpacing
                             bottomPadding: index === appMenuModel.count - 1 ? mainView.innerSpacing : 0
                             flat: true
-                            text: model.label
+                            contentItem: Text {
+                                text: model.label
+                                font.pointSize: mainView.mediumFontSize
+                                elide: Text.ElideRight
+                            }
                             background: Rectangle {
                                 anchors.fill: parent
                                 color: "transparent"
@@ -529,6 +958,82 @@ Page {
             }
 
             // todo: Add source settings
+            Item {
+                id: sourceSettingsItem
+                width: parent.width
+                implicitHeight: sourceSettingsItemColumn.height
+                visible: true
+
+                Column {
+                    id: sourceSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+
+                    Button {
+                        id: sourceSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * sourceSettingsItemButton.padding
+                            text: qsTr("Source settings")
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: sourceSettingsItemColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            sourceSettingsItemColumn.menuState = !sourceSettingsItemColumn.menuState
+                            if (sourceSettingsItemColumn.menuState) {
+                                console.log("Settings | Will create checkboxes")
+                                sourceSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(sourceSettingsItemColumn)
+                            } else {
+                                console.log("Settings | Will destroy checkboxes")
+                                sourceSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        var component = Qt.createComponent("/Checkbox.qml", sourceSettingsItemColumn)
+                        var properties = { "actionId": "signal",
+                                "text": qsTr("Signal"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
+                        var object = component.createObject(sourceSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        sourceSettingsItemColumn.checkboxes.push(object)
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < sourceSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = sourceSettingsItemColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        sourceSettingsItemColumn.checkboxes = new Array
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update settings for " + actionId + ", " + active)
+
+                        if (actionId === "Signal" && active) {
+                            // todo
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
+                }
+            }
 
             Item {
                 id: searchSettingsItem
@@ -563,6 +1068,7 @@ Page {
                             if (searchSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
                                 searchSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(searchSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
                                 searchSettingsItemColumn.destroyCheckboxes()
@@ -576,20 +1082,25 @@ Page {
                                 "text": qsTr("DuckDuckGo"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
                         var object = component.createObject(searchSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
                         properties["actionId"] = "startpage"
                         properties["text"] = qsTr("Startpage")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.StartPage
                         object = component.createObject(searchSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "metager"
                         properties["text"] = qsTr("MetaGer")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.MetaGer
                         object = component.createObject(searchSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
                         console.log("Settings | Checkboxes created")
                     }
@@ -661,6 +1172,7 @@ Page {
                             if (designSettingsItemColumn.menuState) {
                                 console.log("Settings | Will create checkboxes")
                                 designSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(designSettingsItemColumn)
                             } else {
                                 console.log("Settings | Will destroy checkboxes")
                                 designSettingsItemColumn.destroyCheckboxes()
@@ -676,25 +1188,49 @@ Page {
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
                         var object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "coloredIcons"
                         properties["text"] = qsTr("Use colored app icons")
                         properties["checked"] = designSettings.useColoredIcons
                         object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
                         object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "hapticMenus"
                         properties["text"] = qsTr("Use haptic menus")
                         properties["checked"] = designSettings.useHapticMenus
                         object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
+
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "useGroupedApps"
+                        properties["text"] = qsTr("Show grouped apps")
+                        properties["checked"] = designSettings.useGroupedApps
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "useCategories"
+                        properties["text"] = qsTr("Use app categories")
+                        properties["checked"] = designSettings.useCategories
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -712,22 +1248,27 @@ Page {
                         if (actionId === "fullscreen") {
                             designSettings.fullscreen = active
                             designSettings.sync()
-                            if (active) {
-                                mainView.updateVisibility(5)
-                            } else {
-                                mainView.updateVisibility(2)
-                            }
+                            mainView.updateSettings("fullscreen", active)
                         } else if (actionId === "coloredIcons") {
                             designSettings.useColoredIcons = active
                             designSettings.sync()
-                            mainView.updateGridView(active)
+                            mainView.updateGridView("coloredIcons", active)
                         } else if (actionId === "startupIndex") {
                             designSettings.showAppsAtStartup = active
                             designSettings.sync()
+                            mainView.updateSettings("showAppsAtStartup", active)
                         } else if (actionId === "hapticMenus") {
                             designSettings.useHapticMenus = active
                             designSettings.sync()
-                            mainView.useVibration = active
+                            mainView.updateSettings("useHapticMenus", active)
+                        } else if (actionId === "useGroupedApps") {
+                            designSettings.useGroupedApps = active
+                            designSettings.sync()
+                            mainView.updateGridView("useGroupedApps", active)
+                        } else if (actionId === "useCategories") {
+                            designSettings.useCategories = active
+                            designSettings.sync()
+                            mainView.updateGridView("useCategories", active)
                         }
                     }
                 }
@@ -750,9 +1291,11 @@ Page {
                     id: designSettings
                     property bool fullscreen: false
                     property bool useColoredIcons: false
+                    property bool useGroupedApps: true
+                    property bool useCategories: false
                     property bool showAppsAtStartup: false
-                    property bool useHapticMenus: false
-                    property double blurEffect: 60
+                    property bool useHapticMenus: true
+                    property double blurEffect: 30
                 }
             }
 
@@ -788,14 +1331,13 @@ Page {
                 onValueChanged: {
                     console.log("Settings | Blurr filter chanded to " + value)
                     designSettings.blurEffect = value
-                    mainView.updateBlurEffect(value)
+                    mainView.updateSettings("blurEffect", value)
                 }
             }
 
             Item {
                 id: resetSettingsItem
                 width: parent.width
-
                 implicitHeight: resetSettingsItemColumn.height
 
                 Column {
@@ -804,6 +1346,39 @@ Page {
                     spacing: mainView.innerSpacing / 2
 
                     property bool menuState: false
+
+                    onMenuStateChanged: {
+                        if (resetSettingsItemColumn.menuState) {
+                            resetNewsButton.visible = true
+                            timer.setTimeout(function(){
+                                reseetShortcutsButton.visible = true
+                                timer.setTimeout(function(){
+                                    resetLauncherButton.visible = true}, 50)
+                            }, 50)
+                        } else {
+                            resetLauncherButton.visible = false
+                            timer.setTimeout(function(){
+                                reseetShortcutsButton.visible = false
+                                timer.setTimeout(function(){
+                                    resetNewsButton.visible = false}, 50)
+                            }, 50)
+                        }
+                    }
+
+                    Timer {
+                        id: timer
+                        function setTimeout(cb, delayTime) {
+                            timer.interval = delayTime
+                            timer.repeat = false
+                            timer.triggered.connect(cb)
+                            timer.triggered.connect(function release () {
+                                timer.triggered.disconnect(cb) // This is important
+                                timer.triggered.disconnect(release) // This is important as well
+                            })
+                            timer.start()
+                        }
+                    }
+
 
                     Button {
                         id: resetSettingsItemButton
@@ -822,6 +1397,7 @@ Page {
                         }
                         onClicked: {
                             resetSettingsItemColumn.menuState = !resetSettingsItemColumn.menuState
+                            settingsColumn.closeAllItemsExcept(resetSettingsItemColumn)
                         }
                     }
 
@@ -829,7 +1405,7 @@ Page {
                         id: resetNewsButton
                         flat: true
                         highlighted: true
-                        visible: resetSettingsItemColumn.menuState
+                        visible: false
                         x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
@@ -854,8 +1430,6 @@ Page {
                         }
                         onClicked: {
                             resetNewsButtonBackground.color = "transparent"
-                            newsSettingsItemColumn.menuState = false
-                            newsSettingsItemColumn.destroyCheckboxes()
                             mainView.resetFeeds()
                         }
                     }
@@ -864,7 +1438,7 @@ Page {
                         id: reseetShortcutsButton
                         flat: true
                         highlighted: true
-                        visible: resetSettingsItemColumn.menuState
+                        visible: false
                         x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing
@@ -872,7 +1446,7 @@ Page {
                         bottomPadding: mainView.innerSpacing / 2
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
-                            text: qsTr("Reset shorcuts feeds")
+                            text: qsTr("Reset shorcuts")
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
@@ -889,8 +1463,6 @@ Page {
                         }
                         onClicked: {
                             reseetShortcutsButtonBackground.color = "transparent"
-                            shortcutSettingsItemColumn.menuState = false
-                            shortcutSettingsItemColumn.destroyCheckboxes()
                             mainView.resetActions()
                         }
                     }
@@ -899,7 +1471,7 @@ Page {
                         id: resetLauncherButton
                         flat: true
                         highlighted: true
-                        visible: resetSettingsItemColumn.menuState
+                        visible: false
                         x: mainView.innerSpacing
                         topPadding: mainView.innerSpacing / 2
                         leftPadding: mainView.innerSpacing

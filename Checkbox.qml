@@ -9,8 +9,9 @@ CheckBox {
     property double labelFontSize
     property double circleSize
     property var actionId
-    property bool activeCheckbox: true
+    property bool activeCheckbox: false
     property bool hasRemoveButton: false
+    property bool isToggle: false
     property int startX: 0
 
     width: parent.width
@@ -65,9 +66,12 @@ CheckBox {
     onCheckedChanged: {
         console.log("Checkbox | Checked changed for " + text + ", " + checked)
         if (activeCheckbox) {
-            parent.updateSettings(actionId, checked)
-        } else {
-            activeCheckbox = true
+            if (isToggle && !checked) {
+                activeCheckbox = false
+                checked = true
+            } else {
+                parent.updateSettings(actionId, checked)
+            }
         }
     }
 

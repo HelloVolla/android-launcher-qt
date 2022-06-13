@@ -34,6 +34,10 @@ import java.io.ByteArrayOutputStream;
 import androidnative.SystemDispatcher;
 import androidnative.AndroidNativeActivity;
 import android.widget.Toast; 
+import android.content.BroadcastReceiver;
+import com.volla.launcher.R;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class ReceiveTextActivity extends AndroidNativeActivity
 {
@@ -78,7 +82,11 @@ public class ReceiveTextActivity extends AndroidNativeActivity
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -141,6 +149,15 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            // TODO: Re-check statistic permission
+            Log.d(TAG, "Result for permission request: " + resultCode);
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
@@ -194,4 +211,5 @@ public class ReceiveTextActivity extends AndroidNativeActivity
          byte[] imageBytes = baos.toByteArray();
          return Base64.encodeToString(imageBytes, Base64.NO_WRAP);
     }
+
 }

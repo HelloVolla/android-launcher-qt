@@ -57,7 +57,9 @@ DISTFILES += \
     android/src/com/volla/launcher/util/MMSManager.java \
     android/src/com/volla/launcher/util/Settings.java \
     android/src/com/volla/launcher/util/ShortcutUtil.java \
+    android/src/com/volla/launcher/util/SignalUtil.java \
     android/src/com/volla/launcher/worker/ShortcutsWorker.java \
+    android/src/com/volla/launcher/worker/SignalWorker.java \
     translations/*.ts \
     android/res/drawable/wallpaper_black.png \
     android/res/drawable/wallpaper_white.png \
@@ -74,7 +76,8 @@ DISTFILES += \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java \
     android/src/com/volla/launcher/worker/WallpaperWorker.java \
-    android/src/com/volla/launcher/worker/AppWorker.java
+    android/src/com/volla/launcher/worker/AppWorker.java \
+    android/src/com/volla/launcher/worker/SignalWorker.java \
 
 TRANSLATIONS += \
     translations/Volla_de.ts \

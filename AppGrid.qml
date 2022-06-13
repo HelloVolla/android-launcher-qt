@@ -73,11 +73,14 @@ Page {
         "com.volla.launcher": "Settings",
         "com.simplemobiletools.smsmessenger": "Messages",
         "com.android.fmradio" : "Radio",
-        "de.baumann.weather": "Wetter",
+        "de.baumann.weather": "Wetter"
     }
-    property bool unreadMessages: false
-    property bool newCalls: false
+
+    property var appGroups: [] // QML elements with app grids
+
     property int appCount: 0
+    property int selectedGroup: 0
+    property int maxAppCount: 12
 
     background: Rectangle {
         anchors.fill: parent
@@ -85,15 +88,44 @@ Page {
     }
 
     onTextInputChanged: {
-        console.log("text input changed")
-        gridModel.update(textInput)
-        //xmlModel.update(textInput)
+        console.log("AppGrid | Text input changed: " + appLauncher.textInput)
+        for (var i = 0; i < appLauncher.appGroups.length; i++) {
+            var appGroup = appLauncher.appGroups[i]
+            appGroup.textInput = appLauncher.textInput
+        }
     }
 
-    function updateAppLauncher(useColoredAppIcons) {
-        settings.sync()
-        gridView.desaturation = useColoredAppIcons ? 0.0 : 1.0
-        gridView.forceLayout()
+    function updateAppLauncher(key, value) {
+        console.log("AppGrid | Will update app launcher: " + key + ", " + value)
+        if (key === "backgroundOpacity") {
+            for (var i = 0; i < appLauncher.appGroups.length; i++) {
+                var appGroup = appLauncher.appGroups[i]
+                if (backgroundOpacity !== undefined) {
+                    appGroup.backgroundOpacity = backgroundOpacity
+                }
+            }
+        } else if (key === "useCategories") {
+            settings.useCategories = value
+
+            if (settings.useGroupedApps) {
+                appLauncher.selectedGroup = 0
+                var apps = getAllApps()
+                appLauncher.destroyAppGroups()
+                appLauncher.createAppGroups(getGroupedApps(apps))
+            }
+        } else if (key === "useGroupedApps") {
+            settings.useGroupedApps = value
+            appLauncher.selectedGroup = 0
+            apps = getAllApps()
+            appLauncher.destroyAppGroups()
+            appLauncher.createAppGroups(getGroupedApps(apps))
+        } else if (key === "useColoredIcons") {
+            settings.useColoredIcons = value
+            for (i = 0; i < appLauncher.appGroups.length; i++) {
+                appGroup = appLauncher.appGroups[i]
+                appGroup.desaturation = value ? 0.0 : 1.0
+            }
+        }
     }
 
     function updateNotifications() {
@@ -101,39 +133,114 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.threadsCountAction", {"read": 0})
     }
 
-    function getCurrentApps() {
-        return gridModel.modelArr
+    function getAllApps() {
+        var allApps = new Array
+         for (var i = 0; i < appLauncher.appGroups.length; i++) {
+             var appGroup = appLauncher.appGroups[i]
+             allApps = allApps.concat(appGroup.apps)
+        }
+        return allApps
     }
 
-    GridView {
-        id: gridView
-        anchors.fill: parent
-        cellHeight: parent.width * 0.32
-        cellWidth: parent.width * 0.25
+    function getGroupedApps(apps) {
+        var groupedApps = new Array
 
-        property var desaturation: settings.useColoredIcons ? 0.0 : 1.0
+        if (settings.useGroupedApps) {
+            apps.sort(function(a, b) { return b["statistic"] - a["statistic"] })
 
-        Component.onCompleted: {
-            AN.SystemDispatcher.dispatch("volla.launcher.getShortcuts", {})
+            if (apps.length > appLauncher.maxAppCount) {
+                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0, appLauncher.maxAppCount) } )
+
+                if (settings.useCategories) {
+                    var remainingApps = apps.slice(appLauncher.maxAppCount)
+                    remainingApps.sort(function(a, b) {
+                        if (a.category > b.category) return 1
+                        else if (a.category < b.category) return -1
+                        else return 0
+                    })
+                    var groupLabel
+                    var someApps
+                    for (var i = 0; i < remainingApps.length; i++) {
+                        var app = remainingApps[i]
+                        var category = app.category !== "" ? app.category : qsTr("Other apps")
+                        if (category !== groupLabel) {
+                            if (groupLabel !== undefined) groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                            groupLabel = category
+                            someApps = new Array
+                        }
+                        someApps.push(app)
+                    }
+                    groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                } else {
+                    groupedApps.push( { "groupLabel": qsTr("apps"), "apps": apps.slice(appLauncher.maxAppCount) } )
+                }
+            } else {
+                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
+            }
+        } else {
+            groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
         }
 
-        model: gridModel
+        return groupedApps
+    }
 
-        currentIndex: -1
+    function createAppGroups(groupedApps) {
+        console.log("AppGrid | Will create app grids for " + groupedApps.length + " groups.")
+        groupedApps.forEach(function(appGroupInfos, index) {
+            console.log("AppGrid | Will create group " + index)
+            var component = Qt.createComponent("/AppGroup.qml", appLauncherColumn)
+            var properties = { "groupLabel": appGroupInfos["groupLabel"],
+                               "groupIndex": index,
+                               "selectedGroupIndex": appLauncher.selectedGroup,
+                               "textInput": appLauncher.textInput,
+                               "iconMap": appLauncher.iconMap,
+                               "labelMap": appLauncher.labelMap,
+                               "phoneApp": mainView.phoneApp,
+                               "messageApp": mainView.messageApp,
+                               "labelPointSize": appLauncher.labelPointSize,
+                               "headerPointSize": mainView.mediumFontSize,
+                               "innerSpacing": mainView.innerSpacing,
+                               "backgroundOpacity": mainView.backgroundOpacity,
+                               "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
+                               "apps": appGroupInfos["apps"]}
+            if (component.status !== Component.Ready) {
+                if (component.status === Component.Error)
+                    console.debug("AppGrid | Error: "+ component.errorString() );
+            }
+            var object = component.createObject(appLauncherColumn, properties)
+            appLauncher.appGroups.push(object)
+        })
+    }
 
-        header: Column {
-            id: header
+    function destroyAppGroups() {
+        for (var i = 0; i < appLauncher.appGroups.length; i++) {
+            var appGroup = appLauncher.appGroups[i]
+            appGroup.destroy()
+        }
+        appLauncher.appGroups = new Array
+    }
+
+    Flickable {
+        id: appLauncherFlickable
+        anchors.fill: parent
+        contentWidth: parent.width
+        contentHeight: appLauncherColumn.height
+
+        Column {
+            id: appLauncherColumn
             width: parent.width
+
             Label {
-                id: headerLabel
+                id: headerTitle
                 topPadding: mainView.innerSpacing * 2
                 x: mainView.innerSpacing
                 text: qsTr("Apps")
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
             }
+
             TextField {
-                id: textField
+                id: headerTextField
                 padding: mainView.innerSpacing
                 x: mainView.innerSpacing
                 width: parent.width - mainView.innerSpacing * 2
@@ -148,166 +255,57 @@ Page {
                     color: "transparent"
                     border.color: "transparent"
                 }
+
                 Binding {
                     target: appLauncher
                     property: "textInput"
-                    value: textField.displayText.toLowerCase()
+                    value: headerTextField.displayText.toLowerCase()
                 }
 
                 Button {
-                    id: deleteButton
+                    id: headerDeleteButton
                     text: "<font color='#808080'>×</font>"
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
                     topPadding: 0.0
                     anchors.top: parent.top
                     anchors.right: parent.right
-                    visible: textField.displayText !== ""
+                    visible: headerTextField.displayText !== ""
 
                     onClicked: {
-                        textField.text = ""
-                        textField.focus = false
+                        headerTextField.text = ""
+                        headerTextField.focus = false
                     }
                 }
             }
-            Rectangle {
-                width: parent.width
-                border.color: "transparent"
-                color: "transparent"
-                height: 1.1
+
+            Component.onCompleted: {
+                console.log("AppGrid | Column completed")
+                AN.SystemDispatcher.dispatch("volla.launcher.getShortcuts", {})
+                //AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
             }
-            //bottomPadding: mainView.innerSpacing / 2
+
+            function showGroup(groupIndex) {
+                console.log("AppGrid | Will show group " + groupIndex)
+                appLauncher.selectedGroup = groupIndex
+                for (var i = 0; i < appGroups.length; i++) {
+                    var appGroup = appGroups[i]
+                    appGroup.showApps(i === groupIndex)
+                    appGroup.selectedGroupIndex = groupIndex
+                }
+            }
+
+            function openContextMenu(app, gridCell) {
+                contextMenu.app = app
+                contextMenu.isPinnedShortcut = app.shortcutId !== undefined
+                contextMenu.popup(gridCell)
+            }
+
+            function closeContextMenu() {
+                contextMenu.dismiss()
+            }
         }
 
-        delegate: Rectangle {
-            id: gridCell
-            width: parent.width * 0.25
-            height: parent.width * 0.32
-            color: "transparent"
-
-            property var gradientColor: Universal.background
-            property var overlayColor: Universal.foreground
-
-            Rectangle {
-                id: gridCircle
-                anchors.top: gridButton.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: parent.width * 0.6
-                width: parent.width * 0.6
-                color: Universal.foreground
-                opacity: Universal.theme === Universal.Light ? 0.1 : 0.2
-                radius: width * 0.5
-            }
-
-            Button {
-                id: gridButton
-                anchors.top: parent.top
-                anchors.topMargin: parent.width * 0.08 // Adjustment
-                topPadding: mainView.innerSpacing / 2
-                width: parent.width
-                text: model.label
-                contentItem: Column {
-                    spacing: gridCell.width * 0.25
-                    Image {
-                        id: buttonIcon
-                        anchors.left: parent.left
-                        anchors.leftMargin: gridCell.width * 0.25
-                        source: model.package in appLauncher.iconMap && model.shortcutId === undefined
-                                ? Qt.resolvedUrl(appLauncher.iconMap[model.package]) : "data:image/png;base64," + model.icon
-                        width: gridButton.width * 0.35
-                        height: gridButton.width * 0.35
-
-                        ColorOverlay {
-                            anchors.fill: buttonIcon
-                            source: buttonIcon
-                            color: gridCell.overlayColor
-                            visible: (model.package in appLauncher.iconMap) && model.shortcutId === undefined
-                        }
-                    }
-                    Label {
-                        id: buttonLabel
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        width: gridButton.width - mainView.innerSpacing
-                        horizontalAlignment: contentWidth > gridButton.width - mainView.innerSpacing ? Text.AlignLeft : Text.AlignHCenter
-                        text: gridButton.text
-                        font.pointSize: appLauncher.labelPointSize
-                        clip: mainView.backgroundOpacity === 1.0 ? true : false
-                        elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone :  Text.ElideRight
-                    }
-                }
-                flat:true
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: "transparent"
-                }
-                onClicked: {
-                    if (gridView.currentIndex > -1) {
-                        contextMenu.dismiss()
-                        gridView.currentIndex = -1
-                    } else if (model.package.length > 0) {
-                        console.log("App " + model.label + " selected")
-                        // As a workaround for a missing feature in the phone app
-                        if (model.package === mainView.phoneApp) {
-                            if (appLauncher.newCalls) {
-                                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "log"})
-                                AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
-                            } else {
-                                AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp})
-                            }
-                        } else if (model.shortcutId !== undefined) {
-                            AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
-                                                         {"shortcutId": model.shortcutId, "package": model.package})
-                        } else {
-                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
-                        }
-                    }
-                }
-                onPressAndHold: {
-                    gridView.currentIndex = index
-                    contextMenu.app = model
-                    contextMenu.isPinnedShortcut = model.shortcutId !== undefined
-                    contextMenu.popup(gridCell)
-                }
-            }
-
-            Desaturate {
-                anchors.fill: gridButton
-                source: gridButton
-                desaturation: gridView.desaturation
-            }
-
-            LinearGradient {
-                id: labelTruncator
-                height: parent.height
-                width: parent.width //+ parent.width * 0.2
-                start: Qt.point(parent.width - mainView.innerSpacing, 0)
-                end: Qt.point(parent.width,0)
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: "#00000000"
-                    }
-                    GradientStop {
-                        position: 1.0
-                        color: gridCell.gradientColor
-                    }
-                }
-                visible: mainView.backgroundOpacity === 1.0
-            }
-
-            Rectangle {
-                id: notificationBadge
-                visible: mainView.messageApp.includes(model.package) ? appLauncher.unreadMessages
-                                                                     : model.package === mainView.phoneApp ? appLauncher.newCalls                                                               : false
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
-                width: parent.width * 0.15
-                height: parent.width * 0.15
-                radius: height * 0.5
-                color:  Universal.accent
-            }
-        }
     }
 
     Menu {
@@ -406,104 +404,12 @@ Page {
                 console.log("AppGrid | App " + contextMenu.app.shortcutId + " selected to remove a shortcut");
                 gridView.currentIndex = -1
                 var shortcutId = contextMenu.app["itemId"]
-                gridModel.removePinnedShortcut(shortcutId)
+                for (var appGroup in appLauncher.appGroups) {
+                    appGroup.removePinnedShortcut(shortcutId)
+                }
                 AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": shortcutId})
                 disabledPinnedShortcuts.disableShortcut(shortcutId)
             }
-        }
-    }
-
-    ListModel {
-        id: gridModel
-
-        property var apps: new Array
-        property var pinnedShortcuts: new Array
-        property var modelArr: new Array
-
-        function prepareModel() {
-            modelArr = pinnedShortcuts.concat(apps)
-            modelArr.forEach(function(app, i) {
-                modelArr[i].label = app.package in appLauncher.labelMap && app.shortcutId === undefined
-                        ? qsTr(appLauncher.labelMap[app.package]) : app.label
-                modelArr[i].itemId = app.shortcutId !== undefined ? app.shortcutId : app.package
-            })
-        }
-
-        function update(text) {
-            console.log("AppGrid | Update model with text input: " + text)
-
-            var filteredGridDict = new Object
-            var filteredGridItem
-            var gridItem
-            var found
-            var i
-
-            console.log("Model has " + modelArr.length + " elements")
-
-            // filter model
-            for (i = 0; i < modelArr.length; i++) {
-                filteredGridItem = modelArr[i]
-                var modelItemName = modelArr[i].label
-                var modelItemId = modelArr[i].itemId
-                if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    // console.log("Add " + modelItemName + " to filtered items")
-                    filteredGridDict[modelItemId] = filteredGridItem
-                }
-            }
-
-            var existingGridDict = new Object
-            for (i = 0; i < count; ++i) {
-                modelItemId = get(i).itemId
-                existingGridDict[modelItemId] = true
-            }
-
-            // remove items no longer in filtered set
-            i = 0
-            while (i < count) {
-                modelItemId = get(i).itemId
-                found = filteredGridDict.hasOwnProperty(modelItemId)
-                if (!found) {
-                    console.log("GridView | Remove " + modelItemId)
-                    remove(i)
-                } else {
-                    i++
-                }
-            }
-
-            // add new items
-            var keys = Object.keys(filteredGridDict)
-            keys.forEach(function(key) {
-                found = existingGridDict.hasOwnProperty(key)
-                if (!found) {
-                    // for simplicity, just adding to end instead of corresponding position in original list
-                    filteredGridItem = filteredGridDict[key]
-                    // console.log("Will append " + filteredGridItem.label)
-                    append(filteredGridItem)
-                }
-            })
-
-            sortModel()
-        }
-
-        function sortModel() {
-            var n;
-            var i;
-            for (n = 0; n < count; n++) {
-                for (i=n+1; i < count; i++) {
-                    if (get(n).label.toLowerCase() > get(i).label.toLowerCase()) {
-                        move(i, n, 1);
-                        n = 0;
-                    }
-                }
-            }
-        }
-
-        function removePinnedShortcut(shorcutId) {
-            pinnedShortcuts = pinnedShortcuts.filter(function(item) {
-                return item.itemId !== shorcutId
-            })
-            prepareModel()
-            update(textInput)
         }
     }
 
@@ -520,39 +426,38 @@ Page {
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
                 settings.sync()
-                gridModel.apps = message["apps"]
-                gridModel.prepareModel()
-                gridModel.update(textInput)
+                var groupedApps = appLauncher.getGroupedApps(message["apps"])
+                if (appLauncher.appGroups.length !== groupedApps.lemgth) {
+                    for (var i = 0; i < appLauncher.appGroups.length; i++) {
+                        var appGroup = appLauncher.appGroups[i]
+                        appGroup.destroy()
+                    }
+                    appLauncher.appGroups = new Array
+                    appLauncher.createAppGroups(groupedApps)
+                } else {
+                    for (i = 0; i < appLauncher.appGroups.length; i++) {
+                        appGroup = appLauncher.appGroups[i]
+                        appGroup.apps = groupedApps[i]["apps"]
+                    }
+                }
                 mainView.updateSpinner(false)
-            } else if (type === "volla.launcher.callLogResponse") {
-                console.log("AppGrid | Missed calls: " + message["callsCount"])
-                appLauncher.newCalls = message["callsCount"] > 0
-            } else if (type === "volla.launcher.threadsCountResponse") {
-                console.log("AppGrid | Unread messages: " + message["threadsCount"])
-                appLauncher.unreadMessages = message["threadsCount"] > 0
             } else if (type === "volla.launcher.receivedShortcut") {
-                //console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
+                console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
 
                 var isExistingShortcut = gridModel.modelArr.some( function(app) {
                     return app.shorcutId !== undefined && app.shortcutId === message.shortcutId && app.package === message.package
                 })
                 if (!isExistingShortcut) {
-                    //mainView.showToast(qsTr("New pinned shortcut: " + message.shortcutId))
                     var shortcut = {"shortcutId": message["shortcutId"],
                                     "package": message["package"],
                                     "label": message["label"],
-                                    "icon": message["icon"]}
-
-                    //mainView.showToast(shortcut["shortcutId"]);
+                                    "icon": message["icon"] }
 
                     if (shortcut["shortcutId"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Id")
                     if (shortcut["icon"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Icin")
 
-                    gridModel.pinnedShortcuts.push(shortcut)
-                    gridModel.clear()
-                    gridModel.modelArr = new Array
-                    gridModel.prepareModel()
-                    gridModel.update(textInput)
+                    appGroup = appLauncher.appGroups[0]
+                    appGroup.pinnedShortcuts.push(shortcut)
 
                     var disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
 
@@ -569,14 +474,15 @@ Page {
                 if (message["pinnedShortcuts"].length > 0) {
                     disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
                     console.debug("AppGrid | Disabled shortcuts " + disabledShortcutIds.length)
+                    appGroup = appLauncher.appGroups[0]
+                    var pinnedShortcuts = new Array
                     for (i = 0; i < message["pinnedShortcuts"].length; i++) {
                         shortcut = message["pinnedShortcuts"][i]
                         if (disabledShortcutIds.indexOf(shortcut["shortcutId"]) < 0) {
-                            gridModel.pinnedShortcuts.push(shortcut)
+                            pinnedShortcuts.push(shortcut)
                         }
                     }
-                    gridModel.prepareModel()
-                    gridModel.update(textInput)
+                    appGroup.pinnedShortcuts = pinnedShortcuts
                 }
             }
         }
@@ -585,11 +491,8 @@ Page {
     Settings {
         id: settings
         property bool useColoredIcons: false
-
-        onUseColoredIconsChanged: {
-            console.log("Colered icons settings changed")
-            gridView.desaturation = useColoredIcons ? 0.0 : 1.0
-        }
+        property bool useGroupedApps: true
+        property bool useCategories: true
     }
 
     FileIO {

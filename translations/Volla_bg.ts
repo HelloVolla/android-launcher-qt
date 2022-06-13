@@ -25,46 +25,58 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Премахване на пряк път</translation>
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Прикрепеният пряк път вече съществува</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
+        <translation type="unfinished">Отваряне на пряк път</translation>
+    </message>
+    <message>
+        <source>Most used</source>
+        <translation type="unfinished">Най-използвани</translation>
+    </message>
+    <message>
+        <source>apps</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other apps</source>
+        <translation type="unfinished">Други приложения</translation>
     </message>
 </context>
 <context>
     <name>Browser</name>
     <message>
         <source>Show Dialer</source>
-        <translation type="unfinished">Покажи телефон</translation>
+        <translation type="obsolete">Покажи телефон</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="unfinished">отворена камера</translation>
+        <translation type="obsolete">отворена камера</translation>
     </message>
     <message>
         <source>Agenda</source>
-        <translation type="unfinished">Събития</translation>
+        <translation type="obsolete">Събития</translation>
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="unfinished">галерия</translation>
+        <translation type="obsolete">галерия</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="unfinished">Новини</translation>
+        <translation type="obsolete">Новини</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="unfinished">разговори</translation>
+        <translation type="obsolete">разговори</translation>
     </message>
     <message>
         <source>Revent People</source>
-        <translation type="unfinished">Контакти</translation>
+        <translation type="obsolete">Контакти</translation>
     </message>
 </context>
 <context>
@@ -152,6 +164,18 @@
         <source>Open Contact</source>
         <translation type="unfinished">отворен контакт</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">бележки</translation>
+    </message>
+    <message>
+        <source>Find note ...</source>
+        <translation type="unfinished">Намерете бележка ...</translation>
+    </message>
+    <message>
+        <source>Open in Signal</source>
+        <translation type="unfinished">Отворен в сигнала</translation>
+    </message>
 </context>
 <context>
     <name>Conversation</name>
@@ -169,7 +193,7 @@
     </message>
     <message>
         <source>Type your message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Въведете съобщението си</translation>
     </message>
 </context>
 <context>
@@ -271,7 +295,7 @@
     </message>
     <message>
         <source>Background blur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Размазване на фона</translation>
     </message>
     <message>
         <source>Open</source>
@@ -279,23 +303,75 @@
     </message>
     <message>
         <source>Display and menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дисплей и менюта</translation>
     </message>
     <message>
         <source>Reset options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Възможности за нулиране</translation>
     </message>
     <message>
         <source>Reset news feeds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset shorcuts feeds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нулиране на новинарските емисии</translation>
     </message>
     <message>
         <source>Reload contacts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Презареждане на контактите</translation>
+    </message>
+    <message>
+        <source>Security mode is OFF</source>
+        <translation type="unfinished">Режимът за сигурност е изключен</translation>
+    </message>
+    <message>
+        <source>Security mode is ON</source>
+        <translation type="unfinished">Режимът за сигурност е включен</translation>
+    </message>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished">Въведете парола</translation>
+    </message>
+    <message>
+        <source>Repeat password</source>
+        <translation type="unfinished">Повтаряне на паролата</translation>
+    </message>
+    <message>
+        <source>Keep existing Password</source>
+        <translation type="unfinished">Запазване на съществуващата парола</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Отмяна на</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Добре</translation>
+    </message>
+    <message>
+        <source>Wrong password confirmation</source>
+        <translation type="unfinished">Потвърждаване на грешна парола</translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished">Грешна парола</translation>
+    </message>
+    <message>
+        <source>Show grouped apps</source>
+        <translation type="unfinished">Показване на групирани приложения</translation>
+    </message>
+    <message>
+        <source>Use app categories</source>
+        <translation type="unfinished">Използване на категории приложения</translation>
+    </message>
+    <message>
+        <source>Source settings</source>
+        <translation type="unfinished">Настройки на източника</translation>
+    </message>
+    <message>
+        <source>Signal</source>
+        <translation type="unfinished">Сигнал</translation>
+    </message>
+    <message>
+        <source>Reset shorcuts</source>
+        <translation type="unfinished">Нулиране на кратките пътища</translation>
     </message>
 </context>
 <context>
@@ -430,7 +506,43 @@
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="unfinished">бележката ви беше успешно съхранена</translation>
+        <translation type="obsolete">бележката ви беше успешно съхранена</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation type="unfinished">Понеделник</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation type="unfinished">Вторник</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation type="unfinished">Сряда</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation type="unfinished">Четвъртък</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation type="unfinished">Петък</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation type="unfinished">Събота</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation type="unfinished">Неделя</translation>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation type="unfinished">утре</translation>
+    </message>
+    <message>
+        <source>New note saved</source>
+        <translation type="unfinished">Запазена нова бележка</translation>
     </message>
 </context>
 <context>
@@ -441,7 +553,7 @@
     </message>
     <message>
         <source>Just now</source>
-        <translation type="unfinished">сега</translation>
+        <translation type="unfinished">Точно сега</translation>
     </message>
     <message>
         <source>minutes ago</source>
@@ -541,7 +653,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">бележки</translation>
+        <translation type="obsolete">бележки</translation>
     </message>
     <message>
         <source>Create Event</source>
@@ -613,15 +725,31 @@
     </message>
     <message>
         <source>Error because of too much redirects</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Грешка поради твърде много пренасочвания</translation>
     </message>
     <message>
         <source>Could not load a valid feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не може да се зареди валидна емисия</translation>
     </message>
     <message>
         <source>Reset successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Успешно нулиране</translation>
+    </message>
+    <message>
+        <source>Show Notes</source>
+        <translation type="unfinished">показват бележки</translation>
+    </message>
+    <message>
+        <source>Send Signal message</source>
+        <translation type="unfinished">Изпращане на сигнално съобщение</translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
+        <translation type="unfinished">Добавяне в календара</translation>
+    </message>
+    <message>
+        <source>Show in Signal</source>
+        <translation type="unfinished">Покажи в Сигнал</translation>
     </message>
 </context>
 </TS>
