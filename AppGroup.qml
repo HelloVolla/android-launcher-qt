@@ -131,6 +131,9 @@ Item {
             cellHeight: parent.width * 0.32
             cellWidth: parent.width * 0.25
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
+//            boundsBehavior: Flickable.StopAtBounds
+//            verticalOvershoot: 0.0
+            interactive: false
 
             model: groupModel
 
