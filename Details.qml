@@ -199,7 +199,7 @@ Page {
         width: parent.width
         height: parent.height
         contentWidth: parent.width
-        contentHeight: detailEdit.height
+        contentHeight: detailPage.currentDetailMode === mainView.detailMode.Note ? detailEdit.height : detailColumn.height
 
         //----- news content -----------------
 
