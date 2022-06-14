@@ -8,17 +8,17 @@
         <location filename="../AppGrid.qml" line="178"/>
         <location filename="../AppGrid.qml" line="181"/>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meist verwendet</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="165"/>
         <source>Other apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andere Apps</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="175"/>
         <source>apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Apps</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="237"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../Collections.qml" line="94"/>
         <source>Find note ...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Finde Notiz ...</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="165"/>
@@ -175,7 +175,7 @@
     <message>
         <location filename="../Collections.qml" line="489"/>
         <source>Open in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Öffne in Signal</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="656"/>
@@ -206,17 +206,17 @@
     <message>
         <location filename="../Collections.qml" line="993"/>
         <source>Could not load RSS feed: </source>
-        <translation type="unfinished">RSS-Feed konnte nicht geladen werden</translation>
+        <translation type="unfinished">RSS-Feed konnte nicht geladen werden: </translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="1021"/>
         <source>Invalid RSS feed: </source>
-        <translation type="unfinished">Ungültiger RSS-Feed</translation>
+        <translation type="unfinished">Ungültiger RSS-Feed: </translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="1041"/>
         <source>Missing RSS item: </source>
-        <translation type="unfinished">Fehlende RSS-Nachricht</translation>
+        <translation type="unfinished">Fehlende RSS-Nachricht: </translation>
     </message>
 </context>
 <context>
@@ -229,7 +229,7 @@
     <message>
         <location filename="../Conversation.qml" line="244"/>
         <source>Filter messages ...</source>
-        <translation type="unfinished">Filtere Mitteilungen</translation>
+        <translation type="unfinished">Filtere Mitteilungen ...</translation>
     </message>
     <message>
         <location filename="../Conversation.qml" line="379"/>
@@ -309,47 +309,47 @@
         <location filename="../Settings.qml" line="304"/>
         <location filename="../Settings.qml" line="348"/>
         <source>Security mode is OFF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sicherheitsmodus ist AUS</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="371"/>
         <source>Security mode is ON</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sicherheitsmodus ist AN</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="511"/>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Passwort eingeben</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="536"/>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Passwort wiederholen</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="566"/>
         <source>Keep existing Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verwende bestehendes Passwort</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="589"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="614"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="631"/>
         <source>Wrong password confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Falsche Passwort-Bestätigung</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="658"/>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Falsches Passwort</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="694"/>
@@ -371,12 +371,12 @@
     <message>
         <location filename="../Settings.qml" line="980"/>
         <source>Source settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quelleneinstellung</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1005"/>
         <source>Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Signal</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1057"/>
@@ -391,12 +391,12 @@
     <message>
         <location filename="../Settings.qml" line="1220"/>
         <source>Show grouped apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeige gruppierte Apps</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1228"/>
         <source>Use app categories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verwende App-Kategprien</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1389"/>
@@ -411,7 +411,7 @@
     <message>
         <location filename="../Settings.qml" line="1449"/>
         <source>Reset shorcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kurzbefehele zurücksetzen</translation>
     </message>
     <message>
         <source>Reset shorcuts feeds</source>
@@ -484,42 +484,42 @@
     <message>
         <location filename="../Springboard.qml" line="21"/>
         <source>Monday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Montag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="21"/>
         <source>Tuesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dienstag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="21"/>
         <source>Wednesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mittwoch</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="21"/>
         <source>Thursday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Donnerstag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="21"/>
         <source>Friday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Freitag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="22"/>
         <source>Saturday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Samstag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="22"/>
         <source>Sunday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sonntag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="22"/>
         <source>tomorrow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">morgen</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="73"/>
@@ -545,7 +545,7 @@
     <message>
         <location filename="../Springboard.qml" line="470"/>
         <source>New note saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neue Notiz gespeichert</translation>
     </message>
     <message>
         <source>Sorry. Contact has no mobile phone number</source>
@@ -770,17 +770,17 @@
     <message>
         <location filename="../main.qml" line="166"/>
         <source>Send Signal message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sende Signal-Mitteilung</translation>
     </message>
     <message>
         <location filename="../main.qml" line="167"/>
         <source>Add to Calender</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">In Kalender eintragen</translation>
     </message>
     <message>
         <location filename="../main.qml" line="167"/>
         <source>Show in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeige in Signal</translation>
     </message>
     <message>
         <location filename="../main.qml" line="182"/>
@@ -833,8 +833,8 @@
         <translation type="unfinished">Termine</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="769"/>
-        <location filename="../main.qml" line="774"/>
+        <location filename="../main.qml" line="770"/>
+        <location filename="../main.qml" line="775"/>
         <source>Reset successful</source>
         <translation>Zurücksetzen erfolgreich</translation>
     </message>
@@ -868,59 +868,59 @@
         <translation type="unfinished">Nachrichten</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="420"/>
+        <location filename="../main.qml" line="421"/>
         <source>Just now</source>
         <translation type="unfinished">Jetzt</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="422"/>
+        <location filename="../main.qml" line="423"/>
         <source>minutes ago</source>
         <translation type="unfinished">Minuten vorher</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="425"/>
-        <location filename="../main.qml" line="427"/>
+        <location filename="../main.qml" line="426"/>
+        <location filename="../main.qml" line="428"/>
         <source>Today</source>
         <translation type="unfinished">Heute</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="431"/>
-        <location filename="../main.qml" line="433"/>
+        <location filename="../main.qml" line="432"/>
+        <location filename="../main.qml" line="434"/>
         <source>Yesterday</source>
         <translation type="unfinished">Gestern</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="471"/>
+        <location filename="../main.qml" line="472"/>
         <source>New Subscrption</source>
         <translation type="unfinished">Neues Abonnemment</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="473"/>
+        <location filename="../main.qml" line="474"/>
         <source>You have alresdy subscribed the feed</source>
         <translation>Du hast den Feed bereits abonniert</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="496"/>
+        <location filename="../main.qml" line="497"/>
         <source>Invalid news ID</source>
         <translation type="unfinished">Ungültige Nachrichten-ID</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="527"/>
+        <location filename="../main.qml" line="528"/>
         <source>Error because of too much redirects</source>
         <translation type="unfinished">Fehler wegen zu vielen Weiterleitungen</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="539"/>
+        <location filename="../main.qml" line="540"/>
         <source>Could not load a valid feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Könne keinen gültigen Feed laden</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="663"/>
+        <location filename="../main.qml" line="664"/>
         <source>New shortcut</source>
         <translation type="unfinished">Neuer Kurzbefehl</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="665"/>
+        <location filename="../main.qml" line="666"/>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished">Du hast den Kurzbefehl bereits hinzugefügt</translation>
     </message>
@@ -934,7 +934,7 @@
         <translation type="obsolete">Du hast den Kanal bereits abonniert</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="556"/>
+        <location filename="../main.qml" line="557"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ungültiger RSS-Feed</translation>
     </message>
@@ -943,7 +943,7 @@
         <translation type="obsolete">Mitteilung wurde gesendet</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="945"/>
+        <location filename="../main.qml" line="948"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Noch nicht unterstützt</translation>
     </message>
