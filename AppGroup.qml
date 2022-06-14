@@ -58,6 +58,10 @@ Item {
         groupGrid.forceLayout()
     }
 
+    onBackgroundOpacityChanged: {
+        groupGrid.forceLayout()
+    }
+
     onSelectedGroupIndexChanged: {
         console.log("AppGroup " + groupIndex + " | Selected group changed to " + selectedGroupIndex)
         groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?

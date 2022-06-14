@@ -382,7 +382,7 @@
     <message>
         <location filename="../Settings.qml" line="1161"/>
         <source>Display and menus</source>
-        <translation type="unfinished">Beeldscherm en menu's</translation>
+        <translation type="unfinished">Beeldscherm en menu&apos;s</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1220"/>
@@ -813,18 +813,18 @@
         <translation>Agenda</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="539"/>
+        <location filename="../main.qml" line="540"/>
         <source>Could not load a valid feed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="665"/>
+        <location filename="../main.qml" line="666"/>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="769"/>
-        <location filename="../main.qml" line="774"/>
+        <location filename="../main.qml" line="770"/>
+        <location filename="../main.qml" line="775"/>
         <source>Reset successful</source>
         <translation type="unfinished"></translation>
     </message>
@@ -858,29 +858,29 @@
         <translation>Recent nieuws</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="420"/>
+        <location filename="../main.qml" line="421"/>
         <source>Just now</source>
         <translation>Zojuist</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="422"/>
+        <location filename="../main.qml" line="423"/>
         <source>minutes ago</source>
         <translation>minuten geleden</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="425"/>
-        <location filename="../main.qml" line="427"/>
+        <location filename="../main.qml" line="426"/>
+        <location filename="../main.qml" line="428"/>
         <source>Today</source>
         <translation>Vandaag</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="431"/>
-        <location filename="../main.qml" line="433"/>
+        <location filename="../main.qml" line="432"/>
+        <location filename="../main.qml" line="434"/>
         <source>Yesterday</source>
         <translation>Gisteren</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="471"/>
+        <location filename="../main.qml" line="472"/>
         <source>New Subscrption</source>
         <translation>Nieuw abonnement</translation>
     </message>
@@ -889,12 +889,12 @@
         <translation type="vanished">Je hebt je al geabonneerd op het kanaal</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="496"/>
+        <location filename="../main.qml" line="497"/>
         <source>Invalid news ID</source>
         <translation>Ongeldige Nieuws ID</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="556"/>
+        <location filename="../main.qml" line="557"/>
         <source>Invalid RSS feed: </source>
         <translation>Ongeldige RSS feed: </translation>
     </message>
@@ -904,17 +904,17 @@
         <translation>Bericht verzonden</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="473"/>
+        <location filename="../main.qml" line="474"/>
         <source>You have alresdy subscribed the feed</source>
         <translation type="unfinished">U bent al geabonneerd op de feed</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="527"/>
+        <location filename="../main.qml" line="528"/>
         <source>Error because of too much redirects</source>
         <translation type="unfinished">Fout door te veel redirects</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="663"/>
+        <location filename="../main.qml" line="664"/>
         <source>New shortcut</source>
         <translation>Nieuwe snelkoppeling</translation>
     </message>
@@ -923,7 +923,7 @@
         <translation type="vanished">Je hebt de snelkoppeling al toegevoegd</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="945"/>
+        <location filename="../main.qml" line="948"/>
         <source>Not yet supported</source>
         <translation>Nog niet ondersteund</translation>
     </message>
