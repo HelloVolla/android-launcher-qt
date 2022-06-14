@@ -836,7 +836,7 @@ ApplicationWindow {
                                 y = b["name"].toLowerCase()
                             return x === y ? 0 : x > y ? 1 : -1;
                         })
-                        mainView.contacts = mainView.contacts.concat(mainView.loadingContacts.slice())
+                        mainView.contacts = mainView.loadingContacts.slice()
                         mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
                         springboardLoader.active = false
