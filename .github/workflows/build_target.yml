@@ -4,13 +4,11 @@ on:
   push:
     branches:
     - master
-    - dev
     tags:
     - '*'
   pull_request:
     branches:
     - master
-    - dev
 
 jobs:
   build:
@@ -44,7 +42,7 @@ jobs:
           sudo chmod -R 755 ./releases
 
       - name: Upload Apk to Nightly Repository
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/dev' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           username: 'drone'
