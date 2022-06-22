@@ -914,6 +914,7 @@ Page {
                             flat: true
                             contentItem: Text {
                                 text: model.label
+                                color: mainView.fontColor
                                 font.pointSize: mainView.mediumFontSize
                                 elide: Text.ElideRight
                             }

@@ -77,6 +77,7 @@ Page {
     }
 
     property var appGroups: [] // QML elements with app grids
+    property var pinnedShortcuts: []
 
     property int appCount: 0
     property int selectedGroup: 0
@@ -202,6 +203,7 @@ Page {
                                "innerSpacing": mainView.innerSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
+                               "pinnedShortcuts": appLauncher.pinnedShortcuts,
                                "apps": appGroupInfos["apps"]}
             if (component.status !== Component.Ready) {
                 if (component.status === Component.Error)
@@ -295,8 +297,9 @@ Page {
                 }
             }
 
-            function openContextMenu(app, gridCell) {
+            function openContextMenu(app, gridCell, gridView) {
                 contextMenu.app = app
+                contextMenu.gridView = gridView
                 contextMenu.isPinnedShortcut = app.shortcutId !== undefined
                 contextMenu.popup(gridCell)
             }
@@ -313,6 +316,7 @@ Page {
 
         property double menuWidth: 250.0
         property var app
+        property var gridView
         property bool isPinnedShortcut: false
 
         background: Rectangle {
@@ -342,7 +346,7 @@ Page {
             }
             onClicked: {
                 console.log("AppGrid | App " + contextMenu.app["label"] + " selected for shortcuts");
-                gridView.currentIndex = -1
+                contextMenu.gridView.currentIndex = -1
                 mainView.updateAction(contextMenu.app["itemId"],
                                       true,
                                       mainView.settingsAction.CREATE,
@@ -368,7 +372,7 @@ Page {
             onClicked: {
                 console.log("AppGrid | App " + contextMenu.
                             app["label"] + " selected to open");
-                gridView.currentIndex = -1
+                contextMenu.gridView.currentIndex = -1
                 if (contextMenu.isPinnedShortcut) {
                     AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
                                                  {"shortcutId": contextMenu.app["itemId"], "package": contextMenu.app["package"]})
@@ -402,9 +406,10 @@ Page {
             visible: contextMenu.isPinnedShortcut
             onClicked: {
                 console.log("AppGrid | App " + contextMenu.app.shortcutId + " selected to remove a shortcut");
-                gridView.currentIndex = -1
+                contextMenu.gridView.currentIndex = -1
                 var shortcutId = contextMenu.app["itemId"]
-                for (var appGroup in appLauncher.appGroups) {
+                for (var i = 0; i < appLauncher.appGroups.length; i++) {
+                    var appGroup = appLauncher.appGroups[i]
                     appGroup.removePinnedShortcut(shortcutId)
                 }
                 AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": shortcutId})
@@ -456,16 +461,16 @@ Page {
                     if (shortcut["shortcutId"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Id")
                     if (shortcut["icon"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Icin")
 
-                    appGroup = appLauncher.appGroups[0]
-                    appGroup.pinnedShortcuts.push(shortcut)
-
                     var disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
 
-                    var i = disabledShortcutIds.indexOf(shortcut["shortcutId"])
+                    i = disabledShortcutIds.indexOf(shortcut["shortcutId"])
                     if (i >= 0) {
                         disabledShortcutIds.splice(i, 1)
                         disabledPinnedShortcuts.saveShortcutIds(disabledShortcutIds)
                     }
+
+                    appGroup = appGroups[0]
+                    if (appGroup !== undefined) appGroup.pinnedShortcuts.push(shortcut)
                 } else {
                     mainView.showToast(qsTr("Pinned shortcut already exists"))
                 }
@@ -474,7 +479,7 @@ Page {
                 if (message["pinnedShortcuts"].length > 0) {
                     disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
                     console.debug("AppGrid | Disabled shortcuts " + disabledShortcutIds.length)
-                    appGroup = appLauncher.appGroups[0]
+                    appGroup = appGroups[0]
                     var pinnedShortcuts = new Array
                     for (i = 0; i < message["pinnedShortcuts"].length; i++) {
                         shortcut = message["pinnedShortcuts"][i]
@@ -482,7 +487,7 @@ Page {
                             pinnedShortcuts.push(shortcut)
                         }
                     }
-                    appGroup.pinnedShortcuts = pinnedShortcuts
+                    appLauncher.pinnedShortcuts = pinnedShortcuts
                 }
             }
         }
