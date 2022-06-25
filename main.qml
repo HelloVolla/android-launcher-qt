@@ -38,6 +38,8 @@ ApplicationWindow {
               } else {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
+              // Check new pinned shortcut
+              AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
               // Update app grid
               AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
               // Load wallpaper
@@ -980,4 +982,5 @@ ApplicationWindow {
             console.log("MainView | Contacts cache error: " + msg)
         }
     }
+
 }

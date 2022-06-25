@@ -131,12 +131,9 @@ Item {
             width: parent.width
             height: contentHeight
             topMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing / 2 : 0
-            //bottomMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing / 2 : 0
             cellHeight: parent.width * 0.32
             cellWidth: parent.width * 0.25
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
-//            boundsBehavior: Flickable.StopAtBounds
-//            verticalOvershoot: 0.0
             interactive: false
 
             model: groupModel
@@ -207,7 +204,7 @@ Item {
                     }
                     onClicked: {
                         if (groupGrid.currentIndex > -1) {
-                            parent.closeContextMenu()
+                            groupItem.parent.closeContextMenu()
                             groupGrid.currentIndex = -1
                         } else if (model.package.length > 0) {
                             console.log("App " + model.label + " selected")

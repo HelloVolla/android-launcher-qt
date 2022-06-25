@@ -449,37 +449,46 @@ Page {
             } else if (type === "volla.launcher.receivedShortcut") {
                 console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
 
-                var isExistingShortcut = gridModel.modelArr.some( function(app) {
+                var shortcut = {"shortcutId": message["shortcutId"],
+                                "package": message["package"],
+                                "label": message["label"],
+                                "icon": message["icon"] }
+
+                if (shortcut["shortcutId"] === undefined) {
+                    mainView.showToast("ERROR: Undefined Shortcut Id")
+                    return
+                }
+                if (shortcut["icon"] === undefined) {
+                    mainView.showToast("ERROR: Undefined Shortcut Icin")
+                    return
+                }
+
+                var disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
+
+                i = disabledShortcutIds.indexOf(shortcut["shortcutId"])
+                if (i >= 0) {
+                    disabledShortcutIds.splice(i, 1)
+                    disabledPinnedShortcuts.saveShortcutIds(disabledShortcutIds)
+                }
+
+                var isExistingShortcut = appLauncher.pinnedShortcuts.some( function(app) {
                     return app.shorcutId !== undefined && app.shortcutId === message.shortcutId && app.package === message.package
                 })
                 if (!isExistingShortcut) {
-                    var shortcut = {"shortcutId": message["shortcutId"],
-                                    "package": message["package"],
-                                    "label": message["label"],
-                                    "icon": message["icon"] }
-
-                    if (shortcut["shortcutId"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Id")
-                    if (shortcut["icon"] === undefined) mainView.showToast("ERROR: Undefined Shortcut Icin")
-
-                    var disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
-
-                    i = disabledShortcutIds.indexOf(shortcut["shortcutId"])
-                    if (i >= 0) {
-                        disabledShortcutIds.splice(i, 1)
-                        disabledPinnedShortcuts.saveShortcutIds(disabledShortcutIds)
-                    }
-
+                    mainView.showToast(qsTr("New pinned shortcut") + ": " + message["label"])
+                    appLauncher.pinnedShortcuts.push(shortcut)
                     appGroup = appGroups[0]
-                    if (appGroup !== undefined) appGroup.pinnedShortcuts.push(shortcut)
+                    if (appGroup !== undefined) {
+                        appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
+                    }
                 } else {
-                    mainView.showToast(qsTr("Pinned shortcut already exists"))
+                    mainView.showToast(qsTr("Pinned shortcut allready exists") + ": " + message["label"])
                 }
             } else if (type === "volla.launcher.gotShortcuts") {
                 console.log("AppGrid | Pinned shortcuts received: " + message["pinnedShortcuts"].length)
                 if (message["pinnedShortcuts"].length > 0) {
                     disabledShortcutIds = disabledPinnedShortcuts.getShortcutIds()
                     console.debug("AppGrid | Disabled shortcuts " + disabledShortcutIds.length)
-                    appGroup = appGroups[0]
                     var pinnedShortcuts = new Array
                     for (i = 0; i < message["pinnedShortcuts"].length; i++) {
                         shortcut = message["pinnedShortcuts"][i]
@@ -488,6 +497,8 @@ Page {
                         }
                     }
                     appLauncher.pinnedShortcuts = pinnedShortcuts
+                    appGroup = appGroups[0]
+
                 }
             }
         }
