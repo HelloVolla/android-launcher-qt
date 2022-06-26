@@ -76,7 +76,7 @@ DISTFILES += \
     android/src/com/volla/launcher/worker/MessageWorker.java \
     android/src/com/volla/launcher/worker/WallpaperWorker.java \
     android/src/com/volla/launcher/worker/AppWorker.java \
-    android/src/com/volla/launcher/worker/SignalWorker.java \
+    android/src/com/volla/launcher/worker/SignalWorker.java
 
 TRANSLATIONS += \
     translations/Volla_de.ts \
@@ -92,4 +92,6 @@ TRANSLATIONS += \
     translations/Volla_sk.ts \
     translations/Volla_jp.ts \
     translations/Volla_en.ts \
-    translations/Volla_pt.ts
+    translations/Volla_pt.ts \
+    translations/Volla_cs.ts \
+    translations/Volla_dk.ts
