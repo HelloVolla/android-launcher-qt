@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="unfinished">la scorciatoia esiste già</translation>
+        <translation type="obsolete">la scorciatoia esiste già</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
@@ -46,6 +46,14 @@
     <message>
         <source>Other apps</source>
         <translation type="unfinished">Altre applicazioni</translation>
+    </message>
+    <message>
+        <source>New pinned shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pinned shortcut allready exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
