@@ -70,9 +70,7 @@ public class ShortcutUtil {
         List<String> shortcutList = new LinkedList<String>();
         shortcutList.add(shortcutId);
         try {
-//            shortcutManager.removeDynamicShortcuts(shortcutList);
-//.           shortcutManager.removeAllDynamicShortcuts();
-            shortcutManager.disableShortcuts(shortcutList);
+            shortcutManager.disableShortcuts(shortcutList, "Disabled");
         } catch (IllegalStateException ise) {
             Log.e(TAG, "IllegalStateException while disabling shorcut: " + ise.getMessage());
         } catch (IllegalArgumentException iae) {

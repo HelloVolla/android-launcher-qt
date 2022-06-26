@@ -44,10 +44,34 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     private static final String TAG = "ReceiveTextActivity";
 
     public static final String GOT_TEXT = "volla.launcher.receiveTextResponse";
+    public static final String CHECK_SHORTCUT = "volla.launcher.checkNewShortcut";
     public static final String GOT_SHORTCUT = "volla.launcher.receivedShortcut";
     public static final String UIMODE_CHANGED = "volla.launcher.uiModeChanged";
 
     public static ReceiveTextActivity instance;
+
+    private static Map pendingShortcutMessage;
+
+    static {
+        SystemDispatcher.addListener(new SystemDispatcher.Listener() {
+
+            public void onDispatched(String type, Map dmessage) {
+                if (type.equals(CHECK_SHORTCUT)) {
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            if (pendingShortcutMessage != null) {
+                                SystemDispatcher.dispatch(GOT_SHORTCUT, pendingShortcutMessage);
+                                pendingShortcutMessage = null;
+                            }
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                }
+            }
+        });
+    }
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -60,15 +84,40 @@ public class ReceiveTextActivity extends AndroidNativeActivity
         if (instance != null) {
             Log.d(TAG, "App is already running... this won't work");
             Intent mStartActivity = new Intent(this, ReceiveTextActivity.class);
+            if (getIntent().hasExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST)) {
+                mStartActivity.putExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST,
+                    (LauncherApps.PinItemRequest)getIntent().getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST));
+            }
             int mPendingIntentId = 123456;
             PendingIntent mPendingIntent = PendingIntent.getActivity(
                 this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
             mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
             System.exit(0);
+        } else if (getIntent().hasExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST)) {
+            LauncherApps.PinItemRequest pinItemRequest = getIntent().getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST);
+            if (pinItemRequest.getRequestType() == PinItemRequest.REQUEST_TYPE_SHORTCUT) {
+                boolean success = pinItemRequest.accept();
+                Log.d(TAG, "Shortcut is accepted: " + success);
+                ShortcutInfo shortcutInfo = pinItemRequest.getShortcutInfo();
+
+                Log.d(TAG, "New shortcut: " + shortcutInfo.getId());
+                LauncherApps launcher = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
+                Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
+
+                Map reply = new HashMap();
+                reply.put("shortcutId", shortcutInfo.getId() );
+                reply.put("package", shortcutInfo.getPackage() );
+                reply.put("label", shortcutInfo.getShortLabel().toString() );
+                reply.put("icon", drawableToBase64(shortcutIcon) );
+
+                pendingShortcutMessage = reply;
+            } else {
+                Log.w(TAG, "Not valid pin item request");
+            }
         }
+
         instance = this;
-        Log.d(TAG, "Android activity created");
 
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -82,6 +131,8 @@ public class ReceiveTextActivity extends AndroidNativeActivity
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
+
+        Log.d(TAG, "Android activity created");
     }
 
     @Override
@@ -108,31 +159,6 @@ public class ReceiveTextActivity extends AndroidNativeActivity
                 SystemDispatcher.dispatch(GOT_TEXT, reply);
             }
             Log.d(TAG, "Shared text: " +  sharedText);
-        } else if (intent.hasExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST)) {
-            LauncherApps.PinItemRequest pinItemRequest = intent.getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST);
-            if (pinItemRequest.getRequestType() == PinItemRequest.REQUEST_TYPE_SHORTCUT) {
-                boolean success = pinItemRequest.accept();
-                Log.d(TAG, "Shortcut is accepted: " + success);
-                ShortcutInfo shortcutInfo = pinItemRequest.getShortcutInfo();
-                Log.d(TAG, "New shortcut: " + shortcutInfo.getId());
-                LauncherApps launcher = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
-                Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
-
-                Map reply = new HashMap();
-                reply.put("shortcutId", shortcutInfo.getId() );
-                reply.put("package", shortcutInfo.getPackage() );
-                reply.put("label", shortcutInfo.getShortLabel().toString() );
-                reply.put("icon", drawableToBase64(shortcutIcon) );
-
-                Log.d(TAG, "Shortcut Id: " + reply.get("shortcutId"));
-                Log.d(TAG, "Shortcut Id: " + reply.get("package"));
-                Log.d(TAG, "Shortcut Id: " + reply.get("label"));
-                Log.d(TAG, "Shortcut Id: " + reply.get("icon"));
-                SystemDispatcher.dispatch(GOT_SHORTCUT, reply);
-                //Toast.makeText(this, "Not implemented, yet", Toast.LENGTH_LONG).show();
-            } else {
-                Log.w(TAG, "Not valid pin item request");
-            }
         }
     }
 
