@@ -229,7 +229,9 @@ public class ReceiveTextActivity extends AndroidNativeActivity
         Log.d("Arvindvolla", "Creating Notification");
         Bitmap largeIcon = null;
         byte [] bitMapByte = intent.getByteArrayExtra("largeIcon");
-        largeIcon = BitmapFactory.decodeByteArray(bitMapByte, 0,bitMapByte.length);
+        if(bitMapByte != null){
+          largeIcon = BitmapFactory.decodeByteArray(bitMapByte, 0,bitMapByte.length);
+        }
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new NotificationCompat.Builder(this,channel_d)
@@ -252,6 +254,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
             Log.d("Arvindvolla", "Received Notification Broadcast");
             int receivedNotificationCode = intent.getIntExtra("Notification Code",-1);
              channel_d = intent.getStringExtra("channel_d");
+/*
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                NotificationChannel channel = new NotificationChannel(channel_d,"VollaLauncher",
                         NotificationManager.IMPORTANCE_HIGH);
@@ -261,7 +264,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
                     manager.createNotificationChannel(channel);
                 }
 
-            }
+            } */
             createNotification(intent);
         }
     }

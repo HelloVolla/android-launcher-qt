@@ -21,7 +21,7 @@ import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.storage.Message;
 import com.volla.launcher.storage.Users;
 import com.volla.launcher.util.NotificationUtils;
-import com.volla.launcher.util.ImagesHelper;
+import com.volla.launcher.util.SignalUtil;
 import java.io.ByteArrayOutputStream;
 import android.util.Base64;
 import java.util.UUID;
@@ -105,36 +105,43 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             String uuid = UUID.randomUUID().toString();
             String title = NotificationUtils.getTitle(extras);
             String notificationStr = notificationData.toJson();
-
+            Users users = new Users();
             Icon icon = sbn.getNotification().getLargeIcon();
-            Drawable drawable = icon.loadDrawable(getApplication());
-            Bitmap appIcon = ImagesHelper.drawableToBitmap(drawable);
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            if (appIcon.getWidth() > 128) {
-                 appIcon = Bitmap.createScaledBitmap(appIcon, 96, 96, true);
+            byte[] bitmapData = null;
+            if(icon != null){
+                Drawable drawable = icon.loadDrawable(getApplication());
+                Bitmap appIcon = SignalUtil.drawableToBitmap(drawable);
+                Log.d("VollaNotification extra", "capturing large Icon");
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                if (appIcon.getWidth() > 128) {
+                    appIcon = Bitmap.createScaledBitmap(appIcon, 96, 96, true);
+                }
+                appIcon.compress(Bitmap.CompressFormat.PNG, 90, outStream);
+                bitmapData = outStream.toByteArray();
+                String largeIcon = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
+                message.largeIcon = largeIcon;
+                users.largeIcon = largeIcon;
+            } else {
+                message.largeIcon = "";
+                users.largeIcon = "";
             }
-            appIcon.compress(Bitmap.CompressFormat.PNG, 90, outStream);
-            byte[] bitmapData = outStream.toByteArray();
-            String largeIcon = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
-            message.uuid = uuid;
-            message.largeIcon = largeIcon;
+            message.uuid = String.valueOf(sbn.getId());
             message.notification = notificationStr;
-            message.title = title;
-            message.selfDisplayName = extras.getString(android.app.Notification.EXTRA_SELF_DISPLAY_NAME);
+            message.title = NotificationUtils.getMessage(extras);
+            message.selfDisplayName = title;
             message.text = NotificationUtils.getMessage(extras);
             message.timeStamp = timeInMillis;
 			Log.d("VollaNotification Inserting data into db","");
             repository.insertMessage(message);
 
-            Users users = new Users();
-            users.uuid = uuid;
+            
+            users.uuid = String.valueOf(sbn.getId());
             users.body = NotificationUtils.getMessage(extras);
             users.user_name = title;
             users.user_contact_number = "";
             users.read = false;
             users.isSent = false;
             users.notification = notificationStr;
-            users.largeIcon = largeIcon;
             users.timeStamp = timeInMillis;
             
             
@@ -144,7 +151,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             notification = null;
             notificationData = null;
             uuid = null;
-            largeIcon = null;
             title = null;
 
 

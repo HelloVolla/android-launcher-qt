@@ -73,7 +73,6 @@ DISTFILES += \
     android/src/com/volla/launcher/util/VibrationUtil.java \
     android/src/com/volla/launcher/util/MessageUtil.java \
     android/src/com/volla/launcher/util/NotificationUtils.java \
-    android/src/com/volla/launcher/util/ImagesHelper.java \
     android/src/com/volla/launcher/util/VersionUtils.java \
     android/src/com/volla/launcher/util/VollaLauncher.java \
     android/src/com/volla/launcher/worker/CallWorker.java \
