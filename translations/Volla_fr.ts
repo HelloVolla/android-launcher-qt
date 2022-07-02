@@ -4,64 +4,64 @@
 <context>
     <name>AppGrid</name>
     <message>
-        <location filename="../AppGrid.qml" line="153"/>
-        <location filename="../AppGrid.qml" line="179"/>
-        <location filename="../AppGrid.qml" line="182"/>
+        <location filename="../AppGrid.qml" line="154"/>
+        <location filename="../AppGrid.qml" line="180"/>
+        <location filename="../AppGrid.qml" line="183"/>
         <source>Most used</source>
         <translation type="unfinished">Les plus utilisés</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="166"/>
+        <location filename="../AppGrid.qml" line="167"/>
         <source>Other apps</source>
         <translation type="unfinished">Autres applications</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="176"/>
+        <location filename="../AppGrid.qml" line="177"/>
         <source>apps</source>
         <translation type="unfinished">apps</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="239"/>
+        <location filename="../AppGrid.qml" line="240"/>
         <source>Apps</source>
         <translation type="unfinished">Applications</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="249"/>
+        <location filename="../AppGrid.qml" line="250"/>
         <source>Filter apps</source>
         <translation type="unfinished">Filtrer les applications</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="332"/>
+        <location filename="../AppGrid.qml" line="333"/>
         <source>Add to shortcuts</source>
         <translation type="unfinished">ajouter au raccourci</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="354"/>
+        <location filename="../AppGrid.qml" line="355"/>
         <source>Open</source>
         <translation type="unfinished">ouvrir</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="363"/>
+        <location filename="../AppGrid.qml" line="364"/>
         <source>Open App</source>
         <translation type="unfinished">Ouvrir l&apos;application</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="363"/>
+        <location filename="../AppGrid.qml" line="364"/>
         <source>Open Shortcut</source>
         <translation type="unfinished">Ouvrir le raccourci</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="396"/>
+        <location filename="../AppGrid.qml" line="397"/>
         <source>Remove Shortcut</source>
         <translation type="unfinished">Supprimer le raccourci</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="478"/>
+        <location filename="../AppGrid.qml" line="479"/>
         <source>New pinned shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="485"/>
+        <location filename="../AppGrid.qml" line="486"/>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished"></translation>
     </message>

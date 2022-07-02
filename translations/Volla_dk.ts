@@ -43,7 +43,7 @@
         <source>Remove Shortcut</source>
         <translation type="unfinished">Fjern genvej</translation>
     </message>
-    <message>fastg
+    <message>
         <source>New pinned shortcut</source>
         <translation type="unfinished">Ny fastgjort genvej</translation>
     </message>

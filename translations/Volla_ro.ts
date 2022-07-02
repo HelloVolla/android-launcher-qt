@@ -4,64 +4,64 @@
 <context>
     <name>AppGrid</name>
     <message>
-        <location filename="../AppGrid.qml" line="153"/>
-        <location filename="../AppGrid.qml" line="179"/>
-        <location filename="../AppGrid.qml" line="182"/>
+        <location filename="../AppGrid.qml" line="154"/>
+        <location filename="../AppGrid.qml" line="180"/>
+        <location filename="../AppGrid.qml" line="183"/>
         <source>Most used</source>
         <translation type="unfinished">Cele mai utilizate</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="166"/>
+        <location filename="../AppGrid.qml" line="167"/>
         <source>Other apps</source>
         <translation type="unfinished">Alte aplicații</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="176"/>
+        <location filename="../AppGrid.qml" line="177"/>
         <source>apps</source>
         <translation type="unfinished">apps</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="239"/>
+        <location filename="../AppGrid.qml" line="240"/>
         <source>Apps</source>
         <translation type="unfinished">Aplicații</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="249"/>
+        <location filename="../AppGrid.qml" line="250"/>
         <source>Filter apps</source>
         <translation type="unfinished">Filtrează aplicațiile</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="332"/>
+        <location filename="../AppGrid.qml" line="333"/>
         <source>Add to shortcuts</source>
         <translation type="unfinished">adăugați la comenzi rapide</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="354"/>
+        <location filename="../AppGrid.qml" line="355"/>
         <source>Open</source>
         <translation type="unfinished">deschide</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="363"/>
+        <location filename="../AppGrid.qml" line="364"/>
         <source>Open App</source>
         <translation type="unfinished">deschide aplicația</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="363"/>
+        <location filename="../AppGrid.qml" line="364"/>
         <source>Open Shortcut</source>
         <translation type="unfinished">Deschidere comandă rapidă</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="396"/>
+        <location filename="../AppGrid.qml" line="397"/>
         <source>Remove Shortcut</source>
         <translation type="unfinished">Eliminarea comenzii rapide</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="478"/>
+        <location filename="../AppGrid.qml" line="479"/>
         <source>New pinned shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="485"/>
+        <location filename="../AppGrid.qml" line="486"/>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished"></translation>
     </message>
