@@ -29,6 +29,7 @@ Page {
         "com.simplemobiletools.filemanager.pro": "/icons/folder@4x.png",
         "org.telegram.messenger": "/icons/telegram@4x.png",
         "com.android.email": "/icons/email@4x.png",
+        "com.fsck.k9": "/icons/email@4x.png",
         "com.google.android.gm": "/icons/email@4x.png",
         "com.Slack": "/icons/slack@4x.png",
         "com.simplemobiletools.notes.pro": "/icons/notes@4x.png",
@@ -508,7 +509,7 @@ Page {
         id: settings
         property bool useColoredIcons: false
         property bool useGroupedApps: true
-        property bool useCategories: true
+        property bool useCategories: false
     }
 
     FileIO {

@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">apps</translation>
     </message>
     <message>
         <source>Apps</source>
@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Filter apps</source>
-        <translation type="unfinished">Filtrere apps</translation>
+        <translation type="unfinished">Filtrer apps</translation>
     </message>
     <message>
         <source>Add to shortcuts</source>
@@ -48,22 +48,22 @@
         <translation type="unfinished">Ny fastgjort genvej</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
-        <translation type="unfinished">Den fasthæftede genvej findes allerede</translation>
+        <source>Pinned shortcut already exists</source>
+        <translation type="unfinished">Den fastgjorte genvej findes allerede</translation>
     </message>
 </context>
 <context>
     <name>Checkbox</name>
     <message>
         <source>Chip</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chip</translation>
     </message>
 </context>
 <context>
     <name>Collections</name>
     <message>
         <source>People</source>
-        <translation type="unfinished">Mennesker</translation>
+        <translation type="unfinished">Personer</translation>
     </message>
     <message>
         <source>Find people ...</source>
@@ -95,7 +95,7 @@
     </message>
     <message>
         <source>Filter collections</source>
-        <translation type="unfinished">Filtrere samlinger</translation>
+        <translation type="unfinished">Filtrer samlinger</translation>
     </message>
     <message>
         <source>Call</source>
@@ -111,11 +111,11 @@
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished">Åben kontakt</translation>
+        <translation type="unfinished">Åbn kontakt</translation>
     </message>
     <message>
         <source>Open in Signal</source>
-        <translation type="unfinished">Åben i Signal</translation>
+        <translation type="unfinished">Åbn i Signal</translation>
     </message>
     <message>
         <source>Private</source>
@@ -123,15 +123,15 @@
     </message>
     <message>
         <source>New message</source>
-        <translation type="unfinished">Ny meddelelse</translation>
+        <translation type="unfinished">Ny besked</translation>
     </message>
     <message>
         <source>New calls</source>
-        <translation type="unfinished">Nye indkaldelser</translation>
+        <translation type="unfinished">Nye opkald</translation>
     </message>
     <message>
         <source>New call</source>
-        <translation type="unfinished">Ny indkaldelse</translation>
+        <translation type="unfinished">Nyt opkald</translation>
     </message>
     <message>
         <source>You</source>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <source>Filter messages ...</source>
-        <translation type="unfinished">Filtrere meddelelser ...</translation>
+        <translation type="unfinished">Filtrer beskeder ...</translation>
     </message>
     <message>
         <source>Type your message</source>
@@ -188,7 +188,7 @@
     <name>Feed</name>
     <message>
         <source>Feed</source>
-        <translation type="unfinished">Foder</translation>
+        <translation type="unfinished">Feed</translation>
     </message>
     <message>
         <source>Filter news ...</source>
@@ -207,23 +207,23 @@
     </message>
     <message>
         <source>Dark Mode</source>
-        <translation type="unfinished">Mørk tilstand</translation>
+        <translation type="unfinished">Mørk stil</translation>
     </message>
     <message>
         <source>Light Mode</source>
-        <translation type="unfinished">Lystilstand</translation>
+        <translation type="unfinished">Lys stil</translation>
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="unfinished">Gennemskinnelig tilstand</translation>
+        <translation type="unfinished">Gennemskinnelig stil</translation>
     </message>
     <message>
         <source>Security mode is OFF</source>
-        <translation type="unfinished">Sikkerhedstilstand er OFF</translation>
+        <translation type="unfinished">Sikkerhedstilstand er AF</translation>
     </message>
     <message>
         <source>Security mode is ON</source>
-        <translation type="unfinished">Sikkerhedstilstand er ON</translation>
+        <translation type="unfinished">Sikkerhedstilstand er PÅ</translation>
     </message>
     <message>
         <source>Enter password</source>
@@ -234,8 +234,8 @@
         <translation type="unfinished">Gentag adgangskode</translation>
     </message>
     <message>
-        <source>Keep existing Password</source>
-        <translation type="unfinished">Gentag adgangskode</translation>
+        <source>Keep existing password</source>
+        <translation type="unfinished">Behold adgangskode</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -243,11 +243,11 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Annuller</translation>
     </message>
     <message>
         <source>Wrong password confirmation</source>
-        <translation type="unfinished">Bekræftelse af forkert adgangskode</translation>
+        <translation type="unfinished">Forkert adgangskodebekræftelse</translation>
     </message>
     <message>
         <source>Wrong password</source>
@@ -271,7 +271,7 @@
     </message>
     <message>
         <source>Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Signal</translation>
     </message>
     <message>
         <source>Search engines</source>
@@ -299,7 +299,7 @@
     </message>
     <message>
         <source>Use colored app icons</source>
-        <translation type="unfinished">Brug farvede app-ikoner</translation>
+        <translation type="unfinished">Brug farvede appikoner</translation>
     </message>
     <message>
         <source>Show apps at startup</source>
@@ -315,7 +315,7 @@
     </message>
     <message>
         <source>Use app categories</source>
-        <translation type="unfinished">Brug app-kategorier</translation>
+        <translation type="unfinished">Brug appkategorier</translation>
     </message>
     <message>
         <source>Background blur</source>
@@ -335,7 +335,7 @@
     </message>
     <message>
         <source>Reload contacts</source>
-        <translation type="unfinished">Genindlæsning af kontakter</translation>
+        <translation type="unfinished">Genindlæs kontakter</translation>
     </message>
 </context>
 <context>
@@ -378,15 +378,15 @@
     </message>
     <message>
         <source>Type anything</source>
-        <translation type="unfinished">Type noget</translation>
+        <translation type="unfinished">Skriv noget</translation>
     </message>
     <message>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
-        <translation type="unfinished">Undskyld. Jeg kunne ikke finde et telefonnummer til denne kontakt</translation>
+        <translation type="unfinished">Beklager, telefonnummer til kontakt kunne ikke findes</translation>
     </message>
     <message>
         <source>Sorry. I couldn&apos;t identify the contact</source>
-        <translation type="unfinished">Undskyld. Jeg kunne ikke identificere kontakten</translation>
+        <translation type="unfinished">Beklager, kontakt kunne ikke identificeres</translation>
     </message>
     <message>
         <source>Sorry, no contact was selected</source>
@@ -394,11 +394,11 @@
     </message>
     <message>
         <source>Sorry, the mobile phone number is unknown</source>
-        <translation type="unfinished">Beklager, mobiltelefonnummeret er ukendt</translation>
+        <translation type="unfinished">Beklager, ukendt mobiltelefonnummer</translation>
     </message>
     <message>
         <source>Sorry. Contact has no email address</source>
-        <translation type="unfinished">Undskyld. Kontakt har ingen e-mailadresse</translation>
+        <translation type="unfinished">Beklager, kontakt har ingen e-mailadresse</translation>
     </message>
     <message>
         <source>New note saved</source>
@@ -425,11 +425,11 @@
     </message>
     <message>
         <source>Send home email</source>
-        <translation type="unfinished">Send e-mail til hjemmet</translation>
+        <translation type="unfinished">Send privat e-mail</translation>
     </message>
     <message>
         <source>Send work email</source>
-        <translation type="unfinished">Send arbejds-e-mail</translation>
+        <translation type="unfinished">Send job e-mail</translation>
     </message>
     <message>
         <source>Send other email</source>
@@ -437,11 +437,11 @@
     </message>
     <message>
         <source>Call</source>
-        <translation type="unfinished">Ring til</translation>
+        <translation type="unfinished">Ring</translation>
     </message>
     <message>
         <source>Call on cell phone</source>
-        <translation type="unfinished">Opkald på mobiltelefonen</translation>
+        <translation type="unfinished">Ring mobil</translation>
     </message>
     <message>
         <source>Call at home</source>
@@ -449,11 +449,11 @@
     </message>
     <message>
         <source>Call at work</source>
-        <translation type="unfinished">Opkald på arbejdspladsen</translation>
+        <translation type="unfinished">Ring job</translation>
     </message>
     <message>
         <source>Call other phone</source>
-        <translation type="unfinished">Ring til anden telefon</translation>
+        <translation type="unfinished">Ring anden telefon</translation>
     </message>
     <message>
         <source>Create note</source>
@@ -469,11 +469,11 @@
     </message>
     <message>
         <source>Add feed to collection</source>
-        <translation type="unfinished">Tilføj foder til samling</translation>
+        <translation type="unfinished">Tilføj feed til samling</translation>
     </message>
     <message>
         <source>Open Contact</source>
-        <translation type="unfinished">Åben kontakt</translation>
+        <translation type="unfinished">Åbn kontakt</translation>
     </message>
     <message>
         <source>Show Notes</source>
@@ -481,7 +481,7 @@
     </message>
     <message>
         <source>Send Signal message</source>
-        <translation type="unfinished">Send signalbesked</translation>
+        <translation type="unfinished">Send besked med Signal</translation>
     </message>
     <message>
         <source>Add to Calender</source>
@@ -493,11 +493,11 @@
     </message>
     <message>
         <source>Missing message text</source>
-        <translation type="unfinished">Manglende meddelelsestekst</translation>
+        <translation type="unfinished">Manglende tekst</translation>
     </message>
     <message>
         <source>Message sent</source>
-        <translation type="unfinished">Meddelelse sendt</translation>
+        <translation type="unfinished">Besked sendt</translation>
     </message>
     <message>
         <source>Generic failure</source>
@@ -509,7 +509,7 @@
     </message>
     <message>
         <source>Null PDU</source>
-        <translation type="unfinished">Nul PDU</translation>
+        <translation type="unfinished">Manglende PDU</translation>
     </message>
     <message>
         <source>Radio off</source>
@@ -517,11 +517,11 @@
     </message>
     <message>
         <source>Message delivered</source>
-        <translation type="unfinished">Meddelelse leveret</translation>
+        <translation type="unfinished">Besked leveret</translation>
     </message>
     <message>
         <source>Message not delivered</source>
-        <translation type="unfinished">Meddelelse ikke leveret</translation>
+        <translation type="unfinished">Besked ikke leveret</translation>
     </message>
     <message>
         <source>Show Dialer</source>
@@ -576,15 +576,15 @@
         <translation type="unfinished">Ny tilmelding</translation>
     </message>
     <message>
-        <source>You have alresdy subscribed the feed</source>
+        <source>You have already subscribed the feed</source>
         <translation type="unfinished">Du har allerede abonneret på feedet</translation>
     </message>
     <message>
         <source>Invalid news ID</source>
-        <translation type="unfinished">Ugyldigt nyheds-id</translation>
+        <translation type="unfinished">Ugyldigt ID for nyhed</translation>
     </message>
     <message>
-        <source>Error because of too much redirects</source>
+        <source>Error because of too many redirects</source>
         <translation type="unfinished">Fejl på grund af for mange videresendelser</translation>
     </message>
     <message>
@@ -593,14 +593,14 @@
     </message>
     <message>
         <source>Invalid RSS feed: </source>
-        <translation type="unfinished">Ugyldig RSS-feed: </translation>
+        <translation type="unfinished">Ugyldigt RSS-feed: </translation>
     </message>
     <message>
         <source>New shortcut</source>
         <translation type="unfinished">Ny genvej</translation>
     </message>
     <message>
-        <source>You have alresdy added the shortcut</source>
+        <source>You have already added the shortcut</source>
         <translation type="unfinished">Ny Du har allerede tilføjet genvejen</translation>
     </message>
     <message>

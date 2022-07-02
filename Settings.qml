@@ -963,7 +963,7 @@ Page {
                 id: sourceSettingsItem
                 width: parent.width
                 implicitHeight: sourceSettingsItemColumn.height
-                visible: true
+                visible: false
 
                 Column {
                     id: sourceSettingsItemColumn
