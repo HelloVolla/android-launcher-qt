@@ -902,6 +902,7 @@ Page {
 
                 if (thread["isMMS"]) {
                     kind = "MMS"
+                    cThread.c_IMAGE = "data:image/png;base64," + thread["image"]
                 } else if (thread["isSignal"]) {
                     kind = "Signal"
                 }
