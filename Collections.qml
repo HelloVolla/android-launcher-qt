@@ -872,7 +872,7 @@ Page {
                                   || (contact["phone.home"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
                                       && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 3)
-                                  || (contact["name"].toString() === thread["person"].toString())
+                                  || (thread["person"] !== undefined && contact["name"].toString() === thread["person"].toString())
                     } catch (err) {
                         console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
                     }

@@ -102,7 +102,7 @@ Page {
                     headline.text = name
                     currentId = id
                     currentConversationModel = threadContentModel
-                    operationCount = 1
+                    operationCount = 2
                     mainView.updateSpinner(true)
                     loadConversation({"threadId": id, "threadAge": threadAge})
                     break;
@@ -163,12 +163,9 @@ Page {
 
     function loadConversation(filter) {
         console.log("Conversation | Will load messages")
-        messages = new Array
-        if (isNaN(filter["threadId"])) {
-            AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
-        } else {
-            AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
-        }
+        conversationPage.messages = []
+        AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
+        AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
     }
 
     function loadCalls(filter) {
@@ -584,7 +581,7 @@ Page {
         property var modelArr: new Array
 
         function loadData() {
-            console.log("Conversation | Load data for person's content")
+            console.log("Conversation | Load " + conversationPage.messages.length + " messages for person's content")
 
             conversationPage.messages.forEach(function (message, index) {
                 var cMessage = {m_ID: "message." + message["id"]}
@@ -699,7 +696,7 @@ Page {
         property var modelArr: []
 
         function loadData() {
-            console.log("Conversation | Load data for thread content")
+            console.log("Conversation | Load " + conversationPage.messages.length + " messages for thread content")
 
             conversationPage.messages.forEach(function (message, index) {
                 var cMessage = {m_ID: message["id"]}
