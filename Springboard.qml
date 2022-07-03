@@ -29,6 +29,14 @@ Page {
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
+
+        Image {
+            id: sponsorImage
+            visible: false
+            width: parent.width / 3
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: parent
+        }
     }
 
     onTextInputChanged: {
@@ -46,6 +54,8 @@ Page {
         }
         eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S.*)")
         eventRegex = new RegExp(eventRegexStr, "gim")
+
+        AN.SystemDispatcher.dispatch("volla.launcher.sponsorImageAction", {})
     }
 
     function updateShortcuts(actions) {
@@ -578,6 +588,11 @@ Page {
                     console.log("Springboard | onDispatched: " + type)
                     if (message["sent"]) {
                         textInputArea.text = ""
+                    }
+                } else if (type === "volla.launcher.sponsorImageResponse") {
+                    console.log("Springboard | onDispatched: " + type)
+                    if (message["imageUrl"] !== undefined) {
+                        sponsorImage.source = Qt.resolvedUrl(message["imageUrl"])
                     }
                 }
             }

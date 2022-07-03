@@ -21,9 +21,15 @@ import android.content.pm.ResolveInfo;
 import android.content.ComponentName;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.telephony.TelephonyManager;
+import android.provider.Settings;
+import android.provider.Settings.Secure;
+import android.provider.Settings.System;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import org.qtproject.qt5.android.QtNative;
@@ -36,6 +42,8 @@ public class LayoutUtil {
     public static final String SET_COLOR = "volla.launcher.colorAction";
     public static final String GET_NAVBAR_HEIGHT = "volla.launcher.navBarAction";
     public static final String GOT_NAVBAR_HEIGHT = "volla.launcher.navBarResponse";
+    public static final String GET_SPONSOR_IMAGE_URL = "volla.launcher.sponsorImageAction";
+    public static final String GOT_SPONSOR_IMAGE_URL = "volla.launcher.sponsorImageResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -92,7 +100,7 @@ public class LayoutUtil {
                                     Log.d(TAG, "Set night mode and black wallpaper");
                                     wallpaperId = R.drawable.wallpaper_black;
                                 } else {
-                                    Log.d(TAG, "Set nidhgt mode and system wallpaper");
+                                    Log.d(TAG, "Set night mode and system wallpaper");
                                     Log.d(TAG, "Retrieve system wallpaper" );
                                     if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                                         wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
@@ -150,6 +158,27 @@ public class LayoutUtil {
 
                     Thread thread = new Thread(runnable);
                     thread.start();
+                } else if (type.equals(GET_SPONSOR_IMAGE_URL)) {
+                    final Activity activity = QtNative.activity();
+
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            String deviceId = getDeviceIMEI(activity);
+                            Log.d(TAG, "IMEI is " + deviceId);
+
+                            String imageUrl = getSponsorImageUrl(deviceId);
+                            Log.d(TAG, "Image url is " + imageUrl);
+
+                            Map responseMessage = new HashMap();
+                            if (imageUrl != null) {
+                                responseMessage.put("imageUrl", imageUrl);
+                            }
+                            SystemDispatcher.dispatch(GOT_SPONSOR_IMAGE_URL, responseMessage);
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });
@@ -161,4 +190,27 @@ public class LayoutUtil {
         return resources.getDimensionPixelSize(resourceId);
     }
 
+    public static String getDeviceIMEI(Activity activity) {
+        String deviceUniqueIdentifier = null;
+        TelephonyManager tm = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+        if (null != tm) {
+            try {
+                deviceUniqueIdentifier = tm.getImei(0);
+            } catch (Exception e) {
+                Log.e(TAG, "Couldn't get IMEI: " + e.getMessage());
+            }
+        }
+        return deviceUniqueIdentifier;
+    }
+
+    public static String getSponsorImageUrl(String deviceId) {
+        final Map<String, String> map
+            = Arrays.stream(new String[][] {
+                                { "1", "GFG" },
+                                { "2", "Geek" },
+                                { "3", "GeeksForGeeks" } })
+                    .collect(Collectors.toMap(keyMapper -> keyMapper[0], valueMapper -> valueMapper[1]));
+
+        return map.get(deviceId);
+    }
 }
