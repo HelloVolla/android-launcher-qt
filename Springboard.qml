@@ -755,6 +755,8 @@ Page {
                     if (selectedMenuItem.actionId.startsWith("http")) {
                         // Workaround for web shortcuts
                         Qt.openUrlExternally(selectedMenuItem.actionId)
+                    } else if (selectedMenuItem.actionId.startsWith("tel")) {
+                        Qt.openUrlExternally(selectedMenuItem.actionId)
                     } else {
                         AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
                     }
