@@ -102,8 +102,8 @@ Page {
         if (key === "backgroundOpacity") {
             for (var i = 0; i < appLauncher.appGroups.length; i++) {
                 var appGroup = appLauncher.appGroups[i]
-                if (backgroundOpacity !== undefined) {
-                    appGroup.backgroundOpacity = backgroundOpacity
+                if (value !== undefined) {
+                    appGroup.backgroundOpacity = value
                 }
             }
         } else if (key === "useCategories") {
