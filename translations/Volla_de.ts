@@ -213,17 +213,17 @@
         <translation type="unfinished">Du</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="993"/>
+        <location filename="../Collections.qml" line="994"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished">RSS-Feed konnte nicht geladen werden: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1021"/>
+        <location filename="../Collections.qml" line="1022"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ungültiger RSS-Feed: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1041"/>
+        <location filename="../Collections.qml" line="1042"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">Fehlende RSS-Nachricht: </translation>
     </message>
@@ -405,7 +405,7 @@
     <message>
         <location filename="../Settings.qml" line="1229"/>
         <source>Use app categories</source>
-        <translation type="unfinished">Verwende App-Kategprien</translation>
+        <translation type="unfinished">Verwende App-Kategorien</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1390"/>
