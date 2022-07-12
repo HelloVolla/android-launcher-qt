@@ -209,17 +209,17 @@
         <translation type="unfinished">Tú</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="993"/>
+        <location filename="../Collections.qml" line="994"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished">no se ha podido cargar el feed RSS</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1021"/>
+        <location filename="../Collections.qml" line="1022"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">RSS feed inválido</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1041"/>
+        <location filename="../Collections.qml" line="1042"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">Artículo RSS perdido</translation>
     </message>

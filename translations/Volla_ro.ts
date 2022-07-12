@@ -213,17 +213,17 @@
         <translation type="unfinished">tu</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="993"/>
+        <location filename="../Collections.qml" line="994"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished">nu a putut încărca RSS feed: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1021"/>
+        <location filename="../Collections.qml" line="1022"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">invalid RSS feed: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1041"/>
+        <location filename="../Collections.qml" line="1042"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">lipsește mesajul RSS: </translation>
     </message>
