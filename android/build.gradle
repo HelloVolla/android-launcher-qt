@@ -59,7 +59,7 @@ android {
 
     defaultConfig {
 
-        minSdkVersion = 30
+        minSdkVersion = 29
 	 applicationId "com.volla.launcher"
     }
     compileOptions {
