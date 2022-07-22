@@ -45,12 +45,11 @@ android {
      * Changing them manually might break the compilation!
      *******************************************************/
 
-    compileSdkVersion 30
+    compileSdkVersion 29
 
     defaultConfig {
-
-        minSdkVersion = 30
-	 applicationId "com.volla.launcher"
+        minSdkVersion = 28
+        applicationId "com.volla.launcher"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
