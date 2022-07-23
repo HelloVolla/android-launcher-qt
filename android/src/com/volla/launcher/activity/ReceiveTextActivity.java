@@ -8,7 +8,7 @@ import android.content.pm.LauncherApps;
 import android.content.pm.LauncherApps.PinItemRequest;
 import android.content.pm.ShortcutInfo;
 import android.content.Intent;
-import android.view.Window;
+import androidx.core.view.WindowCompat;
 import android.view.View;
 import android.view.WindowManager;
 import android.app.UiModeManager;
@@ -119,18 +119,13 @@ public class ReceiveTextActivity extends AndroidNativeActivity
 
         instance = this;
 
-        Window window = getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setNavigationBarColor(Color.TRANSPARENT);
-            window.setStatusBarColor(Color.TRANSPARENT ) ;
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setDecorFitsSystemWindows(false);
-            window.setStatusBarContrastEnforced(false);
-            window.setNavigationBarContrastEnforced(false);
-        } else {
-            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        }
+        WindowCompat window = getWindow();
+        window.setNavigationBarColor(Color.TRANSPARENT);
+        window.setStatusBarColor(Color.TRANSPARENT ) ;
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setDecorFitsSystemWindows(false);
+        window.setStatusBarContrastEnforced(false);
+        window.setNavigationBarContrastEnforced(false);
 
         Log.d(TAG, "Android activity created");
     }

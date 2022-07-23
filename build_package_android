@@ -32,6 +32,7 @@ mkdir -p $RELEASE_DIR
 cd $BUILD_DIR
 
 # Run qmake, optional: ship the OpenSSL libraries
+export GRADLE_OPTS=-Dorg.gradle.project.android.useAndroidX=true -Dorg.gradle.project.android.enableJetifier=true
 qmake -r $WORKSPACE ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libcrypto.so ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libssl.so
 make -j`nproc` || die "Building the sources failed"
 make install INSTALL_ROOT=$ANDROID_BUILD_DIR

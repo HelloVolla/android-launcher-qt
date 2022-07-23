@@ -28,6 +28,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'com.chimbori.crux:crux:2.2.0'
     implementation 'org.jsoup:jsoup:1.10.2'
+    implementation "androidx.core:core:1.8.0"
     compile 'com.klinkerapps:android-smsmms:5.2.6'
 }
 
