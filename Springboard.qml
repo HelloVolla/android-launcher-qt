@@ -27,15 +27,64 @@ Page {
     property bool roundedShortcutMenu: true
 
     background: Rectangle {
+        id: springBoardBg
         anchors.fill: parent
         color: "transparent"
 
+        property int factor: 1
+
         Image {
-            id: sponsorImage
-            visible: false
-            width: parent.width / 3
+            id: brandLogo
+            source: Qt.resolvedUrl("/images/brand-logo.png")
+            width: parent.width - mainView.innerSpacing * 2 * springBoardBg.factor
             fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.leftMargin: mainView.innerSpacing * springBoardBg.factor
+            anchors.bottom: sponsorBox.top
+            anchors.bottomMargin: 10
+        }
+
+        Rectangle {
+            id: sponsorBox
+            anchors.left: parent.left
+            anchors.leftMargin: mainView.innerSpacing * springBoardBg.factor
+            anchors.right: parent.right
+            anchors.rightMargin: mainView.innerSpacing * springBoardBg.factor
+            y: parent.height - height + radius
+            //anchors.bottom: parent.bottom
+            //anchors.bottomMargin: mainView.innerSpacing * springBoardBg.factor
+            height: parent.height * 0.5 - brandLogo.height - 10 - anchors.bottomMargin
+            color: "white"
+            radius: 10 // rootMenuButton.radius
+
+            Column {
+                width: parent.width
+                padding: mainView.innerSpacing
+                spacing: mainView.innerSpacing
+
+                Label {
+                    width: parent.width - mainView.innerSpacing * 2
+                    text: "Dieses Endgerät wird zur Verfügung gestellt von"
+                    color: "black"
+                    wrapMode: Text.WordWrap
+                    font.pointSize: mainView.largeFontSize
+                }
+
+                Image {
+                    id: sponsorImage
+                    height: 60
+                    fillMode: Image.PreserveAspectFit
+                }
+
+                Label {
+                    width: parent.width - mainView.innerSpacing * 2
+                    text: "Vielen Dank für Deinen täglichen Einsatz!"
+                    color: "black"
+                    wrapMode: Text.WordWrap
+                    font.pointSize: mainView.largeFontSize
+                    font.weight: Font.Bold
+                }
+            }
         }
     }
 
