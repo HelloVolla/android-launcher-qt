@@ -23,9 +23,9 @@ jobs:
 
       - name: Build Apk
         env:
-          ANDROID_KEYSTORE_FILE_CONTENTS: ${{ secrets.ANDROID_KEYSTORE_FILE_CONTENTS }}
-          ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
-          ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+          ANDROID_KEYSTORE_FILE_CONTENTS: ${{ secrets.SAFETY_KEYSTORE_FILE_CONTENTS }}
+          ANDROID_KEYSTORE_PASS: ${{ secrets.SAFETY_KEYSTORE_PASS }}
+          ANDROID_KEYSTORE_ALIAS: ${{ secrets.SAFETY_KEYSTORE_ALIAS }}
         run: |
           export CACHE_DIR=build/cache
           export M2_HOME=`realpath -m $CACHE_DIR/.m2`
@@ -50,7 +50,7 @@ jobs:
           port: 2222
           ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
           local_path: './releases/*.apk'
-          remote_path: '/builds/nightly/volla/android-launcher-qt/'
+          remote_path: '/safety-e/builds/nightly/volla/android-launcher-qt/'
           args: '-o CheckHostIP=no -o StrictHostKeyChecking=no'
 
       - name: Upload Apk to Release Repository
@@ -62,7 +62,7 @@ jobs:
           port: 2222
           ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
           local_path: './releases/*.apk'
-          remote_path: '/builds/release/volla/android-launcher-qt/'
+          remote_path: '/safety-e/builds/release/volla/android-launcher-qt/'
           args: '-o CheckHostIP=no -o StrictHostKeyChecking=no'
 
   release:
