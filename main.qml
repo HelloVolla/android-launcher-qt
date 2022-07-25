@@ -213,14 +213,17 @@ ApplicationWindow {
             {"id" : "https://www.theguardian.com/world/rss", "name": "The Guardian", "activated" : true, "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
         property var defaultActions: [{"id" : actionType.ShowDialer, "name" : qsTr("Show Dialer"), "activated" : true},
             {"id" : actionType.OpenCam, "name": qsTr("Camera"), "activated" : true},
-            {"id" : actionType.ShowGallery, "name": qsTr("Gallery"), "activated" : true},
-            {"id" : actionType.ShowCalendar, "name": qsTr("Agenda"), "activated" : true},
+            {"id" : actionType.ShowGallery, "name": qsTr("Gallery"), "activated" : false},
+            {"id" : actionType.ShowCalendar, "name": qsTr("Agenda"), "activated" : false},
             {"id" : actionType.CreateEvent, "name": qsTr("Create Event"), "activated" : false},
-            {"id" : actionType.ShowNotes, "name": qsTr("Show Notes"), "activated" : true},
-            {"id" : actionType.ShowNews, "name": qsTr("Recent News"), "activated" : true},
-            {"id" : actionType.ShowThreads, "name": qsTr("Recent Threads"), "activated" : true},
-            {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true}]
-
+            {"id" : actionType.ShowNotes, "name": qsTr("Show Notes"), "activated" : false},
+            {"id" : actionType.ShowNews, "name": qsTr("Recent News"), "activated" : false},
+            {"id" : actionType.ShowThreads, "name": qsTr("Recent Threads"), "activated" : false},
+            {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true},
+            {"id" : "org.mozilla.fennec_fdroid", "name": "Web Browser", "activated": true},
+            {"id" : "com.secuso.privacyFriendlyCodeScanner", "name": "QR Scanner", "activated": true},
+            {"id" : "tel:08009594939", "name": "EURO WALDBRAND", "activated": true},
+            {"id" : "https://www.112-login.com", "namr": "112-LOGIN", "activated": true}]
         property var timeStamp: 0
         property var lastCheckOfThreads: 0
         property var lastCheckOfCalls: 0
