@@ -25,6 +25,7 @@ const QVector<QString> permissions({"android.permission.READ_CONTACTS",
                                     "android.permission.WRITE_APN_SETTINGS",
                                     "android.permission.MANAGE_APP_OPS_MODES",
                                     "android.permission.CHANGE_COMPONENT_ENABLED_STATE",
+                                    "android.permission.READ_PRIVILEGED_PHONE_STATE",
                                     "android.permission.QUERY_ALL_PACKAGES"});
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
