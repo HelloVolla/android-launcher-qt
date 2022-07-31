@@ -1249,10 +1249,8 @@ Page {
             for (var i = 0; i < rawNotes.length; i++) {
                 var rawNote = rawNotes[i]
                 var note = {"c_ID": rawNote["id"]}
-                console.log("Collection | Timestamp: " + rawNote.date)
                 note.c_STEXT = mainView.parseTime(rawNote.date)
                 note.c_TSTAMP = rawNote.date
-                console.log("Collection | Date: " + note.c_STEXT)
                 var titleEnd = rawNote.content.indexOf("\n")
                 note.c_TEXT = titleEnd > 0 && titleEnd < mainView.maxTitleLength ?
                             rawNote.content.slice(0, titleEnd) : titleEnd > mainView.maxTitleLength ?
