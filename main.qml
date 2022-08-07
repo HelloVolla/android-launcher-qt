@@ -193,8 +193,8 @@ ApplicationWindow {
         property var notes: new Array
         property var loadingContacts: new Array
         property bool isLoadingContacts: false
-        property var wallpaper: ""
-        property var wallpaperId: ""
+        property var wallpaper: "/android/res/drawable/wallpaper_image.png"
+        property var wallpaperId: "default"
         property var backgroundOpacity: 1.0
         property var backgroundColor: Universal.background
         property var fontColor: Universal.foreground
@@ -884,11 +884,10 @@ ApplicationWindow {
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {
                     console.log("MainView | onDispatched: " + type)
-
-                    if (message["wallpaper"] !== undefined) {
+                    if (message["wallpaper"] !== undefined && settings.theme !== mainView.theme.Translucent) {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                         mainView.wallpaperId = message["wallpaperId"]
-                    } else if (message["wallpaperId"] === undefined) {
+                    } else if (mainView.wallpaperId !== "default") {
                         mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
                         mainView.wallpaperId = "default"
                     }
@@ -939,7 +938,7 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        property int theme: mainView.theme.Dark
+        property int theme: mainView.theme.Translucent
         property int searchMode: mainView.searchMode.Duck
         property bool fullscreen: false
         property bool firstStart: true
