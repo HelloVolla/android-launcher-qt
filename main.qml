@@ -190,10 +190,11 @@ ApplicationWindow {
                                       "MessageDelivered": qsTr("Message delivered"),
                                       "MessageNotDelivered": qsTr("Message not delivered")}
         property var contacts: new Array
+        property var notes: new Array
         property var loadingContacts: new Array
         property bool isLoadingContacts: false
-        property var wallpaper: ""
-        property var wallpaperId: ""
+        property var wallpaper: "/android/res/drawable/wallpaper_image.png"
+        property var wallpaperId: "default"
         property var backgroundOpacity: 1.0
         property var backgroundColor: Universal.background
         property var fontColor: Universal.foreground
@@ -703,26 +704,41 @@ ApplicationWindow {
         }
 
         function getNotes() {
-            var noteStr = notes.read()
-            return noteStr.length > 0 ? JSON.parse(noteStr) : new Array
+            if (notes.length === 0) var noteStr = notesStore.read()
+            return noteStr !== undefined && noteStr.length > 0 ? JSON.parse(noteStr) : notes
         }
 
         function updateNote(id, content, pinned) {
+            console.debug("MainView | New Note: " + id + ", " + content + ", " + pinned)
             var notesArr = mainView.getNotes()
-            var note = notesArr.filter(function checkId(noteToCheck) {
-                return noteToCheck["id"] === id
-            })
-            if (note !== undefined) {
+            var note
+            var i = 0
+            while (id !== undefined && i < notesArr.length) {
+                if (notesArr[i]["id"] === id) note = notesArr[i]
+                i++
+            }
+            console.log("MainView | Existing note: " + note)
+            if (id !== undefined && note !== undefined) {
                 note["content"] = content
                 note["date"] = new Date().valueOf()
                 note["pinned"] = pinned
+                notesArr[i-1] = note
             } else {
+                console.log("MainView | Create note")
+                note = new Object
                 note["id"] = new Date().valueOf()
                 note["content"] = content
                 note["date"] = new Date().valueOf()
                 note["pinned"] = false
+                notesArr.push(note)
             }
-            notes.write(JSON.stringify(notesArr))
+            console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
+            notesStore.write(JSON.stringify(notesArr))
+            notes = notesArr
+            if (mainView.count > mainView.swipeIndex.Collections) {
+                var item = itemAt(swipeIndex.Collections)
+                item.children[0].item.updateCollectionPage(mainView.collectionMode.Notes)
+            }
         }
 
         function removeNote(id) {
@@ -734,7 +750,8 @@ ApplicationWindow {
             })
             if (index > -1) {
                 notesDict = notesArr.slice(index, 1)
-                notes.write(JSON.stringify(notesArr))
+                notesStore.write(JSON.stringify(notesArr))
+                notes = notesArr
             }
             updateCollectionPage(mainView.collectionMode.Notes)
         }
@@ -811,7 +828,7 @@ ApplicationWindow {
                 }
             }
         }
-        
+
         Connections {
             target: AN.SystemDispatcher
             // @disable-check M16
@@ -867,11 +884,10 @@ ApplicationWindow {
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {
                     console.log("MainView | onDispatched: " + type)
-
-                    if (message["wallpaper"] !== undefined) {
+                    if (message["wallpaper"] !== undefined && settings.theme !== mainView.theme.Translucent) {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                         mainView.wallpaperId = message["wallpaperId"]
-                    } else if (message["wallpaperId"] === undefined) {
+                    } else if (mainView.wallpaperId !== "default") {
                         mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
                         mainView.wallpaperId = "default"
                     }
@@ -922,7 +938,7 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        property int theme: mainView.theme.Dark
+        property int theme: mainView.theme.Translucent
         property int searchMode: mainView.searchMode.Duck
         property bool fullscreen: false
         property bool firstStart: true
@@ -971,7 +987,7 @@ ApplicationWindow {
     }
 
     FileIO {
-        id: notes
+        id: notesStore
         source: ".notes.json"
         onError: {
             console.log("Collections | Notes file error: " + msg)

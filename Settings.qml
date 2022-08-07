@@ -255,15 +255,15 @@ Page {
                         switch (themeSettings.theme) {
                             case mainView.theme.Dark:
                                 console.log("Setting | Enable dark mode")
-                                mainView.switchTheme(mainView.theme.Dark, true)
+                                mainView.switchTheme(mainView.theme.Dark, false)
                                 break
                             case mainView.theme.Light:
                                 console.log("Setting | Enable light mode")
-                                mainView.switchTheme(mainView.theme.Light, true)
+                                mainView.switchTheme(mainView.theme.Light, false)
                                 break
                             case mainView.theme.Translucent:
                                 console.log("Setting | Enable translucent mode")
-                                mainView.switchTheme(mainView.theme.Translucent, true)
+                                mainView.switchTheme(mainView.theme.Translucent, false)
                                 break
                             default:
                                 console.log("Settings | Unknown theme selected: " + themeSettings.theme)

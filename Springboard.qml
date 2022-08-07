@@ -524,7 +524,7 @@ Page {
                         break
                     case mainView.actionType.CreateNote:
                         console.log("Springboard | Will create note")
-                        mainView.updateNote(undefined, textInputArea.text)
+                        mainView.updateNote(undefined, textInput, false)
                         textInputArea.text = ""
                         mainView.showToast(qsTr("New note saved"))
                         break
