@@ -93,7 +93,7 @@ Page {
                             break
                         }
                     }
-                    operationCount = 2
+                    operationCount = 3
                     mainView.updateSpinner(true)
                     loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge, "person": name})
                     loadCalls({"match": name, "age": threadAge})
@@ -164,7 +164,11 @@ Page {
     function loadConversation(filter) {
         console.log("Conversation | Will load messages")
         messages = new Array
-        if (isNaN(filter["threadId"])) {
+
+        if (currentConversationMode === mainView.conversationMode.Person) {
+            AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
+            AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
+        } else if (isNaN(filter["threadId"])) {
             AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
         } else {
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
@@ -802,11 +806,11 @@ Page {
             if (type === "volla.launcher.conversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.messages = conversationPage.messages.concat(message["messages"])
-//                message["messages"].forEach(function (message, index) {
-//                    for (const [messageKey, messageValue] of Object.entries(message)) {
-//                        console.log("Conversation | * " + messageKey + ": " + messageValue)
-//                    }
-//                })
+                message["messages"].forEach(function (message, index) {
+                    for (const [messageKey, messageValue] of Object.entries(message)) {
+                        console.log("Conversation | * " + messageKey + ": " + messageValue)
+                    }
+                })
                 conversationPage.updateListMocel()
             } else if (type === "volla.launcher.signalMessagesResponse") {
                 console.log("Conversation | onDispatched: " + type)
