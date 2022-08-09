@@ -79,8 +79,8 @@ Page {
 
                     // Get contact by Id
                     var numbers = new Array
-                    for (var i = 0; i < mainView.contacts.length; i++) {
-                        var contact = mainView.contacts[i]
+                    for (var i = 0; i < mainView.getContacts().length; i++) {
+                        var contact = mainView.getContacts()[i]
                         if (contact["id"] === currentId) {
                             console.log("Conversation | Found contact " + contact["name"])
                             if (contact["phone.mobile"] !== undefined) {
