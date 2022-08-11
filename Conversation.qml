@@ -79,8 +79,8 @@ Page {
 
                     // Get contact by Id
                     var numbers = new Array
-                    for (var i = 0; i < mainView.contacts.length; i++) {
-                        var contact = mainView.contacts[i]
+                    for (var i = 0; i < mainView.getContacts().length; i++) {
+                        var contact = mainView.getContacts()[i]
                         if (contact["id"] === currentId) {
                             console.log("Conversation | Found contact " + contact["name"])
                             if (contact["phone.mobile"] !== undefined) {
@@ -93,7 +93,7 @@ Page {
                             break
                         }
                     }
-                    operationCount = 2
+                    operationCount = 3
                     mainView.updateSpinner(true)
                     loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge, "person": name})
                     loadCalls({"match": name, "age": threadAge})
@@ -164,7 +164,11 @@ Page {
     function loadConversation(filter) {
         console.log("Conversation | Will load messages")
         messages = new Array
-        if (isNaN(filter["threadId"])) {
+
+        if (currentConversationMode === mainView.conversationMode.Person) {
+            AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
+            AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
+        } else if (isNaN(filter["threadId"])) {
             AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
         } else {
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)

@@ -446,6 +446,10 @@ ApplicationWindow {
             }
         }
 
+        function getContacts() {
+            return contacts
+        }
+
         function getApps() {
             return appGrid.children[0].item.getAllApps()
         }
@@ -861,9 +865,9 @@ ApplicationWindow {
                         mainView.contacts = mainView.loadingContacts.slice()
                         mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
-                        springboardLoader.active = false
-                        springboardLoader.sourceComponent = Qt.createComponent("/Springboard.qml", mainView)
-                        springboardLoader.active = active
+//                        springboardLoader.active = false
+//                        springboardLoader.sourceComponent = Qt.createComponent("/Springboard.qml", mainView)
+//                        springboardLoader.active = active
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
