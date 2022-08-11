@@ -223,7 +223,7 @@ ApplicationWindow {
             {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true},
             {"id" : "org.mozilla.fennec_fdroid", "name": "Web Browser", "activated": true},
             {"id" : "com.secuso.privacyFriendlyCodeScanner", "name": "QR Scanner", "activated": true},
-            {"id" : "tel:08009594939", "name": "EURO WALDBRAND", "activated": true},
+            {"id" : "tel:+498009594939", "name": "EURO WALDBRAND", "activated": true},
             {"id" : "https://www.112-login.com", "namr": "112-LOGIN", "activated": true}]
         property var timeStamp: 0
         property var lastCheckOfThreads: 0
