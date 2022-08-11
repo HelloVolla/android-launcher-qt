@@ -27,8 +27,65 @@ Page {
     property bool roundedShortcutMenu: true
 
     background: Rectangle {
+        id: springBoardBg
         anchors.fill: parent
         color: "transparent"
+
+        property int factor: 1
+
+        Image {
+            id: brandLogo
+            source: Qt.resolvedUrl("/images/brand-logo.png")
+            width: parent.width - mainView.innerSpacing * 2 * springBoardBg.factor
+            fillMode: Image.PreserveAspectFit
+            anchors.left: parent.left
+            anchors.leftMargin: mainView.innerSpacing * springBoardBg.factor
+            anchors.bottom: sponsorBox.top
+            anchors.bottomMargin: 10
+        }
+
+        Rectangle {
+            id: sponsorBox
+            anchors.left: parent.left
+            anchors.leftMargin: mainView.innerSpacing * springBoardBg.factor
+            anchors.right: parent.right
+            anchors.rightMargin: mainView.innerSpacing * springBoardBg.factor
+            y: parent.height - height + radius
+            //anchors.bottom: parent.bottom
+            //anchors.bottomMargin: mainView.innerSpacing * springBoardBg.factor
+            height: parent.height * 0.5 - brandLogo.height - 10 - anchors.bottomMargin
+            color: "white"
+            radius: 10 // rootMenuButton.radius
+
+            Column {
+                width: parent.width
+                padding: mainView.innerSpacing
+                spacing: mainView.innerSpacing
+
+                Label {
+                    width: parent.width - mainView.innerSpacing * 2
+                    text: "Dieses Endgerät wird zur Verfügung gestellt von"
+                    color: "black"
+                    wrapMode: Text.WordWrap
+                    font.pointSize: mainView.largeFontSize
+                }
+
+                Image {
+                    id: sponsorImage
+                    height: 60
+                    fillMode: Image.PreserveAspectFit
+                }
+
+                Label {
+                    width: parent.width - mainView.innerSpacing * 2
+                    text: "Vielen Dank für Deinen täglichen Einsatz!"
+                    color: "black"
+                    wrapMode: Text.WordWrap
+                    font.pointSize: mainView.largeFontSize
+                    font.weight: Font.Bold
+                }
+            }
+        }
     }
 
     onTextInputChanged: {
@@ -46,6 +103,8 @@ Page {
         }
         eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S.*)")
         eventRegex = new RegExp(eventRegexStr, "gim")
+
+        AN.SystemDispatcher.dispatch("volla.launcher.sponsorImageAction", {})
     }
 
     function updateShortcuts(actions) {
@@ -579,6 +638,11 @@ Page {
                     if (message["sent"]) {
                         textInputArea.text = ""
                     }
+                } else if (type === "volla.launcher.sponsorImageResponse") {
+                    console.log("Springboard | onDispatched: " + type)
+                    if (message["imageUrl"] !== undefined) {
+                        sponsorImage.source = Qt.resolvedUrl(message["imageUrl"])
+                    }
                 }
             }
         }
@@ -754,6 +818,8 @@ Page {
                     console.log("Springboard | Open app or shortcut")
                     if (selectedMenuItem.actionId.startsWith("http")) {
                         // Workaround for web shortcuts
+                        Qt.openUrlExternally(selectedMenuItem.actionId)
+                    } else if (selectedMenuItem.actionId.startsWith("tel")) {
                         Qt.openUrlExternally(selectedMenuItem.actionId)
                     } else {
                         AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
