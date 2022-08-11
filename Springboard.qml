@@ -161,10 +161,10 @@ Page {
                 if (selectedObj === undefined) {
                     console.log("Try to guess contact")
                     var i = textInput.indexOf(" ")
-                    var contacts = mainView.contacts.filter(checkContacts)
+                    var contacts = mainView.getContacts().filter(checkContacts)
 
                     if (contacts.length === 1) {
-                        console.log("Found contact")
+                        console.log("Springboard | Found contact")
                         selectedObj = contacts[0]
                     }
                 }
@@ -490,7 +490,7 @@ Page {
                         break;
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
-                        selectedObj = Object.assign({}, actionObj)
+                        selectedObj = JSON.parse(JSON.stringify(actionObj))
                         actionValue = "@" + actionValue.replace(/\s/g, "_")
                         textInputArea.text = textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue + " "
                         textInputArea.cursorPosition = textInput.length
@@ -506,7 +506,7 @@ Page {
                 } else if (!springBoardWorker.isRunning) {
                     springBoardWorker.sendMessage({
                         'selectedObj': selectedObj, 'textInput': textInput,
-                        'contacts': mainView.contacts, 'model': listModel, 'actionType': mainView.actionType,
+                        'contacts': mainView.getContacts(), 'model': listModel, 'actionType': mainView.actionType,
                         'actionName': mainView.actionName, 'eventRegex': eventRegex
                     })
                 }

@@ -637,7 +637,7 @@ Page {
                 }
             })
 
-            var contacts = mainView.contacts.filter(checkStarredOrRecent)
+            var contacts = mainView.getContacts().filter(checkStarredOrRecent)
             contacts.forEach(function (contact, index) {
                 console.log("Collections | Matched contact: " + contact["name"])
                 var cContact = {c_ID: contact["id"]}
@@ -757,12 +757,12 @@ Page {
                     break
                 }
             }
-            for (i = 0; i < mainView.contacts.length; i++) {
-                aContact = mainView.contacts[i]
+            for (i = 0; i < mainView.getContacts().length; i++) {
+                aContact = mainView.getContacts()[i]
                 if (aContact["id"] === contactId) {
                     console.log("Collections | Contact in contacts matched")
                     aContact["icon"] = contactImage
-                    mainView.contacts[i] = aContact
+                    mainView.getContacts()[i] = aContact
                     break
                 }
             }
@@ -880,7 +880,7 @@ Page {
                     return matched
                 }
 
-                var contact = mainView.contacts.find(checkMatchigThread)
+                var contact = mainView.getContacts().find(checkMatchigThread)
 
                 if (contact !== undefined) {
                     cThread.c_TITLE = contact["name"]
