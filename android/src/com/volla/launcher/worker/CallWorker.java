@@ -50,7 +50,8 @@ public class CallWorker {
                         }
                     };
 
-                    activity.runOnUiThread(runnable);
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 } else if (type.equals(GET_CONVERSATION)) {
                     Runnable runnable = new Runnable () {
                         public void run() {
