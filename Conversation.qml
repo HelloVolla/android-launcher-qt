@@ -806,11 +806,11 @@ Page {
             if (type === "volla.launcher.conversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.messages = conversationPage.messages.concat(message["messages"])
-                message["messages"].forEach(function (message, index) {
-                    for (const [messageKey, messageValue] of Object.entries(message)) {
-                        console.log("Conversation | * " + messageKey + ": " + messageValue)
-                    }
-                })
+//                message["messages"].forEach(function (message, index) {
+//                    for (const [messageKey, messageValue] of Object.entries(message)) {
+//                        console.log("Conversation | * " + messageKey + ": " + messageValue)
+//                    }
+//                })
                 conversationPage.updateListMocel()
             } else if (type === "volla.launcher.signalMessagesResponse") {
                 console.log("Conversation | onDispatched: " + type)
