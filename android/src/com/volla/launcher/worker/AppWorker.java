@@ -106,6 +106,7 @@ public class AppWorker
                                     for (UsageStats us : queryUsageStats) {
                                         if (us.getPackageName() == ri.activityInfo.packageName) {
                                             timeInForeground = us.getTotalTimeInForeground();
+                                            break;
                                         }
                                     }
                                     if (mostUsed.contains(ri.activityInfo.packageName)) {

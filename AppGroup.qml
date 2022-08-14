@@ -55,6 +55,7 @@ Item {
     }
 
     onDesaturationChanged: {
+        console.log("AppGroup " + groupIndex + " | onDesaturationChanged to " + desaturation)
         groupGrid.forceLayout()
     }
 

@@ -121,7 +121,7 @@ Page {
             apps = getAllApps()
             appLauncher.destroyAppGroups()
             appLauncher.createAppGroups(getGroupedApps(apps))
-        } else if (key === "useColoredIcons") {
+        } else if (key === "coloredIcons") {
             settings.useColoredIcons = value
             for (i = 0; i < appLauncher.appGroups.length; i++) {
                 appGroup = appLauncher.appGroups[i]
@@ -423,12 +423,12 @@ Page {
         target: AN.SystemDispatcher
         onDispatched: {
             if (type === "volla.launcher.appCountResponse") {
-                if (message["appCount"] !== appLauncher.appCount) {
+                //if (message["appCount"] !== appLauncher.appCount) {
                     console.log("AppGrid | Number of apps: " + message["appCount"], ", " + appLauncher.appCount)
                     appLauncher.appCount = message["appCount"]
                     mainView.updateSpinner(true)
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
-                }
+                //}
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
                 settings.sync()
