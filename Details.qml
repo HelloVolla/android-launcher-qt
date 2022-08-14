@@ -303,7 +303,7 @@ Page {
             textFormat: Text.RichText
             verticalAlignment: Text.AlignTop
             background: Rectangle {
-                color:  mainView.backgroundOpacity === 1.0 ? "green" : "transparent"
+                color: "transparent"
                 border.color: "transparent"
             }
 
