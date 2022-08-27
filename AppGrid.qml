@@ -84,6 +84,8 @@ Page {
     property int selectedGroup: 0
     property int maxAppCount: 12
 
+    property double lastAppsCheck: 0.0
+
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
@@ -423,15 +425,19 @@ Page {
         target: AN.SystemDispatcher
         onDispatched: {
             if (type === "volla.launcher.appCountResponse") {
-                //if (message["appCount"] !== appLauncher.appCount) {
+                if (message["appCount"] !== appLauncher.appCount) {
                     console.log("AppGrid | Number of apps: " + message["appCount"], ", " + appLauncher.appCount)
                     appLauncher.appCount = message["appCount"]
                     mainView.updateSpinner(true)
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
-                //}
+                } else if (new Date().valueOf() - appLauncher.lastAppsCheck > 3600000) {
+                    console.debug("AppGrid | Will update statistics")
+                    AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
+                }
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
                 settings.sync()
+                appLauncher.lastAppsCheck = new Date().valueOf()
                 var groupedApps = appLauncher.getGroupedApps(message["apps"])
                 if (appLauncher.appGroups.length !== groupedApps.lemgth) {
                     for (var i = 0; i < appLauncher.appGroups.length; i++) {
