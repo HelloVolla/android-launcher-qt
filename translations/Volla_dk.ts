@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="dk_DK">
+<TS version="2.1" language="da_DK">
 <context>
     <name>AppGrid</name>
     <message>
@@ -49,7 +49,11 @@
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="unfinished">Den fastgjorte genvej findes allerede</translation>
+        <translation type="obsolete">Den fastgjorte genvej findes allerede</translation>
+    </message>
+    <message>
+        <source>Pinned shortcut allready exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -235,7 +239,7 @@
     </message>
     <message>
         <source>Keep existing password</source>
-        <translation type="unfinished">Behold adgangskode</translation>
+        <translation type="obsolete">Behold adgangskode</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -336,6 +340,10 @@
     <message>
         <source>Reload contacts</source>
         <translation type="unfinished">Genindlæs kontakter</translation>
+    </message>
+    <message>
+        <source>Keep existing Password</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -577,7 +585,7 @@
     </message>
     <message>
         <source>You have already subscribed the feed</source>
-        <translation type="unfinished">Du har allerede abonneret på feedet</translation>
+        <translation type="obsolete">Du har allerede abonneret på feedet</translation>
     </message>
     <message>
         <source>Invalid news ID</source>
@@ -585,7 +593,7 @@
     </message>
     <message>
         <source>Error because of too many redirects</source>
-        <translation type="unfinished">Fejl på grund af for mange videresendelser</translation>
+        <translation type="obsolete">Fejl på grund af for mange videresendelser</translation>
     </message>
     <message>
         <source>Could not load a valid feed</source>
@@ -601,7 +609,7 @@
     </message>
     <message>
         <source>You have already added the shortcut</source>
-        <translation type="unfinished">Ny Du har allerede tilføjet genvejen</translation>
+        <translation type="obsolete">Ny Du har allerede tilføjet genvejen</translation>
     </message>
     <message>
         <source>Reset successful</source>
@@ -610,6 +618,18 @@
     <message>
         <source>Not yet supported</source>
         <translation type="unfinished">Endnu ikke understøttet</translation>
+    </message>
+    <message>
+        <source>You have alresdy subscribed the feed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error because of too much redirects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have alresdy added the shortcut</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

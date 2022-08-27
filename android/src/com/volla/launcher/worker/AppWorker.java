@@ -66,7 +66,7 @@ public class AppWorker
                             List<UsageStats> queryUsageStats = new LinkedList();
 
                             if (checkUsagePermission(activity)) {
-                                long startTime = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000);
+                                long startTime = System.currentTimeMillis() - (7 * 86400000);
                                 long endTime = System.currentTimeMillis();
 
                                 UsageStatsManager usageStatsManager = (UsageStatsManager)activity.getSystemService(Context.USAGE_STATS_SERVICE);
@@ -81,7 +81,7 @@ public class AppWorker
                             appList.ensureCapacity(availableActivities.size());
 
                             for (ResolveInfo ri:availableActivities) {
-                                //Log.d(TAG, "Found package " + ri.activityInfo.packageName);
+                                Log.d(TAG, "Found package " + ri.activityInfo.packageName);
 
                                 if (!packages.contains(ri.activityInfo.packageName)) {
                                     Map appInfo = new HashMap();
@@ -104,7 +104,7 @@ public class AppWorker
                                     long timeInForeground = 0;
 
                                     for (UsageStats us : queryUsageStats) {
-                                        if (us.getPackageName() == ri.activityInfo.packageName) {
+                                        if (us.getPackageName().equalsIgnoreCase(ri.activityInfo.packageName)) {
                                             timeInForeground = us.getTotalTimeInForeground();
                                             break;
                                         }
@@ -113,7 +113,7 @@ public class AppWorker
                                         timeInForeground = timeInForeground + 10; // fall back for missing stats
                                     }
 
-                                    //Log.d(TAG, "Statistic: " + timeInForeground);
+                                    Log.d(TAG, "Statistic: " + timeInForeground);
 
                                     appInfo.put("statistic", (int)timeInForeground);
                                     appList.add(appInfo);

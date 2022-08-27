@@ -444,6 +444,10 @@ ApplicationWindow {
         }
 
         function getContacts() {
+            if (contacts === undefined) {
+                var contactsStr = contactsCache.readPrivate()
+                contacts = contactsStr.length === 0 ? new Array : JSON.parse(contactsStr)
+            }
             return contacts
         }
 
