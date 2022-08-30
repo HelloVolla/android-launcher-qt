@@ -224,7 +224,7 @@ ApplicationWindow {
             {"id" : "org.mozilla.fennec_fdroid", "name": "Web Browser", "activated": true},
             {"id" : "com.secuso.privacyFriendlyCodeScanner", "name": "QR Scanner", "activated": true},
             {"id" : "tel:+498009594939", "name": "EURO WALDBRAND", "activated": true},
-            {"id" : "https://www.112-login.com", "namr": "112-LOGIN", "activated": true}]
+            {"id" : "https://www.112-login.com", "name": "112-LOGIN", "activated": true}]
         property var timeStamp: 0
         property var lastCheckOfThreads: 0
         property var lastCheckOfCalls: 0
@@ -952,7 +952,7 @@ ApplicationWindow {
         property bool firstStart: true
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
-        property bool useHapticMenus: false
+        property bool useHapticMenus: true
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
 
