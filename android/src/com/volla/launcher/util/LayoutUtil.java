@@ -207,7 +207,7 @@ public class LayoutUtil {
         final Map<String, String> map
             = Arrays.stream(new String[][] {
                                 { "1", "/images/sponsor-logo-bfe.png" },
-                                { "2", "/images/sponsor-logo-bfe.png" },
+                                { "2", "/images/sponsor-logo-bfe.png" } })
                     .collect(Collectors.toMap(keyMapper -> keyMapper[0], valueMapper -> valueMapper[1]));   
 
         return map.get(deviceId) != null ? map.get(deviceId) : map.get("1");
