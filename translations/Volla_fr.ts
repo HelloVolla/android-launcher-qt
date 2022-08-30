@@ -227,23 +227,23 @@
 <context>
     <name>Conversation</name>
     <message>
-        <location filename="../Conversation.qml" line="205"/>
+        <location filename="../Conversation.qml" line="209"/>
         <source>Conversation</source>
         <translation type="unfinished">Conversation</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="244"/>
+        <location filename="../Conversation.qml" line="248"/>
         <source>Filter messages ...</source>
         <translation type="unfinished">Filtrer les messages ...</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="379"/>
+        <location filename="../Conversation.qml" line="383"/>
         <source>Type your message</source>
         <translation type="unfinished">Tapez votre message</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="692"/>
-        <location filename="../Conversation.qml" line="795"/>
+        <location filename="../Conversation.qml" line="696"/>
+        <location filename="../Conversation.qml" line="799"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Pas encore supporté </translation>
     </message>
@@ -752,7 +752,7 @@
     </message>
     <message>
         <location filename="../main.qml" line="168"/>
-        <location filename="../main.qml" line="219"/>
+        <location filename="../main.qml" line="220"/>
         <source>Show Notes</source>
         <translation type="unfinished">Montrer les notes</translation>
     </message>
@@ -807,28 +807,28 @@
         <translation type="unfinished">message non délivré</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="214"/>
+        <location filename="../main.qml" line="215"/>
         <source>Show Dialer</source>
         <translation type="unfinished">Composer numéro</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="215"/>
+        <location filename="../main.qml" line="216"/>
         <source>Camera</source>
         <translation type="unfinished">caméra</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="217"/>
+        <location filename="../main.qml" line="218"/>
         <source>Agenda</source>
         <translation type="unfinished">Agenda</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="772"/>
-        <location filename="../main.qml" line="777"/>
+        <location filename="../main.qml" line="797"/>
+        <location filename="../main.qml" line="802"/>
         <source>Reset successful</source>
         <translation type="unfinished">Réinitialisation réussie</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="216"/>
+        <location filename="../main.qml" line="217"/>
         <source>Gallery</source>
         <translation type="unfinished">Galerie</translation>
     </message>
@@ -837,79 +837,79 @@
         <translation type="obsolete">notes</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="218"/>
+        <location filename="../main.qml" line="219"/>
         <source>Create Event</source>
         <translation type="unfinished">Créer un événement</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="222"/>
+        <location filename="../main.qml" line="223"/>
         <source>Recent People</source>
         <translation type="unfinished">Contacts récents</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="221"/>
+        <location filename="../main.qml" line="222"/>
         <source>Recent Threads</source>
         <translation type="unfinished">fils récents</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="220"/>
+        <location filename="../main.qml" line="221"/>
         <source>Recent News</source>
         <translation type="unfinished">nouvelles récentes</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="423"/>
+        <location filename="../main.qml" line="424"/>
         <source>Just now</source>
         <translation type="unfinished">Maintenant</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="425"/>
+        <location filename="../main.qml" line="426"/>
         <source>minutes ago</source>
         <translation type="unfinished">Il y a quelques minutes</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="428"/>
-        <location filename="../main.qml" line="430"/>
+        <location filename="../main.qml" line="429"/>
+        <location filename="../main.qml" line="431"/>
         <source>Today</source>
         <translation type="unfinished">Aujourd&apos;hui</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="434"/>
-        <location filename="../main.qml" line="436"/>
+        <location filename="../main.qml" line="435"/>
+        <location filename="../main.qml" line="437"/>
         <source>Yesterday</source>
         <translation type="unfinished">Hier</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="474"/>
+        <location filename="../main.qml" line="483"/>
         <source>New Subscrption</source>
         <translation type="unfinished">nouvel abonnement</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="476"/>
+        <location filename="../main.qml" line="485"/>
         <source>You have alresdy subscribed the feed</source>
         <translation type="unfinished">Vous êtes déjà abonné à ce flux</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="499"/>
+        <location filename="../main.qml" line="508"/>
         <source>Invalid news ID</source>
         <translation type="unfinished">ID des nouvelles invalide</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="530"/>
+        <location filename="../main.qml" line="539"/>
         <source>Error because of too much redirects</source>
         <translation type="unfinished">Erreur due à un trop grand nombre de redirections</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="542"/>
+        <location filename="../main.qml" line="551"/>
         <source>Could not load a valid feed</source>
         <translation type="unfinished">Impossible de charger un flux valide</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="666"/>
+        <location filename="../main.qml" line="675"/>
         <source>New shortcut</source>
         <translation type="unfinished">nouveau raccourci</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="668"/>
+        <location filename="../main.qml" line="677"/>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished">vous avez déjà ajouté le raccourci</translation>
     </message>
@@ -923,7 +923,7 @@
         <translation type="obsolete">Vous êtes déjà abonné à la chaîne</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="559"/>
+        <location filename="../main.qml" line="568"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Flux RSS invalide</translation>
     </message>
@@ -932,7 +932,7 @@
         <translation type="obsolete">Le message a été envoyé</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="950"/>
+        <location filename="../main.qml" line="975"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Pas encore supporté</translation>
     </message>

@@ -84,6 +84,8 @@ Page {
     property int selectedGroup: 0
     property int maxAppCount: 12
 
+    property double lastAppsCheck: 0.0
+
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
@@ -121,7 +123,7 @@ Page {
             apps = getAllApps()
             appLauncher.destroyAppGroups()
             appLauncher.createAppGroups(getGroupedApps(apps))
-        } else if (key === "useColoredIcons") {
+        } else if (key === "coloredIcons") {
             settings.useColoredIcons = value
             for (i = 0; i < appLauncher.appGroups.length; i++) {
                 appGroup = appLauncher.appGroups[i]
@@ -428,10 +430,14 @@ Page {
                     appLauncher.appCount = message["appCount"]
                     mainView.updateSpinner(true)
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
+                } else if (new Date().valueOf() - appLauncher.lastAppsCheck > 3600000) {
+                    console.debug("AppGrid | Will update statistics")
+                    AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
                 }
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
                 settings.sync()
+                appLauncher.lastAppsCheck = new Date().valueOf()
                 var groupedApps = appLauncher.getGroupedApps(message["apps"])
                 if (appLauncher.appGroups.length !== groupedApps.lemgth) {
                     for (var i = 0; i < appLauncher.appGroups.length; i++) {
