@@ -1380,7 +1380,6 @@ Page {
                         }
                     }
 
-
                     Button {
                         id: resetSettingsItemButton
                         width: parent.width
