@@ -45,9 +45,11 @@ Page {
 
         onKeyboardRectangleChanged: {
             console.log("Conversation | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
+            console.log("Conversation | Desktop available height: " + Screen.desktopAvailableHeight)
+            console.log("Conversation | Pixel Ratio: " + Screen.devicePixelRatio)
 
             var delta = Qt.inputMethod.keyboardRectangle.height === 0
-                    ? 0 : mainWindow.visibility === 5 ? conversationPage.navBarHeight + 45 : conversationPage.navBarHeight // estimated navigation bar height
+                    ? 0 : mainWindow.visibility === 5 ? conversationPage.navBarHeight + Screen.desktopAvailableHeight / 16 : conversationPage.navBarHeight // estimated navigation bar height
 
             listView.height = Screen.desktopAvailableHeight - Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio - delta
             listView.positionViewAtEnd()
