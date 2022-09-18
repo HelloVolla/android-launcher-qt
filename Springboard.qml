@@ -87,8 +87,8 @@ Page {
                 }
             }
             TextArea {
-                padding: mainView.innerSpacing
                 id: textArea
+                padding: mainView.innerSpacing
                 x: mainView.innerSpacing
                 width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Type anything")
