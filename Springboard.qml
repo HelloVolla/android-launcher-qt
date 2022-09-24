@@ -48,6 +48,18 @@ Page {
         eventRegex = new RegExp(eventRegexStr, "gim")
     }
 
+    Connections {
+        target: Qt.inputMethod
+
+        onKeyboardRectangleChanged: {
+            console.log("Springboard | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
+
+            if (Qt.inputMethod.keyboardRectangle.height === 0) {
+                shortcutMenu.forceActiveFocus()
+            }
+        }
+    }
+
     function updateShortcuts(actions) {
         shortcutMenu.updateShortcuts(actions)
     }
