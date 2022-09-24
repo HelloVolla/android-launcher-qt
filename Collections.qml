@@ -982,176 +982,180 @@ Page {
         function loadData() {
             // Iterate over rss feeds to the the first item
             rssFeeds = mainView.getFeeds()
-            rssFeeds.forEach(function (rssFeed, index) {
-                if (rssFeed.activated === true) {
-                    console.log("Collections | Create request for " + rssFeed.id)
-                    var doc = new XMLHttpRequest();
-                    doc.onreadystatechange = function() {
-                        if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                            console.log("Collections | Received header status of " + rssFeed.name + ": " + doc.status);
-                            if (doc.status >= 400) {
-                                mainView.updateSpinner(false)
-                                mainView.showToast(qsTr("Could not load RSS feed: ") + rssFeed.name)
-                            }
-                        } else if (doc.readyState === XMLHttpRequest.DONE) {
-                            var cNews = {c_CHANNEL: rssFeed.id}
+            if (rssFeeds.length > 0) {
+                rssFeeds.forEach(function (rssFeed, index) {
+                    if (rssFeed.activated === true) {
+                        console.log("Collections | Create request for " + rssFeed.id)
+                        var doc = new XMLHttpRequest();
+                        doc.onreadystatechange = function() {
+                            if (doc.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                                console.log("Collections | Received header status of " + rssFeed.name + ": " + doc.status);
+                                if (doc.status >= 400) {
+                                    mainView.updateSpinner(false)
+                                    mainView.showToast(qsTr("Could not load RSS feed: ") + rssFeed.name)
+                                }
+                            } else if (doc.readyState === XMLHttpRequest.DONE) {
+                                var cNews = {c_CHANNEL: rssFeed.id}
 
-                            if (rssFeed.icon !== undefined) {
-                                cNews.c_ICON = rssFeed.icon
-                            } else {
-                                cNews.c_ICON = ""
-                            }
-
-                            console.log("Collections | XML of " + rssFeed.name + ": " + doc.responseXML)
-
-                            if (doc.responseXML !== null) {
-                                var rss = doc.responseXML.documentElement
-                                var channel
-                                if (rss.nodeName === "feed") {
-                                    channel = rss
+                                if (rssFeed.icon !== undefined) {
+                                    cNews.c_ICON = rssFeed.icon
                                 } else {
-                                    for (var i = 0; i < rss.childNodes.length; ++i) {
-                                        if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
-                                            channel = rss.childNodes[i]
-                                            break
-                                        }
-                                    }
-                                }
-                                if (channel === undefined) {
-                                    console.log("Collection | Missing rss channel")
-                                    mainView.showToast(qsTr("Invalid RSS feed: ") + rssFeed.name)
-                                    return
+                                    cNews.c_ICON = ""
                                 }
 
-                                var feedItem
-                                for (i = 0; i < channel.childNodes.length; ++i) {
-                                    if (channel.childNodes[i].nodeName === "title") {
-                                        var childNode = channel.childNodes[i]
-                                        var textNode = childNode.firstChild
-                                        cNews.c_STITLE = textNode.nodeValue + " • Feed"
-                                    }
-                                    if (channel.childNodes[i].nodeName === "item" || channel.childNodes[i].nodeName === "entry") {
-                                        feedItem = channel.childNodes[i]
-                                        cNews.c_TYPE = channel.childNodes[i].nodeName === "item" ? mainView.feedMode.RSS
-                                                                                                 : mainView.feedMode.Atom
-                                        break
-                                    }
-                                }
-                                if (feedItem === undefined) {
-                                    console.log("Collection | Missing rss feed item")
-                                    mainView.showToast(qsTr("Missing RSS item: ") + rssFeed.id)
-                                    return
-                                }
-                                for (i = 0; i < feedItem.childNodes.length; ++i) {
-                                    childNode = feedItem.childNodes[i]
-                                    textNode = childNode.firstChild
+                                console.log("Collections | XML of " + rssFeed.name + ": " + doc.responseXML)
 
-                                    if (childNode.nodeName === "title") {
-                                        if (textNode.nodeValue.length > maxTextLength) {
-                                            cNews.c_TEXT = textNode.nodeValue.slice(0, maxTextLength) + "…"
-                                        } else {
-                                            cNews.c_TEXT = textNode.nodeValue
-                                        }
-                                    }
-                                    else if (childNode.nodeName === "pubDate" || childNode.nodeName === "published") {
-                                        var date = new Date(textNode.nodeValue)
-                                        cNews.c_TSTAMP = date.valueOf()
-                                        cNews.c_STEXT = mainView.parseTime(date.valueOf())
-                                    }
-                                    else if (childNode.nodeName === "link") {                                        
-                                        if (textNode && textNode.nodeValue !== undefined) {
-                                            cNews.c_ID = textNode.nodeValue
-                                        } else {
-                                            var isImage = false
-                                            for (var ii = 0; ii < childNode.attributes.length; ++ii) {
-                                                var attribute = childNode.attributes[ii]
-                                                if (attribute.name === "rel" && attribute.value === "enclosure") {
-                                                    isImage = true
-                                                } else if (attribute.name === "href") {
-                                                    if (isImage) {
-                                                        console.log("MainView | Image: " + attribute.value)
-                                                        cNews.c_IMAGE = attribute.value
-                                                        break
-                                                    } else {
-                                                        console.log("MainView | Link: " + attribute.value)
-                                                        cNews.c_ID = attribute.value
-                                                        break
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
-                                            cNews.c_BADGE = true
-                                        }
-                                    }
-                                    else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail") {
-                                        for (ii = 0; ii < childNode.attributes.length; ++ii) {
-                                            attribute = childNode.attributes[ii]
-                                            if (attribute.name === "url") {
-                                                console.log("Collections | Image: " + attribute.value)
-                                                cNews.c_IMAGE = attribute.value
+                                if (doc.responseXML !== null) {
+                                    var rss = doc.responseXML.documentElement
+                                    var channel
+                                    if (rss.nodeName === "feed") {
+                                        channel = rss
+                                    } else {
+                                        for (var i = 0; i < rss.childNodes.length; ++i) {
+                                            if (rss.childNodes[i].nodeName === "channel" || rss.childNodes[i].nodeName === "feed") {
+                                                channel = rss.childNodes[i]
                                                 break
                                             }
                                         }
                                     }
-                                }
-                            } else if (doc.responseText !== null) {
-                                console.log("Collections | Use fall back for " + rssFeed.name)
-                                cNews.c_STITLE = rssFeed.name + " • Feed"
+                                    if (channel === undefined) {
+                                        console.log("Collection | Missing rss channel")
+                                        mainView.showToast(qsTr("Invalid RSS feed: ") + rssFeed.name)
+                                        return
+                                    }
 
-                                var xmlString = doc.responseText
-                                var startTag = "<item>"
-                                var closeTag = "</item>"
-                                var start = xmlString.indexOf(startTag, 0) + startTag.length
-                                var end = xmlString.indexOf(closeTag, 0)
-                                xmlString = xmlString.slice(start, end)
+                                    var feedItem
+                                    for (i = 0; i < channel.childNodes.length; ++i) {
+                                        if (channel.childNodes[i].nodeName === "title") {
+                                            var childNode = channel.childNodes[i]
+                                            var textNode = childNode.firstChild
+                                            cNews.c_STITLE = textNode.nodeValue + " • Feed"
+                                        }
+                                        if (channel.childNodes[i].nodeName === "item" || channel.childNodes[i].nodeName === "entry") {
+                                            feedItem = channel.childNodes[i]
+                                            cNews.c_TYPE = channel.childNodes[i].nodeName === "item" ? mainView.feedMode.RSS
+                                                                                                     : mainView.feedMode.Atom
+                                            break
+                                        }
+                                    }
+                                    if (feedItem === undefined) {
+                                        console.log("Collection | Missing rss feed item")
+                                        mainView.showToast(qsTr("Missing RSS item: ") + rssFeed.id)
+                                        return
+                                    }
+                                    for (i = 0; i < feedItem.childNodes.length; ++i) {
+                                        childNode = feedItem.childNodes[i]
+                                        textNode = childNode.firstChild
 
-                                console.log("Collections | Start and end of item: " + start + ", " + end)
-                                console.log("Collection | Item: " + xmlString)
+                                        if (childNode.nodeName === "title") {
+                                            if (textNode.nodeValue.length > maxTextLength) {
+                                                cNews.c_TEXT = textNode.nodeValue.slice(0, maxTextLength) + "…"
+                                            } else {
+                                                cNews.c_TEXT = textNode.nodeValue
+                                            }
+                                        }
+                                        else if (childNode.nodeName === "pubDate" || childNode.nodeName === "published") {
+                                            var date = new Date(textNode.nodeValue)
+                                            cNews.c_TSTAMP = date.valueOf()
+                                            cNews.c_STEXT = mainView.parseTime(date.valueOf())
+                                        }
+                                        else if (childNode.nodeName === "link") {
+                                            if (textNode && textNode.nodeValue !== undefined) {
+                                                cNews.c_ID = textNode.nodeValue
+                                            } else {
+                                                var isImage = false
+                                                for (var ii = 0; ii < childNode.attributes.length; ++ii) {
+                                                    var attribute = childNode.attributes[ii]
+                                                    if (attribute.name === "rel" && attribute.value === "enclosure") {
+                                                        isImage = true
+                                                    } else if (attribute.name === "href") {
+                                                        if (isImage) {
+                                                            console.log("MainView | Image: " + attribute.value)
+                                                            cNews.c_IMAGE = attribute.value
+                                                            break
+                                                        } else {
+                                                            console.log("MainView | Link: " + attribute.value)
+                                                            cNews.c_ID = attribute.value
+                                                            break
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
+                                                cNews.c_BADGE = true
+                                            }
+                                        }
+                                        else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail") {
+                                            for (ii = 0; ii < childNode.attributes.length; ++ii) {
+                                                attribute = childNode.attributes[ii]
+                                                if (attribute.name === "url") {
+                                                    console.log("Collections | Image: " + attribute.value)
+                                                    cNews.c_IMAGE = attribute.value
+                                                    break
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else if (doc.responseText !== null) {
+                                    console.log("Collections | Use fall back for " + rssFeed.name)
+                                    cNews.c_STITLE = rssFeed.name + " • Feed"
 
-                                startTag = "<title><![CDATA["
-                                closeTag = "]]></title>"
-                                start = xmlString.indexOf(startTag) + startTag.length
-                                end = xmlString.indexOf(closeTag)
-                                if (start === -1) {
-                                    startTag = "<title>"
-                                    closeTag = "</title>"
+                                    var xmlString = doc.responseText
+                                    var startTag = "<item>"
+                                    var closeTag = "</item>"
+                                    var start = xmlString.indexOf(startTag, 0) + startTag.length
+                                    var end = xmlString.indexOf(closeTag, 0)
+                                    xmlString = xmlString.slice(start, end)
+
+                                    console.log("Collections | Start and end of item: " + start + ", " + end)
+                                    console.log("Collection | Item: " + xmlString)
+
+                                    startTag = "<title><![CDATA["
+                                    closeTag = "]]></title>"
                                     start = xmlString.indexOf(startTag) + startTag.length
                                     end = xmlString.indexOf(closeTag)
+                                    if (start === -1) {
+                                        startTag = "<title>"
+                                        closeTag = "</title>"
+                                        start = xmlString.indexOf(startTag) + startTag.length
+                                        end = xmlString.indexOf(closeTag)
+                                    }
+                                    cNews.c_TEXT = xmlString.slice(start, end)
+
+                                    console.log("Collections | Start and end of item: " + start + ", " + end)
+                                    console.log("Collection | Title: " + xmlString.slice(start, end))
+
+                                    startTag = "<pubDate>"
+                                    closeTag = "</pubDate>"
+                                    start = xmlString.indexOf(startTag) + startTag.length
+                                    end = xmlString.indexOf(closeTag)
+                                    date = new Date(xmlString.slice(start, end))
+                                    cNews.c_TSTAMP = date.valueOf()
+                                    cNews.c_STEXT = mainView.parseTime(date.valueOf())
+
+                                    startTag = "<link>"
+                                    closeTag = "</link>"
+                                    start = xmlString.indexOf(startTag) + startTag.length
+                                    end = xmlString.indexOf(closeTag)
+                                    cNews.c_ID = xmlString.slice(start, end)
+
+                                    if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
+                                        cNews.c_BADGE = true
+                                    }
                                 }
-                                cNews.c_TEXT = xmlString.slice(start, end)
 
-                                console.log("Collections | Start and end of item: " + start + ", " + end)
-                                console.log("Collection | Title: " + xmlString.slice(start, end))
-
-                                startTag = "<pubDate>"
-                                closeTag = "</pubDate>"
-                                start = xmlString.indexOf(startTag) + startTag.length
-                                end = xmlString.indexOf(closeTag)
-                                var date = new Date(xmlString.slice(start, end))
-                                cNews.c_TSTAMP = date.valueOf()
-                                cNews.c_STEXT = mainView.parseTime(date.valueOf())
-
-                                startTag = "<link>"
-                                closeTag = "</link>"
-                                start = xmlString.indexOf(startTag) + startTag.length
-                                end = xmlString.indexOf(closeTag)
-                                cNews.c_ID = xmlString.slice(start, end)
-
-                                if (rssFeed["recent"] === undefined || rssFeed["recent"] !== cNews.c_ID) {
-                                    cNews.c_BADGE = true
-                                }
+                                modelArr.push(cNews)
+                                mainView.updateSpinner(false)
+                                update(collectionPage.textInput)
                             }
-
-                            modelArr.push(cNews)
-                            mainView.updateSpinner(false)
-                            update(collectionPage.textInput)
                         }
+                        doc.open("GET", rssFeed.id)
+                        doc.send()
                     }
-                    doc.open("GET", rssFeed.id)
-                    doc.send()
-                }
-            })
+                })
+            } else {
+                mainView.updateSpinner(false)
+            }
         }
 
         function update (text) {

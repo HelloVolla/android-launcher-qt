@@ -182,7 +182,7 @@ Page {
                 groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
             }
         } else {
-            groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
+            groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps } )
         }
 
         return groupedApps

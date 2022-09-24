@@ -107,6 +107,18 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.sponsorImageAction", {})
     }
 
+    Connections {
+        target: Qt.inputMethod
+
+        onKeyboardRectangleChanged: {
+            console.log("Springboard | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
+
+            if (Qt.inputMethod.keyboardRectangle.height === 0) {
+                shortcutMenu.forceActiveFocus()
+            }
+        }
+    }
+
     function updateShortcuts(actions) {
         shortcutMenu.updateShortcuts(actions)
     }
@@ -146,8 +158,8 @@ Page {
                 }
             }
             TextArea {
-                padding: mainView.innerSpacing
                 id: textArea
+                padding: mainView.innerSpacing
                 x: mainView.innerSpacing
                 width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Type anything")

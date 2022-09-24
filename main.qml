@@ -286,7 +286,7 @@ ApplicationWindow {
                 }
                 item = itemAt(swipeIndex.Collections)
             }
-            currentIndex++
+            currentIndex = swipeIndex.Collections
             item.children[0].item.updateCollectionPage(mode)
         }
 
@@ -750,6 +750,7 @@ ApplicationWindow {
         }
 
         function removeNote(id) {
+            console.log("MainView | Remove note " + id)
             var notesArr = mainView.getNotes()
             var index = notesArr.findIndex( element => {
                 if (element.id === id) {
@@ -757,7 +758,7 @@ ApplicationWindow {
                 }
             })
             if (index > -1) {
-                notesDict = notesArr.slice(index, 1)
+                notesArr.splice(index, 1)
                 notesStore.write(JSON.stringify(notesArr))
                 notes = notesArr
             }
@@ -895,7 +896,7 @@ ApplicationWindow {
                     if (message["wallpaper"] !== undefined && settings.theme !== mainView.theme.Translucent) {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                         mainView.wallpaperId = message["wallpaperId"]
-                    } else if (mainView.wallpaperId !== "default") {
+                    } else {
                         mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
                         mainView.wallpaperId = "default"
                     }
