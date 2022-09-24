@@ -896,7 +896,7 @@ ApplicationWindow {
                     if (message["wallpaper"] !== undefined && settings.theme !== mainView.theme.Translucent) {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                         mainView.wallpaperId = message["wallpaperId"]
-                    } else if (mainView.wallpaperId !== "default") {
+                    } else {
                         mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
                         mainView.wallpaperId = "default"
                     }
