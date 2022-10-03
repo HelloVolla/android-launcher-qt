@@ -502,11 +502,18 @@ Page {
                         break;
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
-                        selectedObj = JSON.parse(JSON.stringify(actionObj))
-                        actionValue = "@" + actionValue.replace(/\s/g, "_")
-                        textInputArea.text = textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue + " "
-                        textInputArea.cursorPosition = textInput.length
-                        textInputArea.forceActiveFocus()
+                        if (actionObj !== undefined && actionValue !== undefined) {
+                            springBoard.selectedObj = JSON.parse(JSON.stringify(actionObj))
+                            actionValue = "@" + actionValue.replace(/\s/g, "_")
+                            textInputArea.text = textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue + " "
+                            textInputArea.cursorPosition = textInput.length
+                            textInputArea.forceActiveFocus()
+                        } else {
+                            mainView.showToast(qsTr("An error occured. Please try again."))
+                            textInputArea.text = ""
+                            textInputArea.forceActiveFocus()
+                        }
+                        break;
                 }
             }
 
@@ -517,7 +524,7 @@ Page {
                     listModel.clear()
                 } else if (!springBoardWorker.isRunning) {
                     springBoardWorker.sendMessage({
-                        'selectedObj': selectedObj, 'textInput': textInput,
+                        'selectedObj': springBoard.selectedObj, 'textInput': textInput,
                         'contacts': mainView.getContacts(), 'model': listModel, 'actionType': mainView.actionType,
                         'actionName': mainView.actionName, 'eventRegex': eventRegex
                     })

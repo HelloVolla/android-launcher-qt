@@ -133,7 +133,7 @@ Page {
     }
 
     function updateNotifications() {
-        AN.SystemDispatcher.dispatch("volla.launcher.callLogAction", {"is_read": 0})
+        AN.SystemDispatcher.dispatch("volla.launcher.callCountAction", {"is_read": 0})
         AN.SystemDispatcher.dispatch("volla.launcher.threadsCountAction", {"read": 0})
     }
 
@@ -448,8 +448,8 @@ Page {
                     appLauncher.createAppGroups(groupedApps)
                 } else {
                     for (i = 0; i < appLauncher.appGroups.length; i++) {
-                        appGroup = appLauncher.appGroups[i]
-                        appGroup.apps = groupedApps[i]["apps"]
+                        appLauncher.appGroup = appLauncher.appGroups[i]
+                        appLauncher.appGroup.apps = groupedApps[i]["apps"]
                     }
                 }
                 mainView.updateSpinner(false)

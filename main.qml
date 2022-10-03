@@ -444,11 +444,11 @@ ApplicationWindow {
         }
 
         function getContacts() {
-            if (contacts === undefined) {
+            if (mainView.contacts === undefined) {
                 var contactsStr = contactsCache.readPrivate()
-                contacts = contactsStr.length === 0 ? new Array : JSON.parse(contactsStr)
+                mainView.contacts = contactsStr.length === 0 ? new Array : JSON.parse(contactsStr)
             }
-            return contacts
+            return mainView.contacts
         }
 
         function getApps() {
@@ -843,11 +843,6 @@ ApplicationWindow {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | Contacts " + message["blockStart"] + " to " + message["blockEnd"])
                     mainView.loadingContacts = mainView.loadingContacts.concat(message["contacts"])
-//                    message["contacts"].forEach(function (aContact, index) {
-//                        for (const [aContactKey, aContactValue] of Object.entries(aContact)) {
-//                            console.log("MainView | * " + aContactKey + ": " + aContactValue)
-//                        }
-//                    })
                     if (mainView.loadingContacts.length === message["contactsCount"]) {
                         var d = new Date()
                         console.log("MainView | Retrieving contacts did take " + (d.valueOf() - mainView.timeStamp.valueOf()) + " seconds")
@@ -867,20 +862,15 @@ ApplicationWindow {
                         mainView.contacts = mainView.loadingContacts.slice()
                         mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
-//                        springboardLoader.active = false
-//                        springboardLoader.sourceComponent = Qt.createComponent("/Springboard.qml", mainView)
-//                        springboardLoader.active = active
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
                     if (message["needsSync"] && !mainView.isLoadingContacts) {
                         console.log("MainView | Need to sync contacts")
-                        if (mainView.contacts.length === 0) {
-                            mainView.loadingContacts = new Array
-                            mainView.isLoadingContacts = true
-                            mainView.updateSpinner(true)
-                        }
                         mainView.timeStamp = new Date()
+                        mainView.loadingContacts = new Array
+                        mainView.isLoadingContacts = true
+                        mainView.updateSpinner(true)
                         AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
                     } else if (mainView.contacts.length === 0 && !mainView.isLoadingContacts) {
                         mainView.timeStamp = new Date()

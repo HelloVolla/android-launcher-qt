@@ -24,6 +24,8 @@ public class CallWorker {
 
     public static final String GET_CALLS = "volla.launcher.callLogAction";
     public static final String GOT_CALLS = "volla.launcher.callLogResponse";
+    public static final String GET_CALL_COUNT = "volla.launcher.callCountAction";
+    public static final String GOT_CALL_COUNT = "volla.launcher.callCountResponse";
     public static final String GET_CONVERSATION = "volla.launcher.callConversationAction";
     public static final String GOT_CONVERSATION = "volla.launcher.callConversationResponse";
 
@@ -40,6 +42,23 @@ public class CallWorker {
                         public void run() {
                             if (activity.checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
                                 getCalls(message, GOT_CALLS, activity);
+                            } else {
+                                Map reply = new HashMap();
+                                ArrayList<Map> callList = new ArrayList();
+                                reply.put("calls", callList );
+                                reply.put("callsCount", callList.size() );
+                                SystemDispatcher.dispatch(GOT_CALLS, reply);
+                            }
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                } else if (type.equals(GET_CALL_COUNT)) {
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            if (activity.checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+                                getCalls(message, GOT_CALL_COUNT, activity);
                             } else {
                                 Map reply = new HashMap();
                                 ArrayList<Map> callList = new ArrayList();
@@ -135,42 +154,46 @@ public class CallWorker {
 
             int mesgCount = cursor.getCount();
             Log.d(TAG, "Call count = " + mesgCount );
-            callList.ensureCapacity(mesgCount);
 
             if (cursor != null)
             {
-                int index_id = cursor.getColumnIndex(CallLog.Calls._ID); // message id
-                int index_number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
-                int index_date = cursor.getColumnIndex(CallLog.Calls.DATE);
-                int index_is_read = cursor.getColumnIndex(CallLog.Calls.IS_READ);
-                int index_type = cursor.getColumnIndex(CallLog.Calls.TYPE);
-                int index_name = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
-                int index_match = cursor.getColumnIndex(CallLog.Calls.CACHED_MATCHED_NUMBER);
+                if (!responseType.equals(GOT_CALL_COUNT)) {
+                    callList.ensureCapacity(mesgCount);
 
-                while (cursor.moveToNext()) {
-                    String call_id = cursor.getString(index_id);
-                    String number = cursor.getString(index_number);
-                    String name = cursor.getString(index_name);
-                    String match = cursor.getString(index_match);
-                    Long d = cursor.getLong(index_date);
-                    int state = cursor.getInt(index_is_read);
-                    int type = cursor.getInt(index_type);
+                    int index_id = cursor.getColumnIndex(CallLog.Calls._ID); // message id
+                    int index_number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
+                    int index_date = cursor.getColumnIndex(CallLog.Calls.DATE);
+                    int index_is_read = cursor.getColumnIndex(CallLog.Calls.IS_READ);
+                    int index_type = cursor.getColumnIndex(CallLog.Calls.TYPE);
+                    int index_name = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
+                    int index_match = cursor.getColumnIndex(CallLog.Calls.CACHED_MATCHED_NUMBER);
 
-                    if (match != null) {
-                        number = match;
+                    while (cursor.moveToNext()) {
+                        String call_id = cursor.getString(index_id);
+                        String number = cursor.getString(index_number);
+                        String name = cursor.getString(index_name);
+                        String match = cursor.getString(index_match);
+                        Long d = cursor.getLong(index_date);
+                        int state = cursor.getInt(index_is_read);
+                        int type = cursor.getInt(index_type);
+
+                        if (match != null) {
+                            number = match;
+                        }
+
+                        Map call = new HashMap();
+
+                        call.put("id", call_id);
+                        call.put("number", number);
+                        call.put("isSent", type == CallLog.Calls.OUTGOING_TYPE ? true : false);
+                        call.put("name", name);
+                        call.put("date", Long.toString(d));
+                        call.put("is_read", state == 0 ? false : true);
+
+                        callList.add( call );
                     }
-
-                    Map call = new HashMap();
-
-                    call.put("id", call_id);
-                    call.put("number", number);
-                    call.put("isSent", type == CallLog.Calls.OUTGOING_TYPE ? true : false);
-                    call.put("name", name);
-                    call.put("date", Long.toString(d));
-                    call.put("is_read", state == 0 ? false : true);
-
-                    callList.add( call );
                 }
+
                 if (!cursor.isClosed()) {
                     cursor.close();
                     cursor = null;

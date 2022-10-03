@@ -165,7 +165,7 @@ WorkerScript.onMessage = function(message) {
             // for simplicity, just adding to end instead of corresponding position in original list
             model.append({ "text": item[0], "action": item[1], "object": item[2] })
         }
-        console.log("Springboard | Append Suggestion: " + item[0])
+        console.debug("Springboard | Append Suggestion: " + item[0])
     });
 
     model.sync()
