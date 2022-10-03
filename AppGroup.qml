@@ -39,19 +39,15 @@ Item {
     }
 
     onAppsChanged: {
-        console.log("AppGroup " + groupIndex + " | onAppsChanged")
+        console.log("AppGroup " + groupIndex + " | onAppsChanged: " + groupItem.apps.length)
         groupModel.clear()
-        groupModel.modelArr = new Array
         groupModel.prepareModel()
-        groupModel.update(groupItem.textInput)
     }
 
     onPinnedShortcutsChanged: {
         console.log("AppGroup " + groupIndex + " | onPinnedShortcutsChanged")
         groupModel.clear()
-        groupModel.modelArr = new Array
         groupModel.prepareModel()
-        groupModel.update(groupItem.textInput)
     }
 
     onDesaturationChanged: {
@@ -277,19 +273,47 @@ Item {
             }
         }
 
+        WorkerScript {
+            id: groupModelWorker
+            source: "scripts/apps.mjs"
+            onMessage: {
+                console.debug("AppGroup | Worker message received")
+                groupModel.modelArr = messageObject.apps
+                groupHeader.text = groupLabel.toLowerCase() === "apps"  ? "+" + groupModel.count + " " + groupLabel : groupLabel
+                groupItem.visible = groupModel.count > 0
+            }
+            Component.onCompleted: {
+                console.debug("AppGroup | Workerscript established" );
+                if (groupModel.pendingMessage !== undefined) {
+                    console.debug("AppGroup | Will send message to Workerscript" );
+                    sendMessage(groupModel.pendingMessage)
+                }
+            }
+        }
+
         ListModel {
             id: groupModel
 
             property var modelArr: new Array
+            property var pendingMessage
 
             // Call this method, if apps or shortcuts have been changed
             function prepareModel() {
-                modelArr = groupItem.pinnedShortcuts.concat(groupItem.apps)
-                modelArr.forEach(function(app, i) {
-                    modelArr[i].label = app.package in groupItem.labelMap && app.shortcutId === undefined
-                            ? qsTr(groupItem.labelMap[app.package]) : app.label
-                    modelArr[i].itemId = app.shortcutId !== undefined ? app.shortcutId : app.package
-                })
+                if (groupModelWorker.status === Component.Ready) {
+                    groupModelWorker.sendMessage({
+                        "apps": groupItem.pinnedShortcuts.concat(groupItem.apps),
+                        "labelMap" : groupItem.labelMap,
+                        "model" : groupModel,
+                        "text" : groupItem.textInput
+                    })
+                } else {
+                    pendingMessage = {
+                        "apps": groupItem.pinnedShortcuts.concat(groupItem.apps),
+                        "labelMap" : groupItem.labelMap,
+                        "model" : groupModel,
+                        "text" : groupItem.textInput
+                    }
+                }
             }
 
             // Call this method to update the grid content
@@ -302,7 +326,7 @@ Item {
                 var found
                 var i
 
-                console.log("AppGroup " + groupIndex + " | Model " + groupItem.groupLabel + " has " + modelArr.length + " elements")
+                console.log("AppGroup " + groupIndex + " | Model '" + groupItem.groupLabel + "' has " + modelArr.length + " elements")
 
                 // filter model
                 for (i = 0; i < modelArr.length; i++) {
@@ -340,15 +364,13 @@ Item {
                     if (!found) {
                         // for simplicity, just adding to end instead of corresponding position in original list
                         filteredGridItem = filteredGridDict[key]
-                        console.log("AppGroup " + groupIndex + " | Will append " + key + ", " + filteredGridItem.category)
+                        // console.debug("AppGroup " + groupIndex + " | Will append " + key + ", " + filteredGridItem.category)
                         append(filteredGridItem)
                     }
                 })
 
-                groupHeader.text = groupItem.groupLabel.toLowerCase() === "apps" ? "+" + count + " " + groupItem.groupLabel
-                                                                                 : groupItem.groupLabel
+                groupHeader.text = groupLabel.toLowerCase() === "apps"  ? "+" + count + " " + groupLabel : groupLabel
                 groupItem.visible = count > 0
-
                 sortModel()
             }
 
@@ -369,7 +391,7 @@ Item {
         Connections {
             target: AN.SystemDispatcher
             onDispatched: {
-                if (type === "volla.launcher.callLogResponse") {
+                if (type === "volla.launcher.callCountResponse") {
                     console.log("AppGroup " + groupIndex + " | Missed calls: " + message["callsCount"])
                     groupItem.newCalls = message["callsCount"] > 0
                 } else if (type === "volla.launcher.threadsCountResponse") {
