@@ -9,9 +9,9 @@ WorkerScript.onMessage = function(message) {
     })
 
     apps.sort(function(a, b) {
-        if (a > b)
+        if (a.label < b.label)
             return -1;
-        if (a < b)
+        if (a.label > b.label)
             return
         return 0
     })
