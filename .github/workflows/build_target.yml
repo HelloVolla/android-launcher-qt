@@ -50,7 +50,7 @@ jobs:
           port: 2222
           ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
           local_path: './releases/*.apk'
-          remote_path: '/builds/nightly/volla/android-launcher-qt/'
+          remote_path: '/fdroid-nightly.volla.tech/builds/volla/android-launcher-qt/'
           args: '-o CheckHostIP=no -o StrictHostKeyChecking=no'
 
       - name: Upload Apk to Release Repository
@@ -62,7 +62,7 @@ jobs:
           port: 2222
           ssh_private_key: '${{ secrets.FDROID_DEPLOY_KEY }}'
           local_path: './releases/*.apk'
-          remote_path: '/builds/release/volla/android-launcher-qt/'
+          remote_path: '/fdroid.volla.tech/builds/volla/android-launcher-qt/'
           args: '-o CheckHostIP=no -o StrictHostKeyChecking=no'
 
   release:
