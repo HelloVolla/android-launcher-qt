@@ -38,6 +38,14 @@ ApplicationWindow {
               } else {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
+              // Start onboarding for the first start of the app
+              if (settings.firstStart) {
+                  console.debug("MainView", "Will start tutorial")
+                  var component = Qt.createComponent("/OnBoarding.qml")
+                  var properties = { "mainView" : mainView, "innerSpacing" : mainView.innerSpacing }
+                  var object = component.createObject(mainView, properties)
+                  object.open()
+              }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
               // Update app grid
@@ -268,6 +276,16 @@ ApplicationWindow {
                 id: springboardLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/Springboard.qml", mainView)
+            }
+        }
+
+        function updateSpringboard(text, selectedObj) {
+            console.log("MainView | Uodate springboar with text '" + text + "'")
+            currentIndex = swipeIndex.Springboard
+            var item = itemAt(swipeIndex.Springboard)
+            item.children[0].item.textInput = text
+            if (selectedObj !== undefined) {
+                item.children[0].item.selectedObj = selectedObj
             }
         }
 
