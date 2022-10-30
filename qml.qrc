@@ -76,5 +76,7 @@
         <file>images/05.Notes_Screen.png</file>
         <file>AppGroup.qml</file>
         <file>scripts/apps.mjs</file>
+        <file>OnBoarding.qml</file>
+        <file>Signald.qml</file>
     </qresource>
 </RCC>

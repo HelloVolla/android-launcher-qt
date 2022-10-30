@@ -143,7 +143,7 @@ public class ContactWorker {
 
             // id, name, organization, starred, icon
             // email.home, email.work, email.mobile
-            // phone.home, phone.work, email.mobile
+            // phone.home, phone.work, phone.mobile
 
             String id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
             contact.put("id", id);

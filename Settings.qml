@@ -467,10 +467,6 @@ Page {
                     id: passwordDialog
 
                     anchors.centerIn: parent
-//                    implicitHeight: dialogTitle.height + passwordField.height +
-//                                    dialogLabel.height + confirmationField.height +
-//                                    keepPasswordCheckBox.height + okButton.height +
-//                                    mainView.innerSpacing * 2
                     width: parent.width - mainView.innerSpacing * 4
                     modal: true
                     dim: false
@@ -1023,8 +1019,106 @@ Page {
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
 
-                        if (actionId === "Signal" && active) {
-                            // todo
+                        if (actionId === "Signal") {
+                            if (!signald.busy) {
+                                if (active) signald.activateSignalIntegration()
+                                else signald.deactivateSignalIntegration()
+                            }
+                        }
+                    }
+
+                    Settings {
+                        id: sourceSettings
+
+                        property bool signalIsActivated: false
+                    }
+
+                    Signald {
+                        id: signald
+
+                        function activateSignalIntegration() {
+                            if (!signald.isConnectedToSignald) signald.connect()
+                        }
+
+                        function deactivateSignalIntegration() {
+                            for (var account of signald.linkedAccounts) {
+                                signald.unsubscribe(account.account_id, console.log)
+                            }
+                            // todo: unlink accounts
+                            signald.disconnect()
+                        }
+
+                        Component.onCompleted: {
+                            // Check settings to connect
+                            if (sourceSettings.signalIsActivated && !signald.isConnectedToSignald) {
+                                signald.connect()
+                            }
+                        }
+
+                        property string signalSessionId
+                        property string signalUrl
+                        property bool busy: false
+
+                        onSignalUrlChanged: {
+                            if (signalSessionId !== undefined) {
+                                signald.finish_link(sourceSettingsItemColumn.signalSessionId, false, function(error, response) {
+                                    console.log('Finish linking: ', error, response)
+                                    if (error) {
+                                        mainView.showToast(qsTr("Could not activate signal: ") + error.message)
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
+                                        sourceSettingsItemColumn.checkboxes[0].checked = false
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
+                                    } else {
+                                        mainView.showToast(qsTr("Signal integration sucessfully activated"))
+                                    }
+                                })
+                            }
+                        }
+
+                        onConnected: {
+                            if (signald.linkedAccounts.length < 1) {
+                                // Link accounts, if they are not yet linked
+                                signald.generate_linking_uri(function(error, response) {
+                                    if (error) {
+                                        console.log("Error: ", error.error_type, error.message)
+                                        mainView.showToast(qsTr("Could not activate signal: ") + error.message)
+                                        checkboxes[0].activeCheckbox = false
+                                        checkboxes[0].checked = false
+                                        checkboxes[0].activeCheckbox = true
+                                        sourceSettings.signalIsActivated = false
+                                    } else {
+                                        signald.signalUrl = response.uri
+                                        signald.signalSessionId = response.session_id
+                                    }
+                                })
+                            } else {
+                                // Re-subscribe the accounts
+                                for (var account of linkedAccounts) {
+                                    signald.subscribe(account, function(error, response){
+                                        console.error("Subscribe Error: ", error)
+                                        for (var key in response) {
+                                            console.error("Subscribe response: ", key, response[key])
+                                        }
+                                    })
+                                }
+                            }
+                        }
+
+                        onLinkedAccountsChanged: {
+                            // Subscribe the accounts
+                            for (var account of linkedAccounts) {
+                                signald.subscribe(account, function(error, response){
+                                    mainView.showToast(qsTr("Could not link Signal accounts: " + error))
+                                    console.error("Subscribe Error: ", error)
+                                    for (var key in response) {
+                                        console.error("Subscribe response: ", key, response[key])
+                                    }
+                                })
+                            }
+                        }
+
+                        onClientMessageReceived: {
+                            console.debug('Client message received:', message)
                         }
                     }
                 }
@@ -1033,7 +1127,7 @@ Page {
                     NumberAnimation {
                         duration: 250.0
                     }
-                }
+                }          
             }
 
             Item {
@@ -1510,5 +1604,3 @@ Page {
         }
     }
 }
-
-
