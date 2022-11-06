@@ -293,6 +293,13 @@ ApplicationWindow {
             item.children[0].item.textInputArea.text = text
         }
 
+        function updateShortcutMenuState(opened) {
+            console.log("MainView | Update shortcut menu state: '" + opened + "'")
+            currentIndex = swipeIndex.Springboard
+            var item = itemAt(swipeIndex.Springboard)
+            item.children[0].item.updateShortcutMenuState(opened)
+        }
+
         function updateCollectionPage(mode) {
             console.log("MainView | New collection mode: " + mode)
             if (count === swipeIndex.Springboard + 1) {

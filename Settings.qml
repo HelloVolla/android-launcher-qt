@@ -954,12 +954,11 @@ Page {
                 }
             }
 
-            // todo: Add source settings
             Item {
                 id: sourceSettingsItem
                 width: parent.width
                 implicitHeight: sourceSettingsItemColumn.height
-                visible: false
+                visible: true
 
                 Column {
                     id: sourceSettingsItemColumn
@@ -1019,7 +1018,7 @@ Page {
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
 
-                        if (actionId === "Signal") {
+                        if (actionId === "signal") {
                             if (!signald.busy) {
                                 if (active) signald.activateSignalIntegration()
                                 else signald.deactivateSignalIntegration()
@@ -1102,6 +1101,17 @@ Page {
                                     })
                                 }
                             }
+                        }
+
+                        onDisconnected: {
+                            if (sourceSettingsItemColumn.checkboxes.length > 0
+                                    && sourceSettingsItemColumn.checkboxes[0].checked) {
+                                mainView.showToast(qsTr("You need to install the Signal app at first"))
+                                sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
+                                sourceSettingsItemColumn.checkboxes[0].checked = false
+                                sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
+                            }
+                            sourceSettings.signalIsActivated = false
                         }
 
                         onLinkedAccountsChanged: {

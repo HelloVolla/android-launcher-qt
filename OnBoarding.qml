@@ -3,6 +3,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Window 2.2
 import QtQuick.Controls.Universal 2.12
+import QtGraphicalEffects 1.12
+
 
 Popup {
     id: popup
@@ -26,19 +28,25 @@ Popup {
     }
 
     background: Rectangle {
+        id:blureRect
         anchors.fill: parent
         color: "darkslategrey"
         opacity: 0.6
         border.color: "transparent"
-    }
 
-    Button {
-        anchors.top: parent.top
-        anchors.right: parent.right
-        text: "x"
-        flat: true
-        onClicked: {
-            popup.close()
+        layer.smooth: true
+        layer.enabled: true
+
+        layer.effect: ShaderEffect {
+            id: effectSource
+            anchors.fill: parent
+
+            FastBlur {
+                id: blur
+                anchors.fill: effectSource
+                source: effectSource
+                radius: 32
+            }
         }
     }
 
@@ -133,8 +141,7 @@ Popup {
                 font.pointSize: mainView.mediumFontSize
                 onClicked: {
                     if (text === qsTr("Show demo")) {
-                        mainView.updateCollectionPage(mainView.collectionMode.News)
-                        text = qsTr("Next hint")
+                        swipeView.showCollectionDemo()
                     } else {
                         swipeView.currentIndex = 3
                     }
@@ -216,6 +223,7 @@ Popup {
 
                         timer.setTimeout(function() {
                             mainView.updateSpringboard("")
+                            mainView.contacts = new Array
                             label1.text = qsTr("Learn about more use cases in the printed manual")
                             button1.text = qsTr("Next hint")
                         }, 2000)
@@ -224,11 +232,44 @@ Popup {
             }, 2000)
         }
 
+        function showCollectionDemo() {
+            mainView.updateShortcutMenuState(true)
+
+            timer.setTimeout(function() {
+                mainView.updateCollectionPage(mainView.collectionMode.News)
+
+                timer.setTimeout(function() {
+                    mainView.currentIndex = 2
+                    button2.text = qsTr("Next hint")
+                }, 2000)
+            }, 3000)
+            button2.text = qsTr("Next hint")
+        }
+
         function showRedDotDemo() {
-            // todo
+            mainView.updateShortcutMenuState(true)
+
+            timer.setTimeout(function() {
+                mainView.updateShortcutMenuState(false)
+
+                timer.setTimeout(function() {
+                    button2.text = qsTr("Next hint")
+                }, 2000)
+            }, 2000)
             button2.text = qsTr("Next hint")
         }
     }
+
+    Button {
+        anchors.top: parent.top
+        anchors.right: parent.right
+        text: "x"
+        flat: true
+        onClicked: {
+            popup.close()
+        }
+    }
+
 
     PageIndicator {
         id: indicator
