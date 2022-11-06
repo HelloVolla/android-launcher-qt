@@ -43,6 +43,10 @@ ApplicationWindow {
                   console.debug("MainView", "Will start tutorial")
                   var component = Qt.createComponent("/OnBoarding.qml")
                   var properties = { "mainView" : mainView, "innerSpacing" : mainView.innerSpacing }
+                  if (component.status !== Component.Ready) {
+                      if (component.status === Component.Error)
+                          console.debug("MainView | Error: "+ component.errorString() );
+                  }
                   var object = component.createObject(mainView, properties)
                   object.open()
               }
@@ -283,10 +287,10 @@ ApplicationWindow {
             console.log("MainView | Uodate springboar with text '" + text + "'")
             currentIndex = swipeIndex.Springboard
             var item = itemAt(swipeIndex.Springboard)
-            item.children[0].item.textInput = text
             if (selectedObj !== undefined) {
                 item.children[0].item.selectedObj = selectedObj
             }
+            item.children[0].item.textInputArea.text = text
         }
 
         function updateCollectionPage(mode) {
