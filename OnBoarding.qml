@@ -10,7 +10,7 @@ Popup {
     id: popup
     anchors.centerIn: Overlay.overlay
     height: Screen.height * 0.3
-    width: Screen.width // - 2 * innerSpacing
+    width: Screen.width
     focus: true
     modal: true
     dim: false
@@ -27,26 +27,24 @@ Popup {
         NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
     }
 
-    background: Rectangle {
-        id:blureRect
-        anchors.fill: parent
-        color: "darkslategrey"
-        opacity: 0.6
-        border.color: "transparent"
-
-        layer.smooth: true
-        layer.enabled: true
-
-        layer.effect: ShaderEffect {
+    background: Item {
+        ShaderEffectSource {
             id: effectSource
+            sourceItem: mainView
             anchors.fill: parent
-
-            FastBlur {
-                id: blur
-                anchors.fill: effectSource
-                source: effectSource
-                radius: 32
-            }
+            sourceRect: Qt.rect(popup.x,popup.y,popup.width,popup.height)
+        }
+        FastBlur{
+            id: blur
+            anchors.fill: effectSource
+            source: effectSource
+            radius: 32
+        }
+        Rectangle {
+            anchors.fill: parent
+            color: "#2e2e2e"
+            border.color: "transparent"
+            opacity: 0.6
         }
     }
 
@@ -233,17 +231,12 @@ Popup {
         }
 
         function showCollectionDemo() {
-            mainView.updateShortcutMenuState(true)
+            mainView.updateCollectionPage(mainView.collectionMode.News)
 
             timer.setTimeout(function() {
-                mainView.updateCollectionPage(mainView.collectionMode.News)
-
-                timer.setTimeout(function() {
-                    mainView.currentIndex = 2
-                    button2.text = qsTr("Next hint")
-                }, 2000)
-            }, 3000)
-            button2.text = qsTr("Next hint")
+                mainView.currentIndex = 2
+                button3.text = qsTr("Next hint")
+            }, 6000)
         }
 
         function showRedDotDemo() {
@@ -256,7 +249,6 @@ Popup {
                     button2.text = qsTr("Next hint")
                 }, 2000)
             }, 2000)
-            button2.text = qsTr("Next hint")
         }
     }
 
@@ -269,7 +261,6 @@ Popup {
             popup.close()
         }
     }
-
 
     PageIndicator {
         id: indicator
