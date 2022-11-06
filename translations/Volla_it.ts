@@ -235,6 +235,49 @@
     </message>
 </context>
 <context>
+    <name>OnBoarding</name>
+    <message>
+        <source>Start writing and get suggestions for completion and functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Touch the red dot, drag to a menu item and release for your selection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use smart content collections for recent contacts, messages, news and notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swipe to the right to see the app overview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next hint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swipe to the right to see the launcher settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Finish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hello World</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Learn about more use cases in the printed manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Settings</name>
     <message>
         <source>Settings</source>
@@ -379,6 +422,18 @@
     <message>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Azzeramento delle scorciatoie</translation>
+    </message>
+    <message>
+        <source>Could not activate signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -550,6 +605,10 @@
     <message>
         <source>New note saved</source>
         <translation type="unfinished">Nuova nota salvata</translation>
+    </message>
+    <message>
+        <source>An error occured. Please try again.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
