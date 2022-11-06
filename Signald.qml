@@ -1,4 +1,4 @@
-import com.volla.launcher 0.1
+import Socket 1.0
 
 Socket {
     id: signald
