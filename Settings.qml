@@ -1534,6 +1534,7 @@ Page {
                         }
                         onClicked: {
                             resetNewsButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
                             mainView.resetFeeds()
                         }
                     }
@@ -1567,6 +1568,7 @@ Page {
                         }
                         onClicked: {
                             reseetShortcutsButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
                             mainView.resetActions()
                         }
                     }
@@ -1600,6 +1602,7 @@ Page {
                         }
                         onClicked: {
                             reseetLauncherButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
                             mainView.resetContacts()
                         }
                     }

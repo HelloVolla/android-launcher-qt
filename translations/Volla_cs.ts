@@ -203,43 +203,43 @@
     <name>OnBoarding</name>
     <message>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Začněte psát a získejte návrhy na doplnění a funkce</translation>
     </message>
     <message>
         <source>Show demo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zobrazit ukázku</translation>
     </message>
     <message>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dotkněte se červené tečky, přetáhněte na položku nabídky a uvolněte výběr.</translation>
     </message>
     <message>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Používejte chytré sbírky obsahu pro poslední kontakty, zprávy, novinky a poznámky.</translation>
     </message>
     <message>
         <source>Swipe to the right to see the app overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Přejetím doprava zobrazíte přehled aplikací..</translation>
     </message>
     <message>
         <source>Next hint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Další nápověda</translation>
     </message>
     <message>
         <source>Swipe to the right to see the launcher settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Přejetím doprava zobrazíte nastavení spouštěče.</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dokončení</translation>
     </message>
     <message>
         <source>Hello World</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ahoj světe</translation>
     </message>
     <message>
         <source>Learn about more use cases in the printed manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Další případy použití najdete v tištěné příručce</translation>
     </message>
 </context>
 <context>

@@ -293,7 +293,7 @@
     <message>
         <location filename="../OnBoarding.qml" line="77"/>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Începeți să scrieți și primiți sugestii de completare și funcții</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="86"/>
@@ -304,22 +304,22 @@
         <location filename="../OnBoarding.qml" line="167"/>
         <location filename="../OnBoarding.qml" line="194"/>
         <source>Show demo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arată demonstrația</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="103"/>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Atingeți punctul roșu, trageți până la un element de meniu și eliberați pentru selecție.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="129"/>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utilizați colecții inteligente de conținut pentru contacte recente, mesaje, știri și note</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="155"/>
         <source>Swipe to the right to see the app overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trageți cu degetul spre dreapta pentru a vedea prezentarea generală a aplicației</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="169"/>
@@ -327,27 +327,27 @@
         <location filename="../OnBoarding.qml" line="238"/>
         <location filename="../OnBoarding.qml" line="249"/>
         <source>Next hint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Următorul indiciu</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="182"/>
         <source>Swipe to the right to see the launcher settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trageți cu degetul spre dreapta pentru a vedea setările lansatorului</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="196"/>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Finisaj</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="220"/>
         <source>Hello World</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bună ziua lume</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="225"/>
         <source>Learn about more use cases in the printed manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aflați mai multe cazuri de utilizare în manualul tipărit</translation>
     </message>
 </context>
 <context>
@@ -496,12 +496,12 @@
         <translation type="unfinished">Resetați fluxurile de știri</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1553"/>
+        <location filename="../Settings.qml" line="1554"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Resetarea scurtăturilor</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1586"/>
+        <location filename="../Settings.qml" line="1588"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Reîncărcați contactele</translation>
     </message>
