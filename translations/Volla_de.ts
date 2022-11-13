@@ -292,8 +292,8 @@
     <name>OnBoarding</name>
     <message>
         <location filename="../OnBoarding.qml" line="77"/>
-        <source>Mit dem Schreiben beginnen und Vorschläge für die Vervollständigung und die Funktionen erhalten</source>
-        <translation type="unfinished"></translation>
+        <source>Start writing and get suggestions for completion and functions</source>
+        <translation type="unfinished">Bginnen Sie etwas zu schreuben und erhalten Sie Vorschläge für die Vervollständigung und passende Funktionen</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="86"/>
@@ -303,51 +303,51 @@
         <location filename="../OnBoarding.qml" line="141"/>
         <location filename="../OnBoarding.qml" line="167"/>
         <location filename="../OnBoarding.qml" line="194"/>
-        <source>Demo anzeigen</source>
-        <translation type="unfinished"></translation>
+        <source>Show demo</source>
+        <translation type="unfinished">Demo anzeigen</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="103"/>
-        <source>Berühren Sie den roten Punkt, ziehen Sie auf einen Menüpunkt und lassen Sie los, um Ihre Auswahl zu bestätigen.</source>
-        <translation type="unfinished"></translation>
+        <source>Touch the red dot, drag to a menu item and release for your selection.</source>
+        <translation type="unfinished">Berühren Sie den roten Punkt, ziehen Sie zu einem Menüpunkt und lassen Sie ihn los, um Ihre Auswahl zu bestätigen.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="129"/>
-        <source>Verwenden Sie intelligente Inhaltssammlungen für aktuelle Kontakte, Nachrichten, Neuigkeiten und Notizen</source>
-        <translation type="unfinished"></translation>
+        <source>Use smart content collections for recent contacts, messages, news and notes</source>
+        <translation type="unfinished">Verwenden Sie intelligente Inhaltssammlungen für aktuelle Kontakte, Nachrichten, Neuigkeiten und Notizen</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="155"/>
-        <source>Wischen Sie nach rechts, um die App-Übersicht zu sehen</source>
-        <translation type="unfinished"></translation>
+        <source>Swipe to the right to see the app overview</source>
+        <translation type="unfinished">Wischen Sie nach rechts, um die App-Übersicht zu sehen</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="169"/>
         <location filename="../OnBoarding.qml" line="226"/>
         <location filename="../OnBoarding.qml" line="238"/>
         <location filename="../OnBoarding.qml" line="249"/>
-        <source>Nächster Hinweis</source>
-        <translation type="unfinished"></translation>
+        <source>Next hint</source>
+        <translation type="unfinished">Nächster Hinweis</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="182"/>
-        <source>Wischen Sie nach rechts, um die Einstellungen für diese Benutzeroberfläche anzuzeigen</source>
-        <translation type="unfinished"></translation>
+        <source>Swipe to the right to see the launcher settings</source>
+        <translation type="unfinished">Wischen Sie nach rechts, um die Einstellungen des Launchers anzuzeigen</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="196"/>
-        <source>Beenden</source>
-        <translation type="unfinished"></translation>
+        <source>Finish</source>
+        <translation type="unfinished">Oberfläche</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="220"/>
-        <source>Hallo Welt</source>
-        <translation type="unfinished"></translation>
+        <source>Hello World</source>
+        <translation type="unfinished">Hallo Welt</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="225"/>
-        <source>Erfahren Sie mehr über weitere Anwendungsfälle im gedruckten Handbuch</source>
-        <translation type="unfinished"></translation>
+        <source>Learn about more use cases in the printed manual</source>
+        <translation type="unfinished">Erfahren Sie mehr über weitere Anwendungsfälle im gedruckten Handbuch</translation>
     </message>
 </context>
 <context>
@@ -496,7 +496,7 @@
         <translation type="unfinished">Nachrichtenkanäle zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1553"/>
+        <location filename="../Settings.qml" line="1554"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Kurzbefehele zurücksetzen</translation>
     </message>
@@ -505,7 +505,7 @@
         <translation type="obsolete">Kurzbefehle zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1586"/>
+        <location filename="../Settings.qml" line="1588"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Kontakte neu laden</translation>
     </message>

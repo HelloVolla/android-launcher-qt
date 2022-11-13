@@ -289,7 +289,7 @@
     <message>
         <location filename="../OnBoarding.qml" line="77"/>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Commencez à écrire et obtenez des suggestions de compléments et de fonctions</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="86"/>
@@ -300,22 +300,22 @@
         <location filename="../OnBoarding.qml" line="167"/>
         <location filename="../OnBoarding.qml" line="194"/>
         <source>Show demo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démonstration</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="103"/>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Touchez le point rouge, faites-le glisser jusqu&apos;à un élément de menu et relâchez pour effectuer votre sélection.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="129"/>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utilisez des collections de contenu intelligentes pour les contacts récents, les messages, les nouvelles et les notes.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="155"/>
         <source>Swipe to the right to see the app overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Balayez vers la droite pour voir l&apos;aperçu de l&apos;application.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="169"/>
@@ -323,27 +323,27 @@
         <location filename="../OnBoarding.qml" line="238"/>
         <location filename="../OnBoarding.qml" line="249"/>
         <source>Next hint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prochain conseil</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="182"/>
         <source>Swipe to the right to see the launcher settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Balayez vers la droite pour voir les paramètres du lanceur.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="196"/>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Finition</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="220"/>
         <source>Hello World</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bonjour le monde</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="225"/>
         <source>Learn about more use cases in the printed manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Découvrez d&apos;autres cas d&apos;utilisation dans le manuel imprimé</translation>
     </message>
 </context>
 <context>
@@ -492,12 +492,12 @@
         <translation type="unfinished">Réinitialiser les flux d&apos;actualités</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1553"/>
+        <location filename="../Settings.qml" line="1554"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Réinitialiser les raccourcis</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1586"/>
+        <location filename="../Settings.qml" line="1588"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Reload contacts</translation>
     </message>

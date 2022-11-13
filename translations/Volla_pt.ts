@@ -203,43 +203,43 @@
     <name>OnBoarding</name>
     <message>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Comece a escrever e obtenha sugestões para conclusão e funções</translation>
     </message>
     <message>
         <source>Show demo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostrar demonstração</translation>
     </message>
     <message>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toque no ponto vermelho, arraste para um item do menu e solte para a sua selecção.</translation>
     </message>
     <message>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utilizar colecções de conteúdos inteligentes para contactos, mensagens, notícias e notas recentes</translation>
     </message>
     <message>
         <source>Swipe to the right to see the app overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Passar para a direita para ver a vista geral da aplicação</translation>
     </message>
     <message>
         <source>Next hint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Próxima dica</translation>
     </message>
     <message>
         <source>Swipe to the right to see the launcher settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Passar para a direita para ver as configurações do lançador</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Terminar</translation>
     </message>
     <message>
         <source>Hello World</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Olá Mundo</translation>
     </message>
     <message>
         <source>Learn about more use cases in the printed manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saiba mais sobre casos de utilização no manual impresso</translation>
     </message>
 </context>
 <context>

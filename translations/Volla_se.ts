@@ -293,7 +293,7 @@
     <message>
         <location filename="../OnBoarding.qml" line="77"/>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Börja skriva och få förslag på kompletteringar och funktioner</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="86"/>
@@ -304,22 +304,22 @@
         <location filename="../OnBoarding.qml" line="167"/>
         <location filename="../OnBoarding.qml" line="194"/>
         <source>Show demo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Visa demo</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="103"/>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tryck på den röda punkten, dra till ett menyalternativ och släpp för att välja.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="129"/>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Använd smarta innehållssamlingar för senaste kontakter, meddelanden, nyheter och anteckningar</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="155"/>
         <source>Swipe to the right to see the app overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svep till höger för att se appöversikten</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="169"/>
@@ -327,27 +327,27 @@
         <location filename="../OnBoarding.qml" line="238"/>
         <location filename="../OnBoarding.qml" line="249"/>
         <source>Next hint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nästa tips</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="182"/>
         <source>Swipe to the right to see the launcher settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svep till höger för att se startinställningarna.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="196"/>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Slutförande</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="220"/>
         <source>Hello World</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hej, världen</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="225"/>
         <source>Learn about more use cases in the printed manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Läs mer om fler användningsområden i den tryckta manualen</translation>
     </message>
 </context>
 <context>
@@ -496,12 +496,12 @@
         <translation type="unfinished">Återställ nyhetsflöden</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1553"/>
+        <location filename="../Settings.qml" line="1554"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Återställ genvägar</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1586"/>
+        <location filename="../Settings.qml" line="1588"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Reload contacts</translation>
     </message>
