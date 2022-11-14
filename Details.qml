@@ -168,7 +168,7 @@ Page {
     }
 
     function prepareNoteView(note, curserPosition) {
-        console.log("Details | Process note " + currentDetailId)
+        console.log("Details | Process note " + currentDetailId + " with curser at " + curserPosition)
         var styledText = note.slice()
 
         var urlRegex = /(((https?:\/\/)|([^\s]+\.))[^\s,]+)/g;
@@ -180,7 +180,7 @@ Page {
         styledText = styledText.replace(/^(### .*$)/gim, '<h3><$1</h3>') // h3 tag
                                .replace(/^(## .*$)/gim, '<h2>$1</h2>') // h2 tag
                                .replace(/^(# .*$)/gim, '<h1>$1</h1>') // h1 tag
-                               .replace(/(.*\n)/, '<p style=\"font-size:36pt;font-weight:bold\">$1</p>') // trailing tect
+                               .replace(/^(.*\n)/m, '<p style=\"font-size:36pt;font-weight:bold\">$1</p>') // trailing tect
                                .replace(/(\*\*.*\*\*)/gim, '<b>$1</b>') // bold text
                                .replace(/(\*.*\*)/gim, '<i>$1</i>') // italic text
                                .replace(/^(\* .*)/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">$1</p>') // unsorted list
@@ -313,13 +313,14 @@ Page {
             onCursorRectangleChanged: detailFlickable.ensureVisible(cursorRectangle)
 
             onCursorPositionChanged: {
-                // Todo parse and save text
                 console.log("Details | Curser postion changed to " + detailEdit.cursorPosition)
                 if (!isBlocked) {
                     isBlocked = true
                     lastCurserPosition = detailEdit.cursorPosition
-                    var plainText = detailEdit.text.replace(/p, li \{ white-space: pre-wrap; \}/gim, '').replace(/<[^>]+>/g, '').trim()
-                    detailPage.prepareNoteView(plainText, detailEdit.cursorPosition)
+                    console.debug("Details | Plain Text: " + detailEdit.getText(0, detailEdit.length))
+                    var plainText = detailEdit.getText(0, detailEdit.length)
+                    //detailEdit.text.replace(/p, li \{ white-space: pre-wrap; \}/gim, '').replace(/<[^>]+>/g, '').trim()
+                    detailPage.prepareNoteView(plainText, lastCurserPosition)
                     mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
                 }
                 if (lastCurserPosition === detailEdit.cursorPosition) isBlocked = false

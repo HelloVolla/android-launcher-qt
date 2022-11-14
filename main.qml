@@ -742,17 +742,17 @@ ApplicationWindow {
             return noteStr !== undefined && noteStr.length > 0 ? JSON.parse(noteStr) : notes
         }
 
-        function updateNote(id, content, pinned) {
-            console.debug("MainView | New Note: " + id + ", " + content + ", " + pinned)
+        function updateNote(noteId, content, pinned) {
+            console.debug("MainView | Update Note: " + noteId + ", " + content + ", " + pinned)
             var notesArr = mainView.getNotes()
             var note
             var i = 0
-            while (id !== undefined && i < notesArr.length) {
-                if (notesArr[i]["id"] === id) note = notesArr[i]
+            while (noteId !== undefined && i < notesArr.length && note === undefined) {
+                if (notesArr[i]["id"] === noteId) note = notesArr[i]
                 i++
             }
-            console.log("MainView | Existing note: " + note)
-            if (id !== undefined && note !== undefined) {
+            if (note !== undefined) {
+                console.log("MainView | Existing note: " + note)
                 note["content"] = content
                 note["date"] = new Date().valueOf()
                 note["pinned"] = pinned
@@ -760,7 +760,7 @@ ApplicationWindow {
             } else {
                 console.log("MainView | Create note")
                 note = new Object
-                note["id"] = new Date().valueOf()
+                note["id"] = noteId === undefined ? new Date().valueOf() : noteId
                 note["content"] = content
                 note["date"] = new Date().valueOf()
                 note["pinned"] = false
