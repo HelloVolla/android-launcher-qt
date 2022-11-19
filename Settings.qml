@@ -998,10 +998,10 @@ Page {
                     function createCheckboxes() {
                         var component = Qt.createComponent("/Checkbox.qml", sourceSettingsItemColumn)
                         var properties = { "actionId": "signal",
-                                "text": qsTr("Signal"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
+                                "text": qsTr("Signal"), "checked": sourceSettings.signalIsActivated,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
                         var object = component.createObject(sourceSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         sourceSettingsItemColumn.checkboxes.push(object)
@@ -1036,6 +1036,8 @@ Page {
                         id: signald
 
                         function activateSignalIntegration() {
+                            console.debug("Settings | activate signal" )
+                            console.debug("Settings | connection state: " + signald.isConnectedToSignald)
                             if (!signald.isConnectedToSignald) signald.connect()
                         }
 
@@ -1074,44 +1076,51 @@ Page {
                             }
                         }
 
-                        onConnected: {
-                            if (signald.linkedAccounts.length < 1) {
-                                // Link accounts, if they are not yet linked
-                                signald.generate_linking_uri(function(error, response) {
-                                    if (error) {
-                                        console.log("Error: ", error.error_type, error.message)
-                                        mainView.showToast(qsTr("Could not activate signal: ") + error.message)
-                                        checkboxes[0].activeCheckbox = false
-                                        checkboxes[0].checked = false
-                                        checkboxes[0].activeCheckbox = true
-                                        sourceSettings.signalIsActivated = false
-                                    } else {
-                                        signald.signalUrl = response.uri
-                                        signald.signalSessionId = response.session_id
+                        onStateChanged: {
+                            switch (state) {
+                                case 0:
+                                    console.debug("Settings | disconnected")
+                                    if (sourceSettingsItemColumn.checkboxes.length > 0
+                                            && sourceSettingsItemColumn.checkboxes[0].checked) {
+                                        mainView.showToast(qsTr("You need to install the Signal app at first"))
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
+                                        sourceSettingsItemColumn.checkboxes[0].checked = false
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
                                     }
-                                })
-                            } else {
-                                // Re-subscribe the accounts
-                                for (var account of linkedAccounts) {
-                                    signald.subscribe(account, function(error, response){
-                                        console.error("Subscribe Error: ", error)
-                                        for (var key in response) {
-                                            console.error("Subscribe response: ", key, response[key])
+                                    sourceSettings.signalIsActivated = false
+                                    break
+                                case 2:
+                                    console.debug("Settings | connected")
+                                    if (signald.linkedAccounts.length < 1) {
+                                        console.debug("Settings | Will link accounts")
+                                        // Link accounts, if they are not yet linked
+                                        signald.generate_linking_uri(function(error, response) {
+                                            if (error) {
+                                                console.log("Error: ", error.error_type, error.message)
+                                                mainView.showToast(qsTr("Could not activate signal: ") + error.message)
+                                                checkboxes[0].activeCheckbox = false
+                                                checkboxes[0].checked = false
+                                                checkboxes[0].activeCheckbox = true
+                                                sourceSettings.signalIsActivated = false
+                                            } else {
+                                                signald.signalUrl = response.uri
+                                                signald.signalSessionId = response.session_id
+                                            }
+                                        })
+                                    } else {
+                                        console.debug("Settings | Will re-link accounts")
+                                        // Re-subscribe the accounts
+                                        for (var account of linkedAccounts) {
+                                            signald.subscribe(account, function(error, response){
+                                                console.error("Subscribe Error: ", error)
+                                                for (var key in response) {
+                                                    console.error("Subscribe response: ", key, response[key])
+                                                }
+                                            })
                                         }
-                                    })
-                                }
+                                    }
+                                    break
                             }
-                        }
-
-                        onDisconnected: {
-                            if (sourceSettingsItemColumn.checkboxes.length > 0
-                                    && sourceSettingsItemColumn.checkboxes[0].checked) {
-                                mainView.showToast(qsTr("You need to install the Signal app at first"))
-                                sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
-                                sourceSettingsItemColumn.checkboxes[0].checked = false
-                                sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
-                            }
-                            sourceSettings.signalIsActivated = false
                         }
 
                         onLinkedAccountsChanged: {
