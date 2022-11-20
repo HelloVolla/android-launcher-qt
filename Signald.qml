@@ -12,7 +12,7 @@ Socket {
     readonly property string signalProductionServerId: "6e2eb5a8-5706-45d0-8377-127a816411a4"
     readonly property string signalStagingServerId: "97c17f0c-e53b-426f-8ffa-c052d4183f83"
     property string signalServerId: signalProductionServerId
-    //        property string signalAccountType: 'primary'
+    // property string signalAccountType: 'primary'
     property string signalPhoneNumber: ""
     property string signaldProtocolVersion: "v1"
     property string signaldDeviceName: "Volla Launcher"
