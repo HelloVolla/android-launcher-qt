@@ -1038,7 +1038,7 @@ Page {
 
                         function activateSignalIntegration() {
                             console.debug("Settings | Will activate signal, if necessary" )
-                            signald.signalPhoneNumber = "XXXX"
+                            signald.signalPhoneNumber = ""
                             if (!signald.isConnectedToSignald) signald.connect()
                         }
 
