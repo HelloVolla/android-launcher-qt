@@ -1038,6 +1038,7 @@ Page {
 
                         function activateSignalIntegration() {
                             console.debug("Settings | Will activate signal, if necessary" )
+                            signald.signalPhoneNumber = "XXXX"
                             if (!signald.isConnectedToSignald) signald.connect()
                         }
 
@@ -1081,7 +1082,7 @@ Page {
                         onStateChanged: {
                             switch (state) {
                                 case 0:
-                                    console.debug("Settings | disconnected")
+                                    console.debug("Settings | Signal is disconnected")
                                     if (sourceSettingsItemColumn.checkboxes.length > 0
                                             && sourceSettingsItemColumn.checkboxes[0].checked) {
                                         mainView.showToast(qsTr("You need to install the Signal app at first"))
@@ -1092,7 +1093,7 @@ Page {
                                     sourceSettings.signalIsActivated = false
                                     break
                                 case 2:
-                                    console.debug("Settings | connected")
+                                    console.debug("Settings | Signal is connected")
                                     if (signald.linkedAccounts.length < 1) {
                                         console.debug("Settings | Will link accounts")
                                         // Link accounts, if they are not yet linked
@@ -1127,6 +1128,7 @@ Page {
 
                         onLinkedAccountsChanged: {
                             // Subscribe the accounts
+                            console.debug("Settings | Linked accounts changed")
                             for (var account of linkedAccounts) {
                                 signald.subscribe(account, function(error, response){
                                     mainView.showToast(qsTr("Could not link Signal accounts: " + error))
