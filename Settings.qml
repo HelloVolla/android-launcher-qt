@@ -1034,14 +1034,15 @@ Page {
 
                     Signald {
                         id: signald
+                        url: "/data/signald/signald.sock"
 
                         function activateSignalIntegration() {
-                            console.debug("Settings | activate signal" )
-                            console.debug("Settings | connection state: " + signald.isConnectedToSignald)
+                            console.debug("Settings | Will activate signal, if necessary" )
                             if (!signald.isConnectedToSignald) signald.connect()
                         }
 
                         function deactivateSignalIntegration() {
+                            console.log("Settings | Will unsubscribe and disconnect to signald")
                             for (var account of signald.linkedAccounts) {
                                 signald.unsubscribe(account.account_id, console.log)
                             }
@@ -1052,18 +1053,19 @@ Page {
                         Component.onCompleted: {
                             // Check settings to connect
                             if (sourceSettings.signalIsActivated && !signald.isConnectedToSignald) {
+                                console.log("Setings | Will connect to signald")
                                 signald.connect()
                             }
                         }
 
                         property string signalSessionId
-                        property string signalUrl
                         property bool busy: false
 
-                        onSignalUrlChanged: {
+                        onSignalSessionIdChanged: {
+                            console.debug("Setting | Signal url changed to: " + signalUrl)
                             if (signalSessionId !== undefined) {
                                 signald.finish_link(sourceSettingsItemColumn.signalSessionId, false, function(error, response) {
-                                    console.log('Finish linking: ', error, response)
+                                    console.log('Settings | Finish linking: ', error, response)
                                     if (error) {
                                         mainView.showToast(qsTr("Could not activate signal: ") + error.message)
                                         sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
@@ -1096,14 +1098,14 @@ Page {
                                         // Link accounts, if they are not yet linked
                                         signald.generate_linking_uri(function(error, response) {
                                             if (error) {
-                                                console.log("Error: ", error.error_type, error.message)
+                                                console.error("Settings | Error: ", error.error_type, error.message)
                                                 mainView.showToast(qsTr("Could not activate signal: ") + error.message)
                                                 checkboxes[0].activeCheckbox = false
                                                 checkboxes[0].checked = false
                                                 checkboxes[0].activeCheckbox = true
                                                 sourceSettings.signalIsActivated = false
                                             } else {
-                                                signald.signalUrl = response.uri
+                                                console.debug("Settings | Signal linking response: ", response.session_id)
                                                 signald.signalSessionId = response.session_id
                                             }
                                         })
@@ -1128,16 +1130,16 @@ Page {
                             for (var account of linkedAccounts) {
                                 signald.subscribe(account, function(error, response){
                                     mainView.showToast(qsTr("Could not link Signal accounts: " + error))
-                                    console.error("Subscribe Error: ", error)
+                                    console.error("Settings | Subscribe Error: ", error)
                                     for (var key in response) {
-                                        console.error("Subscribe response: ", key, response[key])
+                                        console.debug("Settings | Subscribe response: ", key, response[key])
                                     }
                                 })
                             }
                         }
 
                         onClientMessageReceived: {
-                            console.debug('Client message received:', message)
+                            console.debug('Settingds | Client message received:', message)
                         }
                     }
                 }
