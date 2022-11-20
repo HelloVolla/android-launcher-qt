@@ -1255,11 +1255,12 @@ Page {
                 var note = {"c_ID": rawNote["id"]}
                 note.c_STEXT = mainView.parseTime(rawNote.date)
                 note.c_TSTAMP = rawNote.date
-                var titleEnd = rawNote.content.indexOf("\n")
+                var content = rawNote.content.replace(/$/gim, "\n")
+                var titleEnd = content.indexOf("\n")
                 note.c_TEXT = titleEnd > 0 && titleEnd < mainView.maxTitleLength ?
-                            rawNote.content.slice(0, titleEnd) : titleEnd > mainView.maxTitleLength ?
-                                rawNote.content.slice(0, mainView.maxTitleLength) + "..." : rawNote.content
-                note.c_CONTENT = rawNote.content
+                            content.slice(0, titleEnd) : titleEnd > mainView.maxTitleLength ?
+                                content.slice(0, mainView.maxTitleLength) + "..." : content
+                note.c_CONTENT = content
                 note.c_ICON = ""
                 note.c_SBADGE = rawNote.pinned
                 modelArr.push(note)
