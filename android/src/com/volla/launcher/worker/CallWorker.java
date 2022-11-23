@@ -209,7 +209,7 @@ public class CallWorker {
 
         Map reply = new HashMap();
         reply.put("calls", callList );
-        reply.put("callsCount", mesgCount );
+        reply.put("callsCount", callList.size() );
         SystemDispatcher.dispatch(responseType, reply);
     }
 }
