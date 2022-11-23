@@ -105,6 +105,8 @@ public class CallWorker {
             CallLog.Calls.TYPE, CallLog.Calls.CACHED_NAME, CallLog.Calls.CACHED_MATCHED_NUMBER};
 
         long cutOffTimeStamp = 0;
+        int mesgCount = 0;
+
         try {
             String filter = " 1=1 " ;
 
@@ -152,7 +154,7 @@ public class CallWorker {
                 cursor = activity.getContentResolver().query(uriCalls , null , filter , null , sortOrder );
             }
 
-            int mesgCount = cursor.getCount();
+            mesgCount = cursor.getCount();
             Log.d(TAG, "Call count = " + mesgCount );
 
             if (cursor != null)
