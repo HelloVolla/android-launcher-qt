@@ -64,6 +64,22 @@ Page {
         shortcutMenu.updateShortcuts(actions)
     }
 
+    function updateShortcutMenuState(opened) {
+        if (opened) {
+            shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
+            shortcutBackground.width = roundedShortcutMenu ? parent.width - mainView.innerSpacing * 4 : parent.width
+            shortcutBackground.height = shortcutColumn.height
+            shortcutColumn.opacity = 1
+        } else {
+            shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
+            shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
+            shortcutColumn.opacity = 0
+            shortcutMenu.executeSelection()
+            shortcutMenu.selectedMenuItem = rootMenuButton
+            shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
+        }
+    }
+
     function updateHeadlineColor() {
         springBoard.headline.color = mainView.fontColor
     }
@@ -720,6 +736,8 @@ Page {
             destroyShortcuts()
             createShortcuts(actions)
         }
+
+
 
         function executeSelection() {
             console.log("Springboard | Action ID is " + selectedMenuItem.actionId)

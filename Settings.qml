@@ -467,10 +467,6 @@ Page {
                     id: passwordDialog
 
                     anchors.centerIn: parent
-//                    implicitHeight: dialogTitle.height + passwordField.height +
-//                                    dialogLabel.height + confirmationField.height +
-//                                    keepPasswordCheckBox.height + okButton.height +
-//                                    mainView.innerSpacing * 2
                     width: parent.width - mainView.innerSpacing * 4
                     modal: true
                     dim: false
@@ -958,12 +954,11 @@ Page {
                 }
             }
 
-            // todo: Add source settings
             Item {
                 id: sourceSettingsItem
                 width: parent.width
                 implicitHeight: sourceSettingsItemColumn.height
-                visible: false
+                visible: true
 
                 Column {
                     id: sourceSettingsItemColumn
@@ -1003,10 +998,10 @@ Page {
                     function createCheckboxes() {
                         var component = Qt.createComponent("/Checkbox.qml", sourceSettingsItemColumn)
                         var properties = { "actionId": "signal",
-                                "text": qsTr("Signal"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
+                                "text": qsTr("Signal"), "checked": sourceSettings.signalIsActivated,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
                         var object = component.createObject(sourceSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         sourceSettingsItemColumn.checkboxes.push(object)
@@ -1023,8 +1018,129 @@ Page {
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
 
-                        if (actionId === "Signal" && active) {
-                            // todo
+                        if (actionId === "signal") {
+                            if (!signald.busy) {
+                                if (active) signald.activateSignalIntegration()
+                                else signald.deactivateSignalIntegration()
+                            }
+                        }
+                    }
+
+                    Settings {
+                        id: sourceSettings
+
+                        property bool signalIsActivated: false
+                    }
+
+                    Signald {
+                        id: signald
+                        url: "/data/signald/signald.sock"
+
+                        function activateSignalIntegration() {
+                            console.debug("Settings | Will activate signal, if necessary" )
+                            if (!signald.isConnectedToSignald) signald.connect()
+                        }
+
+                        function deactivateSignalIntegration() {
+                            console.log("Settings | Will unsubscribe and disconnect to signald")
+                            for (var account of signald.linkedAccounts) {
+                                signald.unsubscribe(account.account_id, console.log)
+                            }
+                            // todo: unlink accounts
+                            signald.disconnect()
+                        }
+
+                        Component.onCompleted: {
+                            // Check settings to connect
+                            if (sourceSettings.signalIsActivated && !signald.isConnectedToSignald) {
+                                console.log("Setings | Will connect to signald")
+                                signald.connect()
+                            }
+                        }
+
+                        property string signalSessionId
+                        property bool busy: false
+
+                        onSignalSessionIdChanged: {
+                            console.debug("Setting | Signal url changed to: " + signalUrl)
+                            if (signalSessionId !== undefined) {
+                                signald.finish_link(sourceSettingsItemColumn.signalSessionId, false, function(error, response) {
+                                    console.log('Settings | Finish linking: ', error, response)
+                                    if (error) {
+                                        mainView.showToast(qsTr("Could not activate signal: ") + error.message)
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
+                                        sourceSettingsItemColumn.checkboxes[0].checked = false
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
+                                    } else {
+                                        mainView.showToast(qsTr("Signal integration sucessfully activated"))
+                                    }
+                                })
+                            }
+                        }
+
+                        onStateChanged: {
+                            switch (state) {
+                                case 0:
+                                    console.debug("Settings | Signal is disconnected")
+                                    if (sourceSettingsItemColumn.checkboxes.length > 0
+                                            && sourceSettingsItemColumn.checkboxes[0].checked) {
+                                        mainView.showToast(qsTr("You need to install the Signal app at first"))
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
+                                        sourceSettingsItemColumn.checkboxes[0].checked = false
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
+                                    }
+                                    sourceSettings.signalIsActivated = false
+                                    break
+                                case 2:
+                                    console.debug("Settings | Signal is connected")
+                                    if (signald.linkedAccounts.length < 1) {
+                                        console.debug("Settings | Will link accounts")
+                                        // Link accounts, if they are not yet linked
+                                        signald.generate_linking_uri(function(error, response) {
+                                            if (error) {
+                                                console.error("Settings | Error: ", error.error_type, error.message)
+                                                mainView.showToast(qsTr("Could not activate signal: ") + error.message)
+                                                checkboxes[0].activeCheckbox = false
+                                                checkboxes[0].checked = false
+                                                checkboxes[0].activeCheckbox = true
+                                                sourceSettings.signalIsActivated = false
+                                            } else {
+                                                console.debug("Settings | Signal linking response: ", response.session_id)
+                                                signald.signalSessionId = response.session_id
+                                            }
+                                        })
+                                    } else {
+                                        console.debug("Settings | Will re-link accounts")
+                                        // Re-subscribe the accounts
+                                        for (var account of linkedAccounts) {
+                                            signald.subscribe(account, function(error, response){
+                                                console.error("Subscribe Error: ", error)
+                                                for (var key in response) {
+                                                    console.error("Subscribe response: ", key, response[key])
+                                                }
+                                            })
+                                        }
+                                    }
+                                    break
+                            }
+                        }
+
+                        onLinkedAccountsChanged: {
+                            // Subscribe the accounts
+                            console.debug("Settings | Linked accounts changed")
+                            for (var account of linkedAccounts) {
+                                signald.subscribe(account, function(error, response){
+                                    mainView.showToast(qsTr("Could not link Signal accounts: " + error))
+                                    console.error("Settings | Subscribe Error: ", error)
+                                    for (var key in response) {
+                                        console.debug("Settings | Subscribe response: ", key, response[key])
+                                    }
+                                })
+                            }
+                        }
+
+                        onClientMessageReceived: {
+                            console.debug('Settingds | Client message received:', message)
                         }
                     }
                 }
@@ -1033,7 +1149,7 @@ Page {
                     NumberAnimation {
                         duration: 250.0
                     }
-                }
+                }          
             }
 
             Item {
@@ -1430,6 +1546,7 @@ Page {
                         }
                         onClicked: {
                             resetNewsButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
                             mainView.resetFeeds()
                         }
                     }
@@ -1463,6 +1580,7 @@ Page {
                         }
                         onClicked: {
                             reseetShortcutsButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
                             mainView.resetActions()
                         }
                     }
@@ -1496,6 +1614,7 @@ Page {
                         }
                         onClicked: {
                             reseetLauncherButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
                             mainView.resetContacts()
                         }
                     }
@@ -1510,5 +1629,3 @@ Page {
         }
     }
 }
-
-

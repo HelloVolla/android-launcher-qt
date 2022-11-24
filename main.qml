@@ -38,6 +38,18 @@ ApplicationWindow {
               } else {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
+              // Start onboarding for the first start of the app
+              if (settings.firstStart) {
+                  console.debug("MainView", "Will start tutorial")
+                  var component = Qt.createComponent("/OnBoarding.qml")
+                  var properties = { "mainView" : mainView, "innerSpacing" : mainView.innerSpacing }
+                  if (component.status !== Component.Ready) {
+                      if (component.status === Component.Error)
+                          console.debug("MainView | Error: "+ component.errorString() );
+                  }
+                  var object = component.createObject(mainView, properties)
+                  object.open()
+              }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
               // Update app grid
@@ -269,6 +281,23 @@ ApplicationWindow {
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/Springboard.qml", mainView)
             }
+        }
+
+        function updateSpringboard(text, selectedObj) {
+            console.log("MainView | Uodate springboar with text '" + text + "'")
+            currentIndex = swipeIndex.Springboard
+            var item = itemAt(swipeIndex.Springboard)
+            if (selectedObj !== undefined) {
+                item.children[0].item.selectedObj = selectedObj
+            }
+            item.children[0].item.textInputArea.text = text
+        }
+
+        function updateShortcutMenuState(opened) {
+            console.log("MainView | Update shortcut menu state: '" + opened + "'")
+            currentIndex = swipeIndex.Springboard
+            var item = itemAt(swipeIndex.Springboard)
+            item.children[0].item.updateShortcutMenuState(opened)
         }
 
         function updateCollectionPage(mode) {
@@ -713,17 +742,17 @@ ApplicationWindow {
             return noteStr !== undefined && noteStr.length > 0 ? JSON.parse(noteStr) : notes
         }
 
-        function updateNote(id, content, pinned) {
-            console.debug("MainView | New Note: " + id + ", " + content + ", " + pinned)
+        function updateNote(noteId, content, pinned) {
+            console.debug("MainView | Update Note: " + noteId + ", " + content + ", " + pinned)
             var notesArr = mainView.getNotes()
             var note
             var i = 0
-            while (id !== undefined && i < notesArr.length) {
-                if (notesArr[i]["id"] === id) note = notesArr[i]
+            while (noteId !== undefined && i < notesArr.length && note === undefined) {
+                if (notesArr[i]["id"] === noteId) note = notesArr[i]
                 i++
             }
-            console.log("MainView | Existing note: " + note)
-            if (id !== undefined && note !== undefined) {
+            if (note !== undefined) {
+                console.log("MainView | Existing note: " + note)
                 note["content"] = content
                 note["date"] = new Date().valueOf()
                 note["pinned"] = pinned
@@ -731,7 +760,7 @@ ApplicationWindow {
             } else {
                 console.log("MainView | Create note")
                 note = new Object
-                note["id"] = new Date().valueOf()
+                note["id"] = noteId === undefined ? new Date().valueOf() : noteId
                 note["content"] = content
                 note["date"] = new Date().valueOf()
                 note["pinned"] = false
