@@ -1034,13 +1034,13 @@ Page {
                         property bool signalIsActivated: false
 
                         onSignalIsActivatedChanged: {
-
+                            mainView.isSignalActive = signalIsActivated
                         }
                     }
 
                     Signald {
                         id: signald
-                        url: "tcp://git.volla.tech:7890" // "/data/signald/signald.sock"
+                        url: "/data/signald/signald.sock"
 
                         function activateSignalIntegration() {
                             console.debug("Settings | Will activate signal, if necessary" )
