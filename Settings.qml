@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Universal 2.12
+import QtQuick.LocalStorage 2.12
 import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
@@ -21,6 +22,7 @@ Page {
         anchors.fill: parent
         contentWidth: parent.width
         contentHeight: settingsColumn.height
+
         Column {
             id: settingsColumn
             width: parent.width
@@ -1030,11 +1032,15 @@ Page {
                         id: sourceSettings
 
                         property bool signalIsActivated: false
+
+                        onSignalIsActivatedChanged: {
+
+                        }
                     }
 
                     Signald {
                         id: signald
-                        url: "/data/signald/signald.sock"
+                        url: "tcp://git.volla.tech:7890" // "/data/signald/signald.sock"
 
                         function activateSignalIntegration() {
                             console.debug("Settings | Will activate signal, if necessary" )
@@ -1062,11 +1068,14 @@ Page {
                         property bool busy: false
 
                         onSignalSessionIdChanged: {
-                            console.debug("Setting | Signal url changed to: " + signalUrl)
+                            console.debug("Setting | Signal session Id changed to: " + signalSessionId)
                             if (signalSessionId !== undefined) {
                                 signald.finish_link(sourceSettingsItemColumn.signalSessionId, false, function(error, response) {
                                     console.log('Settings | Finish linking: ', error, response)
                                     if (error) {
+                                        for (const [key, value] of Object.entries(error)) {
+                                          console.error(key, value);
+                                        }
                                         mainView.showToast(qsTr("Could not activate signal: ") + error.message)
                                         sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
                                         sourceSettingsItemColumn.checkboxes[0].checked = false
@@ -1140,7 +1149,18 @@ Page {
                         }
 
                         onClientMessageReceived: {
-                            console.debug('Settingds | Client message received:', message)
+                            console.debug('Settings | Client message received:', message)
+                            // todo save message
+                            var db = LocalStorage.openDatabaseSync(mainView.cacheName, mainView.cacheVersion,
+                                                                   mainView.cacheDescription, mainView.cacheSize)
+                            db.transaction (
+                                function (tx) {
+                                    tx.executeSql('CREATE TABLE IF NOT EXISTS Signal(address TEXT, message TEXT, date INTEGER, isSent INTEGER)')
+
+                                    // todo store message
+                                }
+
+                            )
                         }
                     }
                 }

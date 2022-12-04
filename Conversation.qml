@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.2
 import QtQuick.XmlListModel 2.12
+import QtQuick.LocalStorage 2.12
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
@@ -171,7 +172,30 @@ Page {
             AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
         } else if (isNaN(filter["threadId"])) {
-            AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
+            var db =  openDatabaseSync(mainView.cacheName, mainView.cacheVersion,
+                                      mainview.cacheDescription. mainView.cacheSize)
+            var d = Date.valueOf() - filter.age * 1000
+            db.transaction (
+                function (tx) {
+                    var rs = tx.executeSql('SELECT * FROM signsl WHERE date > ' + d + ' AND address LIKE \'' + filter["threadId"]
+                                           + '\' ORDER BY date ASC')
+                    var signalMessages = new Array
+                    var recentAddress
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        console.debug("Collections | " +  rs.rows.item(i).contact + ", " + rs.rows.item(i).message)
+                        if (recentContact !== rs.rows.item(i).address) {
+                            var signalMessage = { "isSignal" : true,
+                                                  "address" : rs.rows.item(i).address,
+                                                  "body" : rs.rows.item(i).body,
+                                                  "date" : rs.rows.item(i).date,
+                                                  "isSent" : rs.rows.item(i).isSent === 1 ? true : fale }
+                            signalMessages.push(signalMessage)
+                        }
+                    }
+                    conversationPage.messages = collectionPage.threads.concat(signalThreads)
+                    conversationPage.updateListModel()
+                }
+            )
         } else {
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
         }
@@ -443,13 +467,7 @@ Page {
 
                         if (conversationPage.lastMessageIsFromSignal()) {
                             kind = "Signal"
-                            if (conversationPage.conversationMode.Thread) {
-                                AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction",
-                                    {"threadId": conversationPage.currentId, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
-                            } else {
-                                AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction",
-                                    {"person": conversationPage.headline.text, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
-                            }
+                            // todo: send Signal message
                         } else {
                             AN.SystemDispatcher.dispatch("volla.launcher.messageAction",
                                {"number": conversationPage.phoneNumber, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
@@ -714,6 +732,8 @@ Page {
 
                 if (message["isMMS"] === true) {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • MMS"
+                } else if (message["isSignal"] === true) {
+                    cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • Signal"
                 } else {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
                 }
@@ -813,16 +833,6 @@ Page {
 //                        console.log("Conversation | * " + messageKey + ": " + messageValue)
 //                    }
 //                })
-                conversationPage.updateListMocel()
-            } else if (type === "volla.launcher.signalMessagesResponse") {
-                console.log("Conversation | onDispatched: " + type)
-                message["messages"].forEach(function (message, index) {
-                    message["isSignal"] = true
-                    for (const [messageKey, messageValue] of Object.entries(message)) {
-                        console.log("Conversation | * " + messageKey + ": " + messageValue)
-                    }
-                })
-                conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 conversationPage.updateListMocel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
