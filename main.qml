@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
+import QtQuick.LocalStorage 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 import Qt.labs.settings 1.0
@@ -828,6 +829,14 @@ ApplicationWindow {
             settings.sync()
         }
 
+        function activateSignalIntegration(callback) {
+            if (!signald.busy) signald.activateSignalIntegration(callback)
+        }
+
+        function deactivateSignalIntegration() {
+            if (!signald.busy) deactivateSignalIntegration()
+        }
+
         function resetActions() {
             shortcuts.write(JSON.stringify(defaultActions))
             showToast(qsTr("Reset successful"))
@@ -974,6 +983,7 @@ ApplicationWindow {
         property int searchMode: mainView.searchMode.Duck
         property bool fullscreen: false
         property bool firstStart: true
+        property bool signalIsActivated: false
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
         property bool useHapticMenus: false
@@ -1034,4 +1044,155 @@ ApplicationWindow {
         }
     }
 
+    Signald {
+        id: signald
+        url: "/data/signald/signald.sock"
+
+        property string signalSessionId
+        property bool busy: false
+        property bool isConnecting: false
+        property var callbackfunction
+
+        function activateSignalIntegration(callback) {
+            console.debug("MainView | Will activate signal, if necessary" )
+            if (!signald.isConnectedToSignald) {
+                signald.busy = true
+                signald.isConnecting = true
+                signald.connect()
+                callbackfunction = callback
+            } else {
+                callback(true)
+            }
+        }
+
+        function deactivateSignalIntegration() {
+            console.log("MainView | Will unsubscribe and disconnect to signald")
+            signald.busy = true
+            signald.isConnecting = false
+            for (var account of signald.linkedAccounts) {
+                signald.unsubscribe(account.account_id, console.log)
+            }
+            // todo: unlink accounts
+            signald.disconnect()
+            signald.busy = false
+        }
+
+        Component.onCompleted: {
+            // Check settings to connect
+            if (sourceSettings.signalIsActivated && !signald.isConnectedToSignald) {
+                console.log("MainView | Will connect to signald")
+                signald.connect()
+            }
+        }
+
+        onSignalSessionIdChanged: {
+            console.debug("MainView | Signal session Id changed to: " + signalSessionId)
+            if (signalSessionId !== undefined) {
+                signald.finish_link(signald.signalSessionId, false, function(error, response) {
+                    if (error) {
+                        console.error('MainView | Could not link accounts:')
+                        for (const [key, value] of Object.entries(error)) {
+                          console.error(key, value);
+                        }
+                        mainView.showToast(qsTr("Could not activate Signal: ") + error.message)
+                        settings.signalIsActivated = false
+                        callbackfunction(false)
+                    } else {
+                        console.debug('MainView | Successfully linked accounts')
+                        for (const [key, value] of Object.entries(response)) {
+                          console.error(key, value);
+                        }
+                    }
+                    signald.busy = false
+                })
+            }
+        }
+
+        onStateChanged: {
+            switch (state) {
+                case 0:
+                    console.debug("MainView | Signal is disconnected")
+                    if (signald.isConnecting) {
+                        mainView.showToast(qsTr("You need to install the Signal app at first"))
+                    }
+                    settings.signalIsActivated = false
+                    callbackfunction(false)
+                    break
+                case 2:
+                    console.debug("MainView | Signal is connected")
+                    if (signald.linkedAccounts.length < 1) {
+                        // Link accounts, if they are not yet linked
+                        console.debug("MainView | Will link accounts")
+                        signald.generate_linking_uri(function(error, response) {
+                            if (error) {
+                                console.error("MainView | Error: ", error.error_type, error.message)
+                                mainView.showToast(qsTr("Could not activate Signal: ") + error.message)
+                                settings.signalIsActivated = false
+                                callbackfunction(false)
+                            } else {
+                                console.debug("MainView | Signal linking response: ", response.session_id)
+                                signald.signalSessionId = response.session_id
+                            }
+                        })
+                    } else {
+                        console.debug("MainView | Will re-subscribe accounts")
+                        // Re-subscribe the accounts
+                        for (var account of linkedAccounts) {
+                            signald.subscribe(account, function(error, response){
+                                if (error) {
+                                    console.error("MainView | Subscription error: " + error.meesage)
+                                } else {
+                                    console.debug("MainView | Subscription successfully resubscribed")
+                                    for (var key in response) {
+                                        console.error("Subscribe response: ", key, response[key])
+                                    }
+                                }
+                            })
+                        }
+                    }
+                    break
+            }
+        }
+
+        onLinkedAccountsChanged: {
+            // Subscribe the accounts
+            console.debug("MainView | Linked accounts changed: " + linkedAccounts.length)
+            for (var account of linkedAccounts) {
+                signald.subscribe(account, function(error, response){
+                    if (error) {
+                        console.error("MainView | Subscription Error: ", error.message)
+                        for (var key in error) {
+                            console.debug("MainView | Subscribe error: ", key, response[key])
+                        }
+                        mainView.showToast(qsTr("Could not subscribe Signal accounts: " + error.message))
+                        settings.signalIsActivated = false
+                        callbackfunction(false)
+                    } else {
+                        for (key in response) {
+                            console.debug("MainView | Subscribe response: ", key, response[key])
+                        }
+                        mainView.showToast(qsTr("Signal integration sucessfully activated"))
+                        settings.signalIsActivated = true
+                        isConnecting = false
+                        callbackfunction(true)
+                    }
+                })
+            }
+        }
+
+        onClientMessageReceived: {
+            console.debug('MainView | Client message received:', message)
+            // todo save message
+            var db = LocalStorage.openDatabaseSync(mainView.cacheName, mainView.cacheVersion,
+                                                   mainView.cacheDescription, mainView.cacheSize)
+            db.transaction (
+                function (tx) {
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS Signal(address TEXT, message TEXT, date INTEGER, isSent INTEGER)')
+
+                    // todo store message
+                }
+
+            )
+        }
+    }
 }
