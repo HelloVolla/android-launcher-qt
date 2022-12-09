@@ -1079,9 +1079,9 @@ ApplicationWindow {
 
         Component.onCompleted: {
             // Check settings to connect
-            if (sourceSettings.signalIsActivated && !signald.isConnectedToSignald) {
+            if (settings.signalIsActivated && !signald.isConnectedToSignald) {
                 console.log("MainView | Will connect to signald")
-                signald.connect()
+                activateSignalIntegration(function() { console.log("Activated signald integration") })
             }
         }
 
