@@ -1,4 +1,4 @@
-import QtQuick 2.12
+    import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
@@ -50,6 +50,10 @@ ApplicationWindow {
                   }
                   var object = component.createObject(mainView, properties)
                   object.open()
+              }
+              // Complete Signal activation, if necessary
+              if (signald.isConnecting) {
+                  signald.completeSignalIntegration()
               }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
@@ -1077,16 +1081,8 @@ ApplicationWindow {
             signald.busy = false
         }
 
-        Component.onCompleted: {
-            // Check settings to connect
-            if (settings.signalIsActivated && !signald.isConnectedToSignald) {
-                console.log("MainView | Will connect to signald")
-                activateSignalIntegration(function() { console.log("Activated signald integration") })
-            }
-        }
-
-        onSignalSessionIdChanged: {
-            console.debug("MainView | Signal session Id changed to: " + signalSessionId)
+        function completeSignalIntegration() {
+            console.debug("MainView | Complete Signal integration with session: " + signalSessionId)
             if (signalSessionId !== undefined) {
                 signald.finish_link(signald.signalSessionId, false, function(error, response) {
                     if (error) {
@@ -1104,6 +1100,19 @@ ApplicationWindow {
                         }
                     }
                     signald.busy = false
+                })
+            } else {
+                console.warn("MainView | Signal session is missing")
+                callbackfunction(false)
+            }
+        }
+
+        Component.onCompleted: {
+            // Check settings to connect
+            if (settings.signalIsActivated && !signald.isConnectedToSignald) {
+                console.log("MainView | Will connect to signald")
+                activateSignalIntegration(function() {
+                    console.log("MainView | Activated signald integration")
                 })
             }
         }
@@ -1132,6 +1141,7 @@ ApplicationWindow {
                             } else {
                                 console.debug("MainView | Signal linking response: ", response.session_id)
                                 signald.signalSessionId = response.session_id
+                                Qt.openUrlExternally(response.uri)
                             }
                         })
                     } else {

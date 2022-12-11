@@ -1022,16 +1022,19 @@ Page {
                         if (actionId === "signal") {
                             if (active) {
                                 mainView.activateSignalIntegration( function(succeeded) {
+                                    console.debug("Settings | Connecting Signal successded: " + succeeded)
                                     if (!succeeded & sourceSettingsItemColumn.checkboxes.length > 0) {
                                         sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
                                         sourceSettingsItemColumn.checkboxes[0].checked = false
                                         sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
                                     }
                                     sourceSettings.signalIsActivated = succeeded
+                                    sourceSettings.sync()
                                 })
                             } else {
                                 mainView.deactivateSignalIntegration()
                                 sourceSettings.signalIsActivated = false
+                                sourceSettings.sync()
                             }
                         }
                     }
