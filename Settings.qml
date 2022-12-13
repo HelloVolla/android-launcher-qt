@@ -1368,17 +1368,25 @@ Page {
                     onMenuStateChanged: {
                         if (resetSettingsItemColumn.menuState) {
                             resetNewsButton.visible = true
-                            timer.setTimeout(function(){
+                            timer.setTimeout(function() {
                                 reseetShortcutsButton.visible = true
-                                timer.setTimeout(function(){
-                                    resetLauncherButton.visible = true}, 50)
+                                timer.setTimeout(function() {
+                                    resetContactsButton.visible = true
+                                    timer.setTimeout(function() {
+                                        resetLauncherButton.visible = true
+                                    }, 50)
+                                }, 50)
                             }, 50)
                         } else {
                             resetLauncherButton.visible = false
-                            timer.setTimeout(function(){
-                                reseetShortcutsButton.visible = false
-                                timer.setTimeout(function(){
-                                    resetNewsButton.visible = false}, 50)
+                            timer.setTimeout(function() {
+                                resetContactsButton.visible = false
+                                timer.setTimeout(function() {
+                                    reseetShortcutsButton.visible = false
+                                    timer.setTimeout(function() {
+                                        resetNewsButton.visible = false
+                                    }, 50)
+                                }, 50)
                             }, 50)
                         }
                     }
@@ -1487,7 +1495,7 @@ Page {
                     }
 
                     Button {
-                        id: resetLauncherButton
+                        id: resetContactsButton
                         flat: true
                         highlighted: true
                         visible: false
@@ -1499,6 +1507,40 @@ Page {
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reload contacts")
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            id: resetContactsButtonBackground
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: Universal.foreground
+                            border.width: 1
+                        }
+                        onPressed: {
+                            resetContactsButtonBackground.color = Universal.accent
+                        }
+                        onClicked: {
+                            resetContactsButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
+                            mainView.resetContacts()
+                        }
+                    }
+
+                    Button {
+                        id: resetLauncherButton
+                        flat: true
+                        highlighted: true
+                        visible: false
+                        x: mainView.innerSpacing
+                        topPadding: mainView.innerSpacing / 2
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing / 2
+                        contentItem: Text {
+                            width: parent.width - 2 * resetSettingsItemButton.padding
+                            text: qsTr("Reset launcher")
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
@@ -1516,7 +1558,7 @@ Page {
                         onClicked: {
                             reseetLauncherButtonBackground.color = "transparent"
                             resetSettingsItemColumn.menuState = false
-                            mainView.resetContacts()
+                            mainView.resetLauncher()
                         }
                     }
                 }

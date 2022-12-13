@@ -853,12 +853,6 @@ ApplicationWindow {
 
         function resetLauncher() {
             AN.SystemDispatcher.dispatch("volla.launcher.resetAction", {})
-
-            mainView.contacts = new Array
-            mainView.loadingContacts = new Array
-            mainView.isLoadingContacts = true
-            mainView.updateSpinner(true)
-            mainView.timeStamp = new Date()
         }
 
         function resetContacts() {
@@ -1062,11 +1056,16 @@ ApplicationWindow {
             if (!signald.isConnectedToSignald) {
                 signald.busy = true
                 signald.isConnecting = true
+                signald.callbackfunction = callback
                 signald.connect()
-                callbackfunction = callback
             } else {
                 callback(true)
             }
+        }
+
+        function reactivateSignalIntegration(callback) {
+            signald.callbackfunction = callback
+            signald.connect()
         }
 
         function deactivateSignalIntegration() {
@@ -1091,27 +1090,36 @@ ApplicationWindow {
                           console.error(key, value);
                         }
                         mainView.showToast(qsTr("Could not activate Signal: ") + error.message)
+                        isConnecting = false
                         settings.signalIsActivated = false
                         callbackfunction(false)
                     } else {
                         console.debug('MainView | Successfully linked accounts')
                         for (const [key, value] of Object.entries(response)) {
-                          console.error(key, value);
+                          console.debug(key, value);
                         }
+                        list_accounts(function(error, response){
+                            if (!error) {
+                                linkedAccounts = response.accounts
+                            }
+                        })
                     }
                     signald.busy = false
                 })
             } else {
                 console.warn("MainView | Signal session is missing")
+                isConnecting = false
+                settings.signalIsActivated = false
                 callbackfunction(false)
             }
         }
 
         Component.onCompleted: {
             // Check settings to connect
+            // settings.signalIsActivated = true // ONLY FOR TESTING
             if (settings.signalIsActivated && !signald.isConnectedToSignald) {
                 console.log("MainView | Will connect to signald")
-                activateSignalIntegration(function() {
+                reactivateSignalIntegration(function() {
                     console.log("MainView | Activated signald integration")
                 })
             }
@@ -1124,41 +1132,36 @@ ApplicationWindow {
                     if (signald.isConnecting) {
                         mainView.showToast(qsTr("You need to install the Signal app at first"))
                     }
+                    isConnecting = false
                     settings.signalIsActivated = false
                     callbackfunction(false)
                     break
                 case 2:
                     console.debug("MainView | Signal is connected")
-                    if (signald.linkedAccounts.length < 1) {
+                    if (!settings.signalIsActivated) {
                         // Link accounts, if they are not yet linked
                         console.debug("MainView | Will link accounts")
                         signald.generate_linking_uri(function(error, response) {
                             if (error) {
                                 console.error("MainView | Error: ", error.error_type, error.message)
                                 mainView.showToast(qsTr("Could not activate Signal: ") + error.message)
+                                isConnecting = false
                                 settings.signalIsActivated = false
                                 callbackfunction(false)
                             } else {
                                 console.debug("MainView | Signal linking response: ", response.session_id)
                                 signald.signalSessionId = response.session_id
+                                console.debug("MainView | Will open Signal link: ", response.uri)
                                 Qt.openUrlExternally(response.uri)
                             }
                         })
                     } else {
                         console.debug("MainView | Will re-subscribe accounts")
-                        // Re-subscribe the accounts
-                        for (var account of linkedAccounts) {
-                            signald.subscribe(account, function(error, response){
-                                if (error) {
-                                    console.error("MainView | Subscription error: " + error.meesage)
-                                } else {
-                                    console.debug("MainView | Subscription successfully resubscribed")
-                                    for (var key in response) {
-                                        console.error("Subscribe response: ", key, response[key])
-                                    }
-                                }
-                            })
-                        }
+                        list_accounts(function(error, response){
+                            if (!error) {
+                                linkedAccounts = response.accounts
+                            }
+                        })
                     }
                     break
             }
@@ -1175,6 +1178,7 @@ ApplicationWindow {
                             console.debug("MainView | Subscribe error: ", key, response[key])
                         }
                         mainView.showToast(qsTr("Could not subscribe Signal accounts: " + error.message))
+                        isConnecting = false
                         settings.signalIsActivated = false
                         callbackfunction(false)
                     } else {
@@ -1182,8 +1186,8 @@ ApplicationWindow {
                             console.debug("MainView | Subscribe response: ", key, response[key])
                         }
                         mainView.showToast(qsTr("Signal integration sucessfully activated"))
-                        settings.signalIsActivated = true
                         isConnecting = false
+                        settings.signalIsActivated = true
                         callbackfunction(true)
                     }
                 })
