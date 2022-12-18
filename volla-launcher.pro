@@ -15,8 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         fileio.cpp \
-        main.cpp \
-        socket.cpp
+        main.cpp
 
 RESOURCES += qml.qrc
 
@@ -50,15 +49,32 @@ contains(ANDROID_TARGET_ARCH,x86) {
 }
 
 HEADERS += \
-    fileio.h \
-    socket.h
+    fileio.h
 
 DISTFILES += \
     LICENSE.txt \
+    android/src/com/volla/launcher/models/Action.java \
+    android/src/com/volla/launcher/models/Message.java \
+    android/src/com/volla/launcher/models/Notification.java \
+    android/src/com/volla/launcher/models/NotificationData.java \
+    android/src/com/volla/launcher/models/NotificationIds.java \
+    android/src/com/volla/launcher/models/RemoteInputParcel.java \
+    android/src/com/volla/launcher/repository/MainViewModel.java \
+    android/src/com/volla/launcher/repository/MessageRepository.java \
+    android/src/com/volla/launcher/service/NotificationListenerExampleService.java \
+    android/src/com/volla/launcher/storage/Message.java \
+    android/src/com/volla/launcher/storage/MessageDao.java \
+    android/src/com/volla/launcher/storage/MessageDatabase.java \
+    android/src/com/volla/launcher/storage/Users.java \
+    android/src/com/volla/launcher/storage/UsersDao.java \
     android/src/com/volla/launcher/util/MMSManager.java \
+    android/src/com/volla/launcher/util/NotificationUtils.java \
     android/src/com/volla/launcher/util/Settings.java \
     android/src/com/volla/launcher/util/ShortcutUtil.java \
+    android/src/com/volla/launcher/util/SignalUtil.java \
+    android/src/com/volla/launcher/util/VersionUtils.java \
     android/src/com/volla/launcher/worker/ShortcutsWorker.java \
+    android/src/com/volla/launcher/worker/SignalWorker.java \
     translations/*.ts \
     android/res/drawable/wallpaper_black.png \
     android/res/drawable/wallpaper_white.png \
