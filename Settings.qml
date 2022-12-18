@@ -21,6 +21,7 @@ Page {
         anchors.fill: parent
         contentWidth: parent.width
         contentHeight: settingsColumn.height
+
         Column {
             id: settingsColumn
             width: parent.width
@@ -1019,9 +1020,21 @@ Page {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
 
                         if (actionId === "signal") {
-                            if (!signald.busy) {
-                                if (active) signald.activateSignalIntegration()
-                                else signald.deactivateSignalIntegration()
+                            if (active) {
+                                mainView.activateSignalIntegration( function(succeeded) {
+                                    console.debug("Settings | Connecting Signal successded: " + succeeded)
+                                    if (!succeeded & sourceSettingsItemColumn.checkboxes.length > 0) {
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
+                                        sourceSettingsItemColumn.checkboxes[0].checked = false
+                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
+                                    }
+                                    sourceSettings.signalIsActivated = succeeded
+                                    sourceSettings.sync()
+                                })
+                            } else {
+                                mainView.deactivateSignalIntegration()
+                                sourceSettings.signalIsActivated = false
+                                sourceSettings.sync()
                             }
                         }
                     }
@@ -1030,118 +1043,6 @@ Page {
                         id: sourceSettings
 
                         property bool signalIsActivated: false
-                    }
-
-                    Signald {
-                        id: signald
-                        url: "/data/signald/signald.sock"
-
-                        function activateSignalIntegration() {
-                            console.debug("Settings | Will activate signal, if necessary" )
-                            if (!signald.isConnectedToSignald) signald.connect()
-                        }
-
-                        function deactivateSignalIntegration() {
-                            console.log("Settings | Will unsubscribe and disconnect to signald")
-                            for (var account of signald.linkedAccounts) {
-                                signald.unsubscribe(account.account_id, console.log)
-                            }
-                            // todo: unlink accounts
-                            signald.disconnect()
-                        }
-
-                        Component.onCompleted: {
-                            // Check settings to connect
-                            if (sourceSettings.signalIsActivated && !signald.isConnectedToSignald) {
-                                console.log("Setings | Will connect to signald")
-                                signald.connect()
-                            }
-                        }
-
-                        property string signalSessionId
-                        property bool busy: false
-
-                        onSignalSessionIdChanged: {
-                            console.debug("Setting | Signal url changed to: " + signalUrl)
-                            if (signalSessionId !== undefined) {
-                                signald.finish_link(sourceSettingsItemColumn.signalSessionId, false, function(error, response) {
-                                    console.log('Settings | Finish linking: ', error, response)
-                                    if (error) {
-                                        mainView.showToast(qsTr("Could not activate signal: ") + error.message)
-                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
-                                        sourceSettingsItemColumn.checkboxes[0].checked = false
-                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
-                                    } else {
-                                        mainView.showToast(qsTr("Signal integration sucessfully activated"))
-                                    }
-                                })
-                            }
-                        }
-
-                        onStateChanged: {
-                            switch (state) {
-                                case 0:
-                                    console.debug("Settings | Signal is disconnected")
-                                    if (sourceSettingsItemColumn.checkboxes.length > 0
-                                            && sourceSettingsItemColumn.checkboxes[0].checked) {
-                                        mainView.showToast(qsTr("You need to install the Signal app at first"))
-                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
-                                        sourceSettingsItemColumn.checkboxes[0].checked = false
-                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
-                                    }
-                                    sourceSettings.signalIsActivated = false
-                                    break
-                                case 2:
-                                    console.debug("Settings | Signal is connected")
-                                    if (signald.linkedAccounts.length < 1) {
-                                        console.debug("Settings | Will link accounts")
-                                        // Link accounts, if they are not yet linked
-                                        signald.generate_linking_uri(function(error, response) {
-                                            if (error) {
-                                                console.error("Settings | Error: ", error.error_type, error.message)
-                                                mainView.showToast(qsTr("Could not activate signal: ") + error.message)
-                                                checkboxes[0].activeCheckbox = false
-                                                checkboxes[0].checked = false
-                                                checkboxes[0].activeCheckbox = true
-                                                sourceSettings.signalIsActivated = false
-                                            } else {
-                                                console.debug("Settings | Signal linking response: ", response.session_id)
-                                                signald.signalSessionId = response.session_id
-                                            }
-                                        })
-                                    } else {
-                                        console.debug("Settings | Will re-link accounts")
-                                        // Re-subscribe the accounts
-                                        for (var account of linkedAccounts) {
-                                            signald.subscribe(account, function(error, response){
-                                                console.error("Subscribe Error: ", error)
-                                                for (var key in response) {
-                                                    console.error("Subscribe response: ", key, response[key])
-                                                }
-                                            })
-                                        }
-                                    }
-                                    break
-                            }
-                        }
-
-                        onLinkedAccountsChanged: {
-                            // Subscribe the accounts
-                            console.debug("Settings | Linked accounts changed")
-                            for (var account of linkedAccounts) {
-                                signald.subscribe(account, function(error, response){
-                                    mainView.showToast(qsTr("Could not link Signal accounts: " + error))
-                                    console.error("Settings | Subscribe Error: ", error)
-                                    for (var key in response) {
-                                        console.debug("Settings | Subscribe response: ", key, response[key])
-                                    }
-                                })
-                            }
-                        }
-
-                        onClientMessageReceived: {
-                            console.debug('Settingds | Client message received:', message)
-                        }
                     }
                 }
 
@@ -1467,17 +1368,25 @@ Page {
                     onMenuStateChanged: {
                         if (resetSettingsItemColumn.menuState) {
                             resetNewsButton.visible = true
-                            timer.setTimeout(function(){
+                            timer.setTimeout(function() {
                                 reseetShortcutsButton.visible = true
-                                timer.setTimeout(function(){
-                                    resetLauncherButton.visible = true}, 50)
+                                timer.setTimeout(function() {
+                                    resetContactsButton.visible = true
+                                    timer.setTimeout(function() {
+                                        resetLauncherButton.visible = true
+                                    }, 50)
+                                }, 50)
                             }, 50)
                         } else {
                             resetLauncherButton.visible = false
-                            timer.setTimeout(function(){
-                                reseetShortcutsButton.visible = false
-                                timer.setTimeout(function(){
-                                    resetNewsButton.visible = false}, 50)
+                            timer.setTimeout(function() {
+                                resetContactsButton.visible = false
+                                timer.setTimeout(function() {
+                                    reseetShortcutsButton.visible = false
+                                    timer.setTimeout(function() {
+                                        resetNewsButton.visible = false
+                                    }, 50)
+                                }, 50)
                             }, 50)
                         }
                     }
@@ -1586,7 +1495,7 @@ Page {
                     }
 
                     Button {
-                        id: resetLauncherButton
+                        id: resetContactsButton
                         flat: true
                         highlighted: true
                         visible: false
@@ -1598,6 +1507,40 @@ Page {
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reload contacts")
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            id: resetContactsButtonBackground
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: Universal.foreground
+                            border.width: 1
+                        }
+                        onPressed: {
+                            resetContactsButtonBackground.color = Universal.accent
+                        }
+                        onClicked: {
+                            resetContactsButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
+                            mainView.resetContacts()
+                        }
+                    }
+
+                    Button {
+                        id: resetLauncherButton
+                        flat: true
+                        highlighted: true
+                        visible: false
+                        x: mainView.innerSpacing
+                        topPadding: mainView.innerSpacing / 2
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing / 2
+                        contentItem: Text {
+                            width: parent.width - 2 * resetSettingsItemButton.padding
+                            text: qsTr("Reset launcher")
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
@@ -1615,7 +1558,7 @@ Page {
                         onClicked: {
                             reseetLauncherButtonBackground.color = "transparent"
                             resetSettingsItemColumn.menuState = false
-                            mainView.resetContacts()
+                            mainView.resetLauncher()
                         }
                     }
                 }

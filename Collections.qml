@@ -75,7 +75,7 @@ Page {
                 textInputField.placeholderText = qsTr("Find thread ...")
                 currentCollectionModel = threadModel
                 currentCollectionModel.modelArr = new Array
-                operationCount = 2
+                operationCount = mainView.isSignalActive ? 2 : 1
                 mainView.updateSpinner(true)
                 collectionPage.loadThreads({"age": threadAge})
                 break;
@@ -121,7 +121,31 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
         // load threads from further source
         // address (phone or contact), body (message), date, type
-        AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
+        if (mainView.isActiveSignal) {
+            var db =  openDatabaseSync(mainView.cacheName, mainView.cacheVersion,
+                                      mainview.cacheDescription. mainView.cacheSize)
+            var d = Date.valueOf() - filter.age * 1000
+            db.transaction (
+                function (tx) {
+                    var rs = tx.executeSql('SELECT * FROM signsl WHERE date > ' + d + ' ORDER BY address, data ASC')
+                    var signalThreads = new Array
+                    var recentAddress
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        console.debug("Collections | " +  rs.rows.item(i).contact + ", " + rs.rows.item(i).message)
+                        if (recentContact !== rs.rows.item(i).address) {
+                            var signalThread = { "isSignal" : true,
+                                                 "address" : rs.rows.item(i).address,
+                                                 "body" : rs.rows.item(i).body,
+                                                 "date" : rs.rows.item(i).date,
+                                                 "isSent" : rs.rows.item(i).isSent === 1 ? true : fale }
+                            signalThreads.push(signalThread)
+                        }
+                    }
+                    collectionPage.threads = collectionPage.threads.concat(signalThreads)
+                    collectionPage.updateListModel()
+                }
+            )
+        }
     }
 
     function loadCalls(filter) {
@@ -1387,19 +1411,6 @@ Page {
                 if (currentCollectionMode === mainView.collectionMode.People
                         || currentCollectionMode === mainView.collectionMode.Threads) {
                     collectionPage.threads = collectionPage.threads.concat(message["threads"])
-                    collectionPage.updateListModel()
-                }
-            } else if (type === "volla.launcher.signalThreadsResponse") {
-                console.log("Collections | onDispatched: " + type)
-                if (currentCollectionMode === mainView.collectionMode.People
-                        || currentCollectionMode === mainView.collectionMode.Threads) {
-                    message["messages"].forEach(function (aThread, index) {
-                        aThread["isSignal"] = true
-                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
-                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
-                        }
-                    })
-                    collectionPage.threads = collectionPage.threads.concat(message["messages"])
                     collectionPage.updateListModel()
                 }
             } else if (type === "volla.launcher.callLogResponse") {
