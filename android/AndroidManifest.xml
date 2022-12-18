@@ -102,6 +102,12 @@
             <!-- Background running -->
         </service>
 
+        <service android:name="com.volla.launcher.service.NotificationListenerExampleService" android:label="Volla" android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" android:exported="false">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService"/>
+            </intent-filter>
+        </service>
+
         <receiver android:name="com.klinker.android.send_message.SentReceiver" android:taskAffinity="com.volla.launcher.SMS_SENT"/>
 
         <receiver android:name="com.klinker.android.send_message.DeliveredReceiver" android:taskAffinity="com.volla.launcher.SMS_DELIVERED"/>

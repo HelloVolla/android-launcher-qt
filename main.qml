@@ -1,4 +1,4 @@
-    import QtQuick 2.12
+import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
@@ -50,10 +50,6 @@ ApplicationWindow {
                   }
                   var object = component.createObject(mainView, properties)
                   object.open()
-              }
-              // Complete Signal activation, if necessary
-              if (signald.isConnecting) {
-                  signald.completeSignalIntegration()
               }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
