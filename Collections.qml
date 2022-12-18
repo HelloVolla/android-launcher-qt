@@ -65,7 +65,7 @@ Page {
                 textInputField.placeholderText = qsTr("Find people ...")
                 currentCollectionModel = peopleModel
                 currentCollectionModel.modelArr = new Array
-                operationCount = 3
+                operationCount = mainView.isSignalActive ? 3 : 2
                 mainView.updateSpinner(true)
                 collectionPage.loadThreads({"age": threadAge})
                 collectionPage.loadCalls({"age": threadAge})
