@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poista pikakuvake</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
@@ -45,11 +45,11 @@
     </message>
     <message>
         <source>New pinned shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uusi kiinnitetty pikakuvake</translation>
     </message>
     <message>
         <source>Pinned shortcut allready exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kiinnitetty pikakuvake on jo olemassa</translation>
     </message>
 </context>
 <context>
@@ -422,16 +422,8 @@
         <translation type="unfinished">Pikavalintojen nollaaminen</translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
+        <source>Reset launcher</source>
+        <translation type="unfinished">Käynnistimen nollaus</translation>
     </message>
 </context>
 <context>
@@ -605,8 +597,12 @@
         <translation type="unfinished">Uusi muistiinpano tallennettu</translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occured</source>
+        <translation type="unfinished">Tapahtui virhe</translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
+        <translation type="unfinished">Nollaa yhteystiedot ja yritä uudelleen.</translation>
     </message>
 </context>
 <context>
@@ -814,6 +810,18 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Näytä signaalissa</translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

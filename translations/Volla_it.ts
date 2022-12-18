@@ -49,11 +49,11 @@
     </message>
     <message>
         <source>New pinned shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nuova scorciatoia appuntata</translation>
     </message>
     <message>
         <source>Pinned shortcut allready exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Il collegamento appuntato esiste già</translation>
     </message>
 </context>
 <context>
@@ -424,16 +424,8 @@
         <translation type="unfinished">Azzeramento delle scorciatoie</translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
+        <source>Reset launcher</source>
+        <translation type="unfinished">Azzeramento del launcher</translation>
     </message>
 </context>
 <context>
@@ -607,8 +599,12 @@
         <translation type="unfinished">Nuova nota salvata</translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occured</source>
+        <translation type="unfinished">Si è verificato un errore</translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
+        <translation type="unfinished">Resettare i contatti e riprovare.</translation>
     </message>
 </context>
 <context>
@@ -820,6 +816,18 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Mostra in Segnale</translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

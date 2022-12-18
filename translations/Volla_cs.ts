@@ -381,16 +381,8 @@
         <translation type="unfinished">Opětovné načtení kontaktů</translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
+        <source>Reset launcher</source>
+        <translation type="unfinished">Obnovení spouštěče</translation>
     </message>
 </context>
 <context>
@@ -453,7 +445,7 @@
     </message>
     <message>
         <source>Sorry. Contact has no email address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Omlouvám se. Kontakt nemá e-mailovou adresu</translation>
     </message>
     <message>
         <source>New note saved</source>
@@ -464,8 +456,12 @@
         <translation type="unfinished">Moje událost</translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occured</source>
+        <translation type="unfinished">Došlo k chybě</translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
+        <translation type="unfinished">Obnovte prosím kontakty a zkuste to znovu.</translation>
     </message>
 </context>
 <context>
@@ -620,11 +616,11 @@
     </message>
     <message>
         <source>minutes ago</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">před několika minutami</translation>
     </message>
     <message>
         <source>Today</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dnes</translation>
     </message>
     <message>
         <source>Yesterday</source>
@@ -669,6 +665,18 @@
     <message>
         <source>Not yet supported</source>
         <translation type="unfinished">Zatím není podporováno</translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -525,7 +525,8 @@ Page {
                             textInputArea.cursorPosition = textInput.length
                             textInputArea.forceActiveFocus()
                         } else {
-                            mainView.showToast(qsTr("An error occured. Please try again."))
+                            mainView.showToast(qsTr("An error occured") + ": " + actionValue + ", " + actionObj +
+                                                    ". " + qsTr("Please reset contacts and try again."))
                             textInputArea.text = ""
                             textInputArea.forceActiveFocus()
                         }

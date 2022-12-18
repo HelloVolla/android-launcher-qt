@@ -381,15 +381,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
+        <source>Reset launcher</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -464,7 +456,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
+        <source>An error occured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -668,6 +664,18 @@
     </message>
     <message>
         <source>Show in Signal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

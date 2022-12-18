@@ -49,11 +49,11 @@
     </message>
     <message>
         <source>New pinned shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нов прикрепен пряк път</translation>
     </message>
     <message>
         <source>Pinned shortcut allready exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Закаченият пряк път вече съществува</translation>
     </message>
 </context>
 <context>
@@ -238,43 +238,43 @@
     <name>OnBoarding</name>
     <message>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Започнете да пишете и да получавате предложения за допълване и функции</translation>
     </message>
     <message>
         <source>Show demo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Покажи демонстрация</translation>
     </message>
     <message>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Докоснете червената точка, плъзнете до елемент от менюто и освободете, за да изберете.</translation>
     </message>
     <message>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Използвайте интелигентни колекции от съдържание за последните контакти, съобщения, новини и бележки</translation>
     </message>
     <message>
         <source>Swipe to the right to see the app overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Плъзнете надясно, за да видите прегледа на приложението</translation>
     </message>
     <message>
         <source>Next hint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Следваща подсказка</translation>
     </message>
     <message>
         <source>Swipe to the right to see the launcher settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Плъзнете надясно, за да видите настройките на стартера</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Завършете</translation>
     </message>
     <message>
         <source>Hello World</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Здравей, свят</translation>
     </message>
     <message>
         <source>Learn about more use cases in the printed manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Научете повече за случаите на употреба в печатното ръководство</translation>
     </message>
 </context>
 <context>
@@ -425,16 +425,8 @@
         <translation type="unfinished">Нулиране на кратките пътища</translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
+        <source>Reset launcher</source>
+        <translation type="unfinished">Нулиране на стартера</translation>
     </message>
 </context>
 <context>
@@ -608,8 +600,12 @@
         <translation type="unfinished">Запазена нова бележка</translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occured</source>
+        <translation type="unfinished">Възникнала е грешка</translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
+        <translation type="unfinished">Моля, нулирайте контактите и опитайте отново.</translation>
     </message>
 </context>
 <context>
@@ -817,6 +813,18 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Покажи в Сигнал</translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
