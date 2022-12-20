@@ -54,8 +54,8 @@ public class AppWorker
                             final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts",
                                 "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
                                 "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
-                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control",
-                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock",
+                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
+                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
                                 "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
                                 "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou");
 

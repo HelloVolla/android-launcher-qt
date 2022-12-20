@@ -25,15 +25,15 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retirar o Atalho</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Atalho aberto</translation>
     </message>
     <message>
         <source>Most used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mais utilizados</translation>
     </message>
     <message>
         <source>apps</source>
@@ -41,15 +41,15 @@
     </message>
     <message>
         <source>Other apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Other apps</translation>
     </message>
     <message>
         <source>New pinned shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Novo atalho com pinos</translation>
     </message>
     <message>
         <source>Pinned shortcut allready exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Já existe um atalho com alfinetes</translation>
     </message>
 </context>
 <context>
@@ -139,15 +139,15 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notas</translation>
     </message>
     <message>
         <source>Find note ...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procurar nota ...</translation>
     </message>
     <message>
         <source>Open in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aberto em Signal</translation>
     </message>
 </context>
 <context>
@@ -306,47 +306,47 @@
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aberto</translation>
     </message>
     <message>
         <source>Display and menus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Visualização e menus</translation>
     </message>
     <message>
         <source>Reset options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opções de reinicialização</translation>
     </message>
     <message>
         <source>Reset news feeds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redefinir feeds de notícias</translation>
     </message>
     <message>
         <source>Reload contacts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Recarregar contactos</translation>
     </message>
     <message>
         <source>Security mode is OFF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O modo de segurança está DESLIGADO</translation>
     </message>
     <message>
         <source>Security mode is ON</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O modo de segurança é ON</translation>
     </message>
     <message>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Introduza a palavra-chave</translation>
     </message>
     <message>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Repetir palavra-passe</translation>
     </message>
     <message>
         <source>Keep existing Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Guarde a senha existente</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cancelar</translation>
     </message>
     <message>
         <source>Ok</source>
@@ -354,23 +354,23 @@
     </message>
     <message>
         <source>Wrong password confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Confirmação de senha errada</translation>
     </message>
     <message>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Palavra-passe errada</translation>
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostrar aplicações agrupadas</translation>
     </message>
     <message>
         <source>Use app categories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utilizar categorias de aplicação</translation>
     </message>
     <message>
         <source>Source settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Definições da fonte</translation>
     </message>
     <message>
         <source>Signal</source>
@@ -378,19 +378,11 @@
     </message>
     <message>
         <source>Reset shorcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Repor os atalhos</translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
+        <source>Reset launcher</source>
+        <translation type="unfinished">Lançador de reinicialização</translation>
     </message>
 </context>
 <context>
@@ -429,43 +421,47 @@
     </message>
     <message>
         <source>Monday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Segunda-feira</translation>
     </message>
     <message>
         <source>Tuesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Terça-feira</translation>
     </message>
     <message>
         <source>Wednesday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quarta-feira</translation>
     </message>
     <message>
         <source>Thursday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quinta-feira</translation>
     </message>
     <message>
         <source>Friday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sexta-feira</translation>
     </message>
     <message>
         <source>Saturday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sábado</translation>
     </message>
     <message>
         <source>Sunday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domingo</translation>
     </message>
     <message>
         <source>tomorrow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">amanhã</translation>
     </message>
     <message>
         <source>New note saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nova nota guardada</translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occured</source>
+        <translation type="unfinished">Ocorreu um erro</translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
+        <translation type="unfinished">Por favor, restabeleça os contactos e tente novamente.</translation>
     </message>
 </context>
 <context>
@@ -628,7 +624,7 @@
     </message>
     <message>
         <source>Error because of too much redirects</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erro devido a demasiados redireccionamentos</translation>
     </message>
     <message>
         <source>Invalid RSS feed: </source>
@@ -648,26 +644,38 @@
     </message>
     <message>
         <source>Could not load a valid feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Não foi possível carregar uma alimentação válida</translation>
     </message>
     <message>
         <source>Reset successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Repor com sucesso</translation>
     </message>
     <message>
         <source>Show Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostrar Notas</translation>
     </message>
     <message>
         <source>Send Signal message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enviar mensagem de Signal</translation>
     </message>
     <message>
         <source>Add to Calender</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Add to Calender</translation>
     </message>
     <message>
         <source>Show in Signal</source>
+        <translation type="unfinished">Mostrar em Signal</translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

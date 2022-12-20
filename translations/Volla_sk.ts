@@ -49,11 +49,11 @@
     </message>
     <message>
         <source>New pinned shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nová pripnutá skratka</translation>
     </message>
     <message>
         <source>Pinned shortcut allready exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pripnutá skratka už existuje</translation>
     </message>
 </context>
 <context>
@@ -183,7 +183,7 @@
     </message>
     <message>
         <source>Open in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Otvoriť v položke Signál</translation>
     </message>
 </context>
 <context>
@@ -425,16 +425,8 @@
         <translation type="unfinished">Obnovenie skratiek</translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
+        <source>Reset launcher</source>
+        <translation type="unfinished">Obnovenie spúšťacieho zariadenia</translation>
     </message>
 </context>
 <context>
@@ -610,8 +602,12 @@
         <translation type="unfinished">Uložená nová poznámka</translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occured</source>
+        <translation type="unfinished">Vyskytla sa chyba</translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
+        <translation type="unfinished">Obnovte kontakty a skúste to znova.</translation>
     </message>
 </context>
 <context>
@@ -820,6 +816,18 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Zobraziť v časti Signál</translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

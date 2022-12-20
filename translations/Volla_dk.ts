@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>Pinned shortcut allready exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Den fasthæftede genvej findes allerede</translation>
     </message>
 </context>
 <context>
@@ -386,19 +386,11 @@
     </message>
     <message>
         <source>Keep existing Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Behold eksisterende adgangskode</translation>
     </message>
     <message>
-        <source>Could not activate signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
+        <source>Reset launcher</source>
+        <translation type="unfinished">Nulstil launcheren</translation>
     </message>
 </context>
 <context>
@@ -472,8 +464,12 @@
         <translation type="unfinished">Min begivenhed</translation>
     </message>
     <message>
-        <source>An error occured. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occured</source>
+        <translation type="unfinished">Der er opstået en fejl</translation>
+    </message>
+    <message>
+        <source>Please reset contacts and try again.</source>
+        <translation type="unfinished">Nulstil kontakterne, og prøv igen.</translation>
     </message>
 </context>
 <context>
@@ -680,14 +676,26 @@
     </message>
     <message>
         <source>You have alresdy subscribed the feed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Du har allerede abonneret på feedet</translation>
     </message>
     <message>
         <source>Error because of too much redirects</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fejl på grund af for mange videresendelser</translation>
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
+        <translation type="unfinished">Du har allerede tilføjet genvejen</translation>
+    </message>
+    <message>
+        <source>Could not activate Signal: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to install the Signal app at first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal integration sucessfully activated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -888,11 +888,6 @@ ApplicationWindow {
                     if (mainView.loadingContacts.length === message["contactsCount"]) {
                         var d = new Date()
                         console.log("MainView | Retrieving contacts did take " + (d.valueOf() - mainView.timeStamp.valueOf()) + " seconds")
-                        mainView.isLoadingContacts = false
-                        mainView.updateSpinner(false)
-                        settings.lastContactsCheck = new Date().valueOf()
-                        settings.sync()
-                        console.log("MainView | New contact timestamp " + settings.lastContactsCheck)
                         mainView.loadingContacts = mainView.loadingContacts.filter(function(contact) {
                             return contact["name"] !== undefined
                         })
@@ -904,6 +899,11 @@ ApplicationWindow {
                         mainView.contacts = mainView.loadingContacts.slice()
                         mainView.loadingContacts.lemgh = 0
                         console.log("MainView | Did store contacts: " + contactsCache.writePrivate(JSON.stringify(mainView.contacts)))
+                        mainView.isLoadingContacts = false
+                        mainView.updateSpinner(false)
+                        settings.lastContactsCheck = new Date().valueOf()
+                        settings.sync()
+                        console.log("MainView | New contact timestamp " + settings.lastContactsCheck)
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
                     console.log("MainView | onDispatched: " + type)
