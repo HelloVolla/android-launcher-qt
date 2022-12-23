@@ -40,6 +40,7 @@ ApplicationWindow {
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
               // Start onboarding for the first start of the app
+              console.log("MainView | First start: " + settings.firstStart)
               if (settings.firstStart) {
                   console.debug("MainView", "Will start tutorial")
                   var component = Qt.createComponent("/OnBoarding.qml")
@@ -50,6 +51,7 @@ ApplicationWindow {
                   }
                   var object = component.createObject(mainView, properties)
                   object.open()
+                  settings.firstStart = false
               }
               // Complete Signal activation, if necessary
               if (signald.isConnecting) {
@@ -998,7 +1000,6 @@ ApplicationWindow {
             if (fullscreen) {
                 appWindow.visibility = 5
             }
-            firstStart = false
             settings.sync()
         }
     }
