@@ -922,13 +922,13 @@ Page {
                             onClicked: {
                                 console.log("Settings | App " + model["label"] + " selected for shortcuts");
                                 mainView.updateAction(
-                                            model["itemId"], true, mainView.settingsAction.CREATE,
-                                            {"id": model["itemId"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
+                                            model["package"], true, mainView.settingsAction.CREATE,
+                                            {"id": model["package"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
                                 appMenuModel.append(
-                                            {"id": model["itemId"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
+                                            {"id": model["package"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
 
                                 var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsItemColumn)
-                                var properties = { "actionId": model["itemId"],
+                                var properties = { "actionId": model["package"],
                                     "text": qsTr("Open") + " " + model["label"], "checked": true,
                                     "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                     "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
@@ -1023,16 +1023,10 @@ Page {
                             if (active) {
                                 mainView.activateSignalIntegration( function(succeeded) {
                                     console.debug("Settings | Connecting Signal successded: " + succeeded)
-                                    if (!succeeded & sourceSettingsItemColumn.checkboxes.length > 0) {
-                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = false
-                                        sourceSettingsItemColumn.checkboxes[0].checked = false
-                                        sourceSettingsItemColumn.checkboxes[0].activeCheckbox = true
-                                    }
                                     sourceSettings.signalIsActivated = succeeded
                                     sourceSettings.sync()
                                 })
                             } else {
-                                mainView.deactivateSignalIntegration()
                                 sourceSettings.signalIsActivated = false
                                 sourceSettings.sync()
                             }

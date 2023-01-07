@@ -3,7 +3,6 @@
 #include <QtAndroidExtras/QtAndroid>
 
 #include "fileio.h"
-#include <socket.h>
 
 #ifdef Q_OS_ANDROID
 #include "AndroidNative/systemdispatcher.h"
@@ -55,7 +54,6 @@ int main(int argc, char *argv[])
     app.installTranslator(&myappTranslator);
 
     qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
-    qmlRegisterType<Socket>("Socket", 1, 0, "Socket");
 
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.ContactWorker");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.MessageWorker");
