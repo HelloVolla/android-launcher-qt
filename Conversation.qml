@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.2
 import QtQuick.XmlListModel 2.12
-import QtQuick.LocalStorage 2.12
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
@@ -172,30 +171,7 @@ Page {
             AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
         } else if (isNaN(filter["threadId"])) {
-            var db =  openDatabaseSync(mainView.cacheName, mainView.cacheVersion,
-                                      mainview.cacheDescription. mainView.cacheSize)
-            var d = Date.valueOf() - filter.age * 1000
-            db.transaction (
-                function (tx) {
-                    var rs = tx.executeSql('SELECT * FROM signsl WHERE date > ' + d + ' AND address LIKE \'' + filter["threadId"]
-                                           + '\' ORDER BY date ASC')
-                    var signalMessages = new Array
-                    var recentAddress
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        console.debug("Collections | " +  rs.rows.item(i).contact + ", " + rs.rows.item(i).message)
-                        if (recentContact !== rs.rows.item(i).address) {
-                            var signalMessage = { "isSignal" : true,
-                                                  "address" : rs.rows.item(i).address,
-                                                  "body" : rs.rows.item(i).body,
-                                                  "date" : rs.rows.item(i).date,
-                                                  "isSent" : rs.rows.item(i).isSent === 1 ? true : fale }
-                            signalMessages.push(signalMessage)
-                        }
-                    }
-                    conversationPage.messages = collectionPage.threads.concat(signalThreads)
-                    conversationPage.updateListModel()
-                }
-            )
+            // todo: implement
         } else {
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
         }
@@ -500,9 +476,11 @@ Page {
                 implicitHeight: messageColumn.height
 
                 function parseMessage(message) {
-                    var urlRegex = /(((https?:\/\/)|([^\s]+\.))[^\s,]+)/g;
+                    var urlRegex = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w-]*[^\s\.]*)/g;
                     return message.replace(urlRegex, function(url,b,c) {
-                        var url2 = !c.startsWith('http') ?  'http://' + url : url;
+                        console.log("b: " + b)
+                        console.log("c: " + c)
+                        var url2 = b === undefined ?  'https://' + url : url;
                         return '<a href="' +url2+ '" target="_blank">' + url + '</a>';
                     })
                 }

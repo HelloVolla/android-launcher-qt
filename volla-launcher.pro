@@ -15,8 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         fileio.cpp \
-        main.cpp \
-        socket.cpp
+        main.cpp
 
 RESOURCES += qml.qrc
 
@@ -50,8 +49,7 @@ contains(ANDROID_TARGET_ARCH,x86) {
 }
 
 HEADERS += \
-    fileio.h \
-    socket.h
+    fileio.h
 
 DISTFILES += \
     LICENSE.txt \
