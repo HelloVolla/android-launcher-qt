@@ -293,7 +293,7 @@
     <message>
         <location filename="../OnBoarding.qml" line="77"/>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished">Bginnen Sie etwas zu schreuben und erhalten Sie Vorschläge für die Vervollständigung und passende Funktionen</translation>
+        <translation type="unfinished">Beginnen Sie etwas zu schreiben und erhalten Sie Vorschläge für die Vervollständigung und passende Funktionen</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="86"/>
