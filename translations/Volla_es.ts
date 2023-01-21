@@ -978,7 +978,7 @@
     </message>
     <message>
         <location filename="../main.qml" line="525"/>
-        <source>You have alresdy subscribed the feed</source>
+        <source>You have already subscribed the feed</source>
         <translation type="unfinished">ya te has suscrito al feed</translation>
     </message>
     <message>
