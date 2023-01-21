@@ -520,7 +520,7 @@ ApplicationWindow {
                         console.log("MainView | Did store feeds: " + feeds.write(JSON.stringify(channels)))
                         showToast(qsTr("New Subscrption") + ": " + newChannel.name)
                     } else {
-                        showToast(qsTr("You have alresdy subscribed the feed"))
+                        showToast(qsTr("You have already subscribed the feed"))
                     }
                     break
                 case mainView.settingsAction.UPDATE:

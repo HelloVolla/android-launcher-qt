@@ -118,15 +118,14 @@ WorkerScript.onMessage = function(message) {
             } else {
                 console.log("SpringBoard | No contact selected")
             }
-        }
-
-        var lastToken = textInput.substring(1, textInput.length).toLowerCase()
-        console.log("Springboard | last token:" + lastToken)
-        for (i = 0; i < contacts.length; i++) {
-            var contact = contacts[i]
-            var name = contact["name"].toLowerCase()
-            if (lastToken.length === 0 || name.includes(lastToken)) {
-                filteredSuggestionObj[i] = [contact["name"], actionType.SuggestContact, contact]
+        } else {
+            var lastToken = textInput.substring(1, textInput.length).toLowerCase()
+            for (i = 0; i < contacts.length; i++) {
+                var contact = contacts[i]
+                var name = contact["name"].toLowerCase()
+                if (lastToken.length === 0 || name.includes(lastToken)) {
+                    filteredSuggestionObj[i] = [contact["name"], actionType.SuggestContact, JSON.parse(JSON.stringify(contact))]
+                }
             }
         }
     } else if (textInputIsWebAddress()) {
@@ -170,7 +169,6 @@ WorkerScript.onMessage = function(message) {
 
     model.sync()
 
-    WorkerScript.sendMessage({ })
+    WorkerScript.sendMessage(new Object)
 }
-
 

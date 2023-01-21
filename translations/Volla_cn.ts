@@ -579,7 +579,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You have alresdy subscribed the feed</source>
+        <source>You have already subscribed the feed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -683,7 +683,7 @@
         <translation type="unfinished">Fejl på grund af for mange videresendelser</translation>
     </message>
     <message>
-        <source>You have alresdy added the shortcut</source>
+        <source>You have already added the shortcut</source>
         <translation type="unfinished">Du har allerede tilføjet genvejen</translation>
     </message>
     <message>

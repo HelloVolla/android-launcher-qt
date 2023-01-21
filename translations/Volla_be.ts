@@ -615,7 +615,7 @@
         <translation>Новая падпіска</translation>
     </message>
     <message>
-        <source>You have alresdy subscribed the feed</source>
+        <source>You have already subscribed the feed</source>
         <translation>Вы ўжо падпісаны на гэту стужку</translation>
     </message>
     <message>

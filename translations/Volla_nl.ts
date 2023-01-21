@@ -905,7 +905,7 @@
     </message>
     <message>
         <location filename="../main.qml" line="717"/>
-        <source>You have alresdy added the shortcut</source>
+        <source>You have already added the shortcut</source>
         <translation type="unfinished">Avete già aggiunto la scorciatoia</translation>
     </message>
     <message>
