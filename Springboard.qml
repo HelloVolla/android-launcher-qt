@@ -539,7 +539,7 @@ Page {
 
                 if (textInput.length < 1) {
                     listModel.clear()
-                } else if (!springBoardWorker.isRunning) {
+                } else {
                     springBoardWorker.sendMessage({
                         'selectedObj': springBoard.selectedObj, 'textInput': textInput,
                         'contacts': mainView.getContacts(), 'model': listModel, 'actionType': mainView.actionType,
@@ -622,10 +622,8 @@ Page {
         WorkerScript {
             id: springBoardWorker
             source: "scripts/springboard.mjs"
-            property var isRunning: false
             onMessage: {
                 console.log("Springboard | Message received")
-                isRunning = false
             }
         }
     }

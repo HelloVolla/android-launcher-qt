@@ -782,7 +782,7 @@
         <translation type="unfinished">nuovo collegamento</translation>
     </message>
     <message>
-        <source>You have alresdy added the shortcut</source>
+        <source>You have already added the shortcut</source>
         <translation type="unfinished">hai già aggiunto la scorciatoia</translation>
     </message>
     <message>

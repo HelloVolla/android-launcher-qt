@@ -631,7 +631,7 @@
         <translation type="unfinished">днес</translation>
     </message>
     <message>
-        <source>You have alresdy subscribed the feed</source>
+        <source>You have already subscribed the feed</source>
         <translation type="unfinished">вече сте се абонирали за канала</translation>
     </message>
     <message>
