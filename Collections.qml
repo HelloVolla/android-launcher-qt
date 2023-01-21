@@ -1413,6 +1413,19 @@ Page {
                     collectionPage.threads = collectionPage.threads.concat(message["threads"])
                     collectionPage.updateListModel()
                 }
+            } else if (type === "volla.launcher.signalThreadsResponse") {
+                console.log("Collections | onDispatched: " + type)
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    message["messages"].forEach(function (aThread, index) {
+                        aThread["isSignal"] = true
+                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
+                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
+                        }
+                    })
+                    collectionPage.threads = collectionPage.threads.concat(message["messages"])
+                    collectionPage.updateListModel()
+                }
             } else if (type === "volla.launcher.callLogResponse") {
                 console.log("Collections | onDispatched: " + type)
                 if (currentCollectionMode === mainView.collectionMode.People

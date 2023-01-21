@@ -2,6 +2,7 @@
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
+import QtQuick.LocalStorage 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 import Qt.labs.settings 1.0
@@ -828,6 +829,14 @@ ApplicationWindow {
                 settings.showAppsAtStartup = value
             }
             settings.sync()
+        }
+
+        function activateSignalIntegration(callback) {
+            if (!signald.busy) signald.activateSignalIntegration(callback)
+        }
+
+        function deactivateSignalIntegration() {
+            if (!signald.busy) deactivateSignalIntegration()
         }
 
         function resetActions() {
