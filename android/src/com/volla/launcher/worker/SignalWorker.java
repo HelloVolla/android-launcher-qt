@@ -38,12 +38,23 @@ public class SignalWorker {
                 ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(QtNative.activity().getApplication());
 
                 if (type.equals(GET_SIGNAL_MESSAGES)) {
-                    checkPermission(activity);
-                    retrieveMessageConversations(message, activity);
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            checkPermission(activity);
+                            retrieveMessageConversations(message, activity);
+                        }
+                    };
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 } else if (type.equals(GET_SIGNAL_THREADS)) {
-                    // todo: implement (use a separate thread)
-                    checkPermission(activity);
-                    retriveMessageThreads(message, activity);
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            checkPermission(activity);
+                            retriveMessageThreads(message, activity);
+                        }
+                    };
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });
