@@ -105,7 +105,7 @@ Page {
                     headline.text = name
                     currentId = id
                     currentConversationModel = threadContentModel
-                    operationCount = 1
+                    operationCount = 2
                     mainView.updateSpinner(true)
                     loadConversation({"threadId": id, "threadAge": threadAge})
                     break;
@@ -116,7 +116,7 @@ Page {
         }
    }
 
-    function updateListMocel() {
+    function updateListModel() {
         console.log("Conversation | Operation count is " + operationCount)
         operationCount = operationCount - 1
         if (operationCount < 1) {
@@ -165,38 +165,14 @@ Page {
     }
 
     function loadConversation(filter) {
-        console.log("Conversation | Will load messages")
+        console.log("Conversation | Will load messages: " + filter["threadId"])
         messages = new Array
 
         if (currentConversationMode === mainView.conversationMode.Person) {
             AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
-        } else if (isNaN(filter["threadId"])) {
-            var db =  openDatabaseSync(mainView.cacheName, mainView.cacheVersion,
-                                      mainview.cacheDescription. mainView.cacheSize)
-            var d = Date.valueOf() - filter.age * 1000
-            db.transaction (
-                function (tx) {
-                    var rs = tx.executeSql('SELECT * FROM signsl WHERE date > ' + d + ' AND address LIKE \'' + filter["threadId"]
-                                           + '\' ORDER BY date ASC')
-                    var signalMessages = new Array
-                    var recentAddress
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        console.debug("Collections | " +  rs.rows.item(i).contact + ", " + rs.rows.item(i).message)
-                        if (recentContact !== rs.rows.item(i).address) {
-                            var signalMessage = { "isSignal" : true,
-                                                  "address" : rs.rows.item(i).address,
-                                                  "body" : rs.rows.item(i).body,
-                                                  "date" : rs.rows.item(i).date,
-                                                  "isSent" : rs.rows.item(i).isSent === 1 ? true : fale }
-                            signalMessages.push(signalMessage)
-                        }
-                    }
-                    conversationPage.messages = collectionPage.threads.concat(signalThreads)
-                    conversationPage.updateListModel()
-                }
-            )
         } else {
+            AN.SystemDispatcher.dispatch("volla.launcher.signalMessagesAction", filter)
             AN.SystemDispatcher.dispatch("volla.launcher.conversationAction", filter)
         }
     }
@@ -465,12 +441,15 @@ Page {
                         var d = new Date()
                         var kind = imagePicker.imageUrl !== undefined && imagePicker.imageUrl.length > 0 ? "MMS" : "SMS"
 
+                        var messageToSend = {"number": conversationPage.phoneNumber,
+                                             "text": textArea.text,
+                                             "attachmentUrl": imagePicker.imageUrl})
+
                         if (conversationPage.lastMessageIsFromSignal()) {
                             kind = "Signal"
-                            // todo: send Signal message
+                            AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction", messageToSend)
                         } else {
-                            AN.SystemDispatcher.dispatch("volla.launcher.messageAction",
-                               {"number": conversationPage.phoneNumber, "text": textArea.text, "attachmentUrl": imagePicker.imageUrl} )
+                            AN.SystemDispatcher.dispatch("volla.launcher.messageAction", messageToSend)
                         }
 
                         // Todo: Only add message to list view, if massage was successfully sent.
@@ -833,7 +812,17 @@ Page {
 //                        console.log("Conversation | * " + messageKey + ": " + messageValue)
 //                    }
 //                })
-                conversationPage.updateListMocel()
+                conversationPage.updateListModel()
+            } else if (type === "volla.launcher.signalMessagesResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                message["messages"].forEach(function (message, index) {
+                    message["isSignal"] = true
+                    for (const [messageKey, messageValue] of Object.entries(message)) {
+                        console.log("Conversation | * " + messageKey + ": " + messageValue)
+                    }
+                })
+                conversationPage.messages = conversationPage.messages.concat(message["messages"])
+                conversationPage.updateListModel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.calls = conversationPage.calls.concat(message["calls"])
@@ -842,7 +831,7 @@ Page {
                         console.log("Collections | * " + callKey + ": " + callValue)
                     }
                 })
-                conversationPage.updateListMocel()
+                conversationPage.updateListModel()
             } else if (type === "volla.launcher.mmsImageResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 if (message["hasImage"]) {
