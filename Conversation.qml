@@ -443,7 +443,7 @@ Page {
 
                         var messageToSend = {"number": conversationPage.phoneNumber,
                                              "text": textArea.text,
-                                             "attachmentUrl": imagePicker.imageUrl})
+                                             "attachmentUrl": imagePicker.imageUrl}
 
                         if (conversationPage.lastMessageIsFromSignal()) {
                             kind = "Signal"
