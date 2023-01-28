@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Maybe;
 @Dao
 public interface MessageDao {
 
-    @Query("SELECT * FROM messages WHERE title = :title ORDER BY timeStamp DESC LIMIT 2 OFFSET :pageSize")
+    @Query("SELECT * FROM messages WHERE uuid = :title ORDER BY timeStamp DESC LIMIT :pageSize")
     Maybe<List<Message>> getAllMessageBySender(String title, int pageSize); // working
     //@Query("SELECT * FROM messages")
     //DataSource.Factory<Integer, Message> getAllMessageBySender();

@@ -68,7 +68,7 @@ public class SignalWorker {
         String threadId = (String) message.get("threadId");
         int   age = (Integer) message.get("threadAge");
 
-        repository.getAllMessageBySender(person,1).subscribe(it -> {
+        repository.getAllMessageBySender(threadId,10).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
