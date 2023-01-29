@@ -36,7 +36,7 @@ ApplicationWindow {
                   }
                   mainView.keepLastIndex = false
               } else {
-                  mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+                  //mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
@@ -278,6 +278,10 @@ ApplicationWindow {
             Loader {
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/AppGrid.qml", mainView)
+
+                onLoaded: {
+                    mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+                }
             }
         }
 
