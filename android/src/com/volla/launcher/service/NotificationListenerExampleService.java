@@ -92,7 +92,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             notificationData.notification = notification;
 
             //String extras = sbn.toString();
-            NotificationListenerExampleService.this.cancelAllNotifications();
             //Log.d("ArvindVolla", extras);
             Bundle bundle = sbn.getNotification().extras;
             for (String key : bundle.keySet()) {
