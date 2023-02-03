@@ -65,6 +65,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     private StatusBarNotification my_custom;
     private MessageRepository repository;
+    private boolean isSignaldEnable =false;
+
+    public void enableSignald(boolean enable){
+         isSignaldEnable = enable;
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -76,6 +81,9 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
         //NotificationListenerExampleService.this.cancelAllNotifications();
+	if(!isSignaldEnable){
+              return;
+	}
         int notificationCode = matchNotificationCode(sbn);
         if(notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
             my_custom = sbn;
@@ -115,9 +123,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 if (appIcon.getWidth() > 128) {
                     appIcon = Bitmap.createScaledBitmap(appIcon, 96, 96, true);
                 }
-                appIcon.compress(Bitmap.CompressFormat.PNG, 90, outStream);
+                appIcon.compress(Bitmap.CompressFormat.PNG, 10, outStream);
                 bitmapData = outStream.toByteArray();
                 String largeIcon = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
+		Log.d("com.volla.launcher", "image : "+largeIcon);
                 message.largeIcon = largeIcon;
                 users.largeIcon = largeIcon;
             } else {

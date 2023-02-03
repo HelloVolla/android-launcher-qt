@@ -17,6 +17,7 @@ import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.repository.MainViewModel;
 import com.volla.launcher.storage.Message;
 import com.volla.launcher.storage.Users;
+import com.volla.launcher.service.NotificationListenerExampleService;
 import androidx.core.app.NotificationManagerCompat;
 
 public class SignalWorker {
@@ -28,6 +29,7 @@ public class SignalWorker {
 
     public static final String GET_SIGNAL_THREADS = "volla.launcher.signalThreadsAction";
     public static final String GOT_SIGNAL_THREADS = "volla.launcher.signalThreadsResponse";
+    public static final String ENABLE_SIGNAL = "volla.launcher.signalEnable";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -51,6 +53,15 @@ public class SignalWorker {
                         public void run() {
                             checkPermission(activity);
                             retriveMessageThreads(message, activity);
+                        }
+                    };
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                } else if (type.equals(ENABLE_SIGNAL)) {
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            checkPermission(activity);
+                            enableSignal(message, activity);
                         }
                     };
                     Thread thread = new Thread(runnable);
@@ -146,5 +157,11 @@ public class SignalWorker {
              Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
              activity.startActivity(intent);
         }
+   }
+
+    static void enableSignal(Map message, Activity activity){
+      NotificationListenerExampleService nLS = new NotificationListenerExampleService();
+      boolean enable = (boolean) message.get("enableSignal");
+      nLS.enableSignald(enable);
    }
 }
