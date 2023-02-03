@@ -11,8 +11,12 @@ import io.reactivex.rxjava3.core.Maybe;
 @Dao
 public interface MessageDao {
 
-    @Query("SELECT * FROM messages WHERE uuid = :title ORDER BY timeStamp DESC LIMIT :pageSize")
-    Maybe<List<Message>> getAllMessageBySender(String title, int pageSize); // working
+    @Query("SELECT * FROM messages WHERE selfDisplayName LIKE :name ORDER BY timeStamp DESC LIMIT :pageSize")
+    Maybe<List<Message>> getAllMessageByPersonName(String name, int pageSize); // working
+
+    @Query("SELECT * FROM messages WHERE uuid = :uuid ORDER BY timeStamp DESC LIMIT :pageSize")
+    Maybe<List<Message>> getAllMessageByThreadId(String uuid, int pageSize); // working
+
     //@Query("SELECT * FROM messages")
     //DataSource.Factory<Integer, Message> getAllMessageBySender();
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -29,8 +29,12 @@ public class MainViewModel extends AndroidViewModel {
         return repository.getMessageListBySender();
     }
 
-    public Maybe<List<Message>> getAllMessageBySender(String title, int pageSize) {
-        return repository.getAllMessageBySender(title, pageSize);
+    public Maybe<List<Message>> getAllMessageByThreadId(String threadId, int pageSize) {
+        return repository.getAllMessageByThreadId(threadId, pageSize);
+    }
+
+    public Maybe<List<Message>> getAllMessageByPersonName(String name, int pageSize) {
+        return repository.getAllMessageByPersonName(name, pageSize);
     }
 
     public Maybe<List<Message>> getAllSendersName() {

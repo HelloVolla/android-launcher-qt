@@ -67,31 +67,47 @@ public class SignalWorker {
         String person = (String) message.get("person");
         String threadId = (String) message.get("threadId");
         int   age = (Integer) message.get("threadAge");
-
-        repository.getAllMessageBySender(threadId,10).subscribe(it -> {
+        if(person != null && person.length()>0){
+        repository.getAllMessageByPersonName(person,10).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
-                reply.put("address", "7653456789");
+                reply.put("address", "");
                 reply.put("date", m.getTimeStamp().toString());
                 reply.put("read", "false");
                 reply.put("isSent", "false");
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
-
-                //Log.e("VollaNotification retriving message conversation", "Sender Name: " + m);
-                //Log.e("VollaNotification retriving message conversation JSON", m.getNotificationData().toJson());
                 messageList.add(reply);
             }
+	});
+       } else {
+           repository.getAllMessageByThreadId(threadId,10).subscribe(it -> {
+            for (Message m : it) {
+                Map reply = new HashMap();
+                reply.put("id", m.getId());
+                reply.put("thread_id", m.getUuid());
+                reply.put("body", m.getTitle());
+                reply.put("person", m.getSelfDisplayName());
+                reply.put("address", "");
+                reply.put("date", m.getTimeStamp().toString());
+                reply.put("read", "false");
+                reply.put("isSent", "false");
+                reply.put("image", m.getLargeIcon());
+                reply.put("attachments", "");
+                messageList.add(reply);
+                }
+            });
+
+          }
             Map result = new HashMap();
             result.put("messages", messageList );
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
-        });
     }
 
     static void retriveMessageThreads(Map message, Activity activity){
