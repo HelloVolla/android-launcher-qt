@@ -279,6 +279,10 @@ ApplicationWindow {
             Loader {
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/AppGrid.qml", mainView)
+
+//                onLoaded: {
+//                    mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+//                }
             }
         }
 
