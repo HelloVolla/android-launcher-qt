@@ -36,8 +36,12 @@ public class MessageRepository {
         return messageDao.getMessageListBySender().observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
     }
 
-    public Maybe<List<Message>> getAllMessageBySender(String title, int pageSize) {
-        return messageDao.getAllMessageBySender(title, pageSize).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
+    public Maybe<List<Message>> getAllMessageByThreadId(String threadId, int pageSize) {
+        return messageDao.getAllMessageByThreadId(threadId, pageSize).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
+    }
+
+    public Maybe<List<Message>> getAllMessageByPersonName(String personName, int pageSize) {
+        return messageDao.getAllMessageByPersonName(personName, pageSize).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
     }
 
     public Maybe<List<Message>> getAllSendersName() {

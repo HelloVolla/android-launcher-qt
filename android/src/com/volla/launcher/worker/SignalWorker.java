@@ -17,6 +17,7 @@ import com.volla.launcher.repository.MessageRepository;
 import com.volla.launcher.repository.MainViewModel;
 import com.volla.launcher.storage.Message;
 import com.volla.launcher.storage.Users;
+import com.volla.launcher.service.NotificationListenerExampleService;
 import androidx.core.app.NotificationManagerCompat;
 
 public class SignalWorker {
@@ -28,6 +29,7 @@ public class SignalWorker {
 
     public static final String GET_SIGNAL_THREADS = "volla.launcher.signalThreadsAction";
     public static final String GOT_SIGNAL_THREADS = "volla.launcher.signalThreadsResponse";
+    public static final String ENABLE_SIGNAL = "volla.launcher.signalEnable";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -55,6 +57,15 @@ public class SignalWorker {
                     };
                     Thread thread = new Thread(runnable);
                     thread.start();
+                } else if (type.equals(ENABLE_SIGNAL)) {
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            checkPermission(activity);
+                            enableSignal(message, activity);
+                        }
+                    };
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });
@@ -67,31 +78,47 @@ public class SignalWorker {
         String person = (String) message.get("person");
         String threadId = (String) message.get("threadId");
         int   age = (Integer) message.get("threadAge");
-
-        repository.getAllMessageBySender(threadId,10).subscribe(it -> {
+        if(person != null && person.length()>0){
+        repository.getAllMessageByPersonName(person,10).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
-                reply.put("address", "7653456789");
+                reply.put("address", "");
                 reply.put("date", m.getTimeStamp().toString());
                 reply.put("read", "false");
                 reply.put("isSent", "false");
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
-
-                //Log.e("VollaNotification retriving message conversation", "Sender Name: " + m);
-                //Log.e("VollaNotification retriving message conversation JSON", m.getNotificationData().toJson());
                 messageList.add(reply);
             }
+	});
+       } else {
+           repository.getAllMessageByThreadId(threadId,10).subscribe(it -> {
+            for (Message m : it) {
+                Map reply = new HashMap();
+                reply.put("id", m.getId());
+                reply.put("thread_id", m.getUuid());
+                reply.put("body", m.getTitle());
+                reply.put("person", m.getSelfDisplayName());
+                reply.put("address", "");
+                reply.put("date", m.getTimeStamp().toString());
+                reply.put("read", "false");
+                reply.put("isSent", "false");
+                reply.put("image", m.getLargeIcon());
+                reply.put("attachments", "");
+                messageList.add(reply);
+                }
+            });
+
+          }
             Map result = new HashMap();
             result.put("messages", messageList );
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
-        });
     }
 
     static void retriveMessageThreads(Map message, Activity activity){
@@ -130,5 +157,11 @@ public class SignalWorker {
              Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
              activity.startActivity(intent);
         }
+   }
+
+    static void enableSignal(Map message, Activity activity){
+      NotificationListenerExampleService nLS = new NotificationListenerExampleService();
+      boolean enable = (boolean) message.get("enableSignal");
+      nLS.enableSignald(enable);
    }
 }
