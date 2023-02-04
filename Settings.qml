@@ -959,7 +959,7 @@ Page {
                 id: sourceSettingsItem
                 width: parent.width
                 implicitHeight: sourceSettingsItemColumn.height
-                visible: false
+                visible: true
 
                 Column {
                     id: sourceSettingsItemColumn
@@ -1020,23 +1020,16 @@ Page {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
 
                         if (actionId === "signal") {
-                            if (active) {
-                                mainView.activateSignalIntegration( function(succeeded) {
-                                    console.debug("Settings | Connecting Signal successded: " + succeeded)
-                                    sourceSettings.signalIsActivated = succeeded
-                                    sourceSettings.sync()
-                                })
-                            } else {
-                                sourceSettings.signalIsActivated = false
-                                sourceSettings.sync()
-                            }
+                            AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": active})
+                            mainView.updateSettings("activateSignal", active)
+                            sourceSettings.signalIsActivated = active
                         }
                     }
 
                     Settings {
                         id: sourceSettings
 
-                        property bool signalIsActivated: false
+                        property bool signalIsActivated: true
                     }
                 }
 

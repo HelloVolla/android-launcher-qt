@@ -831,16 +831,10 @@ ApplicationWindow {
                 mainView.useVibration = value
             } else if (key === "showAppsAtStartup") {
                 settings.showAppsAtStartup = value
+            } else if (key === "activateSignal") {
+                settings.signalIsActivated = value
             }
             settings.sync()
-        }
-
-        function activateSignalIntegration(callback) {
-            if (!signald.busy) signald.activateSignalIntegration(callback)
-        }
-
-        function deactivateSignalIntegration() {
-            if (!signald.busy) deactivateSignalIntegration()
         }
 
         function resetActions() {
@@ -983,7 +977,7 @@ ApplicationWindow {
         property int searchMode: mainView.searchMode.Duck
         property bool fullscreen: false
         property bool firstStart: true
-        property bool signalIsActivated: false
+        property bool signalIsActivated: true
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
         property bool useHapticMenus: false
@@ -999,6 +993,9 @@ ApplicationWindow {
             }
             if (fullscreen) {
                 appWindow.visibility = 5
+            }
+            if (signalIsActivated) {
+                AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": true})
             }
             settings.sync()
         }
