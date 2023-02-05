@@ -736,8 +736,6 @@ Page {
             createShortcuts(actions)
         }
 
-
-
         function executeSelection() {
             console.log("Springboard | Action ID is " + selectedMenuItem.actionId)
 
