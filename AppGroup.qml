@@ -22,8 +22,8 @@ Item {
     property double backgroundOpacity
     property double desaturation: 1.0
 
-    property int groupIndex
-    property int selectedGroupIndex
+    property int groupIndex: 0
+    property int selectedGroupIndex: 1
 
     property bool unreadMessages: false
     property bool newCalls: false
@@ -83,6 +83,12 @@ Item {
         width: parent.width
         topPadding: groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
                                                      groupItem.innerSpacing / 2 : groupItem.innerSpacing
+
+        Component.onCompleted: {
+            groupHeader.visible = !groupGrid.visible
+            groupHeader2.visible = groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
+        }
+
         Button {
             id: groupHeader
             anchors.horizontalCenter: parent.horizontalCenter
@@ -95,7 +101,7 @@ Item {
                 opacity: 0.5
                 font.pointSize: groupItem.headerPointSize
             }
-            visible: !groupGrid.visible
+            visible: false // !groupGrid.visible
             background: Rectangle {
                 color: "transparent"
                 border.color: Universal.foreground
@@ -112,7 +118,7 @@ Item {
             id: groupHeader2
             anchors.horizontalCenter: parent.horizontalCenter
             padding: groupItem.innerSpacing / 2
-            visible: groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
+            visible: false // groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
             text: groupHeader.text
             color: Universal.foreground
             opacity: 0.5
@@ -132,6 +138,9 @@ Item {
             cellWidth: parent.width * 0.25
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
             interactive: false
+//            add: Transition {
+//                NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0; duration: 1000 }
+//            }
 
             model: groupModel
 
