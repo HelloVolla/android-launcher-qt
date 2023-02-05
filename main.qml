@@ -995,7 +995,7 @@ ApplicationWindow {
                 appWindow.visibility = 5
             }
             if (signalIsActivated) {
-                AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": true})
+                AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
             settings.sync()
         }
