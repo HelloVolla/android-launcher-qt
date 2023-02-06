@@ -30,6 +30,9 @@ ApplicationWindow {
               // Application go in active state
               console.log("MainView | Application became active")
               settings.sync()
+              appGridLoader.active = true
+              springboardLoader.active = true
+              settingsPageLoader.active = true
               if (mainView.keepLastIndex) {
                   if (mainView.currentIndex === mainView.swipeIndex.ConversationOrNewsOrDetails) {
                       console.log("MainView | Switch to conversation page")
@@ -37,7 +40,7 @@ ApplicationWindow {
                   }
                   mainView.keepLastIndex = false
               } else {
-                  mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+                  mainView.currentIndex === settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
@@ -61,10 +64,13 @@ ApplicationWindow {
               AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
               // Load contacts
               AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck})
-          } else {
+          } else if (Qt.application.state === Qt.ApplicationInactive) {
               // Application go in suspend state
               console.log("MainView | Application became inactive")
               isActive = false
+              appGridLoader.active = false
+              springboardLoader.active = false
+              settingsPageLoader.active = false
           }
        }
     }
@@ -72,7 +78,7 @@ ApplicationWindow {
     SwipeView {
         id: mainView
         anchors.fill: parent
-        currentIndex: 2
+        currentIndex: settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
         interactive: true
 
         background: Item {
@@ -251,6 +257,7 @@ ApplicationWindow {
         property bool keepLastIndex: false
 
         onCurrentIndexChanged: {
+            console.debug("MainView | Index changed to " + currentIndex)
             switch (currentIndex) {
                 case swipeIndex.Apps:
                     appGrid.children[0].item.updateNotifications()
@@ -268,6 +275,7 @@ ApplicationWindow {
             id: settingsPage
 
             Loader {
+                id: settingsPageLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/Settings.qml", mainView)
             }
@@ -277,12 +285,9 @@ ApplicationWindow {
             id: appGrid
 
             Loader {
+                id: appGridLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/AppGrid.qml", mainView)
-
-//                onLoaded: {
-//                    mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
-//                }
             }
         }
 
