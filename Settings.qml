@@ -1318,6 +1318,7 @@ Page {
                 rightPadding: mainView.innerSpacing
                 text: qsTr("Background blur")
                 font.pointSize: mainView.mediumFontSize
+                visible: false
             }
 
             Slider {
@@ -1329,6 +1330,7 @@ Page {
                 from: 0
                 to: 100
                 value: designSettings.blurEffect
+                visible: false
 
                 handle: Rectangle {
                     x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
