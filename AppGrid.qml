@@ -425,20 +425,34 @@ Page {
         target: AN.SystemDispatcher
         onDispatched: {
             if (type === "volla.launcher.appCountResponse") {
-                if (message["appCount"] !== appLauncher.appCount) {
-                    console.log("AppGrid | Number of apps: " + message["appCount"], ", " + appLauncher.appCount)
-                    appLauncher.appCount = message["appCount"]
+                if (message["appCount"] !== settings.appCount) {
+                    console.log("AppGrid | Number of apps: " + message["appCount"], ", " + settings.appCount)
+                    settings.appCount = message["appCount"]
                     mainView.updateSpinner(true)
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
-                } else if (new Date().valueOf() - appLauncher.lastAppsCheck > 3600000) {
+                } else if (new Date().valueOf() - settings.lastAppCountCheck > 3600000) {
                     console.debug("AppGrid | Will update statistics")
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
+                } else if (settings.appCount !== appLauncher.getAllApps().length) {
+                    var appsString = appsCache.readPrivate()
+                    if (appsString.length > 0) {
+                        console.debug("AppLauncher | Will read app cache")
+                        var appsArray = JSON.parse(appsString)
+                        var groupedApps = appLauncher.getGroupedApps(appsArray)
+                        appLauncher.appGroups = new Array
+                        appLauncher.createAppGroups(groupedApps)
+                    } else {
+                        console.log("AppLauncher | Need to retrieve apps from system")
+                        mainView.updateSpinner(true)
+                        AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
+                    }
                 }
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
                 settings.sync()
-                appLauncher.lastAppsCheck = new Date().valueOf()
-                var groupedApps = appLauncher.getGroupedApps(message["apps"])
+                settings.lastAppCountCheck = new Date().valueOf()
+                console.log("App Launcher | Did store apps: " + appsCache.writePrivate(JSON.stringify(message["apps"])))
+                groupedApps = appLauncher.getGroupedApps(message["apps"])
                 if (appLauncher.appGroups.length !== groupedApps.lemgth) {
                     for (var i = 0; i < appLauncher.appGroups.length; i++) {
                         var appGroup = appLauncher.appGroups[i]
@@ -505,7 +519,6 @@ Page {
                     }
                     appLauncher.pinnedShortcuts = pinnedShortcuts
                     appGroup = appGroups[0]
-
                 }
             }
         }
@@ -516,6 +529,8 @@ Page {
         property bool useColoredIcons: false
         property bool useGroupedApps: true
         property bool useCategories: false
+        property int appCount: 0
+        property double lastAppCountCheck: 0.0
     }
 
     FileIO {
@@ -544,6 +559,14 @@ Page {
             }
             shortcutIds.push(shortcutId)
             saveShortcutIds(shortcutIds)
+        }
+    }
+
+    FileIO {
+        id: appsCache
+        source: "apps.json"
+        onError: {
+            console.log("AppLaunchr | Apps cache error: " + msg)
         }
     }
 }
