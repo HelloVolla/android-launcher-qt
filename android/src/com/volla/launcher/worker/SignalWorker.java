@@ -93,6 +93,11 @@ public class SignalWorker {
                 reply.put("attachments", "");
                 messageList.add(reply);
             }
+	     Map result = new HashMap();
+            result.put("messages", messageList );
+            result.put("messagesCount", messageList.size());
+            Log.d(TAG, "Will dispatch messages: " + result.toString());
+            SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
 	});
        } else {
            repository.getAllMessageByThreadId(threadId,10).subscribe(it -> {
@@ -110,14 +115,14 @@ public class SignalWorker {
                 reply.put("attachments", "");
                 messageList.add(reply);
                 }
-            });
-
-          }
-            Map result = new HashMap();
+	     Map result = new HashMap();
             result.put("messages", messageList );
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
+            });
+
+          }
     }
 
     static void retriveMessageThreads(Map message, Activity activity){
