@@ -38,7 +38,6 @@ public class SignalWorker {
                 final Activity activity = QtNative.activity();
                 final Map message = dmessage;
                 ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(QtNative.activity().getApplication());
-
                 if (type.equals(GET_SIGNAL_MESSAGES)) {
                     Runnable runnable = new Runnable () {
                         public void run() {
@@ -160,8 +159,7 @@ public class SignalWorker {
    }
 
     static void enableSignal(Map message, Activity activity){
-      NotificationListenerExampleService nLS = new NotificationListenerExampleService();
       boolean enable = (boolean) message.get("enableSignal");
-      nLS.enableSignald(enable);
+      NotificationListenerExampleService.enableSignald(enable);
    }
 }

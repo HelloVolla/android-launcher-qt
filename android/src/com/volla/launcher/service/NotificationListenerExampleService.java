@@ -65,10 +65,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     private StatusBarNotification my_custom;
     private MessageRepository repository;
-    private boolean isSignaldEnable =false;
+    private static boolean isSignaldEnable =false;
 
-    public void enableSignald(boolean enable){
-         isSignaldEnable = enable;
+    public static void enableSignald(boolean enable){
+       isSignaldEnable = enable;
     }
 
     @Override
@@ -80,7 +80,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
-        //NotificationListenerExampleService.this.cancelAllNotifications();
 	if(!isSignaldEnable){
               return;
 	}
