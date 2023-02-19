@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import com.volla.launcher.NotificationListenerExampleService;
+import com.volla.launcher.service.NotificationListenerExampleService;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.ArrayUtils;
@@ -169,6 +169,83 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         }
 
         return extractStringFromExtra(extras, NotificationCompat.EXTRA_TEXT);
+    }
+
+    private String getTickerText(Notification notification) {
+        String ticker = "";
+
+        try {
+            Bundle extras = getExtras(notification);
+            String extraTitle = extractStringFromExtra(extras, NotificationCompat.EXTRA_TITLE);
+            String extraText = extractStringFromExtra(extras, NotificationCompat.EXTRA_TEXT);
+
+            if (extraTitle != null && !TextUtils.isEmpty(extraText)) {
+                ticker = extraTitle + ": " + extraText;
+            } else if (extraTitle != null) {
+                ticker = extraTitle;
+            } else if (extraText != null) {
+                ticker = extraText;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "problem parsing notification extras for " + notification.tickerText, e);
+        }
+
+        if (ticker.isEmpty()) {
+            ticker = (notification.tickerText != null) ? notification.tickerText.toString() : "";
+        }
+
+        return ticker;
+    }
+    @NonNull
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private static Bundle getExtras(Notification notification) {
+        // NotificationCompat.getExtras() is expected to return non-null values for JELLY_BEAN+
+        return Objects.requireNonNull(NotificationCompat.getExtras(notification));
+    }
+
+    private void sendCurrentNotifications(NotificationListenerExampleService service) {
+        StatusBarNotification[] notifications = service.getActiveNotifications();
+        if (notifications != null) { //Can happen only on API 23 and lower
+            for (StatusBarNotification notification : notifications) {
+                sendNotification(notification);
+            }
+        }
+    }
+    private static String getNotificationKeyCompat(StatusBarNotification statusBarNotification) {
+        String result;
+        // first check if it's one of our remoteIds
+        String tag = statusBarNotification.getTag();
+        String packageName = statusBarNotification.getPackageName();
+        int id = statusBarNotification.getId();
+        result = packageName + ":" + tag + ":" + id;
+        return result;
+    }
+
+    @Nullable
+    private RepliableNotification extractRepliableNotification(StatusBarNotification statusBarNotification) {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return null;
+        }
+
+        if (statusBarNotification.getNotification().actions == null) {
+            return null;
+        }
+
+        for (Notification.Action act : statusBarNotification.getNotification().actions) {
+            if (act != null && act.getRemoteInputs() != null) {
+                // Is a reply
+                RepliableNotification repliableNotification = new RepliableNotification();
+                repliableNotification.remoteInputs.addAll(Arrays.asList(act.getRemoteInputs()));
+                repliableNotification.pendingIntent = act.actionIntent;
+                repliableNotification.packageName = statusBarNotification.getPackageName();
+                repliableNotification.tag = statusBarNotification.getTag(); //TODO find how to pass Tag with sending PendingIntent, might fix Hangout problem
+
+                return repliableNotification;
+            }
+        }
+
+        return null;
     }
 
 
