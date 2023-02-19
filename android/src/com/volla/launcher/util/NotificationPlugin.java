@@ -65,6 +65,12 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
 
         });
     }
+
+    @Override
+    public boolean onCreate() {
+
+        return true;
+    }
     public String getSharedPreferencesName() {
         return  "volla_preferences";
     }

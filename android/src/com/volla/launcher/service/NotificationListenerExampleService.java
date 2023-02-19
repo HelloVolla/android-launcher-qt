@@ -25,6 +25,14 @@ import com.volla.launcher.util.SignalUtil;
 import java.io.ByteArrayOutputStream;
 import android.util.Base64;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import android.content.Context;
+import android.app.Service;
+
 /**
  * MIT License
  *
@@ -50,13 +58,14 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         These are the package names of the apps. for which we want to
         listen the notifications
      */
+    private final static String TAG = "NotificationListener";
     private static final class ApplicationPackageNames {
         public static final String SIGNAL_PACK_NAME = "org.thoughtcrime.securesms";
     }
     private static final String KEY_TEXT_REPLY = "key_text_reply";
     /*
-        These are the return codes we use in the method which intercepts
-        the notifications, to decide whether we should do something or not
+        These are the return codes we use in the method which 1intercepts
+        the notifications, to decide whether we should do somehing or not
      */
     public static final class InterceptedNotificationCode {
         public static final int SIGNAL_CODE = 1;
