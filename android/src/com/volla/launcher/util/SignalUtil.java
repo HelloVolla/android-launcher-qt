@@ -18,6 +18,10 @@ public class SignalUtil {
 
     public static final String SEND_SIGNAL_MESSAGES = "volla.launcher.signalSendMessageAction";
     public static final String DID_SEND_SIGNAL_MESSAGES = "volla.launcher.signalSendMessagesResponse";
+    public final static String PACKET_TYPE_NOTIFICATION_REQUEST = "volla.notification.request";
+    public final static String PACKET_TYPE_NOTIFICATION_REPLY = "volla.notification.reply";
+    public final static String PACKET_TYPE_NOTIFICATION_ACTION = "volla.notification.action";
+    public final static String PACKET_TYPE_NOTIFICATION = "volla.notification";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {

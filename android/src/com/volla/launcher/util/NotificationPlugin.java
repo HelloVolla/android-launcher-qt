@@ -248,6 +248,127 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         return null;
     }
 
+    @Nullable
+    private Bitmap extractIcon(StatusBarNotification statusBarNotification, Notification notification) {
+        try {
+            Context foreignContext = context.createPackageContext(statusBarNotification.getPackageName(), 0);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && notification.getLargeIcon() != null) {
+                return iconToBitmap(foreignContext, notification.getLargeIcon());
+            } else if (notification.largeIcon != null) {
+                return notification.largeIcon;
+            }
+
+            PackageManager pm = context.getPackageManager();
+            Resources foreignResources = pm.getResourcesForApplication(statusBarNotification.getPackageName());
+            Drawable foreignIcon = foreignResources.getDrawable(notification.icon); //Might throw Resources.NotFoundException
+            return drawableToBitmap(foreignIcon);
+
+        } catch (PackageManager.NameNotFoundException | Resources.NotFoundException e) {
+            Log.e(TAG, "Package not found", e);
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private JSONArray extractActions(Notification notification, String key) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || ArrayUtils.isEmpty(notification.actions)) {
+            return null;
+        }
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (Notification.Action action : notification.actions) {
+
+            if (null == action.title)
+                continue;
+
+            // Check whether it is a reply action. We have special treatment for them
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH &&
+                    ArrayUtils.isNotEmpty(action.getRemoteInputs()))
+                continue;
+
+            jsonArray.put(action.title.toString());
+
+            // A list is automatically created if it doesn't already exist.
+            actions.put(key, action);
+        }
+
+        return jsonArray;
+    }
+
+    private Pair<String, String> extractConversation(Notification notification) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            return new Pair<>(null, null);
+
+        if (!notification.extras.containsKey(Notification.EXTRA_MESSAGES))
+            return new Pair<>(null, null);
+
+        Parcelable[] ms = notification.extras.getParcelableArray(Notification.EXTRA_MESSAGES);
+
+        if (ms == null)
+            return new Pair<>(null, null);
+
+        String title = notification.extras.getString(Notification.EXTRA_CONVERSATION_TITLE);
+
+        boolean isGroupConversation = notification.extras.getBoolean(NotificationCompat.EXTRA_IS_GROUP_CONVERSATION);
+
+        StringBuilder messagesBuilder = new StringBuilder();
+
+        for (Parcelable p : ms) {
+            Bundle m = (Bundle) p;
+
+            if (isGroupConversation && m.containsKey("sender")) {
+                messagesBuilder.append(m.get("sender"));
+                messagesBuilder.append(": ");
+            }
+
+            messagesBuilder.append(extractStringFromExtra(m, "text"));
+            messagesBuilder.append("\n");
+        }
+
+        return new Pair<>(title, messagesBuilder.toString());
+    }
+
+    private static String extractStringFromExtra(Bundle extras, String key) {
+        Object extra = extras.get(key);
+        if (extra == null) {
+            return null;
+        } else if (extra instanceof String) {
+            return (String) extra;
+        } else if (extra instanceof SpannableString) {
+            return extra.toString();
+        } else {
+            Log.e(TAG, "Don't know how to extract text from extra of type: " + extra.getClass().getCanonicalName());
+            return null;
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private Bitmap iconToBitmap(Context foreignContext, Icon icon) {
+        if (icon == null) return null;
+
+        return drawableToBitmap(icon.loadDrawable(foreignContext));
+    }
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable == null) return null;
+
+        Bitmap res;
+        if (drawable.getIntrinsicWidth() > 128 || drawable.getIntrinsicHeight() > 128) {
+            res = Bitmap.createBitmap(96, 96, Bitmap.Config.ARGB_8888);
+        } else if (drawable.getIntrinsicWidth() <= 64 || drawable.getIntrinsicHeight() <= 64) {
+            res = Bitmap.createBitmap(96, 96, Bitmap.Config.ARGB_8888);
+        } else {
+            res = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(res);
+        drawable.setBounds(0, 0, res.getWidth(), res.getHeight());
+        drawable.draw(canvas);
+        return res;
+    }
+
 
 
 }
