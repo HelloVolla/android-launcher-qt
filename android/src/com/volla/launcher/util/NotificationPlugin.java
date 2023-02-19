@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import com.volla.launcher_1.NotificationListenerExampleService;
+import com.volla.launcher.NotificationListenerExampleService;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.ArrayUtils;
@@ -127,4 +127,50 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         np.set("text", extractText(notification, conversation));
         Log.d(TAG, "RepliableNotification id "+ rn.id);
     }
+
+    public void replyToNotification(String id, String message) {
+        if (pendingIntents.isEmpty() || !pendingIntents.containsKey(id)) {
+            Log.e(TAG, "No such notification");
+            return;
+        }
+        RepliableNotification repliableNotification = pendingIntents.get(id);
+        if (repliableNotification == null) {
+            Log.e(TAG, "No such notification");
+            return;
+        }
+        RemoteInput[] remoteInputs = new RemoteInput[repliableNotification.remoteInputs.size()];
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Bundle localBundle = new Bundle();
+        int i = 0;
+        for (RemoteInput remoteIn : repliableNotification.remoteInputs) {
+            remoteInputs[i] = remoteIn;
+            localBundle.putCharSequence(remoteInputs[i].getResultKey(), message);
+            i++;
+        }
+        RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle);
+        try {
+            repliableNotification.pendingIntent.send(context, 0, localIntent);
+        } catch (PendingIntent.CanceledException e) {
+            Log.e(TAG, "replyToNotification error: " + e.getMessage());
+        }
+        pendingIntents.remove(id);
+    }
+    private String extractText(Notification notification, Pair<String, String> conversation) {
+
+        if (conversation.second != null) {
+            return conversation.second;
+        }
+
+        Bundle extras = getExtras(notification);
+
+        if (extras.containsKey(NotificationCompat.EXTRA_BIG_TEXT)) {
+            return extractStringFromExtra(extras, NotificationCompat.EXTRA_BIG_TEXT);
+        }
+
+        return extractStringFromExtra(extras, NotificationCompat.EXTRA_TEXT);
+    }
+
+
+
 }
