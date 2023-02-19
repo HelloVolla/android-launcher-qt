@@ -25,6 +25,14 @@ import com.volla.launcher.util.SignalUtil;
 import java.io.ByteArrayOutputStream;
 import android.util.Base64;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import android.content.Context;
+import android.app.Service;
+
 /**
  * MIT License
  *
@@ -50,13 +58,14 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         These are the package names of the apps. for which we want to
         listen the notifications
      */
+    private final static String TAG = "NotificationListener";
     private static final class ApplicationPackageNames {
         public static final String SIGNAL_PACK_NAME = "org.thoughtcrime.securesms";
     }
     private static final String KEY_TEXT_REPLY = "key_text_reply";
     /*
-        These are the return codes we use in the method which intercepts
-        the notifications, to decide whether we should do something or not
+        These are the return codes we use in the method which 1intercepts
+        the notifications, to decide whether we should do somehing or not
      */
     public static final class InterceptedNotificationCode {
         public static final int SIGNAL_CODE = 1;
@@ -65,11 +74,68 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     private StatusBarNotification my_custom;
     private MessageRepository repository;
-    private boolean isSignaldEnable =false;
+    private static boolean isSignaldEnable =false;
+    private final static ArrayList<InstanceCallback> callbacks = new ArrayList<>();
+    private final static Lock mutex = new ReentrantLock(true);
+    private boolean connected = true;
+    void NotificationListenerExampleService(){
 
-    public void enableSignald(boolean enable){
-         isSignaldEnable = enable;
     }
+
+
+    public static void enableSignald(boolean enable){
+       isSignaldEnable = enable;
+    }
+
+    public interface InstanceCallback {
+        void onServiceStart(NotificationListenerExampleService service);
+    }
+    public interface NotificationListener {
+        boolean onCreate();
+
+        void onNotificationPosted(StatusBarNotification statusBarNotification);
+
+        void onNotificationRemoved(StatusBarNotification statusBarNotification);
+
+        void onListenerConnected(NotificationListenerExampleService service);
+    }
+
+    private final ArrayList<NotificationListener> listeners = new ArrayList<>();
+
+    public void addListener(NotificationListener listener) {
+        Log.d(TAG,"Adding Listener");
+        listeners.add(listener);
+    }
+
+    public void removeListener(NotificationListener listener) {
+        listeners.remove(listener);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        //Log.e("NotificationReceiver", "onStartCommand");
+        mutex.lock();
+        try {
+            for (InstanceCallback c : callbacks) {
+                c.onServiceStart(this);
+            }
+            callbacks.clear();
+        } finally {
+            mutex.unlock();
+        }
+        return Service.START_STICKY;
+    }
+
+    @Override
+    public void onListenerConnected() {
+        super.onListenerConnected();
+        for (NotificationListener listener : listeners) {
+            listener.onListenerConnected(this);
+        }
+        connected = true;
+    }
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -80,7 +146,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
-        //NotificationListenerExampleService.this.cancelAllNotifications();
 	if(!isSignaldEnable){
               return;
 	}
@@ -226,5 +291,29 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         } else {
             Log.i("ArvindVolla", "not success");
         }
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public static void Start(Context c) {
+        RunCommand(c, null);
+    }
+
+    public static void RunCommand(Context c, final InstanceCallback callback) {
+        Log.d(TAG,"RunCommand "+callback);
+        if (callback != null) {
+            Log.d(TAG,"callback != null "+callback);
+            mutex.lock();
+            try {
+                callbacks.add(callback);
+                Log.d(TAG,"RunCommand callbacks.add"+callback);
+            } finally {
+                mutex.unlock();
+            }
+        }
+        Intent serviceIntent = new Intent(c, NotificationListenerExampleService.class);
+        c.startService(serviceIntent);
     }
 }
