@@ -66,6 +66,9 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         });
     }
 
+    public NotificationPlugin(){
+    }
+
     @Override
     public boolean onCreate() {
 

@@ -19,6 +19,7 @@ import com.volla.launcher.storage.Message;
 import com.volla.launcher.storage.Users;
 import com.volla.launcher.service.NotificationListenerExampleService;
 import androidx.core.app.NotificationManagerCompat;
+import com.volla.launcher.util.NotificationPlugin;
 
 public class SignalWorker {
 
@@ -30,6 +31,8 @@ public class SignalWorker {
     public static final String GET_SIGNAL_THREADS = "volla.launcher.signalThreadsAction";
     public static final String GOT_SIGNAL_THREADS = "volla.launcher.signalThreadsResponse";
     public static final String ENABLE_SIGNAL = "volla.launcher.signalEnable";
+    public static final String SEND_SIGNAL_MESSAGES ="volla.launcher.signalSendMessageAction";
+    public static NotificationPlugin np;
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -65,11 +68,18 @@ public class SignalWorker {
                     };
                     Thread thread = new Thread(runnable);
                     thread.start();
-                }
-            }
+                } else if (type.equals(SEND_SIGNAL_MESSAGES)){
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            sendSignalmessage(message, activity);
+                        }
+                    };
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+             }
+	    }
         });
     }
-
     static void retrieveMessageConversations(Map message, Activity activity){
         Log.d(TAG, "Invoked JAVA retrieveMessageConversations: " + message.toString());
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
@@ -167,4 +177,10 @@ public class SignalWorker {
       boolean enable = (boolean) message.get("enableSignal");
       NotificationListenerExampleService.enableSignald(enable);
    }
+   static void sendSignalmessage(Map message, Activity activity){
+        String text = (String) message.get("text");
+        String thread_id = (String) message.get("thread_id");
+        np = new NotificationPlugin();
+        np.replyToNotification(thread_id,text);
+    }
 }
