@@ -83,7 +83,6 @@ Item {
         width: parent.width
         topPadding: groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
                                                      groupItem.innerSpacing / 2 : groupItem.innerSpacing
-
         Component.onCompleted: {
             groupHeader.visible = !groupGrid.visible
             groupHeader2.visible = groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
@@ -138,9 +137,6 @@ Item {
             cellWidth: parent.width * 0.25
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
             interactive: false
-//            add: Transition {
-//                NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0; duration: 1000 }
-//            }
 
             model: groupModel
 

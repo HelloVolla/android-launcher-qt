@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.1.12" android:versionCode="257" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.1.14" android:versionCode="259" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="29"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -102,12 +102,6 @@
             <!-- Background running -->
         </service>
 
-        <service android:name="com.volla.launcher.service.NotificationListenerExampleService" android:label="Volla" android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" android:exported="false">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService"/>
-            </intent-filter>
-        </service>
-
         <receiver android:name="com.klinker.android.send_message.SentReceiver" android:taskAffinity="com.volla.launcher.SMS_SENT"/>
 
         <receiver android:name="com.klinker.android.send_message.DeliveredReceiver" android:taskAffinity="com.volla.launcher.SMS_DELIVERED"/>
@@ -138,5 +132,5 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.MANAGE_USERS"/>
 <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
-<uses-permission android:name="android.permission.ACCESS_NOTIFICATIONS"/>
+<uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
 </manifest>

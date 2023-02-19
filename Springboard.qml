@@ -114,6 +114,79 @@ Page {
                     value: headline
                 }
             }
+
+            Row {
+                width: parent.width
+
+            Flickable {
+                id: flickable
+                width: parent.width - mainView.innerSpacing * 2
+                height: Math.min(contentHeight, 200)
+                contentWidth: width
+                contentHeight: textArea.implicitHeight
+                clip: true
+                flickableDirection: Flickable.VerticalFlick
+
+                TextArea.flickable: TextArea {
+                    id: textArea
+                    padding: mainView.innerSpacing
+                    x: mainView.innerSpacing
+                    width: parent.width
+                    placeholderText: qsTr("Type anything")
+                    color: mainView.fontColor
+                    placeholderTextColor: "darkgrey"
+                    font.pointSize: mainView.largeFontSize
+                    wrapMode: Text.WordWrap
+                    leftPadding: 0.0
+                    inputMethodHints: Qt.ImhEmailCharactersOnly
+
+                    background: Rectangle {
+                        color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                        border.color: "transparent"
+                    }
+
+                    Binding {
+                        target: springBoard
+                        property: "textInput"
+                        value: textArea.text
+                    }
+                    Binding {
+                        target: springBoard
+                        property: "textFocus"
+                        value: activeFocus
+                    }
+                    Binding {
+                        target: springBoard
+                        property: "textInputArea"
+                        value: textArea
+                    }
+
+                    onActiveFocusChanged: {
+                        headline.color = textArea.activeFocus ? "grey" : mainView.fontColor
+                    }
+                }
+                ScrollBar.vertical: ScrollBar {}
+            }
+
+            Button {
+                id: deleteButton
+                text: "<font color='#808080'>×</font>"
+                font.pointSize: mainView.largeFontSize * 2
+                flat: true
+                topPadding: 0.0
+//                anchors.top: flickable.top
+//                anchors.right: flickable.right
+                visible: textArea.preeditText !== "" || textArea.text !== ""
+
+                onClicked: {
+                    textArea.text = ""
+                    textArea.focus = false
+                }
+            }
+
+            }
+
+            /**
             TextArea {
                 id: textArea
                 padding: mainView.innerSpacing
@@ -168,7 +241,8 @@ Page {
                         textArea.focus = false
                     }
                 }
-            }
+            }*/
+
             Rectangle {
                 width: parent.width
                 color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"

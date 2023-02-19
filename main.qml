@@ -30,9 +30,9 @@ ApplicationWindow {
               // Application go in active state
               console.log("MainView | Application became active")
               settings.sync()
-              appGridLoader.active = true
-              springboardLoader.active = true
-              settingsPageLoader.active = true
+              if (!appGridLoader.active) appGridLoader.active = true
+              if (!springboardLoader.active) springboardLoader.active = true
+              if (!settingsPageLoader.active) settingsPageLoader.active = true
               if (mainView.keepLastIndex) {
                   if (mainView.currentIndex === mainView.swipeIndex.ConversationOrNewsOrDetails) {
                       console.log("MainView | Switch to conversation page")
@@ -40,7 +40,7 @@ ApplicationWindow {
                   }
                   mainView.keepLastIndex = false
               } else {
-                  mainView.currentIndex === settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+                  mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
@@ -78,7 +78,7 @@ ApplicationWindow {
     SwipeView {
         id: mainView
         anchors.fill: parent
-        currentIndex: settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
+        currentIndex: 2
         interactive: true
 
         background: Item {
@@ -1002,6 +1002,7 @@ ApplicationWindow {
             if (signalIsActivated) {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
+            mainView.useVibration = useHapticMenus
             settings.sync()
         }
     }
