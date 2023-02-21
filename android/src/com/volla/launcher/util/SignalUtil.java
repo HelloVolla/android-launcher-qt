@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import com.volla.launcher.util.NotificationPlugin;
 
 public class SignalUtil {
 
@@ -22,7 +23,7 @@ public class SignalUtil {
     public final static String PACKET_TYPE_NOTIFICATION_REPLY = "volla.notification.reply";
     public final static String PACKET_TYPE_NOTIFICATION_ACTION = "volla.notification.action";
     public final static String PACKET_TYPE_NOTIFICATION = "volla.notification";
-
+    public static NotificationPlugin np;
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
@@ -32,6 +33,13 @@ public class SignalUtil {
 
                 if (type.equals(SEND_SIGNAL_MESSAGES)) {
                     // todo: implement (use a separate thread)
+		    Runnable runnable = new Runnable () {
+                        public void run() {
+                           sendSignalmessage(message);
+                        }
+                    };
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });
@@ -48,5 +56,11 @@ public class SignalUtil {
         drawable.draw(canvas);
 
         return bitmap;
+    }
+    static void sendSignalmessage(Map message){
+        String text = (String) message.get("text");
+        String thread_id = (String) message.get("thread_id");
+        np = new NotificationPlugin();
+        np.replyToNotification(thread_id,text);
     }
 }
