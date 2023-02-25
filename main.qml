@@ -982,7 +982,7 @@ ApplicationWindow {
         property int searchMode: mainView.searchMode.Duck
         property bool fullscreen: false
         property bool firstStart: true
-        property bool signalIsActivated: true
+        property bool signalIsActivated: false
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
         property bool useHapticMenus: false
