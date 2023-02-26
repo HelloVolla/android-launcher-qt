@@ -32,7 +32,7 @@ Page {
     property string m_STEXT:     "stext"   // small text beyond the main text, grey
     property string m_IMAGE:     "image"   // preview image
     property string m_PART_IDs:  "partIds" // the ids of mms message parts
-    property string m_IS_SENT:   "sent"    // true if the content was sent by user
+    property bool   m_IS_SENT:   false     // true if the content was sent by user
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
 
@@ -464,8 +464,8 @@ Page {
 
                         // Todo: Only add message to list view, if massage was successfully sent.
                         currentConversationModel.append(
-                            {m_IS_SENT: "true", "m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • " + kind,
-                             "m_KIND": kind, "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
+                            {m_IS_SENT: true, m_TEXT: textArea.text, m_STEXT: mainView.parseTime(d.valueOf()) + " • " + kind,
+                             m_KIND: kind, m_DATE: d.valueOf().toString(), m_IMAGE: imagePicker.imageUrl} )
                         textArea.text = ""
                         textArea.focus = false
                         imagePicker.imageUrl = ""
