@@ -1,4 +1,4 @@
-import QtQuick 2.12
+ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.2
 import QtQuick.XmlListModel 2.12
@@ -311,7 +311,7 @@ Page {
                 width: parent.width
                 leftPadding: mainView.innerSpacing
                 rightPadding: mainView.innerSpacing
-                visible: conversationPage.phoneNumber !== undefined
+                visible: conversationPage.phoneNumber !== undefined || currentConversationMode === mainView.conversationMode.Thread
 
                 Button {
                     id:attachmentButtonAdd
@@ -441,21 +441,31 @@ Page {
                         var d = new Date()
                         var kind = imagePicker.imageUrl !== undefined && imagePicker.imageUrl.length > 0 ? "MMS" : "SMS"
 
-                        var messageToSend = {"number": conversationPage.phoneNumber,
-                                             "text": textArea.text,
-                                             "attachmentUrl": imagePicker.imageUrl}
+                        var messageToSend = {"text": textArea.text, "attachmentUrl": imagePicker.imageUrl}
 
                         if (conversationPage.lastMessageIsFromSignal()) {
                             kind = "Signal"
+                            switch (currentConversationMode) {
+                                case mainView.conversationMode.Person:
+                                    messageToSend.person = headline.text
+                                    break;
+                                case mainView.conversationMode.Thread:
+                                    messageToSend.thread_id = currentId
+                                    break;
+                                default:
+                                    console.log("Conversation | Unknown conversation mode")
+                                    break;
+                            }
                             AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction", messageToSend)
                         } else {
+                            messageToSend.number = conversationPage.phoneNumber
                             AN.SystemDispatcher.dispatch("volla.launcher.messageAction", messageToSend)
                         }
 
                         // Todo: Only add message to list view, if massage was successfully sent.
                         currentConversationModel.append(
-                            {"m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • " + kind,
-                             "m_IS_SENT": true, "m_KIND": "sms", "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
+                            {m_IS_SENT: "true", "m_TEXT": textArea.text, "m_STEXT": mainView.parseTime(d.valueOf()) + " • " + kind,
+                             "m_KIND": kind, "m_DATE": d.valueOf().toString(), "m_IMAGE": imagePicker.imageUrl} )
                         textArea.text = ""
                         textArea.focus = false
                         imagePicker.imageUrl = ""

@@ -68,6 +68,7 @@ DISTFILES += \
     android/src/com/volla/launcher/storage/Users.java \
     android/src/com/volla/launcher/storage/UsersDao.java \
     android/src/com/volla/launcher/util/MMSManager.java \
+    android/src/com/volla/launcher/util/NotificationPlugin.java \
     android/src/com/volla/launcher/util/NotificationUtils.java \
     android/src/com/volla/launcher/util/Settings.java \
     android/src/com/volla/launcher/util/ShortcutUtil.java \

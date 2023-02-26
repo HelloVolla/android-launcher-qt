@@ -57,7 +57,8 @@ public class SignalUtil {
 
         return bitmap;
     }
-    static void sendSignalmessage(Map message){
+
+    public static void sendSignalmessage(Map message){
         String text = (String) message.get("text");
         String thread_id = (String) message.get("thread_id");
         np = new NotificationPlugin();
