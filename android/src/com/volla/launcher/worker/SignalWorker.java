@@ -68,15 +68,7 @@ public class SignalWorker {
                     };
                     Thread thread = new Thread(runnable);
                     thread.start();
-                } else if (type.equals(SEND_SIGNAL_MESSAGES)){
-                    Runnable runnable = new Runnable () {
-                        public void run() {
-                            sendSignalmessage(message, activity);
-                        }
-                    };
-                    Thread thread = new Thread(runnable);
-                    thread.start();
-             }
+                }
 	    }
         });
     }
@@ -177,10 +169,4 @@ public class SignalWorker {
       boolean enable = (boolean) message.get("enableSignal");
       NotificationListenerExampleService.enableSignald(enable);
    }
-   static void sendSignalmessage(Map message, Activity activity){
-        String text = (String) message.get("text");
-        String thread_id = (String) message.get("thread_id");
-        np = new NotificationPlugin();
-        np.replyToNotification(thread_id,text);
-    }
 }
