@@ -138,7 +138,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
     }
 
     public void replyToNotification(String id, String message) {
-        if (pendingIntents.isEmpty() || !pendingIntents.containsKey(id)) {
+        if (pendingIntents == null || pendingIntents.isEmpty() || !pendingIntents.containsKey(id)) {
             Log.e(TAG, "No such notification");
             return;
         }
