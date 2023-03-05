@@ -32,7 +32,7 @@ Page {
     property string m_STEXT:     "stext"   // small text beyond the main text, grey
     property string m_IMAGE:     "image"   // preview image
     property string m_PART_IDs:  "partIds" // the ids of mms message parts
-    property bool   m_IS_SENT:   false     // true if the content was sent by user
+    property string m_IS_SENT:   "sent"    // true if the content was sent by user
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
 
@@ -463,9 +463,16 @@ Page {
                         }
 
                         // Todo: Only add message to list view, if massage was successfully sent.
-                        currentConversationModel.append(
-                            {m_IS_SENT: true, m_TEXT: textArea.text, m_STEXT: mainView.parseTime(d.valueOf()) + " • " + kind,
-                             m_KIND: kind, m_DATE: d.valueOf().toString(), m_IMAGE: imagePicker.imageUrl} )
+                        textInputField.text = ""
+                        var newMessage = new Object
+                        newMessage.m_IS_SENT = true
+                        newMessage.m_TEXT = textArea.text
+                        newMessage.m_STEXT = mainView.parseTime(d.valueOf()) + " • " + kind
+                        newMessage.m_KIND = kind
+                        newMessage.m_DATE = d.valueOf().toString()
+                        newMessage.m_IMAGE = imagePicker.imageUrl
+                        currentConversationModel.modelArr.push(newMessage)
+                        currentConversationModel.update(textInput)
                         textArea.text = ""
                         textArea.focus = false
                         imagePicker.imageUrl = ""
@@ -727,8 +734,8 @@ Page {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
                 }
 
-                cMessage.m_IS_SENT = message["isSent"]
-
+                cMessage.m_IS_SENT = typeof message["isSent"] === Boolean ? message["isSent"]
+                                                                          : message["isSent"] === "true" ? true : false
                 if (!message["isSent"]) {
                     conversationPage.phoneNumber = message["address"]
                 }
@@ -825,10 +832,10 @@ Page {
                 conversationPage.updateListModel()
             } else if (type === "volla.launcher.signalMessagesResponse") {
                 console.log("Conversation | onDispatched: " + type)
-                message["messages"].forEach(function (message, index) {
-                    message["isSignal"] = true
-                    for (const [messageKey, messageValue] of Object.entries(message)) {
-                        console.log("Conversation | * " + messageKey + ": " + messageValue)
+                message["messages"].forEach(function (signalMessage, index) {
+                    signalMessage["isSignal"] = true
+                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
+                        console.log("Conversation | * " + messageKey + ": " + messageValue + ": " + typeof messageValue)
                     }
                 })
                 conversationPage.messages = conversationPage.messages.concat(message["messages"])
