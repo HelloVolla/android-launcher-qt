@@ -1357,7 +1357,8 @@ Page {
                 Column {
                     id: resetSettingsItemColumn
                     width: parent.width
-                    spacing: mainView.innerSpacing / 2
+                    spacing: mainView.innerSpacing  / 2
+                    bottomPadding: mainView.innerSpacing * 2
 
                     property bool menuState: false
 

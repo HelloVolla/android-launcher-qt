@@ -87,6 +87,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
             if (getIntent().hasExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST)) {
                 mStartActivity.putExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST,
                     (LauncherApps.PinItemRequest)getIntent().getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST));
+                mStartActivity.setAction(LauncherApps.ACTION_CONFIRM_PIN_SHORTCUT);
             }
             int mPendingIntentId = 123456;
             PendingIntent mPendingIntent = PendingIntent.getActivity(
@@ -159,6 +160,28 @@ public class ReceiveTextActivity extends AndroidNativeActivity
                 SystemDispatcher.dispatch(GOT_TEXT, reply);
             }
             Log.d(TAG, "Shared text: " +  sharedText);
+        } else if (LauncherApps.ACTION_CONFIRM_PIN_SHORTCUT.equals(action)) {
+            LauncherApps.PinItemRequest pinItemRequest = intent.getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST);
+            if (pinItemRequest.getRequestType() == PinItemRequest.REQUEST_TYPE_SHORTCUT) {
+                Log.d(TAG, "Will accept shortcut");
+                boolean success = pinItemRequest.accept();
+                Log.d(TAG, "Shortcut is accepted: " + success);
+                ShortcutInfo shortcutInfo = pinItemRequest.getShortcutInfo();
+
+                Log.d(TAG, "New shortcut: " + shortcutInfo.getId());
+                LauncherApps launcher = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
+                Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
+
+                Map reply = new HashMap();
+                reply.put("shortcutId", shortcutInfo.getId() );
+                reply.put("package", shortcutInfo.getPackage() );
+                reply.put("label", shortcutInfo.getShortLabel().toString() );
+                reply.put("icon", drawableToBase64(shortcutIcon) );
+
+                pendingShortcutMessage = reply;
+            } else {
+                Log.w(TAG, "Not valid pin item request");
+            }
         }
     }
 

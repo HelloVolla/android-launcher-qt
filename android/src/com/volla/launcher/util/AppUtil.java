@@ -128,17 +128,17 @@ public class AppUtil {
                             i.setData(uri);
                             activity.startActivity(i);
                         } else if (type.equals(RESET_LAUNCHER)) {
-                            Log.d(TAG, "Will reset launcher");
                             // https://stackoverflow.com/questions/4856955/how-to-programmatically-clear-application-data
-                            ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
 
+                            Log.d(TAG, "Will restart launcher");
                             Intent mStartActivity = new Intent(activity, ReceiveTextActivity.class);
-                            int mPendingIntentId = 123456;
+                            int mPendingIntentId = 234567;
                             PendingIntent mPendingIntent = PendingIntent.getActivity(
                                 activity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
                             AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
-                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                            System.exit(0);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, mPendingIntent);
+                            Log.d(TAG, "Will reset launcher");
+                            ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
                         } else if (type.equals(TOGGLE_SECURITY_MODE)) {
                             boolean activate = (boolean) message.get("activate");
                             boolean keepPassword = (boolean) message.get("keepPassword");

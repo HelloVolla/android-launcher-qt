@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished">rimuovi dalle scorciatoie</translation>
+        <translation type="obsolete">rimuovi dalle scorciatoie</translation>
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
@@ -54,6 +54,10 @@
     <message>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished">Il collegamento appuntato esiste già</translation>
+    </message>
+    <message>
+        <source>Remove Bookmark</source>
+        <translation type="unfinished">Rimuovi il segnalibro</translation>
     </message>
 </context>
 <context>
@@ -631,7 +635,7 @@
     </message>
     <message>
         <source>You have already subscribed the feed</source>
-        <translation type="obsolete">sei già abbonato al canale</translation>
+        <translation type="unfinished">sei già abbonato al canale</translation>
     </message>
     <message>
         <source>Invalid RSS feed: </source>
@@ -783,7 +787,7 @@
     </message>
     <message>
         <source>You have already added the shortcut</source>
-        <translation type="unfinished">hai già aggiunto la scorciatoia</translation>
+        <translation type="obsolete">hai già aggiunto la scorciatoia</translation>
     </message>
     <message>
         <source>Error because of too much redirects</source>
@@ -791,7 +795,7 @@
     </message>
     <message>
         <source>You have alresdy subscribed the feed</source>
-        <translation type="unfinished">Hai già sottoscritto il feed</translation>
+        <translation type="obsolete">Hai già sottoscritto il feed</translation>
     </message>
     <message>
         <source>Could not load a valid feed</source>
@@ -818,15 +822,7 @@
         <translation type="unfinished">Mostra in Segnale</translation>
     </message>
     <message>
-        <source>Could not activate Signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
+        <source>You have alresdy added the shortcut</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

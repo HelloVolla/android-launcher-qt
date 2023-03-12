@@ -41,7 +41,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished">Odstranění zkratky</translation>
+        <translation type="obsolete">Odstranění zkratky</translation>
     </message>
     <message>
         <source>New pinned shortcut</source>
@@ -50,6 +50,10 @@
     <message>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished">Připnutá zkratka již existuje</translation>
+    </message>
+    <message>
+        <source>Remove Bookmark</source>
+        <translation type="unfinished">Odstranění záložky</translation>
     </message>
 </context>
 <context>
@@ -665,18 +669,6 @@
     <message>
         <source>Not yet supported</source>
         <translation type="unfinished">Zatím není podporováno</translation>
-    </message>
-    <message>
-        <source>Could not activate Signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

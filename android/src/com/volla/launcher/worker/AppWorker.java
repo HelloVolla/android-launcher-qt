@@ -145,8 +145,8 @@ public class AppWorker
         }
         if (!granted) {
             Log.d(TAG, "App usage statistic access is not granted");
-//            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-//            activity.startActivityForResult(intent, 2);
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            activity.startActivityForResult(intent, 2);
         }
         return granted;
     }

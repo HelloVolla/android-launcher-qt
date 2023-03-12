@@ -40,13 +40,12 @@ Item {
 
     onAppsChanged: {
         console.log("AppGroup " + groupIndex + " | onAppsChanged: " + groupItem.apps.length)
-        groupModel.clear()
         groupModel.prepareModel()
     }
 
     onPinnedShortcutsChanged: {
         console.log("AppGroup " + groupIndex + " | onPinnedShortcutsChanged")
-        groupModel.clear()
+        console.debug("AppGroup " + groupIndex + " | Number of pinned shortcuts: " + groupItem.pinnedShortcuts.length)
         groupModel.prepareModel()
     }
 
@@ -70,12 +69,12 @@ Item {
         groupHeader.visible = !appsShouldBeVisible
     }
 
-    function removePinnedShortcut(shorcutId) {
-        pinnedShortcuts = pinnedShortcuts.filter(function(item) {
-            return item.itemId !== shorcutId
-        })
-        groupModel.prepareModel()
-        groupModel.update(textInput)
+    function removePinnedShortcut(shortcutId) {
+        if (groupItem.groupIndex === 0) {
+            groupItem.pinnedShortcuts = groupItem.pinnedShortcuts.filter(function(item) {
+                return item.shortcutId !== shortcutId
+            })
+        }
     }
 
     Column {
@@ -175,7 +174,7 @@ Item {
                             id: buttonIcon
                             anchors.left: parent.left
                             anchors.leftMargin: gridCell.width * 0.25
-                            source: model.package in groupItem.iconMap && model.shortcutId === undefined
+                            source: model.package in groupItem.iconMap && (model.shortcutId === undefined || model.shortcutId.length === 0)
                                     ? Qt.resolvedUrl(groupItem.iconMap[model.package]) : "data:image/png;base64," + model.icon
                             width: gridButton.width * 0.35
                             height: gridButton.width * 0.35
@@ -209,7 +208,7 @@ Item {
                             groupItem.parent.closeContextMenu()
                             groupGrid.currentIndex = -1
                         } else if (model.package.length > 0) {
-                            console.log("App " + model.label + " selected")
+                            console.log("App Group | App " + model.label + " selected")
                             // As a workaround for a missing feature in the phone app
                             if (model.package === groupItem.phoneApp) {
                                 if (groupItem.newCalls) {
@@ -218,7 +217,7 @@ Item {
                                 } else {
                                     AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": groupItem.phoneApp})
                                 }
-                            } else if (model.shortcutId !== undefined) {
+                            } else if (model.shortcutId !== undefined && model.shortcutId.length > 0) {
                                 AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
                                                              {"shortcutId": model.shortcutId, "package": model.package})
                             } else {
@@ -281,16 +280,20 @@ Item {
         WorkerScript {
             id: groupModelWorker
             source: "scripts/apps.mjs"
+
+            property bool isReady: false
+
             onMessage: {
-                console.debug("AppGroup | Worker message received")
+                console.debug("AppGroup " + groupIndex + " | Worker message received")
                 groupModel.modelArr = messageObject.apps
                 groupHeader.text = groupLabel.toLowerCase() === "apps"  ? "+" + groupModel.count + " " + groupLabel : groupLabel
                 groupItem.visible = groupModel.count > 0
             }
             Component.onCompleted: {
-                console.debug("AppGroup | Workerscript established" );
+                console.debug("AppGroup " + groupIndex + " | Workerscript established" );
+                isReady = true
                 if (groupModel.pendingMessage !== undefined) {
-                    console.debug("AppGroup | Will send message to Workerscript" );
+                    console.debug("AppGroup " + groupIndex + " | Will send message to Workerscript" );
                     sendMessage(groupModel.pendingMessage)
                 }
             }
@@ -302,9 +305,15 @@ Item {
             property var modelArr: new Array
             property var pendingMessage
 
+            onCountChanged: {
+                console.log("AppGroup " + groupIndex + " | Number of grid itens changed: " + count)
+            }
+
             // Call this method, if apps or shortcuts have been changed
             function prepareModel() {
-                if (groupModelWorker.status === Component.Ready) {
+                console.debug("AppGroup " + groupIndex + " | Will prepare model")
+                if (groupModelWorker.isReady) {
+                    console.debug("AppGroup " + groupIndex + " | Will send worker message")
                     groupModelWorker.sendMessage({
                         "apps": groupItem.pinnedShortcuts.concat(groupItem.apps),
                         "labelMap" : groupItem.labelMap,
@@ -312,6 +321,7 @@ Item {
                         "text" : groupItem.textInput
                     })
                 } else {
+                    console.debug("AppGroup " + groupIndex + " | Will define pending message for script status " + groupModelWorker.status)
                     pendingMessage = {
                         "apps": groupItem.pinnedShortcuts.concat(groupItem.apps),
                         "labelMap" : groupItem.labelMap,
@@ -332,6 +342,7 @@ Item {
                 var i
 
                 console.log("AppGroup " + groupIndex + " | Model '" + groupItem.groupLabel + "' has " + modelArr.length + " elements")
+                console.log("AppGroup " + groupIndex + " | Model '" + groupItem.groupLabel + "' has " + count + " elements")
 
                 // filter model
                 for (i = 0; i < modelArr.length; i++) {
@@ -369,7 +380,7 @@ Item {
                     if (!found) {
                         // for simplicity, just adding to end instead of corresponding position in original list
                         filteredGridItem = filteredGridDict[key]
-                        // console.debug("AppGroup " + groupIndex + " | Will append " + key + ", " + filteredGridItem.category)
+                        console.debug("AppGroup " + groupIndex + " | * Will append " + key)
                         append(filteredGridItem)
                     }
                 })
