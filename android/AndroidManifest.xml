@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.1.15" android:versionCode="260" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.1.16" android:versionCode="261" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="29"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -16,7 +16,7 @@
 
         <!-- org.qtproject.qt5.android.bindings.QtActivity -->
 
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|uiMode" android:name="com.volla.launcher.activity.ReceiveTextActivity" android:label="Volla" android:theme="@style/AppTheme" android:screenOrientation="portrait" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|uiMode" android:name="com.volla.launcher.activity.ReceiveTextActivity" android:exported="true" android:label="Volla" android:theme="@style/AppTheme" android:screenOrientation="portrait" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
@@ -92,7 +92,7 @@
             <!-- extract android style -->
         </activity>
 
-        <activity android:name="com.volla.launcher.activity.AddShortcutActivity" android:theme="@style/Theme.Transparent" android:launchMode="singleInstance" android:exported="true" android:label="Volla">
+        <activity android:name="com.volla.launcher.activity.AddShortcutActivity" android:exported="true" android:theme="@style/Theme.Transparent" android:launchMode="singleInstance" android:label="Volla">
             <intent-filter>
                 <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT"/>
             </intent-filter>
@@ -138,4 +138,5 @@
 <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
 <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+
 </manifest>

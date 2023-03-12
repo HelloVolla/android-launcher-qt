@@ -9,7 +9,9 @@ import android.util.Log;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
+import android.content.pm.PackageInfo;
 import android.content.Intent;
+import android.content.ComponentName;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.provider.MediaStore;
@@ -77,9 +79,32 @@ public class AppUtil {
 
                             }
                         } else if (type.equals(RUN_APP)) {
-                            String appId = (String) message.get("appId");
-                            Intent app = pm.getLaunchIntentForPackage(appId);
-                            activity.startActivity(app);
+                            String packageName = (String) message.get("appId");
+                            PackageInfo pi;
+                            try {
+                                pi = activity.getPackageManager().getPackageInfo(packageName, 0);
+                                Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+                                resolveIntent.setPackage(pi.packageName);
+                                List<ResolveInfo> apps = pm.queryIntentActivities(resolveIntent, 0);
+                                for (ResolveInfo app: apps){
+                                    Log.d(TAG,String.format("%s %s",app.activityInfo.packageName,app.activityInfo.name));
+                                    packageName = app.activityInfo.packageName;
+                                    String className = app.activityInfo.name;
+                                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                                    ComponentName cn = new ComponentName(packageName, className);
+                                    intent.setComponent(cn);
+                                    try {
+                                        activity.startActivity(intent);
+                                    } catch (SecurityException e){
+                                        Log.e(TAG, "Security exception: " + e.getMessage());
+                                    }
+                                }
+                            } catch (PackageManager.NameNotFoundException e) {
+                                Log.e(TAG, "Package Name not found: " + e.getMessage() + ", App is not installed.");
+                            } catch (SecurityException e){
+                                Log.e(TAG, "Security exception: " + e.getMessage());
+                            }
                         } else if (type.equals(OPEN_NOTES)) {
                             String text = (String) message.get("text");
                             Intent sendIntent = new Intent();
