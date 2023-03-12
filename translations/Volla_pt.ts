@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished">Retirar o Atalho</translation>
+        <translation type="obsolete">Retirar o Atalho</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
@@ -50,6 +50,10 @@
     <message>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished">Já existe um atalho com alfinetes</translation>
+    </message>
+    <message>
+        <source>Remove Bookmark</source>
+        <translation type="unfinished">Remover Bookmark</translation>
     </message>
 </context>
 <context>
@@ -665,18 +669,6 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Mostrar em Signal</translation>
-    </message>
-    <message>
-        <source>Could not activate Signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

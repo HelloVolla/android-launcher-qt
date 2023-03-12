@@ -206,7 +206,7 @@ Page {
                                "innerSpacing": mainView.innerSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
-                               "pinnedShortcuts": appLauncher.pinnedShortcuts,
+                               "pinnedShortcuts": index === 0 ? appLauncher.pinnedShortcuts : new Array,
                                "apps": appGroupInfos["apps"]}
             if (component.status !== Component.Ready) {
                 if (component.status === Component.Error)
@@ -392,11 +392,11 @@ Page {
             }
         }
         MenuItem {
-            id: removeShortcutItem
+            id: removePinnedShortcutItem
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: contextMenu.menuWidth
-                text: qsTr("Remove Shortcut")
+                text: qsTr("Remove Bookmark")
                 horizontalAlignment: Text.AlignHCenter
             }
             leftPadding: mainView.innerSpacing
@@ -537,7 +537,7 @@ Page {
         id: disabledPinnedShortcuts
         source: "dusabledShorcuts.json"
         onError: {
-            console.log("AppGrid | Disabled contacts store error: " + msg)
+            console.log("AppGrid | Disabled shortcuts store error: " + msg)
         }
         function getShortcutIds() {
             var shortcutIds = readPrivate()

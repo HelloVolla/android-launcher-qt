@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.1.14" android:versionCode="259" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.1.15" android:versionCode="260" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="29"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -27,9 +27,6 @@
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="text/plain"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT"/>
             </intent-filter>
 
             <!-- Application arguments -->
@@ -95,6 +92,13 @@
             <!-- extract android style -->
         </activity>
 
+        <activity android:name="com.volla.launcher.activity.AddShortcutActivity" android:theme="@style/Theme.Transparent" android:launchMode="singleInstance" android:exported="true" android:label="Volla">
+            <intent-filter>
+                <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT"/>
+            </intent-filter>
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+        </activity>
+
         <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
         <service android:name="com.android.mms.transaction.TransactionService">
             <!-- Background running -->
@@ -133,4 +137,5 @@
 <uses-permission android:name="android.permission.MANAGE_USERS"/>
 <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
+<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 </manifest>

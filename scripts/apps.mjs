@@ -34,11 +34,34 @@ WorkerScript.onMessage = function(message) {
         }
     }
 
+    var existingGridDict = new Object
+    for (i = 0; i < model.count; ++i) {
+        modelItemId = model.get(i).itemId
+        existingGridDict[modelItemId] = true
+    }
+
+    // remove items no longer in filtered set
+    i = 0
+    while (i < model.count) {
+        modelItemId = model.get(i).itemId
+        found = filteredGridDict.hasOwnProperty(modelItemId)
+        if (!found) {
+            console.debug("AppScript | Remove " + modelItemId)
+            model.remove(i)
+        } else {
+            i++
+        }
+    }
+
     // add new items
     var keys = Object.keys(filteredGridDict)
     keys.forEach(function(key) {
-        filteredGridItem = filteredGridDict[key]
-        model.append(filteredGridItem)
+        found = existingGridDict.hasOwnProperty(key)
+        if (!found) {
+            // for simplicity, just adding to end instead of corresponding position in original list
+            filteredGridItem = filteredGridDict[key]
+            model.append(filteredGridItem)
+        }
     })
 
     model.sync()
