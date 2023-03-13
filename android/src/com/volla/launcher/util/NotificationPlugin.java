@@ -37,37 +37,46 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import com.volla.launcher.storage.Message;
 
 public class NotificationPlugin implements NotificationListenerExampleService.NotificationListener{
 
     private final static String TAG = "Volla/NotificationPlugi";
     private Set<String> currentNotifications;
-    private Map<String, RepliableNotification> pendingIntents;
+    private Map<String, RepliableNotification> repliableNotificationMap;
     private MultiValuedMap<String, Notification.Action> actions;
     private boolean serviceReady;
     private SharedPreferences sharedPreferences;
     private final static String PREF_KEY = "prefKey";
     public Context context;
+    private static NotificationPlugin instance;
+    public static synchronized NotificationPlugin getInstance(Context context) {
+        if (instance == null) {
+            instance = new NotificationPlugin(context);
+        }
+        return instance;
+    }
+     public void registerListener(){
+        NotificationListenerExampleService.RunCommand(context, service -> {
+            Log.d(TAG, "NotificationPlugin Adding Listner");
+            service.addListener(NotificationPlugin.this);
 
-    public NotificationPlugin(Context context){
+            serviceReady = service.isConnected();
+            Log.d(TAG, "NotificationPlugin serviceReady "+ serviceReady);
+        });
+    }
+
+    private NotificationPlugin(Context context){
         this.context = context;
         Log.d(TAG, "NotificationPlugin Condtructor0");
-        pendingIntents = new HashMap<>();
+        repliableNotificationMap = new HashMap<>();
         currentNotifications = new HashSet<>();
         actions = new ArrayListValuedHashMap<>();
         sharedPreferences = context.getSharedPreferences(getSharedPreferencesName(), Context.MODE_PRIVATE);
         Log.d(TAG, "NotificationPlugin getSharedPref");
-        NotificationListenerExampleService.RunCommand(context, service -> {
-            Log.d(TAG, "NotificationPlugin Adding Listner");
-            service.addListener(NotificationPlugin.this);
-            serviceReady = service.isConnected();
-            Log.d(TAG, "NotificationPlugin serviceReady "+ serviceReady);
-
-        });
     }
 
-    public NotificationPlugin(){
-    }
+
 
     @Override
     public boolean onCreate() {
@@ -124,7 +133,9 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         RepliableNotification rn = extractRepliableNotification(statusBarNotification);
         if (rn != null) {
             np.set("requestReplyId", rn.id);
-            pendingIntents.put(String.valueOf(statusBarNotification.getId()), rn);
+            repliableNotificationMap.put(String.valueOf(statusBarNotification.getId()), rn);
+	    Log.d(TAG, "RepliableNotification id arvi");
+	    Log.d(TAG, "RepliableNotification id to store repliableNotificationMap "+ statusBarNotification.getId()+" RepliableNotificationMap "+repliableNotificationMap);
         }
         np.set("ticker", getTickerText(notification));
         Pair<String, String> conversation = extractConversation(notification);
@@ -138,11 +149,12 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
     }
 
     public void replyToNotification(String id, String message) {
-        if (pendingIntents == null || pendingIntents.isEmpty() || !pendingIntents.containsKey(id)) {
-            Log.e(TAG, "No such notification");
+        Log.d(TAG, "pending Intent : " + repliableNotificationMap);	
+        if (repliableNotificationMap == null || repliableNotificationMap.isEmpty() || !repliableNotificationMap.containsKey(id)) {
+            Log.e(TAG, "No such notification, pending intent is null or does't contains id: " +id );
             return;
         }
-        RepliableNotification repliableNotification = pendingIntents.get(id);
+        RepliableNotification repliableNotification = repliableNotificationMap.get(id);
         if (repliableNotification == null) {
             Log.e(TAG, "No such notification");
             return;
@@ -160,10 +172,20 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle);
         try {
             repliableNotification.pendingIntent.send(context, 0, localIntent);
+	    storeRepliedMessage(id,message);
         } catch (PendingIntent.CanceledException e) {
             Log.e(TAG, "replyToNotification error: " + e.getMessage());
         }
-        pendingIntents.remove(id);
+        repliableNotificationMap.remove(id);
+    }
+    private void storeRepliedMessage(String id, String text){
+        NotificationListenerExampleService.RunCommand(context, service -> {
+            service.addListener(NotificationPlugin.this);
+            Message message = new Message();
+            message.id = Integer.valueOf(id);
+            message.text = text;
+            service.storeMessage(message);
+        });
     }
     private String extractText(Notification notification, Pair<String, String> conversation) {
 

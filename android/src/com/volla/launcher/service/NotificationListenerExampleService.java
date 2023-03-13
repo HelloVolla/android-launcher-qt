@@ -104,7 +104,9 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     public void addListener(NotificationListener listener) {
         Log.d(TAG,"Adding Listener");
-        listeners.add(listener);
+	if(!listeners.contains(listener)){
+            listeners.add(listener);
+        }
     }
 
     public void removeListener(NotificationListener listener) {
@@ -146,6 +148,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
+
+        Log.d(TAG, "listeners size  : " +listeners.size());
+        for (NotificationListener listener : listeners) {
+            listener.onNotificationPosted(sbn);
+        }
 	if(!isSignaldEnable){
               return;
 	}
@@ -268,7 +275,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         }
     }
 
-
+    public void storeMessage(Message msg){
+        msg.timeStamp = System.currentTimeMillis();
+        repository.insertMessage(msg);
+	Log.d(TAG, "msg.id :"+msg.id);
+        Log.d(TAG, "msg.id :"+msg.text);
+        Log.d(TAG, "msg.id :"+msg.timeStamp);
+    }
     private int matchNotificationCode(StatusBarNotification sbn) {
         String packageName = sbn.getPackageName();
         String extras = sbn.toString();
@@ -279,7 +292,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     }
 
 
-    public void reply(){
+  /*  public void reply(){
         Action action = NotificationUtils.getQuickReplyAction(my_custom.getNotification(), getPackageName());
         if (action != null) {
             Log.i("ArvindVolla", "success");
@@ -291,7 +304,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         } else {
             Log.i("ArvindVolla", "not success");
         }
-    }
+    }*/
 
     public boolean isConnected() {
         return connected;

@@ -23,7 +23,7 @@ public class SignalUtil {
     public final static String PACKET_TYPE_NOTIFICATION_REPLY = "volla.notification.reply";
     public final static String PACKET_TYPE_NOTIFICATION_ACTION = "volla.notification.action";
     public final static String PACKET_TYPE_NOTIFICATION = "volla.notification";
-    public static NotificationPlugin np;
+    //public static NotificationPlugin np;
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
@@ -61,7 +61,7 @@ public class SignalUtil {
     public static void sendSignalmessage(Map message){
         String text = (String) message.get("text");
         String thread_id = (String) message.get("thread_id");
-        np = new NotificationPlugin();
-        np.replyToNotification(thread_id,text);
+        //np = new NotificationPlugin();
+        NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(thread_id,text);
     }
 }

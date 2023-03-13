@@ -43,6 +43,7 @@ import androidx.core.app.NotificationCompat;
 import com.volla.launcher.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import com.volla.launcher.util.NotificationPlugin;
 
 public class ReceiveTextActivity extends AndroidNativeActivity
 {
@@ -58,7 +59,6 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     private String channel_d;
 
     private static Map pendingShortcutMessage;
-
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
@@ -143,7 +143,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.volla.launcher.notification");
         registerReceiver(notificationBroadcastReceiver, intentFilter);
-
+        NotificationPlugin.getInstance(ReceiveTextActivity.this).registerListener();
         Log.d(TAG, "Android activity created");
     }
 
@@ -179,6 +179,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     public void onResume() {
         super.onResume();
         Log.d(TAG, "On Resume called");
+	NotificationPlugin.getInstance(ReceiveTextActivity.this).registerListener();
         // todo: Adopt ui mode
     }
 
