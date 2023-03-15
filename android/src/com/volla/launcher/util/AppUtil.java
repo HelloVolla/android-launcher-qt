@@ -80,30 +80,33 @@ public class AppUtil {
                             }
                         } else if (type.equals(RUN_APP)) {
                             String packageName = (String) message.get("appId");
-                            PackageInfo pi;
                             try {
-                                pi = activity.getPackageManager().getPackageInfo(packageName, 0);
-                                Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
-                                resolveIntent.setPackage(pi.packageName);
-                                List<ResolveInfo> apps = pm.queryIntentActivities(resolveIntent, 0);
-                                for (ResolveInfo app: apps){
-                                    Log.d(TAG,String.format("%s %s",app.activityInfo.packageName,app.activityInfo.name));
-                                    packageName = app.activityInfo.packageName;
-                                    String className = app.activityInfo.name;
-                                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                                    ComponentName cn = new ComponentName(packageName, className);
-                                    intent.setComponent(cn);
-                                    try {
-                                        activity.startActivity(intent);
-                                    } catch (SecurityException e){
-                                        Log.e(TAG, "Security exception: " + e.getMessage());
-                                    }
-                                }
-                            } catch (PackageManager.NameNotFoundException e) {
-                                Log.e(TAG, "Package Name not found: " + e.getMessage() + ", App is not installed.");
+                                Intent app = pm.getLaunchIntentForPackage(packageName);
+                                activity.startActivity(app);
                             } catch (SecurityException e){
-                                Log.e(TAG, "Security exception: " + e.getMessage());
+                                PackageInfo pi;
+                                try {
+                                    pi = activity.getPackageManager().getPackageInfo(packageName, 0);
+                                    Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+                                    resolveIntent.setPackage(pi.packageName);
+                                    List<ResolveInfo> apps = pm.queryIntentActivities(resolveIntent, 0);
+                                    for (ResolveInfo app: apps){
+                                        Log.d(TAG,String.format("%s %s",app.activityInfo.packageName,app.activityInfo.name));
+                                        packageName = app.activityInfo.packageName;
+                                        String className = app.activityInfo.name;
+                                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                                        ComponentName cn = new ComponentName(packageName, className);
+                                        intent.setComponent(cn);
+                                        try {
+                                            activity.startActivity(intent);
+                                        } catch (SecurityException se){
+                                            Log.e(TAG, "Security exception: " + se.getMessage());
+                                        }
+                                    }
+                                } catch (PackageManager.NameNotFoundException nnfe) {
+                                    Log.e(TAG, "Package Name not found: " + nnfe.getMessage() + ", App is not installed.");
+                                }
                             }
                         } else if (type.equals(OPEN_NOTES)) {
                             String text = (String) message.get("text");

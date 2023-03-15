@@ -59,6 +59,14 @@
         <source>Remove Bookmark</source>
         <translation type="unfinished">Odstrániť záložku</translation>
     </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
