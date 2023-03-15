@@ -4,6 +4,16 @@
 <context>
     <name>AppGrid</name>
     <message>
+        <location filename="../AppGrid.qml" line="71"/>
+        <source>Files</source>
+        <translation type="unfinished">Dateien</translation>
+    </message>
+    <message>
+        <location filename="../AppGrid.qml" line="73"/>
+        <source>Maps</source>
+        <translation type="unfinished">Karten</translation>
+    </message>
+    <message>
         <location filename="../AppGrid.qml" line="156"/>
         <location filename="../AppGrid.qml" line="182"/>
         <location filename="../AppGrid.qml" line="185"/>
@@ -454,7 +464,7 @@
         <translation type="unfinished">Signal</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1539"/>
+        <location filename="../Settings.qml" line="1540"/>
         <source>Reset launcher</source>
         <translation type="unfinished">Start-App zurücksetzen</translation>
     </message>
@@ -479,17 +489,17 @@
         <translation type="unfinished">Verwende App-Kategorien</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1410"/>
+        <location filename="../Settings.qml" line="1411"/>
         <source>Reset options</source>
         <translation type="unfinished">Optionen zum Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1437"/>
+        <location filename="../Settings.qml" line="1438"/>
         <source>Reset news feeds</source>
         <translation type="unfinished">Nachrichtenkanäle zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1471"/>
+        <location filename="../Settings.qml" line="1472"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Kurzbefehle zurücksetzen</translation>
     </message>
@@ -498,7 +508,7 @@
         <translation type="obsolete">Kurzbefehle zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1505"/>
+        <location filename="../Settings.qml" line="1506"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Kontakte neu laden</translation>
     </message>

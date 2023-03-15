@@ -4,6 +4,16 @@
 <context>
     <name>AppGrid</name>
     <message>
+        <location filename="../AppGrid.qml" line="71"/>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AppGrid.qml" line="73"/>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../AppGrid.qml" line="156"/>
         <location filename="../AppGrid.qml" line="182"/>
         <location filename="../AppGrid.qml" line="185"/>
@@ -454,7 +464,7 @@
         <translation type="unfinished">Signal</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1539"/>
+        <location filename="../Settings.qml" line="1540"/>
         <source>Reset launcher</source>
         <translation type="unfinished">Återställ startprogrammet</translation>
     </message>
@@ -479,22 +489,22 @@
         <translation type="unfinished">Använd appkategorier</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1410"/>
+        <location filename="../Settings.qml" line="1411"/>
         <source>Reset options</source>
         <translation type="unfinished">Återställ alternativen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1437"/>
+        <location filename="../Settings.qml" line="1438"/>
         <source>Reset news feeds</source>
         <translation type="unfinished">Återställ nyhetsflöden</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1471"/>
+        <location filename="../Settings.qml" line="1472"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Återställ genvägar</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1505"/>
+        <location filename="../Settings.qml" line="1506"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Reload contacts</translation>
     </message>

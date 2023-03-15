@@ -55,6 +55,14 @@
         <source>Remove Bookmark</source>
         <translation type="unfinished">Poista kirjanmerkki</translation>
     </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
