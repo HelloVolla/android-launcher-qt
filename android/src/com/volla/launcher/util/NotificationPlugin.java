@@ -145,7 +145,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
             np.set("title", extractStringFromExtra(getExtras(notification), NotificationCompat.EXTRA_TITLE));
         }
         np.set("text", extractText(notification, conversation));
-        Log.d(TAG, "RepliableNotification id "+ rn.id);
+       // Log.d(TAG, "RepliableNotification id "+ rn.id);
     }
 
     public void replyToNotification(String id, String message) {
@@ -172,7 +172,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle);
         try {
             repliableNotification.pendingIntent.send(context, 0, localIntent);
-	    storeRepliedMessage(id,message);
+	   // storeRepliedMessage(id,message);
         } catch (PendingIntent.CanceledException e) {
             Log.e(TAG, "replyToNotification error: " + e.getMessage());
         }

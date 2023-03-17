@@ -32,6 +32,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import android.content.Context;
 import android.app.Service;
+import java.io.IOException;
+import android.net.Uri;
+import android.graphics.BitmapFactory;
+import java.io.InputStream;
+import android.os.Parcelable;
 
 /**
  * MIT License
@@ -187,7 +192,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             Users users = new Users();
             Icon icon = sbn.getNotification().getLargeIcon();
             byte[] bitmapData = null;
-            if(icon != null){
+            /*if(icon != null){
                 Drawable drawable = icon.loadDrawable(getApplication());
                 Bitmap appIcon = SignalUtil.drawableToBitmap(drawable);
                 Log.d("VollaNotification extra", "capturing large Icon");
@@ -201,7 +206,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 		Log.d("com.volla.launcher", "image : "+largeIcon);
                 message.largeIcon = largeIcon;
                 users.largeIcon = largeIcon;
-            } else {
+            }*/
+	    String largeIcon = getBase64OfAttachment(extras);
+            if(largeIcon.length() > 10){
+                message.largeIcon = largeIcon;
+                users.largeIcon = largeIcon;
+
+            }else {
                 message.largeIcon = "";
                 users.largeIcon = "";
             }
@@ -273,6 +284,61 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 }
             }
         }
+    }
+    private String getBase64OfAttachment(Bundle extras){
+        String base64 = "";
+        if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){
+            return base64;
+        }
+        Parcelable[] messageArray =extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES);
+        Log.d(TAG, "message array length" +messageArray.length);
+
+        //Uri uri = Uri.parse("content://org.thoughtcrime.securesms.part/part/1678991116949/19");
+        //String provider = "org.thoughtcrime.securesms.providers.PartProvider";
+       /* for (Parcelable p: ms1
+        ) {
+            Bundle bndl = (Bundle) p;
+            Log.d(TAG, "message Bundle "+bndl.toString());
+        }*/
+        Parcelable parcel = (Parcelable) messageArray[messageArray.length-1];
+        Bundle latestMessageBundle = (Bundle) parcel;
+        if(latestMessageBundle.containsKey("text")){
+            Log.d(TAG,"Last mesage text "+latestMessageBundle.get("text"));
+        }
+        try {
+            if(latestMessageBundle.containsKey("uri")){
+                byte[] bitmapData = null;
+                Log.d(TAG,"Last mesage contains attachment "+latestMessageBundle.get("uri"));
+                Bitmap attachmentBitmap = getBitmapFromUri(this,Uri.parse(Uri.decode(latestMessageBundle.get("uri").toString())));
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                //if (attachmentBitmap.getWidth() > 128) {
+                //    attachmentBitmap = Bitmap.createScaledBitmap(attachmentBitmap, 96, 96, true);
+                //}
+                attachmentBitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                bitmapData = outStream.toByteArray();
+                base64 = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return base64;
+    }
+    public Bitmap getBitmapFromUri(Context context, Uri uri) throws IOException {
+        InputStream input = context.getContentResolver().openInputStream(uri);
+        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+        onlyBoundsOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+        input.close();
+
+        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
+            return null;
+        int originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth) ? onlyBoundsOptions.outHeight : onlyBoundsOptions.outWidth;
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+
+        input = context.getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+        input.close();
+        return bitmap;
     }
 
     public void storeMessage(Message msg){
