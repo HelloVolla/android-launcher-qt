@@ -95,7 +95,7 @@ Page {
                             break
                         }
                     }
-                    operationCount = 3
+                    operationCount = 2
                     mainView.updateSpinner(true)
                     loadConversation({"personId": id, "numbers": numbers, "threadAge": threadAge, "person": name})
                     loadCalls({"match": name, "age": threadAge})
@@ -476,7 +476,7 @@ Page {
                 implicitHeight: messageColumn.height
 
                 function parseMessage(message) {
-                    var urlRegex = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w-]*[^\s\.]*)/g;
+                    var urlRegex = /(https?:\/\/)?([\da-zA-ZÀ-ž-]+\.)+([a-z]{2,6})([\/\w-]*[^\s\.]*)/g;
                     return message.replace(urlRegex, function(url,b,c) {
                         console.log("b: " + b)
                         console.log("c: " + c)
