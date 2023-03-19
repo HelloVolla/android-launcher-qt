@@ -979,7 +979,7 @@ ApplicationWindow {
         property bool signalIsActivated: false
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
-        property bool useHapticMenus: false
+        property bool useHapticMenus: true
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
 

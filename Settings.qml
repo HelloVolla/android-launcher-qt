@@ -1292,8 +1292,8 @@ Page {
                         onRunningChanged: {
                             console.log("Settings | Running changed to " + running)
                             if (!running) {
-                                blurLabel.visible = !blurLabel.visible
-                                blurSlider.visible = !blurSlider.visible
+                                blurLabel.visible = designSettingsItemColumn.menuState
+                                blurSlider.visible = designSettingsItemColumn.menuState
                             }
                         }
                     }
