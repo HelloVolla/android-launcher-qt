@@ -83,6 +83,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     private final static ArrayList<InstanceCallback> callbacks = new ArrayList<>();
     private final static Lock mutex = new ReentrantLock(true);
     private boolean connected = true;
+    public NotificationData notificationData;
     void NotificationListenerExampleService(){
 
     }
@@ -164,9 +165,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         int notificationCode = matchNotificationCode(sbn);
         if(notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
             my_custom = sbn;
-
-            Message message = new Message();
-            NotificationData notificationData = new NotificationData();
+            notificationData = new NotificationData();
             notificationData.id = sbn.getId();
             notificationData.key = sbn.getKey();
             notificationData.userHandle = sbn.getUser().describeContents();
@@ -179,11 +178,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             //String extras = sbn.toString();
             //Log.d("ArvindVolla", extras);
             Bundle bundle = sbn.getNotification().extras;
-            for (String key : bundle.keySet()) {
+            /*for (String key : bundle.keySet()) {
                 Object value = bundle.get(key);
                 Log.d("VollaNotification sbn  key: ", key + "  :: value:" + (value == null ? "null" : value.toString()));
                 //Log.d("ArvindVolla sbn value: ",value.toString());
-            }
+            }*/
             Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
             long timeInMillis = System.currentTimeMillis();
             String uuid = UUID.randomUUID().toString();
@@ -192,7 +191,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             Users users = new Users();
             Icon icon = sbn.getNotification().getLargeIcon();
             byte[] bitmapData = null;
-            /*if(icon != null){
+            if(icon != null){
                 Drawable drawable = icon.loadDrawable(getApplication());
                 Bitmap appIcon = SignalUtil.drawableToBitmap(drawable);
                 Log.d("VollaNotification extra", "capturing large Icon");
@@ -204,28 +203,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 bitmapData = outStream.toByteArray();
                 String largeIcon = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
 		Log.d("com.volla.launcher", "image : "+largeIcon);
-                message.largeIcon = largeIcon;
                 users.largeIcon = largeIcon;
-            }*/
-	    String largeIcon = getBase64OfAttachment(extras);
-            if(largeIcon.length() > 10){
-                message.largeIcon = largeIcon;
-                users.largeIcon = largeIcon;
-
-            }else {
-                message.largeIcon = "";
-                users.largeIcon = "";
             }
-            message.uuid = String.valueOf(sbn.getId());
-            message.notification = notificationStr;
-            message.title = NotificationUtils.getMessage(extras);
-            message.selfDisplayName = title;
-            message.text = NotificationUtils.getMessage(extras);
-            message.timeStamp = timeInMillis;
-			Log.d("VollaNotification Inserting data into db","");
-            repository.insertMessage(message);
-
-            
+            repository.insertMessage(storeNotificationMessage(sbn));
+ 
             users.uuid = String.valueOf(sbn.getId());
             users.body = NotificationUtils.getMessage(extras);
             users.user_name = title;
@@ -233,12 +214,9 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             users.read = false;
             users.isSent = false;
             users.notification = notificationStr;
-            users.timeStamp = timeInMillis;
-            
-            
-           
+            users.timeStamp = timeInMillis;           
             repository.insertUser(users);
-            message = null;
+
             notification = null;
             notificationData = null;
             uuid = null;
@@ -285,23 +263,34 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             }
         }
     }
-    private String getBase64OfAttachment(Bundle extras){
-        String base64 = "";
+    private Message storeNotificationMessage(StatusBarNotification sbn){
+        Message msg = new Message();
+        Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
         if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){
-            return base64;
+            return msg;
         }
         Parcelable[] messageArray =extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES);
         Log.d(TAG, "message array length" +messageArray.length);
-
-        //Uri uri = Uri.parse("content://org.thoughtcrime.securesms.part/part/1678991116949/19");
-        //String provider = "org.thoughtcrime.securesms.providers.PartProvider";
-       /* for (Parcelable p: ms1
-        ) {
-            Bundle bndl = (Bundle) p;
-            Log.d(TAG, "message Bundle "+bndl.toString());
-        }*/
         Parcelable parcel = (Parcelable) messageArray[messageArray.length-1];
         Bundle latestMessageBundle = (Bundle) parcel;
+        msg.largeIcon = getBase64OfAttachment(latestMessageBundle);
+        msg.uuid = String.valueOf(sbn.getId());
+        msg.notification = notificationData.toJson();
+        if(latestMessageBundle.containsKey("text")){
+            msg.text = String.valueOf(latestMessageBundle.get("text"));
+            msg.title = String.valueOf(latestMessageBundle.get("text"));
+        }
+        if(latestMessageBundle.containsKey("sender")){
+            msg.selfDisplayName = latestMessageBundle.getString("sender");
+        }
+        if(latestMessageBundle.containsKey("time")){
+            msg.timeStamp = latestMessageBundle.getLong("time");
+        }
+        Log.d("VollaNotification ","Inserting data into db "+msg.toString());
+        return msg;
+    }
+    private String getBase64OfAttachment(Bundle latestMessageBundle){
+        String base64 = "";
         if(latestMessageBundle.containsKey("text")){
             Log.d(TAG,"Last mesage text "+latestMessageBundle.get("text"));
         }
@@ -311,9 +300,9 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 Log.d(TAG,"Last mesage contains attachment "+latestMessageBundle.get("uri"));
                 Bitmap attachmentBitmap = getBitmapFromUri(this,Uri.parse(Uri.decode(latestMessageBundle.get("uri").toString())));
                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                //if (attachmentBitmap.getWidth() > 128) {
-                //    attachmentBitmap = Bitmap.createScaledBitmap(attachmentBitmap, 96, 96, true);
-                //}
+                if (attachmentBitmap.getWidth() > 128) {
+                    attachmentBitmap = Bitmap.createScaledBitmap(attachmentBitmap, 96, 96, true);
+                }
                 attachmentBitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
                 bitmapData = outStream.toByteArray();
                 base64 = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
