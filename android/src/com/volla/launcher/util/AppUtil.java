@@ -9,7 +9,9 @@ import android.util.Log;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
+import android.content.pm.PackageInfo;
 import android.content.Intent;
+import android.content.ComponentName;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.provider.MediaStore;
@@ -77,9 +79,35 @@ public class AppUtil {
 
                             }
                         } else if (type.equals(RUN_APP)) {
-                            String appId = (String) message.get("appId");
-                            Intent app = pm.getLaunchIntentForPackage(appId);
-                            activity.startActivity(app);
+                            String packageName = (String) message.get("appId");
+                            try {
+                                Intent app = pm.getLaunchIntentForPackage(packageName);
+                                activity.startActivity(app);
+                            } catch (SecurityException e){
+                                PackageInfo pi;
+                                try {
+                                    pi = activity.getPackageManager().getPackageInfo(packageName, 0);
+                                    Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+                                    resolveIntent.setPackage(pi.packageName);
+                                    List<ResolveInfo> apps = pm.queryIntentActivities(resolveIntent, 0);
+                                    for (ResolveInfo app: apps){
+                                        Log.d(TAG,String.format("%s %s",app.activityInfo.packageName,app.activityInfo.name));
+                                        packageName = app.activityInfo.packageName;
+                                        String className = app.activityInfo.name;
+                                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                                        ComponentName cn = new ComponentName(packageName, className);
+                                        intent.setComponent(cn);
+                                        try {
+                                            activity.startActivity(intent);
+                                        } catch (SecurityException se){
+                                            Log.e(TAG, "Security exception: " + se.getMessage());
+                                        }
+                                    }
+                                } catch (PackageManager.NameNotFoundException nnfe) {
+                                    Log.e(TAG, "Package Name not found: " + nnfe.getMessage() + ", App is not installed.");
+                                }
+                            }
                         } else if (type.equals(OPEN_NOTES)) {
                             String text = (String) message.get("text");
                             Intent sendIntent = new Intent();
@@ -128,17 +156,17 @@ public class AppUtil {
                             i.setData(uri);
                             activity.startActivity(i);
                         } else if (type.equals(RESET_LAUNCHER)) {
-                            Log.d(TAG, "Will reset launcher");
                             // https://stackoverflow.com/questions/4856955/how-to-programmatically-clear-application-data
-                            ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
 
+                            Log.d(TAG, "Will restart launcher");
                             Intent mStartActivity = new Intent(activity, ReceiveTextActivity.class);
-                            int mPendingIntentId = 123456;
+                            int mPendingIntentId = 234567;
                             PendingIntent mPendingIntent = PendingIntent.getActivity(
                                 activity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
                             AlarmManager mgr = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
-                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                            System.exit(0);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, mPendingIntent);
+                            Log.d(TAG, "Will reset launcher");
+                            ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).clearApplicationUserData();
                         } else if (type.equals(TOGGLE_SECURITY_MODE)) {
                             boolean activate = (boolean) message.get("activate");
                             boolean keepPassword = (boolean) message.get("keepPassword");

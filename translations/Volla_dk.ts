@@ -41,7 +41,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished">Fjern genvej</translation>
+        <translation type="obsolete">Fjern genvej</translation>
     </message>
     <message>
         <source>New pinned shortcut</source>
@@ -54,6 +54,18 @@
     <message>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished">Den fasthæftede genvej findes allerede</translation>
+    </message>
+    <message>
+        <source>Remove Bookmark</source>
+        <translation type="unfinished">Fjern bogmærke</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -640,7 +652,7 @@
     </message>
     <message>
         <source>You have already subscribed the feed</source>
-        <translation type="obsolete">Du har allerede abonneret på feedet</translation>
+        <translation type="unfinished">Du har allerede abonneret på feedet</translation>
     </message>
     <message>
         <source>Invalid news ID</source>
@@ -676,26 +688,14 @@
     </message>
     <message>
         <source>You have alresdy subscribed the feed</source>
-        <translation type="unfinished">Du har allerede abonneret på feedet</translation>
+        <translation type="obsolete">Du har allerede abonneret på feedet</translation>
     </message>
     <message>
         <source>Error because of too much redirects</source>
         <translation type="unfinished">Fejl på grund af for mange videresendelser</translation>
     </message>
     <message>
-        <source>You have already added the shortcut</source>
-        <translation type="unfinished">Du har allerede tilføjet genvejen</translation>
-    </message>
-    <message>
-        <source>Could not activate Signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
+        <source>You have alresdy added the shortcut</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

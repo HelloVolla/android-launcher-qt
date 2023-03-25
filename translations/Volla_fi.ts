@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished">Poista pikakuvake</translation>
+        <translation type="obsolete">Poista pikakuvake</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
@@ -50,6 +50,18 @@
     <message>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished">Kiinnitetty pikakuvake on jo olemassa</translation>
+    </message>
+    <message>
+        <source>Remove Bookmark</source>
+        <translation type="unfinished">Poista kirjanmerkki</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -810,18 +822,6 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Näytä signaalissa</translation>
-    </message>
-    <message>
-        <source>Could not activate Signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

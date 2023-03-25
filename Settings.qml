@@ -1285,8 +1285,8 @@ Page {
                         onRunningChanged: {
                             console.log("Settings | Running changed to " + running)
                             if (!running) {
-                                blurLabel.visible = !blurLabel.visible
-                                blurSlider.visible = !blurSlider.visible
+                                blurLabel.visible = designSettingsItemColumn.menuState
+                                blurSlider.visible = designSettingsItemColumn.menuState
                             }
                         }
                     }
@@ -1350,7 +1350,8 @@ Page {
                 Column {
                     id: resetSettingsItemColumn
                     width: parent.width
-                    spacing: mainView.innerSpacing / 2
+                    spacing: mainView.innerSpacing  / 2
+                    bottomPadding: mainView.innerSpacing * 2
 
                     property bool menuState: false
 

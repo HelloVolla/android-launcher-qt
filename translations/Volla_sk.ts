@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="unfinished">Odstránenie skratky</translation>
+        <translation type="obsolete">Odstránenie skratky</translation>
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
@@ -54,6 +54,18 @@
     <message>
         <source>Pinned shortcut allready exists</source>
         <translation type="unfinished">Pripnutá skratka už existuje</translation>
+    </message>
+    <message>
+        <source>Remove Bookmark</source>
+        <translation type="unfinished">Odstrániť záložku</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -816,18 +828,6 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Zobraziť v časti Signál</translation>
-    </message>
-    <message>
-        <source>Could not activate Signal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to install the Signal app at first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signal integration sucessfully activated</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

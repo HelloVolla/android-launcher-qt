@@ -857,12 +857,9 @@ ApplicationWindow {
         }
 
         function resetContacts() {
-            mainView.contacts.length = 0
-            mainView.loadingContacts.length = 0
-            mainView.isLoadingContacts = true
-            mainView.updateSpinner(true)
-            mainView.timeStamp = new Date()
-            AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
+            console.debug("MainView | Reset contacts")
+            settings.lastContactsCheck = 0.0
+            AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck })
         }
 
         WorkerScript {
@@ -919,7 +916,7 @@ ApplicationWindow {
                         mainView.timeStamp = new Date()
                         var contactsStr = contactsCache.readPrivate()
                         console.log("MainView | Did read contacts with length " + contactsStr.length)
-                        contactsWorker.sendMessage({'contactsStr': contactsStr })
+                        if (contactsStr !== undefined) contactsWorker.sendMessage({'contactsStr': contactsStr })
                     }
                 } else if (type === "volla.launcher.wallpaperResponse") {
                     console.log("MainView | onDispatched: " + type)
@@ -985,7 +982,7 @@ ApplicationWindow {
         property bool signalIsActivated: false
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
-        property bool useHapticMenus: false
+        property bool useHapticMenus: true
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
 

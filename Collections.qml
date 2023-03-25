@@ -215,6 +215,7 @@ Page {
 
             property var selectedMenuItem: contactBox
             property bool isMenuStatus: false
+            property int indexOfThisDelegate: index
 
             Rectangle {
                 id: contactBox
@@ -499,11 +500,8 @@ Page {
                         property bool wasRunning: false
 
                         onRunningChanged: {
-                            console.log("Collections: Running changed to " + running)
-                            if (!running && wasRunning && index === listView.count -1) {
-                                console.log("Collections: Scroll to the end")
-                                listView.positionViewAtEnd()
-                            }
+                            console.log("Collections | Running changed to " + running)
+                            listView.positionViewAtIndex(backgroundItem.indexOfThisDelegate, ListView.Contain)
                             wasRunning = running
                         }
                     }
