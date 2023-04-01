@@ -88,9 +88,9 @@ public class SignalWorker {
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
                 reply.put("address", "");
-                reply.put("date", m.getTimeStamp().toString());
-                reply.put("read", "false");
-                reply.put("isSent", "false");
+                reply.put("date", m.getTimeStamp());
+                reply.put("read", true);
+                reply.put("isSent", true);
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
                 messageList.add(reply);
@@ -110,9 +110,9 @@ public class SignalWorker {
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
                 reply.put("address", "");
-                reply.put("date", m.getTimeStamp().toString());
-                reply.put("read", "false");
-                reply.put("isSent", "false");
+                reply.put("date", m.getTimeStamp());
+                reply.put("read", true);
+                reply.put("isSent", true);
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
                 messageList.add(reply);
@@ -140,7 +140,7 @@ public class SignalWorker {
                 reply.put("body", m.getBody());
                 reply.put("person", m.getUser_name());
                 reply.put("address", "7653456789");
-                reply.put("date", m.getTimeStamp().toString());
+                reply.put("date", m.getTimeStamp());
                 reply.put("read", m.getRead());
                 reply.put("isSent", m.getSent());
                 reply.put("image", m.getLargeIcon());
