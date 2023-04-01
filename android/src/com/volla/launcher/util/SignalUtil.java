@@ -12,6 +12,10 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import com.volla.launcher.util.NotificationPlugin;
+import java.util.HashMap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.content.Context;
 
 public class SignalUtil {
 
@@ -35,7 +39,11 @@ public class SignalUtil {
                     // todo: implement (use a separate thread)
 		    Runnable runnable = new Runnable () {
                         public void run() {
-                           sendSignalmessage(message);
+                           if(!isInternetAccessible(activity)){
+                              errorMessageReply("No Internet Access"); 
+			   } else {
+                              sendSignalmessage(message);
+			   }
                         }
                     };
                     Thread thread = new Thread(runnable);
@@ -58,10 +66,30 @@ public class SignalUtil {
         return bitmap;
     }
 
-    public static void sendSignalmessage(Map message){
+    public static void sendSignalmessage(Map message){ 
         String text = (String) message.get("text");
         String thread_id = (String) message.get("thread_id");
+	String person = (String) message.get("person");
         //np = new NotificationPlugin();
-        NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(thread_id,text);
+        NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(person,thread_id,text);
+    }
+    public static void errorMessageReply(String msg){
+         Map reply = new HashMap();
+	 reply.put("isSent", false);
+	 reply.put("message",msg);
+	 Log.d(TAG, "Dispatch DID_SEND_SIGNAL_MESSAGES "+msg);
+	 SystemDispatcher.dispatch(DID_SEND_SIGNAL_MESSAGES,reply);
+    }
+    public static boolean isInternetAccessible(Context ctx) {
+        if (ctx == null)
+            return false;
+
+        ConnectivityManager cm =
+                (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 }

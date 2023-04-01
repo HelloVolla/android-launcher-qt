@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import com.volla.launcher.service.NotificationListenerExampleService;
+import com.volla.launcher.util.SignalUtil;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,6 +45,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
     private final static String TAG = "Volla/NotificationPlugi";
     private Set<String> currentNotifications;
     private Map<String, RepliableNotification> repliableNotificationMap;
+    private Map<String, String> mappingNameWithThread_id;
     private MultiValuedMap<String, Notification.Action> actions;
     private boolean serviceReady;
     private SharedPreferences sharedPreferences;
@@ -70,6 +72,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         this.context = context;
         Log.d(TAG, "NotificationPlugin Condtructor0");
         repliableNotificationMap = new HashMap<>();
+	mappingNameWithThread_id = new HashMap<>();
         currentNotifications = new HashSet<>();
         actions = new ArrayListValuedHashMap<>();
         sharedPreferences = context.getSharedPreferences(getSharedPreferencesName(), Context.MODE_PRIVATE);
@@ -137,6 +140,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
 	    Log.d(TAG, "RepliableNotification id arvi");
 	    Log.d(TAG, "RepliableNotification id to store repliableNotificationMap "+ statusBarNotification.getId()+" RepliableNotificationMap "+repliableNotificationMap);
         }
+	mapNameWithId(statusBarNotification);
         np.set("ticker", getTickerText(notification));
         Pair<String, String> conversation = extractConversation(notification);
         if (conversation.first != null) {
@@ -148,14 +152,19 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
        // Log.d(TAG, "RepliableNotification id "+ rn.id);
     }
 
-    public void replyToNotification(String id, String message) {
-        Log.d(TAG, "pending Intent : " + repliableNotificationMap);	
-        if (repliableNotificationMap == null || repliableNotificationMap.isEmpty() || !repliableNotificationMap.containsKey(id)) {
+    public void replyToNotification(String person, String id, String message) {
+        Log.d(TAG, "pending Intent : " + repliableNotificationMap);
+        if(person != null && person.length()>0 && mappingNameWithThread_id.containsKey(person)){
+		id = mappingNameWithThread_id.get(person);
+        }
+        if (repliableNotificationMap == null || repliableNotificationMap.isEmpty() || id == null ||  !repliableNotificationMap.containsKey(id)) {
+	    SignalUtil.errorMessageReply("No such Notification avaiable");
             Log.e(TAG, "No such notification, pending intent is null or does't contains id: " +id );
             return;
         }
         RepliableNotification repliableNotification = repliableNotificationMap.get(id);
         if (repliableNotification == null) {
+	    SignalUtil.errorMessageReply("No such Notification avaiable");
             Log.e(TAG, "No such notification");
             return;
         }
@@ -186,6 +195,20 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
             message.text = text;
             service.storeMessage(message);
         });
+    }
+
+    private void mapNameWithId(StatusBarNotification sbn){
+        Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
+        if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){
+            return ;
+        }
+        Parcelable[] messageArray =extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES);
+        Log.d(TAG, "message array length" +messageArray.length);
+        Parcelable parcel = (Parcelable) messageArray[messageArray.length-1];
+        Bundle latestMessageBundle = (Bundle) parcel;
+        if(latestMessageBundle.containsKey("sender")){
+            mappingNameWithThread_id.put(latestMessageBundle.getString("sender"), String.valueOf(sbn.getId()));
+        }
     }
     private String extractText(Notification notification, Pair<String, String> conversation) {
 
