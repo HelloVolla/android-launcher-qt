@@ -635,8 +635,8 @@ Page {
                 id: button
                 width: parent.width - mainView.innerSpacing
                 leftPadding: mainView.innerSpacing
-                topPadding: model.index === 0 ? mainView.innerSpacing : 0
-                bottomPadding: model.index === listModel.count - 1 ? mainView.innerSpacing : mainView.innerSpacing / 2
+                topPadding: model.index === 0 || model.isFirstSuggestion ? mainView.innerSpacing : 0
+                bottomPadding: model.index === listModel.count - 1 || model.action === mainView.actionType.SearchWeb ? mainView.innerSpacing : mainView.innerSpacing / 2
                 anchors.top: parent.top
                 text: styledText(model.text, textInput.substring(1, textInput.length))
                 flat: model.action >= 20000 ? false : true
