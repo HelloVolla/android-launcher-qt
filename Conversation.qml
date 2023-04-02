@@ -31,7 +31,7 @@ Page {
     property string m_STEXT:     "stext"   // small text beyond the main text, grey
     property string m_IMAGE:     "image"   // preview image
     property string m_PART_IDs:  "partIds" // the ids of mms message parts
-    property string m_IS_SENT:   "sent"    // true if the content was sent by user
+    property bool m_IS_SENT:   false    // true if the content was sent by user
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
 
@@ -735,13 +735,15 @@ Page {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
                 }
 
-                cMessage.m_IS_SENT = typeof message["isSent"] === Boolean ? message["isSent"]
-                                                                          : message["isSent"] === "true" ? true : false
+                console.debug("Conversation | " + message["body"] + ", " + message["isSent"])
+
+                cMessage.m_IS_SENT = message["isSent"]
+
                 if (!message["isSent"]) {
                     conversationPage.phoneNumber = message["address"]
                 }
 
-                if (message["image"] !== undefined) {
+                if (message["image"] !== undefined && message["image"].length > 0) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else {
                     cMessage.m_IMAGE = ""
