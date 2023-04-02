@@ -855,6 +855,10 @@ Page {
                 if (message["hasImage"]) {
                     conversationPage.updateImage(message["messageId"], message["image"])
                 }
+            } else if (type === "volla.launcher.signalSendMessagesResponse") {
+                console.log("Conversation | onDispatched: " + type)
+                if (!message["isSent"])
+                    mainView.showToast(qsTr("Message not sent") + ": " + message["message"])
             } else if (type === "volla.launcher.navBarResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.navBarHeight = message["height"] / Screen.pixelDensity
