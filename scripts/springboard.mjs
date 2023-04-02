@@ -137,6 +137,15 @@ WorkerScript.onMessage = function(message) {
         filteredSuggestionObj[0] = [actionName.MakeCall, actionType.MakeCall]
     } else if (textInput.length > 1) {
         filteredSuggestionObj[0] = [actionName.SearchWeb, actionType.SearchWeb]
+
+        lastToken = textInput.substring(1, textInput.length).toLowerCase()
+        for (i = 0; i < contacts.length; i++) {
+            contact = contacts[i]
+            name = contact["name"].toLowerCase()
+            if (lastToken.length === 0 || name.includes(lastToken)) {
+                filteredSuggestionObj[i+1] = [contact["name"], actionType.SuggestContact, JSON.parse(JSON.stringify(contact)), i === 0]
+            }
+        }
     }
 
     var existingSuggestionObj = new Object
@@ -162,7 +171,7 @@ WorkerScript.onMessage = function(message) {
         found = existingSuggestionObj.hasOwnProperty(item)
         if (!found) {
             // for simplicity, just adding to end instead of corresponding position in original list
-            model.append({ "text": item[0], "action": item[1], "object": item[2] })
+            model.append({ "text": item[0], "action": item[1], "object": item[2], "isFirstSuggestion" : item[3] !== undefined ? item[3] : false})
         }
         console.debug("Springboard | Append Suggestion: " + item[0])
     });

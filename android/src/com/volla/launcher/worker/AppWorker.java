@@ -139,14 +139,19 @@ public class AppWorker
         int mode = appOps.checkOpNoThrow("android:get_usage_stats", android.os.Process.myUid(), activity.getPackageName());
         boolean granted;
         if (mode == AppOpsManager.MODE_DEFAULT) {
+            Log.d(TAG, "App usage statistic access in default mode");
             granted = (activity.checkCallingOrSelfPermission(android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED);
+            if (!granted) {
+                Log.w(TAG, "App usage statistic access is not granted");
+                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                activity.startActivityForResult(intent, 2);
+            }
         } else {
+            Log.d(TAG, "App usage statistic access check mode");
             granted = (mode == AppOpsManager.MODE_ALLOWED);
-        }
-        if (!granted) {
-            Log.d(TAG, "App usage statistic access is not granted");
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            activity.startActivityForResult(intent, 2);
+            if (!granted) {
+                Log.w(TAG, "App usage statistic access is not granted");
+            }
         }
         return granted;
     }
