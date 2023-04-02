@@ -54,9 +54,9 @@ Page {
         onKeyboardRectangleChanged: {
             console.log("Springboard | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
 
-            if (Qt.inputMethod.keyboardRectangle.height === 0) {
-                shortcutMenu.forceActiveFocus()
-            }
+//            if (Qt.inputMethod.keyboardRectangle.height === 0) {
+//                shortcutMenu.forceActiveFocus()
+//            }
         }
     }
 
@@ -138,7 +138,7 @@ Page {
                     font.pointSize: mainView.largeFontSize
                     wrapMode: Text.WordWrap
                     leftPadding: 0.0
-                    inputMethodHints: Qt.ImhEmailCharactersOnly
+                    //inputMethodHints: Qt.ImhEmailCharactersOnly
 
                     background: Rectangle {
                         color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
