@@ -61,7 +61,15 @@ Page {
         "de.baumann.weather": "/icons/weather@4x_104x104px.png",
         "com.simplemobiletools.calculator": "/icons/calculator@4x_104x104px.png",
         "com.android.calculator2": "/icons/calculator@4x_104x104px.png",
-        "eu.siacs.conversations": "/icons/xmpp@4x_104x104px.png"
+        "eu.siacs.conversations": "/icons/xmpp@4x_104x104px.png",
+        "one.socializer.android": "/icons/socializer@4x.png",
+        "im.status.ethereum": "/icons/status.im@4x.png",
+        "org.liberty.android.freeotpplus": "/icons/freeOTP@4x.png",
+        "com.kickstarter.kickstarter": "/icons/kickstarter@4x.png",
+        "com.ebay.kleinanzeigen": "/icons/ebay@4x.png",
+        "com.secuso.privacyFriendlyCodeScanner": "/icons/qr-scanner@4x.png",
+        "com.twitter.android": "/icons/twitter@4x.png",
+        "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
         "org.mozilla.fennec_fdroid": "Browser",

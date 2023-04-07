@@ -138,12 +138,14 @@ WorkerScript.onMessage = function(message) {
     } else if (textInput.length > 1) {
         filteredSuggestionObj[0] = [actionName.SearchWeb, actionType.SearchWeb]
 
-        lastToken = textInput.substring(1, textInput.length).toLowerCase()
+        lastToken = textInput.substring(0, textInput.length).toLowerCase()
+        var isFirstSuggestion = true
         for (i = 0; i < contacts.length; i++) {
             contact = contacts[i]
             name = contact["name"].toLowerCase()
             if (lastToken.length === 0 || name.includes(lastToken)) {
-                filteredSuggestionObj[i+1] = [contact["name"], actionType.SuggestContact, JSON.parse(JSON.stringify(contact)), i === 0]
+                filteredSuggestionObj[i+1] = [contact["name"], actionType.SuggestContact, JSON.parse(JSON.stringify(contact)), isFirstSuggestion]
+                isFirstSuggestion = false
             }
         }
     }
