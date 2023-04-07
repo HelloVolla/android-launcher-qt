@@ -53,10 +53,6 @@ Page {
 
         onKeyboardRectangleChanged: {
             console.log("Springboard | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
-
-//            if (Qt.inputMethod.keyboardRectangle.height === 0) {
-//                shortcutMenu.forceActiveFocus()
-//            }
         }
     }
 
@@ -118,71 +114,69 @@ Page {
             Row {
                 width: parent.width
 
-            Flickable {
-                id: flickable
-                width: parent.width - mainView.innerSpacing * 2
-                height: Math.min(contentHeight, 200)
-                contentWidth: width
-                contentHeight: textArea.implicitHeight
-                clip: true
-                flickableDirection: Flickable.VerticalFlick
+                Flickable {
+                    id: flickable
+                    width: parent.width - mainView.innerSpacing * 2
+                    height: Math.min(contentHeight, 200)
+                    contentWidth: width
+                    contentHeight: textArea.implicitHeight
+                    clip: true
+                    flickableDirection: Flickable.VerticalFlick
 
-                TextArea.flickable: TextArea {
-                    id: textArea
-                    padding: mainView.innerSpacing
-                    x: mainView.innerSpacing
-                    width: parent.width
-                    placeholderText: qsTr("Type anything")
-                    color: mainView.fontColor
-                    placeholderTextColor: "darkgrey"
-                    font.pointSize: mainView.largeFontSize
-                    wrapMode: Text.WordWrap
-                    leftPadding: 0.0
-                    //inputMethodHints: Qt.ImhEmailCharactersOnly
+                    TextArea.flickable: TextArea {
+                        id: textArea
+                        padding: mainView.innerSpacing
+                        x: mainView.innerSpacing
+                        width: parent.width
+                        placeholderText: qsTr("Type anything")
+                        color: mainView.fontColor
+                        placeholderTextColor: "darkgrey"
+                        font.pointSize: mainView.largeFontSize
+                        wrapMode: Text.WordWrap
+                        leftPadding: 0.0
+                        inputMethodHints: Qt.ImhEmailCharactersOnly //Qt.ImhNoPredictiveText
 
-                    background: Rectangle {
-                        color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-                        border.color: "transparent"
-                    }
+                        background: Rectangle {
+                            color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                            border.color: "transparent"
+                        }
 
-                    Binding {
-                        target: springBoard
-                        property: "textInput"
-                        value: textArea.text
-                    }
-                    Binding {
-                        target: springBoard
-                        property: "textFocus"
-                        value: activeFocus
-                    }
-                    Binding {
-                        target: springBoard
-                        property: "textInputArea"
-                        value: textArea
-                    }
+                        Binding {
+                            target: springBoard
+                            property: "textInput"
+                            value: textArea.text
+                        }
+                        Binding {
+                            target: springBoard
+                            property: "textFocus"
+                            value: activeFocus
+                        }
+                        Binding {
+                            target: springBoard
+                            property: "textInputArea"
+                            value: textArea
+                        }
 
-                    onActiveFocusChanged: {
-                        headline.color = textArea.activeFocus ? "grey" : mainView.fontColor
+                        onActiveFocusChanged: {
+                            headline.color = textArea.activeFocus ? "grey" : mainView.fontColor
+                        }
+                    }
+                    ScrollBar.vertical: ScrollBar {}
+                }
+
+                Button {
+                    id: deleteButton
+                    text: "<font color='#808080'>×</font>"
+                    font.pointSize: mainView.largeFontSize * 2
+                    flat: true
+                    topPadding: 0.0
+                    visible: textArea.preeditText !== "" || textArea.text !== ""
+
+                    onClicked: {
+                        textArea.text = ""
+                        textArea.focus = false
                     }
                 }
-                ScrollBar.vertical: ScrollBar {}
-            }
-
-            Button {
-                id: deleteButton
-                text: "<font color='#808080'>×</font>"
-                font.pointSize: mainView.largeFontSize * 2
-                flat: true
-                topPadding: 0.0
-//                anchors.top: flickable.top
-//                anchors.right: flickable.right
-                visible: textArea.preeditText !== "" || textArea.text !== ""
-
-                onClicked: {
-                    textArea.text = ""
-                    textArea.focus = false
-                }
-            }
 
             }
 
@@ -638,7 +632,7 @@ Page {
                 topPadding: model.index === 0 || model.isFirstSuggestion ? mainView.innerSpacing : 0
                 bottomPadding: model.index === listModel.count - 1 || model.action === mainView.actionType.SearchWeb ? mainView.innerSpacing : mainView.innerSpacing / 2
                 anchors.top: parent.top
-                text: styledText(model.text, textInput.substring(1, textInput.length))
+                text: styledText(model.text, textInput.substring(textInput.indexOf("@") === 0 ? 1 : 0, textInput.length))
                 flat: model.action >= 20000 ? false : true
                 contentItem: Text {
                     text: button.text
