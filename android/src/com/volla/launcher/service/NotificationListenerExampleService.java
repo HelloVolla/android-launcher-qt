@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.graphics.BitmapFactory;
 import java.io.InputStream;
 import android.os.Parcelable;
+import android.graphics.Matrix;
 
 /**
  * MIT License
@@ -300,8 +301,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 Log.d(TAG,"Last mesage contains attachment "+latestMessageBundle.get("uri"));
                 Bitmap attachmentBitmap = getBitmapFromUri(this,Uri.parse(Uri.decode(latestMessageBundle.get("uri").toString())));
                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                if (attachmentBitmap.getWidth() > 128) {
-                    attachmentBitmap = Bitmap.createScaledBitmap(attachmentBitmap, 96, 96, true);
+                int maxHeight = 640;
+                int maxWidth = 640;
+                if (attachmentBitmap.getHeight() > maxHeight || attachmentBitmap.getWidth() > maxWidth) {
+                       float scale = Math.min(((float)maxHeight / attachmentBitmap.getWidth()), ((float)maxWidth / attachmentBitmap.getHeight()));
+                       Matrix matrix = new Matrix();
+                       matrix.postScale(scale, scale);
+                       attachmentBitmap = Bitmap.createBitmap(attachmentBitmap, 0, 0, attachmentBitmap.getWidth(), attachmentBitmap.getHeight(), matrix, true);
                 }
                 attachmentBitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
                 bitmapData = outStream.toByteArray();
