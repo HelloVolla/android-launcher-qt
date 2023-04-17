@@ -90,7 +90,11 @@ public class SignalWorker {
                 reply.put("address", "");
                 reply.put("date", m.getTimeStamp());
                 reply.put("read", true);
-                reply.put("isSent", true);
+                if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
+                    reply.put("isSent", false);
+                } else {
+                    reply.put("isSent", true);
+                }
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
                 messageList.add(reply);
@@ -112,7 +116,11 @@ public class SignalWorker {
                 reply.put("address", "");
                 reply.put("date", m.getTimeStamp());
                 reply.put("read", true);
-                reply.put("isSent", true);
+                if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
+                    reply.put("isSent", false);
+                } else {
+                    reply.put("isSent", true);
+                }
                 reply.put("image", m.getLargeIcon());
                 reply.put("attachments", "");
                 messageList.add(reply);
