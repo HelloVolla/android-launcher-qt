@@ -16,6 +16,8 @@ import java.util.HashMap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.content.Context;
+import android.content.ComponentName;
+import android.content.Intent;
 
 public class SignalUtil {
 
@@ -27,6 +29,7 @@ public class SignalUtil {
     public final static String PACKET_TYPE_NOTIFICATION_REPLY = "volla.notification.reply";
     public final static String PACKET_TYPE_NOTIFICATION_ACTION = "volla.notification.action";
     public final static String PACKET_TYPE_NOTIFICATION = "volla.notification";
+    public final static String SEND_SIGNAL_ATTACHMENT = "volla.notification.attachment";
     //public static NotificationPlugin np;
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -48,8 +51,10 @@ public class SignalUtil {
                     };
                     Thread thread = new Thread(runnable);
                     thread.start();
-                }
-            }
+                } else if(type.equals(SEND_SIGNAL_ATTACHMENT)){
+                   launchComponent(activity,"org.thoughtcrime.securesms","org.thoughtcrime.securesms.RoutingActivity");
+               }
+             }
         });
     }
 
@@ -91,5 +96,13 @@ public class SignalUtil {
             return true;
         }
         return false;
+    }
+    private static void launchComponent(Activity act,String packageName, String name)
+    {
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.LAUNCHER");
+        intent.setComponent(new ComponentName(packageName, name));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        act.startActivity(intent);
     }
 }
