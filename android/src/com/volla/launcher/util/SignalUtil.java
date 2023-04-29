@@ -18,6 +18,7 @@ import android.net.NetworkInfo;
 import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 
 public class SignalUtil {
 
@@ -52,7 +53,7 @@ public class SignalUtil {
                     Thread thread = new Thread(runnable);
                     thread.start();
                 } else if(type.equals(SEND_SIGNAL_ATTACHMENT)){
-                   launchComponent(activity,"org.thoughtcrime.securesms","org.thoughtcrime.securesms.RoutingActivity");
+                   launchComponent(activity,message);
                }
              }
         });
@@ -97,12 +98,26 @@ public class SignalUtil {
         }
         return false;
     }
-    private static void launchComponent(Activity act,String packageName, String name)
+    private static void launchComponent(Activity act,Map message)
     {
-        Intent intent = new Intent("android.intent.action.MAIN");
-        intent.addCategory("android.intent.category.LAUNCHER");
-        intent.setComponent(new ComponentName(packageName, name));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        act.startActivity(intent);
+	 String packageName = "org.thoughtcrime.securesms";
+         String componentName = "org.thoughtcrime.securesms.SmsSendtoActivity"; 
+	 String activityName = "org.thoughtcrime.securesms.RoutingActivity";
+	String phone_number = (String) message.get("phone_number");
+	Intent intent = new Intent();
+        intent.setAction("android.intent.action.SENDTO");
+	if(phone_number.length()> 0) {
+             intent.setClassName(packageName, componentName);
+             Uri uri = Uri.parse("tel:" + phone_number);
+             intent.setType("sms");
+             intent.setData(uri);
+             act.startActivity(intent);   
+	} else {
+	     intent.setAction("android.intent.action.MAIN");
+             intent.addCategory("android.intent.category.LAUNCHER");
+             intent.setComponent(new ComponentName(packageName, activityName));
+             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+             act.startActivity(intent);     
+	}
     }
 }
