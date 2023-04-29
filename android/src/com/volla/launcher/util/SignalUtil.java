@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
+import android.content.ClipData;
+import java.io.File;
 
 public class SignalUtil {
 
@@ -31,6 +33,7 @@ public class SignalUtil {
     public final static String PACKET_TYPE_NOTIFICATION_ACTION = "volla.notification.action";
     public final static String PACKET_TYPE_NOTIFICATION = "volla.notification";
     public final static String SEND_SIGNAL_ATTACHMENT = "volla.notification.attachment";
+    public final static String SEND_SIGNAL_CONTACT = "volla.notification.contacts";
     //public static NotificationPlugin np;
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -52,9 +55,11 @@ public class SignalUtil {
                     };
                     Thread thread = new Thread(runnable);
                     thread.start();
-                } else if(type.equals(SEND_SIGNAL_ATTACHMENT)){
+                } else if(type.equals(SEND_SIGNAL_CONTACT)) {
                    launchComponent(activity,message);
-               }
+               } else if(type.equals(SEND_SIGNAL_ATTACHMENT)){
+                   launchShareActivity(activity, message); 
+	       } 
              }
         });
     }
@@ -98,7 +103,7 @@ public class SignalUtil {
         }
         return false;
     }
-    private static void launchComponent(Activity act,Map message)
+    private static void launchComponent(Activity activity,Map message)
     {
 	 String packageName = "org.thoughtcrime.securesms";
          String componentName = "org.thoughtcrime.securesms.SmsSendtoActivity"; 
@@ -111,13 +116,33 @@ public class SignalUtil {
              Uri uri = Uri.parse("tel:" + phone_number);
              intent.setType("sms");
              intent.setData(uri);
-             act.startActivity(intent);   
+             activity.startActivity(intent);
 	} else {
 	     intent.setAction("android.intent.action.MAIN");
              intent.addCategory("android.intent.category.LAUNCHER");
              intent.setComponent(new ComponentName(packageName, activityName));
              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-             act.startActivity(intent);     
+             activity.startActivity(intent);
 	}
+    }
+    
+    private static void launchShareActivity(Activity activity, Map message){
+	     // File path ust start from content//
+	     String filePath = (String) message.get("file");
+	     String phone_number = (String) message.get("phone_number");
+	     File file = new File(filePath);
+             String packageName = "org.thoughtcrime.securesms";
+             String componentName = "org.thoughtcrime.securesms.sharing.v2.ShareActivity";
+             Intent intent = new Intent();
+             intent.setAction("android.intent.action.SENDTO");
+             intent.setClassName(packageName, componentName);
+             Log.d("Arvind", Uri.fromFile(file).toString());
+             intent.setType("image/*");
+             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+             intent.setData(Uri.fromFile(file));
+             Uri imageUri = Uri.fromFile(file);
+             ClipData clipData = ClipData.newUri(activity.getContentResolver(), "image", imageUri);
+             intent.setClipData(clipData);
+             activity.startActivity(intent);
     }
 }
