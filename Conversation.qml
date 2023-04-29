@@ -447,6 +447,7 @@ Page {
                             switch (currentConversationMode) {
                                 case mainView.conversationMode.Person:
                                     messageToSend.person = headline.text
+                                    messageToSend.number = conversationPage.phoneNumber
                                     break;
                                 case mainView.conversationMode.Thread:
                                     messageToSend.thread_id = currentId

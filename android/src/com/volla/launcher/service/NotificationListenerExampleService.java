@@ -264,6 +264,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             }
         }
     }
+
     private Message storeNotificationMessage(StatusBarNotification sbn){
         Message msg = new Message();
         Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
@@ -290,6 +291,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Log.d("VollaNotification ","Inserting data into db "+msg.toString());
         return msg;
     }
+
     private String getBase64OfAttachment(Bundle latestMessageBundle){
         String base64 = "";
         if(latestMessageBundle.containsKey("text")){
@@ -318,12 +320,20 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         }
         return base64;
     }
+
     public Bitmap getBitmapFromUri(Context context, Uri uri) throws IOException {
-        InputStream input = context.getContentResolver().openInputStream(uri);
-        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
-        onlyBoundsOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
-        input.close();
+        InputStream input;
+        BitmapFactory.Options onlyBoundsOptions;
+        try {
+            input = context.getContentResolver().openInputStream(uri);
+            onlyBoundsOptions = new BitmapFactory.Options();
+            onlyBoundsOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+            input.close();
+        } catch (SecurityException se) {
+            Log.e(TAG, se.getMessage());
+            return null;
+        }
 
         if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
             return null;
@@ -343,6 +353,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Log.d(TAG, "msg.id :"+msg.text);
         Log.d(TAG, "msg.id :"+msg.timeStamp);
     }
+
     private int matchNotificationCode(StatusBarNotification sbn) {
         String packageName = sbn.getPackageName();
         String extras = sbn.toString();
@@ -351,7 +362,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         } else
             return(InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE);
     }
-
 
   /*  public void reply(){
         Action action = NotificationUtils.getQuickReplyAction(my_custom.getNotification(), getPackageName());
