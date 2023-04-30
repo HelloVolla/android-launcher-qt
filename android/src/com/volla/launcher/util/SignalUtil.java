@@ -32,9 +32,7 @@ public class SignalUtil {
     public final static String PACKET_TYPE_NOTIFICATION_REPLY = "volla.notification.reply";
     public final static String PACKET_TYPE_NOTIFICATION_ACTION = "volla.notification.action";
     public final static String PACKET_TYPE_NOTIFICATION = "volla.notification";
-    public final static String SEND_SIGNAL_ATTACHMENT = "volla.notification.attachment";
-    public final static String SEND_SIGNAL_CONTACT = "volla.notification.contacts";
-    //public static NotificationPlugin np;
+
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
@@ -43,11 +41,14 @@ public class SignalUtil {
                 final Map message = dmessage;
 
                 if (type.equals(SEND_SIGNAL_MESSAGES)) {
-                    // todo: implement (use a separate thread)
 		    Runnable runnable = new Runnable () {
                         public void run() {
                            if(!isInternetAccessible(activity)){
                               errorMessageReply("No Internet Access"); 
+                           } else if (message.get("attachmentUrl") != null) {
+                              launchShareActivity(activity, message);
+                           } else if (message.get("number") != null) {
+                              launchComponent(activity, message);
 			   } else {
                               sendSignalmessage(message);
 			   }
@@ -55,11 +56,7 @@ public class SignalUtil {
                     };
                     Thread thread = new Thread(runnable);
                     thread.start();
-                } else if(type.equals(SEND_SIGNAL_CONTACT)) {
-                   launchComponent(activity,message);
-               } else if(type.equals(SEND_SIGNAL_ATTACHMENT)){
-                   launchShareActivity(activity, message); 
-	       } 
+                }
              }
         });
     }
@@ -84,6 +81,7 @@ public class SignalUtil {
         //np = new NotificationPlugin();
         NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(person,thread_id,text);
     }
+
     public static void errorMessageReply(String msg){
          Map reply = new HashMap();
 	 reply.put("isSent", false);
@@ -91,6 +89,7 @@ public class SignalUtil {
 	 Log.d(TAG, "Dispatch DID_SEND_SIGNAL_MESSAGES "+msg);
 	 SystemDispatcher.dispatch(DID_SEND_SIGNAL_MESSAGES,reply);
     }
+
     public static boolean isInternetAccessible(Context ctx) {
         if (ctx == null)
             return false;
@@ -103,12 +102,13 @@ public class SignalUtil {
         }
         return false;
     }
+
     private static void launchComponent(Activity activity,Map message)
     {
-	 String packageName = "org.thoughtcrime.securesms";
-         String componentName = "org.thoughtcrime.securesms.SmsSendtoActivity"; 
-	 String activityName = "org.thoughtcrime.securesms.RoutingActivity";
-	String phone_number = (String) message.get("phone_number");
+        String packageName = "org.thoughtcrime.securesms";
+        String componentName = "org.thoughtcrime.securesms.SmsSendtoActivity";
+        String activityName = "org.thoughtcrime.securesms.RoutingActivity";
+        String phone_number = (String) message.get("number");
 	Intent intent = new Intent();
         intent.setAction("android.intent.action.SENDTO");
 	if(phone_number.length()> 0) {
@@ -128,8 +128,8 @@ public class SignalUtil {
     
     private static void launchShareActivity(Activity activity, Map message){
 	     // File path ust start from content//
-	     String filePath = (String) message.get("file");
-	     String phone_number = (String) message.get("phone_number");
+             String filePath = (String) message.get("attachmentUrl");
+             String phone_number = (String) message.get("number");
 	     File file = new File(filePath);
              String packageName = "org.thoughtcrime.securesms";
              String componentName = "org.thoughtcrime.securesms.sharing.v2.ShareActivity";
