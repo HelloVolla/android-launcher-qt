@@ -127,22 +127,27 @@ public class SignalUtil {
     }
     
     private static void launchShareActivity(Activity activity, Map message){
-	     // File path ust start from content//
-             String filePath = (String) message.get("attachmentUrl");
-             String phone_number = (String) message.get("number");
-	     File file = new File(filePath);
-             String packageName = "org.thoughtcrime.securesms";
-             String componentName = "org.thoughtcrime.securesms.sharing.v2.ShareActivity";
-             Intent intent = new Intent();
-             intent.setAction("android.intent.action.SENDTO");
-             intent.setClassName(packageName, componentName);
-             Log.d("Arvind", Uri.fromFile(file).toString());
-             intent.setType("image/*");
-             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-             intent.setData(Uri.fromFile(file));
-             Uri imageUri = Uri.fromFile(file);
-             ClipData clipData = ClipData.newUri(activity.getContentResolver(), "image", imageUri);
-             intent.setClipData(clipData);
-             activity.startActivity(intent);
+        Log.d(TAG, "Will share text and url");
+
+        String attachmentUrl = (String) message.get("attachmentUrl");
+        String phone_number = (String) message.get("number");
+        String text = (String) message.get("text");
+
+        Uri uri = Uri.parse(attachmentUrl);
+
+        String packageName = "org.thoughtcrime.securesms";
+        String componentName = "org.thoughtcrime.securesms.sharing.v2.ShareActivity";
+
+        Intent intent = new Intent(packageName);
+        intent.setAction("android.intent.action.SEND");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        if (text != null) {
+            intent.putExtra(Intent.EXTRA_TEXT, text);
+            intent.setType("*/*");
+        } else {
+            intent.setType("image/*");
+        }
+
+        activity.startActivity(intent);
     }
 }
