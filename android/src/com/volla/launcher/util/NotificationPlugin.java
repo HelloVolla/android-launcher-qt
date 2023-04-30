@@ -319,7 +319,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
             return drawableToBitmap(foreignIcon);
 
         } catch (PackageManager.NameNotFoundException | Resources.NotFoundException e) {
-            Log.e(TAG, "Package not found", e);
+            Log.e(TAG, "Package not found", e.getMessage());
         }
 
         return null;
