@@ -106,31 +106,30 @@ public class SignalUtil {
     private static void launchComponent(Activity activity,Map message)
     {
         String packageName = "org.thoughtcrime.securesms";
-        String componentName = "org.thoughtcrime.securesms.SmsSendtoActivity";
-        String activityName = "org.thoughtcrime.securesms.RoutingActivity";
         String phone_number = (String) message.get("number");
+        String text = (String) message.get("text");
 	Intent intent = new Intent();
-        intent.setAction("android.intent.action.SENDTO");
-	if(phone_number.length()> 0) {
-             intent.setClassName(packageName, componentName);
-             Uri uri = Uri.parse("tel:" + phone_number);
-             intent.setType("sms");
-             intent.setData(uri);
-             activity.startActivity(intent);
+        if (phone_number != null) {
+            intent.setAction("android.intent.action.SENDTO");
+            intent.setPackage("org.thoughtcrime.securesms");
+            intent.setData(Uri.parse("smsto:" + phone_number));
+            intent.putExtra("sms_body", text);
 	} else {
-	     intent.setAction("android.intent.action.MAIN");
-             intent.addCategory("android.intent.category.LAUNCHER");
-             intent.setComponent(new ComponentName(packageName, activityName));
-             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-             activity.startActivity(intent);
-	}
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setPackage(packageName);
+            intent.putExtra(Intent.EXTRA_TEXT, text);
+            intent.setType("text/plain");
+        }
+        if (intent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(intent);
+        }
     }
     
     private static void launchShareActivity(Activity activity, Map message){
         Log.d(TAG, "Will share text and url");
 
         String attachmentUrl = (String) message.get("attachmentUrl");
-        String phone_number = (String) message.get("number");
+        String phone_number = (String) message.get("number"); // Can't be used for this intend
         String text = (String) message.get("text");
 
         Log.d(TAG, "Attachment url: " + attachmentUrl);
@@ -143,18 +142,17 @@ public class SignalUtil {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setPackage(packageName);
-        //intent.setClassName(packageName, componentName);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-//        if (text != null) {
-//            intent.putExtra(Intent.EXTRA_TEXT, text);
-//            intent.setType("*/*");
-//        } else {
-            intent.setType("image/*");
-//        }
-        if (phone_number != null) {
-            intent.setData(Uri.parse("smsto:" + phone_number));
+        if (text != null) {
+            intent.putExtra(Intent.EXTRA_TEXT, text);
+            intent.setType("text/plain");
         }
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.setType("image/*");
 
-        activity.startActivity(intent);
+        if (intent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(intent);
+        } else {
+            Log.d(TAG, "Intent not found");
+        }
     }
 }
