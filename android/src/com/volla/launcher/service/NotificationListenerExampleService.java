@@ -206,7 +206,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 		Log.d("com.volla.launcher", "image : "+largeIcon);
                 users.largeIcon = largeIcon;
             }
-            repository.insertMessage(storeNotificationMessage(sbn));
+	    //Droping the Notifications received for attachments but contains no attachment data
+            Message msg = new Message();
+            msg = storeNotificationMessage(sbn);
+            if(msg.getText().equalsIgnoreCase("\uD83D\uDCF7 Photo") && msg.getLargeIcon().length() <=2){
+               return;
+            }
+            repository.insertMessage(msg);
  
             users.uuid = String.valueOf(sbn.getId());
             users.body = NotificationUtils.getMessage(extras);
