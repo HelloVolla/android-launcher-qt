@@ -22,6 +22,9 @@ import android.net.Uri;
 import android.content.ClipData;
 import java.io.File;
 
+import java.net.URL;
+import android.media.MediaScannerConnection;
+
 public class SignalUtil {
 
     private static final String TAG = "SignalUtil";
@@ -45,7 +48,7 @@ public class SignalUtil {
                         public void run() {
                            if(!isInternetAccessible(activity)){
                               errorMessageReply("No Internet Access"); 
-                           } else if (message.get("attachmentUrl") != null) {
+                           } else if (message.get("attachmentUrl") != null && ((String)message.get("attachmentUrl")).length() > 0) {
                               launchShareActivity(activity, message);
                            } else if (message.get("number") != null) {
                               launchComponent(activity, message);
@@ -132,27 +135,34 @@ public class SignalUtil {
         String phone_number = (String) message.get("number"); // Can't be used for this intend
         String text = (String) message.get("text");
 
-        Log.d(TAG, "Attachment url: " + attachmentUrl);
+        Log.d(TAG, "Text: " + text);
+        Log.d(TAG, "Attachment: " + attachmentUrl);
 
-        Uri uri = Uri.parse(attachmentUrl);
+        URL url;
 
-        String packageName = "org.thoughtcrime.securesms";
-        String componentName = "org.thoughtcrime.securesms.sharing.v2.ShareActivity";
+        try {
+            url = new URL(attachmentUrl);
 
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setPackage(packageName);
-        if (text != null) {
-            intent.putExtra(Intent.EXTRA_TEXT, text);
-            intent.setType("text/plain");
-        }
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.setType("image/*");
+            MediaScannerConnection.scanFile(activity, new String[] { url.getPath() }, null, (path, uri) -> {
+                String packageName = "org.thoughtcrime.securesms";
 
-        if (intent.resolveActivity(activity.getPackageManager()) != null) {
-            activity.startActivity(intent);
-        } else {
-            Log.d(TAG, "Intent not found");
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setPackage(packageName);
+                if (text != null) {
+                    intent.putExtra(Intent.EXTRA_TITLE, text);
+                }
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                intent.setType("image/*");
+
+                if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                    activity.startActivity(intent);
+                } else {
+                    Log.d(TAG, "Intent not found");
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 }

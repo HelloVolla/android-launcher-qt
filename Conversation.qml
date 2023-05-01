@@ -440,7 +440,7 @@ Page {
                         var d = new Date()
                         var kind = imagePicker.imageUrl !== undefined && imagePicker.imageUrl.length > 0 ? "MMS" : "SMS"
 
-                        var messageToSend = {"text": textArea.text, "attachmentUrl": imagePicker.imageUrl}
+                        var messageToSend = {"text": textArea.text, "attachmentUrl": decodeURIComponent(imagePicker.imageUrl)}
 
                         if (conversationPage.lastMessageIsFromSignal()) {
                             kind = "Signal"

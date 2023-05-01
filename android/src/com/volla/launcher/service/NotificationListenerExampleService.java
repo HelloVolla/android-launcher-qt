@@ -144,8 +144,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         connected = true;
     }
 
-
-
     @Override
     public IBinder onBind(Intent intent) {
         repository = new MessageRepository(getApplication());
@@ -160,11 +158,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         for (NotificationListener listener : listeners) {
             listener.onNotificationPosted(sbn);
         }
-	if(!isSignaldEnable){
+
+        if (!isSignaldEnable){
               return;
 	}
+
         int notificationCode = matchNotificationCode(sbn);
-        if(notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
+        if (notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
             my_custom = sbn;
             notificationData = new NotificationData();
             notificationData.id = sbn.getId();
@@ -197,7 +197,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 Bitmap appIcon = SignalUtil.drawableToBitmap(drawable);
                 Log.d("VollaNotification extra", "capturing large Icon");
                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                if (appIcon.getWidth() > 128) {
+                if (appIcon != null && appIcon.getWidth() > 128) {
                     appIcon = Bitmap.createScaledBitmap(appIcon, 96, 96, true);
                 }
                 appIcon.compress(Bitmap.CompressFormat.PNG, 10, outStream);
@@ -206,7 +206,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 		Log.d("com.volla.launcher", "image : "+largeIcon);
                 users.largeIcon = largeIcon;
             }
-	    //Droping the Notifications received for attachments but contains no attachment data
+
+            // Droping the Notifications received for attachments but contains no attachment data
             Message msg = new Message();
             msg = storeNotificationMessage(sbn);
             if(msg.getText().equalsIgnoreCase("\uD83D\uDCF7 Photo") && msg.getLargeIcon().length() <=2){
@@ -229,8 +230,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             uuid = null;
             title = null;
 
-
-           try {
+            try {
                 Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
                 String channel_id;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -245,7 +245,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                     intent.putExtra("title", NotificationUtils.getTitle(extras));
                     intent.putExtra("body", NotificationUtils.getMessage(extras));
                     sendBroadcast(intent);
-                    }
+                }
             } catch(Exception e){
                 e.printStackTrace();
                 Log.e("NotificationsPlugin", "Error retrieving icon");
@@ -300,14 +300,15 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     private String getBase64OfAttachment(Bundle latestMessageBundle){
         String base64 = "";
-        if(latestMessageBundle.containsKey("text")){
+        if (latestMessageBundle.containsKey("text")) {
             Log.d(TAG,"Last mesage text "+latestMessageBundle.get("text"));
         }
-        try {
-            if(latestMessageBundle.containsKey("uri")){
+        if (latestMessageBundle.containsKey("uri")) {
+            try {
                 byte[] bitmapData = null;
                 Log.d(TAG,"Last mesage contains attachment "+latestMessageBundle.get("uri"));
                 Bitmap attachmentBitmap = getBitmapFromUri(this,Uri.parse(Uri.decode(latestMessageBundle.get("uri").toString())));
+                if (attachmentBitmap == null) return base64;
                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
                 int maxHeight = 640;
                 int maxWidth = 640;
@@ -320,9 +321,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 attachmentBitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
                 bitmapData = outStream.toByteArray();
                 base64 = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
+            } catch (IOException e) {
+                Log.e(TAG, "IOException: " + e.getMessage());
+            } catch (SecurityException se) {
+                Log.e(TAG, "SecurityExcetion: " + se.getMessage());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return base64;
     }
@@ -337,7 +340,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
             input.close();
         } catch (SecurityException se) {
-            Log.e(TAG, se.getMessage());
+            Log.e(TAG, "SecurityExcetion: " + se.getMessage());
             return null;
         }
 
