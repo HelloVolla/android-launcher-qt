@@ -133,19 +133,26 @@ public class SignalUtil {
         String phone_number = (String) message.get("number");
         String text = (String) message.get("text");
 
+        Log.d(TAG, "Attachment url: " + attachmentUrl);
+
         Uri uri = Uri.parse(attachmentUrl);
 
         String packageName = "org.thoughtcrime.securesms";
         String componentName = "org.thoughtcrime.securesms.sharing.v2.ShareActivity";
 
-        Intent intent = new Intent(packageName);
-        intent.setAction("android.intent.action.SEND");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setPackage(packageName);
+        //intent.setClassName(packageName, componentName);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        if (text != null) {
-            intent.putExtra(Intent.EXTRA_TEXT, text);
-            intent.setType("*/*");
-        } else {
+//        if (text != null) {
+//            intent.putExtra(Intent.EXTRA_TEXT, text);
+//            intent.setType("*/*");
+//        } else {
             intent.setType("image/*");
+//        }
+        if (phone_number != null) {
+            intent.setData(Uri.parse("smsto:" + phone_number));
         }
 
         activity.startActivity(intent);
