@@ -114,6 +114,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
     }
 
     private void sendNotification(StatusBarNotification statusBarNotification) {
+        Log.d(TAG, "sendNotification");
         Notification notification = statusBarNotification.getNotification();
         String key = getNotificationKeyCompat(statusBarNotification);
         String packageName = statusBarNotification.getPackageName();

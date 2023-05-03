@@ -153,6 +153,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
+        Log.d(TAG, "onNotificationPosted");
 
         Log.d(TAG, "listeners size  : " +listeners.size());
         for (NotificationListener listener : listeners) {
@@ -255,6 +256,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn){
+        Log.d(TAG, "onNotificationPosted");
+
         int notificationCode = matchNotificationCode(sbn);
         if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
             StatusBarNotification[] activeNotifications = this.getActiveNotifications();
@@ -272,6 +275,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     }
 
     private Message storeNotificationMessage(StatusBarNotification sbn){
+        Log.d(TAG, "storeNotificationMessage");
         Message msg = new Message();
         Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
         if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){
@@ -299,6 +303,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     }
 
     private String getBase64OfAttachment(Bundle latestMessageBundle){
+        Log.d(TAG, "getBase64OfAttachment");
+
         String base64 = "";
         if (latestMessageBundle.containsKey("text")) {
             Log.d(TAG,"Last mesage text "+latestMessageBundle.get("text"));

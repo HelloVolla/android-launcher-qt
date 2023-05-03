@@ -736,8 +736,6 @@ Page {
                     cMessage.m_STEXT = mainView.parseTime(Number(message["date"])) + " • SMS"
                 }
 
-                console.debug("Conversation | " + message["body"] + ", " + message["isSent"])
-
                 cMessage.m_IS_SENT = message["isSent"]
 
                 if (!message["isSent"]) {
@@ -779,7 +777,6 @@ Page {
                 filteredModelItem = modelArr[i]
                 var modelItemName = modelArr[i].m_ID
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    console.log("Conversation | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
                 }
             }
@@ -836,22 +833,27 @@ Page {
                 conversationPage.updateListModel()
             } else if (type === "volla.launcher.signalMessagesResponse") {
                 console.log("Conversation | onDispatched: " + type)
+                var previousMessage
                 message["messages"].forEach(function (signalMessage, index) {
                     signalMessage["isSignal"] = true
-                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
-                        console.log("Conversation | * " + messageKey + ": " + messageValue + ": " + typeof messageValue)
-                    }
+                    // Workaround for duplicates
+                    if (previousMessage === undefined || previousMessage["body"] !== signalMessage["body"])
+                        conversationPage.messages.push(signalMessage)
+                    previousMessage = signalMessage
+//                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
+//                        console.log("Conversation | * " + messageKey + ": " + messageValue + ": " + typeof messageValue)
+//                    }
                 })
-                conversationPage.messages = conversationPage.messages.concat(message["messages"])
+//                conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 conversationPage.updateListModel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)
                 conversationPage.calls = conversationPage.calls.concat(message["calls"])
-                message["calls"].forEach(function (call, index) {
-                    for (const [callKey, callValue] of Object.entries(call)) {
-                        console.log("Collections | * " + callKey + ": " + callValue)
-                    }
-                })
+//                message["calls"].forEach(function (call, index) {
+//                    for (const [callKey, callValue] of Object.entries(call)) {
+//                        console.log("Collections | * " + callKey + ": " + callValue)
+//                    }
+//                })
                 conversationPage.updateListModel()
             } else if (type === "volla.launcher.mmsImageResponse") {
                 console.log("Conversation | onDispatched: " + type)
