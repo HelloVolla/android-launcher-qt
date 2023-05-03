@@ -114,7 +114,7 @@ public class SignalWorker {
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
                 reply.put("address", "");
-                reply.put("date", m.getTimeStamp());
+                reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", true);
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
                     reply.put("isSent", false);
@@ -148,7 +148,7 @@ public class SignalWorker {
                 reply.put("body", m.getBody());
                 reply.put("person", m.getUser_name());
                 reply.put("address", "7653456789");
-                reply.put("date", m.getTimeStamp());
+                reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", m.getRead());
                 reply.put("isSent", m.getSent());
                 reply.put("image", m.getLargeIcon());
