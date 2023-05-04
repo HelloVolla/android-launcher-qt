@@ -57,7 +57,8 @@ public class AppWorker
                                 "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
                                 "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
                                 "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
-                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou");
+                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
+                                "com.elishaazaria.sayboard");
 
                             final List<String> mostUsed = Arrays.asList("com.android.dialer", "com.mediatek.camera",
                                 "com.simplemobiletools.dialer", "com.simplemobiletools.gallery.pro", "com.android.messaging",
@@ -139,14 +140,19 @@ public class AppWorker
         int mode = appOps.checkOpNoThrow("android:get_usage_stats", android.os.Process.myUid(), activity.getPackageName());
         boolean granted;
         if (mode == AppOpsManager.MODE_DEFAULT) {
+            Log.d(TAG, "App usage statistic access in default mode");
             granted = (activity.checkCallingOrSelfPermission(android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED);
+            if (!granted) {
+                Log.w(TAG, "App usage statistic access is not granted");
+                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                activity.startActivityForResult(intent, 2);
+            }
         } else {
+            Log.d(TAG, "App usage statistic access check mode");
             granted = (mode == AppOpsManager.MODE_ALLOWED);
-        }
-        if (!granted) {
-            Log.d(TAG, "App usage statistic access is not granted");
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            activity.startActivityForResult(intent, 2);
+            if (!granted) {
+                Log.w(TAG, "App usage statistic access is not granted");
+            }
         }
         return granted;
     }

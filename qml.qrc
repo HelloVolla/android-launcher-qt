@@ -77,5 +77,14 @@
         <file>AppGroup.qml</file>
         <file>scripts/apps.mjs</file>
         <file>OnBoarding.qml</file>
+        <file>icons/ebay@4x.png</file>
+        <file>icons/freeOTP@4x.png</file>
+        <file>icons/indiegogo@4x.png</file>
+        <file>icons/kickstarter@4x.png</file>
+        <file>icons/photoTAN@4x.png</file>
+        <file>icons/qr-scanner@4x.png</file>
+        <file>icons/socializer@4x.png</file>
+        <file>icons/status.im@4x.png</file>
+        <file>icons/twitter@4x.png</file>
     </qresource>
 </RCC>
