@@ -134,7 +134,7 @@ Page {
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         leftPadding: 0.0
-                        inputMethodHints: Qt.ImhEmailCharactersOnly //Qt.ImhNoPredictiveText
+                        inputMethodHints: Qt.ImhNoPredictiveText
 
                         background: Rectangle {
                             color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"

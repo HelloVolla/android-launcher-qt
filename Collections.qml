@@ -121,31 +121,7 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
         // load threads from further source
         // address (phone or contact), body (message), date, type
-        if (mainView.isActiveSignal) {
-            var db =  openDatabaseSync(mainView.cacheName, mainView.cacheVersion,
-                                      mainview.cacheDescription. mainView.cacheSize)
-            var d = Date.valueOf() - filter.age * 1000
-            db.transaction (
-                function (tx) {
-                    var rs = tx.executeSql('SELECT * FROM signsl WHERE date > ' + d + ' ORDER BY address, data ASC')
-                    var signalThreads = new Array
-                    var recentAddress
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        console.debug("Collections | " +  rs.rows.item(i).contact + ", " + rs.rows.item(i).message)
-                        if (recentContact !== rs.rows.item(i).address) {
-                            var signalThread = { "isSignal" : true,
-                                                 "address" : rs.rows.item(i).address,
-                                                 "body" : rs.rows.item(i).body,
-                                                 "date" : rs.rows.item(i).date,
-                                                 "isSent" : rs.rows.item(i).isSent === 1 ? true : fale }
-                            signalThreads.push(signalThread)
-                        }
-                    }
-                    collectionPage.threads = collectionPage.threads.concat(signalThreads)
-                    collectionPage.updateListModel()
-                }
-            )
-        }
+        AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
     function loadCalls(filter) {
@@ -894,9 +870,10 @@ Page {
                                   || (contact["phone.home"] !== undefined && thread["address"] !== undefined
                                       && contact["phone.home"].toString().endsWith(thread["address"].slice(3))
                                       && Math.abs(contact["phone.home"].toString().length - thread["address"].length) < 3)
-                                  || (contact["name"].toString() === thread["person"].toString())
+                                  || (contact["name"] !== undefined && thread["person"] !== undefined
+                                      && contact["name"].toString() === thread["person"].toString())
                     } catch (err) {
-                        console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)
+                        console.log("Collections | Error for checking contact " + contact["name"] + ": " + err.message)                        
                     }
 
                     return matched
@@ -1409,6 +1386,19 @@ Page {
                 if (currentCollectionMode === mainView.collectionMode.People
                         || currentCollectionMode === mainView.collectionMode.Threads) {
                     collectionPage.threads = collectionPage.threads.concat(message["threads"])
+                    collectionPage.updateListModel()
+                }
+            } else if (type === "volla.launcher.signalThreadsResponse") {
+                console.log("Collections | onDispatched: " + type)
+                if (currentCollectionMode === mainView.collectionMode.People
+                        || currentCollectionMode === mainView.collectionMode.Threads) {
+                    message["messages"].forEach(function (aThread, index) {
+                        aThread["isSignal"] = true
+                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
+                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
+                        }
+                    })
+                    collectionPage.threads = collectionPage.threads.concat(message["messages"])
                     collectionPage.updateListModel()
                 }
             } else if (type === "volla.launcher.callLogResponse") {

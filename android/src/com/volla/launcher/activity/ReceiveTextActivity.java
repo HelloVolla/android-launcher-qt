@@ -33,11 +33,17 @@ import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 import androidnative.SystemDispatcher;
 import androidnative.AndroidNativeActivity;
-import android.widget.Toast; 
+import android.widget.Toast;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import com.volla.launcher.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import com.volla.launcher.util.NotificationPlugin;
 
 public class ReceiveTextActivity extends AndroidNativeActivity
 {
@@ -48,10 +54,11 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     public static final String GOT_SHORTCUT = "volla.launcher.receivedShortcut";
     public static final String UIMODE_CHANGED = "volla.launcher.uiModeChanged";
 
+    private NotificationBroadcastReceiver notificationBroadcastReceiver;
     public static ReceiveTextActivity instance;
+    private String channel_d;
 
     private static Map pendingShortcutMessage;
-
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
@@ -133,12 +140,18 @@ public class ReceiveTextActivity extends AndroidNativeActivity
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
 
+        notificationBroadcastReceiver = new NotificationBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.volla.launcher.notification");
+        registerReceiver(notificationBroadcastReceiver, intentFilter);
+        NotificationPlugin.getInstance(ReceiveTextActivity.this).registerListener();
         Log.d(TAG, "Android activity created");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(notificationBroadcastReceiver);
     }
 
     @Override
@@ -189,6 +202,7 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     public void onResume() {
         super.onResume();
         Log.d(TAG, "On Resume called");
+	NotificationPlugin.getInstance(ReceiveTextActivity.this).registerListener();
         // todo: Adopt ui mode
     }
 
@@ -261,4 +275,47 @@ public class ReceiveTextActivity extends AndroidNativeActivity
          return Base64.encodeToString(imageBytes, Base64.NO_WRAP);
     }
 
+    private void createNotification(Intent intent){
+        Log.d("Arvindvolla", "Creating Notification");
+        Bitmap largeIcon = null;
+        byte [] bitMapByte = intent.getByteArrayExtra("largeIcon");
+        if(bitMapByte != null){
+          largeIcon = BitmapFactory.decodeByteArray(bitMapByte, 0,bitMapByte.length);
+        }
+        NotificationManager notificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new NotificationCompat.Builder(this,channel_d)
+                .setSmallIcon(R.drawable.icon)
+                .setAutoCancel(true)
+                .setContentTitle(intent.getStringExtra("title"))
+                .setContentText(intent.getStringExtra("body"))
+                .setLargeIcon(largeIcon)
+                .setDefaults(Notification.DEFAULT_LIGHTS| Notification.DEFAULT_SOUND)
+                .setTicker("Message")
+                .setPriority(Notification.PRIORITY_HIGH)
+                .build();
+        notificationManager.notify("VollaOS", 1, notification);
+    }
+
+
+    public class NotificationBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Arvindvolla", "Received Notification Broadcast");
+            int receivedNotificationCode = intent.getIntExtra("Notification Code",-1);
+             channel_d = intent.getStringExtra("channel_d");
+    /*
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+               NotificationChannel channel = new NotificationChannel(channel_d,"VollaLauncher",
+                        NotificationManager.IMPORTANCE_HIGH);
+                NotificationManager manager = (NotificationManager)
+                        context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if(manager != null){
+                    manager.createNotificationChannel(channel);
+                }
+
+            } */
+            createNotification(intent);
+        }
+    }
 }
