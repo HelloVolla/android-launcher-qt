@@ -85,6 +85,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     private final static Lock mutex = new ReentrantLock(true);
     private boolean connected = true;
     public NotificationData notificationData;
+    private long lastNotificationTime = 0;
     void NotificationListenerExampleService(){
 
     }
@@ -214,6 +215,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             if(msg.getText().equalsIgnoreCase("\uD83D\uDCF7 Photo") && msg.getLargeIcon().length() <=2){
                return;
             }
+	    if(lastNotificationTime == msg.getTimeStamp()){
+               return;
+            }
+	    Log.d(TAG, "Keeping Volla notifications messages");
             repository.insertMessage(msg);
  
             users.uuid = String.valueOf(sbn.getId());
