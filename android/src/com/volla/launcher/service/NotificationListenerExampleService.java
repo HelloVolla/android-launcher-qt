@@ -218,6 +218,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 	    if(lastNotificationTime == msg.getTimeStamp()){
                return;
             }
+	    lastNotificationTime = msg.getTimeStamp();
 	    Log.d(TAG, "Keeping Volla notifications messages");
             repository.insertMessage(msg);
  
