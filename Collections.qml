@@ -883,6 +883,8 @@ Page {
 
                 if (contact !== undefined) {
                     cThread.c_TITLE = contact["name"]
+                } else if (thread["person"] !== undefined) {
+                    cThread.c_TITLE = thread["person"]
                 } else if (thread["address"] !== undefined) {
                     cThread.c_TITLE = thread["address"]
                 } else {
