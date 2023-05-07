@@ -180,63 +180,6 @@ Page {
 
             }
 
-            /**
-            TextArea {
-                id: textArea
-                padding: mainView.innerSpacing
-                x: mainView.innerSpacing
-                width: parent.width - mainView.innerSpacing * 2
-                placeholderText: qsTr("Type anything")
-                color: mainView.fontColor
-                placeholderTextColor: "darkgrey"
-                font.pointSize: mainView.largeFontSize
-                wrapMode: Text.WordWrap
-                leftPadding: 0.0
-                rightPadding: mainView.innerSpacing
-                inputMethodHints: Qt.ImhEmailCharactersOnly
-
-                background: Rectangle {
-                    color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-                    border.color: "transparent"
-                }
-
-                Binding {
-                    target: springBoard
-                    property: "textInput"
-                    value: textArea.text
-                }
-                Binding {
-                    target: springBoard
-                    property: "textFocus"
-                    value: activeFocus
-                }
-                Binding {
-                    target: springBoard
-                    property: "textInputArea"
-                    value: textArea
-                }
-
-                onActiveFocusChanged: {
-                    headline.color = textArea.activeFocus ? "grey" : mainView.fontColor
-                }
-
-                Button {
-                    id: deleteButton
-                    text: "<font color='#808080'>×</font>"
-                    font.pointSize: mainView.largeFontSize * 2
-                    flat: true
-                    topPadding: 0.0
-                    anchors.top: parent.top
-                    anchors.right: parent.right
-                    visible: textArea.preeditText !== "" || textArea.text !== ""
-
-                    onClicked: {
-                        textArea.text = ""
-                        textArea.focus = false
-                    }
-                }
-            }*/
-
             Rectangle {
                 width: parent.width
                 color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
