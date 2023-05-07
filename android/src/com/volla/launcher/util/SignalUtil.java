@@ -81,8 +81,9 @@ public class SignalUtil {
         String text = (String) message.get("text");
         String thread_id = (String) message.get("thread_id");
 	String person = (String) message.get("person");
+	String phone_number = (String) message.get("number");
         //np = new NotificationPlugin();
-        NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(person,thread_id,text);
+        NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(person,thread_id,text,phone_number);
     }
 
     public static void errorMessageReply(String msg){
