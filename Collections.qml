@@ -115,6 +115,19 @@ Page {
         }
     }
 
+    function sortListModel() {
+        var n;
+        var i;
+        for (n = 0; n < currentCollectionModel.count; n++) {
+            for (i=n+1; i < currentCollectionModel.count; i++) {
+                if (currentCollectionModel.get(n).c_TSTAMP < currentCollectionModel.get(i).c_TSTAMP) {
+                    currentCollectionModel.move(i, n, 1);
+                    n = 0;
+                }
+            }
+        }
+    }
+
     function loadThreads(filter) {
         console.log("Collections | Will load threads")
         collectionPage.threads = new Array
@@ -909,6 +922,7 @@ Page {
                 }
 
                 cThread.c_STEXT = mainView.parseTime(Number(thread["date"])) + " • " + qsTr(kind)
+                cThread.c_TSTAMP = Number(thread["date"])
 
                 modelArr.push(cThread)
             })
@@ -967,6 +981,8 @@ Page {
                     append(filteredModelDict[modelItemName])
                 }
             }
+
+            collectionPage.sortListModel()
         }
 
         function executeSelection(item, type) {
@@ -1396,9 +1412,9 @@ Page {
                         || currentCollectionMode === mainView.collectionMode.Threads) {
                     message["messages"].forEach(function (aThread, index) {
                         aThread["isSignal"] = true
-                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
-                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
-                        }
+//                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
+//                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
+//                        }
                     })
                     collectionPage.threads = collectionPage.threads.concat(message["messages"])
                     collectionPage.updateListModel()
