@@ -1029,7 +1029,7 @@ Page {
                     Settings {
                         id: sourceSettings
 
-                        property bool signalIsActivated: true
+                        property bool signalIsActivated: false
                     }
                 }
 

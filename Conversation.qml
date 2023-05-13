@@ -386,6 +386,7 @@ Page {
                         placeholderTextColor: "darkgrey"
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
+                        inputMethodHints: Qt.ImhNoPredictiveText
                         background: Rectangle {
                             color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                             border.color: "transparent"
@@ -413,7 +414,7 @@ Page {
                     flat: true
                     anchors.bottom: parent.bottom
                     bottomPadding: 10
-                    enabled: textArea.text.length > 0
+                    enabled: textArea.text.length > 0 || imagePicker.imageUrl.length > 0
                     opacity: enabled ? 1.0 : 0.3
                     contentItem: Image {
                         id: sendIcon
