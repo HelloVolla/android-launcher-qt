@@ -20,7 +20,7 @@ import com.volla.launcher.storage.Users;
 import com.volla.launcher.service.NotificationListenerExampleService;
 import androidx.core.app.NotificationManagerCompat;
 import com.volla.launcher.util.NotificationPlugin;
-
+import android.content.pm.PackageManager;
 public class SignalWorker {
 
    private static final String TAG = "SignalWorker";
@@ -170,6 +170,16 @@ public class SignalWorker {
       if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {        //ask for permission
              Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
              activity.startActivity(intent);
+        }
+   }
+   public static boolean isSignalInstalled(Activity activity) {
+	   String packageName = "org.thoughtcrime.securesms";
+	   PackageManager packageManager = activity.getPackageManager();
+        try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
    }
 
