@@ -147,7 +147,7 @@ public class SignalWorker {
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getBody());
                 reply.put("person", m.getUser_name());
-                reply.put("address", "7653456789");
+                reply.put("address", "");
                 reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", m.getRead());
                 reply.put("isSent", m.getSent());
