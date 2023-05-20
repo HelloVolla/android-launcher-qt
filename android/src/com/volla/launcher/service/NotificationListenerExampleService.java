@@ -80,7 +80,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     private StatusBarNotification my_custom;
     private MessageRepository repository;
-    private static boolean isSignaldEnable =false;
+    private static boolean isSignaldEnable = false;
     private final static ArrayList<InstanceCallback> callbacks = new ArrayList<>();
     private final static Lock mutex = new ReentrantLock(true);
     private boolean connected = true;
@@ -162,7 +162,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
         if (!isSignaldEnable){
               return;
-	}
+        }
 
         int notificationCode = matchNotificationCode(sbn);
         if (notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
