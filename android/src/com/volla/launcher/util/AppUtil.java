@@ -119,8 +119,8 @@ public class AppUtil {
                         } else if (type.equals(OPEN_DIALER)) {
                             String app = (String) message.get("app");
 
-                            TelecomManager manger = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
-                            app = manger.getDefaultDialerPackage();
+                            TelecomManager manager = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+                            app = manager.getDefaultDialerPackage();
 
                             Log.d(TAG, "Dialer package is " + app);
 
