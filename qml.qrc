@@ -4,6 +4,7 @@
         <file>qtquickcontrols2.conf</file>
         <file>Springboard.qml</file>
         <file>AppGrid.qml</file>
+        <file>MusicBoard.qml</file>
         <file>Collections.qml</file>
         <file>icons/browser@4x.png</file>
         <file>icons/dial-phone@4x.png</file>
@@ -82,5 +83,6 @@
         <file>images/open-in-signal_light_2x.png</file>
         <file>images/open-in-signal_dark@2x.png</file>
         <file>images/open-in-signal_light@2x.png</file>
+        <file>icons/albom.svg</file>
     </qresource>
 </RCC>
