@@ -29,7 +29,9 @@ ApplicationWindow {
               isActive = true
               // Application go in active state
               console.log("MainView | Application became active")
-              settings.sync()
+              if (settings.sync) {
+                  settings.sync()
+              }
               if (!appGridLoader.active) appGridLoader.active = true
               if (!springboardLoader.active) springboardLoader.active = true
               if (!settingsPageLoader.active) settingsPageLoader.active = true
