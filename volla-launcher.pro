@@ -1,4 +1,4 @@
-QT += quick androidextras
+QT += quick androidextras svg
 
 CONFIG += c++11 lrelease embed_translations
 
