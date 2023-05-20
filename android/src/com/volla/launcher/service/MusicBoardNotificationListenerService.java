@@ -1,5 +1,6 @@
 package com.volla.launcher.service;
 
+import androidnative.SystemDispatcher;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +14,13 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 
 public class MusicBoardNotificationListenerService extends NotificationListenerService {
+    public static final String GOT_TRACK_CHANGED = "volla.launcher.trackChanged";
+
     private final static String TAG = "MusicBoardNotificationListenerService";
     public MusicBoardNotificationListenerService() {
     }
@@ -41,20 +46,52 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
         List<MediaController> controllers = mediaSessionManager.getActiveSessions(componentName);
         for (MediaController controller : controllers) {
             Log.d(TAG, "current player: " + controller.getPackageName());
-            Intent intent = new Intent("com.volla.launcher.service");
             MediaMetadata metadata = controller.getMetadata();
-            if (metadata != null) {
-                intent.putExtra("Music package", controller.getPackageName());
-                intent.putExtra("Song name", metadata.getString(MediaMetadata.METADATA_KEY_TITLE));
-                intent.putExtra("Song author", metadata.getString(MediaMetadata.METADATA_KEY_ARTIST));
-            }
-            sendBroadcast(intent);
+            Map reply = new HashMap();
+            reply.put("musicPackage", controller.getPackageName());
+            reply.put("trackName", getTrackTitle(metadata));
+            reply.put("trackAuthor", getTrackAuthor(metadata));
+            SystemDispatcher.dispatch(GOT_TRACK_CHANGED, reply);
         }
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn){
       // Implement what you want here
+    }
+
+    String getTrackTitle(MediaMetadata metadata) {
+        if (metadata == null) {
+            return "";
+        }
+        String title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE);
+        if (!title.isEmpty()) {
+            return title;
+        }
+        String display_title = metadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE);
+        if (!display_title.isEmpty()) {
+            return display_title;
+        }
+        return "";
+    }
+
+    String getTrackAuthor(MediaMetadata metadata) {
+        if (metadata == null) {
+            return "";
+        }
+        String artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
+        if (!artist.isEmpty()) {
+            return artist;
+        }
+        String author = metadata.getString(MediaMetadata.METADATA_KEY_AUTHOR);
+        if (!author.isEmpty()) {
+            return author;
+        }
+        String writer = metadata.getString(MediaMetadata.METADATA_KEY_WRITER);
+        if (!writer.isEmpty()) {
+            return writer;
+        }
+        return "";
     }
 
     @Override
