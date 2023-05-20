@@ -42,7 +42,7 @@ import com.volla.launcher.storage.Message;
 
 public class NotificationPlugin implements NotificationListenerExampleService.NotificationListener{
 
-    private final static String TAG = "Volla/NotificationPlugi";
+    private final static String TAG = "Volla/NotificationPlugin";
     private Set<String> currentNotifications;
     private Map<String, RepliableNotification> repliableNotificationMap;
     private Map<String, String> mappingNameWithThread_id;
