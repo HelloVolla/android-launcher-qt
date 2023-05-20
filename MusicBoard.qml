@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
+import AndroidNative 1.0 as AN
 
 Page {
     id: musicBoard
@@ -19,22 +20,33 @@ Page {
     }
 
     Text {
-        id: songName
+        id: trackName
 
         anchors.topMargin: 10
         anchors.left: albomPic.left
         anchors.top: albomPic.bottom
-        text: "Song name"
+        text: ""
         color: "white"
     }
 
     Text {
-        id: songAuthor
+        id: trackAuthor
 
         anchors.topMargin: 10
-        anchors.left: songName.left
-        anchors.top: songName.bottom
-        text: "Song author"
+        anchors.left: trackName.left
+        anchors.top: trackName.bottom
+        text: ""
         color: "white"
+    }
+
+
+    Connections {
+        target: AN.SystemDispatcher
+        onDispatched: {
+            if (type === "volla.launcher.trackChanged") {
+                trackName.text = message["trackName"];
+                trackAuthor.text = message["trackAuthor"];
+            }
+        }
     }
 }
