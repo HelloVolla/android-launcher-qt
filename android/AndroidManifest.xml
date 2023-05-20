@@ -105,6 +105,14 @@
             </intent-filter>
         </service>
 
+        <service android:name="com.volla.launcher.service.MusicBoardNotificationListenerService"
+            android:label="Volla Launcher Music Board Service"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
         <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
         <service android:name="com.android.mms.transaction.TransactionService">
             <!-- Background running -->

@@ -61,6 +61,7 @@ DISTFILES += \
     android/src/com/volla/launcher/models/RemoteInputParcel.java \
     android/src/com/volla/launcher/repository/MainViewModel.java \
     android/src/com/volla/launcher/repository/MessageRepository.java \
+    android/src/com/volla/launcher/service/MusicBoardNotificationListenerService.java \
     android/src/com/volla/launcher/service/NotificationListenerExampleService.java \
     android/src/com/volla/launcher/storage/Message.java \
     android/src/com/volla/launcher/storage/MessageDao.java \
