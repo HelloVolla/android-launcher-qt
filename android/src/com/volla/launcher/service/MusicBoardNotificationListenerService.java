@@ -139,6 +139,8 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
                 }
             }
         });
+
+        dispatchSessionData();
     }
     @Override
     public IBinder onBind(Intent intent) {
