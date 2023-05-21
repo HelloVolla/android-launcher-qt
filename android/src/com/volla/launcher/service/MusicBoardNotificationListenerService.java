@@ -23,7 +23,7 @@ import java.util.List;
 
 public class MusicBoardNotificationListenerService extends NotificationListenerService {
     public static final String GOT_TRACK_CHANGED = "volla.launcher.trackChanged";
-    public static final String GOT_PLAYER_AVAIBLE = "volla.launcher.playerAvaible";
+    public static final String GOT_PLAYER_AVAILABLE = "volla.launcher.playerAvailable";
     public static final String SEND_NEXT_TRACK = "volla.launcher.nextTrack";
     public static final String SEND_PREV_TRACK = "volla.launcher.prevTrack";
 
@@ -40,10 +40,10 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
     public void onNotificationPosted(StatusBarNotification sbn){
         Log.d(TAG, "onNotificationPosted " + sbn.getPackageName());
         List<MediaController> controllers = mediaSessionManager.getActiveSessions(componentName);
-        Map playerAvaibleReply = new HashMap();
+        Map playerAvailableReply = new HashMap();
         boolean hasPlayer = !controllers.isEmpty();
-        playerAvaibleReply.put("hasPlayer", hasPlayer);
-        SystemDispatcher.dispatch(GOT_PLAYER_AVAIBLE, playerAvaibleReply);
+        playerAvailableReply.put("hasPlayer", hasPlayer);
+        SystemDispatcher.dispatch(GOT_PLAYER_AVAILABLE, playerAvailableReply);
         if (!hasPlayer) {
             return;
         }
