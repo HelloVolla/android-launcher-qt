@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -28,6 +29,17 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
     public static final String SEND_PREV_TRACK = "volla.launcher.prevTrack";
 
     private final static String TAG = "MusicBoardNotificationListenerService";
+
+    private MediaController.Callback mediaControllerCallback = new MediaController.Callback() {
+        @Override
+        public void onPlaybackStateChanged(PlaybackState state) {
+            dispatchSessionData();
+        }
+        @Override
+        public void onMetadataChanged(MediaMetadata metadata) {
+            dispatchSessionData();
+        }
+    };
 
     public MusicBoardNotificationListenerService() {
     }
@@ -56,10 +68,14 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
             return;
         }
 
-        Map trackDataReply = new HashMap();
+        if (currentController != null) {
+            currentController.unregisterCallback(mediaControllerCallback);
+        }
         currentController = controllers.get(0);
+        currentController.registerCallback(mediaControllerCallback);
         Log.d(TAG, "current player: " + currentController.getPackageName());
         MediaMetadata metadata = currentController.getMetadata();
+        Map trackDataReply = new HashMap();
         trackDataReply.put("musicPackage", currentController.getPackageName());
         trackDataReply.put("trackName", getTrackTitle(metadata));
         trackDataReply.put("trackAuthor", getTrackAuthor(metadata));
