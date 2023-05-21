@@ -14,7 +14,7 @@ Page {
         anchors.verticalCenterOffset: -50
         height: 300
         width: 300
-        source: "/icons/albom.svg"
+        source: private_.defaultAlbumPic
         antialiasing: true
         smooth: true
     }
@@ -46,7 +46,19 @@ Page {
             if (type === "volla.launcher.trackChanged") {
                 trackName.text = message["trackName"];
                 trackAuthor.text = message["trackAuthor"];
+                console.log("MusicBoard |", message["albumPic"]);
+                if (message["albumPic"] && message["albumPic"].length !== 0) {
+                    albomPic.source = "data:image/png;base64," + message["albumPic"];
+                } else {
+                    albomPic.source = private_.defaultAlbumPic;
+                }
             }
         }
+    }
+
+    QtObject {
+        id: private_
+
+        readonly property string defaultAlbumPic: "/icons/albom.svg";
     }
 }
