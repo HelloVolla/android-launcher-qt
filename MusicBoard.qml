@@ -39,6 +39,41 @@ Page {
         color: "white"
     }
 
+    Button {
+        id: previousTrack
+
+        anchors.left: albomPic.left
+        anchors.top: trackAuthor.bottom
+        icon.source: "/icons/previous.svg"
+        icon.height: 48
+        icon.width: 48
+        background: Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+        }
+
+        onClicked: {
+            AN.SystemDispatcher.dispatch("volla.launcher.prevTrack", new Object)
+        }
+    }
+
+    Button {
+        id: nextTrack
+
+        anchors.right: albomPic.right
+        anchors.top: trackAuthor.bottom
+        icon.source: "/icons/next.svg"
+        icon.height: 48
+        icon.width: 48
+        background: Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+        }
+
+        onClicked: {
+            AN.SystemDispatcher.dispatch("volla.launcher.nextTrack", new Object)
+        }
+    }
 
     Connections {
         target: AN.SystemDispatcher
