@@ -38,7 +38,15 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
-        Log.d(TAG, "onNotificationPosted " + sbn.getPackageName());
+        dispatchSessionData();
+    }
+
+    @Override
+    public void onNotificationRemoved(StatusBarNotification sbn){
+      // Implement what you want here
+    }
+
+    void dispatchSessionData() {
         List<MediaController> controllers = mediaSessionManager.getActiveSessions(componentName);
         Map playerAvailableReply = new HashMap();
         boolean hasPlayer = !controllers.isEmpty();
@@ -57,11 +65,6 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
         trackDataReply.put("trackAuthor", getTrackAuthor(metadata));
         trackDataReply.put("albumPic", getAlbomPicture(metadata));
         SystemDispatcher.dispatch(GOT_TRACK_CHANGED, trackDataReply);
-    }
-
-    @Override
-    public void onNotificationRemoved(StatusBarNotification sbn){
-      // Implement what you want here
     }
 
     String getTrackTitle(MediaMetadata metadata) {
