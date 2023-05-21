@@ -4,13 +4,16 @@ import androidnative.SystemDispatcher;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Base64;
 import android.util.Log;
+import java.io.ByteArrayOutputStream;
 
 import androidx.annotation.Nullable;
 
@@ -24,7 +27,6 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
     private final static String TAG = "MusicBoardNotificationListenerService";
     public MusicBoardNotificationListenerService() {
     }
-
 
     MediaSessionManager mediaSessionManager;
     MediaController controller;
@@ -51,6 +53,7 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
             reply.put("musicPackage", controller.getPackageName());
             reply.put("trackName", getTrackTitle(metadata));
             reply.put("trackAuthor", getTrackAuthor(metadata));
+            reply.put("albumPic", getAlbomPicture(metadata));
             SystemDispatcher.dispatch(GOT_TRACK_CHANGED, reply);
         }
     }
@@ -91,6 +94,22 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
         if (!writer.isEmpty()) {
             return writer;
         }
+        return "";
+    }
+
+    String getAlbomPicture(MediaMetadata metadata) {
+        if (metadata == null) {
+            return "";
+        }
+        Bitmap bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+        if (bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String icon = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+            return icon;
+        }
+        Log.d(TAG, "No album art");
         return "";
     }
 
