@@ -46,16 +46,18 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
     public void onNotificationPosted(StatusBarNotification sbn){
         Log.d(TAG, "onNotificationPosted " + sbn.getPackageName());
         List<MediaController> controllers = mediaSessionManager.getActiveSessions(componentName);
-        for (MediaController controller : controllers) {
-            Log.d(TAG, "current player: " + controller.getPackageName());
-            MediaMetadata metadata = controller.getMetadata();
-            Map reply = new HashMap();
-            reply.put("musicPackage", controller.getPackageName());
-            reply.put("trackName", getTrackTitle(metadata));
-            reply.put("trackAuthor", getTrackAuthor(metadata));
-            reply.put("albumPic", getAlbomPicture(metadata));
-            SystemDispatcher.dispatch(GOT_TRACK_CHANGED, reply);
+        if (controllers.isEmpty()) {
+            return;
         }
+        MediaController controller = controllers.get(0);
+        Log.d(TAG, "current player: " + controller.getPackageName());
+        MediaMetadata metadata = controller.getMetadata();
+        Map reply = new HashMap();
+        reply.put("musicPackage", controller.getPackageName());
+        reply.put("trackName", getTrackTitle(metadata));
+        reply.put("trackAuthor", getTrackAuthor(metadata));
+        reply.put("albumPic", getAlbomPicture(metadata));
+        SystemDispatcher.dispatch(GOT_TRACK_CHANGED, reply);
     }
 
     @Override
