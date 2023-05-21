@@ -24,8 +24,11 @@ import java.util.List;
 public class MusicBoardNotificationListenerService extends NotificationListenerService {
     public static final String GOT_TRACK_CHANGED = "volla.launcher.trackChanged";
     public static final String GOT_PLAYER_AVAIBLE = "volla.launcher.playerAvaible";
+    public static final String SEND_NEXT_TRACK = "volla.launcher.nextTrack";
+    public static final String SEND_PREV_TRACK = "volla.launcher.prevTrack";
 
     private final static String TAG = "MusicBoardNotificationListenerService";
+
     public MusicBoardNotificationListenerService() {
     }
 
@@ -127,6 +130,22 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
 
         componentName = new ComponentName(this, MusicBoardNotificationListenerService.class);
         mediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
+
+        SystemDispatcher.addListener(new SystemDispatcher.Listener() {
+
+            public void onDispatched(String type, Map message) {
+                if (currentController == null) {
+                    return;
+                }
+
+                MediaController.TransportControls transportControls = currentController.getTransportControls();
+                if (type.equals(SEND_NEXT_TRACK)) {
+                    transportControls.skipToNext();
+                } else if (type.equals(SEND_PREV_TRACK)) {
+                    transportControls.skipToPrevious();
+                }
+            }
+        });
     }
     @Override
     public IBinder onBind(Intent intent) {
