@@ -36,16 +36,6 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
     MediaController currentController;
     ComponentName componentName;
 
-    MediaSessionManager.OnActiveSessionsChangedListener sessionsChangedListener = new MediaSessionManager.OnActiveSessionsChangedListener() {
-        @Override
-        public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
-            Log.d(TAG, "sessionsChangedListener");
-            for (MediaController controller : controllers) {
-                Log.d(TAG, "current player: " + controller.getPackageName());
-            }
-        }
-    };
-
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
         Log.d(TAG, "onNotificationPosted " + sbn.getPackageName());
