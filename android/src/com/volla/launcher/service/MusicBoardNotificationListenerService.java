@@ -30,7 +30,7 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
     }
 
     MediaSessionManager mediaSessionManager;
-    MediaController controller;
+    MediaController currentController;
     ComponentName componentName;
 
     MediaSessionManager.OnActiveSessionsChangedListener sessionsChangedListener = new MediaSessionManager.OnActiveSessionsChangedListener() {
@@ -56,10 +56,10 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
         }
 
         Map trackDataReply = new HashMap();
-        MediaController controller = controllers.get(0);
-        Log.d(TAG, "current player: " + controller.getPackageName());
-        MediaMetadata metadata = controller.getMetadata();
-        trackDataReply.put("musicPackage", controller.getPackageName());
+        currentController = controllers.get(0);
+        Log.d(TAG, "current player: " + currentController.getPackageName());
+        MediaMetadata metadata = currentController.getMetadata();
+        trackDataReply.put("musicPackage", currentController.getPackageName());
         trackDataReply.put("trackName", getTrackTitle(metadata));
         trackDataReply.put("trackAuthor", getTrackAuthor(metadata));
         trackDataReply.put("albumPic", getAlbomPicture(metadata));
