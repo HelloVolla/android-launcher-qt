@@ -23,6 +23,7 @@ import java.util.List;
 
 public class MusicBoardNotificationListenerService extends NotificationListenerService {
     public static final String GOT_TRACK_CHANGED = "volla.launcher.trackChanged";
+    public static final String GOT_PLAYER_AVAIBLE = "volla.launcher.playerAvaible";
 
     private final static String TAG = "MusicBoardNotificationListenerService";
     public MusicBoardNotificationListenerService() {
@@ -46,18 +47,23 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
     public void onNotificationPosted(StatusBarNotification sbn){
         Log.d(TAG, "onNotificationPosted " + sbn.getPackageName());
         List<MediaController> controllers = mediaSessionManager.getActiveSessions(componentName);
-        if (controllers.isEmpty()) {
+        Map playerAvaibleReply = new HashMap();
+        boolean hasPlayer = !controllers.isEmpty();
+        playerAvaibleReply.put("hasPlayer", hasPlayer);
+        SystemDispatcher.dispatch(GOT_PLAYER_AVAIBLE, playerAvaibleReply);
+        if (!hasPlayer) {
             return;
         }
+
+        Map trackDataReply = new HashMap();
         MediaController controller = controllers.get(0);
         Log.d(TAG, "current player: " + controller.getPackageName());
         MediaMetadata metadata = controller.getMetadata();
-        Map reply = new HashMap();
-        reply.put("musicPackage", controller.getPackageName());
-        reply.put("trackName", getTrackTitle(metadata));
-        reply.put("trackAuthor", getTrackAuthor(metadata));
-        reply.put("albumPic", getAlbomPicture(metadata));
-        SystemDispatcher.dispatch(GOT_TRACK_CHANGED, reply);
+        trackDataReply.put("musicPackage", controller.getPackageName());
+        trackDataReply.put("trackName", getTrackTitle(metadata));
+        trackDataReply.put("trackAuthor", getTrackAuthor(metadata));
+        trackDataReply.put("albumPic", getAlbomPicture(metadata));
+        SystemDispatcher.dispatch(GOT_TRACK_CHANGED, trackDataReply);
     }
 
     @Override
