@@ -95,6 +95,6 @@ Page {
     QtObject {
         id: private_
 
-        readonly property string defaultAlbumPic: "/icons/albom.svg";
+        readonly property string defaultAlbumPic: "/icons/album.svg";
     }
 }
