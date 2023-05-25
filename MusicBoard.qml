@@ -58,12 +58,16 @@ Page {
 
         anchors.left: albumPic.left
         anchors.top: trackAuthor.bottom
-        icon.source: "/icons/previous.svg"
-        icon.height: 48
-        icon.width: 48
+        height: 48
+        width: 48
         background: Rectangle {
             anchors.fill: parent
             color: "transparent"
+        }
+        contentItem: ColoredImage {
+            anchors.fill: parent
+            source: "/icons/previous.svg"
+            color: Universal.foreground
         }
 
         onClicked: {
@@ -76,12 +80,16 @@ Page {
 
         anchors.right: albumPic.right
         anchors.top: trackAuthor.bottom
-        icon.source: "/icons/next.svg"
-        icon.height: 48
-        icon.width: 48
+        height: 48
+        width: 48
         background: Rectangle {
             anchors.fill: parent
             color: "transparent"
+        }
+        contentItem: ColoredImage {
+            anchors.fill: parent
+            source: "/icons/next.svg"
+            color: Universal.foreground
         }
 
         onClicked: {
