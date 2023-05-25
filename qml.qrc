@@ -87,5 +87,7 @@
         <file>icons/album.svg</file>
         <file>icons/next.svg</file>
         <file>icons/previous.svg</file>
+        <file>icons/pause.svg</file>
+        <file>icons/play.svg</file>
     </qresource>
 </RCC>
