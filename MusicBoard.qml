@@ -6,6 +6,21 @@ import AndroidNative 1.0 as AN
 Page {
     id: musicBoard
 
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+
+    Label {
+        id: headerTitle
+
+        topPadding: mainView.innerSpacing * 2
+        x: mainView.innerSpacing
+        text: qsTr("Music Board")
+        font.pointSize: mainView.headerFontSize
+        font.weight: Font.Black
+    }
+
     Item {
         id: albumPic
 
