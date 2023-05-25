@@ -16,7 +16,8 @@ Page {
         width: 300
         source: private_.defaultAlbumPic
         antialiasing: true
-        smooth: true
+        sourceSize.height: albomPic.height
+        sourceSize.width: albomPic.width
     }
 
     Text {
