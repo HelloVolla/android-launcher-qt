@@ -26,7 +26,7 @@ Page {
         anchors.left: albomPic.left
         anchors.top: albomPic.bottom
         text: ""
-        color: "white"
+        color: Universal.foreground
     }
 
     Text {
@@ -36,7 +36,7 @@ Page {
         anchors.left: trackName.left
         anchors.top: trackName.bottom
         text: ""
-        color: "white"
+        color: Universal.foreground
     }
 
     Button {
