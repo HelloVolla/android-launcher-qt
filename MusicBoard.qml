@@ -6,7 +6,7 @@ import AndroidNative 1.0 as AN
 Page {
     id: musicBoard
 
-    Image {
+    Item {
         id: albomPic
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -14,10 +14,25 @@ Page {
         anchors.verticalCenterOffset: -50
         height: 300
         width: 300
-        source: private_.defaultAlbumPic
-        antialiasing: true
-        sourceSize.height: albomPic.height
-        sourceSize.width: albomPic.width
+
+        property alias source: playerAlbomPic.source
+
+        ColoredImage {
+            id: defaultAlbomPic
+
+            anchors.fill: parent
+            source: "/icons/album.svg"
+            color: Universal.foreground
+            visible: !playerAlbomPic.visible
+        }
+
+        Image {
+            id: playerAlbomPic
+
+            anchors.fill: parent
+            antialiasing: true
+            visible: source.toString() !== ""
+        }
     }
 
     Text {
@@ -86,15 +101,9 @@ Page {
                 if (message["albumPic"] && message["albumPic"].length !== 0) {
                     albomPic.source = "data:image/png;base64," + message["albumPic"];
                 } else {
-                    albomPic.source = private_.defaultAlbumPic;
+                    albomPic.source = "";
                 }
             }
         }
-    }
-
-    QtObject {
-        id: private_
-
-        readonly property string defaultAlbumPic: "/icons/album.svg";
     }
 }
