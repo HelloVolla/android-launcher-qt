@@ -754,7 +754,9 @@ ApplicationWindow {
 
         function updateSearchMode(searchMode) {
             settings.searchMode = searchMode
-            settings.sync()
+            if (settings.sync) {
+                settings.sync()
+            }
         }
 
         function getNotes() {
@@ -841,7 +843,9 @@ ApplicationWindow {
             } else if (key === "activateSignal") {
                 settings.signalIsActivated = value
             }
-            settings.sync()
+            if (settings.sync) {
+                settings.sync()
+            }
         }
 
         function resetActions() {
@@ -902,7 +906,9 @@ ApplicationWindow {
                         mainView.isLoadingContacts = false
                         mainView.updateSpinner(false)
                         settings.lastContactsCheck = new Date().valueOf()
-                        settings.sync()
+                        if (settings.sync) {
+                            settings.sync()
+                        }
                         console.log("MainView | New contact timestamp " + settings.lastContactsCheck)
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
@@ -1003,7 +1009,9 @@ ApplicationWindow {
             }
             mainView.isActiveSignal = signalIsActivated
             mainView.useVibration = useHapticMenus
-            settings.sync()
+            if (settings.sync) {
+                settings.sync()
+            }
         }
     }
 
