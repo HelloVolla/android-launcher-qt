@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MusicBoardNotificationListenerService extends NotificationListenerService {
+    public static final String SEND_PLAY_PAUSE_TRACK = "volla.launcher.playPauseTrack";
+    public static final String GOT_TRACK_PLAYING_STATUS = "volla.launcher.gotPlayingStatus";
     public static final String GOT_TRACK_CHANGED = "volla.launcher.trackChanged";
     public static final String GOT_PLAYER_AVAILABLE = "volla.launcher.playerAvailable";
     public static final String SEND_NEXT_TRACK = "volla.launcher.nextTrack";
@@ -81,6 +83,23 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
         trackDataReply.put("trackAuthor", getTrackAuthor(metadata));
         trackDataReply.put("albumPic", getAlbomPicture(metadata));
         SystemDispatcher.dispatch(GOT_TRACK_CHANGED, trackDataReply);
+        dispatchPlayingStatus(currentController.getPlaybackState());
+    }
+
+    void dispatchPlayingStatus(PlaybackState state) {
+        if (state == null) {
+            return;
+        }
+        Map reply = new HashMap();
+        reply.put("playingStatus", isPlaying(state));
+        SystemDispatcher.dispatch(GOT_TRACK_PLAYING_STATUS, reply);
+    }
+
+    boolean isPlaying(PlaybackState state) {
+        if (state == null) {
+            return false;
+        }
+        return state.getState() == PlaybackState.STATE_PLAYING;
     }
 
     String getTrackTitle(MediaMetadata metadata) {
@@ -133,6 +152,14 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
         return "";
     }
 
+    void playPause(MediaController controller) {
+        if (isPlaying(controller.getPlaybackState())) {
+            controller.getTransportControls().pause();
+        } else {
+            controller.getTransportControls().play();
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -152,6 +179,8 @@ public class MusicBoardNotificationListenerService extends NotificationListenerS
                     transportControls.skipToNext();
                 } else if (type.equals(SEND_PREV_TRACK)) {
                     transportControls.skipToPrevious();
+                } else if (type.equals(SEND_PLAY_PAUSE_TRACK)) {
+                    playPause(currentController);
                 }
             }
         });
