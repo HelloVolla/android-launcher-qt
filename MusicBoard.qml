@@ -7,7 +7,7 @@ Page {
     id: musicBoard
 
     Item {
-        id: albomPic
+        id: albumPic
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -15,19 +15,17 @@ Page {
         height: 300
         width: 300
 
-        property alias source: playerAlbomPic.source
+        property alias source: playerAlbumPic.source
 
         ColoredImage {
-            id: defaultAlbomPic
-
             anchors.fill: parent
             source: "/icons/album.svg"
             color: Universal.foreground
-            visible: !playerAlbomPic.visible
+            visible: !playerAlbumPic.visible
         }
 
         Image {
-            id: playerAlbomPic
+            id: playerAlbumPic
 
             anchors.fill: parent
             antialiasing: true
@@ -39,8 +37,8 @@ Page {
         id: trackName
 
         anchors.topMargin: 10
-        anchors.left: albomPic.left
-        anchors.top: albomPic.bottom
+        anchors.left: albumPic.left
+        anchors.top: albumPic.bottom
         text: ""
         color: Universal.foreground
     }
@@ -58,7 +56,7 @@ Page {
     Button {
         id: previousTrack
 
-        anchors.left: albomPic.left
+        anchors.left: albumPic.left
         anchors.top: trackAuthor.bottom
         icon.source: "/icons/previous.svg"
         icon.height: 48
@@ -76,7 +74,7 @@ Page {
     Button {
         id: nextTrack
 
-        anchors.right: albomPic.right
+        anchors.right: albumPic.right
         anchors.top: trackAuthor.bottom
         icon.source: "/icons/next.svg"
         icon.height: 48
@@ -99,9 +97,9 @@ Page {
                 trackAuthor.text = message["trackAuthor"];
                 console.log("MusicBoard |", message["albumPic"]);
                 if (message["albumPic"] && message["albumPic"].length !== 0) {
-                    albomPic.source = "data:image/png;base64," + message["albumPic"];
+                    albumPic.source = "data:image/png;base64," + message["albumPic"];
                 } else {
-                    albomPic.source = "";
+                    albumPic.source = "";
                 }
             }
         }
