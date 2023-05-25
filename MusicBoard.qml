@@ -112,6 +112,43 @@ Page {
         }
     }
 
+    Button {
+        id: playButton
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: trackAuthor.bottom
+        height: 48
+        width: 48
+        background: Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+        }
+
+        property bool playing: false
+
+        contentItem: Item {
+            anchors.fill: parent
+
+            ColoredImage {
+                anchors.fill: parent
+                source: "/icons/pause.svg"
+                color: Universal.foreground
+                visible: playButton.playing
+            }
+
+            ColoredImage {
+                anchors.fill: parent
+                source: "/icons/play.svg"
+                color: Universal.foreground
+                visible: !playButton.playing
+            }
+        }
+
+        onClicked: {
+            AN.SystemDispatcher.dispatch("volla.launcher.playPauseTrack", new Object)
+        }
+    }
+
     Connections {
         target: AN.SystemDispatcher
         onDispatched: {
@@ -124,6 +161,8 @@ Page {
                 } else {
                     albumPic.source = "";
                 }
+            } else if (type === "volla.launcher.gotPlayingStatus") {
+                playButton.playing = message["playingStatus"];
             }
         }
     }
