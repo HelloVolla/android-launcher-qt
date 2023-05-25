@@ -6,6 +6,7 @@
         <file>AppGrid.qml</file>
         <file>MusicBoard.qml</file>
         <file>Collections.qml</file>
+        <file>ColoredImage.qml</file>
         <file>icons/browser@4x.png</file>
         <file>icons/dial-phone@4x.png</file>
         <file>icons/message@4x.png</file>
