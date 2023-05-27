@@ -32,6 +32,7 @@ public class SignalWorker {
     public static final String GOT_SIGNAL_THREADS = "volla.launcher.signalThreadsResponse";
     public static final String ENABLE_SIGNAL = "volla.launcher.signalEnable";
     public static final String SEND_SIGNAL_MESSAGES ="volla.launcher.signalSendMessageAction";
+    public static final String SIGNAL_ERROR =  "volla.launcher.signalAppNotInstalled";
     public static NotificationPlugin np;
 
     static {
@@ -183,8 +184,14 @@ public class SignalWorker {
         }
    }
 
-    static void enableSignal(Map message, Activity activity){
+    static void enableSignal(Map message, Activity activity) {
       boolean enable = (boolean) message.get("enableSignal");
-      NotificationListenerExampleService.enableSignald(enable);
+      if(isSignalInstalled(activity)) {
+          NotificationListenerExampleService.enableSignald(enable);
+      } else {
+          Map result = new HashMap();
+          result.put("error", "Signal Application not Installed");
+          SystemDispatcher.dispatch(SIGNAL_ERROR, result);
+      }
    }
 }
