@@ -215,6 +215,10 @@
         <source>Type your message</source>
         <translation type="unfinished">Въведете съобщението си</translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished">Съобщението не е изпратено</translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -439,6 +443,10 @@
     <message>
         <source>Reset launcher</source>
         <translation type="unfinished">Нулиране на стартера</translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
+        <translation type="unfinished">Приложението Сигнал не е инсталирано</translation>
     </message>
 </context>
 <context>

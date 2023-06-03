@@ -184,6 +184,10 @@
         <source>Not yet supported</source>
         <translation type="unfinished">Endnu ikke understøttet</translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished">Besked ikke sendt</translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -403,6 +407,10 @@
     <message>
         <source>Reset launcher</source>
         <translation type="unfinished">Nulstil launcheren</translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
+        <translation type="unfinished">Signal-appen er ikke installeret</translation>
     </message>
 </context>
 <context>

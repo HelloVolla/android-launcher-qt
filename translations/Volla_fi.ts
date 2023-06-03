@@ -213,6 +213,10 @@
         <source>Type your message</source>
         <translation type="unfinished">Kirjoita viestisi</translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished">Viestiä ei ole lähetetty</translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -436,6 +440,10 @@
     <message>
         <source>Reset launcher</source>
         <translation type="unfinished">Käynnistimen nollaus</translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
+        <translation type="unfinished">Signaalisovellusta ei ole asennettu</translation>
     </message>
 </context>
 <context>

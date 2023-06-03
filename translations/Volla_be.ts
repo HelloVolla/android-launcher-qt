@@ -180,6 +180,10 @@
         <source>Type your message</source>
         <translation>Увядзіце паведамленне</translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -394,6 +398,10 @@
     </message>
     <message>
         <source>Reset launcher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
