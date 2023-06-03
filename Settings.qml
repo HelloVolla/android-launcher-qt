@@ -1031,6 +1031,20 @@ Page {
 
                         property bool signalIsActivated: false
                     }
+
+                    Connections {
+                        target: AN.SystemDispatcher
+
+                        onDispatched: {
+                            if (type === "volla.launcher.signalAppNotInstalled") {
+                                mainView.showToast(qsTr("Signal app is not installed"))
+                                for (var i = 0; i < sourceSettingsItemColumn.checkboxes.length; i++) {
+                                    var checkbox = sourceSettingsItemColumn.checkboxes[i]
+                                    if (checkbox.actionId === "signal") checkbox.checked = false
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Behavior on implicitHeight {

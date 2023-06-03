@@ -216,6 +216,10 @@
         <source>Type your message</source>
         <translation type="unfinished">Zadajte svoju správu</translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished">Správa nebola odoslaná</translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -439,6 +443,10 @@
     <message>
         <source>Reset launcher</source>
         <translation type="unfinished">Obnovenie spúšťacieho zariadenia</translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
+        <translation type="unfinished">Aplikácia Signál nie je nainštalovaná</translation>
     </message>
 </context>
 <context>

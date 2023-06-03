@@ -20,7 +20,7 @@ import com.volla.launcher.storage.Users;
 import com.volla.launcher.service.NotificationListenerExampleService;
 import androidx.core.app.NotificationManagerCompat;
 import com.volla.launcher.util.NotificationPlugin;
-
+import android.content.pm.PackageManager;
 public class SignalWorker {
 
    private static final String TAG = "SignalWorker";
@@ -32,6 +32,7 @@ public class SignalWorker {
     public static final String GOT_SIGNAL_THREADS = "volla.launcher.signalThreadsResponse";
     public static final String ENABLE_SIGNAL = "volla.launcher.signalEnable";
     public static final String SEND_SIGNAL_MESSAGES ="volla.launcher.signalSendMessageAction";
+    public static final String SIGNAL_ERROR =  "volla.launcher.signalAppNotInstalled";
     public static NotificationPlugin np;
 
     static {
@@ -147,7 +148,7 @@ public class SignalWorker {
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getBody());
                 reply.put("person", m.getUser_name());
-                reply.put("address", "7653456789");
+                reply.put("address", "");
                 reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", m.getRead());
                 reply.put("isSent", m.getSent());
@@ -172,9 +173,25 @@ public class SignalWorker {
              activity.startActivity(intent);
         }
    }
+   public static boolean isSignalInstalled(Activity activity) {
+	   String packageName = "org.thoughtcrime.securesms";
+	   PackageManager packageManager = activity.getPackageManager();
+        try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+   }
 
-    static void enableSignal(Map message, Activity activity){
+    static void enableSignal(Map message, Activity activity) {
       boolean enable = (boolean) message.get("enableSignal");
-      NotificationListenerExampleService.enableSignald(enable);
+      if(isSignalInstalled(activity)) {
+          NotificationListenerExampleService.enableSignald(enable);
+      } else {
+          Map result = new HashMap();
+          result.put("error", "Signal Application not Installed");
+          SystemDispatcher.dispatch(SIGNAL_ERROR, result);
+      }
    }
 }

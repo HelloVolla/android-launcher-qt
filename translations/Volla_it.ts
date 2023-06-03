@@ -215,6 +215,10 @@
         <source>Type your message</source>
         <translation type="unfinished">Digitare il messaggio</translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished">Messaggio non inviato</translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -438,6 +442,10 @@
     <message>
         <source>Reset launcher</source>
         <translation type="unfinished">Azzeramento del launcher</translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
+        <translation type="unfinished">L'applicazione Signal non è installata</translation>
     </message>
 </context>
 <context>
