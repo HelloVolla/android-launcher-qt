@@ -32,7 +32,6 @@ public class SignalWorker {
     public static final String GOT_SIGNAL_THREADS = "volla.launcher.signalThreadsResponse";
     public static final String ENABLE_SIGNAL = "volla.launcher.signalEnable";
     public static final String SEND_SIGNAL_MESSAGES ="volla.launcher.signalSendMessageAction";
-    public static NotificationPlugin np;
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {

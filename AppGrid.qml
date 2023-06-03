@@ -457,7 +457,9 @@ Page {
                 }
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
-                settings.sync()
+                if (settings.sync) {
+                    settings.sync()
+                }
                 settings.lastAppCountCheck = new Date().valueOf()
                 console.log("App Launcher | Did store apps: " + appsCache.writePrivate(JSON.stringify(message["apps"])))
                 groupedApps = appLauncher.getGroupedApps(message["apps"])

@@ -7,7 +7,9 @@ import android.content.pm.LauncherApps.PinItemRequest;
 import android.content.pm.ShortcutInfo;
 import android.content.Intent;
 import android.util.Log;
-import android.os.Bundle;import com.volla.launcher.activity.ReceiveTextActivity;
+import android.os.Bundle;
+
+import com.volla.launcher.activity.ReceiveTextActivity;
 
 public class AddShortcutActivity extends Activity {
 
