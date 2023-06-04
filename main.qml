@@ -29,6 +29,13 @@ ApplicationWindow {
               isActive = true
               // Application go in active state
               console.log("MainView | Application became active")
+              if (Qt.fontFamilies().indexOf("Noto Sans") > -1) {
+                  console.debug("APP: Use smaller font size")
+                  mainView.headerFontSize = 34.0
+                  mainView.largeFontSize = 18.0
+                  mainView.mediumFontSize = 16.0
+                  mainView.smallFontSize = 14.0
+              }
               if (settings.sync) {
                   settings.sync()
               }
