@@ -80,11 +80,14 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     private StatusBarNotification my_custom;
     private MessageRepository repository;
-    private static boolean isSignaldEnable =false;
+    private static boolean isSignaldEnable = false;
     private final static ArrayList<InstanceCallback> callbacks = new ArrayList<>();
     private final static Lock mutex = new ReentrantLock(true);
     private boolean connected = true;
     public NotificationData notificationData;
+    private long lastNotificationTime = 0;
+    private String lastAttachment ="";
+    private String lastMessage ="";
     void NotificationListenerExampleService(){
 
     }
@@ -162,7 +165,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
         if (!isSignaldEnable){
               return;
-	}
+        }
 
         int notificationCode = matchNotificationCode(sbn);
         if (notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
@@ -211,9 +214,22 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             // Droping the Notifications received for attachments but contains no attachment data
             Message msg = new Message();
             msg = storeNotificationMessage(sbn);
-            if(msg.getText().equalsIgnoreCase("\uD83D\uDCF7 Photo") && msg.getLargeIcon().length() <=2){
+             if(msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2) {
                return;
             }
+	    if(lastNotificationTime == msg.getTimeStamp()){
+              if(msg.getLargeIcon().length() >= 10){
+                    if(lastAttachment.equalsIgnoreCase(msg.getLargeIcon()) && lastMessage.equalsIgnoreCase(msg.getText())){
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            }
+	    lastNotificationTime = msg.getTimeStamp();
+	    lastAttachment = msg.getLargeIcon();
+	    lastMessage = msg.getText();
+	    Log.d(TAG, "Keeping Volla notifications messages");
             repository.insertMessage(msg);
  
             users.uuid = String.valueOf(sbn.getId());

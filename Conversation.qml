@@ -838,14 +838,14 @@ Page {
                 message["messages"].forEach(function (signalMessage, index) {
                     signalMessage["isSignal"] = true
                     // Workaround for duplicates
-                    if (previousMessage === undefined || previousMessage["body"] !== signalMessage["body"])
-                        conversationPage.messages.push(signalMessage)
-                    previousMessage = signalMessage
+//                    if (previousMessage === undefined || previousMessage["body"] !== signalMessage["body"])
+//                        conversationPage.messages.push(signalMessage)
+//                    previousMessage = signalMessage
 //                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
 //                        console.log("Conversation | * " + messageKey + ": " + messageValue + ": " + typeof messageValue)
 //                    }
                 })
-//                conversationPage.messages = conversationPage.messages.concat(message["messages"])
+                conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 conversationPage.updateListModel()
             } else if (type === "volla.launcher.callConversationResponse") {
                 console.log("Conversation | onDispatched: " + type)

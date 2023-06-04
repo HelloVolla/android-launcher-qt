@@ -39,10 +39,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import com.volla.launcher.storage.Message;
+import android.net.Uri;
 
 public class NotificationPlugin implements NotificationListenerExampleService.NotificationListener{
 
-    private final static String TAG = "Volla/NotificationPlugi";
+    private final static String TAG = "Volla/NotificationPlugin";
     private Set<String> currentNotifications;
     private Map<String, RepliableNotification> repliableNotificationMap;
     private Map<String, String> mappingNameWithThread_id;
@@ -153,7 +154,7 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
        // Log.d(TAG, "RepliableNotification id "+ rn.id);
     }
 
-    public void replyToNotification(String person, String id, String message) {
+    public void replyToNotification(String person, String id, String message, String phone_number) {
         Log.d(TAG, "pending Intent : " + repliableNotificationMap);
         if(person != null && person.length()>0 && mappingNameWithThread_id.containsKey(person)){
 		id = mappingNameWithThread_id.get(person);
@@ -161,12 +162,14 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         if (repliableNotificationMap == null || repliableNotificationMap.isEmpty() || id == null ||  !repliableNotificationMap.containsKey(id)) {
 	    SignalUtil.errorMessageReply("No such Notification avaiable");
             Log.e(TAG, "No such notification, pending intent is null or does't contains id: " +id );
+	    fallbackIfNoRepliableNotification(phone_number, message);
             return;
         }
         RepliableNotification repliableNotification = repliableNotificationMap.get(id);
         if (repliableNotification == null) {
 	    SignalUtil.errorMessageReply("No such Notification avaiable");
             Log.e(TAG, "No such notification");
+	    fallbackIfNoRepliableNotification(phone_number, message);
             return;
         }
         RemoteInput[] remoteInputs = new RemoteInput[repliableNotification.remoteInputs.size()];
@@ -187,6 +190,25 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
             Log.e(TAG, "replyToNotification error: " + e.getMessage());
         }
         repliableNotificationMap.remove(id);
+    }
+    private void fallbackIfNoRepliableNotification(String phone_number, String text){
+	String packageName = "org.thoughtcrime.securesms";
+	Intent intent = new Intent();
+        if (phone_number != null) {
+            intent.setAction("android.intent.action.SENDTO");
+            intent.setPackage("org.thoughtcrime.securesms");
+            intent.setData(Uri.parse("smsto:" + phone_number));
+            intent.putExtra("sms_body", text);
+	} else {
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setPackage(packageName);
+            intent.putExtra(Intent.EXTRA_TEXT, text);
+            intent.setType("text/plain");
+        }
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
+
     }
     private void storeRepliedMessage(String id, String text){
         NotificationListenerExampleService.RunCommand(context, service -> {

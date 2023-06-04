@@ -180,6 +180,10 @@
         <source>Not yet supported</source>
         <translation type="unfinished">Zatím není podporováno</translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished">Zpráva nebyla odeslána</translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -395,6 +399,10 @@
     <message>
         <source>Reset launcher</source>
         <translation type="unfinished">Obnovení spouštěče</translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
+        <translation type="unfinished">Aplikace Signál není nainstalována</translation>
     </message>
 </context>
 <context>

@@ -65,15 +65,6 @@
         <file>icons/trash@4x.png</file>
         <file>icons/lock@2x.png</file>
         <file>scripts/contacts.mjs</file>
-        <file>images/01.Grid_cleanup_Screen.png</file>
-        <file>images/01.Grid_groups_Screen.png</file>
-        <file>images/02.Grid_cleanup_Screen.png</file>
-        <file>images/02.Grid_groups_Screen.png</file>
-        <file>images/02.Notes_Screen.png</file>
-        <file>images/03.Grid_groups_Screen.png</file>
-        <file>images/03.Notes_Screen.png</file>
-        <file>images/04.Notes_Screen.png</file>
-        <file>images/05.Notes_Screen.png</file>
         <file>AppGroup.qml</file>
         <file>scripts/apps.mjs</file>
         <file>OnBoarding.qml</file>
@@ -86,5 +77,6 @@
         <file>icons/socializer@4x.png</file>
         <file>icons/status.im@4x.png</file>
         <file>icons/twitter@4x.png</file>
+        <file>icons/share@4x.png</file>
     </qresource>
 </RCC>

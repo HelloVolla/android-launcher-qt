@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.content.ClipData;
 import java.io.File;
+import com.volla.launcher.worker.SignalWorker;
 
 import java.net.URL;
 import android.media.MediaScannerConnection;
@@ -81,8 +82,14 @@ public class SignalUtil {
         String text = (String) message.get("text");
         String thread_id = (String) message.get("thread_id");
 	String person = (String) message.get("person");
-        //np = new NotificationPlugin();
-        NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(person,thread_id,text);
+	String phone_number = (String) message.get("number");
+        if(SignalWorker.isSignalInstalled(QtNative.activity())) {
+            NotificationPlugin.getInstance(QtNative.activity()).replyToNotification(person,thread_id,text,phone_number);
+        } else {
+            Map result = new HashMap();
+            result.put("error", "Signal Application not Installed");
+            SystemDispatcher.dispatch(SignalWorker.SIGNAL_ERROR, result);
+        }
     }
 
     public static void errorMessageReply(String msg){

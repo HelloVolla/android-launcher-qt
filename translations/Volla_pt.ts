@@ -180,6 +180,10 @@
         <source>Not yet supported</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Message not sent</source>
+        <translation type="unfinished">Mensagem não enviada</translation>
+    </message>
 </context>
 <context>
     <name>Details</name>
@@ -395,6 +399,10 @@
     <message>
         <source>Reset launcher</source>
         <translation type="unfinished">Lançador de reinicialização</translation>
+    </message>
+    <message>
+        <source>Signal app is not installed</source>
+        <translation type="unfinished">A aplicação Signal não está instalada</translation>
     </message>
 </context>
 <context>

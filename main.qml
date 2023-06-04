@@ -1,4 +1,4 @@
-    import QtQuick 2.12
+import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
@@ -29,7 +29,9 @@ ApplicationWindow {
               isActive = true
               // Application go in active state
               console.log("MainView | Application became active")
-              settings.sync()
+              if (settings.sync) {
+                  settings.sync()
+              }
               if (!appGridLoader.active) appGridLoader.active = true
               if (!springboardLoader.active) springboardLoader.active = true
               if (!settingsPageLoader.active) settingsPageLoader.active = true
@@ -752,7 +754,9 @@ ApplicationWindow {
 
         function updateSearchMode(searchMode) {
             settings.searchMode = searchMode
-            settings.sync()
+            if (settings.sync) {
+                settings.sync()
+            }
         }
 
         function getNotes() {
@@ -839,7 +843,9 @@ ApplicationWindow {
             } else if (key === "activateSignal") {
                 settings.signalIsActivated = value
             }
-            settings.sync()
+            if (settings.sync) {
+                settings.sync()
+            }
         }
 
         function resetActions() {
@@ -900,7 +906,9 @@ ApplicationWindow {
                         mainView.isLoadingContacts = false
                         mainView.updateSpinner(false)
                         settings.lastContactsCheck = new Date().valueOf()
-                        settings.sync()
+                        if (settings.sync) {
+                            settings.sync()
+                        }
                         console.log("MainView | New contact timestamp " + settings.lastContactsCheck)
                     }
                 } else if (type === "volla.launcher.checkContactResponse") {
@@ -1001,7 +1009,9 @@ ApplicationWindow {
             }
             mainView.isActiveSignal = signalIsActivated
             mainView.useVibration = useHapticMenus
-            settings.sync()
+            if (settings.sync) {
+                settings.sync()
+            }
         }
     }
 
