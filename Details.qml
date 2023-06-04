@@ -46,12 +46,15 @@ Page {
                 y: (pinButton.height - pinBadge.height) * 0.5
                 radius: height * 0.5
                 color: Universal.accent
+                onVisibleChanged: {
+                    dateLabel.leftPadding = pinBadge.visible ? 0.8 : 0.0
+                }
             }
 
             Label {
                 id: dateLabel
-                leftPadding: 8.0
-                width: parent.width - 2 * mainView.innerSpacing - pinButton.width - trashButton.width - pinBadge.width
+                leftPadding: pinBadge.visible ? 1.0 : 0.0
+                width: parent.width - 2 * mainView.innerSpacing - pinButton.width - trashButton.width - pinBadge.width - noteShareButton.width
                 height: pinButton.height
                 text: detailPage.currentDetailAuthorAndDate
                 font.pointSize: mainView.mediumFontSize
@@ -107,6 +110,40 @@ Page {
                 }
                 onClicked: {
                     mainView.removeNote(detailPage.currentDetailId)
+                }
+            }
+
+            Button {
+                id: noteShareButton
+                flat:true
+                width: 36.0
+                height: 36.0
+                bottomPadding: 6.0
+                contentItem: Image {
+                    id: noteShareButtonIcon
+                    source: Qt.resolvedUrl("/icons/share@4x.png")
+                    fillMode: Image.PreserveAspectFit
+                    opacity: 0.6
+
+                    ColorOverlay {
+                        anchors.fill: noteShareButtonIcon
+                        source: noteShareButtonIcon
+                        color: mainView.fontColor
+                    }
+                }
+                background: Rectangle {
+                    color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                    border.color: "transparent"
+                }
+                onClicked: {
+                    console.log("Details | Share note")
+                    an.shareContent(  {
+                        mime_type: 'text/plain',
+                        // uri: single_uri
+                        text: detailEdit.text.replace(/p, li \{ white-space: pre-wrap; \}/gim, '').replace(/<[^>]+>/g, '').trim()
+                        // subject: "This is a sample SUBJECT for sharing"
+                        // package: "com.whatsapp"
+                    }  )
                 }
             }
         }
@@ -255,11 +292,10 @@ Page {
                         console.log("Details | Share content")
                         an.shareContent(  {
                             mime_type: 'text/plain',
-                            // , uri: single_uri
-                            text: currentDetailId,
-                            subject:  "This is a sample SUBJECT for sharing"
-                            // , package: "com.whatsapp"
-                            // url : "https://volla.online"
+                            uri: currentDetailId,
+                            text: currentTitle
+                            // subject: "This is a sample SUBJECT for sharing"
+                            // package: "com.whatsapp"
                         }  )
                     }
                 }
