@@ -51,7 +51,7 @@ public class AppWorker
                             ArrayList<Map> appList = new ArrayList();
 
                             final PackageManager pm = activity.getPackageManager();
-                            final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts",
+                            final List<String> packages = Arrays.asList("com.android.browser",
                                 "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
                                 "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
                                 "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
@@ -184,7 +184,7 @@ public class AppWorker
     public static String getApplistAsJSON(Activity a){
         String json="[\n";
         final PackageManager pm = a.getPackageManager();
-        final List<String> packages = Arrays.asList("com.android.browser", "com.android.contacts", "com.android.gallery3d",
+        final List<String> packages = Arrays.asList("com.android.browser", "com.android.gallery3d",
             "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk",
             "com.android.calendar", "com.mediatek.filemanager", "com.mediatek.cellbroadcastreceiver",
             "com.conena.navigation.gesture.control", "com.android.quicksearchbox");
