@@ -72,17 +72,17 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
-        "org.mozilla.fennec_fdroid": "Browser",
-        "com.google.android.gm" : "Mail",
-        "at.bitfire.davdroid": "Sync",
-        "hideme.android.vpn.noPlayStore": "VPN",
+        "org.mozilla.fennec_fdroid": qsTr("Browser"),
+        "com.google.android.gm" : qsTr("Mail"),
+        "at.bitfire.davdroid": qsTr("Sync"),
+        "hideme.android.vpn.noPlayStore": qsTr("VPN"),
         "com.simplemobiletools.filemanager.pro": qsTr("Files"),
-        "com.aurora.store": "Store",
+        "com.aurora.store": qsTr("Store"),
         "net.osmand.plus": qsTr("Maps"),
-        "com.volla.launcher": "Settings",
-        "com.simplemobiletools.smsmessenger": "Messages",
-        "com.android.fmradio" : "Radio",
-        "de.baumann.weather": "Wetter"
+        "com.volla.launcher": qsTr("Settings"),
+        "com.simplemobiletools.smsmessenger": qsTr("Messages"),
+        "com.android.fmradio" : qsTr("Radio"),
+        "de.baumann.weather": qsTr("Weather")
     }
 
     property var appGroups: [] // QML elements with app grids
