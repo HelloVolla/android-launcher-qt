@@ -513,7 +513,7 @@ Page {
                         appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
                     }
                 } else {
-                    mainView.showToast(qsTr("Pinned shortcut allready exists") + ": " + message["label"])
+                    mainView.showToast(qsTr("Pinned shortcut already exists") + ": " + message["label"])
                 }
             } else if (type === "volla.launcher.gotShortcuts") {
                 console.log("AppGrid | Pinned shortcuts received: " + message["pinnedShortcuts"].length)
