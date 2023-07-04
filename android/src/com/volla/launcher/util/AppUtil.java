@@ -37,6 +37,8 @@ public class AppUtil {
     public static final String OPEN_SMS_THREAD = "volla.launcher.showSmsTreadAction";
     public static final String RUN_APP = "volla.launcher.runAppAction";
     public static final String DELETE_APP = "volla.launcher.deleteAppAction";
+    public static final String GET_CAN_DELETE_APP = "volla.launcher.canDeleteAppAction";
+    public static final String GOT_CAN_DELETE_APP = "volla.launcher.canDeleteAppResponce";
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
     public static final String OPEN_CONTACT = "volla.launcher.showContactAction";
     public static final String RESET_LAUNCHER = "volla.launcher.resetAction";
@@ -116,6 +118,18 @@ public class AppUtil {
                             Uri packageUri = Uri.parse("package:" + packageName);
                             Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
                             activity.startActivity(uninstallIntent);
+                        } else if (type.equals(GET_CAN_DELETE_APP)) {
+                            String packageName = (String) message.get("appId");
+                            Map reply = new HashMap();
+                            try {
+                                ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
+                                reply.put("canDeleteApp", (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0 ||
+                                    (appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0);
+                            } catch (PackageManager.NameNotFoundException e) {
+                                Log.e(TAG,String.format("Can not find %s", packageName));
+                                reply.put("canDeleteApp", false);
+                            }
+                            SystemDispatcher.dispatch(GOT_CAN_DELETE_APP, reply);
                         } else if (type.equals(OPEN_NOTES)) {
                             String text = (String) message.get("text");
                             Intent sendIntent = new Intent();
