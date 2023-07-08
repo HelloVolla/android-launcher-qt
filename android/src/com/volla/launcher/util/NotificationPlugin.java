@@ -40,6 +40,10 @@ import java.util.Objects;
 import java.util.Set;
 import com.volla.launcher.storage.Message;
 import android.net.Uri;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.ContactsContract;
+
 
 public class NotificationPlugin implements NotificationListenerExampleService.NotificationListener{
 
@@ -220,6 +224,53 @@ public class NotificationPlugin implements NotificationListenerExampleService.No
         });
     }
 
+
+    public static String getPhoneNumber(String signalName, Context ctx){
+             String signalNumber = "";
+	     try {
+	     ContentResolver contentResolver = ctx.getContentResolver();
+                String[] mainQueryProjection = {
+                        ContactsContract.Contacts._ID,
+                        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
+                };
+                String mainQuerySelection = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " = ?";
+                String[] mainQuerySelectionArgs = new String[]{signalName};
+                String mainQuerySortOrder = String.format("%1$s COLLATE NOCASE", ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+                final Cursor mainQueryCursor = contentResolver.query(
+                        ContactsContract.Contacts.CONTENT_URI,
+                        mainQueryProjection,
+                        mainQuerySelection,
+                        mainQuerySelectionArgs,
+                        mainQuerySortOrder);
+                if (mainQueryCursor != null) {
+                    Log.d(TAG, "mainQueryCursor Count  "+ mainQueryCursor.getCount());
+                    mainQueryCursor.moveToFirst();
+                    String id = mainQueryCursor.getString(mainQueryCursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    String name = mainQueryCursor.getString(mainQueryCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+                    Log.d(TAG, "Contact id "+ id +"  name : "+ name );
+                    Cursor cs = contentResolver.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            new String[]{ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+                                    ContactsContract.CommonDataKinds.Phone.NUMBER,
+                                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME},
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =? AND account_type=?",
+                            new String[]{id, "org.thoughtcrime.securesms"}, null);
+
+                    Log.d(TAG, "cs cursor count  "+ cs.getCount());
+                    if (cs.moveToFirst()) {
+                        signalNumber = cs.getString(cs.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        signalNumber.replace(" ", "");
+                        Log.d(TAG," signal number "+ signalNumber);
+                    }
+                    mainQueryCursor.close();
+                } else {
+                    Log.d(TAG, "No Signal Contact Found : " );
+                }
+	     } catch (Exception e){
+		     return signalNumber;
+	     }
+          return signalNumber;
+    }
     private void mapNameWithId(StatusBarNotification sbn){
         Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
         if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){

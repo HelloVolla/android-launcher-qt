@@ -38,6 +38,7 @@ import android.graphics.BitmapFactory;
 import java.io.InputStream;
 import android.os.Parcelable;
 import android.graphics.Matrix;
+import com.volla.launcher.util.NotificationPlugin;
 
 /**
  * MIT License
@@ -314,7 +315,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         if(latestMessageBundle.containsKey("time")){
             msg.timeStamp = latestMessageBundle.getLong("time");
         }
-        Log.d("VollaNotification ","Inserting data into db "+msg.toString());
+        msg.address = NotificationPlugin.getPhoneNumber(msg.selfDisplayName,this);
+        Log.d(TAG,"Inserting data into db "+msg.toString());
         return msg;
     }
 
