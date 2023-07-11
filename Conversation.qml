@@ -290,13 +290,10 @@ Page {
             }
         }
 
-        footer: Rectangle {
+        footer: Item {
             id: footer
             width: parent.width
             implicitHeight: mainWindow.visibility === 5 ? messageRow.height : messageRow.height + 2 * mainView.innerSpacing
-            color: Universal.background //mainView.backgroundColor // mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-            opacity: mainView.backgroundOpacity
-            border.color: Universal.background
             z: 2
 
             Behavior on implicitHeight {
@@ -305,9 +302,17 @@ Page {
                 }
             }
 
+            Rectangle {
+                anchors.fill: parent
+                color: Universal.background
+                opacity: mainView.backgroundOpacity
+                border.color: Universal.background
+            }
+
             Row {
                 id: messageRow
                 width: parent.width
+                anchors.top: parent.top
                 leftPadding: mainView.innerSpacing
                 rightPadding: mainView.innerSpacing
                 visible: conversationPage.phoneNumber !== undefined || currentConversationMode === mainView.conversationMode.Thread
