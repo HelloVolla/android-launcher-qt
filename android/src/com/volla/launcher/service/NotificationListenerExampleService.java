@@ -336,7 +336,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 		e.printStackTrace();
             }
         } else {
-                Log.e(TAG, "No attachment URI available in latest message");
+                Log.d(TAG, "No attachment URI available in latest message");
 	}
         return base64;
     }
