@@ -215,11 +215,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             // Droping the Notifications received for attachments but contains no attachment data
             Message msg = new Message();
             msg = storeNotificationMessage(sbn);
-             if(msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2) {
+             if(msg.getText() != null &&  msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2) {
                return;
             }
 	    if(lastNotificationTime == msg.getTimeStamp()){
-              if(msg.getLargeIcon().length() >= 10){
+              if(msg.getLargeIcon() != null &&  msg.getLargeIcon().length() >= 10){
                     if(lastAttachment.equalsIgnoreCase(msg.getLargeIcon()) && lastMessage.equalsIgnoreCase(msg.getText())){
                         return;
                     }
