@@ -215,9 +215,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             // Droping the Notifications received for attachments but contains no attachment data
             Message msg = new Message();
             msg = storeNotificationMessage(sbn);
-             if(msg.getText() != null &&  msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2) {
-               return;
-            }
+	    if(msg == null){
+              Log.d(TAG, "storeNotificationMessage returned null msg object");
+	      return;
+	    }
 	    if(lastNotificationTime == msg.getTimeStamp()){
               if(msg.getLargeIcon() != null &&  msg.getLargeIcon().length() >= 10){
                     if(lastAttachment.equalsIgnoreCase(msg.getLargeIcon()) && lastMessage.equalsIgnoreCase(msg.getText())){
@@ -296,6 +297,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Message msg = new Message();
         Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
         if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){
+	    Log.d(TAG, "SBN does't contains EXTRA_MESSAGES");
             return msg;
         }
         Parcelable[] messageArray =extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES);
@@ -354,9 +356,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
             input.close();
         } catch (SecurityException se) {
-            Log.e(TAG, "SecurityExcetion: " + se.getMessage());
-	    se.printStackTrace();
-            base64OfImage = "Image not accessible";
+            Log.e(TAG, se.getMessage());
+            base64OfImage = "Attached image not accessible";
 	    return base64OfImage;
         }
         if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))

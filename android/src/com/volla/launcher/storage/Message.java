@@ -6,7 +6,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.volla.launcher.models.NotificationData;
-@Entity(tableName = "messages", indices = {@Index("title"), @Index("timeStamp")})
+@Entity(tableName = "messages", indices = {@Index("title"), @Index(value = {"timeStamp"},unique = true)})
 public class Message {
 
     @ColumnInfo
