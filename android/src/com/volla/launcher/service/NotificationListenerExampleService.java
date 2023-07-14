@@ -38,6 +38,7 @@ import android.graphics.BitmapFactory;
 import java.io.InputStream;
 import android.os.Parcelable;
 import android.graphics.Matrix;
+import com.volla.launcher.util.NotificationPlugin;
 
 /**
  * MIT License
@@ -214,11 +215,12 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             // Droping the Notifications received for attachments but contains no attachment data
             Message msg = new Message();
             msg = storeNotificationMessage(sbn);
-             if(msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2) {
-               return;
-            }
+	    if(msg == null){
+              Log.d(TAG, "storeNotificationMessage returned null msg object");
+	      return;
+	    }
 	    if(lastNotificationTime == msg.getTimeStamp()){
-              if(msg.getLargeIcon().length() >= 10){
+              if(msg.getLargeIcon() != null &&  msg.getLargeIcon().length() >= 10){
                     if(lastAttachment.equalsIgnoreCase(msg.getLargeIcon()) && lastMessage.equalsIgnoreCase(msg.getText())){
                         return;
                     }
@@ -295,6 +297,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Message msg = new Message();
         Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
         if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){
+	    Log.d(TAG, "SBN does't contains EXTRA_MESSAGES");
             return msg;
         }
         Parcelable[] messageArray =extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES);
@@ -314,13 +317,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         if(latestMessageBundle.containsKey("time")){
             msg.timeStamp = latestMessageBundle.getLong("time");
         }
-        Log.d("VollaNotification ","Inserting data into db "+msg.toString());
+        msg.address = NotificationPlugin.getPhoneNumber(msg.selfDisplayName,this);
+        Log.d(TAG,"Inserting data into db "+msg.toString());
         return msg;
     }
 
     private String getBase64OfAttachment(Bundle latestMessageBundle){
         Log.d(TAG, "getBase64OfAttachment");
-
         String base64 = "";
         if (latestMessageBundle.containsKey("text")) {
             Log.d(TAG,"Last mesage text "+latestMessageBundle.get("text"));
@@ -329,52 +332,61 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             try {
                 byte[] bitmapData = null;
                 Log.d(TAG,"Last mesage contains attachment "+latestMessageBundle.get("uri"));
-                Bitmap attachmentBitmap = getBitmapFromUri(this,Uri.parse(Uri.decode(latestMessageBundle.get("uri").toString())));
-                if (attachmentBitmap == null) return base64;
-                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                int maxHeight = 640;
-                int maxWidth = 640;
-                if (attachmentBitmap.getHeight() > maxHeight || attachmentBitmap.getWidth() > maxWidth) {
-                       float scale = Math.min(((float)maxHeight / attachmentBitmap.getWidth()), ((float)maxWidth / attachmentBitmap.getHeight()));
-                       Matrix matrix = new Matrix();
-                       matrix.postScale(scale, scale);
-                       attachmentBitmap = Bitmap.createBitmap(attachmentBitmap, 0, 0, attachmentBitmap.getWidth(), attachmentBitmap.getHeight(), matrix, true);
-                }
-                attachmentBitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-                bitmapData = outStream.toByteArray();
-                base64 = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
-            } catch (IOException e) {
-                Log.e(TAG, "IOException: " + e.getMessage());
-            } catch (SecurityException se) {
-                Log.e(TAG, "SecurityExcetion: " + se.getMessage());
+                base64 = getBitmapFromUri(this,Uri.parse(Uri.decode(latestMessageBundle.get("uri").toString())));
+            } catch (Exception e) {
+                Log.e(TAG, "Exception: " + e.getMessage());
+		e.printStackTrace();
             }
-        }
+        } else {
+                Log.d(TAG, "No attachment URI available in latest message");
+	}
         return base64;
     }
 
-    public Bitmap getBitmapFromUri(Context context, Uri uri) throws IOException {
+    public String getBitmapFromUri(Context context, Uri uri) throws IOException {
         InputStream input;
+	String base64OfImage = "";
+	byte[] bitmapData = null;
         BitmapFactory.Options onlyBoundsOptions;
         try {
+	    context.grantUriPermission(context.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             input = context.getContentResolver().openInputStream(uri);
             onlyBoundsOptions = new BitmapFactory.Options();
             onlyBoundsOptions.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
             input.close();
         } catch (SecurityException se) {
-            Log.e(TAG, "SecurityExcetion: " + se.getMessage());
-            return null;
+            Log.e(TAG, se.getMessage());
+            base64OfImage = "Attached image not accessible";
+	    return base64OfImage;
         }
-
         if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
-            return null;
+            return base64OfImage;
         int originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth) ? onlyBoundsOptions.outHeight : onlyBoundsOptions.outWidth;
         BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-
         input = context.getContentResolver().openInputStream(uri);
         Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
         input.close();
-        return bitmap;
+         try{
+	 if (bitmap == null) return base64OfImage;
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                int maxHeight = 640;
+                int maxWidth = 640;
+                if (bitmap.getHeight() > maxHeight || bitmap.getWidth() > maxWidth) {
+                       float scale = Math.min(((float)maxHeight / bitmap.getWidth()), ((float)maxWidth / bitmap.getHeight()));
+                       Matrix matrix = new Matrix();
+                       matrix.postScale(scale, scale);
+                       bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                }
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                bitmapData = outStream.toByteArray();
+                base64OfImage = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
+            } catch (Exception e) {
+                Log.e(TAG, "Exception: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+	       return base64OfImage;
+	    }
     }
 
     public void storeMessage(Message msg){
