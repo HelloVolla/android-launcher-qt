@@ -165,6 +165,7 @@ Item {
                     id: gridButton
                     anchors.top: parent.top
                     anchors.topMargin: parent.width * 0.08 // Adjustment
+                    anchors.horizontalCenter: parent.horizontalCenter
                     topPadding: groupItem.innerSpacing / 2
                     width: parent.width
                     text: model.label
