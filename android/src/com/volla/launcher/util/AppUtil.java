@@ -33,7 +33,8 @@ public class AppUtil {
     public static final String GET_APP_COUNT = "volla.launcher.appCountAction";
     public static final String GOT_APP_COUNT = "volla.launcher.appCountResponse";
     public static final String OPEN_CAM = "volla.launcher.camAction";
-    public static final String OPEN_DIALER = "volla.launcher.dialerAction";    
+    public static final String OPEN_DIALER = "volla.launcher.dialerAction";
+    public static final String OPEN_SMS_THREAD = "volla.launcher.showSmsTreadAction";
     public static final String RUN_APP = "volla.launcher.runAppAction";
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
     public static final String OPEN_CONTACT = "volla.launcher.showContactAction";
@@ -155,6 +156,11 @@ public class AppUtil {
                             Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contact_id);
                             i.setData(uri);
                             activity.startActivity(i);
+                        } else if (type.equals(OPEN_SMS_THREAD)) {
+                            String phone_number = (String) message.get("number");
+                            if (phone_number != null) {
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phone_number, null)));
+                            }
                         } else if (type.equals(RESET_LAUNCHER)) {
                             // https://stackoverflow.com/questions/4856955/how-to-programmatically-clear-application-data
 

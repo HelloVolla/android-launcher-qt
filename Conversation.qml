@@ -601,7 +601,12 @@ Page {
             }
 
             onClicked: {
-                // todo: do anything with the selected message
+                // Open message thread in app
+                if (conversationPage.phoneNumber !== undefined && model.m_STEXT.endsWith("Signal")) {
+                    AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction", {"number": conversationPage.phoneNumber})
+                } else {
+                    AN.SystemDispatcher.dispatch("volla.launcher.showSmsTreadAction", {"number": conversationPage.phoneNumber})
+                }
             }
         }
     }
@@ -633,7 +638,7 @@ Page {
                     conversationPage.phoneNumber = message["address"]
                 }
 
-                if (message["image"] !== undefined) {
+                if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else {
                     cMessage.m_IMAGE = ""
@@ -748,7 +753,7 @@ Page {
                     conversationPage.phoneNumber = message["address"]
                 }
 
-                if (message["image"] !== undefined && message["image"].length > 0) {
+                if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else {
                     cMessage.m_IMAGE = ""
@@ -842,13 +847,10 @@ Page {
                 var previousMessage
                 message["messages"].forEach(function (signalMessage, index) {
                     signalMessage["isSignal"] = true
-                    // Workaround for duplicates
-//                    if (previousMessage === undefined || previousMessage["body"] !== signalMessage["body"])
-//                        conversationPage.messages.push(signalMessage)
-//                    previousMessage = signalMessage
-//                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
-//                        console.log("Conversation | * " + messageKey + ": " + messageValue + ": " + typeof messageValue)
-//                    }
+                    previousMessage = signalMessage
+                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
+                        console.log("Conversation | * " + messageKey + ": \"" + messageValue + "\": " + typeof messageValue)
+                    }
                 })
                 conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 conversationPage.updateListModel()
