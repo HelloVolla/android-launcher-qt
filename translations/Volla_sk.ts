@@ -52,7 +52,7 @@
         <translation type="unfinished">Nová pripnutá skratka</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Pripnutá skratka už existuje</translation>
     </message>
     <message>

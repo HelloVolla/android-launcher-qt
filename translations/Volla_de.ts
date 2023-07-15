@@ -76,7 +76,7 @@
     </message>
     <message>
         <location filename="../AppGrid.qml" line="514"/>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Angepinnte Verknüpfung existiert bereits</translation>
     </message>
     <message>

@@ -76,7 +76,7 @@
     </message>
     <message>
         <location filename="../AppGrid.qml" line="514"/>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Den fasthållna genvägen finns redan</translation>
     </message>
     <message>
