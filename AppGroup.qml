@@ -174,7 +174,7 @@ Item {
                         Image {
                             id: buttonIcon
                             anchors.left: parent.left
-                            anchors.leftMargin: gridCell.width * 0.25
+                            //anchors.leftMargin: gridCell.width * 0.25
                             source: model.package in groupItem.iconMap && (model.shortcutId === undefined || model.shortcutId.length === 0) && desaturation === 1.0
                                     ? Qt.resolvedUrl(groupItem.iconMap[model.package]) : "data:image/png;base64," + model.icon
                             width: gridButton.width * 0.35
