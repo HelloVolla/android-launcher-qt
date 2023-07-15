@@ -15,18 +15,25 @@ Page {
     property real labelPointSize: 16
     property var iconMap: {
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
+        "com.android.dialer": "/icons/dial-phone@4x.png",
         "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
         "com.android.mms" : "/icons/message@4x.png",
         "com.android.messaging": "/icons/message@4x.png",
         "com.google.android.apps.messaging" : "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
+        "org.lineageos.aperture": "/icons/camera@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
+        "com.android.gallery3d": "/icons/photo-gallery@4x.png",
         "com.simplemobiletools.contacts.pro": "/icons/people-contacts-agenda@4x.png",
         "com.simplemobiletools.clock": "/icons/clock@4x.png",
+        "com.android.deskclock": "/icons/clock@4x.png",
         "com.android.settings": "/icons/settings@4x.png",
         "com.simplemobiletools.calendar.pro": "/icons/calendar@4x.png",
+        "ws.xsoh.etar": "/icons/calendar@4x.png",
+        "org.lineageos.etar": "/icons/calendar@4x.png",
         "com.simplemobiletools.filemanager.pro": "/icons/folder@4x.png",
+        "com.android.documentsui": "/icons/folder@4x.png",
         "org.telegram.messenger": "/icons/telegram@4x.png",
         "com.android.email": "/icons/email@4x.png",
         "com.fsck.k9": "/icons/email@4x.png",
@@ -34,6 +41,7 @@ Page {
         "com.Slack": "/icons/slack@4x.png",
         "com.simplemobiletools.notes.pro": "/icons/notes@4x.png",
         "org.mozilla.fennec_fdroid": "/icons/browser@4x.png",
+        "com.android.browser": "/icons/browser@4x.png",
         "com.maxfour.music": "/icons/music@4x.png",
         "com.instagram.android": "/icons/instagram@4x.png",
         "com.github.yeriomin.yalpstore": "/icons/yalp-store@4x.png",
@@ -56,6 +64,7 @@ Page {
         "com.wetter.androidclient": "/icons/wetter-com@4x.png",
         "com.whatsapp": "/icons/whats-app@4x.png",
         "com.android.fmradio": "/icons/radio@4x_104x104px.png",
+        "com.caf.fmradio": "/icons/radio@4x_104x104px.png",
         "at.bitfire.davdroid": "/icons/sync@4x_104x104px.png",
         "org.thoughtcrime.securesms": "/icons/signal@4x_104x104px.png",
         "de.baumann.weather": "/icons/weather@4x_104x104px.png",
@@ -72,17 +81,17 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
-        "org.mozilla.fennec_fdroid": "Browser",
-        "com.google.android.gm" : "Mail",
-        "at.bitfire.davdroid": "Sync",
-        "hideme.android.vpn.noPlayStore": "VPN",
+        "org.mozilla.fennec_fdroid": qsTr("Browser"),
+        "com.google.android.gm" : qsTr("Mail"),
+        "at.bitfire.davdroid": qsTr("Sync"),
+        "hideme.android.vpn.noPlayStore": qsTr("VPN"),
         "com.simplemobiletools.filemanager.pro": qsTr("Files"),
-        "com.aurora.store": "Store",
+        "com.aurora.store": qsTr("Store"),
         "net.osmand.plus": qsTr("Maps"),
-        "com.volla.launcher": "Settings",
-        "com.simplemobiletools.smsmessenger": "Messages",
-        "com.android.fmradio" : "Radio",
-        "de.baumann.weather": "Wetter"
+        "com.volla.launcher": qsTr("Settings"),
+        "com.simplemobiletools.smsmessenger": qsTr("Messages"),
+        "com.android.fmradio" : qsTr("Radio"),
+        "de.baumann.weather": qsTr("Weather")
     }
 
     property var appGroups: [] // QML elements with app grids
@@ -513,7 +522,7 @@ Page {
                         appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
                     }
                 } else {
-                    mainView.showToast(qsTr("Pinned shortcut allready exists") + ": " + message["label"])
+                    mainView.showToast(qsTr("Pinned shortcut already exists") + ": " + message["label"])
                 }
             } else if (type === "volla.launcher.gotShortcuts") {
                 console.log("AppGrid | Pinned shortcuts received: " + message["pinnedShortcuts"].length)
