@@ -602,6 +602,7 @@ Page {
 
             onClicked: {
                 // Open message thread in app
+                console.debug("Conversation | Will open conversation for " + conversationPage.phoneNumber)
                 if (conversationPage.phoneNumber !== undefined && model.m_STEXT.endsWith("Signal")) {
                     AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction", {"number": conversationPage.phoneNumber})
                 } else {

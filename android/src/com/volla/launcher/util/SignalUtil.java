@@ -47,12 +47,13 @@ public class SignalUtil {
                 if (type.equals(SEND_SIGNAL_MESSAGES)) {
 		    Runnable runnable = new Runnable () {
                         public void run() {
-                           if(!isInternetAccessible(activity)){
-                              errorMessageReply("No Internet Access"); 
-                           } else if (message.get("attachmentUrl") != null && ((String)message.get("attachmentUrl")).length() > 0) {
+
+                           if (message.get("attachmentUrl") != null && ((String)message.get("attachmentUrl")).length() > 0) {
                               launchShareActivity(activity, message);
                            } else if (message.get("number") != null) {
                               launchComponent(activity, message);
+                           } else if (!isInternetAccessible(activity)){
+                              errorMessageReply("No Internet Access");
 			   } else {
                               sendSignalmessage(message);
 			   }
