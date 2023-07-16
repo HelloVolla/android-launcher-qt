@@ -818,7 +818,6 @@ Page {
                         }
                         addButton.visible = true
                         console.log("Settings | Checkboxes created")
-
                     }
 
                     function addCheckbox(actionId, label) {
@@ -1353,6 +1352,85 @@ Page {
                     console.log("Settings | Blurr filter chanded to " + value)
                     designSettings.blurEffect = value
                     mainView.updateSettings("blurEffect", value)
+                }
+            }
+
+            Item {
+                id: pluginSettingsItem
+                width: parent.width
+                implicitHeight: pluginSettingsItemColumn.height
+                visible: true
+
+                Column {
+                    id: pluginSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+
+                    Button {
+                        id: pluginSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * pluginSettingsItemButton.padding
+                            text: qsTr("Springboard Skills")
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: pluginSettingsItemColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            pluginSettingsItemColumn.menuState = !pluginSettingsItemColumn.menuState
+                            if (pluginSettingsItemColumn.menuState) {
+                                console.log("Settings | Will create checkboxes")
+                                pluginSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(pluginSettingsItemColumn)
+                            } else {
+                                console.log("Settings | Will destroy checkboxes")
+                                pluginSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        var plugins // todo: load available plugins
+
+                        for (var i = 0; i < plugins.length; i++) {
+                            var component = Qt.createComponent("/Checkbox.qml", pluginSettingsItemColumn)
+                            var properties = { "actionId": plugins[i]["id"],
+                                "text": plugins[i]["name"], "checked": plugins[i]["activated"],
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                            var object = component.createObject(pluginSettingsItemColumn, properties)
+                            object.activeCheckbox = true
+                            pluginSettingsItemColumn.checkboxes.push(object)
+                        }
+                        console.log("Settings | Checkboxes created")
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < pluginSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = pluginSettingsItemColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        pluginSettingsItemColumn.checkboxes = new Array
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update plugin settings for " + actionId + ", " + active)
+                        // todo: implement
+                    }
+
+                    Behavior on implicitHeight {
+                        NumberAnimation {
+                            duration: 250.0
+                        }
+                    }
                 }
             }
 
