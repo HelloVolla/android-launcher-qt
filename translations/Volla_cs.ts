@@ -48,7 +48,7 @@
         <translation type="unfinished">Nová připnutá zkratka</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Připnutá zkratka již existuje</translation>
     </message>
     <message>

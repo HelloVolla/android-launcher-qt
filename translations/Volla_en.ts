@@ -44,7 +44,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

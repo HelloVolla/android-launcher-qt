@@ -48,7 +48,7 @@
         <translation>Новы замацаваны ярлык</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation>Замацаваны ярлык ужо існуе</translation>
     </message>
     <message>

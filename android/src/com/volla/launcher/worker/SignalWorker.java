@@ -88,7 +88,7 @@ public class SignalWorker {
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
-                reply.put("address", "");
+                reply.put("address", m.getAddress());
                 reply.put("date", m.getTimeStamp());
                 reply.put("read", true);
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
@@ -114,7 +114,7 @@ public class SignalWorker {
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
                 reply.put("person", m.getSelfDisplayName());
-                reply.put("address", "");
+                reply.put("address", m.getAddress());
                 reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", true);
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){

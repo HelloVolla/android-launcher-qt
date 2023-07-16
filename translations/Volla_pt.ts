@@ -48,7 +48,7 @@
         <translation type="unfinished">Novo atalho com pinos</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Já existe um atalho com alfinetes</translation>
     </message>
     <message>

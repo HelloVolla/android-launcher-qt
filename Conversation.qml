@@ -290,13 +290,10 @@ Page {
             }
         }
 
-        footer: Rectangle {
+        footer: Item {
             id: footer
             width: parent.width
             implicitHeight: mainWindow.visibility === 5 ? messageRow.height : messageRow.height + 2 * mainView.innerSpacing
-            color: Universal.background //mainView.backgroundColor // mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-            opacity: mainView.backgroundOpacity
-            border.color: Universal.background
             z: 2
 
             Behavior on implicitHeight {
@@ -305,9 +302,17 @@ Page {
                 }
             }
 
+            Rectangle {
+                anchors.fill: parent
+                color: Universal.background
+                opacity: mainView.backgroundOpacity
+                border.color: Universal.background
+            }
+
             Row {
                 id: messageRow
                 width: parent.width
+                anchors.top: parent.top
                 leftPadding: mainView.innerSpacing
                 rightPadding: mainView.innerSpacing
                 visible: conversationPage.phoneNumber !== undefined || currentConversationMode === mainView.conversationMode.Thread
@@ -596,7 +601,13 @@ Page {
             }
 
             onClicked: {
-                // todo: do anything with the selected message
+                // Open message thread in app
+                console.debug("Conversation | Will open conversation for " + conversationPage.phoneNumber)
+                if (conversationPage.phoneNumber !== undefined && model.m_STEXT.endsWith("Signal")) {
+                    AN.SystemDispatcher.dispatch("volla.launcher.signalSendMessageAction", {"number": conversationPage.phoneNumber})
+                } else {
+                    AN.SystemDispatcher.dispatch("volla.launcher.showSmsTreadAction", {"number": conversationPage.phoneNumber})
+                }
             }
         }
     }
@@ -628,7 +639,7 @@ Page {
                     conversationPage.phoneNumber = message["address"]
                 }
 
-                if (message["image"] !== undefined) {
+                if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else {
                     cMessage.m_IMAGE = ""
@@ -743,7 +754,7 @@ Page {
                     conversationPage.phoneNumber = message["address"]
                 }
 
-                if (message["image"] !== undefined && message["image"].length > 0) {
+                if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else {
                     cMessage.m_IMAGE = ""
@@ -837,13 +848,10 @@ Page {
                 var previousMessage
                 message["messages"].forEach(function (signalMessage, index) {
                     signalMessage["isSignal"] = true
-                    // Workaround for duplicates
-//                    if (previousMessage === undefined || previousMessage["body"] !== signalMessage["body"])
-//                        conversationPage.messages.push(signalMessage)
-//                    previousMessage = signalMessage
-//                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
-//                        console.log("Conversation | * " + messageKey + ": " + messageValue + ": " + typeof messageValue)
-//                    }
+                    previousMessage = signalMessage
+                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
+                        console.log("Conversation | * " + messageKey + ": \"" + messageValue + "\": " + typeof messageValue)
+                    }
                 })
                 conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 conversationPage.updateListModel()

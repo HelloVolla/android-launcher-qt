@@ -165,6 +165,7 @@ Item {
                     id: gridButton
                     anchors.top: parent.top
                     anchors.topMargin: parent.width * 0.08 // Adjustment
+                    anchors.horizontalCenter: parent.horizontalCenter
                     topPadding: groupItem.innerSpacing / 2
                     width: parent.width
                     text: model.label
@@ -172,9 +173,10 @@ Item {
                         spacing: gridCell.width * 0.25
                         Image {
                             id: buttonIcon
-                            anchors.left: parent.left
-                            anchors.leftMargin: gridCell.width * 0.25
-                            source: model.package in groupItem.iconMap && (model.shortcutId === undefined || model.shortcutId.length === 0)
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            //anchors.left: parent.left
+                            //anchors.leftMargin: gridCell.width * 0.25
+                            source: model.package in groupItem.iconMap && (model.shortcutId === undefined || model.shortcutId.length === 0) && desaturation === 1.0
                                     ? Qt.resolvedUrl(groupItem.iconMap[model.package]) : "data:image/png;base64," + model.icon
                             width: gridButton.width * 0.35
                             height: gridButton.width * 0.35
@@ -183,7 +185,7 @@ Item {
                                 anchors.fill: buttonIcon
                                 source: buttonIcon
                                 color: gridCell.overlayColor
-                                visible: (model.package in groupItem.iconMap) && model.shortcutId === undefined
+                                visible: (model.package in groupItem.iconMap) && model.shortcutId === undefined && desaturation === 1.0
                             }
                         }
                         Label {

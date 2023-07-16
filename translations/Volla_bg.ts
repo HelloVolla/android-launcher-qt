@@ -52,7 +52,7 @@
         <translation type="unfinished">Нов прикрепен пряк път</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Закаченият пряк път вече съществува</translation>
     </message>
     <message>

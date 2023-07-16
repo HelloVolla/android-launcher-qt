@@ -11,8 +11,8 @@ if [[ "$BUILD_TARGET" != "android_arm64_v8a" && "$BUILD_TARGET" != "android_armv
     exit -1
 fi
 
-# The container we use is: a12e/docker-qt:5.12-android_arm64_v8a
-CONTAINER=${CONTAINER:-a12e/docker-qt:5.12-$BUILD_TARGET}
+# The container we use is: a12e/docker-qt:5.13-android_arm64_v8a
+CONTAINER=${CONTAINER:-a12e/docker-qt:5.13-$BUILD_TARGET}
 TIMESTAMP=`date +%Y%m%d`
 BUILD_ID=${BUILD_ID:-$TIMESTAMP}
 

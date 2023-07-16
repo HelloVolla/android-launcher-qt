@@ -48,7 +48,7 @@
         <translation type="unfinished">Uusi kiinnitetty pikakuvake</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Kiinnitetty pikakuvake on jo olemassa</translation>
     </message>
     <message>

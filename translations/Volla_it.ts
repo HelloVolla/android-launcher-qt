@@ -52,7 +52,7 @@
         <translation type="unfinished">Nuova scorciatoia appuntata</translation>
     </message>
     <message>
-        <source>Pinned shortcut allready exists</source>
+        <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Il collegamento appuntato esiste già</translation>
     </message>
     <message>
