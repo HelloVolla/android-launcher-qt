@@ -720,6 +720,8 @@ Page {
 
         function createShortcuts(shortcuts) {
             var leftDistance = Screen.width / 4
+            var componentWidth = Screen.width - leftDistance
+            console.log("Springboard | Width " + componentWidth)
             for (var i = 0; i < shortcuts.length; i++) {
                 if (shortcuts[i]["activated"]) {
                     var component = Qt.createComponent("/Shortcut.qml", shortcutColumn)
@@ -727,7 +729,12 @@ Page {
                         "text": shortcuts[i]["name"],
                         "labelFontSize": mainView.largeFontSize,
                         "leftPadding": leftDistance,
-                        "bottomPadding": mainView.innerSpacing }
+                        "bottomPadding": mainView.innerSpacing,
+                        "width": componentWidth }
+                    if (component.status !== Component.Ready) {
+                        if (component.status === Component.Error)
+                            console.debug("Springboard | Error: "+ component.errorString() )
+                    }
                     var object = component.createObject(shortcutColumn, properties)
                     shortcutColumn.shortcutLabels.push(object)
                 }
