@@ -9,6 +9,7 @@ Label {
     anchors.left: parent.left
     color: "white"
     elide: Text.ElideRight
+    wrapMode: Text.NoWrap
 
     property var actionId
     property double labelFontSize
