@@ -14,6 +14,7 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
+        "be.ccb.safeonweb": "/icons/safeonweb@4x.png",
         "de.stocard.stocard": "/icons/stocard@4x.png",
         "s1m.savertuner": "/icons/savertuner@4x.png",
         "mobi.inthepocket.bcmc.bancontact": "/icons/payconiq-by-bancontact@4x.png",
@@ -94,6 +95,7 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
+        "be.ccb.safeonweb": qsTr("Safeonweb"),
         "de.stocard.stocard": qsTr("Stocard"),
         "s1m.savertuner": qsTr("SaverTuner"),
         "mobi.inthepocket.bcmc.bancontact": qsTr("Bancontact"),
