@@ -991,7 +991,7 @@ ApplicationWindow {
     Settings {
         id: settings
         property int theme: mainView.theme.Dark
-        property int searchMode: mainView.searchMode.Duck
+        property int searchMode: mainView.searchMode.StartPage
         property bool fullscreen: false
         property bool firstStart: true
         property bool signalIsActivated: false
