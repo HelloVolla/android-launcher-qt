@@ -5,7 +5,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Message.class, Users.class}, version = 1)
+@Database(entities = {Message.class, Users.class}, version = 2, exportSchema = false)
 public abstract class MessageDatabase extends RoomDatabase {
 
     public static final String DATABASE_NAME = "volla_launcher_database";
@@ -19,7 +19,9 @@ public abstract class MessageDatabase extends RoomDatabase {
             synchronized (MessageDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            MessageDatabase.class, DATABASE_NAME).build();
+                            MessageDatabase.class, DATABASE_NAME)
+                            .addMigrations(new MigrationFromVersion1To2())
+                            .build();
                 }
             }
         }
