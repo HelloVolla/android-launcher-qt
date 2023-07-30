@@ -172,6 +172,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
         int notificationCode = matchNotificationCode(sbn);
         if (notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
+            try {
             my_custom = sbn;
             notificationData = new NotificationData();
 	    errorProperty = new HashMap();
@@ -266,7 +267,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             uuid = null;
             title = null;
 
-            try {
+
                 Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
                 String channel_id;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
