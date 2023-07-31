@@ -91,6 +91,7 @@ public class SignalWorker {
                 reply.put("address", m.getAddress());
                 reply.put("date", m.getTimeStamp());
                 reply.put("read", true);
+		reply.put("errorProperty", m.getNotification());
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
                     reply.put("isSent", false);
                 } else {
@@ -117,6 +118,7 @@ public class SignalWorker {
                 reply.put("address", m.getAddress());
                 reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", true);
+		reply.put("errorProperty", m.getNotification());
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
                     reply.put("isSent", false);
                 } else {
