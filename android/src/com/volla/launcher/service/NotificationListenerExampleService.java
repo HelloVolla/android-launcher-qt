@@ -39,6 +39,7 @@ import java.io.InputStream;
 import android.os.Parcelable;
 import android.graphics.Matrix;
 import com.volla.launcher.util.NotificationPlugin;
+import java.util.Map;
 
 /**
  * MIT License
@@ -89,6 +90,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     private long lastNotificationTime = 0;
     private String lastAttachment ="";
     private String lastMessage ="";
+    Map errorProperty;
     void NotificationListenerExampleService(){
 
     }
@@ -170,8 +172,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
         int notificationCode = matchNotificationCode(sbn);
         if (notificationCode == InterceptedNotificationCode.SIGNAL_CODE) {
+            try {
             my_custom = sbn;
             notificationData = new NotificationData();
+	    errorProperty = new HashMap();
             notificationData.id = sbn.getId();
             notificationData.key = sbn.getKey();
             notificationData.userHandle = sbn.getUser().describeContents();
@@ -219,6 +223,20 @@ public class NotificationListenerExampleService extends NotificationListenerServ
               Log.d(TAG, "storeNotificationMessage returned null msg object");
 	      return;
 	    }
+	     if(msg.getText() != null &&  msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2){
+                 msg.setLargeIcon("403");
+           }
+           if(msg.getLargeIcon() != null &&  msg.getLargeIcon().equalsIgnoreCase("403")){
+               if(!errorProperty.isEmpty()){
+                      errorProperty.clear();
+              }
+              msg.setLargeIcon("");
+               errorProperty.put("code","403");
+               errorProperty.put("message","Attched image not accessible");
+              msg.setNotification(errorProperty.toString());
+           } else {
+               msg.setNotification("");
+           }
 	    if(lastNotificationTime == msg.getTimeStamp()){
               if(msg.getLargeIcon() != null &&  msg.getLargeIcon().length() >= 10){
                     if(lastAttachment.equalsIgnoreCase(msg.getLargeIcon()) && lastMessage.equalsIgnoreCase(msg.getText())){
@@ -249,7 +267,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             uuid = null;
             title = null;
 
-            try {
+
                 Log.d("VollaNotification extra", String.valueOf(sbn.getNotification().extras));
                 String channel_id;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -306,7 +324,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Bundle latestMessageBundle = (Bundle) parcel;
         msg.largeIcon = getBase64OfAttachment(latestMessageBundle);
         msg.uuid = String.valueOf(sbn.getId());
-        msg.notification = notificationData.toJson();
+        //msg.notification = notificationData.toJson();
         if(latestMessageBundle.containsKey("text")){
             msg.text = String.valueOf(latestMessageBundle.get("text"));
             msg.title = String.valueOf(latestMessageBundle.get("text"));
@@ -357,7 +375,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             input.close();
         } catch (SecurityException se) {
             Log.e(TAG, se.getMessage());
-            base64OfImage = "Attached image not accessible";
+            base64OfImage = "403";
 	    return base64OfImage;
         }
         if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
