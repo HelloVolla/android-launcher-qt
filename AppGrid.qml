@@ -14,21 +14,7 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
-        "be.ccb.safeonweb": "/icons/safeonweb@4x.png",
-        "de.stocard.stocard": "/icons/stocard@4x.png",
-        "s1m.savertuner": "/icons/savertuner@4x.png",
         "mobi.inthepocket.bcmc.bancontact": "/icons/payconiq-by-bancontact@4x.png",
-        "com.symantec.mobilesecurity": "/icons/norton360-mobile-virus-scanner@4x.png",
-        "com.bookmark.money": "/icons/money-lover@4x.png",
-        "com.lscsmartconnection.smart": "/icons/lsc-smart-connect@4x.png",
-        "be.bmid.itsme": "/icons/itsme@4x.png",
-        "be.engie.smart": "/icons/engie@4x.png",
-        "be.ixor.doccle.android": "/icons/doccle@4x.png",
-        "com.codesynd.cashfree": "/icons/bonsai@4x.png",
-        "com.asvcorp.aftershock": "/icons/aftershock@4x.png",
-        "be.tweedehands.m": "/icons/2dehands@4x.png",
-        "be.argenta.bankieren": "/icons/argenta@4x.png",
-        "be.belgacom.hello": "/icons/myproximus@4x.png",
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
         "com.android.dialer": "/icons/dial-phone@4x.png",
         "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
@@ -95,21 +81,7 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
-        "be.ccb.safeonweb": qsTr("Safeonweb"),
-        "de.stocard.stocard": qsTr("Stocard"),
-        "s1m.savertuner": qsTr("SaverTuner"),
         "mobi.inthepocket.bcmc.bancontact": qsTr("Bancontact"),
-        "com.symantec.mobilesecurity": qsTr("Norton 360"),
-        "com.bookmark.money": qsTr("Money Lover"),
-        "com.lscsmartconnection.smart": qsTr("LSC Smart Connect"),
-        "be.bmid.itsme": qsTr("Itsme"),
-        "be.engie.smart": qsTr("Engie Smart"),
-        "be.ixor.doccle.android": qsTr("Doccle"),
-        "com.codesynd.cashfree": qsTr("Bonsai"),
-        "com.asvcorp.aftershock": qsTr("AfterShock"),
-        "be.tweedehands.m": qsTr("2dehands"),
-        "be.argenta.bankieren": qsTr("Argenta"),
-        "be.belgacom.hello": qsTr("MyProximus"),
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
         "com.google.android.gm" : qsTr("Mail"),
         "com.fsck.k9": qsTr("Mail"),
