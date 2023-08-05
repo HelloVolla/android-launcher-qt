@@ -29,11 +29,11 @@ public class MainViewModel extends AndroidViewModel {
         return repository.getMessageListBySender();
     }
 
-    public Maybe<List<Message>> getAllMessageByThreadId(String threadId, int pageSize) {
+    public Maybe<List<Message>> getAllMessageByThreadId(String threadId, long pageSize) {
         return repository.getAllMessageByThreadId(threadId, pageSize);
     }
 
-    public Maybe<List<Message>> getAllMessageByPersonName(String name, int pageSize) {
+    public Maybe<List<Message>> getAllMessageByPersonName(String name, long pageSize) {
         return repository.getAllMessageByPersonName(name, pageSize);
     }
 
@@ -41,8 +41,8 @@ public class MainViewModel extends AndroidViewModel {
         return repository.getAllSendersName();
     }
 
-    public Maybe<List<Users>> getAllUsers() {
-        return repository.getAllUsers();
+    public Maybe<List<Users>> getAllUsers(long age) {
+        return repository.getAllUsers(age);
     }
     public Maybe<Users> getReplyNotification(String uuid) {
         return repository.getReplyNotification(uuid);

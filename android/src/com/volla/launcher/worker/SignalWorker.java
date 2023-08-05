@@ -80,8 +80,9 @@ public class SignalWorker {
         String person = (String) message.get("person");
         String threadId = (String) message.get("threadId");
         int   age = (Integer) message.get("threadAge");
+        long timeFrame = System.currentTimeMillis() - (age * 1000);
         if(person != null && person.length()>0){
-        repository.getAllMessageByPersonName(person,10).subscribe(it -> {
+        repository.getAllMessageByPersonName(person,timeFrame).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
@@ -108,7 +109,7 @@ public class SignalWorker {
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
 	});
        } else {
-           repository.getAllMessageByThreadId(threadId,10).subscribe(it -> {
+           repository.getAllMessageByThreadId(threadId,timeFrame).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
@@ -129,7 +130,7 @@ public class SignalWorker {
                 messageList.add(reply);
                 }
 	     Map result = new HashMap();
-            result.put("messages", messageList );
+            result.put("messages", messageList);
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
@@ -142,8 +143,9 @@ public class SignalWorker {
         Log.d(TAG, "Invoked JAVA retriveMessageThreads");
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
         ArrayList<Map> messageList = new ArrayList();
-        String threadId = (String) message.get("threadAge");
-        repository.getAllUsers().subscribe(it -> {
+        int age = (Integer) message.get("age");
+        long timeFrame = System.currentTimeMillis() - (age * 1000);
+        repository.getAllUsers(timeFrame).subscribe(it -> {
             for (Users m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
@@ -166,6 +168,7 @@ public class SignalWorker {
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch threads:" + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_THREADS, result);
+            repository.deleteAllThreadsHavingTimeStampLessThen(timeFrame);
         });
     }
 
