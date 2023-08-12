@@ -51,6 +51,7 @@ Page {
         "com.dropbox.android": "/icons/dropbox@4x.png",
         "org.fdroid.fdroid": "/icons/f-droid@4x.png",
         "com.facebook.katana": "/icons/facebook@4x.png",
+        "com.facebook.lite": "/icons/facebook@4x.png",
         "de.gmx.mobile.android.mail": "/icons/gmx@4x.png",
         "hideme.android.vpn.noPlayStore": "/icons/hide-me@4x.png",
         "com.linkedin.android": "/icons/linkedin@4x.png",
@@ -82,6 +83,7 @@ Page {
     }
     property var labelMap: {
         "mobi.inthepocket.bcmc.bancontact": qsTr("Bancontact"),
+        "com.facebook.lite": qsTr("Facebook"),
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
         "com.google.android.gm" : qsTr("Mail"),
         "com.fsck.k9": qsTr("Mail"),
