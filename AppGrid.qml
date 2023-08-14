@@ -15,7 +15,7 @@ Page {
     property real labelPointSize: 16
     property var iconMap: {
         "com.atharok.barcodescanner": "/icons/barcode@4x.png",
-        "com.okmarco.teehub": "/icons/twitter@4x.png",
+        "com.caij.twiper": "/icons/twitter@4x.png",
         "mobi.inthepocket.bcmc.bancontact": "/icons/payconiq-by-bancontact@4x.png",
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
         "com.android.dialer": "/icons/dial-phone@4x.png",
@@ -84,7 +84,7 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
-        "com.okmarco.teehub": qsTr("Twitter"),
+        "com.caij.twiper": qsTr("Twitter"),
         "mobi.inthepocket.bcmc.bancontact": qsTr("Bancontact"),
         "com.facebook.lite": qsTr("Facebook"),
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
