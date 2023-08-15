@@ -84,6 +84,7 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
+        "com.twitter.android": qsTr("Twitter"),
         "com.caij.twiper": qsTr("Twitter"),
         "mobi.inthepocket.bcmc.bancontact": qsTr("Bancontact"),
         "com.facebook.lite": qsTr("Facebook"),
