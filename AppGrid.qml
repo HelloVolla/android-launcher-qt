@@ -54,6 +54,7 @@ Page {
         "org.fdroid.fdroid": "/icons/f-droid@4x.png",
         "com.facebook.katana": "/icons/facebook@4x.png",
         "com.facebook.lite": "/icons/facebook@4x.png",
+        "com.facebook.orca": "/icons/messenger@4x.png",
         "de.gmx.mobile.android.mail": "/icons/gmx@4x.png",
         "hideme.android.vpn.noPlayStore": "/icons/hide-me@4x.png",
         "com.linkedin.android": "/icons/linkedin@4x.png",
