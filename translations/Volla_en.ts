@@ -59,6 +59,42 @@
         <source>Maps</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>
@@ -178,6 +214,10 @@
     </message>
     <message>
         <source>Message not sent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attached image is not available for preview</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
