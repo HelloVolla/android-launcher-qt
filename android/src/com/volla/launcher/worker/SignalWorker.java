@@ -73,6 +73,7 @@ public class SignalWorker {
 	    }
         });
     }
+
     static void retrieveMessageConversations(Map message, Activity activity){
         Log.d(TAG, "Invoked JAVA retrieveMessageConversations: " + message.toString());
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
@@ -142,7 +143,7 @@ public class SignalWorker {
         Log.d(TAG, "Invoked JAVA retriveMessageThreads");
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
         ArrayList<Map> messageList = new ArrayList();
-        String threadId = (String) message.get("threadAge");
+        String threadId = (String) message.get("threadId");
         repository.getAllUsers().subscribe(it -> {
             for (Users m : it) {
                 Map reply = new HashMap();
@@ -169,13 +170,14 @@ public class SignalWorker {
         });
     }
 
-   static void checkPermission(Activity activity){
+    static void checkPermission(Activity activity){
       if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {        //ask for permission
              Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
              activity.startActivity(intent);
         }
    }
-   public static boolean isSignalInstalled(Activity activity) {
+
+    public static boolean isSignalInstalled(Activity activity) {
 	   String packageName = "org.thoughtcrime.securesms";
 	   PackageManager packageManager = activity.getPackageManager();
         try {
