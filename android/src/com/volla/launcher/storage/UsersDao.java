@@ -16,11 +16,14 @@ public interface UsersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertUser(Users user); // working
 
-    @Query("SELECT * FROM users ORDER BY timeStamp DESC")
-    Maybe<List<Users>> getAllUsers();
+    @Query("SELECT * FROM users WHERE timeStamp > :age ORDER BY timeStamp DESC")
+    Maybe<List<Users>> getAllUsers(long age);
 
     @Query("SELECT * FROM users WHERE uuid = :uuid")
     Maybe<Users> getReplyNotification(String uuid);
+
+    @Query("DELETE FROM users WHERE timeStamp < :threadAge")
+    void deleteAllThreadsHavingTimeStampLessThen(long threadAge);
 
 //    @Query("SELECT * FROM users WHERE title IN ('Thanos ', 'Arvind Yadav') GROUP BY title ORDER BY timeStamp ASC ")
 //    Maybe<List<Message>> getMessageListBySender();

@@ -36,12 +36,16 @@ public class MessageRepository {
         return messageDao.getMessageListBySender().observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
     }
 
-    public Maybe<List<Message>> getAllMessageByThreadId(String threadId, int pageSize) {
+    public Maybe<List<Message>> getAllMessageByThreadId(String threadId, long pageSize) {
         return messageDao.getAllMessageByThreadId(threadId, pageSize).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
     }
 
-    public Maybe<List<Message>> getAllMessageByPersonName(String personName, int pageSize) {
+    public Maybe<List<Message>> getAllMessageByPersonName(String personName, long pageSize) {
         return messageDao.getAllMessageByPersonName(personName, pageSize).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
+    }
+
+    public void deleteAllMessagesHavingTimeStampLessThen(long age) {
+        messageDao.deleteAllMessagesHavingTimeStampLessThen(age);
     }
 
     public Maybe<List<Message>> getAllSendersName() {
@@ -68,10 +72,15 @@ public class MessageRepository {
 		Log.d("VollaNotification Inserted Users","");
     }
 
-    public Maybe<List<Users>> getAllUsers() {
-	    Log.d("VollaNotification Calling getAllUsers","");   
-        return usersDao.getAllUsers().observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
+    public void deleteAllThreadsHavingTimeStampLessThen(long threadAge) {
+            Log.d("VollaNotification Calling deleteAllThreadsHavingTimeStampLessThen","");
+            usersDao.deleteAllThreadsHavingTimeStampLessThen(threadAge);
     }
+
+public Maybe<List<Users>> getAllUsers(long age) {
+        Log.d("VollaNotification Calling getAllUsers","");
+    return usersDao.getAllUsers(age).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
+}
 
     public Maybe<Users> getReplyNotification(String uuid) {
 	    Log.d("VollaNotification Calling getReplyNotification","");   
