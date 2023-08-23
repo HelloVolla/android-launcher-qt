@@ -14,6 +14,7 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
+        "com.beeper.chat": "/icons/beeper@4x.png",
         "com.atharok.barcodescanner": "/icons/barcode@4x.png",
         "com.caij.twiper": "/icons/twitter@4x.png",
         "mobi.inthepocket.bcmc.bancontact": "/icons/payconiq-by-bancontact@4x.png",
