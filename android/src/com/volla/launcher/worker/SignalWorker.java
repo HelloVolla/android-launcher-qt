@@ -34,6 +34,10 @@ public class SignalWorker {
     public static final String SEND_SIGNAL_MESSAGES ="volla.launcher.signalSendMessageAction";
     public static final String SIGNAL_ERROR =  "volla.launcher.signalAppNotInstalled";
     public static NotificationPlugin np;
+    static final Map<String , String> errorCodeMap = new HashMap<String , String>() {{
+        put("403",    "Attached image not accessible");
+        put("404", "Attached image not available");
+    }};
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -86,6 +90,7 @@ public class SignalWorker {
         repository.getAllMessageByPersonName(person,timeFrame).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
+                Map errorCode = new HashMap();
                 reply.put("id", m.getId());
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
@@ -93,7 +98,13 @@ public class SignalWorker {
                 reply.put("address", m.getAddress());
                 reply.put("date", m.getTimeStamp());
                 reply.put("read", true);
-		reply.put("errorProperty", m.getNotification());
+                if(m.getNotification().length() > 1) {
+                    errorCode.put("code", m.getNotification());
+                    errorCode.put("message", errorCodeMap.get(m.getNotification()));
+                    reply.put("errorProperty", errorCode);
+                } else {
+                    reply.put("errorProperty", errorCode);
+                }
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
                     reply.put("isSent", false);
                 } else {
@@ -103,7 +114,7 @@ public class SignalWorker {
                 reply.put("attachments", "");
                 messageList.add(reply);
             }
-	     Map result = new HashMap();
+	        Map result = new HashMap();
             result.put("messages", messageList );
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
@@ -113,6 +124,7 @@ public class SignalWorker {
            repository.getAllMessageByThreadId(threadId,timeFrame).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
+                Map errorCode = new HashMap();
                 reply.put("id", m.getId());
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
@@ -120,7 +132,13 @@ public class SignalWorker {
                 reply.put("address", m.getAddress());
                 reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", true);
-		reply.put("errorProperty", m.getNotification());
+                if(m.getNotification().length() > 1) {
+                    errorCode.put("code", m.getNotification());
+                    errorCode.put("message", errorCodeMap.get(m.getNotification()));
+                    reply.put("errorProperty", errorCode);
+                } else {
+                    reply.put("errorProperty", errorCode);
+                }
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
                     reply.put("isSent", false);
                 } else {
