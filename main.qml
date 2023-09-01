@@ -1094,4 +1094,12 @@ ApplicationWindow {
             console.log("MainView | Contacts cache error: " + msg)
         }
     }
+
+    FileIO {
+        id: pluginListCache
+        source: "pluginList.json"
+        onError: {
+            console.log("MainView | pluginList cache error: " + msg)
+        }
+    }
 }
