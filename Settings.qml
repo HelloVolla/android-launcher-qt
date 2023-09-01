@@ -1425,7 +1425,12 @@ Page {
 
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update plugin settings for " + actionId + ", " + active)
+                        pluginSettingsItemColumn.pluginsArray[actionId]["isEnable"] = active;
+                        console.log("Settings | Update pluginSettingsItemColumn.pluginsArray after " + pluginSettingsItemColumn.pluginsArray[actionId]["isEnable"])
+                        // Arvind Need to download plugin related stuff if active is true. Else just need to disable this plugin.
                         // todo: implement
+                        mainView.pluginsArray = pluginSettingsItemColumn.pluginsArray;
+                        mainView.updatePluginListCache(mainView.pluginsArray);
                     }
 
                     Behavior on implicitHeight {
