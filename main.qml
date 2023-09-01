@@ -876,6 +876,17 @@ ApplicationWindow {
             AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck })
         }
 
+        function getPluginListFromCache(){
+            console.debug("MainView | getPluginListFromCache")
+            var pluginsArray = pluginListCache.readPrivate()
+            pluginsArray = pluginsArray.length === 0 ? new Array : pluginsArray
+            return pluginsArray
+        }
+
+        function updatePluginListCache(item) {
+            pluginListCache.writePrivate(item);
+        }
+
         function fetchData() {
             console.log("Settings | Inside fetchData")
             var xhr = new XMLHttpRequest();
@@ -1036,6 +1047,7 @@ ApplicationWindow {
         property double lastContactsCheck: 0.0
 
         Component.onCompleted: {
+            mainView.fetchData()
             console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)
