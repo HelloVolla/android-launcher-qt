@@ -264,6 +264,7 @@ ApplicationWindow {
         property var redirectCount: 0
         property var maxRedirectCount: 1
         property bool keepLastIndex: false
+        property var pluginsArray: new Array
 
         onCurrentIndexChanged: {
             console.debug("MainView | Index changed to " + currentIndex)
@@ -873,6 +874,39 @@ ApplicationWindow {
             console.debug("MainView | Reset contacts")
             settings.lastContactsCheck = 0.0
             AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck })
+        }
+
+        function fetchData() {
+            console.log("Settings | Inside fetchData")
+            var xhr = new XMLHttpRequest();
+            var temp;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    console.log("MainView | got xhr responce");
+                    if (xhr.status === 200) {
+                        console.log("MainView | got xhr responce 200");
+                        var jsonData = JSON.parse(xhr.responseText);
+                        console.log("MainView | jsonData" + jsonData["pluginList"]);
+                        var arrayReceived = jsonData["pluginList"];
+                        var pluginArrayFromCache = mainView.getPluginListFromCache();
+                        console.log("MainView | pluginArrayFromCache" + pluginArrayFromCache);
+                        if(pluginArrayFromCache.length > 0){
+                            for (var i = 0; i < arrayReceived.length; i++) {
+                                if(pluginArrayFromCache[i]["pId"] === arrayReceived[i]["pId"]){
+                                    arrayReceived[i]["isEnable"] = pluginArrayFromCache[i]["isEnable"];
+                                }
+                            }
+                        }
+                        mainView.updatePluginListCache(arrayReceived);
+                        mainView.pluginsArray = arrayReceived;
+                    } else {
+                        console.error("MainView | Error fetching data:", xhr.status, xhr.statusText);
+                    }
+                }
+            };
+            xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/pluginConfig.json");
+            console.log("MainView | Sending fetchdata request");
+            xhr.send();
         }
 
         WorkerScript {
