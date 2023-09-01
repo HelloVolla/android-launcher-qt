@@ -1367,6 +1367,7 @@ Page {
 
                     property bool menuState: false
                     property var checkboxes: new Array
+                    property var pluginsArray: new Array
 
                     Button {
                         id: pluginSettingsItemButton
@@ -1397,12 +1398,13 @@ Page {
                     }
 
                     function createCheckboxes() {
-                        var plugins // todo: load available plugins
-
-                        for (var i = 0; i < plugins.length; i++) {
+                        //var plugins // todo: load available plugins
+                        pluginSettingsItemColumn.pluginsArray = mainView.pluginsArray;
+                        console.log("Settings | plugins.length " +pluginSettingsItemColumn.pluginsArray.length);
+                        for (var i = 0; i < pluginSettingsItemColumn.pluginsArray.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", pluginSettingsItemColumn)
-                            var properties = { "actionId": plugins[i]["id"],
-                                "text": plugins[i]["name"], "checked": plugins[i]["activated"],
+                            var properties = { "actionId": i,
+                                "text": pluginSettingsItemColumn.pluginsArray[i]["pTitle"], "checked": pluginSettingsItemColumn.pluginsArray[i]["isEnable"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
