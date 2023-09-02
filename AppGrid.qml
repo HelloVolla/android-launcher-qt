@@ -14,6 +14,7 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
+        "be.bpost.mybpost": "/icons/bpost@4x.png",
         "com.kiwibrowser.browser": "/icons/kiwi@4x.png",
         "com.beeper.chat": "/icons/beeper@4x.png",
         "com.atharok.barcodescanner": "/icons/barcode@4x.png",
