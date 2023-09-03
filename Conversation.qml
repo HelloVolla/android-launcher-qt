@@ -601,7 +601,6 @@ Page {
                     Label {
                         id: errorMessage
                         anchors.left: parent.left
-                        anchors.leftMargin: 3.0
                         topPadding: 6.0
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
@@ -612,7 +611,7 @@ Page {
                         color: Universal.accent
                         clip: true
                         opacity: 0.7
-                        horizontalAlignment: Text.AlignRight
+                        horizontalAlignment: Text.AlignLeft
                         visible: model.m_ERROR !== undefined
                     }
                 }
@@ -659,8 +658,7 @@ Page {
 
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
-                // todo: Use errorProperty evalution as soon its fixed
-                } else if (message["errorProperty"] !== undefined) {
+                } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === 403) {
                     cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
                                                                             : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
                     cMessage.m_ERROR = qsTr("Attached image is not available for preview")
@@ -777,12 +775,12 @@ Page {
                     conversationPage.phoneNumber = message["address"]
                 }
 
-                console.debug("Conversation | Error: " + message["errorProperty"])
-                console.debug("Conversation | Color: " + mainView.backgroundColor)
+                //console.debug("Conversation | Error: " + message["errorProperty"]["code"])
+                //console.debug("Conversation | Color: " + mainView.backgroundColor)
 
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
-                } else if (message["errorProperty"].length > 0) {
+                } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === "403") {
                     cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
                                                                             : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
                     cMessage.m_ERROR = qsTr("Attached image is not available for preview")
