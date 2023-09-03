@@ -49,11 +49,7 @@
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="obsolete">Den fastgjorte genvej findes allerede</translation>
-    </message>
-    <message>
-        <source>Pinned shortcut already exists</source>
-        <translation type="unfinished">Den fasthæftede genvej findes allerede</translation>
+        <translation type="unfinished">Den fastgjorte genvej findes allerede</translation>
     </message>
     <message>
         <source>Remove Bookmark</source>
@@ -65,6 +61,42 @@
     </message>
     <message>
         <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished">Indstillinger</translation>
+    </message>
+    <message>
+        <source>Messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -187,6 +219,10 @@
     <message>
         <source>Message not sent</source>
         <translation type="unfinished">Besked ikke sendt</translation>
+    </message>
+    <message>
+        <source>Attached image is not available for preview</source>
+        <translation type="unfinished">Billedet er ikke tilgængeligt til forhåndsvisning</translation>
     </message>
 </context>
 <context>

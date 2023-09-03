@@ -227,13 +227,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                  msg.setLargeIcon("403");
            }
            if(msg.getLargeIcon() != null &&  msg.getLargeIcon().equalsIgnoreCase("403")){
-               if(!errorProperty.isEmpty()){
-                      errorProperty.clear();
-              }
-              msg.setLargeIcon("");
-               errorProperty.put("code","403");
-               errorProperty.put("message","Attched image not accessible");
-              msg.setNotification(errorProperty.toString());
+               msg.setLargeIcon("");
+               msg.setNotification("403");
            } else {
                msg.setNotification("");
            }

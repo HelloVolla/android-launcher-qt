@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="obsolete">Прикрепеният пряк път вече съществува</translation>
+        <translation type="unfinished">Прикрепеният пряк път вече съществува</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
@@ -52,10 +52,6 @@
         <translation type="unfinished">Нов прикрепен пряк път</translation>
     </message>
     <message>
-        <source>Pinned shortcut already exists</source>
-        <translation type="unfinished">Закаченият пряк път вече съществува</translation>
-    </message>
-    <message>
         <source>Remove Bookmark</source>
         <translation type="unfinished">Премахване на отметки</translation>
     </message>
@@ -65,6 +61,42 @@
     </message>
     <message>
         <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished">Настройки</translation>
+    </message>
+    <message>
+        <source>Messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -218,6 +250,10 @@
     <message>
         <source>Message not sent</source>
         <translation type="unfinished">Съобщението не е изпратено</translation>
+    </message>
+    <message>
+        <source>Attached image is not available for preview</source>
+        <translation type="unfinished">изображението не е налично за предварителен преглед</translation>
     </message>
 </context>
 <context>

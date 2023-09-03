@@ -31,9 +31,10 @@ Page {
     property string m_STEXT:     "stext"   // small text beyond the main text, grey
     property string m_IMAGE:     "image"   // preview image
     property string m_PART_IDs:  "partIds" // the ids of mms message parts
-    property bool m_IS_SENT:   false    // true if the content was sent by user
+    property bool   m_IS_SENT:   false     // true if the content was sent by user
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
+    property string m_ERROR:     "error"   // error message under message
 
     background: Rectangle {
         anchors.fill: parent
@@ -587,8 +588,8 @@ Page {
                         id: messageImage
                         x: model.m_IS_SENT ? messageBox.width * (1 -  widthFactor) + mainView.innerSpacing : mainView.innerSpacing
                         horizontalAlignment: Image.AlignLeft
-                        width: messageBox.width * widthFactor
-                        source: model.m_IMAGE // !== undefined ? model.m_IMAGE : ""
+                        width: model.m_ERROR === undefined ? messageBox.width * widthFactor : messageBox.width * 0.6
+                        source: model.m_IMAGE
                         fillMode: Image.PreserveAspectFit
 
                         Desaturate {
@@ -596,6 +597,22 @@ Page {
                             source: messageImage
                             desaturation: 1.0
                         }
+                    }
+                    Label {
+                        id: errorMessage
+                        anchors.left: parent.left
+                        topPadding: 6.0
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: 6.0
+                        width: messageBox.width * widthFactor
+                        text: model.m_ERROR !== undefined ? model.m_ERROR : ""
+                        font.pointSize: mainView.smallFontSize
+                        color: Universal.accent
+                        clip: true
+                        opacity: 0.7
+                        horizontalAlignment: Text.AlignLeft
+                        visible: model.m_ERROR !== undefined
                     }
                 }
             }
@@ -641,6 +658,10 @@ Page {
 
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
+                } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === 403) {
+                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
+                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
+                    cMessage.m_ERROR = qsTr("Attached image is not available for preview")
                 } else {
                     cMessage.m_IMAGE = ""
                 }
@@ -754,8 +775,15 @@ Page {
                     conversationPage.phoneNumber = message["address"]
                 }
 
+                //console.debug("Conversation | Error: " + message["errorProperty"]["code"])
+                //console.debug("Conversation | Color: " + mainView.backgroundColor)
+
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
+                } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === "403") {
+                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
+                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
+                    cMessage.m_ERROR = qsTr("Attached image is not available for preview")
                 } else {
                     cMessage.m_IMAGE = ""
                 }

@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Pinned shortcut already exists</source>
-        <translation type="obsolete">la scorciatoia esiste già</translation>
+        <translation type="unfinished">la scorciatoia esiste già</translation>
     </message>
     <message>
         <source>Open Shortcut</source>
@@ -52,10 +52,6 @@
         <translation type="unfinished">Nuova scorciatoia appuntata</translation>
     </message>
     <message>
-        <source>Pinned shortcut already exists</source>
-        <translation type="unfinished">Il collegamento appuntato esiste già</translation>
-    </message>
-    <message>
         <source>Remove Bookmark</source>
         <translation type="unfinished">Rimuovi il segnalibro</translation>
     </message>
@@ -65,6 +61,42 @@
     </message>
     <message>
         <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished">Impostazioni</translation>
+    </message>
+    <message>
+        <source>Messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -218,6 +250,10 @@
     <message>
         <source>Message not sent</source>
         <translation type="unfinished">Messaggio non inviato</translation>
+    </message>
+    <message>
+        <source>Attached image is not available for preview</source>
+        <translation type="unfinished">l'immagine non è disponibile per l'anteprima</translation>
     </message>
 </context>
 <context>
@@ -445,7 +481,7 @@
     </message>
     <message>
         <source>Signal app is not installed</source>
-        <translation type="unfinished">L'applicazione Signal non è installata</translation>
+        <translation type="unfinished">L&apos;applicazione Signal non è installata</translation>
     </message>
 </context>
 <context>

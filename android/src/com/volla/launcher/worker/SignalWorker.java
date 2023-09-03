@@ -34,6 +34,10 @@ public class SignalWorker {
     public static final String SEND_SIGNAL_MESSAGES ="volla.launcher.signalSendMessageAction";
     public static final String SIGNAL_ERROR =  "volla.launcher.signalAppNotInstalled";
     public static NotificationPlugin np;
+    static final Map<String , String> errorCodeMap = new HashMap<String , String>() {{
+        put("403",    "Attached image not accessible");
+        put("404", "Attached image not available");
+    }};
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -73,6 +77,7 @@ public class SignalWorker {
 	    }
         });
     }
+
     static void retrieveMessageConversations(Map message, Activity activity){
         Log.d(TAG, "Invoked JAVA retrieveMessageConversations: " + message.toString());
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
@@ -80,10 +85,12 @@ public class SignalWorker {
         String person = (String) message.get("person");
         String threadId = (String) message.get("threadId");
         int   age = (Integer) message.get("threadAge");
+        long timeFrame = System.currentTimeMillis() - (age * 1000);
         if(person != null && person.length()>0){
-        repository.getAllMessageByPersonName(person,10).subscribe(it -> {
+        repository.getAllMessageByPersonName(person,timeFrame).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
+                Map errorCode = new HashMap();
                 reply.put("id", m.getId());
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
@@ -91,7 +98,13 @@ public class SignalWorker {
                 reply.put("address", m.getAddress());
                 reply.put("date", m.getTimeStamp());
                 reply.put("read", true);
-		reply.put("errorProperty", m.getNotification());
+                if(m.getNotification().length() > 1) {
+                    errorCode.put("code", m.getNotification());
+                    errorCode.put("message", errorCodeMap.get(m.getNotification()));
+                    reply.put("errorProperty", errorCode);
+                } else {
+                    reply.put("errorProperty", errorCode);
+                }
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
                     reply.put("isSent", false);
                 } else {
@@ -101,16 +114,17 @@ public class SignalWorker {
                 reply.put("attachments", "");
                 messageList.add(reply);
             }
-	     Map result = new HashMap();
+	        Map result = new HashMap();
             result.put("messages", messageList );
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
 	});
        } else {
-           repository.getAllMessageByThreadId(threadId,10).subscribe(it -> {
+           repository.getAllMessageByThreadId(threadId,timeFrame).subscribe(it -> {
             for (Message m : it) {
                 Map reply = new HashMap();
+                Map errorCode = new HashMap();
                 reply.put("id", m.getId());
                 reply.put("thread_id", m.getUuid());
                 reply.put("body", m.getTitle());
@@ -118,7 +132,13 @@ public class SignalWorker {
                 reply.put("address", m.getAddress());
                 reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", true);
-		reply.put("errorProperty", m.getNotification());
+                if(m.getNotification().length() > 1) {
+                    errorCode.put("code", m.getNotification());
+                    errorCode.put("message", errorCodeMap.get(m.getNotification()));
+                    reply.put("errorProperty", errorCode);
+                } else {
+                    reply.put("errorProperty", errorCode);
+                }
                 if(m.getSelfDisplayName() != null && m.getSelfDisplayName().length()>=1){
                     reply.put("isSent", false);
                 } else {
@@ -129,7 +149,7 @@ public class SignalWorker {
                 messageList.add(reply);
                 }
 	     Map result = new HashMap();
-            result.put("messages", messageList );
+            result.put("messages", messageList);
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
@@ -142,8 +162,9 @@ public class SignalWorker {
         Log.d(TAG, "Invoked JAVA retriveMessageThreads");
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
         ArrayList<Map> messageList = new ArrayList();
-        String threadId = (String) message.get("threadAge");
-        repository.getAllUsers().subscribe(it -> {
+        int age = (Integer) message.get("age");
+        long timeFrame = System.currentTimeMillis() - (age * 1000);
+        repository.getAllUsers(timeFrame).subscribe(it -> {
             for (Users m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
@@ -166,16 +187,18 @@ public class SignalWorker {
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch threads:" + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_THREADS, result);
+            repository.deleteAllThreadsHavingTimeStampLessThen(timeFrame);
         });
     }
 
-   static void checkPermission(Activity activity){
+    static void checkPermission(Activity activity){
       if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {        //ask for permission
              Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
              activity.startActivity(intent);
         }
    }
-   public static boolean isSignalInstalled(Activity activity) {
+
+    public static boolean isSignalInstalled(Activity activity) {
 	   String packageName = "org.thoughtcrime.securesms";
 	   PackageManager packageManager = activity.getPackageManager();
         try {
