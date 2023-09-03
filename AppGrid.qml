@@ -14,6 +14,7 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
+        "com.themobilecompany.delijn": "/icons/delijn@4x.png",
         "com.zhilaoapp.musically": "/icons/tiktok@4x.png",
         "nl.apcreation.woolsocks": "/icons/woolsocks@4x.png",
         "be.bpost.mybpost": "/icons/bpost@4x.png",
