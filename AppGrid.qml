@@ -14,6 +14,7 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
+        "yqtrack.app": "/icons/17track@4x.png",
         "com.aftership.AfterShip": "/icons/aftership@4x.png",
         "be.nexushealth.mobile.mynexuz": "/icons/mynexus@4x.png",
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
@@ -80,6 +81,7 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
+        "yqtrack.app": qsTr("17Track"),
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
         "com.google.android.gm" : qsTr("Mail"),
         "com.fsck.k9": qsTr("Mail"),
