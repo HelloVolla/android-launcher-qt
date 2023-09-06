@@ -14,6 +14,7 @@ Page {
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
+        "com.aftership.AfterShip": "/icons/aftership@4x.png",
         "be.nexushealth.mobile.mynexuz": "/icons/mynexus@4x.png",
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
         "com.android.dialer": "/icons/dial-phone@4x.png",
