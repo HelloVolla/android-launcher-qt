@@ -272,7 +272,7 @@ ApplicationWindow {
                 case swipeIndex.Apps:
                     appGrid.children[0].item.updateNotifications()
                     break
-                case swipeIndex.Settings:
+                case swipeIndex.Preferences:
                     settingsPage.children[0].item.updateAvailablePlugins()
                     break
                 default:
@@ -888,11 +888,15 @@ ApplicationWindow {
             var installedPlugins = getInstalledPlugins()
             if (isEnabled) {
                 installedPlugins.push(pluginMetadata)
+
+                // todo: download and install plugin
             } else {
                 const index = installedPlugins.findIndex((i) => {
                   return i.pId === pluginMetadata.pId
                 })
                 installedPlugins.splice(index, 1);
+
+                // todo: remove installe dplugin
             }
             plugins.writePrivate(JSON.stringify(installedPlugins))
         }
@@ -1024,7 +1028,6 @@ ApplicationWindow {
         property double lastContactsCheck: 0.0
 
         Component.onCompleted: {
-            mainView.fetchData()
             console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)

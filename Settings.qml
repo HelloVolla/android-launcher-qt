@@ -1436,7 +1436,7 @@ Page {
                     function createCheckboxes() {
                         for (var i = 0; i < pluginSettingsItemColumn.availablePlugins.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", pluginSettingsItemColumn)
-                            var properties = { "actionId": i,
+                            var properties = { "actionId": availablePlugins[i]["pId"],
                                 "text": availablePlugins[i]["pTitle"], "checked": availablePlugins[i]["isEnabled"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
@@ -1458,17 +1458,15 @@ Page {
 
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update plugin settings for " + actionId + ", " + active)
-
-                        // todo: implement
                         var pluginMetadata = availablePlugins.find(p => p.pId === actionId)
                         pluginMetadata.isEnabled = active
-                        mainView.updateInstalledPlugins(pluginMetadata, active) // implement
+                        mainView.updateInstalledPlugins(pluginMetadata, active)
                     }
+                }
 
-                    Behavior on implicitHeight {
-                        NumberAnimation {
-                            duration: 250.0
-                        }
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
                     }
                 }
             }
