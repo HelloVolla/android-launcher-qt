@@ -17,6 +17,10 @@ Page {
         color: "transparent"
     }
 
+    function updateAvailablePlugins() {
+        pluginSettingsItemColumn.loadAvailablePlugins()
+    }
+
     Flickable {
         anchors.fill: parent
         contentWidth: parent.width
@@ -1367,7 +1371,7 @@ Page {
 
                     property bool menuState: false
                     property var checkboxes: new Array
-                    property var pluginsArray: new Array
+                    property var availablePlugins: new Array
 
                     Button {
                         id: pluginSettingsItemButton
@@ -1395,16 +1399,45 @@ Page {
                                 pluginSettingsItemColumn.destroyCheckboxes()
                             }
                         }
+                     }
+
+                    function loadAvailablePlugins() {
+                        console.log("Settings | Load plugins")
+                        var xhr = new XMLHttpRequest();
+                        var temp;
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                console.log("Settings | got plugins request responce");
+                                if (xhr.status === 200) {
+                                    console.log("Settings | plugin responste status 200");
+                                    var jsonData = JSON.parse(xhr.responseText);
+                                    console.log("Settings | jsonData" + jsonData["pluginList"]);
+                                    availablePlugins = jsonData["pluginList"];
+                                    var installedPlugins = mainView.getInstalledPlugins(); // todo
+                                    var installedPluginIds = new Array
+                                    for (var i = 0; i < availablePlugins.length; i++) {
+                                        availablePlugins[i].isEnabled = installedPlugins.some(plugin => plugin.pId === availablePlugins[i].pId)
+                                    }
+                                } else {
+                                    mainView.showToast(qsTr("Couldn't load available plugins"))
+                                    console.error("Settings | Error retrieving available plugins:", xhr.status, xhr.statusText);
+                                    availablePlugins = mainView.getInstalledPlugins();
+                                    for (var i = 0; i < availablePlugins.length; i++) {
+                                        availablePlugins[i].isEnabled = true
+                                    }
+                                }
+                            }
+                        };
+                        xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/pluginConfig.json");
+                        console.log("Settings | Sending available plugins request");
+                        xhr.send();
                     }
 
                     function createCheckboxes() {
-                        //var plugins // todo: load available plugins
-                        pluginSettingsItemColumn.pluginsArray = mainView.pluginsArray;
-                        console.log("Settings | plugins.length " +pluginSettingsItemColumn.pluginsArray.length);
-                        for (var i = 0; i < pluginSettingsItemColumn.pluginsArray.length; i++) {
+                        for (var i = 0; i < pluginSettingsItemColumn.availablePlugins.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", pluginSettingsItemColumn)
                             var properties = { "actionId": i,
-                                "text": pluginSettingsItemColumn.pluginsArray[i]["pTitle"], "checked": pluginSettingsItemColumn.pluginsArray[i]["isEnable"],
+                                "text": availablePlugins[i]["pTitle"], "checked": availablePlugins[i]["isEnabled"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
@@ -1420,17 +1453,16 @@ Page {
                             var checkbox = pluginSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
-                        pluginSettingsItemColumn.checkboxes = new Array
+                        pluginSettingsItemColumn.availablePlugins = new Array
                     }
 
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update plugin settings for " + actionId + ", " + active)
-                        pluginSettingsItemColumn.pluginsArray[actionId]["isEnable"] = active;
-                        console.log("Settings | Update pluginSettingsItemColumn.pluginsArray after " + pluginSettingsItemColumn.pluginsArray[actionId]["isEnable"])
-                        // Arvind Need to download plugin related stuff if active is true. Else just need to disable this plugin.
+
                         // todo: implement
-                        mainView.pluginsArray = pluginSettingsItemColumn.pluginsArray;
-                        mainView.updatePluginListCache(mainView.pluginsArray);
+                        var pluginMetadata = availablePlugins.find(p => p.pId === actionId)
+                        pluginMetadata.isEnabled = active
+                        mainView.updateInstalledPlugins(pluginMetadata, active) // implement
                     }
 
                     Behavior on implicitHeight {

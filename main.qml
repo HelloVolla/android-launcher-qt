@@ -264,13 +264,16 @@ ApplicationWindow {
         property var redirectCount: 0
         property var maxRedirectCount: 1
         property bool keepLastIndex: false
-        property var pluginsArray: new Array
+        property var plugins: new Array
 
         onCurrentIndexChanged: {
             console.debug("MainView | Index changed to " + currentIndex)
             switch (currentIndex) {
                 case swipeIndex.Apps:
                     appGrid.children[0].item.updateNotifications()
+                    break
+                case swipeIndex.Settings:
+                    settingsPage.children[0].item.updateAvailablePlugins()
                     break
                 default:
                     // Nothing to do
@@ -876,48 +879,22 @@ ApplicationWindow {
             AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck })
         }
 
-        function getPluginListFromCache(){
-            console.debug("MainView | getPluginListFromCache")
-            var pluginsArray = pluginListCache.readPrivate()
-            pluginsArray = pluginsArray.length === 0 ? new Array : pluginsArray
-            return pluginsArray
+        function getInstalledPlugins() {
+            var pluginsStr = plugins.readPrivate()
+            return pluginsStr !== undefined && pluginsStr.length > 0 ? JSON.parse(pluginsStr) : new Array
         }
 
-        function updatePluginListCache(item) {
-            pluginListCache.writePrivate(item);
-        }
-
-        function fetchData() {
-            console.log("Settings | Inside fetchData")
-            var xhr = new XMLHttpRequest();
-            var temp;
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    console.log("MainView | got xhr responce");
-                    if (xhr.status === 200) {
-                        console.log("MainView | got xhr responce 200");
-                        var jsonData = JSON.parse(xhr.responseText);
-                        console.log("MainView | jsonData" + jsonData["pluginList"]);
-                        var arrayReceived = jsonData["pluginList"];
-                        var pluginArrayFromCache = mainView.getPluginListFromCache();
-                        console.log("MainView | pluginArrayFromCache" + pluginArrayFromCache);
-                        if(pluginArrayFromCache.length > 0){
-                            for (var i = 0; i < arrayReceived.length; i++) {
-                                if(pluginArrayFromCache[i]["pId"] === arrayReceived[i]["pId"]){
-                                    arrayReceived[i]["isEnable"] = pluginArrayFromCache[i]["isEnable"];
-                                }
-                            }
-                        }
-                        mainView.updatePluginListCache(arrayReceived);
-                        mainView.pluginsArray = arrayReceived;
-                    } else {
-                        console.error("MainView | Error fetching data:", xhr.status, xhr.statusText);
-                    }
-                }
-            };
-            xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/pluginConfig.json");
-            console.log("MainView | Sending fetchdata request");
-            xhr.send();
+        function updateInstalledPlugins(pluginMetadata, isEnabled) {
+            var installedPlugins = getInstalledPlugins()
+            if (isEnabled) {
+                installedPlugins.push(pluginMetadata)
+            } else {
+                const index = installedPlugins.findIndex((i) => {
+                  return i.pId === pluginMetadata.pId
+                })
+                installedPlugins.splice(index, 1);
+            }
+            plugins.writePrivate(JSON.stringify(installedPlugins))
         }
 
         WorkerScript {
@@ -1108,10 +1085,10 @@ ApplicationWindow {
     }
 
     FileIO {
-        id: pluginListCache
-        source: "pluginList.json"
+        id: plugins
+        source: "pluginStore.json"
         onError: {
-            console.log("MainView | pluginList cache error: " + msg)
+            console.log("MainView | plugin store error: " + msg)
         }
     }
 }
