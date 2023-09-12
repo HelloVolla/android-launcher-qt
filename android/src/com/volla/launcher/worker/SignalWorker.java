@@ -168,9 +168,9 @@ public class SignalWorker {
             for (Users m : it) {
                 Map reply = new HashMap();
                 reply.put("id", m.getId());
-                reply.put("thread_id", m.getUuid());
+                reply.put("thread_id", m.getUser_name());
                 reply.put("body", m.getBody());
-                reply.put("person", m.getUser_name());
+                reply.put("person",  m.getUuid());
                 reply.put("address", "");
                 reply.put("date", Long.toString(m.getTimeStamp()));
                 reply.put("read", m.getRead());

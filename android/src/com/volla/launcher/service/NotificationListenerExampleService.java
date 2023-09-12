@@ -247,12 +247,16 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 	    Log.d(TAG, "Keeping Volla notifications messages");
             repository.insertMessage(msg);
  
-            users.uuid = String.valueOf(msg.getUuid());
+            users.uuid = msg.getSelfDisplayName();
             users.body = msg.getText();
-            users.user_name = title;
+            users.user_name = String.valueOf(msg.getUuid());
             users.user_contact_number = "";
             users.read = false;
-            users.isSent = false;
+            if(msg.getSelfDisplayName() != null && msg.getSelfDisplayName().length()>=1){
+                users.isSent = false;
+            } else {
+                users.isSent = true;
+            }
             users.notification = notificationStr;
             users.timeStamp = msg.getTimeStamp();
             repository.insertUser(users);
