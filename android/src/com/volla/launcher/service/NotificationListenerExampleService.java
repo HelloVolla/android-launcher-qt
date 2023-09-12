@@ -247,14 +247,14 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 	    Log.d(TAG, "Keeping Volla notifications messages");
             repository.insertMessage(msg);
  
-            users.uuid = String.valueOf(sbn.getId());
-            users.body = NotificationUtils.getMessage(extras);
+            users.uuid = String.valueOf(msg.getUuid());
+            users.body = msg.getText();
             users.user_name = title;
             users.user_contact_number = "";
             users.read = false;
             users.isSent = false;
             users.notification = notificationStr;
-            users.timeStamp = timeInMillis;           
+            users.timeStamp = msg.getTimeStamp();
             repository.insertUser(users);
 
             notification = null;
@@ -405,9 +405,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     public void storeMessage(Message msg){
         msg.timeStamp = System.currentTimeMillis();
         repository.insertMessage(msg);
-	Log.d(TAG, "msg.id :"+msg.id);
-        Log.d(TAG, "msg.id :"+msg.text);
-        Log.d(TAG, "msg.id :"+msg.timeStamp);
     }
 
     private int matchNotificationCode(StatusBarNotification sbn) {

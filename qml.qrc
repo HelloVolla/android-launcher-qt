@@ -80,5 +80,7 @@
         <file>icons/share@4x.png</file>
         <file>images/open-in-signal_dark_2x.png</file>
         <file>images/open-in-signal_light_2x.png</file>
+        <file>images/open-in-signal_dark@2x.png</file>
+        <file>images/open-in-signal_light@2x.png</file>
     </qresource>
 </RCC>

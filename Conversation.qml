@@ -610,7 +610,7 @@ Page {
                         font.pointSize: mainView.smallFontSize
                         color: Universal.accent
                         clip: true
-                        opacity: 0.7
+                        opacity: 0.5
                         horizontalAlignment: Text.AlignLeft
                         visible: model.m_ERROR !== undefined
                     }
@@ -659,8 +659,8 @@ Page {
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === 403) {
-                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
-                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
+                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light@2x.png")
+                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark@2x.png")
                     cMessage.m_ERROR = qsTr("Attached image is not available for preview")
                 } else {
                     cMessage.m_IMAGE = ""
@@ -781,8 +781,8 @@ Page {
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
                 } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === "403") {
-                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
-                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
+                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light@2x.png")
+                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark@2x.png")
                     cMessage.m_ERROR = qsTr("Attached image is not available for preview")
                 } else {
                     cMessage.m_IMAGE = ""
