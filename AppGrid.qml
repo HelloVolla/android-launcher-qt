@@ -428,7 +428,7 @@ Page {
         }
         MenuItem {
             id: removePinnedShortcutItem
-            height: contextMenu.isPinnedShortcut ? contextMenu.menuItemHeight : 0
+            height: removePinnedShortcutItem.visible ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: contextMenu.menuWidth
