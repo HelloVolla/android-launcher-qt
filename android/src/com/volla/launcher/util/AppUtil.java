@@ -114,7 +114,7 @@ public class AppUtil {
                             }
                         } else if (type.equals(DELETE_APP)) {
                             String packageName = (String) message.get("appId");
-                            Log.d(TAG,String.format("Delete %s",packageName));
+                            Log.d(TAG, String.format("Delete %s",packageName));
                             Uri packageUri = Uri.parse("package:" + packageName);
                             Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
                             activity.startActivity(uninstallIntent);
@@ -262,7 +262,7 @@ public class AppUtil {
             return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0 ||
                 (appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG,String.format("Can not find %s", packageName));
+            Log.e(TAG, String.format("Can not find %s", packageName));
             return false;
         }
     }
