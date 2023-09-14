@@ -406,6 +406,24 @@ Page {
             }
         }
         MenuItem {
+            id: removeAppItem
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: contextMenu.menuWidth
+                text: qsTr("Remove App")
+                horizontalAlignment: Text.AlignHCenter
+            }
+            leftPadding: mainView.innerSpacing
+            rightPadding: mainView.innerSpacing
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            onClicked: {
+                    AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId": contextMenu.app["package"]})
+            }
+        }
+        MenuItem {
             id: removePinnedShortcutItem
             height: contextMenu.isPinnedShortcut ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
