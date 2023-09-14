@@ -335,6 +335,7 @@ Page {
         property var app
         property var gridView
         property bool isPinnedShortcut: false
+        property bool canBeDeleted: false
         property int menuItemHeight: 40
 
         background: Rectangle {
@@ -407,6 +408,7 @@ Page {
         }
         MenuItem {
             id: removeAppItem
+            height: removeAppItem.visible ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: contextMenu.menuWidth
@@ -419,6 +421,7 @@ Page {
                 anchors.fill: parent
                 color: "transparent"
             }
+            visible: contextMenu.canBeDeleted
             onClicked: {
                     AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId": contextMenu.app["package"]})
             }
@@ -450,6 +453,19 @@ Page {
                 }
                 AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": shortcutId})
                 disabledPinnedShortcuts.disableShortcut(shortcutId)
+            }
+        }
+
+        onAboutToShow: {
+            AN.SystemDispatcher.dispatch("volla.launcher.canDeleteAppAction", {"appId": contextMenu.app["package"]})
+        }
+
+        Connections {
+            target: AN.SystemDispatcher
+            onDispatched: {
+                if (type === "volla.launcher.canDeleteAppResponce") {
+                    contextMenu.canBeDeleted = message["canDeleteApp"]
+                }
             }
         }
     }
