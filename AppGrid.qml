@@ -335,10 +335,10 @@ Page {
         property var app
         property var gridView
         property bool isPinnedShortcut: false
+        property int menuItemHeight: 40
 
         background: Rectangle {
             id: menuBackground
-            height: contextMenu.isPinnedShortcut ? 150 : 110
             implicitWidth: contextMenu.menuWidth
             color: Universal.accent
             radius: mainView.innerSpacing
@@ -407,6 +407,7 @@ Page {
         }
         MenuItem {
             id: removePinnedShortcutItem
+            height: contextMenu.isPinnedShortcut ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: contextMenu.menuWidth
