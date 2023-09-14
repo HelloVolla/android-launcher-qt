@@ -121,14 +121,7 @@ public class AppUtil {
                         } else if (type.equals(GET_CAN_DELETE_APP)) {
                             String packageName = (String) message.get("appId");
                             Map reply = new HashMap();
-                            try {
-                                ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
-                                reply.put("canDeleteApp", (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0 ||
-                                    (appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0);
-                            } catch (PackageManager.NameNotFoundException e) {
-                                Log.e(TAG,String.format("Can not find %s", packageName));
-                                reply.put("canDeleteApp", false);
-                            }
+                            reply.put("canDeleteApp", !isAppSystem(packageName));
                             SystemDispatcher.dispatch(GOT_CAN_DELETE_APP, reply);
                         } else if (type.equals(OPEN_NOTES)) {
                             String text = (String) message.get("text");
@@ -259,5 +252,18 @@ public class AppUtil {
                 thread.start();
             }
         });
+    }
+
+    static boolean isAppSystem(String packageName) {
+        try {
+            final Activity activity = QtNative.activity();
+            final PackageManager pm = activity.getPackageManager();
+            ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
+            return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0 ||
+                (appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG,String.format("Can not find %s", packageName));
+            return false;
+        }
     }
 }
