@@ -880,6 +880,7 @@ ApplicationWindow {
         }
 
         function getInstalledPlugins() {
+            plugins.setSource("installedPlugins.json")
             var pluginsStr = plugins.readPrivate()
             return pluginsStr !== undefined && pluginsStr.length > 0 ? JSON.parse(pluginsStr) : new Array
         }
@@ -888,17 +889,28 @@ ApplicationWindow {
             var installedPlugins = getInstalledPlugins()
             if (isEnabled) {
                 installedPlugins.push(pluginMetadata)
+                plugins.writePrivate(JSON.stringify(installedPlugins))
 
                 // todo: download and install plugin
-            } else {
-                const index = installedPlugins.findIndex((i) => {
-                  return i.pId === pluginMetadata.pId
-                })
-                installedPlugins.splice(index, 1);
-
-                // todo: remove installe dplugin
+                var xmlRequest = new XMLHttpRequest();
+                xmlRequest.onreadystatechange = function() {
+                    if (xmlRequest.readyState === XMLHttpRequest.DONE) {
+                        console.debug("MainView | got plugin request responce");
+                        if (xhr.status === 200) {
+                            console.log("MainView | plugin responste status 200");
+                            var pluginScript = xmlRequest.responseText
+                            plugins.setSource(pluginMetadata["pId"] + ".mjs")
+                            plugins.writePrivate(pluginScript)
+                        } else {
+                            mainView.showToast(qsTr("Couldn't load plugin"))
+                            console.error("Settings | Error retrieving plugin:", xmlRequest.status, xmlRequest.statusText)..
+                        }
+                    }
+                };
+                xmlRequest.open("GET", pluginMetadata.url);
+                console.debug("Mainview | Sending plugin request");
+                xmlRequest.send();
             }
-            plugins.writePrivate(JSON.stringify(installedPlugins))
         }
 
         WorkerScript {
