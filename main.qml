@@ -264,7 +264,6 @@ ApplicationWindow {
         property var redirectCount: 0
         property var maxRedirectCount: 1
         property bool keepLastIndex: false
-        property var plugins: new Array
 
         onCurrentIndexChanged: {
             console.debug("MainView | Index changed to " + currentIndex)
@@ -880,17 +879,15 @@ ApplicationWindow {
         }
 
         function getInstalledPlugins() {
-            plugins.setSource("installedPlugins.json")
-            var pluginsStr = plugins.readPrivate()
+            pluginStore.setSource("installedPlugins.json")
+            var pluginsStr = pluginStore.readPrivate()
             return pluginsStr !== undefined && pluginsStr.length > 0 ? JSON.parse(pluginsStr) : new Array
         }
 
-        function updateInstalledPlugins(pluginMetadata, isEnabled) {
+        function updateInstalledPlugins(pluginMetadata, isEnabled, callback) {
             var installedPlugins = getInstalledPlugins()
+            var pluginSource = pluginMetadata["pId"] + "/plugin.mjs"
             if (isEnabled) {
-                installedPlugins.push(pluginMetadata)
-                plugins.writePrivate(JSON.stringify(installedPlugins))
-
                 // todo: download and install plugin
                 var xmlRequest = new XMLHttpRequest();
                 xmlRequest.onreadystatechange = function() {
@@ -899,17 +896,29 @@ ApplicationWindow {
                         if (xhr.status === 200) {
                             console.log("MainView | plugin responste status 200");
                             var pluginScript = xmlRequest.responseText
-                            plugins.setSource(pluginMetadata["pId"] + ".mjs")
-                            plugins.writePrivate(pluginScript)
+                            pluginStore.setSource(pluginSource)
+                            pluginStore.writePrivate(pluginScript)
+                            installedPlugins.push(pluginMetadata)
+                            pluginStore.setSource("installedPlugins.json")
+                            pluginStore.writePrivate(JSON.stringify(installedPlugins))
+                            springboard.children[0].item.addPlugin(pluginSource)
+                            callback(true)
                         } else {
                             mainView.showToast(qsTr("Couldn't load plugin"))
-                            console.error("Settings | Error retrieving plugin:", xmlRequest.status, xmlRequest.statusText)..
+                            console.error("Settings | Error retrieving plugin: ", xmlRequest.status, xmlRequest.statusText)
+                            callback(false)
                         }
                     }
                 };
                 xmlRequest.open("GET", pluginMetadata.url);
                 console.debug("Mainview | Sending plugin request");
                 xmlRequest.send();
+            } else {
+                installedPlugins = installedPlugins.filter( el => el.pID !== pluginMetadata.pId )
+                pluginStore.setSource("installedPlugins.json")
+                pluginStore.writePrivate(JSON.stringify(installedPlugins))
+                springboard.children[0].item.removePlugin(pluginSource)
+                return true
             }
         }
 
@@ -1100,7 +1109,7 @@ ApplicationWindow {
     }
 
     FileIO {
-        id: plugins
+        id: pluginStore
         source: "pluginStore.json"
         onError: {
             console.log("MainView | plugin store error: " + msg)

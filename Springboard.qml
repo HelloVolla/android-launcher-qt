@@ -21,10 +21,12 @@ Page {
     property var eventGlossar: [qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"), qsTr("Thursday"), qsTr("Friday"),
                                 qsTr("Saturday"), qsTr("Sunday"), qsTr("tomorrow")]
     property var eventRegex
+    property var pluginStripts: new Array
 
     property bool defaultSuggestions: false
     property bool dotShortcut: true
     property bool roundedShortcutMenu: true
+
 
     background: Rectangle {
         anchors.fill: parent
@@ -46,6 +48,12 @@ Page {
         }
         eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S.*)")
         eventRegex = new RegExp(eventRegexStr, "gim")
+
+        // todo: Load an creat plugins
+        var installedPlugins = mainView.getInstalledPlugins()
+        for (i = 0; i < installedPlugins.length; i++) {
+            addPlugin(installedPlugins[i].pId + "/plugin.mjs")
+        }
     }
 
     Connections {
@@ -78,6 +86,17 @@ Page {
 
     function updateHeadlineColor() {
         springBoard.headline.color = mainView.fontColor
+    }
+
+    function addPlugin(pluginSource) {
+        var component = Qt.createComponent("WorkerScript.qml", listView)
+        var properties = { "source": pluginSource}
+        var object = component.createObject(listView, properties)
+        springBoard.pluginStripts.push(object)
+    }
+
+    function removePlugin(pluginSource) {
+        springBoard.pluginStripts = springBoard.pluginScripts.filter(el => el.source !== pluginSource)
     }
 
     ListView {

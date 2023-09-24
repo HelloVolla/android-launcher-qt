@@ -1460,7 +1460,14 @@ Page {
                         console.log("Settings | Update plugin settings for " + actionId + ", " + active)
                         var pluginMetadata = availablePlugins.find(p => p.pId === actionId)
                         pluginMetadata.isEnabled = active
-                        mainView.updateInstalledPlugins(pluginMetadata, active)
+                        mainView.updateInstalledPlugins(pluginMetadata, active, function(success) {
+                            if (!succes) {
+                                for (var i = 0; i < pluginSettingsItemColumn.checkboxes.length; i++) {
+                                    var checkbox = pluginSettingsItemColumn.checkboxes[i]
+                                    if (checkbox.actionId === actionId) checkbox.checked = false
+                                }
+                            }
+                        })
                     }
                 }
 
