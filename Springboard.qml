@@ -21,12 +21,11 @@ Page {
     property var eventGlossar: [qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"), qsTr("Thursday"), qsTr("Friday"),
                                 qsTr("Saturday"), qsTr("Sunday"), qsTr("tomorrow")]
     property var eventRegex
-    property var pluginStripts: new Array
+    property var plugins: new Array
 
     property bool defaultSuggestions: false
     property bool dotShortcut: true
     property bool roundedShortcutMenu: true
-
 
     background: Rectangle {
         anchors.fill: parent
@@ -49,10 +48,9 @@ Page {
         eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S.*)")
         eventRegex = new RegExp(eventRegexStr, "gim")
 
-        // todo: Load an creat plugins
         var installedPlugins = mainView.getInstalledPlugins()
         for (i = 0; i < installedPlugins.length; i++) {
-            addPlugin(installedPlugins[i].pId + "/plugin.mjs")
+            addPlugin(mainView.getInstalledPluginSource(installedPlugins[i].pId), installedPlugins[i].pId)
         }
     }
 
@@ -88,15 +86,13 @@ Page {
         springBoard.headline.color = mainView.fontColor
     }
 
-    function addPlugin(pluginSource) {
-        var component = Qt.createComponent("WorkerScript.qml", listView)
-        var properties = { "source": pluginSource}
-        var object = component.createObject(listView, properties)
-        springBoard.pluginStripts.push(object)
+    function addPlugin(pluginSource, pluginId) {
+        var component = Qt.createQmlObject(pluginSource, listView, pluginId) // not sure about the file path
+        springBoard.plugins.push(object)
     }
 
-    function removePlugin(pluginSource) {
-        springBoard.pluginStripts = springBoard.pluginScripts.filter(el => el.source !== pluginSource)
+    function removePlugin(pluginId) {
+        springBoard.pluginStripts = springBoard.plugins.filter(el => el.id !== pluginId)
     }
 
     ListView {
@@ -575,6 +571,20 @@ Page {
                         'contacts': mainView.getContacts(), 'model': listModel, 'actionType': mainView.actionType,
                         'actionName': mainView.actionName, 'eventRegex': eventRegex
                     })
+
+                    pluginWorker.sendMessage({
+                        'textInput': textInput,
+                        'actionObj': springBoard.selectedObj, // a selected contact, potentially something else
+                        'contacts': mainView.getContacts()
+                    })
+
+//                    for (i = 0; i > springBoard.plugins.length; i++) {
+//                        pluginStripts[i].sendMessage({
+//                             'actionObj': springBoard.selectedObj, 'textInput': textInput,
+//                             'actionType': mainView.actionType, 'actionName': mainView.actionName,
+//                             'contacts': mainView.getContacts()
+//                         })
+//                    }
                 }
             }
         }
@@ -654,6 +664,14 @@ Page {
             source: "scripts/springboard.mjs"
             onMessage: {
                 console.log("Springboard | Message received")
+            }
+        }
+
+        WorkerScript {
+            id: pluginWorker
+
+            onMessage: {
+
             }
         }
     }

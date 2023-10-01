@@ -186,7 +186,9 @@ ApplicationWindow {
             'OpenContact' : 20025,
             'OpenApp' : 20026,
             'SendSignal' : 20027,
-            'OpenSignalContact' : 20028
+            'OpenSignalContact' : 20028,
+            'ShowCompletion' : 20029,
+            'ExecuteFunktion': 20030
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -884,9 +886,14 @@ ApplicationWindow {
             return pluginsStr !== undefined && pluginsStr.length > 0 ? JSON.parse(pluginsStr) : new Array
         }
 
+        function getInstalledPluginSource(pluginId) {
+            pluginStore.setSource(pluginId + "/plugin.qml")
+            return pluginStore.readPrivate()
+        }
+
         function updateInstalledPlugins(pluginMetadata, isEnabled, callback) {
             var installedPlugins = getInstalledPlugins()
-            var pluginSource = pluginMetadata["pId"] + "/plugin.mjs"
+            var pluginSource = pluginMetadata["pId"] + "/plugin.qml"
             if (isEnabled) {
                 // todo: download and install plugin
                 var xmlRequest = new XMLHttpRequest();
@@ -901,7 +908,7 @@ ApplicationWindow {
                             installedPlugins.push(pluginMetadata)
                             pluginStore.setSource("installedPlugins.json")
                             pluginStore.writePrivate(JSON.stringify(installedPlugins))
-                            springboard.children[0].item.addPlugin(pluginSource)
+                            springboard.children[0].item.addPlugin(pluginScript)
                             callback(true)
                         } else {
                             mainView.showToast(qsTr("Couldn't load plugin"))
@@ -917,7 +924,7 @@ ApplicationWindow {
                 installedPlugins = installedPlugins.filter( el => el.pID !== pluginMetadata.pId )
                 pluginStore.setSource("installedPlugins.json")
                 pluginStore.writePrivate(JSON.stringify(installedPlugins))
-                springboard.children[0].item.removePlugin(pluginSource)
+                springboard.children[0].item.removePlugin(pluginMetadata.pId)
                 return true
             }
         }
