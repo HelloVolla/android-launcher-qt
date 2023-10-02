@@ -541,7 +541,10 @@ Page {
                         console.log("Springboard | Will show contact " + phoneNumber + " in Signal")
                         Qt.openUrlExternally("sgnl://signal.me/#p/" + phoneNumber)
                         textInputArea.text = ""
-                        break;
+                        break
+                    case mainView.actionType.ExecutePlugin:
+                        // todo
+                        break
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         if (actionObj !== undefined && actionValue !== undefined) {

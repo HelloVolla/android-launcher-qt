@@ -49,7 +49,7 @@ WorkerScript.onMessage = function(message) {
     }
 
     var filteredSuggestionObj = new Array
-    var filteredSuggestion
+    //var filteredSuggestion
     var suggestion
     var found
     var i
