@@ -1407,28 +1407,28 @@ Page {
                         var temp;
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === XMLHttpRequest.DONE) {
-                                console.log("Settings | got plugins request responce");
+                                console.log("Settings | got plugins request responce")
                                 if (xhr.status === 200) {
-                                    console.log("Settings | plugin responste status 200");
-                                    var jsonData = JSON.parse(xhr.responseText);
-                                    console.log("Settings | jsonData" + jsonData["pluginList"]);
-                                    availablePlugins = jsonData["pluginList"];
-                                    var installedPlugins = mainView.getInstalledPlugins(); // todo
+                                    console.log("Settings | plugin responste status 200")
+                                    var jsonData = JSON.parse(xhr.responseText)
+                                    console.log("Settings | jsonData " + jsonData["pluginList"])
+                                    availablePlugins = jsonData["pluginList"]
+                                    var installedPlugins = mainView.getInstalledPlugins()
                                     var installedPluginIds = new Array
                                     for (var i = 0; i < availablePlugins.length; i++) {
-                                        availablePlugins[i].isEnabled = installedPlugins.some(plugin => plugin.pId === availablePlugins[i].pId)
+                                        availablePlugins[i].isEnabled = installedPlugins.some(plugin => plugin.id === availablePlugins[i].id)
                                     }
                                 } else {
                                     mainView.showToast(qsTr("Couldn't load available plugins"))
-                                    console.error("Settings | Error retrieving available plugins:", xhr.status, xhr.statusText);
-                                    availablePlugins = mainView.getInstalledPlugins();
-                                    for (var i = 0; i < availablePlugins.length; i++) {
+                                    console.error("Settings | Error retrieving available plugins:", xhr.status, xhr.statusText)
+                                    availablePlugins = mainView.getInstalledPlugins()
+                                    for (i = 0; i < availablePlugins.length; i++) {
                                         availablePlugins[i].isEnabled = true
                                     }
                                 }
                             }
                         };
-                        xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/pluginConfig.json");
+                        xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/VollaPluginList.json");
                         console.log("Settings | Sending available plugins request");
                         xhr.send();
                     }
@@ -1436,8 +1436,8 @@ Page {
                     function createCheckboxes() {
                         for (var i = 0; i < pluginSettingsItemColumn.availablePlugins.length; i++) {
                             var component = Qt.createComponent("/Checkbox.qml", pluginSettingsItemColumn)
-                            var properties = { "actionId": availablePlugins[i]["pId"],
-                                "text": availablePlugins[i]["pTitle"], "checked": availablePlugins[i]["isEnabled"],
+                            var properties = { "actionId": availablePlugins[i]["id"],
+                                "text": availablePlugins[i]["name"], "checked": availablePlugins[i]["isEnabled"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
@@ -1458,10 +1458,10 @@ Page {
 
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update plugin settings for " + actionId + ", " + active)
-                        var pluginMetadata = availablePlugins.find(p => p.pId === actionId)
+                        var pluginMetadata = availablePlugins.find(p => p.id === actionId)
                         pluginMetadata.isEnabled = active
                         mainView.updateInstalledPlugins(pluginMetadata, active, function(success) {
-                            if (!succes) {
+                            if (!success) {
                                 for (var i = 0; i < pluginSettingsItemColumn.checkboxes.length; i++) {
                                     var checkbox = pluginSettingsItemColumn.checkboxes[i]
                                     if (checkbox.actionId === actionId) checkbox.checked = false

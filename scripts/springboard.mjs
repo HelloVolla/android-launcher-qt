@@ -1,5 +1,5 @@
 WorkerScript.onMessage = function(message) {
-    console.log("Springboard | Will execute worker script")
+    console.log("Springboard | Will execute main worker script")
 
     var selectedObj = message.selectedObj
     var textInput = message.textInput

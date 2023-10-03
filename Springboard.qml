@@ -50,7 +50,7 @@ Page {
 
         var installedPlugins = mainView.getInstalledPlugins()
         for (i = 0; i < installedPlugins.length; i++) {
-            addPlugin(mainView.getInstalledPluginSource(installedPlugins[i].pId), installedPlugins[i].pId)
+            addPlugin(mainView.getInstalledPluginSource(installedPlugins[i].id), installedPlugins[i].id)
         }
     }
 
@@ -87,12 +87,14 @@ Page {
     }
 
     function addPlugin(pluginSource, pluginId) {
-        var component = Qt.createQmlObject(pluginSource, listView, pluginId) // not sure about the file path
-        springBoard.plugins.push(object)
+        console.debug("Springboard | Plugin " + pluginId + " source length: " + pluginSource.length)
+        var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId) // not sure about the file path
+        console.debug("Springboard | PluginObject: " + qmlObject)
+        springBoard.plugins.push(qmlObject)
     }
 
     function removePlugin(pluginId) {
-        springBoard.pluginStripts = springBoard.plugins.filter(el => el.id !== pluginId)
+        springBoard.plugins = springBoard.plugins.filter(el => el.id !== pluginId)
     }
 
     ListView {
@@ -372,7 +374,7 @@ Page {
                 return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}\s\S+/.test(textInput)
             }
 
-            function executeAction(actionValue, actionType, actionObj) {
+            function executeAction(actionValue, actionType, actionObj, actionFnc) {
                 if (actionObj !== undefined) {
                     console.log("SpringBoard | " + actionValue + ": " + actionType + ": " + actionObj["id"])
                 } else {
@@ -529,7 +531,6 @@ Page {
                         mainView.showToast("Event added to calendar")                       
                         break
                     case mainView.actionType.SendSignal:
-                        // todo: implement
                         idx = textInput.search(/\s/)
                         message = textInput.substring(idx+1, textInput.length)
                         phoneNumber = selectedObj["phone.signal"]
@@ -543,7 +544,7 @@ Page {
                         textInputArea.text = ""
                         break
                     case mainView.actionType.ExecutePlugin:
-                        // todo
+                        actionFnc(textInput)
                         break
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
@@ -574,20 +575,6 @@ Page {
                         'contacts': mainView.getContacts(), 'model': listModel, 'actionType': mainView.actionType,
                         'actionName': mainView.actionName, 'eventRegex': eventRegex
                     })
-
-                    pluginWorker.sendMessage({
-                        'textInput': textInput,
-                        'actionObj': springBoard.selectedObj, // a selected contact, potentially something else
-                        'contacts': mainView.getContacts()
-                    })
-
-//                    for (i = 0; i > springBoard.plugins.length; i++) {
-//                        pluginStripts[i].sendMessage({
-//                             'actionObj': springBoard.selectedObj, 'textInput': textInput,
-//                             'actionType': mainView.actionType, 'actionName': mainView.actionName,
-//                             'contacts': mainView.getContacts()
-//                         })
-//                    }
                 }
             }
         }
@@ -631,7 +618,7 @@ Page {
 
                 onClicked: {
                     console.log("Springboard | Menu item clicked")
-                    listModel.executeAction(model.text, model.action, model.object)
+                    listModel.executeAction(model.text, model.action, model.object, model.pluginFunction)
                 }
             }
         }
@@ -666,15 +653,20 @@ Page {
             id: springBoardWorker
             source: "scripts/springboard.mjs"
             onMessage: {
-                console.log("Springboard | Message received")
+                console.log("Springboard | Main worker script finished")
+                pluginWorker.sendMessage({
+                    'textInput': springBoard.textInput, 'actionObj': springBoard.selectedObj, // a selected contact, potentially something else
+                    'plugins': springBoard.plugins, 'model': listModel, 'actionType': mainView.actionType, 'contacts': mainView.getContacts()
+                })
             }
         }
 
         WorkerScript {
             id: pluginWorker
+            source: "scripts/plugins.mjs"
 
             onMessage: {
-
+                console.log("Springboard | Plugin worker script finished")
             }
         }
     }

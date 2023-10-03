@@ -158,6 +158,7 @@ ApplicationWindow {
         }
         property var actionType: {
             'SuggestContact': 0,
+            'SuggestPluginEntity' : 1,
             'MakeCall': 20000,
             'SendEmail': 20001,
             'SendSMS': 20002,
@@ -187,8 +188,7 @@ ApplicationWindow {
             'OpenApp' : 20026,
             'SendSignal' : 20027,
             'OpenSignalContact' : 20028,
-            'ShowCompletion' : 20029,
-            'ExecutePlugin': 20030
+            'ExecutePlugin': 20029,
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -887,28 +887,29 @@ ApplicationWindow {
         }
 
         function getInstalledPluginSource(pluginId) {
-            pluginStore.setSource(pluginId + "/plugin.qml")
+            console.debug("MainView | plugin id: " + pluginId)
+            pluginStore.setSource(pluginId + "_plugin.qml")
             return pluginStore.readPrivate()
         }
 
         function updateInstalledPlugins(pluginMetadata, isEnabled, callback) {
             var installedPlugins = getInstalledPlugins()
-            var pluginSource = pluginMetadata["pId"] + "/plugin.qml"
+            var pluginSource = pluginMetadata["id"] + "_plugin.qml"
             if (isEnabled) {
-                // todo: download and install plugin
                 var xmlRequest = new XMLHttpRequest();
                 xmlRequest.onreadystatechange = function() {
                     if (xmlRequest.readyState === XMLHttpRequest.DONE) {
-                        console.debug("MainView | got plugin request responce");
-                        if (xhr.status === 200) {
-                            console.log("MainView | plugin responste status 200");
-                            var pluginScript = xmlRequest.responseText
+                        console.debug("MainView | got plugin request responce")
+                        if (xmlRequest.status === 200) {
+                            console.log("MainView | plugin responste status 200")
+                            var plugin = xmlRequest.responseText
                             pluginStore.setSource(pluginSource)
-                            pluginStore.writePrivate(pluginScript)
+                            pluginStore.writePrivate(plugin)
+                            console.debug("MainView | Read back: " + pluginStore.readPrivate().length)
                             installedPlugins.push(pluginMetadata)
                             pluginStore.setSource("installedPlugins.json")
                             pluginStore.writePrivate(JSON.stringify(installedPlugins))
-                            springboard.children[0].item.addPlugin(pluginScript)
+                            springboard.children[0].item.addPlugin(plugin, pluginMetadata.id)
                             callback(true)
                         } else {
                             mainView.showToast(qsTr("Couldn't load plugin"))
@@ -917,15 +918,15 @@ ApplicationWindow {
                         }
                     }
                 };
-                xmlRequest.open("GET", pluginMetadata.url);
-                console.debug("Mainview | Sending plugin request");
+                xmlRequest.open("GET", pluginMetadata.downloadUrl)
+                console.debug("Mainview | Sending plugin request")
                 xmlRequest.send();
             } else {
-                installedPlugins = installedPlugins.filter( el => el.pID !== pluginMetadata.pId )
+                installedPlugins = installedPlugins.filter( el => el.id !== pluginMetadata.id )
                 pluginStore.setSource("installedPlugins.json")
                 pluginStore.writePrivate(JSON.stringify(installedPlugins))
-                springboard.children[0].item.removePlugin(pluginMetadata.pId)
-                return true
+                springboard.children[0].item.removePlugin(pluginMetadata.id)
+                callback(true)
             }
         }
 
