@@ -88,9 +88,18 @@ Page {
 
     function addPlugin(pluginSource, pluginId) {
         console.debug("Springboard | Plugin " + pluginId + " source length: " + pluginSource.length)
-        var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId) // not sure about the file path
-        console.debug("Springboard | PluginObject: " + qmlObject)
-        springBoard.plugins.push(qmlObject)
+        try {
+            var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId) // not sure about the file path
+            springBoard.plugins.push(qmlObject)
+        } catch (error) {
+            console.debug("Springboard | Error loading QML : ")
+            for (var i = 0; i < error.qmlErrors.length; i++) {
+                console.debug("Springboard | lineNumber: " + error.qmlErrors[i].lineNumber)
+                console.debug("Springboard | columnNumber: " + error.qmlErrors[i].columnNumber)
+                console.debug("Springboard | fileName: " + error.qmlErrors[i].fileName)
+                console.debug("Springboard | message: " + error.qmlErrors[i].message)
+            }
+        }
     }
 
     function removePlugin(pluginId) {
