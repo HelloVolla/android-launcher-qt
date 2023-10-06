@@ -4,7 +4,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Universal 2.12
 
 Button {
-    id: settingsButton
+    id: root
 
     property bool boldText: false
     property alias textColor: buttonText.color
@@ -15,10 +15,10 @@ Button {
     padding: mainView.innerSpacing
     contentItem: Text {
         id: buttonText
-        width: parent.width - 2 * settingsButton.padding
+        width: parent.width - 2 * root.padding
         font.pointSize: mainView.largeFontSize
-        font.weight: settingsButton.boldText ? Font.Black : Font.Normal
-        text: settingsButton.text
+        font.weight: root.boldText ? Font.Black : Font.Normal
+        text: root.text
         color: Universal.foreground
     }
     background: Rectangle {
