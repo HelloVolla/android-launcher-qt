@@ -682,7 +682,7 @@ Page {
                     property bool menuState: false
                     property var newsCheckboxes: new Array
 
-                    SettingsButton {
+                    HighlightButton {
                         id: newsSettingsItemTitle
                         width: parent.width
                         text: qsTr("News Channels")
@@ -763,7 +763,7 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    SettingsButton {
+                    HighlightButton {
                         id: shortcutSettingsItemButton
                         width: parent.width
                         text: qsTr("Shortcuts")
@@ -948,7 +948,7 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    SettingsButton {
+                    HighlightButton {
                         id: sourceSettingsItemButton
                         width: parent.width
                         boldText: sourceSettingsItemColumn.menuState
@@ -1037,7 +1037,7 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    SettingsButton {
+                    HighlightButton {
                         id: searchSettingsItemButton
                         width: parent.width
                         text: qsTr("Search engines")
@@ -1131,7 +1131,7 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    SettingsButton {
+                    HighlightButton {
                         id: designSettingsItemButton
                         width: parent.width
                         text: qsTr("Display and menus")
@@ -1359,7 +1359,7 @@ Page {
                         }
                     }
 
-                    SettingsButton {
+                    HighlightButton {
                         id: resetSettingsItemButton
                         width: parent.width
                         text: qsTr("Reset options")
