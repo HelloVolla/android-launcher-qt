@@ -7,6 +7,10 @@ Button {
     id: settingsButton
 
     property bool boldText: false
+    property alias textColor: buttonText.color
+    property alias textOpacity: buttonText.opacity
+    property alias backgroundColor: buttonBackground.color
+    property alias fontPointSize: buttonText.font.pointSize
 
     padding: mainView.innerSpacing
     contentItem: Text {
@@ -18,6 +22,7 @@ Button {
         color: Universal.foreground
     }
     background: Rectangle {
+        id: buttonBackground
         anchors.fill: parent
         color: "transparent"
     }
