@@ -682,21 +682,11 @@ Page {
                     property bool menuState: false
                     property var newsCheckboxes: new Array
 
-                    Button {
+                    SettingsButton {
                         id: newsSettingsItemTitle
                         width: parent.width
-                        padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * newsSettingsItemTitle.padding
-                            text: qsTr("News Channels")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: newsSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("News Channels")
+                        boldText: newsSettingsItemColumn.menuState
                         onClicked: {
                             newsSettingsItemColumn.menuState = !newsSettingsItemColumn.menuState
                             if (newsSettingsItemColumn.menuState) {
@@ -773,21 +763,11 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    SettingsButton {
                         id: shortcutSettingsItemButton
                         width: parent.width
-                        padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsItemButton.padding
-                            text: qsTr("Shortcuts")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Shortcuts")
+                        boldText: shortcutSettingsItemColumn.menuState
                         onClicked: {
                             shortcutSettingsItemColumn.menuState = !shortcutSettingsItemColumn.menuState
                             if (shortcutSettingsItemColumn.menuState) {
@@ -968,21 +948,11 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    SettingsButton {
                         id: sourceSettingsItemButton
                         width: parent.width
-                        padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * sourceSettingsItemButton.padding
-                            text: qsTr("Source settings")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: sourceSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        boldText: sourceSettingsItemColumn.menuState
+                        text: qsTr("Source settings")
                         onClicked: {
                             sourceSettingsItemColumn.menuState = !sourceSettingsItemColumn.menuState
                             if (sourceSettingsItemColumn.menuState) {
@@ -1067,21 +1037,11 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    SettingsButton {
                         id: searchSettingsItemButton
                         width: parent.width
-                        padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsItemButton.padding
-                            text: qsTr("Search engines")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Search engines")
+                        boldText: searchSettingsItemColumn.menuState
                         onClicked: {
                             searchSettingsItemColumn.menuState = !searchSettingsItemColumn.menuState
                             if (searchSettingsItemColumn.menuState) {
@@ -1171,21 +1131,11 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    SettingsButton {
                         id: designSettingsItemButton
                         width: parent.width
-                        padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsItemButton.padding
-                            text: qsTr("Display and menus")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Display and menus")
+                        boldText: designSettingsItemColumn.menuState
                         onClicked: {
                             designSettingsItemColumn.menuState = !designSettingsItemColumn.menuState
                             if (designSettingsItemColumn.menuState) {
@@ -1409,21 +1359,11 @@ Page {
                         }
                     }
 
-                    Button {
+                    SettingsButton {
                         id: resetSettingsItemButton
                         width: parent.width
-                        padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * resetSettingsItemButton.padding
-                            text: qsTr("Reset options")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: resetSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Reset options")
+                        boldText: resetSettingsItemColumn.menuState
                         onClicked: {
                             resetSettingsItemColumn.menuState = !resetSettingsItemColumn.menuState
                             settingsColumn.closeAllItemsExcept(resetSettingsItemColumn)
