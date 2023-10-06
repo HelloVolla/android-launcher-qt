@@ -28,6 +28,7 @@
         <file>Conversation.qml</file>
         <file>Feed.qml</file>
         <file>Settings.qml</file>
+        <file>SettingsButton.qml</file>
         <file>Checkbox.qml</file>
         <file>icons/aurora-store-line@4x.png</file>
         <file>icons/amazon@4x.png</file>
