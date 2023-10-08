@@ -1102,7 +1102,7 @@ Page {
                                                 cNews.c_BADGE = true
                                             }
                                         }
-                                        else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail") {
+                                        else if (childNode.nodeName === "content" || childNode.nodeName === "thumbnail" || childNode.nodeName === "enclosure") {
                                             for (ii = 0; ii < childNode.attributes.length; ++ii) {
                                                 attribute = childNode.attributes[ii]
                                                 if (attribute.name === "url") {
@@ -1111,7 +1111,7 @@ Page {
                                                     break
                                                 }
                                             }
-                                        }
+                                        } 
                                     }
                                 } else if (doc.responseText !== null) {
                                     console.log("Collections | Use fall back for " + rssFeed.name)

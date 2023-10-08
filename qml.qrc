@@ -82,5 +82,21 @@
         <file>images/open-in-signal_light_2x.png</file>
         <file>images/open-in-signal_dark@2x.png</file>
         <file>images/open-in-signal_light@2x.png</file>
+        <file>icons/argenta@4x.png</file>
+        <file>icons/beeper@4x.png</file>
+        <file>icons/bitwarden@4x.png</file>
+        <file>icons/bpost@4x.png</file>
+        <file>icons/de-lijn@4x.png</file>
+        <file>icons/doccle@4x.png</file>
+        <file>icons/engie@4x.png</file>
+        <file>icons/facebook-lite@4x.png</file>
+        <file>icons/itsme@4x.png</file>
+        <file>icons/money-lover@4x.png</file>
+        <file>icons/my-nexuzhealth@4x.png</file>
+        <file>icons/my-proximus@4x.png</file>
+        <file>icons/norton-360@4x.png</file>
+        <file>icons/payconiq@4x.png</file>
+        <file>icons/tiktok@4x.png</file>
+        <file>icons/woolsocks@4x.png</file>
     </qresource>
 </RCC>
