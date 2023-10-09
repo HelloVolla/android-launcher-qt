@@ -4,7 +4,13 @@ WorkerScript.onMessage = function(message) {
     var contacts = message.contacts
     var model = message.model
     var actionType = message.actionType
-    var plugins = message.plugins
+    var plugins = plugins
+
+    console.debug("Plugin script | " + textInput)
+    console.debug("Plugin script | " + plugins)
+    console.debug("Plugin script | " + plugins.length)
+    console.debug("Plugin script | " + plugins[0])
+
 
     var pluginFunctions = new Array
     var autocompletions = new Array
@@ -30,7 +36,14 @@ WorkerScript.onMessage = function(message) {
         }
     }
 
-    var indexOfFirstSuggestion = model.findIndex(el => el.isFirstSuggestion !== true)
+    var indexOfFirstSuggestion
+
+    for (i = 0; i < model.count; i++) {
+        if (model.get(i).isFirstSuggestion) {
+            indexOfFirstSuggestion =i
+            break
+        }
+    }
 
     for (i = 0; i < pluginFunctions.length; i++) {
         model.insert(indexOfFirstSuggestion > -1 ? indexOfFirstSuggestion : model.count - 1, pluginFunctions[i])

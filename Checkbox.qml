@@ -46,6 +46,8 @@ CheckBox {
         visible: settingsCheckbox.hasRemoveButton
     }
 
+
+
     indicator: Rectangle {
         width: circleSize
         height: circleSize

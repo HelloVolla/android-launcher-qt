@@ -88,8 +88,41 @@ Page {
 
     function addPlugin(pluginSource, pluginId) {
         console.debug("Springboard | Plugin " + pluginId + " source length: " + pluginSource.length)
+        console.debug("Springboard | Plugin " + pluginId + " source: " + pluginSource)
         try {
-            var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId) // not sure about the file path
+            var qmlObject = Qt.createQmlObject("import QtQuick 2.12;
+
+QtObject {
+    id: volla_weather;
+
+    property var metadata: {
+        'id': 'volla_weather',
+        'name': 'Weather Forecast',
+        'description': 'It will add feature to get Weather Forecast directly from Springboard',
+        'version': 0.1,
+        'minLauncherVersion': 3,
+        'maxLauncherVersion': 100
+    }
+
+    function processInput (inputString) {
+        // Process the input string here
+        // Todo : Need to validate for city name and need to check if weather forecast app is installed
+        // Return an object containing the autocompletion or methods/functions
+        return [
+            {
+                'label' : 'Weather',
+                'func': function (anyString) {
+                    console.debug('DO ANYTHING');
+                }
+            },
+            {
+                'label' : 'Berlin',
+                'object' : 1224455
+            }
+       ];
+    }
+}", springBoard, pluginId) // not sure about the file path
+            console.debug("Springboard | Plugin " + qmlObject.metadata.id + " created")
             springBoard.plugins.push(qmlObject)
         } catch (error) {
             console.debug("Springboard | Error loading QML : ")
@@ -98,6 +131,8 @@ Page {
                 console.debug("Springboard | columnNumber: " + error.qmlErrors[i].columnNumber)
                 console.debug("Springboard | fileName: " + error.qmlErrors[i].fileName)
                 console.debug("Springboard | message: " + error.qmlErrors[i].message)
+                console.debug("Springboard | substring: " + pluginSource.substring(error.qmlErrors[i].columnNumber - 10, error.qmlErrors[i].columnNumber + 1))
+
             }
         }
     }
@@ -661,12 +696,62 @@ Page {
         WorkerScript {
             id: springBoardWorker
             source: "scripts/springboard.mjs"
+
             onMessage: {
                 console.log("Springboard | Main worker script finished")
-                pluginWorker.sendMessage({
-                    'textInput': springBoard.textInput, 'actionObj': springBoard.selectedObj, // a selected contact, potentially something else
-                    'plugins': springBoard.plugins, 'model': listModel, 'actionType': mainView.actionType, 'contacts': mainView.getContacts()
-                })
+                console.log("Springboard | Plugin: " + springBoard.plugins[0])
+
+                var pluginFunctions = new Array
+                var autocompletions = new Array
+                var i
+
+                for (i = 0; i < plugins.length; i++) {
+                    console.debug("Plugin script | " + plugins[i].metadata.id)
+                    var result = plugins[i].processInput(textInput)
+                    console.debug("Springboard | Plugin result: " + result.length + ", " + result)
+                    for (var j = 0; j < result.length; j++) {
+                        console.debug("Springboard | Plugin result: " + result[j])
+                        if (result[j].func !== undefined) {
+                            pluginFunctions.push({
+                                 "text": result[j].label,
+                                 "action": mainView.actionType.ExecutePlugin,
+                                 "pluginFunction": result[j].func,
+                                 "isFirstSuggestion": false
+                            })
+                        } else {
+                            autocompletions.push({
+                                "text": result[j].label,
+                                "action": mainView.actionType.SuggestPluginEntity,
+                                "object": result[j].object === undefined ? new Object : result[j].object,
+                                "isFirstSuggestion": false
+                            })
+                        }
+                    }
+                }
+
+                var indexOfFirstSuggestion
+
+                for (i = 0; i < listView.model.count; i++) {
+                    if (listView.model.get(i).isFirstSuggestion) {
+                        indexOfFirstSuggestion =i
+                        break
+                    }
+                }
+
+                for (i = 0; i < pluginFunctions.length; i++) {
+                    listView.model.insert(indexOfFirstSuggestion > -1 ? indexOfFirstSuggestion : listView.model.count, pluginFunctions[i])
+                }
+
+                for (i = 0; i < autocompletions.length; i++) {
+                    var autocompletion = autocompletions[i]
+                    autocompletions.isFirstSuggestion = indexOfFirstSuggestion === -1 && i === 0 ? true : false
+                    listView.model.append(pluginFunctions[i])
+                }
+
+//                pluginWorker.sendMessage({
+//                    'textInput': springBoard.textInput, 'actionObj': springBoard.selectedObj,
+//                    'plugins': springBoard.plugins, 'model': listModel, 'actionType': mainView.actionType, 'contacts': mainView.getContacts()
+//                })
             }
         }
 
