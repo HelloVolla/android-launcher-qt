@@ -685,6 +685,7 @@ Page {
                     HighlightButton {
                         id: newsSettingsItemTitle
                         width: parent.width
+                        padding: mainView.innerSpacing
                         text: qsTr("News Channels")
                         boldText: newsSettingsItemColumn.menuState
                         onClicked: {
@@ -766,6 +767,7 @@ Page {
                     HighlightButton {
                         id: shortcutSettingsItemButton
                         width: parent.width
+                        padding: mainView.innerSpacing
                         text: qsTr("Shortcuts")
                         boldText: shortcutSettingsItemColumn.menuState
                         onClicked: {
@@ -951,6 +953,7 @@ Page {
                     HighlightButton {
                         id: sourceSettingsItemButton
                         width: parent.width
+                        padding: mainView.innerSpacing
                         boldText: sourceSettingsItemColumn.menuState
                         text: qsTr("Source settings")
                         onClicked: {
@@ -1040,6 +1043,7 @@ Page {
                     HighlightButton {
                         id: searchSettingsItemButton
                         width: parent.width
+                        padding: mainView.innerSpacing
                         text: qsTr("Search engines")
                         boldText: searchSettingsItemColumn.menuState
                         onClicked: {
@@ -1134,6 +1138,7 @@ Page {
                     HighlightButton {
                         id: designSettingsItemButton
                         width: parent.width
+                        padding: mainView.innerSpacing
                         text: qsTr("Display and menus")
                         boldText: designSettingsItemColumn.menuState
                         onClicked: {
@@ -1362,6 +1367,7 @@ Page {
                     HighlightButton {
                         id: resetSettingsItemButton
                         width: parent.width
+                        padding: mainView.innerSpacing
                         text: qsTr("Reset options")
                         boldText: resetSettingsItemColumn.menuState
                         onClicked: {

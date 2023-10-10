@@ -12,7 +12,6 @@ Button {
     property alias backgroundColor: buttonBackground.color
     property alias fontPointSize: buttonText.font.pointSize
 
-    padding: mainView.innerSpacing
     contentItem: Text {
         id: buttonText
         width: parent.width - 2 * root.padding
