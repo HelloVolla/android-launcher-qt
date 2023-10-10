@@ -10,12 +10,12 @@ Button {
     property alias textColor: buttonText.color
     property alias textOpacity: buttonText.opacity
     property alias backgroundColor: buttonBackground.color
-    property alias fontPointSize: buttonText.font.pointSize
+    property real fontPointSize: mainView.largeFontSize
 
     contentItem: Text {
         id: buttonText
         width: parent.width - 2 * root.padding
-        font.pointSize: mainView.largeFontSize
+        font.pointSize: root.fontPointSize
         font.weight: root.boldText ? Font.Black : Font.Normal
         text: root.text
         color: Universal.foreground
