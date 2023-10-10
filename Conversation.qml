@@ -6,7 +6,7 @@ import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 
-Page {
+LauncherPage {
     id: conversationPage
     anchors.fill: parent
 
@@ -35,11 +35,6 @@ Page {
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
     property string m_ERROR:     "error"   // error message under message
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     Connections {
         target: Qt.inputMethod

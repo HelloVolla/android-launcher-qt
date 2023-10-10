@@ -7,7 +7,7 @@ import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 import FileIO 1.0
 
-Page {
+LauncherPage {
     id: collectionPage
     anchors.fill: parent
 
@@ -41,11 +41,6 @@ Page {
     property string c_TSTAMP:    "tstamp"   // timestamp to sort the list
     property string c_TYPE:      "type"     // rss or atpm feed type
     property string c_SIGNAL:    "signal"   // has a signal account
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     onTextInputChanged: {
         console.log("Collections | text input changed")

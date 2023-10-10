@@ -5,7 +5,7 @@ import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 
-Page {
+LauncherPage {
     id : feedPage
     anchors.fill: parent
 

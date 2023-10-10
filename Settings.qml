@@ -7,15 +7,10 @@ import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 
-Page {
+LauncherPage {
     id: settingsPage
     anchors.fill: parent
     topPadding: mainView.innerSpacing
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     Flickable {
         anchors.fill: parent

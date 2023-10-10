@@ -5,7 +5,7 @@ import QtWebView 1.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 
-Page {
+LauncherPage {
     id: detailPage
     objectName: "detailPage"
     anchors.fill: parent
@@ -15,11 +15,6 @@ Page {
     property var currentDetailAuthorAndDate: ""
     property var currentTitle
     property var currentDetailHasBadge: false
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     header: Rectangle {
         id: detailPageHeader
