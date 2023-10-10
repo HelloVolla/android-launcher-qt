@@ -30,6 +30,7 @@
         <file>Settings.qml</file>
         <file>HighlightButton.qml</file>
         <file>Checkbox.qml</file>
+        <file>LauncherPage.qml</file>
         <file>icons/aurora-store-line@4x.png</file>
         <file>icons/amazon@4x.png</file>
         <file>icons/aurora-store@4x.png</file>
