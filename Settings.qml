@@ -109,7 +109,7 @@ Page {
                             }
                         }
                     }
-                    Button {
+                    HighlightButton {
                         id: darkModeOption
 
                         property var theme: mainView.theme.Dark
@@ -120,19 +120,13 @@ Page {
                         width: parent.width
                         visible: themeSettingsItem.menuState
                         text: qsTr("Dark Mode")
-                        contentItem: Text {
-                            text: darkModeOption.text
-                            font.pointSize: mainView.mediumFontSize
-                            font.weight: themeSettingsItem.selectedMenuItem === darkModeOption ? Font.Black : Font.Normal
-                            color: "white"
-                            opacity: themeSettingsItem.labelOpacity
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
-                        }
+                        boldText: themeSettingsItem.selectedMenuItem === darkModeOption
+                        textColor: "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        fontPointSize: mainView.mediumFontSize
                     }
-                    Button {
+                    HighlightButton {
                         id: lightModeOption
 
                         property var theme: mainView.theme.Light
@@ -143,19 +137,13 @@ Page {
                         width: parent.width
                         visible: themeSettingsItem.menuState
                         text: qsTr("Light Mode")
-                        contentItem: Text {
-                            text: lightModeOption.text
-                            font.pointSize: mainView.mediumFontSize
-                            font.weight: themeSettingsItem.selectedMenuItem === lightModeOption ? Font.Black : Font.Normal
-                            color: "white"
-                            opacity: themeSettingsItem.labelOpacity
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
-                        }
+                        boldText: themeSettingsItem.selectedMenuItem === lightModeOption
+                        textColor: "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        fontPointSize: mainView.mediumFontSize
                     }
-                    Button {
+                    HighlightButton {
                         id: translucentModeOption
 
                         property var theme: mainView.theme.Translucent
@@ -166,17 +154,11 @@ Page {
                         width: parent.width
                         visible: themeSettingsItem.menuState
                         text: qsTr("Translucent Mode")
-                        contentItem: Text {
-                            text: translucentModeOption.text
-                            font.pointSize: mainView.mediumFontSize
-                            font.weight: themeSettingsItem.selectedMenuItem === translucentModeOption ? Font.Black : Font.Normal
-                            color: "white"
-                            opacity: themeSettingsItem.labelOpacity
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
-                        }
+                        boldText: themeSettingsItem.selectedMenuItem === translucentModeOption
+                        textColor: "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        fontPointSize: mainView.mediumFontSize
                     }
                 }
 
