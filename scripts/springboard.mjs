@@ -49,7 +49,7 @@ WorkerScript.onMessage = function(message) {
     }
 
     var filteredSuggestionObj = new Array
-    //var filteredSuggestion
+    var indexOfFirstSuggestion = 0
     var suggestion
     var found
     var i
@@ -137,15 +137,13 @@ WorkerScript.onMessage = function(message) {
         filteredSuggestionObj[0] = [actionName.MakeCall, actionType.MakeCall]
     } else if (textInput.length > 1) {
         filteredSuggestionObj[0] = [actionName.SearchWeb, actionType.SearchWeb]
-
+        indexOfFirstSuggestion = 1
         lastToken = textInput.substring(0, textInput.length).toLowerCase()
-        var isFirstSuggestion = true
         for (i = 0; i < contacts.length; i++) {
             contact = contacts[i]
             name = contact["name"].toLowerCase()
             if (lastToken.length === 0 || name.includes(lastToken)) {
-                filteredSuggestionObj[i+1] = [contact["name"], actionType.SuggestContact, JSON.parse(JSON.stringify(contact)), isFirstSuggestion]
-                isFirstSuggestion = false
+                filteredSuggestionObj[i+1] = [contact["name"], actionType.SuggestContact, JSON.parse(JSON.stringify(contact))]
             }
         }
     }
@@ -173,13 +171,13 @@ WorkerScript.onMessage = function(message) {
         found = existingSuggestionObj.hasOwnProperty(item)
         if (!found) {
             // for simplicity, just adding to end instead of corresponding position in original list
-            model.append({ "text": item[0], "action": item[1], "object": item[2], "isFirstSuggestion" : item[3] !== undefined ? item[3] : false})
+            model.append({ "text": item[0], "action": item[1], "object": item[2] })
         }
         console.debug("Springboard | Append Suggestion: " + item[0])
     });
 
     model.sync()
 
-    WorkerScript.sendMessage(new Object)
+    WorkerScript.sendMessage( {'indexOfFirstSuggestion': indexOfFirstSuggestion } )
 }
 

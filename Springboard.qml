@@ -90,38 +90,7 @@ Page {
         console.debug("Springboard | Plugin " + pluginId + " source length: " + pluginSource.length)
         console.debug("Springboard | Plugin " + pluginId + " source: " + pluginSource)
         try {
-            var qmlObject = Qt.createQmlObject("import QtQuick 2.12;
-
-QtObject {
-    id: volla_weather;
-
-    property var metadata: {
-        'id': 'volla_weather',
-        'name': 'Weather Forecast',
-        'description': 'It will add feature to get Weather Forecast directly from Springboard',
-        'version': 0.1,
-        'minLauncherVersion': 3,
-        'maxLauncherVersion': 100
-    }
-
-    function processInput (inputString) {
-        // Process the input string here
-        // Todo : Need to validate for city name and need to check if weather forecast app is installed
-        // Return an object containing the autocompletion or methods/functions
-        return [
-            {
-                'label' : 'Weather',
-                'func': function (anyString) {
-                    console.debug('DO ANYTHING');
-                }
-            },
-            {
-                'label' : 'Berlin',
-                'object' : 1224455
-            }
-       ];
-    }
-}", springBoard, pluginId) // not sure about the file path
+            var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId)
             console.debug("Springboard | Plugin " + qmlObject.metadata.id + " created")
             springBoard.plugins.push(qmlObject)
         } catch (error) {
@@ -131,8 +100,6 @@ QtObject {
                 console.debug("Springboard | columnNumber: " + error.qmlErrors[i].columnNumber)
                 console.debug("Springboard | fileName: " + error.qmlErrors[i].fileName)
                 console.debug("Springboard | message: " + error.qmlErrors[i].message)
-                console.debug("Springboard | substring: " + pluginSource.substring(error.qmlErrors[i].columnNumber - 10, error.qmlErrors[i].columnNumber + 1))
-
             }
         }
     }
@@ -251,6 +218,8 @@ QtObject {
 
         model: ListModel {
             id: listModel
+
+            property int indexOfFirstSuggestion: -1
 
             function checkContacts(contact) {
                 var fullName = contact["name"].replace(/\s/g, "_")
@@ -418,7 +387,7 @@ QtObject {
                 return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}\s\S+/.test(textInput)
             }
 
-            function executeAction(actionValue, actionType, actionObj, actionFnc) {
+            function executeAction(actionValue, actionType, actionObj, functionReference) {
                 if (actionObj !== undefined) {
                     console.log("SpringBoard | " + actionValue + ": " + actionType + ": " + actionObj["id"])
                 } else {
@@ -588,7 +557,11 @@ QtObject {
                         textInputArea.text = ""
                         break
                     case mainView.actionType.ExecutePlugin:
-                        actionFnc(textInput)
+                        for (var i = 0; i < springBoard.plugins.length; i++) {
+                            if (functionReference.pluginId === springBoard.plugins[i].metadata.id) {
+                                springBoard.plugins[i].executeInput(textInput, actionObj, functionReference.functionId)
+                            }
+                        }
                         break
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
@@ -635,8 +608,9 @@ QtObject {
                 id: button
                 width: parent.width - mainView.innerSpacing
                 leftPadding: mainView.innerSpacing
-                topPadding: model.index === 0 || model.isFirstSuggestion ? mainView.innerSpacing : 0
-                bottomPadding: model.index === listModel.count - 1 || model.action === mainView.actionType.SearchWeb ? mainView.innerSpacing : mainView.innerSpacing / 2
+                topPadding: model.index === 0 || model.index === listModel.indexOfFirstSuggestion ? mainView.innerSpacing : 0
+                bottomPadding: model.index === listModel.count - 1 || model.index === listModel.indexOfFirstSuggestion - 1
+                               ? mainView.innerSpacing : mainView.innerSpacing / 2
                 anchors.top: parent.top
                 text: styledText(model.text, textInput.substring(textInput.indexOf("@") === 0 ? 1 : 0, textInput.length))
                 flat: model.action >= 20000 ? false : true
@@ -662,7 +636,7 @@ QtObject {
 
                 onClicked: {
                     console.log("Springboard | Menu item clicked")
-                    listModel.executeAction(model.text, model.action, model.object, model.pluginFunction)
+                    listModel.executeAction(model.text, model.action, model.object, model.functionReference)
                 }
             }
         }
@@ -701,6 +675,8 @@ QtObject {
                 console.log("Springboard | Main worker script finished")
                 console.log("Springboard | Plugin: " + springBoard.plugins[0])
 
+                listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
+
                 var pluginFunctions = new Array
                 var autocompletions = new Array
                 var i
@@ -710,12 +686,15 @@ QtObject {
                     var result = plugins[i].processInput(textInput)
                     console.debug("Springboard | Plugin result: " + result.length + ", " + result)
                     for (var j = 0; j < result.length; j++) {
-                        console.debug("Springboard | Plugin result: " + result[j])
-                        if (result[j].func !== undefined) {
+                        console.debug("Springboard | Plugin result " + j + ": " + result[j].label)
+                        if (result[j].label === undefined && result[j].label.length > 100) {
+                            console.warn("Springboard | Missing or too long label of plugin suggestion")
+                        }
+                        if (result[j].functionId !== undefined) {
                             pluginFunctions.push({
                                  "text": result[j].label,
                                  "action": mainView.actionType.ExecutePlugin,
-                                 "pluginFunction": result[j].func,
+                                 "functionReference": {"pluginId": plugins[i].metadata.id, "functionId": result[j].functionId},
                                  "isFirstSuggestion": false
                             })
                         } else {
@@ -729,29 +708,15 @@ QtObject {
                     }
                 }
 
-                var indexOfFirstSuggestion
-
-                for (i = 0; i < listView.model.count; i++) {
-                    if (listView.model.get(i).isFirstSuggestion) {
-                        indexOfFirstSuggestion =i
-                        break
-                    }
-                }
+                listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length
 
                 for (i = 0; i < pluginFunctions.length; i++) {
-                    listView.model.insert(indexOfFirstSuggestion > -1 ? indexOfFirstSuggestion : listView.model.count, pluginFunctions[i])
+                    listView.model.insert(0, pluginFunctions[i])
                 }
 
                 for (i = 0; i < autocompletions.length; i++) {
-                    var autocompletion = autocompletions[i]
-                    autocompletions.isFirstSuggestion = indexOfFirstSuggestion === -1 && i === 0 ? true : false
-                    listView.model.append(pluginFunctions[i])
+                    listView.model.append(autocompletions[i])
                 }
-
-//                pluginWorker.sendMessage({
-//                    'textInput': springBoard.textInput, 'actionObj': springBoard.selectedObj,
-//                    'plugins': springBoard.plugins, 'model': listModel, 'actionType': mainView.actionType, 'contacts': mainView.getContacts()
-//                })
             }
         }
 
