@@ -335,10 +335,11 @@ Page {
         property var app
         property var gridView
         property bool isPinnedShortcut: false
+        property bool canBeDeleted: false
+        property int menuItemHeight: 40
 
         background: Rectangle {
             id: menuBackground
-            height: contextMenu.isPinnedShortcut ? 150 : 110
             implicitWidth: contextMenu.menuWidth
             color: Universal.accent
             radius: mainView.innerSpacing
@@ -406,7 +407,28 @@ Page {
             }
         }
         MenuItem {
+            id: removeAppItem
+            height: removeAppItem.visible ? contextMenu.menuItemHeight : 0
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: contextMenu.menuWidth
+                text: qsTr("Remove App")
+                horizontalAlignment: Text.AlignHCenter
+            }
+            leftPadding: mainView.innerSpacing
+            rightPadding: mainView.innerSpacing
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            visible: contextMenu.canBeDeleted
+            onClicked: {
+                    AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId": contextMenu.app["package"]})
+            }
+        }
+        MenuItem {
             id: removePinnedShortcutItem
+            height: removePinnedShortcutItem.visible ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: contextMenu.menuWidth
@@ -431,6 +453,19 @@ Page {
                 }
                 AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": shortcutId})
                 disabledPinnedShortcuts.disableShortcut(shortcutId)
+            }
+        }
+
+        onAboutToShow: {
+            AN.SystemDispatcher.dispatch("volla.launcher.canDeleteAppAction", {"appId": contextMenu.app["package"]})
+        }
+
+        Connections {
+            target: AN.SystemDispatcher
+            onDispatched: {
+                if (type === "volla.launcher.canDeleteAppResponce") {
+                    contextMenu.canBeDeleted = message["canDeleteApp"]
+                }
             }
         }
     }
