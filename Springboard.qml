@@ -719,15 +719,6 @@ Page {
                 }
             }
         }
-
-        WorkerScript {
-            id: pluginWorker
-            source: "scripts/plugins.mjs"
-
-            onMessage: {
-                console.log("Springboard | Plugin worker script finished")
-            }
-        }
     }
 
     MouseArea {
