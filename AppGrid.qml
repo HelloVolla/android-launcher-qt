@@ -7,7 +7,7 @@ import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 import FileIO 1.0
 
-Page {
+LauncherPage {
     id: appLauncher
     anchors.fill: parent
 
@@ -99,11 +99,6 @@ Page {
     property int maxAppCount: 12
 
     property double lastAppsCheck: 0.0
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     onTextInputChanged: {
         console.log("AppGrid | Text input changed: " + appLauncher.textInput)

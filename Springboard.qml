@@ -7,7 +7,7 @@ import QtQuick.Window 2.2
 import FileIO 1.0
 import AndroidNative 1.0 as AN
 
-Page {
+LauncherPage {
     id: springBoard
     anchors.fill: parent
 
@@ -25,11 +25,6 @@ Page {
     property bool defaultSuggestions: false
     property bool dotShortcut: true
     property bool roundedShortcutMenu: true
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     onTextInputChanged: {
         console.log("Springboard | text input changed")

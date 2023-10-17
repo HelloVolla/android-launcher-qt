@@ -7,15 +7,10 @@ import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 
-Page {
+LauncherPage {
     id: settingsPage
     anchors.fill: parent
     topPadding: mainView.innerSpacing
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     Flickable {
         anchors.fill: parent
@@ -109,7 +104,7 @@ Page {
                             }
                         }
                     }
-                    Button {
+                    HighlightButton {
                         id: darkModeOption
 
                         property var theme: mainView.theme.Dark
@@ -120,19 +115,13 @@ Page {
                         width: parent.width
                         visible: themeSettingsItem.menuState
                         text: qsTr("Dark Mode")
-                        contentItem: Text {
-                            text: darkModeOption.text
-                            font.pointSize: mainView.mediumFontSize
-                            font.weight: themeSettingsItem.selectedMenuItem === darkModeOption ? Font.Black : Font.Normal
-                            color: "white"
-                            opacity: themeSettingsItem.labelOpacity
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
-                        }
+                        boldText: themeSettingsItem.selectedMenuItem === darkModeOption
+                        textColor: "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        fontPointSize: mainView.mediumFontSize
                     }
-                    Button {
+                    HighlightButton {
                         id: lightModeOption
 
                         property var theme: mainView.theme.Light
@@ -143,19 +132,13 @@ Page {
                         width: parent.width
                         visible: themeSettingsItem.menuState
                         text: qsTr("Light Mode")
-                        contentItem: Text {
-                            text: lightModeOption.text
-                            font.pointSize: mainView.mediumFontSize
-                            font.weight: themeSettingsItem.selectedMenuItem === lightModeOption ? Font.Black : Font.Normal
-                            color: "white"
-                            opacity: themeSettingsItem.labelOpacity
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
-                        }
+                        boldText: themeSettingsItem.selectedMenuItem === lightModeOption
+                        textColor: "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        fontPointSize: mainView.mediumFontSize
                     }
-                    Button {
+                    HighlightButton {
                         id: translucentModeOption
 
                         property var theme: mainView.theme.Translucent
@@ -166,17 +149,11 @@ Page {
                         width: parent.width
                         visible: themeSettingsItem.menuState
                         text: qsTr("Translucent Mode")
-                        contentItem: Text {
-                            text: translucentModeOption.text
-                            font.pointSize: mainView.mediumFontSize
-                            font.weight: themeSettingsItem.selectedMenuItem === translucentModeOption ? Font.Black : Font.Normal
-                            color: "white"
-                            opacity: themeSettingsItem.labelOpacity
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: themeSettingsItem.menuState ? Universal.accent : "transparent"
-                        }
+                        boldText: themeSettingsItem.selectedMenuItem === translucentModeOption
+                        textColor: "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        fontPointSize: mainView.mediumFontSize
                     }
                 }
 
@@ -682,21 +659,12 @@ Page {
                     property bool menuState: false
                     property var newsCheckboxes: new Array
 
-                    Button {
+                    HighlightButton {
                         id: newsSettingsItemTitle
                         width: parent.width
                         padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * newsSettingsItemTitle.padding
-                            text: qsTr("News Channels")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: newsSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("News Channels")
+                        boldText: newsSettingsItemColumn.menuState
                         onClicked: {
                             newsSettingsItemColumn.menuState = !newsSettingsItemColumn.menuState
                             if (newsSettingsItemColumn.menuState) {
@@ -773,21 +741,12 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    HighlightButton {
                         id: shortcutSettingsItemButton
                         width: parent.width
                         padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsItemButton.padding
-                            text: qsTr("Shortcuts")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Shortcuts")
+                        boldText: shortcutSettingsItemColumn.menuState
                         onClicked: {
                             shortcutSettingsItemColumn.menuState = !shortcutSettingsItemColumn.menuState
                             if (shortcutSettingsItemColumn.menuState) {
@@ -968,21 +927,12 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    HighlightButton {
                         id: sourceSettingsItemButton
                         width: parent.width
                         padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * sourceSettingsItemButton.padding
-                            text: qsTr("Source settings")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: sourceSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        boldText: sourceSettingsItemColumn.menuState
+                        text: qsTr("Source settings")
                         onClicked: {
                             sourceSettingsItemColumn.menuState = !sourceSettingsItemColumn.menuState
                             if (sourceSettingsItemColumn.menuState) {
@@ -1067,21 +1017,12 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    HighlightButton {
                         id: searchSettingsItemButton
                         width: parent.width
                         padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsItemButton.padding
-                            text: qsTr("Search engines")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Search engines")
+                        boldText: searchSettingsItemColumn.menuState
                         onClicked: {
                             searchSettingsItemColumn.menuState = !searchSettingsItemColumn.menuState
                             if (searchSettingsItemColumn.menuState) {
@@ -1171,21 +1112,12 @@ Page {
                     property bool menuState: false
                     property var checkboxes: new Array
 
-                    Button {
+                    HighlightButton {
                         id: designSettingsItemButton
                         width: parent.width
                         padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * shortcutSettingsItemButton.padding
-                            text: qsTr("Display and menus")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: shortcutSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Display and menus")
+                        boldText: designSettingsItemColumn.menuState
                         onClicked: {
                             designSettingsItemColumn.menuState = !designSettingsItemColumn.menuState
                             if (designSettingsItemColumn.menuState) {
@@ -1409,21 +1341,12 @@ Page {
                         }
                     }
 
-                    Button {
+                    HighlightButton {
                         id: resetSettingsItemButton
                         width: parent.width
                         padding: mainView.innerSpacing
-                        contentItem: Text {
-                            width: parent.width - 2 * resetSettingsItemButton.padding
-                            text: qsTr("Reset options")
-                            font.pointSize: mainView.largeFontSize
-                            font.weight: resetSettingsItemColumn.menuState ? Font.Black : Font.Normal
-                            color: Universal.foreground
-                        }
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                        }
+                        text: qsTr("Reset options")
+                        boldText: resetSettingsItemColumn.menuState
                         onClicked: {
                             resetSettingsItemColumn.menuState = !resetSettingsItemColumn.menuState
                             settingsColumn.closeAllItemsExcept(resetSettingsItemColumn)
