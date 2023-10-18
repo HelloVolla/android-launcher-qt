@@ -353,7 +353,7 @@ LauncherPage {
                     detailPage.prepareNoteView(plainText, lastCurserPosition)
                     mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
                 }
-                if (lastCurserPosition === detailEdit.cursorPosition) isBlocked = false
+                if (lastCurserPosition === detailEdit.cursorPosition) isBlocked = true
             }
 
             onActiveFocusChanged: {
