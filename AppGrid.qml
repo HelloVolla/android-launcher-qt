@@ -7,13 +7,30 @@ import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 import FileIO 1.0
 
-Page {
+LauncherPage {
     id: appLauncher
     anchors.fill: parent
 
     property string textInput
     property real labelPointSize: 16
     property var iconMap: {
+        "com.contactoffice.mailfence": "/icons/email@4x.png",
+        "be.engie.smart": "/icons/engie@4x.png",
+        "be.bmid.itsme": "/icons/itsme@4x.png",
+        "com.facebook.lite": "/icons/facebook-lite@4x.png",
+        "nl.apcreation.woolsocks": "/icons/woolsocks@4x.png",
+        "com.zhiliaoapp.musically": "/icons/tiktok@4x.png",
+        "com.proximus.proximusplus": "/icons/my-proximus@4x.png",
+        "mobi.inthepocket.bcmc.bancontact": "/icons/payconiq@4x.png",
+        "com.symantec.mobilesecurity": "/icons/norton-360@4x.png",
+        "be.nexuzhealth.mobile.mynexus": "/icons/my-nexuzhealth@4x.png",
+        "com.bookmark.money": "/icons/money-lover@4x.png",
+        "be.bpost.mybpost": "/icons/bpost@4x.png",
+        "be.ixor.doccle.android": "/icons/doccle@4x.png",
+        "com.themobilecompany.delijn": "/icons/de-lijn@4x.png",
+        "com.x8bit.bitwarden": "/icons/bitwarden@4x.png",
+        "com.beeper.chat": "/icons/beeper@4x.png",
+        "be.argenta.bankieren": "/icons/argenta@4x.png",
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
         "com.android.dialer": "/icons/dial-phone@4x.png",
         "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
@@ -76,6 +93,8 @@ Page {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
+        "mobi.inthepocket.bcmc.bancontact": qsTr("Bancontact"),
+        "com.facebook.lite": qsTr("Facebook"),
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
         "com.google.android.gm" : qsTr("Mail"),
         "com.fsck.k9": qsTr("Mail"),
@@ -99,11 +118,6 @@ Page {
     property int maxAppCount: 12
 
     property double lastAppsCheck: 0.0
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     onTextInputChanged: {
         console.log("AppGrid | Text input changed: " + appLauncher.textInput)
@@ -335,10 +349,11 @@ Page {
         property var app
         property var gridView
         property bool isPinnedShortcut: false
+        property bool canBeDeleted: false
+        property int menuItemHeight: 40
 
         background: Rectangle {
             id: menuBackground
-            height: contextMenu.isPinnedShortcut ? 150 : 110
             implicitWidth: contextMenu.menuWidth
             color: Universal.accent
             radius: mainView.innerSpacing
@@ -382,6 +397,7 @@ Page {
             }
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
+            bottomPadding: removeAppItem.visible ? 0 : mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"
@@ -406,7 +422,29 @@ Page {
             }
         }
         MenuItem {
+            id: removeAppItem
+            height: removeAppItem.visible ? contextMenu.menuItemHeight : 0
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: contextMenu.menuWidth
+                text: qsTr("Remove App")
+                horizontalAlignment: Text.AlignHCenter
+            }
+            leftPadding: mainView.innerSpacing
+            rightPadding: mainView.innerSpacing
+            bottomPadding: mainView.innerSpacing
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            visible: contextMenu.canBeDeleted
+            onClicked: {
+                    AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId": contextMenu.app["package"]})
+            }
+        }
+        MenuItem {
             id: removePinnedShortcutItem
+            height: removePinnedShortcutItem.visible ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: contextMenu.menuWidth
@@ -431,6 +469,19 @@ Page {
                 }
                 AN.SystemDispatcher.dispatch("volla.launcher.removeShortcut", {"shortcutId": shortcutId})
                 disabledPinnedShortcuts.disableShortcut(shortcutId)
+            }
+        }
+
+        onAboutToShow: {
+            AN.SystemDispatcher.dispatch("volla.launcher.canDeleteAppAction", {"appId": contextMenu.app["package"]})
+        }
+
+        Connections {
+            target: AN.SystemDispatcher
+            onDispatched: {
+                if (type === "volla.launcher.canDeleteAppResponce") {
+                    contextMenu.canBeDeleted = message["canDeleteApp"]
+                }
             }
         }
     }
