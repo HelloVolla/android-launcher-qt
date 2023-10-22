@@ -7,7 +7,7 @@ import Qt.labs.settings 1.0
 import AndroidNative 1.0 as AN
 import FileIO 1.0
 
-Page {
+LauncherPage {
     id: collectionPage
     anchors.fill: parent
 
@@ -41,11 +41,6 @@ Page {
     property string c_TSTAMP:    "tstamp"   // timestamp to sort the list
     property string c_TYPE:      "type"     // rss or atpm feed type
     property string c_SIGNAL:    "signal"   // has a signal account
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     onTextInputChanged: {
         console.log("Collections | text input changed")
@@ -134,7 +129,7 @@ Page {
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
         // load threads from further source
         // address (phone or contact), body (message), date, type
-        AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
+        if (mainView.isSignalActive) AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
     function loadCalls(filter) {
@@ -628,9 +623,9 @@ Page {
             var now = new Date()
 
             collectionPage.threads.forEach(function (thread, index) {
-                console.log("Collections | Thread: " + thread["date"])
+                console.log("Collections | Thread: " + thread["address"])
                 if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
-                    console.log("Collections | Thread matched: " + thread["id"])
+                    console.log("Collections | Thread matched: " + thread["address"])
                     if (thread["isSignal"]) contactThreads[thread["person"]] = thread
                     else contactThreads[thread["address"]] = thread
                 }
@@ -798,7 +793,7 @@ Page {
                 filteredModelItem = modelArr[i]
                 var modelItemName = modelArr[i].c_TITLE
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    //console.log("Collections | Add " + modelItemName + " to filtered items")
+                    // console.log("Collections | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
                 }
             }

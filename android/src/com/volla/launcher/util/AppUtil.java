@@ -36,6 +36,9 @@ public class AppUtil {
     public static final String OPEN_DIALER = "volla.launcher.dialerAction";
     public static final String OPEN_SMS_THREAD = "volla.launcher.showSmsTreadAction";
     public static final String RUN_APP = "volla.launcher.runAppAction";
+    public static final String DELETE_APP = "volla.launcher.deleteAppAction";
+    public static final String GET_CAN_DELETE_APP = "volla.launcher.canDeleteAppAction";
+    public static final String GOT_CAN_DELETE_APP = "volla.launcher.canDeleteAppResponce";
     public static final String OPEN_NOTES = "volla.launcher.notesAction";
     public static final String OPEN_CONTACT = "volla.launcher.showContactAction";
     public static final String RESET_LAUNCHER = "volla.launcher.resetAction";
@@ -109,6 +112,17 @@ public class AppUtil {
                                     Log.e(TAG, "Package Name not found: " + nnfe.getMessage() + ", App is not installed.");
                                 }
                             }
+                        } else if (type.equals(DELETE_APP)) {
+                            String packageName = (String) message.get("appId");
+                            Log.d(TAG, String.format("Delete %s",packageName));
+                            Uri packageUri = Uri.parse("package:" + packageName);
+                            Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
+                            activity.startActivity(uninstallIntent);
+                        } else if (type.equals(GET_CAN_DELETE_APP)) {
+                            String packageName = (String) message.get("appId");
+                            Map reply = new HashMap();
+                            reply.put("canDeleteApp", !isAppSystem(packageName));
+                            SystemDispatcher.dispatch(GOT_CAN_DELETE_APP, reply);
                         } else if (type.equals(OPEN_NOTES)) {
                             String text = (String) message.get("text");
                             Intent sendIntent = new Intent();
@@ -238,5 +252,18 @@ public class AppUtil {
                 thread.start();
             }
         });
+    }
+
+    static boolean isAppSystem(String packageName) {
+        try {
+            final Activity activity = QtNative.activity();
+            final PackageManager pm = activity.getPackageManager();
+            ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
+            return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0 ||
+                (appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, String.format("Can not find %s", packageName));
+            return false;
+        }
     }
 }

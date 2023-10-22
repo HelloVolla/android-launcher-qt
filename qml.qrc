@@ -1,102 +1,108 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>qtquickcontrols2.conf</file>
-        <file>Springboard.qml</file>
         <file>AppGrid.qml</file>
-        <file>Collections.qml</file>
-        <file>icons/browser@4x.png</file>
-        <file>icons/dial-phone@4x.png</file>
-        <file>icons/message@4x.png</file>
-        <file>icons/photo-gallery@4x.png</file>
-        <file>Details.qml</file>
-        <file>icons/calendar@4x.png</file>
-        <file>icons/camera@4x.png</file>
-        <file>icons/clock@4x.png</file>
-        <file>icons/email@4x.png</file>
-        <file>icons/folder@4x.png</file>
-        <file>icons/instagram@4x.png</file>
-        <file>icons/music@4x.png</file>
-        <file>icons/notes@4x.png</file>
-        <file>icons/people-contacts-agenda@4x.png</file>
-        <file>icons/route-directions-map@4x.png</file>
-        <file>icons/settings@4x.png</file>
-        <file>icons/slack@4x.png</file>
-        <file>icons/telegram@4x.png</file>
-        <file>icons/yalp-store@4x.png</file>
-        <file>images/contact-mask.png</file>
-        <file>Conversation.qml</file>
-        <file>Feed.qml</file>
-        <file>Settings.qml</file>
-        <file>Checkbox.qml</file>
-        <file>icons/aurora-store-line@4x.png</file>
-        <file>icons/amazon@4x.png</file>
-        <file>icons/aurora-store@4x.png</file>
-        <file>icons/db-navigator@4x.png</file>
-        <file>icons/dropbox@4x.png</file>
-        <file>icons/f-droid@4x.png</file>
-        <file>icons/facebook@4x.png</file>
-        <file>icons/gmx@4x.png</file>
-        <file>icons/hide-me@4x.png</file>
-        <file>icons/linkedin@4x.png</file>
-        <file>icons/nextcloud@4x.png</file>
-        <file>icons/paypal@4x.png</file>
-        <file>icons/skype@4x.png</file>
-        <file>icons/spotify@4x.png</file>
-        <file>icons/tutanota@4x.png</file>
-        <file>icons/volla-settings@4x.png</file>
-        <file>icons/web-de@4x.png</file>
-        <file>icons/wetter-com@4x.png</file>
-        <file>icons/whats-app@4x.png</file>
-        <file>icons/radio@4x_104x104px.png</file>
-        <file>icons/signal@4x_104x104px.png</file>
-        <file>icons/sync@4x_104x104px.png</file>
-        <file>scripts/springboard.mjs</file>
-        <file>android/res/drawable/wallpaper_image.png</file>
-        <file>icons/calculator@4x_104x104px.png</file>
-        <file>icons/weather@4x_104x104px.png</file>
-        <file>icons/xmpp@4x_104x104px.png</file>
-        <file>Shortcut.qml</file>
-        <file>icons/send_icon_light@4x.png</file>
-        <file>icons/attachment@4x.png</file>
-        <file>icons/check@4x.png</file>
-        <file>icons/link@4x.png</file>
-        <file>icons/pin@4x.png</file>
-        <file>icons/trash@4x.png</file>
-        <file>icons/lock@2x.png</file>
-        <file>scripts/contacts.mjs</file>
         <file>AppGroup.qml</file>
-        <file>scripts/apps.mjs</file>
+        <file>Checkbox.qml</file>
+        <file>Collections.qml</file>
+        <file>Conversation.qml</file>
+        <file>Details.qml</file>
+        <file>Feed.qml</file>
+        <file>HighlightButton.qml</file>
+        <file>LauncherPage.qml</file>
+        <file>main.qml</file>
         <file>OnBoarding.qml</file>
-        <file>icons/ebay@4x.png</file>
-        <file>icons/freeOTP@4x.png</file>
-        <file>icons/indiegogo@4x.png</file>
-        <file>icons/kickstarter@4x.png</file>
-        <file>icons/photoTAN@4x.png</file>
-        <file>icons/qr-scanner@4x.png</file>
-        <file>icons/socializer@4x.png</file>
-        <file>icons/status.im@4x.png</file>
-        <file>icons/twitter@4x.png</file>
-        <file>icons/share@4x.png</file>
-        <file>images/open-in-signal_dark_2x.png</file>
-        <file>images/open-in-signal_light_2x.png</file>
-        <file>images/open-in-signal_dark@2x.png</file>
-        <file>images/open-in-signal_light@2x.png</file>
+        <file>Settings.qml</file>
+        <file>Shortcut.qml</file>
+        <file>Springboard.qml</file>
+        <file>qtquickcontrols2.conf</file>
+
+        <file>scripts/apps.mjs</file>
+        <file>scripts/contacts.mjs</file>
+        <file>scripts/springboard.mjs</file>
+
+        <file>android/res/drawable/wallpaper_image.png</file>
+        
+        <file>icons/amazon@4x.png</file>
         <file>icons/argenta@4x.png</file>
+        <file>icons/attachment@4x.png</file>
+        <file>icons/aurora-store-line@4x.png</file>
+        <file>icons/aurora-store@4x.png</file>
         <file>icons/beeper@4x.png</file>
         <file>icons/bitwarden@4x.png</file>
         <file>icons/bpost@4x.png</file>
+        <file>icons/browser@4x.png</file>
+        <file>icons/calculator@4x_104x104px.png</file>
+        <file>icons/calendar@4x.png</file>
+        <file>icons/camera@4x.png</file>
+        <file>icons/check@4x.png</file>
+        <file>icons/clock@4x.png</file>
+        <file>icons/db-navigator@4x.png</file>
         <file>icons/de-lijn@4x.png</file>
+        <file>icons/dial-phone@4x.png</file>
         <file>icons/doccle@4x.png</file>
+        <file>icons/dropbox@4x.png</file>
+        <file>icons/ebay@4x.png</file>
+        <file>icons/email@4x.png</file>
         <file>icons/engie@4x.png</file>
+        <file>icons/f-droid@4x.png</file>
         <file>icons/facebook-lite@4x.png</file>
+        <file>icons/facebook@4x.png</file>
+        <file>icons/folder@4x.png</file>
+        <file>icons/freeOTP@4x.png</file>
+        <file>icons/gmx@4x.png</file>
+        <file>icons/hide-me@4x.png</file>
+        <file>icons/indiegogo@4x.png</file>
+        <file>icons/instagram@4x.png</file>
         <file>icons/itsme@4x.png</file>
+        <file>icons/kickstarter@4x.png</file>
+        <file>icons/link@4x.png</file>
+        <file>icons/linkedin@4x.png</file>
+        <file>icons/lock@2x.png</file>
+        <file>icons/message@4x.png</file>
         <file>icons/money-lover@4x.png</file>
+        <file>icons/music@4x.png</file>
         <file>icons/my-nexuzhealth@4x.png</file>
         <file>icons/my-proximus@4x.png</file>
+        <file>icons/nextcloud@4x.png</file>
         <file>icons/norton-360@4x.png</file>
+        <file>icons/notes@4x.png</file>
         <file>icons/payconiq@4x.png</file>
+        <file>icons/paypal@4x.png</file>
+        <file>icons/people-contacts-agenda@4x.png</file>
+        <file>icons/photo-gallery@4x.png</file>
+        <file>icons/photoTAN@4x.png</file>
+        <file>icons/pin@4x.png</file>
+        <file>icons/qr-scanner@4x.png</file>
+        <file>icons/radio@4x_104x104px.png</file>
+        <file>icons/route-directions-map@4x.png</file>
+        <file>icons/send_icon_light@4x.png</file>
+        <file>icons/settings@4x.png</file>
+        <file>icons/share@4x.png</file>
+        <file>icons/signal@4x_104x104px.png</file>
+        <file>icons/skype@4x.png</file>
+        <file>icons/slack@4x.png</file>
+        <file>icons/socializer@4x.png</file>
+        <file>icons/spotify@4x.png</file>
+        <file>icons/status.im@4x.png</file>
+        <file>icons/sync@4x_104x104px.png</file>
+        <file>icons/telegram@4x.png</file>
         <file>icons/tiktok@4x.png</file>
+        <file>icons/trash@4x.png</file>
+        <file>icons/tutanota@4x.png</file>
+        <file>icons/twitter@4x.png</file>
+        <file>icons/volla-settings@4x.png</file>
+        <file>icons/weather@4x_104x104px.png</file>
+        <file>icons/web-de@4x.png</file>
+        <file>icons/wetter-com@4x.png</file>
+        <file>icons/whats-app@4x.png</file>
         <file>icons/woolsocks@4x.png</file>
+        <file>icons/xmpp@4x_104x104px.png</file>
+        <file>icons/yalp-store@4x.png</file>
+
+        <file>images/contact-mask.png</file>
+        <file>images/open-in-signal_dark@2x.png</file>
+        <file>images/open-in-signal_dark_2x.png</file>
+        <file>images/open-in-signal_light@2x.png</file>
+        <file>images/open-in-signal_light_2x.png</file>
     </qresource>
 </RCC>
