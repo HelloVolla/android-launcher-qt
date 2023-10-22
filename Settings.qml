@@ -433,7 +433,7 @@ LauncherPage {
                             // Check, if password is set
                             AN.SystemDispatcher.dispatch("volla.launcher.checkSecurityPasswordAction", {})
                         } else if (selectedMenuItem.text === securityModeOffOption.text) {
-                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "white"  ? "#292929" : "#CCCCCC"
                             passwordDialog.definePasswordMode = false
                             passwordDialog.isPasswordSet = true
                             passwordDialog.open()
@@ -500,7 +500,7 @@ LauncherPage {
                             placeholderTextColor: "darkgrey"
                             font.pointSize: mainView.mediumFontSize
                             background: Rectangle {
-                                color: mainView.backgroundColor
+                                color: mainView.fontColor.toString() === "white"  ? "black" : "white"
                                 border.color: "transparent"
                             }
                         }
@@ -528,7 +528,7 @@ LauncherPage {
                             font.pointSize: mainView.mediumFontSize
                             visible: passwordDialog.definePasswordMode
                             background: Rectangle {
-                                color: mainView.backgroundColor
+                                color: mainView.fontColor.toString() === "white"  ? "black" : "white"
                                 border.color: "transparent"
                             }
                         }
@@ -638,7 +638,7 @@ LauncherPage {
                             securitySettingsItem.visible = message["error"] === undefined && message["isInstalled"]
                         } else if (type === "volla.launcher.checkSecurityPasswordResponse") {
                             console.log("Settings | Password is set: " + message["isPasswordSet"])
-                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                            passwordDialog.backgroundColor = mainView.fontColor.toString() === "white"  ? "#292929" : "#CCCCCC"
                             passwordDialog.definePasswordMode = true
                             passwordDialog.isPasswordSet = message["isPasswordSet"]
                             passwordDialog.open()

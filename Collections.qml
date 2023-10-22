@@ -129,7 +129,7 @@ LauncherPage {
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
         // load threads from further source
         // address (phone or contact), body (message), date, type
-        AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
+        if (mainView.isSignalActive) AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
     function loadCalls(filter) {
@@ -623,9 +623,9 @@ LauncherPage {
             var now = new Date()
 
             collectionPage.threads.forEach(function (thread, index) {
-                console.log("Collections | Thread: " + thread["date"])
+                console.log("Collections | Thread: " + thread["address"])
                 if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
-                    console.log("Collections | Thread matched: " + thread["id"])
+                    console.log("Collections | Thread matched: " + thread["address"])
                     if (thread["isSignal"]) contactThreads[thread["person"]] = thread
                     else contactThreads[thread["address"]] = thread
                 }
@@ -793,7 +793,7 @@ LauncherPage {
                 filteredModelItem = modelArr[i]
                 var modelItemName = modelArr[i].c_TITLE
                 if (text.length === 0 || modelItemName.toLowerCase().includes(text.toLowerCase())) {
-                    //console.log("Collections | Add " + modelItemName + " to filtered items")
+                    // console.log("Collections | Add " + modelItemName + " to filtered items")
                     filteredModelDict[modelItemName] = filteredModelItem
                 }
             }

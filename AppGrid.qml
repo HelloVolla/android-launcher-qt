@@ -397,6 +397,7 @@ LauncherPage {
             }
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
+            bottomPadding: removeAppItem.visible ? 0 : mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"
@@ -431,6 +432,7 @@ LauncherPage {
             }
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
+            bottomPadding: mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"

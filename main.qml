@@ -772,7 +772,7 @@ ApplicationWindow {
         }
 
         function updateNote(noteId, content, pinned) {
-            console.debug("MainView | Update Note: " + noteId + ", " + content + ", " + pinned)
+            //console.debug("MainView | Update Note: " + noteId + ", " + content + ", " + pinned)
             var notesArr = mainView.getNotes()
             var note
             var i = 0
@@ -795,7 +795,7 @@ ApplicationWindow {
                 note["pinned"] = false
                 notesArr.push(note)
             }
-            console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
+            //console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
             notesStore.write(JSON.stringify(notesArr))
             notes = notesArr
             if (mainView.count > mainView.swipeIndex.Collections) {
