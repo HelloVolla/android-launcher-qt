@@ -1,6 +1,29 @@
 <RCC>
     <qresource prefix="/">
         <file>AppGrid.qml</file>
+        <file>MusicBoard.qml</file>
+        <file>Collections.qml</file>
+        <file>ColoredImage.qml</file>
+        <file>icons/browser@4x.png</file>
+        <file>icons/dial-phone@4x.png</file>
+        <file>icons/message@4x.png</file>
+        <file>icons/photo-gallery@4x.png</file>
+        <file>Details.qml</file>
+        <file>icons/calendar@4x.png</file>
+        <file>icons/camera@4x.png</file>
+        <file>icons/clock@4x.png</file>
+        <file>icons/email@4x.png</file>
+        <file>icons/folder@4x.png</file>
+        <file>icons/instagram@4x.png</file>
+        <file>icons/music@4x.png</file>
+        <file>icons/notes@4x.png</file>
+        <file>icons/people-contacts-agenda@4x.png</file>
+        <file>icons/route-directions-map@4x.png</file>
+        <file>icons/settings@4x.png</file>
+        <file>icons/slack@4x.png</file>
+        <file>icons/telegram@4x.png</file>
+        <file>icons/yalp-store@4x.png</file>
+        <file>images/contact-mask.png</file>
         <file>AppGroup.qml</file>
         <file>Checkbox.qml</file>
         <file>Collections.qml</file>
@@ -103,6 +126,11 @@
         <file>images/open-in-signal_dark@2x.png</file>
         <file>images/open-in-signal_dark_2x.png</file>
         <file>images/open-in-signal_light@2x.png</file>
+        <file>icons/album.svg</file>
+        <file>icons/next.svg</file>
+        <file>icons/previous.svg</file>
+        <file>icons/pause.svg</file>
+        <file>icons/play.svg</file>
         <file>images/open-in-signal_light_2x.png</file>
     </qresource>
 </RCC>
