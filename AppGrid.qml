@@ -23,7 +23,7 @@ LauncherPage {
         "com.proximus.proximusplus": "/icons/my-proximus@4x.png",
         "mobi.inthepocket.bcmc.bancontact": "/icons/payconiq@4x.png",
         "com.symantec.mobilesecurity": "/icons/norton-360@4x.png",
-        "be.nexuzhealth.mobile.mynexus": "/icons/my-nexuzhealth@4x.png",
+        "be.nexuzhealth.mobile.mynexuz": "/icons/my-nexuzhealth@4x.png",
         "com.bookmark.money": "/icons/money-lover@4x.png",
         "be.bpost.mybpost": "/icons/bpost@4x.png",
         "be.ixor.doccle.android": "/icons/doccle@4x.png",
