@@ -1440,7 +1440,8 @@ Page {
                                 "text": availablePlugins[i]["name"], "checked": availablePlugins[i]["isEnabled"],
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "hasDescriptionButton": true }
                             var object = component.createObject(pluginSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             pluginSettingsItemColumn.checkboxes.push(object)
@@ -1456,6 +1457,10 @@ Page {
                         pluginSettingsItemColumn.availablePlugins = new Array
                     }
 
+                    function showDescription(actionId) {
+
+                    }
+
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update plugin settings for " + actionId + ", " + active)
                         var pluginMetadata = availablePlugins.find(p => p.id === actionId)
@@ -1469,6 +1474,10 @@ Page {
                             }
                         })
                     }
+                }
+
+                Dialog {
+
                 }
 
                 Behavior on implicitHeight {
