@@ -520,7 +520,7 @@
     <message>
         <location filename="../Settings.qml" line="1547"/>
         <source>Reset launcher</source>
-        <translation type="unfinished">Azzeramento del launcher</translation>
+        <translation>Launcher resetten</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1076"/>
