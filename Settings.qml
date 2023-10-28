@@ -1261,7 +1261,7 @@ Page {
                             var checkbox = designSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
-                        designSettingsItemColumn.checkboxes = new Array
+                        pluginSettingsItemColumn.checkboxes = new Array
                     }
 
                     function updateSettings(actionId, active) {
@@ -1403,6 +1403,7 @@ Page {
 
                     function loadAvailablePlugins() {
                         console.log("Settings | Load plugins")
+                        availablePlugins = new Array
                         var xhr = new XMLHttpRequest();
                         var temp;
                         xhr.onreadystatechange = function() {
@@ -1454,11 +1455,17 @@ Page {
                             var checkbox = pluginSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
-                        pluginSettingsItemColumn.availablePlugins = new Array
+                        pluginSettingsItemColumn.checkboxes = new Array
                     }
 
                     function showDescription(actionId) {
-
+                        pluginDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                        for (var i = 0; i < pluginSettingsItemColumn.availablePlugins.length; i++) {
+                            if (pluginSettingsItemColumn.availablePlugins[i].id === actionId) {
+                                pluginDialog.dialogDescritpion = pluginSettingsItemColumn.availablePlugins[i].description
+                            }
+                        }
+                        pluginDialog.open()
                     }
 
                     function updateSettings(actionId, active) {
@@ -1477,7 +1484,64 @@ Page {
                 }
 
                 Dialog {
+                    id: pluginDialog
 
+                    anchors.centerIn: parent
+                    width: parent.width - mainView.innerSpacing * 4
+                    modal: true
+                    dim: false
+
+                    property var backgroundColor: "#292929"
+                    property var dialogDescritpion
+
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: pluginDialog.backgroundColor
+                        border.color: "transparent"
+                        radius: mainView.innerSpacing / 2
+                    }
+
+                    contentItem: Column {
+                        spacing: mainView.innerSpacing / 2
+
+                        Label {
+                            id: pluginDialogTitle
+                            width: parent.width
+                            padding: mainView.innerSpacing / 2
+                            text: pluginDialog.dialogDescritpion
+                            color: mainView.fontColor
+                            wrapMode: Text.WordWrap
+                            font.pointSize: mainView.mediumFontSize
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "transparent"
+                            }
+                        }
+                        Button {
+                            id: pluginOkButton
+                            anchors.right: parent.right
+                            width: parent.width / 2 - mainView.innerSpacing / 2
+                            padding: mainView.innerSpacing / 2
+                            flat: true
+                            text: qsTr("Ok")
+
+                            contentItem: Text {
+                                text: okButton.text
+                                color: mainView.fontColor
+                                font.pointSize: mainView.mediumFontSize
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "gray"
+                            }
+
+                            onClicked: {
+                                pluginDialog.close()
+                            }
+                        }
+                    }
                 }
 
                 Behavior on implicitHeight {
