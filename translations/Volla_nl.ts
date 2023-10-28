@@ -520,7 +520,7 @@
     <message>
         <location filename="../Settings.qml" line="1547"/>
         <source>Reset launcher</source>
-        <translation>Launcher resetten</translation>
+        <translation>Startscherm-app resetten</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1076"/>
