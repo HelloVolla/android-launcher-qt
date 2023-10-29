@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.ShortcutUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.SignalUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.SignalWorker");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.service.MusicBoardNotificationListenerService");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
