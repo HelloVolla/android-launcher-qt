@@ -220,15 +220,21 @@ LauncherPage {
                                .replace(/<p>(### .*)<\/p>/gim, '<h3><$1</h3>') // h3 tag
                                .replace(/<p>(## .*)<\/p>/gim, '<h2>$1</h2>') // h2 tag
                                .replace(/<p>(# .*)<\/p>/gim, '<h1>$1</h1>') // h1 tag
-                               .replace(/<p>(.*)<\/p>/m, '<p style=\"font-size:36pt;font-weight:bold\">$1</p>') // trailing text
-                               .replace(/(\*\*.*\*\*)/gim, '<b>$1</b>') // bold text
-                               .replace(/(\*.*\*)/gim, '<i>$1</i>') // italic text
+                               .replace(/<p>(.+)<\/p>/, '<p style=\"font-size:36pt;font-weight:bold\">$1</p>') // trailing text
+                               .replace(/(\*\*.+\*\*)/gim, '<b>$1</b>') // bold text
+                               .replace(/(\*.+\*)/gim, '<i>$1</i>') // italic text
                                .replace(/<p>(\* .*)<\/p>/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">$1</p>') // unsorted list
                                .replace(/<p>(- .*)<\/p>/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">$1</p>') // unsorted list
                                .replace(/<p>([0-9]+\. .*)<\/p>/gim, '<p style=\"margin-left:20px;text-indent:-20px;\">$1</p>') // ordered list
-                               .replace(/(<p><\/p>)/gim, '')
-                               .replace(/\n\n/gim, '')
+                               .replace(/^(<p>\s*<\/p>\n)/gim, '')
+                               //.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
+                               //.replace(/^($)/gim, '')
+                               //.replace(/\n/gim, '')
                                //.trim()
+
+        if (detailEdit.editMode) {
+            styledText.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
+        }
 
 //        console.debug("----------------")
 //        var textArr = styledText.split("\n")
@@ -360,12 +366,14 @@ LauncherPage {
             }
 
             property bool isBlocked: false
+            property bool editMode: false
             property int lastCurserPosition: 0
             property int textLength
 
             onCursorRectangleChanged: detailFlickable.ensureVisible(cursorRectangle)
 
             onCursorPositionChanged: {
+                editMode = true
                 if (detailEdit.isBlocked === false) {
                     console.debug("Details | Curser postion changed from " + lastCurserPosition + " to " + detailEdit.cursorPosition)
 
@@ -385,8 +393,9 @@ LauncherPage {
                 if (activeFocus) {
                     detailFlickable.height = mainView.height * 0.46
                 } else {
-                    var plainText = detailEdit.text.replace(/p, li \{ white-space: pre-wrap; \}/gim, '').replace(/<[^>]+>/g, '').trim()
+                    var plainText = detailEdit.getText(0, 10000)
                     mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
+                    detailEdit.editMode = false
                     detailFlickable.height = mainView.height
                 }
             }
