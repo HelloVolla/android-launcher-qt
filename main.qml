@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
-import QtQuick.LocalStorage 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 import Qt.labs.settings 1.0
@@ -777,7 +776,7 @@ ApplicationWindow {
         }
 
         function updateNote(noteId, content, pinned) {
-            console.debug("MainView | Update Note: " + noteId + ", " + content + ", " + pinned)
+            //console.debug("MainView | Update Note: " + noteId + ", " + content + ", " + pinned)
             var notesArr = mainView.getNotes()
             var note
             var i = 0
@@ -800,7 +799,7 @@ ApplicationWindow {
                 note["pinned"] = false
                 notesArr.push(note)
             }
-            console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
+            //console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
             notesStore.write(JSON.stringify(notesArr))
             notes = notesArr
             if (mainView.count > mainView.swipeIndex.Collections) {

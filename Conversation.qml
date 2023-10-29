@@ -6,7 +6,7 @@ import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
 import AndroidNative 1.0 as AN
 
-Page {
+LauncherPage {
     id: conversationPage
     anchors.fill: parent
 
@@ -35,11 +35,6 @@ Page {
     property string m_KIND:      "kind"    // kind of content like sms or mms
     property string m_DATE:      "date"    // date in milliseconds of the item
     property string m_ERROR:     "error"   // error message under message
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-    }
 
     Connections {
         target: Qt.inputMethod
@@ -601,7 +596,6 @@ Page {
                     Label {
                         id: errorMessage
                         anchors.left: parent.left
-                        anchors.leftMargin: 3.0
                         topPadding: 6.0
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
@@ -611,8 +605,8 @@ Page {
                         font.pointSize: mainView.smallFontSize
                         color: Universal.accent
                         clip: true
-                        opacity: 0.7
-                        horizontalAlignment: Text.AlignRight
+                        opacity: 0.5
+                        horizontalAlignment: Text.AlignLeft
                         visible: model.m_ERROR !== undefined
                     }
                 }
@@ -659,10 +653,9 @@ Page {
 
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
-                // todo: Use errorProperty evalution as soon its fixed
-                } else if (message["errorProperty"] !== undefined) {
-                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
-                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
+                } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === 403) {
+                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light@2x.png")
+                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark@2x.png")
                     cMessage.m_ERROR = qsTr("Attached image is not available for preview")
                 } else {
                     cMessage.m_IMAGE = ""
@@ -777,14 +770,14 @@ Page {
                     conversationPage.phoneNumber = message["address"]
                 }
 
-                console.debug("Conversation | Error: " + message["errorProperty"])
-                console.debug("Conversation | Color: " + mainView.backgroundColor)
+                //console.debug("Conversation | Error: " + message["errorProperty"]["code"])
+                //console.debug("Conversation | Color: " + mainView.backgroundColor)
 
                 if (message["image"] !== undefined && message["image"].length > 100) {
                     cMessage.m_IMAGE = "data:image/png;base64," + message["image"]
-                } else if (message["errorProperty"].length > 0) {
-                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light_2x.png")
-                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark_2x.png")
+                } else if (message["errorProperty"] !== undefined && message["errorProperty"]["code"] === "403") {
+                    cMessage.m_IMAGE = mainView.backgroundColor === "white" ? Qt.resolvedUrl("/images/open-in-signal_light@2x.png")
+                                                                            : Qt.resolvedUrl("/images/open-in-signal_dark@2x.png")
                     cMessage.m_ERROR = qsTr("Attached image is not available for preview")
                 } else {
                     cMessage.m_IMAGE = ""

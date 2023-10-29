@@ -227,13 +227,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                  msg.setLargeIcon("403");
            }
            if(msg.getLargeIcon() != null &&  msg.getLargeIcon().equalsIgnoreCase("403")){
-               if(!errorProperty.isEmpty()){
-                      errorProperty.clear();
-              }
-              msg.setLargeIcon("");
-               errorProperty.put("code","403");
-               errorProperty.put("message","Attched image not accessible");
-              msg.setNotification(errorProperty.toString());
+               msg.setLargeIcon("");
+               msg.setNotification("403");
            } else {
                msg.setNotification("");
            }
@@ -252,14 +247,18 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 	    Log.d(TAG, "Keeping Volla notifications messages");
             repository.insertMessage(msg);
  
-            users.uuid = String.valueOf(sbn.getId());
-            users.body = NotificationUtils.getMessage(extras);
-            users.user_name = title;
+            users.uuid = msg.getSelfDisplayName();
+            users.body = msg.getText();
+            users.user_name = String.valueOf(msg.getUuid());
             users.user_contact_number = "";
             users.read = false;
-            users.isSent = false;
+            if(msg.getSelfDisplayName() != null && msg.getSelfDisplayName().length()>=1){
+                users.isSent = false;
+            } else {
+                users.isSent = true;
+            }
             users.notification = notificationStr;
-            users.timeStamp = timeInMillis;           
+            users.timeStamp = msg.getTimeStamp();
             repository.insertUser(users);
 
             notification = null;
@@ -410,9 +409,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     public void storeMessage(Message msg){
         msg.timeStamp = System.currentTimeMillis();
         repository.insertMessage(msg);
-	Log.d(TAG, "msg.id :"+msg.id);
-        Log.d(TAG, "msg.id :"+msg.text);
-        Log.d(TAG, "msg.id :"+msg.timeStamp);
     }
 
     private int matchNotificationCode(StatusBarNotification sbn) {
