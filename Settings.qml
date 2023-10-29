@@ -1346,6 +1346,14 @@ LauncherPage {
                                     var installedPluginIds = new Array
                                     for (var i = 0; i < availablePlugins.length; i++) {
                                         availablePlugins[i].isEnabled = installedPlugins.some(plugin => plugin.id === availablePlugins[i].id)
+                                        var installedPlugin = installedPlugins.find(plugin => plugin.id === availablePlugins[i].id)
+                                        if (installedPlugin !== undefined && installedPlugin.version < availablePlugins[i].version) {
+                                            mainView.updateInstalledPlugins(pluginMetadata, true, function(success) {
+                                                if (!success) {
+                                                    console.log("Settings | Successfully updated plugin " + availablePlugins[i].id)
+                                                }
+                                            })
+                                        }
                                     }
                                 } else {
                                     mainView.showToast(qsTr("Couldn't load available plugins"))
