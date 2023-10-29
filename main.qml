@@ -186,7 +186,8 @@ ApplicationWindow {
             'OpenContact' : 20025,
             'OpenApp' : 20026,
             'SendSignal' : 20027,
-            'OpenSignalContact' : 20028
+            'OpenSignalContact' : 20028,
+            'ShowMusicBoard' : 20029
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -196,7 +197,8 @@ ApplicationWindow {
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
             "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection"),
             "OpenContact" : qsTr("Open Contact"), "ShowNotes": qsTr("Show Notes"), "SendSignal" : qsTr("Send Signal message"),
-            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal")
+            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal"),
+            "ShowMusicBoard": qsTr("Show Player")
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -256,8 +258,8 @@ ApplicationWindow {
             {"id" : actionType.ShowNotes, "name": qsTr("Show Notes"), "activated" : true},
             {"id" : actionType.ShowNews, "name": qsTr("Recent News"), "activated" : true},
             {"id" : actionType.ShowThreads, "name": qsTr("Recent Threads"), "activated" : true},
-            {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true}]
-
+            {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true},
+            {"id" : actionType.ShowMusicBoard, "name" : qsTr("Music Player"), "actiavated": false}]
         property var timeStamp: 0
         property var lastCheckOfThreads: 0
         property var lastCheckOfCalls: 0
@@ -325,6 +327,19 @@ ApplicationWindow {
             currentIndex = swipeIndex.Springboard
             var item = itemAt(swipeIndex.Springboard)
             item.children[0].item.updateShortcutMenuState(opened)
+        }
+
+        function updateMusicBoard() {
+            console.log("MainView | Will show music board")
+            if (count > swipeIndex.Springboard + 1) {
+                 while (count > swipeIndex.Collections) {
+                    removeItem(swipeIndex.Collections)
+                }
+            }
+            var item = Qt.createQmlObject('import QtQuick 2.12; Item {Loader {anchors.fill: parent}}', mainView, "dynamicQml")
+            item.children[0].sourceComponent = Qt.createComponent("/MusicBoard.qml", mainView)
+            addItem(item)
+            currentIndex = swipeIndex.Collections
         }
 
         function updateCollectionPage(mode) {

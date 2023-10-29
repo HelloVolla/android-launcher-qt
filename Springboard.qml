@@ -797,6 +797,10 @@ LauncherPage {
                     console.log("Springboard | Create event")
                     AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
                     break
+                case mainView.actionType.ShowMusicBoard:
+                    console.log("Springboard | Show music board")
+                    mainView.updateMusicBoard()
+                    break
                 default:
                     console.log("Springboard | Open app or shortcut")
                     if (selectedMenuItem.actionId.startsWith("http")) {
