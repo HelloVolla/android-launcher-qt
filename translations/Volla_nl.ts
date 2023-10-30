@@ -118,7 +118,7 @@
     <message>
         <location filename="../AppGrid.qml" line="516"/>
         <source>New pinned shortcut</source>
-        <translation type="unfinished">Nuova scorciatoia appuntata</translation>
+        <translation>Nieuwe vastgezette snelkoppeling</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="523"/>
