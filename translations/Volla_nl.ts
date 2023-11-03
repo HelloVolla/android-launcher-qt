@@ -99,21 +99,21 @@
     <message>
         <location filename="../AppGrid.qml" line="381"/>
         <source>Open App</source>
-        <translation>Open app</translation>
+        <translation>Applicatie openen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="381"/>
         <source>Open Shortcut</source>
-        <translation type="unfinished">Snelkoppeling openen</translation>
+        <translation>Snelkoppeling openen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="414"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished">Bladwijzer verwijderen</translation>
+        <translation>Bladwijzer verwijderen</translation>
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="obsolete">Snelkoppeling verwijderen</translation>
+        <translation>Snelkoppeling verwijderen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="516"/>

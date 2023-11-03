@@ -17,6 +17,23 @@ SOURCES += \
         fileio.cpp \
         main.cpp
 
+
+OTHER_FILES += \  
+            AppGrid.qml \
+            AppGroup.qml \
+            Checkbox.qml \
+            Collections.qml \
+            Conversation.qml \
+            Details.qml \
+            Feed.qml \
+            HighlightButton.qml \
+            LauncherPage.qml \
+            OnBoarding.qml \
+            Settings.qml \
+            Shortcut.qml \
+            Springboard.qml \
+            Main.qml
+
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
