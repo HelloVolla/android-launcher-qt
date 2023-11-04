@@ -99,22 +99,27 @@
     <message>
         <location filename="../AppGrid.qml" line="381"/>
         <source>Open App</source>
-        <translation>Open app</translation>
+        <translation>Applicatie Openen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="381"/>
         <source>Open Shortcut</source>
-        <translation type="unfinished">Snelkoppeling openen</translation>
+        <translation>Snelkoppeling openen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="414"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished">Bladwijzer verwijderen</translation>
+        <translation>Bladwijzer verwijderen</translation>
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="obsolete">Snelkoppeling verwijderen</translation>
+        <translation>Snelkoppeling verwijderen</translation>
     </message>
+    <message>
+        <location filename="AppGrid.qml" line="430"/>
+        <source>Remove App</source>
+        <translation>Applicatie Verwijderen</translation>
+    </message>    
     <message>
         <location filename="../AppGrid.qml" line="516"/>
         <source>New pinned shortcut</source>
@@ -123,38 +128,38 @@
     <message>
         <location filename="../AppGrid.qml" line="523"/>
         <source>Pinned shortcut already exists</source>
-        <translation type="unfinished">Il collegamento appuntato esiste già</translation>
+        <translation>De vastgezette link bestaat al</translation>
     </message>
 </context>
 <context>
     <name>Browser</name>
     <message>
         <source>Show Dialer</source>
-        <translation type="vanished">Toon telefoon</translation>
+        <translation>Toon telefoon</translation>
     </message>
     <message>
         <source>Open Camera</source>
-        <translation type="vanished">Open camera</translation>
+        <translation>Open camera</translation>
     </message>
     <message>
         <source>Agenda</source>
-        <translation type="vanished">Agenda</translation>
+        <translation>Agenda</translation>
     </message>
     <message>
         <source>Gallery</source>
-        <translation type="vanished">Galerij</translation>
+        <translation>Galerij</translation>
     </message>
     <message>
         <source>Recent News</source>
-        <translation type="vanished">Laatste nieuws</translation>
+        <translation>Laatste nieuws</translation>
     </message>
     <message>
         <source>Recent Threads</source>
-        <translation type="vanished">Laatste gesprekken</translation>
+        <translation>Laatste gesprekken</translation>
     </message>
     <message>
         <source>Recent People</source>
-        <translation type="vanished">Laatste contactpersonen</translation>
+        <translation>Laatste contactpersonen</translation>
     </message>
 </context>
 <context>
