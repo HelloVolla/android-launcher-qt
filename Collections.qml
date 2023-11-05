@@ -129,7 +129,8 @@ LauncherPage {
         AN.SystemDispatcher.dispatch("volla.launcher.threadAction", filter)
         // load threads from further source
         // address (phone or contact), body (message), date, type
-        if (mainView.isSignalActive) AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
+        console.debug("Collections | Signal is active: " + mainView.isSignalActive)
+        if (mainView.isActiveSignal) AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
     function loadCalls(filter) {
