@@ -227,13 +227,9 @@ LauncherPage {
                                .replace(/<p>(- .*)<\/p>/gim, '<p style=\"margin-left:12px;text-indent:-12px;\">$1</p>') // unsorted list
                                .replace(/<p>([0-9]+\. .*)<\/p>/gim, '<p style=\"margin-left:20px;text-indent:-20px;\">$1</p>') // ordered list
                                .replace(/^(<p>\s*<\/p>\n)/gim, '')
-                               //.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
-                               //.replace(/^($)/gim, '')
-                               //.replace(/\n/gim, '')
-                               //.trim()
 
         if (detailEdit.editMode) {
-            styledText.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
+            styledText = styledText.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
         }
 
 //        console.debug("----------------")
