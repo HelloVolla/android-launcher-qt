@@ -12,6 +12,10 @@ LauncherPage {
     anchors.fill: parent
     topPadding: mainView.innerSpacing
 
+    function updateAvailablePlugins() {
+        pluginSettingsItemColumn.loadAvailablePlugins()
+    }
+
     Flickable {
         anchors.fill: parent
         contentWidth: parent.width
@@ -781,7 +785,6 @@ LauncherPage {
                         }
                         addButton.visible = true
                         console.log("Settings | Checkboxes created")
-
                     }
 
                     function addCheckbox(actionId, label) {
@@ -1289,6 +1292,206 @@ LauncherPage {
                     console.log("Settings | Blurr filter chanded to " + value)
                     designSettings.blurEffect = value
                     mainView.updateSettings("blurEffect", value)
+                }
+            }
+
+            Item {
+                id: pluginSettingsItem
+                width: parent.width
+                implicitHeight: pluginSettingsItemColumn.height
+                visible: true
+
+                Column {
+                    id: pluginSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+                    property var availablePlugins: new Array
+
+                    Button {
+                        id: pluginSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * pluginSettingsItemButton.padding
+                            text: qsTr("Springboard Skills")
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: pluginSettingsItemColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            pluginSettingsItemColumn.menuState = !pluginSettingsItemColumn.menuState
+                            if (pluginSettingsItemColumn.menuState) {
+                                console.log("Settings | Will create checkboxes")
+                                pluginSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(pluginSettingsItemColumn)
+                            } else {
+                                console.log("Settings | Will destroy checkboxes")
+                                pluginSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                     }
+
+                    function loadAvailablePlugins() {
+                        console.log("Settings | Load plugins")
+                        availablePlugins = new Array
+                        var xhr = new XMLHttpRequest();
+                        var temp;
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                console.log("Settings | got plugins request responce")
+                                if (xhr.status === 200) {
+                                    console.log("Settings | plugin responste status 200")
+                                    var jsonData = JSON.parse(xhr.responseText)
+                                    console.log("Settings | jsonData " + jsonData["pluginList"])
+                                    availablePlugins = jsonData["pluginList"]
+                                    var installedPlugins = mainView.getInstalledPlugins()
+                                    var installedPluginIds = new Array
+                                    for (var i = 0; i < availablePlugins.length; i++) {
+                                        availablePlugins[i].isEnabled = installedPlugins.some(plugin => plugin.id === availablePlugins[i].id)
+                                        var installedPlugin = installedPlugins.find(plugin => plugin.id === availablePlugins[i].id)
+                                        if (installedPlugin !== undefined && installedPlugin.version < availablePlugins[i].version) {
+                                            mainView.updateInstalledPlugins(pluginMetadata, true, function(success) {
+                                                if (!success) {
+                                                    console.log("Settings | Successfully updated plugin " + availablePlugins[i].id)
+                                                }
+                                            })
+                                        }
+                                    }
+                                } else {
+                                    mainView.showToast(qsTr("Couldn't load available plugins"))
+                                    console.error("Settings | Error retrieving available plugins:", xhr.status, xhr.statusText)
+                                    availablePlugins = mainView.getInstalledPlugins()
+                                    for (i = 0; i < availablePlugins.length; i++) {
+                                        availablePlugins[i].isEnabled = true
+                                    }
+                                }
+                            }
+                        };
+                        xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/VollaPluginList.json");
+                        console.log("Settings | Sending available plugins request");
+                        xhr.send();
+                    }
+
+                    function createCheckboxes() {
+                        for (var i = 0; i < pluginSettingsItemColumn.availablePlugins.length; i++) {
+                            var component = Qt.createComponent("/Checkbox.qml", pluginSettingsItemColumn)
+                            var properties = { "actionId": availablePlugins[i]["id"],
+                                "text": availablePlugins[i]["name"], "checked": availablePlugins[i]["isEnabled"],
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "hasDescriptionButton": true }
+                            var object = component.createObject(pluginSettingsItemColumn, properties)
+                            object.activeCheckbox = true
+                            pluginSettingsItemColumn.checkboxes.push(object)
+                        }
+                        console.log("Settings | Checkboxes created")
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < pluginSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = pluginSettingsItemColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        pluginSettingsItemColumn.checkboxes = new Array
+                    }
+
+                    function showDescription(actionId) {
+                        pluginDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                        for (var i = 0; i < pluginSettingsItemColumn.availablePlugins.length; i++) {
+                            if (pluginSettingsItemColumn.availablePlugins[i].id === actionId) {
+                                pluginDialog.dialogDescritpion = pluginSettingsItemColumn.availablePlugins[i].description
+                            }
+                        }
+                        pluginDialog.open()
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update plugin settings for " + actionId + ", " + active)
+                        var pluginMetadata = availablePlugins.find(p => p.id === actionId)
+                        pluginMetadata.isEnabled = active
+                        mainView.updateInstalledPlugins(pluginMetadata, active, function(success) {
+                            if (!success) {
+                                for (var i = 0; i < pluginSettingsItemColumn.checkboxes.length; i++) {
+                                    var checkbox = pluginSettingsItemColumn.checkboxes[i]
+                                    if (checkbox.actionId === actionId) checkbox.checked = false
+                                }
+                            }
+                        })
+                    }
+                }
+
+                Dialog {
+                    id: pluginDialog
+
+                    anchors.centerIn: parent
+                    width: parent.width - mainView.innerSpacing * 4
+                    modal: true
+                    dim: false
+
+                    property var backgroundColor: "#292929"
+                    property var dialogDescritpion: ""
+
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: pluginDialog.backgroundColor
+                        border.color: "transparent"
+                        radius: mainView.innerSpacing / 2
+                    }
+
+                    contentItem: Column {
+                        spacing: mainView.innerSpacing / 2
+
+                        Label {
+                            id: pluginDialogTitle
+                            width: parent.width
+                            padding: mainView.innerSpacing / 2
+                            text: pluginDialog.dialogDescritpion
+                            color: mainView.fontColor
+                            wrapMode: Text.WordWrap
+                            font.pointSize: mainView.mediumFontSize
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "transparent"
+                            }
+                        }
+                        Button {
+                            id: pluginOkButton
+                            anchors.right: parent.right
+                            width: parent.width / 2 - mainView.innerSpacing / 2
+                            padding: mainView.innerSpacing / 2
+                            flat: true
+                            text: qsTr("Ok")
+
+                            contentItem: Text {
+                                text: okButton.text
+                                color: mainView.fontColor
+                                font.pointSize: mainView.mediumFontSize
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "gray"
+                            }
+
+                            onClicked: {
+                                pluginDialog.close()
+                            }
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
                 }
             }
 

@@ -99,6 +99,22 @@
         <source>Weather</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Bancontact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Facebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A-Droid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove App</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>
@@ -448,6 +464,14 @@
         <source>Signal app is not installed</source>
         <translation type="unfinished">Signal-appen er ikke installeret</translation>
     </message>
+    <message>
+        <source>Springboard Skills</source>
+        <translation>Springbrætsfærdigheder</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t load available plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -740,6 +764,10 @@
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t load plugin</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

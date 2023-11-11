@@ -99,6 +99,22 @@
         <source>Weather</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Bancontact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Facebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A-Droid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove App</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
@@ -485,6 +501,14 @@
         <source>Signal app is not installed</source>
         <translation type="unfinished">Signaalisovellusta ei ole asennettu</translation>
     </message>
+    <message>
+        <source>Springboard Skills</source>
+        <translation>Springboard-taidot</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t load available plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -870,6 +894,10 @@
     <message>
         <source>Show in Signal</source>
         <translation type="unfinished">Näytä signaalissa</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t load plugin</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

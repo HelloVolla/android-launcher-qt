@@ -157,6 +157,7 @@ ApplicationWindow {
         }
         property var actionType: {
             'SuggestContact': 0,
+            'SuggestPluginEntity' : 1,
             'MakeCall': 20000,
             'SendEmail': 20001,
             'SendSMS': 20002,
@@ -185,7 +186,8 @@ ApplicationWindow {
             'OpenContact' : 20025,
             'OpenApp' : 20026,
             'SendSignal' : 20027,
-            'OpenSignalContact' : 20028
+            'OpenSignalContact' : 20028,
+            'ExecutePlugin': 20029,
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -269,6 +271,9 @@ ApplicationWindow {
             switch (currentIndex) {
                 case swipeIndex.Apps:
                     appGrid.children[0].item.updateNotifications()
+                    break
+                case swipeIndex.Preferences:
+                    settingsPage.children[0].item.updateAvailablePlugins()
                     break
                 default:
                     // Nothing to do
@@ -874,6 +879,57 @@ ApplicationWindow {
             AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck })
         }
 
+        function getInstalledPlugins() {
+            pluginStore.setSource("installedPlugins.json")
+            var pluginsStr = pluginStore.readPrivate()
+            return pluginsStr !== undefined && pluginsStr.length > 0 ? JSON.parse(pluginsStr) : new Array
+        }
+
+        function getInstalledPluginSource(pluginId) {
+            console.debug("MainView | plugin id: " + pluginId)
+            pluginStore.setSource(pluginId + "_plugin.qml")
+            return pluginStore.readPrivate()
+        }
+
+        function updateInstalledPlugins(pluginMetadata, isEnabled, callback) {
+            var installedPlugins = getInstalledPlugins()
+            var pluginSource = pluginMetadata["id"] + "_plugin.qml"
+            if (isEnabled) {
+                var xmlRequest = new XMLHttpRequest();
+                xmlRequest.onreadystatechange = function() {
+                    if (xmlRequest.readyState === XMLHttpRequest.DONE) {
+                        console.debug("MainView | got plugin request responce")
+                        if (xmlRequest.status === 200) {
+                            console.log("MainView | plugin responste status 200")
+                            var plugin = xmlRequest.responseText
+                            pluginStore.setSource(pluginSource)
+                            console.debug("MainView | Length: " + plugin.length)
+                            pluginStore.writePrivate(plugin)
+                            console.debug("MainView | Read back: " + pluginStore.readPrivate().length)
+                            installedPlugins.push(pluginMetadata)
+                            pluginStore.setSource("installedPlugins.json")
+                            pluginStore.writePrivate(JSON.stringify(installedPlugins))
+                            springboard.children[0].item.addPlugin(plugin, pluginMetadata.id)
+                            callback(true)
+                        } else {
+                            mainView.showToast(qsTr("Couldn't load plugin"))
+                            console.error("Settings | Error retrieving plugin: ", xmlRequest.status, xmlRequest.statusText)
+                            callback(false)
+                        }
+                    }
+                };
+                xmlRequest.open("GET", pluginMetadata.downloadUrl)
+                console.debug("Mainview | Sending plugin request")
+                xmlRequest.send();
+            } else {
+                installedPlugins = installedPlugins.filter( el => el.id !== pluginMetadata.id )
+                pluginStore.setSource("installedPlugins.json")
+                pluginStore.writePrivate(JSON.stringify(installedPlugins))
+                springboard.children[0].item.removePlugin(pluginMetadata.id)
+                callback(true)
+            }
+        }
+
         WorkerScript {
             id: contactsWorker
             source: "scripts/contacts.mjs"
@@ -1057,6 +1113,14 @@ ApplicationWindow {
         source: "contacts.json"
         onError: {
             console.log("MainView | Contacts cache error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: pluginStore
+        source: "pluginStore.json"
+        onError: {
+            console.log("MainView | plugin store error: " + msg)
         }
     }
 }
