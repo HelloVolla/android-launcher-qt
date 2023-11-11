@@ -903,6 +903,7 @@ ApplicationWindow {
                             console.log("MainView | plugin responste status 200")
                             var plugin = xmlRequest.responseText
                             pluginStore.setSource(pluginSource)
+                            console.debug("MainView | Length: " + plugin.length)
                             pluginStore.writePrivate(plugin)
                             console.debug("MainView | Read back: " + pluginStore.readPrivate().length)
                             installedPlugins.push(pluginMetadata)

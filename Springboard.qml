@@ -83,7 +83,7 @@ LauncherPage {
 
     function addPlugin(pluginSource, pluginId) {
         console.debug("Springboard | Plugin " + pluginId + " source length: " + pluginSource.length)
-        console.debug("Springboard | Plugin " + pluginId + " source: " + pluginSource)
+        //console.debug("Springboard | Plugin " + pluginId + " source: " + pluginSource)
         try {
             var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId)
             console.debug("Springboard | Plugin " + qmlObject.metadata.id + " created")
@@ -384,9 +384,9 @@ LauncherPage {
 
             function executeAction(actionValue, actionType, actionObj, functionReference) {
                 if (actionObj !== undefined) {
-                    console.log("SpringBoard | " + actionValue + ": " + actionType + ": " + actionObj["id"])
+                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": " + actionObj["id"])
                 } else {
-                    console.log("SpringBoard | " + actionValue + ": " + actionType)
+                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType)
                 }
 
                 switch (actionType) {
@@ -552,12 +552,31 @@ LauncherPage {
                         textInputArea.text = ""
                         break
                     case mainView.actionType.ExecutePlugin:
+                        console.log("Springboard | Will execute plugin " + functionReference.pluginId)
                         for (var i = 0; i < springBoard.plugins.length; i++) {
                             if (functionReference.pluginId === springBoard.plugins[i].metadata.id) {
-                                springBoard.plugins[i].executeInput(textInput, actionObj, functionReference.functionId)
+                                if (selectedObj !== undefined) {
+                                    springBoard.plugins[i].executeInput(textInput, functionReference.functionId, selectedObj.entity)
+                                } else {
+                                    springBoard.plugins[i].executeInput(textInput, functionReference.functionId)
+                                }
                             }
                         }
+                        textInputArea.text = ""
                         break
+                    case mainView.actionType.SuggestPluginEntity:
+                        console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
+                        if (actionObj !== undefined && actionValue !== undefined) {
+                            springBoard.selectedObj = actionObj
+                            textInputArea.text = actionValue
+                            textInputArea.cursorPosition = textInput.length
+                            textInputArea.forceActiveFocus()
+                        } else {
+                            mainView.showToast(qsTr("An error occured") + ": " + actionValue + ", " + actionObj)
+                            textInputArea.text = ""
+                            textInputArea.forceActiveFocus()
+                        }
+                        break;
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         if (actionObj !== undefined && actionValue !== undefined) {
@@ -567,8 +586,9 @@ LauncherPage {
                             textInputArea.cursorPosition = textInput.length
                             textInputArea.forceActiveFocus()
                         } else {
-                            mainView.showToast(qsTr("An error occured") + ": " + actionValue + ", " + actionObj +
-                                                    ". " + qsTr("Please reset contacts and try again."))
+                            mainView.showToast(qsTr("An error occured")
+                                               + ": " + actionValue + ", " + actionObj
+                                               + ". " + qsTr("Please reset contacts and try again."))
                             textInputArea.text = ""
                             textInputArea.forceActiveFocus()
                         }
@@ -631,7 +651,13 @@ LauncherPage {
 
                 onClicked: {
                     console.log("Springboard | Menu item clicked")
-                    listModel.executeAction(model.text, model.action, model.object, model.functionReference)
+                    if (model["functionReference"] !== undefined) {
+                        console.debug("Springboard | Function: " + model.functionReference.pluginId)
+                        listModel.executeAction(model.text, model.action, new Object, model.functionReference)
+                    } else {
+                        console.debug("Springboard | Object: " + model.object)
+                        listModel.executeAction(model.text, model.action, model.object)
+                    }
                 }
             }
         }
@@ -668,7 +694,7 @@ LauncherPage {
 
             onMessage: {
                 console.log("Springboard | Main worker script finished")
-                console.log("Springboard | Plugin: " + springBoard.plugins[0])
+                console.log("Springboard | Number of plugins: " + springBoard.plugins.length)
 
                 listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
 
@@ -677,12 +703,12 @@ LauncherPage {
                 var i
 
                 for (i = 0; i < plugins.length; i++) {
-                    console.debug("Plugin script | " + plugins[i].metadata.id)
+                    console.debug("Springboard | Execute plugin " + plugins[i].metadata.id)
                     var result = plugins[i].processInput(textInput)
                     console.debug("Springboard | Plugin result: " + result.length + ", " + result)
                     for (var j = 0; j < result.length; j++) {
                         console.debug("Springboard | Plugin result " + j + ": " + result[j].label)
-                        if (result[j].label === undefined && result[j].label.length > 100) {
+                        if (result[j].label === undefined || result[j].label.length > 100) {
                             console.warn("Springboard | Missing or too long label of plugin suggestion")
                         }
                         if (result[j].functionId !== undefined) {
@@ -696,7 +722,7 @@ LauncherPage {
                             autocompletions.push({
                                 "text": result[j].label,
                                 "action": mainView.actionType.SuggestPluginEntity,
-                                "object": result[j].object === undefined ? new Object : result[j].object,
+                                "object": {'pluginId': plugins[i].metadata.id, 'entity': result[j].object },
                                 "isFirstSuggestion": false
                             })
                         }
@@ -706,10 +732,15 @@ LauncherPage {
                 listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length
 
                 for (i = 0; i < pluginFunctions.length; i++) {
-                    listView.model.insert(0, pluginFunctions[i])
+                    if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
+                            && selectedObj.pluginId === pluginFunctions[i].functionReference.pluginId)) {
+                        console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].functionReference.pluginId)
+                        listView.model.insert(0, pluginFunctions[i])
+                    }
                 }
 
                 for (i = 0; i < autocompletions.length; i++) {
+                    console.debug("Springboard | Appending plugin suggestion: " + autocompletions[i].object)
                     listView.model.append(autocompletions[i])
                 }
             }

@@ -12,6 +12,10 @@ LauncherPage {
     anchors.fill: parent
     topPadding: mainView.innerSpacing
 
+    function updateAvailablePlugins() {
+        pluginSettingsItemColumn.loadAvailablePlugins()
+    }
+
     Flickable {
         anchors.fill: parent
         contentWidth: parent.width
@@ -1189,7 +1193,7 @@ LauncherPage {
                             var checkbox = designSettingsItemColumn.checkboxes[i]
                             checkbox.destroy()
                         }
-                        pluginSettingsItemColumn.checkboxes = new Array
+                        designSettingsItemColumn.checkboxes = new Array
                     }
 
                     function updateSettings(actionId, active) {
@@ -1428,7 +1432,7 @@ LauncherPage {
                     dim: false
 
                     property var backgroundColor: "#292929"
-                    property var dialogDescritpion
+                    property var dialogDescritpion: ""
 
                     background: Rectangle {
                         anchors.fill: parent
