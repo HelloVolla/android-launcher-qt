@@ -193,7 +193,7 @@
     <name>Collections</name>
     <message>
         <location filename="../Collections.qml" line="59"/>
-        <location filename="../Collections.qml" line="155"/>
+        <location filename="../Collections.qml" line="156"/>
         <source>People</source>
         <translation type="unfinished">Contacte</translation>
     </message>
@@ -233,73 +233,73 @@
         <translation type="unfinished">Găsiți nota ...</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="173"/>
+        <location filename="../Collections.qml" line="174"/>
         <source>Filter collections</source>
         <translation type="unfinished">Filtrează colecțiile</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="467"/>
+        <location filename="../Collections.qml" line="468"/>
         <source>Call</source>
         <translation type="unfinished">suna</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="475"/>
+        <location filename="../Collections.qml" line="476"/>
         <source>Send Message</source>
         <translation type="unfinished">Trimite mesaj</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="483"/>
+        <location filename="../Collections.qml" line="484"/>
         <source>Send Email</source>
         <translation type="unfinished">Trimite email</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="491"/>
+        <location filename="../Collections.qml" line="492"/>
         <source>Open Contact</source>
         <translation type="unfinished">deschide contactul</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="498"/>
+        <location filename="../Collections.qml" line="499"/>
         <source>Open in Signal</source>
         <translation type="unfinished">Deschis în semnal</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="662"/>
+        <location filename="../Collections.qml" line="663"/>
         <source>Private</source>
         <translation type="unfinished">privat</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="714"/>
+        <location filename="../Collections.qml" line="715"/>
         <source>New message</source>
         <translation type="unfinished">mesaj nou</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="722"/>
+        <location filename="../Collections.qml" line="723"/>
         <source>New calls</source>
         <translation type="unfinished">apeluri pierdute</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="722"/>
+        <location filename="../Collections.qml" line="723"/>
         <source>New call</source>
         <translation type="unfinished">apel pierdut</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="899"/>
-        <location filename="../Collections.qml" line="904"/>
+        <location filename="../Collections.qml" line="900"/>
+        <location filename="../Collections.qml" line="905"/>
         <source>You</source>
         <translation type="unfinished">tu</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1007"/>
+        <location filename="../Collections.qml" line="1008"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished">nu a putut încărca RSS feed: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1035"/>
+        <location filename="../Collections.qml" line="1036"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">invalid RSS feed: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1055"/>
+        <location filename="../Collections.qml" line="1056"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">lipsește mesajul RSS: </translation>
     </message>
@@ -347,12 +347,12 @@
         <translation type="unfinished">încă nu este acceptat</translation>
     </message>
     <message>
-        <location filename="../Details.qml" line="299"/>
+        <location filename="../Details.qml" line="295"/>
         <source>Open in browser</source>
         <translation type="unfinished">deschis în browser</translation>
     </message>
     <message>
-        <location filename="../Details.qml" line="310"/>
+        <location filename="../Details.qml" line="306"/>
         <source>Share</source>
         <translation type="unfinished">acțiune</translation>
     </message>
@@ -440,160 +440,160 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../Settings.qml" line="54"/>
+        <location filename="../Settings.qml" line="58"/>
         <source>Settings</source>
         <translation type="unfinished">setări</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="81"/>
-        <location filename="../Settings.qml" line="94"/>
-        <location filename="../Settings.qml" line="117"/>
+        <location filename="../Settings.qml" line="85"/>
+        <location filename="../Settings.qml" line="98"/>
+        <location filename="../Settings.qml" line="121"/>
         <source>Dark Mode</source>
         <translation type="unfinished">modul întunecat</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="97"/>
-        <location filename="../Settings.qml" line="134"/>
+        <location filename="../Settings.qml" line="101"/>
+        <location filename="../Settings.qml" line="138"/>
         <source>Light Mode</source>
         <translation type="unfinished">modul luminos</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="100"/>
-        <location filename="../Settings.qml" line="151"/>
+        <location filename="../Settings.qml" line="104"/>
+        <location filename="../Settings.qml" line="155"/>
         <source>Translucent Mode</source>
         <translation type="unfinished">modul transparent</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="282"/>
-        <location filename="../Settings.qml" line="326"/>
+        <location filename="../Settings.qml" line="286"/>
+        <location filename="../Settings.qml" line="330"/>
         <source>Security mode is OFF</source>
         <translation type="unfinished">Modul de securitate este dezactivat</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="349"/>
+        <location filename="../Settings.qml" line="353"/>
         <source>Security mode is ON</source>
         <translation type="unfinished">Modul de securitate este activat</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="485"/>
+        <location filename="../Settings.qml" line="490"/>
         <source>Enter password</source>
         <translation type="unfinished">Introduceți parola</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="510"/>
+        <location filename="../Settings.qml" line="516"/>
         <source>Repeat password</source>
         <translation type="unfinished">Repetați parola</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="540"/>
+        <location filename="../Settings.qml" line="547"/>
         <source>Keep existing Password</source>
         <translation type="unfinished">Păstrați parola existentă</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="563"/>
+        <location filename="../Settings.qml" line="570"/>
         <source>Cancel</source>
         <translation type="unfinished">Anulează</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="588"/>
-        <location filename="../Settings.qml" line="1454"/>
+        <location filename="../Settings.qml" line="595"/>
+        <location filename="../Settings.qml" line="1470"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="605"/>
+        <location filename="../Settings.qml" line="612"/>
         <source>Wrong password confirmation</source>
         <translation type="unfinished">Confirmare parolă greșită</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="632"/>
+        <location filename="../Settings.qml" line="639"/>
         <source>Wrong password</source>
         <translation type="unfinished">Parolă greșită</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="666"/>
+        <location filename="../Settings.qml" line="674"/>
         <source>News Channels</source>
         <translation type="unfinished">canale de știri</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="748"/>
+        <location filename="../Settings.qml" line="756"/>
         <source>Shortcuts</source>
         <translation type="unfinished">comenzi rapide</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="884"/>
-        <location filename="../Settings.qml" line="886"/>
-        <location filename="../Settings.qml" line="890"/>
+        <location filename="../Settings.qml" line="892"/>
+        <location filename="../Settings.qml" line="894"/>
+        <location filename="../Settings.qml" line="898"/>
         <source>Open</source>
         <translation type="unfinished">deschide</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="934"/>
+        <location filename="../Settings.qml" line="942"/>
         <source>Source settings</source>
         <translation type="unfinished">Setări sursă</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="951"/>
+        <location filename="../Settings.qml" line="959"/>
         <source>Signal</source>
         <translation type="unfinished">Signal</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="989"/>
+        <location filename="../Settings.qml" line="997"/>
         <source>Signal app is not installed</source>
         <translation type="unfinished">Aplicația Signal nu este instalată</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1310"/>
+        <location filename="../Settings.qml" line="1318"/>
         <source>Springboard Skills</source>
         <translation>Competențe Springboard</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1351"/>
+        <location filename="../Settings.qml" line="1367"/>
         <source>Couldn&apos;t load available plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1661"/>
+        <location filename="../Settings.qml" line="1677"/>
         <source>Reset launcher</source>
         <translation type="unfinished">Resetare lansator</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1023"/>
+        <location filename="../Settings.qml" line="1031"/>
         <source>Search engines</source>
         <translation type="unfinished">motoare de căutare</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1118"/>
+        <location filename="../Settings.qml" line="1126"/>
         <source>Display and menus</source>
         <translation type="unfinished">Afișaj și meniuri</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1170"/>
+        <location filename="../Settings.qml" line="1178"/>
         <source>Show grouped apps</source>
         <translation type="unfinished">Afișați aplicațiile grupate</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1178"/>
+        <location filename="../Settings.qml" line="1186"/>
         <source>Use app categories</source>
         <translation type="unfinished">Utilizați categoriile de aplicații</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1539"/>
+        <location filename="../Settings.qml" line="1555"/>
         <source>Reset options</source>
         <translation type="unfinished">Opțiuni de resetare</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1559"/>
+        <location filename="../Settings.qml" line="1575"/>
         <source>Reset news feeds</source>
         <translation type="unfinished">Resetați fluxurile de știri</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1593"/>
+        <location filename="../Settings.qml" line="1609"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Resetarea scurtăturilor</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1627"/>
+        <location filename="../Settings.qml" line="1643"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Reîncărcați contactele</translation>
     </message>
@@ -602,17 +602,17 @@
         <translation type="obsolete">StartPage</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1041"/>
+        <location filename="../Settings.qml" line="1049"/>
         <source>DuckDuckGo</source>
         <translation type="unfinished">DuckDuckGo</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1051"/>
+        <location filename="../Settings.qml" line="1059"/>
         <source>Startpage</source>
         <translation type="unfinished">Startpage</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1059"/>
+        <location filename="../Settings.qml" line="1067"/>
         <source>MetaGer</source>
         <translation type="unfinished">MetaGer</translation>
     </message>
@@ -621,27 +621,27 @@
         <translation type="obsolete">experimental</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1136"/>
+        <location filename="../Settings.qml" line="1144"/>
         <source>Fullscreen</source>
         <translation type="unfinished">fullscreen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1146"/>
+        <location filename="../Settings.qml" line="1154"/>
         <source>Use colored app icons</source>
         <translation type="unfinished">utilizați pictograme colorate ale aplicațiilor</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1154"/>
+        <location filename="../Settings.qml" line="1162"/>
         <source>Show apps at startup</source>
         <translation type="unfinished">afișați aplicațiile la pornire</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1162"/>
+        <location filename="../Settings.qml" line="1170"/>
         <source>Use haptic menus</source>
         <translation type="unfinished">utilizarea meniurilor haptice</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1257"/>
+        <location filename="../Settings.qml" line="1265"/>
         <source>Background blur</source>
         <translation type="unfinished">Estomparea fundalului</translation>
     </message>
@@ -715,12 +715,13 @@
         <translation type="unfinished">Notă nouă salvată</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="570"/>
+        <location filename="../Springboard.qml" line="575"/>
+        <location filename="../Springboard.qml" line="589"/>
         <source>An error occured</source>
         <translation type="unfinished">S-a produs o eroare</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="571"/>
+        <location filename="../Springboard.qml" line="591"/>
         <source>Please reset contacts and try again.</source>
         <translation type="unfinished">Vă rugăm să resetați contactele și să încercați din nou.</translation>
     </message>
@@ -815,7 +816,7 @@
         <translation type="obsolete">nota dvs. a fost stocată cu succes</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="880"/>
+        <location filename="../Springboard.qml" line="911"/>
         <source>My event</source>
         <translation type="unfinished">evenimentul meu</translation>
     </message>
@@ -1108,12 +1109,12 @@
         <translation type="unfinished">Resetare reușită</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="914"/>
+        <location filename="../main.qml" line="915"/>
         <source>Couldn&apos;t load plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="1082"/>
+        <location filename="../main.qml" line="1083"/>
         <source>Not yet supported</source>
         <translation type="unfinished">încă nu este acceptat</translation>
     </message>
