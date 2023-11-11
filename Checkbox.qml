@@ -11,6 +11,7 @@ CheckBox {
     property var actionId
     property bool activeCheckbox: false
     property bool hasRemoveButton: false
+    property bool hasDescriptionButton: false
     property bool isToggle: false
     property int startX: 0
 
@@ -44,6 +45,21 @@ CheckBox {
             settingsCheckbox.parent.removeSettings(actionId)
         }
         visible: settingsCheckbox.hasRemoveButton
+    }
+
+    Button {
+        id: descriptionButton
+        anchors.right: parent.right
+        rightPadding: settingsCheckbox.leftPadding
+        leftPadding: settingsCheckbox.leftPadding
+        flat: true
+        text: "<font color='#808080'>ⓘ</font>"
+        font.pointSize: labelFontSize
+        onClicked: {
+            console.log("Checkbox | Show description: " + settingsCheckbox.text)
+            settingsCheckbox.parent.showDescription(actionId)
+        }
+        visible: settingsCheckbox.hasDescriptionButton
     }
 
     indicator: Rectangle {

@@ -99,6 +99,22 @@
         <source>Weather</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Bancontact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Facebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A-Droid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove App</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>
@@ -253,7 +269,7 @@
     </message>
     <message>
         <source>Attached image is not available for preview</source>
-        <translation type="unfinished">l'immagine non è disponibile per l'anteprima</translation>
+        <translation type="unfinished">l&apos;immagine non è disponibile per l&apos;anteprima</translation>
     </message>
 </context>
 <context>
@@ -482,6 +498,14 @@
     <message>
         <source>Signal app is not installed</source>
         <translation type="unfinished">L&apos;applicazione Signal non è installata</translation>
+    </message>
+    <message>
+        <source>Springboard Skills</source>
+        <translation>Abilità del trampolino di lancio</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t load available plugins</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -875,6 +899,10 @@
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t load plugin</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

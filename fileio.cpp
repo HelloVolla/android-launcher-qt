@@ -70,10 +70,11 @@ QString FileIO::readPrivate()
     if ( file.open(QIODevice::ReadOnly) ) {
         QString line;
         QTextStream t( &file );
-        do {
-            line = t.readLine();
-            fileContent += line;
-         } while (!line.isNull());
+        fileContent = t.readAll();
+//        do {
+//            line = t.readLine();
+//            fileContent += line;
+//         } while (!line.isNull());
 
         file.close();
     } else {
