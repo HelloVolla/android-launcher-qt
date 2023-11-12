@@ -124,7 +124,7 @@
     <message>
         <location filename="../AppGrid.qml" line="430"/>
         <source>Remove App</source>
-        <translation type="unfinished"></translation>
+        <translation>Applicatie verwijderen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="451"/>
@@ -463,22 +463,22 @@
         <location filename="../Settings.qml" line="286"/>
         <location filename="../Settings.qml" line="330"/>
         <source>Security mode is OFF</source>
-        <translation type="unfinished">Beveiligingsmodus is UIT</translation>
+        <translation>Beveiligingsmodus is UIT</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="353"/>
         <source>Security mode is ON</source>
-        <translation type="unfinished">Beveiligingsmodus is AAN</translation>
+        <translation>Beveiligingsmodus is AAN</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="490"/>
         <source>Enter password</source>
-        <translation type="unfinished">Wachtwoord invoeren</translation>
+        <translation>Wachtwoord invoeren</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="516"/>
         <source>Repeat password</source>
-        <translation type="unfinished">Herhaal wachtwoord</translation>
+        <translation>Herhaal wachtwoord</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="547"/>
@@ -536,7 +536,7 @@
     <message>
         <location filename="../Settings.qml" line="997"/>
         <source>Signal app is not installed</source>
-        <translation type="unfinished">Signal app is niet geïnstalleerd</translation>
+        <translation>Signal app is niet geïnstalleerd</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1318"/>
