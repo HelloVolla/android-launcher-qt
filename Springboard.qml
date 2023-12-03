@@ -112,6 +112,8 @@ LauncherPage {
             id: header
             width: parent.width
             z: 2
+            leftPadding: Screen.desktopAvailableWidth > 360 ? 44 : 0
+            rightPadding: Screen.desktopAvailableWidth > 360 ? 44 : 0
 
             Label {
                 id: headline

@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Window 2.2
 import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.12
@@ -117,6 +118,21 @@ ApplicationWindow {
             }
          }
 
+        Component.onCompleted: {
+            console.debug("MainView | on completed")
+            console.debug("MainView | ratio: " + Screen.devicePixelRatio)
+            console.debug("MainView | height: " + Screen.desktopAvailableHeight
+                          + ", " + Screen.desktopAvailableHeight / Screen.devicePixelRatio
+                          + ", " + innerSpacing / (Screen.desktopAvailableHeight / Screen.devicePixelRatio))
+            console.debug("MainView | width: " + Screen.desktopAvailableWidth
+                          + ", " + Screen.desktopAvailableWidth / Screen.devicePixelRatio
+                          + ", " + innerSpacing / (Screen.desktopAvailableWidth / Screen.devicePixelRatio))
+            var relativeWidth = Screen.desktopAvailableWidth / Screen.devicePixelRatio
+            var relativeSpacingFactor = innerSpacing / relativeWidth
+            console.debug("MainView | spacing: " + relativeSpacingFactor * relativeWidth)
+        }
+
+        property real outerSpacing: Screen.desktopAvailableWidth > 360 ? 82 : 0
         property real innerSpacing : 22.0
         property real headerFontSize: 36.0
         property real largeFontSize: 20.0

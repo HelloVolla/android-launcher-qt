@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.2
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
@@ -24,6 +25,7 @@ Item {
 
     property int groupIndex: 0
     property int selectedGroupIndex: 1
+    property int columnCount: Screen.desktopAvailableWidth > 360 ? 5 : 4
 
     property bool unreadMessages: false
     property bool newCalls: false
@@ -132,8 +134,8 @@ Item {
             width: parent.width
             height: contentHeight
             topMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing / 2 : 0
-            cellHeight: parent.width * 0.32
-            cellWidth: parent.width * 0.25
+            cellHeight: parent.width / groupItem.columnCount * 1.28
+            cellWidth: parent.width / groupItem.columnCount
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
             interactive: false
 
@@ -143,8 +145,8 @@ Item {
 
             delegate: Rectangle {
                 id: gridCell
-                width: parent.width * 0.25
-                height: parent.width * 0.32
+                width: groupGrid.cellWidth
+                height: groupGrid.cellHeight
                 color: "transparent"
 
                 property var gradientColor: Universal.background

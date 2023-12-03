@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.2
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.XmlListModel 2.12
@@ -39,6 +40,7 @@ LauncherPage {
         "com.google.android.apps.messaging" : "/icons/message@4x.png",
         "net.osmand.plus": "/icons/route-directions-map@4x.png",
         "com.mediatek.camera": "/icons/camera@4x.png",
+        "com.android.camera2": "/icons/camera@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
         "com.android.gallery3d": "/icons/photo-gallery@4x.png",
         "com.simplemobiletools.contacts.pro": "/icons/people-contacts-agenda@4x.png",
@@ -257,11 +259,13 @@ LauncherPage {
         id: appLauncherFlickable
         anchors.fill: parent
         contentWidth: parent.width
-        contentHeight: appLauncherColumn.height
+        contentHeight: appLauncherColumn.height        
 
         Column {
             id: appLauncherColumn
-            width: parent.width
+            width: parent.width - 2 * mainView.outerSpacing
+            leftPadding: mainView.outerSpacing
+            rightPadding: mainView.outerSpacing
 
             Label {
                 id: headerTitle
