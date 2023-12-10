@@ -611,53 +611,50 @@ LauncherPage {
             }
 
             function iteratePlugins(item, length){
-                var i = item
-                console.debug("Springboard | Execute plugin " + plugins[i].metadata.id)
+                var counter = 0
                 var pluginFunctions = new Array
                 var autocompletions = new Array
-                plugins[i].processInput(textInput, function (success, suggestions) {
-                    var result = suggestions;
-                    if (success) {
-                        for (var j = 0; j < result.length; j++) {
-                            if (result[j].label === undefined || result[j].label.length > 100) {
-                                console.warn("Springboard | Missing or too long label of plugin suggestion")
+                for (var i = 0; i < length; i++) {
+                    console.debug("Springboard | Execute plugin " + springBoard.plugins[i].metadata.id)
+                    springBoard.plugins[i].processInput(textInput, function (success, suggestions, pluginId) {
+                        var result = suggestions;
+                        if (success) {
+                            for (var j = 0; j < result.length; j++) {
+                                if (result[j].label === undefined || result[j].label.length > 100) {
+                                    console.warn("Springboard | Missing or too long label of plugin suggestion")
+                                }
+                                if (result[j].functionId !== undefined) {
+                                    pluginFunctions.push({"text": result[j].label,
+                                                          "action": mainView.actionType.ExecutePlugin,
+                                                          "functionReference": {"pluginId": pluginId, "functionId": result[j].functionId},
+                                                          "isFirstSuggestion": false })
+                                } else {
+                                    autocompletions.push({"text": result[j].label,
+                                                          "action": mainView.actionType.SuggestPluginEntity,
+                                                          "object": {'pluginId': pluginId, 'entity': result[j].object },
+                                                          "isFirstSuggestion": false })
+                                }
                             }
-                            if (result[j].functionId !== undefined) {
-                                pluginFunctions.push({
-                                                         "text": result[j].label,
-                                                         "action": mainView.actionType.ExecutePlugin,
-                                                         "functionReference": {"pluginId": plugins[i].metadata.id, "functionId": result[j].functionId},
-                                                         "isFirstSuggestion": false
-                                                     })
-                            } else {
-                                autocompletions.push({
-                                                         "text": result[j].label,
-                                                         "action": mainView.actionType.SuggestPluginEntity,
-                                                         "object": {'pluginId': plugins[i].metadata.id, 'entity': result[j].object },
-                                                         "isFirstSuggestion": false
-                                                     })
+                            if (counter++ === length -1) {
+                                listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length
+                                console.debug("Springboard | listModel.indexOfFirstSuggestion" + listModel.indexOfFirstSuggestion )
+                                for (i = 0; i < pluginFunctions.length; i++) {
+                                    if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
+                                                                      && selectedObj.pluginId === pluginFunctions[i].functionReference.pluginId)) {
+                                        console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].functionReference.pluginId)
+                                        listView.model.insert(0, pluginFunctions[i])
+                                    }
+                                }
+                                for (i = 0; i < autocompletions.length; i++) {
+                                    console.debug("Springboard | Appending plugin suggestion: " + autocompletions[i].object)
+                                    listView.model.append(autocompletions[i])
+                                }
                             }
+                        } else{
+                            console.debug("Springboard | Plugin returned success false")
                         }
-                        listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length
-                        console.warn("Springboard | listModel.indexOfFirstSuggestion" +listModel.indexOfFirstSuggestion )
-                        for (i = 0; i < pluginFunctions.length; i++) {
-                            if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
-                                                              && selectedObj.pluginId === pluginFunctions[i].functionReference.pluginId)) {
-                                console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].functionReference.pluginId)
-                                listView.model.insert(0, pluginFunctions[i])
-                            }
-                        }
-                        for (i = 0; i < autocompletions.length; i++) {
-                            console.debug("Springboard | Appending plugin suggestion: " + autocompletions[i].object)
-                            listView.model.append(autocompletions[i])
-                        }
-                    } else{
-                        console.debug("Springboard | Plugin returned success false: ")
-                    }
-                    if(i < length){
-                        iteratePlugins(i+1, length)
-                    }
-                })
+                    })
+                }
             }
         }
 
@@ -748,7 +745,7 @@ LauncherPage {
 
                 listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
                 if(plugins.length > 0){
-                    listModel.iteratePlugins(0,plugins.length)
+                    listModel.iteratePlugins(0, plugins.length)
                 }
             }
         }
