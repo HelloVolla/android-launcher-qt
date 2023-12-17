@@ -100,7 +100,8 @@ LauncherPage {
     }
 
     function removePlugin(pluginId) {
-        springBoard.plugins = springBoard.plugins.filter(el => el.id !== pluginId)
+        console.debug("Springboard | Will remove pluding " + pluginId)
+        springBoard.plugins = springBoard.plugins.filter(el => el.metadata.id !== pluginId)
     }
 
     ListView {
