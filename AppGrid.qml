@@ -127,7 +127,7 @@ LauncherPage {
         }
     }
 
-    function updateAppLauncher(key, value) {
+    function updateA                               ppLauncher(key, value) {
         console.log("AppGrid | Will update app launcher: " + key + ", " + value)
         if (key === "backgroundOpacity") {
             for (var i = 0; i < appLauncher.appGroups.length; i++) {
@@ -586,6 +586,9 @@ LauncherPage {
                     }
                     appLauncher.pinnedShortcuts = pinnedShortcuts
                     appGroup = appGroups[0]
+                    if (appGroup !== undefined) {
+                        appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
+                    }
                 }
             }
         }
