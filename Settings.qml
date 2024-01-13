@@ -14,6 +14,7 @@ LauncherPage {
 
     function updateAvailablePlugins() {
         pluginSettingsItemColumn.loadAvailablePlugins()
+        pluginSettingsItemColumn.getSecurityModeStatus()
     }
 
     Flickable {
@@ -1426,6 +1427,10 @@ LauncherPage {
                                 }
                             }
                         })
+                    }
+
+                    function getSecurityModeStatus() {
+                        AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
                     }
                 }
 
