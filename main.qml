@@ -132,7 +132,7 @@ ApplicationWindow {
             console.debug("MainView | spacing: " + relativeSpacingFactor * relativeWidth)
         }
 
-        property real outerSpacing: Screen.desktopAvailableWidth > 360 ? 82 : 0
+        property real outerSpacing: Screen.desktopAvailableWidth > 360 ? 100 : 0
         property real innerSpacing : 22.0
         property real headerFontSize: 36.0
         property real largeFontSize: 20.0

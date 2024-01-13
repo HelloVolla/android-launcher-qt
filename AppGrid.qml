@@ -10,7 +10,7 @@ import FileIO 1.0
 
 LauncherPage {
     id: appLauncher
-    anchors.fill: parent
+    anchors.fill: parent    
 
     property string textInput
     property real labelPointSize: 16
@@ -264,6 +264,8 @@ LauncherPage {
         Column {
             id: appLauncherColumn
             width: parent.width - 2 * mainView.outerSpacing
+            topPadding: mainView.innerSpacing
+            bottomPadding: mainView.innerSpacing
             leftPadding: mainView.outerSpacing
             rightPadding: mainView.outerSpacing
 

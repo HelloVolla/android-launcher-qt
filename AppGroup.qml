@@ -25,7 +25,7 @@ Item {
 
     property int groupIndex: 0
     property int selectedGroupIndex: 1
-    property int columnCount: Screen.desktopAvailableWidth > 360 ? 5 : 4
+    property int columnCount: Screen.desktopAvailableWidth > 360 ? 6 : 4
 
     property bool unreadMessages: false
     property bool newCalls: false
@@ -166,8 +166,9 @@ Item {
                 Button {
                     id: gridButton
                     anchors.top: parent.top
-                    anchors.topMargin: parent.width * 0.08 // Adjustment
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    //anchors.topMargin: parent.width * 0.08 // Adjustment
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.centerIn: gridCell
                     topPadding: groupItem.innerSpacing / 2
                     width: parent.width
                     text: model.label
