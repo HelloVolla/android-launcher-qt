@@ -113,7 +113,7 @@
     </message>
     <message>
         <location filename="../AppGrid.qml" line="395"/>
-        <source>Open App</source>
+        <source>Open Applicatie</source>
         <translation>Applicatie Openen</translation>
     </message>
     <message>
@@ -124,7 +124,7 @@
     <message>
         <location filename="../AppGrid.qml" line="430"/>
         <source>Remove App</source>
-        <translation type="unfinished"></translation>
+        <translation>Applicatie Verwijderen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="451"/>
@@ -133,7 +133,7 @@
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="vanished">Snelkoppeling verwijderen</translation>
+        <translation>Snelkoppeling verwijderen</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="566"/>
