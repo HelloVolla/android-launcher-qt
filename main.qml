@@ -276,6 +276,7 @@ ApplicationWindow {
                     break
                 case swipeIndex.Preferences:
                     settingsPage.children[0].item.updateAvailablePlugins()
+                    AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
                     break
                 default:
                     // Nothing to do

@@ -331,7 +331,7 @@ LauncherPage {
             function openContextMenu(app, gridCell, gridView) {
                 contextMenu.app = app
                 contextMenu.gridView = gridView
-                contextMenu.isPinnedShortcut = app.shortcutId !== undefined
+                contextMenu.isPinnedShortcut = app.shortcutId !== undefined && app.shortcutId.length > 0
                 contextMenu.popup(gridCell)
             }
 
@@ -344,6 +344,8 @@ LauncherPage {
 
     Menu {
         id: contextMenu
+        implicitHeight: addShortCutItem.height + openAppItem.height + removeAppItem.height + removePinnedShortcutItem.height + mainView.innerSpacing
+        topPadding: mainView.innerSpacing / 2
 
         property double menuWidth: 250.0
         property var app

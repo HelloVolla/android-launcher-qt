@@ -14,7 +14,6 @@ LauncherPage {
 
     function updateAvailablePlugins() {
         pluginSettingsItemColumn.loadAvailablePlugins()
-        pluginSettingsItemColumn.getSecurityModeStatus()
     }
 
     Flickable {
@@ -308,10 +307,6 @@ LauncherPage {
                         background: Rectangle {
                             anchors.fill: parent
                             color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
-                        }
-
-                        Component.onCompleted: {
-                            AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
                         }
 
                         onTextChanged: {
@@ -1427,10 +1422,6 @@ LauncherPage {
                                 }
                             }
                         })
-                    }
-
-                    function getSecurityModeStatus() {
-                        AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
                     }
                 }
 
