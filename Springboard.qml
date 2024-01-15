@@ -112,8 +112,6 @@ LauncherPage {
             id: header
             width: parent.width
             z: 2
-            leftPadding: Screen.desktopAvailableWidth > 360 ? 44 : 0
-            rightPadding: Screen.desktopAvailableWidth > 360 ? 44 : 0
 
             Label {
                 id: headline
@@ -751,7 +749,7 @@ LauncherPage {
 
     MouseArea {
         id: shortcutMenu
-        width: parent.width
+        width: 400 // parent.width
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -782,7 +780,7 @@ LauncherPage {
                 console.log("Springboard | enable menu")
                 //shortcutBackground.visible = true
                 shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
-                shortcutBackground.width = roundedShortcutMenu ? parent.width - mainView.innerSpacing * 4 : parent.width
+                shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
                 shortcutBackground.height = shortcutColumn.height
                 shortcutColumn.opacity = 1
             }
@@ -958,6 +956,8 @@ LauncherPage {
             // height: menuheight
             topPadding: mainView.innerSpacing * 1.5
             bottomPadding: mainView.innerSpacing
+            anchors.right: parent.right
+            anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 

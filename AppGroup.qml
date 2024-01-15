@@ -25,7 +25,7 @@ Item {
 
     property int groupIndex: 0
     property int selectedGroupIndex: 1
-    property int columnCount: Screen.desktopAvailableWidth > 360 ? 6 : 4
+    property int columnCount: Screen.desktopAvailableWidth > 360 ? 5 : 4
 
     property bool unreadMessages: false
     property bool newCalls: false

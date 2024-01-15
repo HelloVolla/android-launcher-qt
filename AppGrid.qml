@@ -263,11 +263,11 @@ LauncherPage {
 
         Column {
             id: appLauncherColumn
-            width: parent.width - 2 * mainView.outerSpacing
-            topPadding: mainView.innerSpacing
-            bottomPadding: mainView.innerSpacing
-            leftPadding: mainView.outerSpacing
-            rightPadding: mainView.outerSpacing
+            width: parent.width// - 2 * mainView.outerSpacing
+//            topPadding: mainView.innerSpacing
+//            bottomPadding: mainView.innerSpacing
+//            leftPadding: mainView.outerSpacing
+//            rightPadding: mainView.outerSpacing
 
             Label {
                 id: headerTitle
@@ -345,7 +345,6 @@ LauncherPage {
                 contextMenu.dismiss()
             }
         }
-
     }
 
     Menu {
