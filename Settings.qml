@@ -309,10 +309,6 @@ LauncherPage {
                             color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
                         }
 
-                        Component.onCompleted: {
-                            AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
-                        }
-
                         onTextChanged: {
                             securitySettingsItemTitleIcon.visible = text === securityModeOnOption.text
                         }

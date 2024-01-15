@@ -331,7 +331,7 @@ LauncherPage {
             function openContextMenu(app, gridCell, gridView) {
                 contextMenu.app = app
                 contextMenu.gridView = gridView
-                contextMenu.isPinnedShortcut = app.shortcutId !== undefined
+                contextMenu.isPinnedShortcut = app.shortcutId !== undefined && app.shortcutId.length > 0
                 contextMenu.popup(gridCell)
             }
 
@@ -344,6 +344,8 @@ LauncherPage {
 
     Menu {
         id: contextMenu
+        implicitHeight: addShortCutItem.height + openAppItem.height + removeAppItem.height + removePinnedShortcutItem.height + mainView.innerSpacing
+        topPadding: mainView.innerSpacing / 2
 
         property double menuWidth: 250.0
         property var app
@@ -361,6 +363,7 @@ LauncherPage {
 
         MenuItem {
             id: addShortCutItem
+            anchors.margins: mainView.innerSpacing
             text: qsTr("Add to shortcuts")
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
@@ -369,9 +372,6 @@ LauncherPage {
                 font: addShortCutItem.font
                 horizontalAlignment: Text.AlignHCenter
             }
-            leftPadding: mainView.innerSpacing
-            rightPadding: mainView.innerSpacing
-            topPadding: mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"
@@ -389,15 +389,13 @@ LauncherPage {
         }
         MenuItem {
             id: openAppItem
+            anchors.margins: mainView.innerSpacing
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: contextMenu.menuWidth
                 text: contextMenu.isPinnedShortcut ? qsTr("Open Shortcut") : qsTr("Open App")
                 horizontalAlignment: Text.AlignHCenter
             }
-            leftPadding: mainView.innerSpacing
-            rightPadding: mainView.innerSpacing
-            bottomPadding: removeAppItem.visible ? 0 : mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"
@@ -423,6 +421,7 @@ LauncherPage {
         }
         MenuItem {
             id: removeAppItem
+            anchors.margins: mainView.innerSpacing
             height: removeAppItem.visible ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
@@ -430,9 +429,6 @@ LauncherPage {
                 text: qsTr("Remove App")
                 horizontalAlignment: Text.AlignHCenter
             }
-            leftPadding: mainView.innerSpacing
-            rightPadding: mainView.innerSpacing
-            bottomPadding: mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"
@@ -444,6 +440,7 @@ LauncherPage {
         }
         MenuItem {
             id: removePinnedShortcutItem
+            anchors.margins: mainView.innerSpacing
             height: removePinnedShortcutItem.visible ? contextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
@@ -451,9 +448,6 @@ LauncherPage {
                 text: qsTr("Remove Bookmark")
                 horizontalAlignment: Text.AlignHCenter
             }
-            leftPadding: mainView.innerSpacing
-            rightPadding: mainView.innerSpacing
-            bottomPadding: mainView.innerSpacing
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"
