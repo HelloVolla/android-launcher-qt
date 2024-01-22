@@ -234,6 +234,7 @@ LauncherPage {
                                "labelPointSize": appLauncher.labelPointSize,
                                "headerPointSize": mainView.mediumFontSize,
                                "innerSpacing": mainView.innerSpacing,
+                               "componentSpacing" : mainView.componentSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
                                "pinnedShortcuts": index === 0 ? appLauncher.pinnedShortcuts : new Array,
@@ -264,10 +265,6 @@ LauncherPage {
         Column {
             id: appLauncherColumn
             width: parent.width// - 2 * mainView.outerSpacing
-//            topPadding: mainView.innerSpacing
-//            bottomPadding: mainView.innerSpacing
-//            leftPadding: mainView.outerSpacing
-//            rightPadding: mainView.outerSpacing
 
             Label {
                 id: headerTitle
@@ -280,15 +277,16 @@ LauncherPage {
 
             TextField {
                 id: headerTextField
-                padding: mainView.innerSpacing
+                topPadding: mainView.componentSpacing
+                bottomPadding: mainView.componentSpacing
+                leftPadding: 0.0
+                rightPadding: 0.0
                 x: mainView.innerSpacing
                 width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Filter apps")
                 color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
                 font.pointSize: mainView.largeFontSize
-                leftPadding: 0.0
-                rightPadding: 0.0
 
                 background: Rectangle {
                     color: "transparent"

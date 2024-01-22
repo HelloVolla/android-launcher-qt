@@ -148,7 +148,10 @@ LauncherPage {
 
                     TextArea.flickable: TextArea {
                         id: textArea
-                        padding: mainView.innerSpacing
+                        topPadding: mainView.componentSpacing
+                        bottomPadding: mainView.innerSpacing
+                        leftPadding: 0.0
+                        rightPadding: mainView.innerSpacing
                         x: mainView.innerSpacing
                         width: parent.width
                         placeholderText: qsTr("Type anything")
@@ -156,7 +159,6 @@ LauncherPage {
                         placeholderTextColor: "darkgrey"
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
-                        leftPadding: 0.0
                         inputMethodHints: Qt.ImhNoPredictiveText
 
                         background: Rectangle {
@@ -189,10 +191,11 @@ LauncherPage {
 
                 Button {
                     id: deleteButton
+                    anchors.top: flickable
                     text: "<font color='#808080'>×</font>"
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
-                    topPadding: 0.0
+                    topPadding: mainView.innerSpacing === mainView.componentSpacing ? 0.0 : 18.0
                     visible: textArea.preeditText !== "" || textArea.text !== ""
 
                     onClicked: {
@@ -200,7 +203,6 @@ LauncherPage {
                         textArea.focus = false
                     }
                 }
-
             }
 
             Rectangle {
@@ -749,7 +751,7 @@ LauncherPage {
 
     MouseArea {
         id: shortcutMenu
-        width: 400 // parent.width
+        width: parent.width > 360 ? parent.width * 0.6 : parent.width
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -778,6 +780,7 @@ LauncherPage {
             if (mouseX > rbPoint.x && mouseX < rbPoint.x + rootMenuButton.width
                     && mouseY > touchY && mouseY < touchY + touchHeight) {
                 console.log("Springboard | enable menu")
+                console.log("Springboard | width" + parent.width, shortcutMenu.width, shortcutColumn.width)
                 //shortcutBackground.visible = true
                 shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
                 shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
@@ -827,8 +830,8 @@ LauncherPage {
         }        
 
         function createShortcuts(shortcuts) {
-            var leftDistance = Screen.width / 4
-            var componentWidth = Screen.width - leftDistance
+            var leftDistance = mainView.innerSpacing * 4
+            var componentWidth = Screen.width > 360 ? Screen.width * 0.6 - leftDistance : Screen.width - leftDistance
             console.log("Springboard | Width " + componentWidth)
             for (var i = 0; i < shortcuts.length; i++) {
                 if (shortcuts[i]["activated"]) {
@@ -952,9 +955,10 @@ LauncherPage {
             id: shortcutColumn
             visible: true // shortcutBackground.visible
             opacity: 0.0
-            width: parent.width
-            // height: menuheight
+            width: parent.width - mainView.innerSpacing * 2
             topPadding: mainView.innerSpacing * 1.5
+            rightPadding: mainView.innerSpacing
+            leftPadding: mainView.innerSpacing
             bottomPadding: mainView.innerSpacing
             anchors.right: parent.right
             anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0

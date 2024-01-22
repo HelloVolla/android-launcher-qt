@@ -18,6 +18,7 @@ Item {
     property string textInput: ""
 
     property double innerSpacing
+    property double componentSpacing
     property double labelPointSize
     property double headerPointSize
     property double backgroundOpacity
@@ -83,7 +84,7 @@ Item {
         id: groupColumn
         width: parent.width
         topPadding: groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
-                                                     groupItem.innerSpacing / 2 : groupItem.innerSpacing
+                                                     groupItem.componentSpacing / 2 : groupItem.componentSpacing
         Component.onCompleted: {
             groupHeader.visible = !groupGrid.visible
             groupHeader2.visible = groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
@@ -117,7 +118,10 @@ Item {
         Label {
             id: groupHeader2
             anchors.horizontalCenter: parent.horizontalCenter
-            padding: groupItem.innerSpacing / 2
+            topPadding: groupItem.componentSpacing / 2
+            bottomPadding: groupItem.componentSpacing / 2
+            leftPadding: groupItem.innerSpacing / 2
+            rightPadding: groupItem.innerSpacing / 2
             visible: false // groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
             text: groupHeader.text
             color: Universal.foreground
@@ -133,7 +137,7 @@ Item {
             id: groupGrid
             width: parent.width
             height: contentHeight
-            topMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing / 2 : 0
+            topMargin: groupItem.groupIndex > 0 ? groupItem.compnentSpacing / 2 : 0
             cellHeight: parent.width / groupItem.columnCount * 1.28
             cellWidth: parent.width / groupItem.columnCount
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
@@ -156,8 +160,8 @@ Item {
                     id: gridCircle
                     anchors.top: gridButton.top
                     anchors.horizontalCenter: parent.horizontalCenter
-                    height: parent.width * 0.6
-                    width: parent.width * 0.6
+                    height: parent.width * 0.55
+                    width: parent.width * 0.55
                     color: Universal.foreground
                     opacity: Universal.theme === Universal.Light ? 0.1 : 0.2
                     radius: width * 0.5
@@ -166,8 +170,6 @@ Item {
                 Button {
                     id: gridButton
                     anchors.top: parent.top
-                    //anchors.topMargin: parent.width * 0.08 // Adjustment
-                    //anchors.horizontalCenter: parent.horizontalCenter
                     anchors.centerIn: gridCell
                     topPadding: groupItem.innerSpacing / 2
                     width: parent.width
