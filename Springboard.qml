@@ -988,4 +988,24 @@ LauncherPage {
             anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
         }
     }
+
+    Column {
+        id: appColumn
+        anchors.right: parent.right
+        anchors.rightMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+        spacing: mainView.innerSpacing
+
+        Button {
+            id: closeAppsButton
+            width: mainView.innerSpacing
+            height: mainView.innerSpacing
+            contentItem: Rectangle {
+
+            }
+        }
+    }
+
+
 }

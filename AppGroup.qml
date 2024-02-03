@@ -267,9 +267,9 @@ Item {
                     id: notificationBadge
                     visible: groupItem.messageApp.includes(model.package) ? groupItem.unreadMessages
                                                                           : model.package === groupItem.phoneApp ? groupItem.newCalls                                                               : false
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
+                    anchors.top: gridCircle.top
+                    anchors.left: gridCircle.left
+                    //anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
                     width: parent.width * 0.15
                     height: parent.width * 0.15
                     radius: height * 0.5
