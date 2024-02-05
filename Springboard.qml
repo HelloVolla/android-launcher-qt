@@ -22,6 +22,7 @@ LauncherPage {
                                 qsTr("Saturday"), qsTr("Sunday"), qsTr("tomorrow")]
     property var eventRegex
     property var plugins: new Array
+    property var appButtons: new Array
 
     property bool defaultSuggestions: false
     property bool dotShortcut: true
@@ -191,7 +192,7 @@ LauncherPage {
 
                 Button {
                     id: deleteButton
-                    anchors.top: flickable
+                    anchors.top: flickable.top
                     text: "<font color='#808080'>×</font>"
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
@@ -686,6 +687,33 @@ LauncherPage {
                     if (message["sent"]) {
                         textInputArea.text = ""
                     }
+                } else if (type === "volla.launcher.runningAppsResponse") {
+                    console.log("Springboard | " + message["apps"].length + " app infos received")
+                    for (var i = 0; i < springBoard.appButtons.length; i++) {
+                        var appButton = springBoard.appButtons[i]
+                        appButton.destroy()
+                    }
+                    closeAppsButton.visible = false
+                    springBoard.appButtons = new Array
+                    for (i = 0; i < message["appsCount"]; i++) {
+                        app = message["apps"][i]
+                        console.log("Springboard | Will create app button " + app.package)
+                        var component = Qt.createComponent("/AppButton.qml", appSwitcher)
+                        var properties = { "app": app,
+                                           "height": mainView.innerSpacing,
+                                           "width":  mainView.innerSpacing,
+                                           "iconSource": app.package in mainView.iconMap
+                                                         ? Qt.resolvedUrl(mainView.iconMap[app.package]) : "data:image/png;base64," + app.icon,
+                                           "hasColoredIcon": mainView.useColoredIcons}
+                        if (component.status !== Component.Ready) {
+                            if (component.status === Component.Error)
+                                console.debug("Springboard | Error: "+ component.errorString() );
+                        }
+                        var object = component.createObject(appSwitcher, properties)
+                        appButtons.push(object)
+                        closeAppsButton.anchors.top = object.bottom
+                        closeAppsButton.visible = true
+                    }
                 }
             }
         }
@@ -990,22 +1018,32 @@ LauncherPage {
     }
 
     Column {
-        id: appColumn
-        anchors.right: parent.right
-        anchors.rightMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+        id: appSwitcher
+        anchors.left: parent.left
+        anchors.leftMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
         anchors.bottom: parent.bottom
         anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
         spacing: mainView.innerSpacing
+        visible: mainView.isTablet
 
         Button {
             id: closeAppsButton
             width: mainView.innerSpacing
             height: mainView.innerSpacing
+            visible: false
             contentItem: Rectangle {
-
+                anchors.fill: parent
+                color: Universal.foreground
+                opacity: Universal.theme === Universal.Light ? 0.1 : 0.2
+                radius: width * 0.5
+                Text {
+                    anchors.centerIn: parent
+                    text: qsTr("X")
+                }
+            }
+            onClicked: {
+                AN.SystemDispatcher.dispatch("volla.launcher.closeAppsAction", {})
             }
         }
     }
-
-
 }

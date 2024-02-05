@@ -1211,6 +1211,7 @@ LauncherPage {
                             designSettings.useColoredIcons = active
                             designSettings.sync()
                             mainView.updateGridView("coloredIcons", active)
+                            mainView.useColoredIcons = active
                         } else if (actionId === "startupIndex") {
                             designSettings.showAppsAtStartup = active
                             designSettings.sync()

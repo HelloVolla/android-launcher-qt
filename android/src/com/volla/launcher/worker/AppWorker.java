@@ -1,6 +1,8 @@
 package com.volla.launcher.worker;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.usage.UsageStatsManager;
 import android.app.usage.UsageStats;
 import android.app.AppOpsManager;
@@ -35,6 +37,8 @@ public class AppWorker
 
     public static final String GET_APPS = "volla.launcher.appAction";
     public static final String GOT_APPS = "volla.launcher.appResponse";
+    public static final String GET_RUNNING_APPS = "volla.launcher.runningAppsAction";
+    public static final String GOT_RUNNING_APPS = "volla.launcher.runningAppsResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -51,6 +55,7 @@ public class AppWorker
                             ArrayList<Map> appList = new ArrayList();
 
                             final PackageManager pm = activity.getPackageManager();
+
                             final List<String> packages = Arrays.asList("com.android.browser",
                                 "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
                                 "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
@@ -125,6 +130,66 @@ public class AppWorker
                             reply.put("apps", appList );
                             reply.put("appsCount", appList.size() );
                             SystemDispatcher.dispatch(GOT_APPS,reply);
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                } else if (type.equals(GET_RUNNING_APPS)) {
+                    Log.d(TAG, "Get running apps action called");
+
+                    Runnable runnable = new Runnable () {
+
+                        public void run() {
+                            ArrayList<Map> appList = new ArrayList();
+
+                            final PackageManager pm = activity.getPackageManager();
+                            final List<String> packages = Arrays.asList("com.android.browser",
+                                "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
+                                "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
+                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
+                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
+                                "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
+                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
+                                "com.elishaazaria.sayboard");
+
+                            ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+                            List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfo = am.getRunningAppProcesses();
+                            ArrayList<String> activeAppList = new ArrayList();
+
+                            for (int i = 0; i < runningAppProcessInfo.size(); i++) {
+                              activeAppList.add(runningAppProcessInfo.get(i).processName);
+                            }
+
+                            Intent i = new Intent(Intent.ACTION_MAIN, null);
+                            i.addCategory(Intent.CATEGORY_LAUNCHER);
+                            List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
+                            appList.ensureCapacity(availableActivities.size());
+
+                            for (ResolveInfo ri:availableActivities) {
+
+                                try {
+                                    ApplicationInfo packageInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
+
+                                    if (activeAppList.contains(packageInfo.packageName)
+                                        && !packages.contains(packageInfo.packageName)) {
+
+                                        Log.d(TAG, "Found package " + packageInfo.packageName);
+
+                                        Map appInfo = new HashMap();
+                                        appInfo.put("package", packageInfo.packageName);
+                                        appInfo.put("label", String.valueOf(packageInfo.loadLabel(pm)));
+                                        appInfo.put("icon", AppWorker.drawableToBase64(packageInfo.loadIcon(pm)));
+                                        appList.add(appInfo);
+                                    }
+                                } catch (Exception e) {
+                                    Log.w(TAG, "Unknown package name: " + e.toString());
+                                }
+                            }
+
+                            Map reply = new HashMap();
+                            reply.put("apps", appList );
+                            SystemDispatcher.dispatch(GOT_RUNNING_APPS, reply);
                         }
                     };
 
