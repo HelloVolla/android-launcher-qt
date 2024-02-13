@@ -9,6 +9,7 @@ Button {
     id: appButton
 
     property var app
+    property var overlayColor: Universal.foreground
     property string iconSource
     property bool hasColoredIcon
 
@@ -35,7 +36,7 @@ Button {
             ColorOverlay {
                 anchors.fill: buttonIcon
                 source: appIcon
-                color: gridCell.overlayColor
+                color: appButton.overlayColor
                 visible: hasColoredIcon
             }
         }

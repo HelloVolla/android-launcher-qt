@@ -3,6 +3,7 @@ package com.volla.launcher.worker;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.usage.UsageStatsManager;
 import android.app.usage.UsageStats;
 import android.app.AppOpsManager;
@@ -153,12 +154,26 @@ public class AppWorker
                                 "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
                                 "com.elishaazaria.sayboard");
 
-                            ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-                            List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfo = am.getRunningAppProcesses();
-                            ArrayList<String> activeAppList = new ArrayList();
+                            List<UsageStats> queryUsageStats = new LinkedList();
+                            List<String> activeApps = new LinkedList();
 
-                            for (int i = 0; i < runningAppProcessInfo.size(); i++) {
-                              activeAppList.add(runningAppProcessInfo.get(i).processName);
+                            if (checkUsagePermission(activity)) {
+                                long startTime = System.currentTimeMillis() - 1000;
+                                long endTime = System.currentTimeMillis();
+
+                                UsageStatsManager usageStatsManager = (UsageStatsManager)activity.getSystemService(Context.USAGE_STATS_SERVICE);
+                                queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
+
+                                Log.d(TAG, "Usage stats entries: " + queryUsageStats.size());
+
+                                for (UsageStats us : queryUsageStats) {
+                                    Log.d(TAG, "Usage stat entry: " + us.getPackageName());
+                                    Log.d(TAG, "Usage stat visibe: " + us.getTotalTimeVisible());
+                                    Log.d(TAG, "Usage stat foreground: " + us.getTotalTimeInForeground());
+                                    Log.d(TAG, "Usage stat last foreground used: " + us.getLastTimeForegroundServiceUsed());
+                                    Log.d(TAG, "Usage stat foreground service used: " + us.getTotalTimeForegroundServiceUsed());
+                                    activeApps.add(us.getPackageName());
+                                }
                             }
 
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
@@ -166,13 +181,13 @@ public class AppWorker
                             List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
                             appList.ensureCapacity(availableActivities.size());
 
-                            for (ResolveInfo ri:availableActivities) {
 
+
+                            for (ResolveInfo ri:availableActivities) {
                                 try {
                                     ApplicationInfo packageInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
 
-                                    if (activeAppList.contains(packageInfo.packageName)
-                                        && !packages.contains(packageInfo.packageName)) {
+                                    if (activeApps.contains(packageInfo.packageName) && !packages.contains(packageInfo.packageName)) {
 
                                         Log.d(TAG, "Found package " + packageInfo.packageName);
 

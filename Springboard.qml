@@ -688,15 +688,15 @@ LauncherPage {
                         textInputArea.text = ""
                     }
                 } else if (type === "volla.launcher.runningAppsResponse") {
-                    console.log("Springboard | " + message["apps"].length + " app infos received")
+                    console.log("Springboard | " + message["apps"].length + " running apps received")
                     for (var i = 0; i < springBoard.appButtons.length; i++) {
                         var appButton = springBoard.appButtons[i]
                         appButton.destroy()
                     }
                     closeAppsButton.visible = false
                     springBoard.appButtons = new Array
-                    for (i = 0; i < message["appsCount"]; i++) {
-                        app = message["apps"][i]
+                    for (i = 0; i < message["apps"].length; i++) {
+                        var app = message["apps"][i]
                         console.log("Springboard | Will create app button " + app.package)
                         var component = Qt.createComponent("/AppButton.qml", appSwitcher)
                         var properties = { "app": app,
