@@ -566,6 +566,7 @@ ApplicationWindow {
             }
             var item = itemAt(swipeIndex.Springboard)
             item.children[0].item.updateHeadlineColor()
+
             AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": updateLockScreen})
         }
 

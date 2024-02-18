@@ -104,6 +104,19 @@ LauncherPage {
         springBoard.plugins = springBoard.plugins.filter(el => el.id !== pluginId)
     }
 
+    Image {
+        id: widgetsMockup
+        source: Qt.resolvedUrl("/images/Widget_trio@2x.png")
+        visible: mainView.isTablet
+        height: 320
+        width: 320
+        fillMode: Image.PreserveAspectFit
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: mainView.innerSpacing
+        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+    }
+
     ListView {
         id: listView
         anchors.fill: parent
@@ -700,18 +713,18 @@ LauncherPage {
                         console.log("Springboard | Will create app button " + app.package)
                         var component = Qt.createComponent("/AppButton.qml", appSwitcher)
                         var properties = { "app": app,
-                                           "height": mainView.innerSpacing,
-                                           "width":  mainView.innerSpacing,
+                                           "height": mainView.innerSpacing * 2,
+                                           "width":  mainView.innerSpacing * 2,
                                            "iconSource": app.package in mainView.iconMap
-                                                         ? Qt.resolvedUrl(mainView.iconMap[app.package]) : "data:image/png;base64," + app.icon,
-                                           "hasColoredIcon": mainView.useColoredIcons}
+                                                         ? Qt.resolvedUrl(mainView.iconMap[app.package])
+                                                         : ("data:image/png;base64," + app.icon),
+                                           "hasColoredIcon": mainView.useColoredIcons }
                         if (component.status !== Component.Ready) {
                             if (component.status === Component.Error)
                                 console.debug("Springboard | Error: "+ component.errorString() );
                         }
                         var object = component.createObject(appSwitcher, properties)
                         appButtons.push(object)
-                        closeAppsButton.anchors.top = object.bottom
                         closeAppsButton.visible = true
                     }
                 }
@@ -779,10 +792,13 @@ LauncherPage {
 
     MouseArea {
         id: shortcutMenu
-        width: parent.width > 360 ? parent.width * 0.6 : parent.width
+        width: mainView.isTablet ? Screen.desktopAvailableWidth / Screen.devicePixelRatio * 0.9
+                                 : Screen.desktopAvailableWidth / Screen.devicePixelRatio
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right
+        anchors.rightMargin: -mainView.outerSpacing
+
         preventStealing: true
         enabled: !textInputArea.activeFocus && !defaultSuggestions
 
@@ -1019,31 +1035,46 @@ LauncherPage {
 
     Column {
         id: appSwitcher
-        anchors.left: parent.left
-        anchors.leftMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+        x: dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing
+//        anchors.left: parent.left
+//        anchors.leftMargin: dotShortcut ? mainView.innerSpacing : 0
+        anchors.bottom: closeAppsButton.top
+        anchors.bottomMargin: mainView.innerSpacing
         spacing: mainView.innerSpacing
         visible: mainView.isTablet
+    }
 
-        Button {
-            id: closeAppsButton
-            width: mainView.innerSpacing
-            height: mainView.innerSpacing
-            visible: false
-            contentItem: Rectangle {
-                anchors.fill: parent
+    Button {
+        id: closeAppsButton
+        x: dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing
+        //anchors.left: mainView.left
+        //anchors.leftMargin: dotShortcut ? mainView.innerSpacing : 0
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+        width: mainView.innerSpacing * 2
+        height: mainView.innerSpacing * 2
+        visible: false
+        flat: true
+        background: Rectangle {
+            color: "transparent"
+            opacity: Universal.theme === Universal.Light ? 0.4 : 0.6
+            radius: width * 0.5
+            border.color: Universal.foreground
+        }
+        contentItem: Item {
+            anchors.fill: parent
+            Text {
+                opacity: 1.0
+                anchors.centerIn: parent
+                text: qsTr("x")
                 color: Universal.foreground
-                opacity: Universal.theme === Universal.Light ? 0.1 : 0.2
-                radius: width * 0.5
-                Text {
-                    anchors.centerIn: parent
-                    text: qsTr("X")
-                }
             }
-            onClicked: {
-                AN.SystemDispatcher.dispatch("volla.launcher.closeAppsAction", {})
-            }
+        }
+        onClicked: {
+            console.log("Springboard | Close all apps")
+            AN.SystemDispatcher.dispatch("volla.launcher.closeAppsAction", {})
+            appSwitcher.visible = false;
+            closeAppsButton.visible = false;
         }
     }
 }

@@ -40,6 +40,7 @@ public class AppWorker
     public static final String GOT_APPS = "volla.launcher.appResponse";
     public static final String GET_RUNNING_APPS = "volla.launcher.runningAppsAction";
     public static final String GOT_RUNNING_APPS = "volla.launcher.runningAppsResponse";
+    public static final String CLOSE_RUNNUNG_APPS = "volla.launcher.closeAppsAction";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -181,8 +182,6 @@ public class AppWorker
                             List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
                             appList.ensureCapacity(availableActivities.size());
 
-
-
                             for (ResolveInfo ri:availableActivities) {
                                 try {
                                     ApplicationInfo packageInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
@@ -193,8 +192,8 @@ public class AppWorker
 
                                         Map appInfo = new HashMap();
                                         appInfo.put("package", packageInfo.packageName);
-                                        appInfo.put("label", String.valueOf(packageInfo.loadLabel(pm)));
-                                        appInfo.put("icon", AppWorker.drawableToBase64(packageInfo.loadIcon(pm)));
+                                        appInfo.put("label", String.valueOf(ri.loadLabel(pm)));
+                                        appInfo.put("icon", AppWorker.drawableToBase64(ri.loadIcon(pm)));
                                         appList.add(appInfo);
                                     }
                                 } catch (Exception e) {
@@ -205,6 +204,64 @@ public class AppWorker
                             Map reply = new HashMap();
                             reply.put("apps", appList );
                             SystemDispatcher.dispatch(GOT_RUNNING_APPS, reply);
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                } else if (type.equals(CLOSE_RUNNUNG_APPS)) {
+                    Log.d(TAG, "Close running apps action called");
+
+                    Runnable runnable = new Runnable () {
+
+                        public void run() {
+                            ArrayList<Map> appList = new ArrayList();
+
+                            final PackageManager pm = activity.getPackageManager();
+                            final List<String> packages = Arrays.asList("com.android.browser",
+                                "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
+                                "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
+                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
+                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
+                                "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
+                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
+                                "com.elishaazaria.sayboard");
+
+                            List<UsageStats> queryUsageStats = new LinkedList();
+                            List<String> activeApps = new LinkedList();
+
+                            if (checkUsagePermission(activity)) {
+                                long startTime = System.currentTimeMillis() - 1000;
+                                long endTime = System.currentTimeMillis();
+
+                                UsageStatsManager usageStatsManager = (UsageStatsManager)activity.getSystemService(Context.USAGE_STATS_SERVICE);
+                                queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
+
+                                Log.d(TAG, "Usage stats entries: " + queryUsageStats.size());
+
+                                for (UsageStats us : queryUsageStats) {
+                                    activeApps.add(us.getPackageName());
+                                }
+                            }
+
+                            Intent i = new Intent(Intent.ACTION_MAIN, null);
+                            i.addCategory(Intent.CATEGORY_LAUNCHER);
+                            List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
+
+                            ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+
+                            for (ResolveInfo ri:availableActivities) {
+                                try {
+                                    ApplicationInfo packageInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
+
+                                    if (activeApps.contains(packageInfo.packageName) && !packages.contains(packageInfo.packageName)) {
+                                        Log.d(TAG, "Found package " + packageInfo.packageName);
+                                        am.killBackgroundProcesses(packageInfo.packageName);
+                                    }
+                                } catch (Exception e) {
+                                    Log.w(TAG, "Unknown package name: " + e.toString());
+                                }
+                            }
                         }
                     };
 
@@ -241,52 +298,6 @@ public class AppWorker
         final PackageManager pm = a.getPackageManager();
         Intent app=pm.getLaunchIntentForPackage(ID);
         return app;
-    }
-
-    public static String getApplist(Activity a){
-        String list="<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>";
-        final PackageManager pm = a.getPackageManager();
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
-        for (ResolveInfo ri:availableActivities) {
-            list+="<item>";
-            list+="<package>"+ri.activityInfo.packageName+"</package>";
-            list+="<label>"+String.valueOf(ri.loadLabel(pm))+"</label>";
-            Log.d("Icon", ri.activityInfo.packageName);
-            list+="<icon>"+AppWorker.drawableToBase64(ri.loadIcon(pm))+"</icon>";
-            list+="</item>";
-        }
-        list+="</root>";
-        return list;
-    }
-
-    public static String getApplistAsJSON(Activity a){
-        String json="[\n";
-        final PackageManager pm = a.getPackageManager();
-        final List<String> packages = Arrays.asList("com.android.browser", "com.android.gallery3d",
-            "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk",
-            "com.android.calendar", "com.mediatek.filemanager", "com.mediatek.cellbroadcastreceiver",
-            "com.conena.navigation.gesture.control", "com.android.quicksearchbox");
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
-        for (ResolveInfo ri:availableActivities) {
-            Log.d("Found package", ri.activityInfo.packageName);
-
-            // todo: Remove. Workaround for beta demo purpose
-            if (!packages.contains(ri.activityInfo.packageName)) {
-                Log.d("Added package", ri.activityInfo.packageName);
-                json+="{\n";
-                json+="\"package\": \"" + ri.activityInfo.packageName + "\",\n";
-                json+="\"label\": \"" + String.valueOf(ri.loadLabel(pm)) + "\",\n";
-                json+="\"icon\": \"" + AppWorker.drawableToBase64(ri.loadIcon(pm)) + "\"\n";
-                json+="},\n";
-            }
-        }
-        json=json.substring(0,json.length()-2);
-        json+="\n]";
-        return json;
     }
 
     public static String drawableToBase64 (Drawable drawable) {

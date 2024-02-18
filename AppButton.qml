@@ -9,35 +9,34 @@ Button {
     id: appButton
 
     property var app
-    property var overlayColor: Universal.foreground
     property string iconSource
     property bool hasColoredIcon
 
     flat:true
 
     background: Rectangle {
-        color: "transparent"
+        color: Universal.foreground
+        opacity: Universal.theme === Universal.Light ? 0.1 : 0.3
+        radius: width * 0.5
         border.color: "transparent"
     }
 
     contentItem: Rectangle {
         anchors.fill: parent
-        color: Universal.foreground
-        opacity: Universal.theme === Universal.Light ? 0.1 : 0.2
-        radius: width * 0.5
+        color: "transparent"
 
         Image {
             id: appIcon
             anchors.centerIn: parent
             source: iconSource
-            width: appButton.width * 0.8
-            height: appButton.width * 0.8
+            width: appButton.width * 0.65
+            height: appButton.width * 0.65
 
             ColorOverlay {
-                anchors.fill: buttonIcon
+                anchors.fill: appIcon
                 source: appIcon
-                color: appButton.overlayColor
-                visible: hasColoredIcon
+                color: Universal.foreground
+                visible: !hasColoredIcon
             }
         }
     }
