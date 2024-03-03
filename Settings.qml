@@ -1374,7 +1374,7 @@ LauncherPage {
                                 }
                             }
                         };
-                        xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/VollaPluginList.json");
+                        xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/dev/VollaPluginList.json");
                         console.log("Settings | Sending available plugins request");
                         xhr.send();
                     }

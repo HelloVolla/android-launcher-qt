@@ -209,6 +209,7 @@ ApplicationWindow {
             'SendSignal' : 20027,
             'OpenSignalContact' : 20028,
             'ExecutePlugin': 20029,
+            'LiveContentPlugin': 20030
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
