@@ -107,7 +107,7 @@ LauncherPage {
     Image {
         id: widgetsMockup
         source: Qt.resolvedUrl("/images/Widget_trio@2x.png")
-        visible: mainView.isTablet
+        visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
         height: 320
         width: 320
         fillMode: Image.PreserveAspectFit
@@ -593,6 +593,12 @@ LauncherPage {
                             textInputArea.forceActiveFocus()
                         }
                         break;
+                    case mainView.actionType.LiveContentPluginEntity:
+                        if (functionReference.link.length > 0) {
+                            console.debug("Springboard | Will open link '" + functionReference.link + "' of plugin " + functionReference.pluginId)
+                            Qt.openUrlExternally(functionReference.link)
+                        }
+                        break;
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         if (actionObj !== undefined && actionValue !== undefined) {
@@ -649,7 +655,7 @@ LauncherPage {
                     text: button.text
                     elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
-                    color: model.action < 20000 ? Universal.foreground : "white"
+                    color: model.action < 20000 ? Universal.foreground : model.action === 20030 ? "grey" : "white"
                 }
                 background: Rectangle {
                     color: "transparent"
@@ -743,6 +749,7 @@ LauncherPage {
 
                 var pluginFunctions = new Array
                 var autocompletions = new Array
+                var liveContent = new Array
                 var i
 
                 for (i = 0; i < plugins.length; i++) {
@@ -761,11 +768,18 @@ LauncherPage {
                                  "functionReference": {"pluginId": plugins[i].metadata.id, "functionId": result[j].functionId},
                                  "isFirstSuggestion": false
                             })
-                        } else {
+                        } else if (result[j].object !== undefined) {
                             autocompletions.push({
                                 "text": result[j].label,
                                 "action": mainView.actionType.SuggestPluginEntity,
                                 "object": {'pluginId': plugins[i].metadata.id, 'entity': result[j].object },
+                                "isFirstSuggestion": false
+                            })
+                        } else {
+                            liveContent.push({
+                                "text": result[j].label,
+                                "action": mainView.actionType.LiveContentPlugin,
+                                "functionReference": {"pluginId": plugins[i].metadata.id, "link": result[j].link !== undefined ? result[j].link : ""},
                                 "isFirstSuggestion": false
                             })
                         }
@@ -779,6 +793,14 @@ LauncherPage {
                             && selectedObj.pluginId === pluginFunctions[i].functionReference.pluginId)) {
                         console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].functionReference.pluginId)
                         listView.model.insert(0, pluginFunctions[i])
+                    }
+                }
+
+                for (i = 0; i < liveContent.length; i++) {
+                    if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
+                            && selectedObj.pluginId === liveContent[i].functionReference.pluginId)) {
+                        console.debug("Springboard | Appending plugin live content: " + liveContent[i].functionReference.pluginId)
+                        listView.model.insert(0, liveContent[i])
                     }
                 }
 
