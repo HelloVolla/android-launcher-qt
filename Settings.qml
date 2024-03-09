@@ -309,10 +309,6 @@ LauncherPage {
                             color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
                         }
 
-                        Component.onCompleted: {
-                            AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
-                        }
-
                         onTextChanged: {
                             securitySettingsItemTitleIcon.visible = text === securityModeOnOption.text
                         }
@@ -1309,6 +1305,8 @@ LauncherPage {
                     property bool menuState: false
                     property var checkboxes: new Array
                     property var availablePlugins: new Array
+                    property var dpluginListUrl: "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/dev/VollaPluginList.json"
+                    property var pluginListUrl: "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/VollaPluginList.json"
 
                     Button {
                         id: pluginSettingsItemButton
@@ -1374,7 +1372,7 @@ LauncherPage {
                                 }
                             }
                         };
-                        xhr.open("GET", "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/dev/VollaPluginList.json");
+                        xhr.open("GET", pluginListUrl);
                         console.log("Settings | Sending available plugins request");
                         xhr.send();
                     }

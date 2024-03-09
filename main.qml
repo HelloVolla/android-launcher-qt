@@ -49,6 +49,8 @@ ApplicationWindow {
                   }
                   mainView.keepLastIndex = false
               } else {
+                  if (settings.showAppsAtStartup && mainView.currentIndex !== mainView.swipeIndex.Apps)
+                      appGrid.children[0].item.updateNotifications()
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
               // Start onboarding for the first start of the app
@@ -378,6 +380,7 @@ ApplicationWindow {
                     break
                 case swipeIndex.Preferences:
                     settingsPage.children[0].item.updateAvailablePlugins()
+                    AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
                     break
                 default:
                     // Nothing to do
