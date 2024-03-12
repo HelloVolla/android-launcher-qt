@@ -708,7 +708,7 @@ LauncherPage {
 
             height: button.height
             width: parent.width
-            color: model.action < 20000 ? "transparent" : Universal.accent
+            color: model.action < 20000 ? "transparent" : model.action === 20030 ? "#2f4f4f" : Universal.accent
             Button {
                 id: button
                 width: parent.width - mainView.innerSpacing
@@ -723,7 +723,7 @@ LauncherPage {
                     text: button.text
                     elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
-                    color: model.action < 20000 ? Universal.foreground : model.action === 20030 ? "grey" : "white"
+                    color: model.action < 20000 ? Universal.foreground : "white"
                 }
                 background: Rectangle {
                     color: "transparent"
@@ -1099,7 +1099,11 @@ LauncherPage {
         }
         onClicked: {
             console.log("Springboard | Close all apps")
-            AN.SystemDispatcher.dispatch("volla.launcher.closeAppsAction", {})
+            var openApps = new Array
+            for (var i = 0; i < appButtons.length; i++) {
+                openApps.push(appButtons[i].app.package)
+            }
+            AN.SystemDispatcher.dispatch("volla.launcher.closeAppsAction", {"packages": openApps})
             appSwitcher.visible = false;
             closeAppsButton.visible = false;
         }

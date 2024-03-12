@@ -168,12 +168,10 @@ public class AppWorker
                                 Log.d(TAG, "Usage stats entries: " + queryUsageStats.size());
 
                                 for (UsageStats us : queryUsageStats) {
-                                    Log.d(TAG, "Usage stat entry: " + us.getPackageName());
-                                    Log.d(TAG, "Usage stat visibe: " + us.getTotalTimeVisible());
-                                    Log.d(TAG, "Usage stat foreground: " + us.getTotalTimeInForeground());
-                                    Log.d(TAG, "Usage stat last foreground used: " + us.getLastTimeForegroundServiceUsed());
-                                    Log.d(TAG, "Usage stat foreground service used: " + us.getTotalTimeForegroundServiceUsed());
-                                    activeApps.add(us.getPackageName());
+                                    if (us.getTotalTimeVisible() > 0 && us.getTotalTimeInForeground() > 0) {
+                                        Log.d(TAG, "Usage stat entry: " + us.getPackageName());
+                                        activeApps.add(us.getPackageName());
+                                    }
                                 }
                             }
 
@@ -187,9 +185,7 @@ public class AppWorker
                                     ApplicationInfo packageInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
 
                                     if (activeApps.contains(packageInfo.packageName) && !packages.contains(packageInfo.packageName)) {
-
                                         Log.d(TAG, "Found package " + packageInfo.packageName);
-
                                         Map appInfo = new HashMap();
                                         appInfo.put("package", packageInfo.packageName);
                                         appInfo.put("label", String.valueOf(ri.loadLabel(pm)));
@@ -215,52 +211,17 @@ public class AppWorker
                     Runnable runnable = new Runnable () {
 
                         public void run() {
-                            ArrayList<Map> appList = new ArrayList();
-
-                            final PackageManager pm = activity.getPackageManager();
-                            final List<String> packages = Arrays.asList("com.android.browser",
-                                "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
-                                "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
-                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
-                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
-                                "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
-                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
-                                "com.elishaazaria.sayboard");
-
-                            List<UsageStats> queryUsageStats = new LinkedList();
-                            List<String> activeApps = new LinkedList();
-
-                            if (checkUsagePermission(activity)) {
-                                long startTime = System.currentTimeMillis() - 1000;
-                                long endTime = System.currentTimeMillis();
-
-                                UsageStatsManager usageStatsManager = (UsageStatsManager)activity.getSystemService(Context.USAGE_STATS_SERVICE);
-                                queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
-
-                                Log.d(TAG, "Usage stats entries: " + queryUsageStats.size());
-
-                                for (UsageStats us : queryUsageStats) {
-                                    activeApps.add(us.getPackageName());
-                                }
-                            }
-
-                            Intent i = new Intent(Intent.ACTION_MAIN, null);
-                            i.addCategory(Intent.CATEGORY_LAUNCHER);
-                            List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
-
+                            List<String> packageNames = (List)message.get("packages");
                             ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
 
-                            for (ResolveInfo ri:availableActivities) {
-                                try {
-                                    ApplicationInfo packageInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
-
-                                    if (activeApps.contains(packageInfo.packageName) && !packages.contains(packageInfo.packageName)) {
-                                        Log.d(TAG, "Found package " + packageInfo.packageName);
-                                        am.killBackgroundProcesses(packageInfo.packageName);
-                                    }
-                                } catch (Exception e) {
-                                    Log.w(TAG, "Unknown package name: " + e.toString());
-                                }
+                            for (String packageName : packageNames) {
+                                Log.d(TAG, "Will kill package " + packageName);
+                                am.killBackgroundProcesses(packageName);
+//                                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                intent.addCategory(Intent.CATEGORY_HOME);
+//                                intent.setPackage(packageName);
+//                                activity.startActivity(intent);
                             }
                         }
                     };
