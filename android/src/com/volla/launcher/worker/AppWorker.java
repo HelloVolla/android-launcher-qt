@@ -14,6 +14,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.content.Intent;
 import android.content.Context;
+import android.content.ComponentName;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -29,6 +30,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.qtproject.qt5.android.QtNative;
 import androidnative.SystemDispatcher;
 
@@ -155,24 +157,14 @@ public class AppWorker
                                 "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
                                 "com.elishaazaria.sayboard");
 
-                            List<UsageStats> queryUsageStats = new LinkedList();
-                            List<String> activeApps = new LinkedList();
+                            ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+                            List<ActivityManager.RunningTaskInfo> runningTaskInfos = am.getRunningTasks(100);
+                            List<String> activeApps = new ArrayList();
 
-                            if (checkUsagePermission(activity)) {
-                                long startTime = System.currentTimeMillis() - 1000;
-                                long endTime = System.currentTimeMillis();
-
-                                UsageStatsManager usageStatsManager = (UsageStatsManager)activity.getSystemService(Context.USAGE_STATS_SERVICE);
-                                queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
-
-                                Log.d(TAG, "Usage stats entries: " + queryUsageStats.size());
-
-                                for (UsageStats us : queryUsageStats) {
-                                    if (us.getTotalTimeVisible() > 0 && us.getTotalTimeInForeground() > 0) {
-                                        Log.d(TAG, "Usage stat entry: " + us.getPackageName());
-                                        activeApps.add(us.getPackageName());
-                                    }
-                                }
+                            for (int i = 0; i < runningTaskInfos.size(); i++) {
+                                ComponentName componentInfo = runningTaskInfos.get(i).topActivity;
+                                Log.d(TAG, "Running task: " + componentInfo.getPackageName());
+                                activeApps.add(componentInfo.getPackageName());
                             }
 
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
@@ -213,16 +205,38 @@ public class AppWorker
                         public void run() {
                             List<String> packageNames = (List)message.get("packages");
                             ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+                            List<ActivityManager.RunningTaskInfo> runningTaskInfos = am.getRunningTasks(100);
+
+                            final PackageManager pm = activity.getPackageManager();
 
                             for (String packageName : packageNames) {
                                 Log.d(TAG, "Will kill package " + packageName);
-                                am.killBackgroundProcesses(packageName);
-//                                Intent intent = new Intent(Intent.ACTION_MAIN);
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                intent.addCategory(Intent.CATEGORY_HOME);
-//                                intent.setPackage(packageName);
-//                                activity.startActivity(intent);
+                                pm.setApplicationEnabledSetting(packageName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, 0);
+                                pm.setApplicationEnabledSetting(packageName,PackageManager.COMPONENT_ENABLED_STATE_ENABLED, 0);
                             }
+
+
+//                                for (int i = 0; i < runningTaskInfos.size(); i++){
+//                                    ComponentName componentInfo = runningTaskInfos.get(i).baseActivity;
+//                                    if (componentInfo.getPackageName().equals(packageName)) {
+//                                        Log.d(TAG, "Will kill package " + packageName);
+//                                        Intent baseIntent = runningTaskInfos.get(i).baseIntent;
+//                                        baseIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                        activity.startActivity(baseIntent);
+//                                    }
+//                                }
+//                            }
+
+//                            List<RunningAppProcessInfo> activities = am.getRunningAppProcesses();
+
+//                            for (String packageName : packageNames) {
+//                                for (int i = 0; i < activities.size(); i++){
+//                                    if (activities.get(i).processName.equals(packageName)) {
+//                                        Log.d(TAG, "Will kill package " + packageName);
+//                                        android.os.Process.killProcess(activities.get(i).pid);
+//                                    }
+//                                }
+//                            }
                         }
                     };
 
