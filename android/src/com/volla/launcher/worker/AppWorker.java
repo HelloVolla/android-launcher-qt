@@ -1,4 +1,4 @@
-package com.volla.launcher.worker;
+    package com.volla.launcher.worker;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -22,6 +22,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.util.Base64;
+import android.util.Log;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -203,40 +205,19 @@ public class AppWorker
                     Runnable runnable = new Runnable () {
 
                         public void run() {
-                            List<String> packageNames = (List)message.get("packages");
-                            ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-                            List<ActivityManager.RunningTaskInfo> runningTaskInfos = am.getRunningTasks(100);
-
-                            final PackageManager pm = activity.getPackageManager();
-
-                            for (String packageName : packageNames) {
-                                Log.d(TAG, "Will kill package " + packageName);
-                                pm.setApplicationEnabledSetting(packageName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, 0);
-                                pm.setApplicationEnabledSetting(packageName,PackageManager.COMPONENT_ENABLED_STATE_ENABLED, 0);
+                            try {
+                                Class<?> activityManagerClass = Class.forName("android.app.ActivityTaskManager");
+                                Method mRemoveAllVisibleRecentTasks;
+                                mRemoveAllVisibleRecentTasks = activityManagerClass.getMethod("removeAllVisibleRecentTasks");
+                                mRemoveAllVisibleRecentTasks.setAccessible(true);
+                                mRemoveAllVisibleRecentTasks.invoke(activity.getSystemService("activity_task"));
                             }
-
-
-//                                for (int i = 0; i < runningTaskInfos.size(); i++){
-//                                    ComponentName componentInfo = runningTaskInfos.get(i).baseActivity;
-//                                    if (componentInfo.getPackageName().equals(packageName)) {
-//                                        Log.d(TAG, "Will kill package " + packageName);
-//                                        Intent baseIntent = runningTaskInfos.get(i).baseIntent;
-//                                        baseIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                        activity.startActivity(baseIntent);
-//                                    }
-//                                }
-//                            }
-
-//                            List<RunningAppProcessInfo> activities = am.getRunningAppProcesses();
-
-//                            for (String packageName : packageNames) {
-//                                for (int i = 0; i < activities.size(); i++){
-//                                    if (activities.get(i).processName.equals(packageName)) {
-//                                        Log.d(TAG, "Will kill package " + packageName);
-//                                        android.os.Process.killProcess(activities.get(i).pid);
-//                                    }
-//                                }
-//                            }
+                            catch ( ClassNotFoundException e ) {
+                                Log.e(TAG, "No Such Class Found Exception: ", e);
+                            }
+                            catch ( Exception e ) {
+                                Log.e(TAG, "General Exception occurred", e);
+                            }
                         }
                     };
 
