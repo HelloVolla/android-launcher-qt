@@ -595,7 +595,7 @@ LauncherPage {
                         }
                         break;
                     case mainView.actionType.LiveContentPluginEntity:
-                        if (functionReference.link.length > 0) {
+                        if (functionReference.link !== undefined && functionReference.link.length > 0) {
                             console.debug("Springboard | Will open link '" + functionReference.link + "' of plugin " + functionReference.pluginId)
                             Qt.openUrlExternally(functionReference.link)
                         }
@@ -696,7 +696,7 @@ LauncherPage {
                         } else{
                             console.debug("Springboard | Plugin returned success false")
                         }
-                    })
+                    }, selectedObj !== undefined && selectedObj.pluginId !== undefined ? selectedObj.entity : undefined)
                 }
             }
         }
