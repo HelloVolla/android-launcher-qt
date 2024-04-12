@@ -15,13 +15,10 @@
         <file>Shortcut.qml</file>
         <file>Springboard.qml</file>
         <file>qtquickcontrols2.conf</file>
-
         <file>scripts/apps.mjs</file>
         <file>scripts/contacts.mjs</file>
         <file>scripts/springboard.mjs</file>
-
         <file>android/res/drawable/wallpaper_image.png</file>
-        
         <file>icons/amazon@4x.png</file>
         <file>icons/argenta@4x.png</file>
         <file>icons/attachment@4x.png</file>
@@ -98,11 +95,11 @@
         <file>icons/woolsocks@4x.png</file>
         <file>icons/xmpp@4x_104x104px.png</file>
         <file>icons/yalp-store@4x.png</file>
-
         <file>images/contact-mask.png</file>
         <file>images/open-in-signal_dark@2x.png</file>
         <file>images/open-in-signal_dark_2x.png</file>
         <file>images/open-in-signal_light@2x.png</file>
         <file>images/open-in-signal_light_2x.png</file>
+        <file>SttSetup.qml</file>
     </qresource>
 </RCC>

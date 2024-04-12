@@ -65,6 +65,16 @@ ApplicationWindow {
                   var object = component.createObject(mainView, properties)
                   object.open()
                   settings.firstStart = false
+              } else if (!settings.sttchecked) {
+                  console.debug("MainView", "Will start stt dialog")
+                  component = Qt.createComponent("/SttSetup.qml")
+                  properties = { "fontSize" : mainView.mediumFontSize, "innerSpacing" : mainView.innerSpacing }
+                  if (component.status !== Component.Ready) {
+                      if (component.status === Component.Error)
+                          console.debug("MainView | Error: "+ component.errorString() );
+                  }
+                  object = component.createObject(mainView, properties)
+                  object.open()
               }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
@@ -1052,6 +1062,7 @@ ApplicationWindow {
         property int searchMode: mainView.searchMode.StartPage
         property bool fullscreen: false
         property bool firstStart: true
+        property bool sttChecked: false
         property bool signalIsActivated: false
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false

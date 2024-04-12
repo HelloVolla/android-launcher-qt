@@ -917,6 +917,7 @@ LauncherPage {
                     kind = "Signal"
                 }
 
+                cThread.c_SBADGE = thread["read"] === "true" ? false : true
                 cThread.c_STEXT = mainView.parseTime(Number(thread["date"])) + " • " + qsTr(kind)
                 cThread.c_TSTAMP = Number(thread["date"])
 
