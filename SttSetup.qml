@@ -11,12 +11,12 @@ Dialog {
     anchors.centerIn: Overlay.overlay
     height: 200
     width: 250
-    padding: popup.innerSpacing
+    padding: dialog.innerSpacing
     focus: true
     modal: true
     dim: false
     closePolicy: Popup.NoAutoClose
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    standardButtons: Dialog.Cancel | Dialog.Ok
 
     property var fontSize
     property int innerSpacing
@@ -51,10 +51,13 @@ Dialog {
     }
 
     contentItem: Text {
+        anchors.fill: dialog
         text: qsTr("Setup speech to text")
         color: Universal.foreground
         wrapMode: Text.WordWrap
         font.pointSize: dialog.fontSize
+        horizontalAlignment: Text.AlignNCenter
+        verticalAlignment: Text.AlignVCenter
     }
 
     onAccepted: {
