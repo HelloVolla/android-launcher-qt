@@ -549,6 +549,13 @@
     </message>
 </context>
 <context>
+    <name>SttSetup</name>
+    <message>
+        <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <source>Volla</source>

@@ -289,17 +289,17 @@
         <translation type="unfinished">tu</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1008"/>
+        <location filename="../Collections.qml" line="1009"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished">nu a putut încărca RSS feed: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1036"/>
+        <location filename="../Collections.qml" line="1037"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">invalid RSS feed: </translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1056"/>
+        <location filename="../Collections.qml" line="1057"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">lipsește mesajul RSS: </translation>
     </message>
@@ -854,6 +854,14 @@
     </message>
 </context>
 <context>
+    <name>SttSetup</name>
+    <message>
+        <location filename="../SttSetup.qml" line="55"/>
+        <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
+        <translation type="unfinished">Acum configurați recunoașterea vocală pentru introducerea textului, pe care o puteți activa apoi prin intermediul simbolului microfonului de pe tastatură.</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <location filename="../main.qml" line="14"/>
@@ -861,153 +869,153 @@
         <translation type="unfinished">Volla</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="194"/>
+        <location filename="../main.qml" line="205"/>
         <source>Send message</source>
         <translation type="unfinished">Trimite mesaj</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="194"/>
+        <location filename="../main.qml" line="205"/>
         <source>Send email</source>
         <translation type="unfinished">Trimite email</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="199"/>
+        <location filename="../main.qml" line="210"/>
         <source>Create note</source>
         <translation type="unfinished">Creați o notă</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="199"/>
+        <location filename="../main.qml" line="210"/>
         <source>Search web</source>
         <translation type="unfinished">Pentru a căuta pe internet</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="196"/>
+        <location filename="../main.qml" line="207"/>
         <source>Call</source>
         <translation type="unfinished">suna</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="195"/>
+        <location filename="../main.qml" line="206"/>
         <source>Send home email</source>
         <translation type="unfinished">trimite e-mail acasă</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="195"/>
+        <location filename="../main.qml" line="206"/>
         <source>Send work email</source>
         <translation type="unfinished">trimite e-mail de lucru</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="196"/>
+        <location filename="../main.qml" line="207"/>
         <source>Send other email</source>
         <translation type="unfinished">trimite alt e-mail</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="197"/>
+        <location filename="../main.qml" line="208"/>
         <source>Call on cell phone</source>
         <translation type="unfinished">apel pe telefonul mobil</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="197"/>
+        <location filename="../main.qml" line="208"/>
         <source>Call at home</source>
         <translation type="unfinished">sunați acasă</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="198"/>
+        <location filename="../main.qml" line="209"/>
         <source>Call at work</source>
         <translation type="unfinished">apelare la serviciu</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="198"/>
+        <location filename="../main.qml" line="209"/>
         <source>Call other phone</source>
         <translation type="unfinished">apelare alt telefon</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="200"/>
+        <location filename="../main.qml" line="211"/>
         <source>Open in browser</source>
         <translation type="unfinished">deschis în browser</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="200"/>
+        <location filename="../main.qml" line="211"/>
         <source>Add feed to collection</source>
         <translation type="unfinished">adăugați un canal la colecție</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="201"/>
+        <location filename="../main.qml" line="212"/>
         <source>Open Contact</source>
         <translation type="unfinished">contact deschis</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="201"/>
-        <location filename="../main.qml" line="259"/>
+        <location filename="../main.qml" line="212"/>
+        <location filename="../main.qml" line="270"/>
         <source>Show Notes</source>
         <translation type="unfinished">arată note</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="201"/>
+        <location filename="../main.qml" line="212"/>
         <source>Send Signal message</source>
         <translation type="unfinished">Trimiteți un mesaj de semnal</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="202"/>
+        <location filename="../main.qml" line="213"/>
         <source>Add to Calender</source>
         <translation type="unfinished">Adăugați la calendar</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="202"/>
+        <location filename="../main.qml" line="213"/>
         <source>Show in Signal</source>
         <translation type="unfinished">Arată în semnal</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="217"/>
+        <location filename="../main.qml" line="228"/>
         <source>Missing message text</source>
         <translation type="unfinished">textul mesajului lipsă</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="219"/>
+        <location filename="../main.qml" line="230"/>
         <source>Generic failure</source>
         <translation type="unfinished">eșec generic</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="220"/>
+        <location filename="../main.qml" line="231"/>
         <source>No service</source>
         <translation type="unfinished">niciun serviciu</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="221"/>
+        <location filename="../main.qml" line="232"/>
         <source>Null PDU</source>
         <translation type="unfinished">pdu nul</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="222"/>
+        <location filename="../main.qml" line="233"/>
         <source>Radio off</source>
         <translation type="unfinished">radio oprit</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="223"/>
+        <location filename="../main.qml" line="234"/>
         <source>Message delivered</source>
         <translation type="unfinished">mesaj transmis</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="224"/>
+        <location filename="../main.qml" line="235"/>
         <source>Message not delivered</source>
         <translation type="unfinished">mesajul nu a fost livrat</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="254"/>
+        <location filename="../main.qml" line="265"/>
         <source>Show Dialer</source>
         <translation type="unfinished">arată telefonul</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="255"/>
+        <location filename="../main.qml" line="266"/>
         <source>Camera</source>
         <translation type="unfinished">camera</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="257"/>
+        <location filename="../main.qml" line="268"/>
         <source>Agenda</source>
         <translation type="unfinished">Evenimente</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="256"/>
+        <location filename="../main.qml" line="267"/>
         <source>Gallery</source>
         <translation type="unfinished">Galerie</translation>
     </message>
@@ -1016,105 +1024,105 @@
         <translation type="obsolete">notes</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="258"/>
+        <location filename="../main.qml" line="269"/>
         <source>Create Event</source>
         <translation type="unfinished">creează eveniment</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="262"/>
+        <location filename="../main.qml" line="273"/>
         <source>Recent People</source>
         <translation type="unfinished">Contacte</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="261"/>
+        <location filename="../main.qml" line="272"/>
         <source>Recent Threads</source>
         <translation type="unfinished">Conversații</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="260"/>
+        <location filename="../main.qml" line="271"/>
         <source>Recent News</source>
         <translation type="unfinished">știri</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="487"/>
+        <location filename="../main.qml" line="498"/>
         <source>Just now</source>
         <translation type="unfinished">acum</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="489"/>
+        <location filename="../main.qml" line="500"/>
         <source>minutes ago</source>
         <translation type="unfinished">minute înainte</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="492"/>
-        <location filename="../main.qml" line="494"/>
+        <location filename="../main.qml" line="503"/>
+        <location filename="../main.qml" line="505"/>
         <source>Today</source>
         <translation type="unfinished">azi</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="498"/>
-        <location filename="../main.qml" line="500"/>
+        <location filename="../main.qml" line="509"/>
+        <location filename="../main.qml" line="511"/>
         <source>Yesterday</source>
         <translation type="unfinished">ieri</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="546"/>
+        <location filename="../main.qml" line="557"/>
         <source>New Subscrption</source>
         <translation type="unfinished">abonament nou</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="548"/>
+        <location filename="../main.qml" line="559"/>
         <source>You have already subscribed the feed</source>
         <translation type="unfinished">v-ați abonat deja la feed</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="571"/>
+        <location filename="../main.qml" line="582"/>
         <source>Invalid news ID</source>
         <translation type="unfinished">ID știre invalid</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="631"/>
+        <location filename="../main.qml" line="642"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">invalid RSS feed: </translation>
     </message>
     <message>
-        <location filename="../main.qml" line="218"/>
+        <location filename="../main.qml" line="229"/>
         <source>Message sent</source>
         <translation type="unfinished">Mesaj trimis</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="602"/>
+        <location filename="../main.qml" line="613"/>
         <source>Error because of too much redirects</source>
         <translation type="unfinished">Eroare din cauza prea multor redirecționări</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="614"/>
+        <location filename="../main.qml" line="625"/>
         <source>Could not load a valid feed</source>
         <translation type="unfinished">Nu s-a putut încărca un feed valid</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="738"/>
+        <location filename="../main.qml" line="749"/>
         <source>New shortcut</source>
         <translation type="unfinished">o nouă comandă rapidă</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="740"/>
+        <location filename="../main.qml" line="751"/>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished">ați adăugat deja comanda rapidă</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="867"/>
-        <location filename="../main.qml" line="872"/>
+        <location filename="../main.qml" line="878"/>
+        <location filename="../main.qml" line="883"/>
         <source>Reset successful</source>
         <translation type="unfinished">Resetare reușită</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="918"/>
+        <location filename="../main.qml" line="929"/>
         <source>Couldn&apos;t load plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="1086"/>
+        <location filename="../main.qml" line="1098"/>
         <source>Not yet supported</source>
         <translation type="unfinished">încă nu este acceptat</translation>
     </message>

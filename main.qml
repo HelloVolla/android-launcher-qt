@@ -67,8 +67,9 @@ ApplicationWindow {
                   settings.firstStart = false
               } else if (!settings.sttchecked) {
                   console.debug("MainView", "Will start stt dialog")
+                  settings.sttChecked = true
                   component = Qt.createComponent("/SttSetup.qml")
-                  properties = { "fontSize" : mainView.mediumFontSize, "innerSpacing" : mainView.innerSpacing }
+                  properties = { "fontSize" : 18, "innerSpacing" : 22 }
                   if (component.status !== Component.Ready) {
                       if (component.status === Component.Error)
                           console.debug("MainView | Error: "+ component.errorString() );

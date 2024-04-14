@@ -9,8 +9,8 @@ import AndroidNative 1.0 as AN
 Dialog {
     id: dialog
     anchors.centerIn: Overlay.overlay
-    height: 200
-    width: 250
+    height: 240
+    width: 260
     padding: dialog.innerSpacing
     focus: true
     modal: true
@@ -52,11 +52,11 @@ Dialog {
 
     contentItem: Text {
         anchors.fill: dialog
-        text: qsTr("Setup speech to text")
+        text: qsTr("Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.")
         color: Universal.foreground
         wrapMode: Text.WordWrap
         font.pointSize: dialog.fontSize
-        horizontalAlignment: Text.AlignNCenter
+        horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
 
