@@ -19,6 +19,7 @@ import android.provider.CallLog;
 import android.telecom.TelecomManager;
 import android.content.Context;
 import android.net.Uri;
+import android.speech.RecognizerIntent;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,7 @@ public class AppUtil {
     public static final String GOT_SECURITY_STATE = "volla.launcher.securityStateResponse";
     public static final String GET_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordAction";
     public static final String GOT_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordResponse";
+    public static final String GET_IS_STT_AVAILABLE = "volla.launcher.checkSttAvailability";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -244,6 +246,58 @@ public class AppUtil {
                             Map reply = new HashMap();
                             reply.put("isPasswordSet", childModeManager.isPasswortSet() );
                             SystemDispatcher.dispatch(GOT_IS_SECURITY_PW_SET, reply);
+                        } else if (type.equals(GET_IS_STT_AVAILABLE)) {
+                            Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                            List<ResolveInfo> speechActivities = pm.queryIntentActivities(speechIntent, 0);
+                            Log.d(TAG, "STT activities: " + speechActivities.size());
+                            if (speechActivities.size() == 0) { //we have a microphone
+                                PackageInfo pi;
+                                String packageName = "com.volla.vollaboard";
+                                try {
+                                    pi = activity.getPackageManager().getPackageInfo(packageName, 0);
+                                    Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+                                    resolveIntent.setPackage(pi.packageName);
+                                    List<ResolveInfo> apps = pm.queryIntentActivities(resolveIntent, 0);
+                                    for (ResolveInfo app: apps){
+                                        Log.d(TAG,String.format("%s %s",app.activityInfo.packageName,app.activityInfo.name));
+                                        packageName = app.activityInfo.packageName;
+                                        String className = app.activityInfo.name;
+                                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                                        ComponentName cn = new ComponentName(packageName, className);
+                                        intent.setComponent(cn);
+                                        try {
+                                            activity.startActivity(intent);
+                                        } catch (SecurityException se){
+                                            Log.e(TAG, "Security exception: " + se.getMessage());
+                                        }
+                                    }
+                                } catch (PackageManager.NameNotFoundException nnfe) {
+                                    Log.e(TAG, "Package Name not found: " + nnfe.getMessage() + ", App is not installed.");
+                                }
+                                try {
+                                    pi = activity.getPackageManager().getPackageInfo(packageName, 0);
+                                    Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+                                    resolveIntent.setPackage(pi.packageName);
+                                    List<ResolveInfo> apps = pm.queryIntentActivities(resolveIntent, 0);
+                                    for (ResolveInfo app: apps){
+                                        Log.d(TAG,String.format("%s %s",app.activityInfo.packageName,app.activityInfo.name));
+                                        packageName = app.activityInfo.packageName;
+                                        String className = app.activityInfo.name;
+                                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                                        ComponentName cn = new ComponentName(packageName, className);
+                                        intent.setComponent(cn);
+                                        try {
+                                            activity.startActivity(intent);
+                                        } catch (SecurityException se){
+                                            Log.e(TAG, "Security exception: " + se.getMessage());
+                                        }
+                                    }
+                                } catch (PackageManager.NameNotFoundException nnfe) {
+                                    Log.e(TAG, "Package Name not found: " + nnfe.getMessage() + ", App is not installed.");
+                                }
+                            }
                         }
                     }
                 };

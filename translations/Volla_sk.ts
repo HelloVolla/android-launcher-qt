@@ -691,6 +691,13 @@
     </message>
 </context>
 <context>
+    <name>SttSetup</name>
+    <message>
+        <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
+        <translation type="unfinished">Teraz nastavte rozpoznávanie hlasu na zadávanie textu, ktoré potom môžete aktivovať pomocou symbolu mikrofónu na klávesnici.</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <source>Volla</source>

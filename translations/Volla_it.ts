@@ -688,6 +688,13 @@
     </message>
 </context>
 <context>
+    <name>SttSetup</name>
+    <message>
+        <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
+        <translation type="unfinished">Ora impostate il riconoscimento vocale per l'inserimento del testo, che potrete attivare tramite il simbolo del microfono sulla tastiera.</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <source>Volla</source>
