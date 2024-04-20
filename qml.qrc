@@ -18,7 +18,6 @@
         <file>scripts/apps.mjs</file>
         <file>scripts/contacts.mjs</file>
         <file>scripts/springboard.mjs</file>
-        <file>android/res/drawable/wallpaper_image.png</file>
         <file>icons/amazon@4x.png</file>
         <file>icons/argenta@4x.png</file>
         <file>icons/attachment@4x.png</file>
