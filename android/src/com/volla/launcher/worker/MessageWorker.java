@@ -124,8 +124,7 @@ public class MessageWorker {
         });
     }
 
-
-   private static void updateMessageHandler(Map message, Activity activity) {
+    private static void updateMessageHandler(Map message, Activity activity) {
         Runnable runnable = new Runnable () {
               public void run() {
                    Looper.prepare();
@@ -182,7 +181,6 @@ public class MessageWorker {
       receiveTextActivity.connectSmsUpdateManager(activity, smsPid);
 
     }
-
 
     static void getConversation(Map message, Activity activity) {
         Log.d(TAG, "Invoked JAVA getConversation" );
