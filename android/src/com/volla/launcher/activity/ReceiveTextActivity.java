@@ -44,8 +44,15 @@ import com.volla.launcher.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.volla.launcher.util.NotificationPlugin;
+import android.content.ServiceConnection;
+import android.content.ComponentName;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
+import com.volla.smssdk.SMSUpdateManager;
+import android.os.Looper;
 
-public class ReceiveTextActivity extends AndroidNativeActivity
+public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpdateManager.ServiceConnectionListener
 {
     private static final String TAG = "ReceiveTextActivity";
 
@@ -53,10 +60,13 @@ public class ReceiveTextActivity extends AndroidNativeActivity
     public static final String CHECK_SHORTCUT = "volla.launcher.checkNewShortcut";
     public static final String GOT_SHORTCUT = "volla.launcher.receivedShortcut";
     public static final String UIMODE_CHANGED = "volla.launcher.uiModeChanged";
+    public List<String> smsPid;
+    private Handler handler;
 
     private NotificationBroadcastReceiver notificationBroadcastReceiver;
     public static ReceiveTextActivity instance;
     private String channel_d;
+    SMSUpdateManager smsUpdateManager;
 
     private static Map pendingShortcutMessage;
     static {
@@ -146,7 +156,30 @@ public class ReceiveTextActivity extends AndroidNativeActivity
         registerReceiver(notificationBroadcastReceiver, intentFilter);
         NotificationPlugin.getInstance(ReceiveTextActivity.this).registerListener();
         Log.d(TAG, "Android activity created");
+        handler = new Handler(Looper.getMainLooper());
     }
+
+public void connectSmsUpdateManager(Context ctx, List<String> smsItems) {
+    this.smsPid = smsItems;
+    smsUpdateManager = new SMSUpdateManager(ctx, this);
+    smsUpdateManager.start();
+    }
+
+@Override
+   public void onServiceConnected() {
+       if(smsPid != null && smsPid.size() > 0){
+           Log.d(TAG, "SMS database update called ");
+           int item = smsUpdateManager.smsUpdate(smsPid);
+           Log.d(TAG, "SMS database updated "+ item + "for sms id "+smsPid);
+        }
+
+        Log.d(TAG, "SMS database updated ");
+   }
+
+   @Override
+   public void onServiceDisconnected() {
+
+   }
 
     @Override
     protected void onDestroy() {
