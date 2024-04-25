@@ -79,12 +79,12 @@
         <location filename="../AppGrid.qml" line="210"/>
         <location filename="../AppGrid.qml" line="213"/>
         <source>Most used</source>
-        <translation type="unfinished">Meest gebruikt</translation>
+        <translation>Meest gebruikt</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="197"/>
         <source>Other apps</source>
-        <translation type="unfinished">Most used</translation>
+        <translation>Andere apps</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="207"/>
@@ -858,7 +858,7 @@
     <message>
         <location filename="../SttSetup.qml" line="55"/>
         <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
-        <translation type="unfinished">Stel nu spraakherkenning in voor tekstinvoer, die je vervolgens kunt activeren via het microfoonsymbool op het toetsenbord.</translation>
+        <translation>Stel nu spraakherkenning in voor tekstinvoer, die je vervolgens kunt activeren via het microfoonsymbool op het toetsenbord.</translation>
     </message>
 </context>
 <context>
