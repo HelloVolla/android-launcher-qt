@@ -65,17 +65,10 @@ ApplicationWindow {
                   var object = component.createObject(mainView, properties)
                   object.open()
                   settings.firstStart = false
-              } else if (!settings.sttchecked) {
-                  console.debug("MainView", "Will start stt dialog")
+              } else if (!settings.sttChecked) {
+                  console.debug("MainView", "Will check stt availability")
                   settings.sttChecked = true
-                  component = Qt.createComponent("/SttSetup.qml")
-                  properties = { "fontSize" : 18, "innerSpacing" : 22 }
-                  if (component.status !== Component.Ready) {
-                      if (component.status === Component.Error)
-                          console.debug("MainView | Error: "+ component.errorString() );
-                  }
-                  object = component.createObject(mainView, properties)
-                  object.open()
+                  AN.SystemDispatcher.dispatch("volla.launcher.checkSttAvailability", {})
               }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
@@ -1038,6 +1031,18 @@ ApplicationWindow {
                         } else if (message["uiMode"] === mainView.theme.Dark && settings.theme !== mainView.theme.Translucent) {
                             mainView.switchTheme(mainView.theme.Dark, true)
                         }
+                    }
+                } else if (type === "volla.launcher.checkSttAvailabilityResponse") {
+                    console.debug("MainView | STT activation status: " + message["isActivated"])
+                    if (!message["isActivated"]) {
+                        var component = Qt.createComponent("/SttSetup.qml")
+                        var properties = { "fontSize" : 18, "innerSpacing" : 22 }
+                        if (component.status !== Component.Ready) {
+                            if (component.status === Component.Error)
+                                console.debug("MainView | Error: "+ component.errorString() );
+                        }
+                        var object = component.createObject(mainView, properties)
+                        object.open()
                     }
                 }
             }

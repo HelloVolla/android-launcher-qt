@@ -16,7 +16,6 @@ Dialog {
     modal: true
     dim: false
     closePolicy: Popup.NoAutoClose
-    standardButtons: Dialog.Cancel | Dialog.Ok
 
     property var fontSize
     property int innerSpacing
@@ -30,11 +29,12 @@ Dialog {
     }
 
     background: Item {
+        anchors.fill: parent
         ShaderEffectSource {
             id: effectSource
             sourceItem: mainView
             anchors.fill: parent
-            sourceRect: Qt.rect(popup.x,popup.y,popup.width,popup.height)
+            sourceRect: Qt.rect(dialog.x,dialog.y,dialog.width,dialog.height)
         }
         FastBlur{
             id: blur
@@ -50,21 +50,73 @@ Dialog {
         }
     }
 
-    contentItem: Text {
-        anchors.fill: dialog
-        text: qsTr("Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.")
-        color: Universal.foreground
-        wrapMode: Text.WordWrap
-        font.pointSize: dialog.fontSize
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-    }
+    contentItem: Column {
+        //anchors.fill: parent
+        width: dialog.width
+        height: dialog.height
+        spacing: dialog.innerSpacing
+        Text {
+            width: parent.width
+            height: parent.height - buttonRow.height - dialog.innerSpacing
+            text: qsTr("Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.")
+            color: Universal.foreground
+            wrapMode: Text.WordWrap
+            font.pointSize: dialog.fontSize
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+        Row {
+            id: buttonRow
+            width: parent.width
+            spacing: dialog.innerSpacing
 
-    onAccepted: {
-        AN.SystemDispatcher.dispatch("volla.launcher.checkSttAvailability", {})
-    }
+            Button {
+                id: cancelButton
+                flat: true
+                padding: dialog.innerSpacing / 2
+                width: parent.width / 2 - dialog.innerSpacing / 2
+                text: qsTr("Cancel")
 
-    onRejected: {
-        dialog.close()
+                contentItem: Text {
+                    text: cancelButton.text
+                    color: Universal.foreground
+                    font.pointSize: dialog.fontSize
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "gray"
+                }
+
+                onClicked: {
+                    dialog.close()
+                }
+            }
+
+            Button {
+                id: okButton
+                width: parent.width / 2 - mainView.innerSpacing / 2
+                padding: dialog.innerSpacing / 2
+                flat: true
+                text: qsTr("Ok")
+
+                contentItem: Text {
+                    text: okButton.text
+                    color: Universal.foreground
+                    font.pointSize: dialog.fontSize
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "gray"
+                }
+
+                onClicked: {
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": "com.volla.vollaboard"})
+                }
+            }
+        }
     }
 }
