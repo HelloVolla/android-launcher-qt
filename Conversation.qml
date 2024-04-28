@@ -872,9 +872,9 @@ LauncherPage {
                 message["messages"].forEach(function (signalMessage, index) {
                     signalMessage["isSignal"] = true
                     previousMessage = signalMessage
-                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
-                        console.log("Conversation | * " + messageKey + ": \"" + messageValue + "\": " + typeof messageValue)
-                    }
+//                    for (const [messageKey, messageValue] of Object.entries(signalMessage)) {
+//                        console.log("Conversation | * " + messageKey + ": \"" + messageValue + "\": " + typeof messageValue)
+//                    }
                 })
                 conversationPage.messages = conversationPage.messages.concat(message["messages"])
                 conversationPage.updateListModel()

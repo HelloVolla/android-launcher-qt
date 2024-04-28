@@ -917,7 +917,7 @@ LauncherPage {
                     kind = "Signal"
                 }
 
-                cThread.c_SBADGE = thread["read"] === "true" ? false : true
+                cThread.c_SBADGE = thread["read"] === true ? false : true
                 cThread.c_STEXT = mainView.parseTime(Number(thread["date"])) + " • " + qsTr(kind)
                 cThread.c_TSTAMP = Number(thread["date"])
 
@@ -1409,6 +1409,7 @@ LauncherPage {
                         || currentCollectionMode === mainView.collectionMode.Threads) {
                     message["messages"].forEach(function (aThread, index) {
                         aThread["isSignal"] = true
+                        aThread["read"] = true // workaround for allways false negative
 //                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
 //                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
 //                        }
