@@ -105,18 +105,51 @@ LauncherPage {
         springBoard.plugins = springBoard.plugins.filter(el => el.metadata.id !== pluginId)
     }
 
-    Image {
-        id: widgetsMockup
-        source: Qt.resolvedUrl("/images/Widget_trio@2x.png")
+    Flow {
+        id: widgetsFlow
         visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
-        height: 320
-        width: 320
-        fillMode: Image.PreserveAspectFit
+        width: dotShortcut ? parent.width - mainView.innerSpacing * 9 : parent.width - mainView.innerSpacing * 5
+        layoutDirection: Qt.RightToLeft
+        spacing: mainView.innerSpacing
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: mainView.innerSpacing
         anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+
+        Rectangle {
+            color: "grey"
+            border.color: Universal.foreground
+            width: 100
+            height: 100
+        }
+
+        Rectangle {
+            color: "green"
+            border.color: Universal.foreground
+            width: 100
+            height: 100
+        }
+
+        Rectangle {
+            color: "blue"
+            border.color: Universal.foreground
+            width: 100
+            height: 100
+        }
     }
+
+//    Image {
+//        id: widgetsMockup
+//        source: Qt.resolvedUrl("/images/Widget_trio@2x.png")
+//        visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
+//        height: 320
+//        width: 320
+//        fillMode: Image.PreserveAspectFit
+//        anchors.bottom: parent.bottom
+//        anchors.right: parent.right
+//        anchors.rightMargin: mainView.innerSpacing
+//        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+//    }
 
     ListView {
         id: listView
