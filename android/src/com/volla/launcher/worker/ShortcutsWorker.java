@@ -43,24 +43,29 @@ public class ShortcutsWorker {
                             query.setQueryFlags(ShortcutQuery.FLAG_MATCH_PINNED);
                             int uid = activity.getApplicationInfo().uid;
 
-                            List<ShortcutInfo> shortcutInfos = launcher.getShortcuts(query, UserHandle.getUserHandleForUid(uid));
                             List pinnedShortcuts = new LinkedList();
 
-                            Log.d(TAG, shortcutInfos.size() + " pinned shortucts retrieved");
+                            try {
+                                List<ShortcutInfo> shortcutInfos = launcher.getShortcuts(query, UserHandle.getUserHandleForUid(uid));
 
-                            for (int i = 0; i < shortcutInfos.size(); i++) {
-                                ShortcutInfo shortcutInfo = shortcutInfos.get(i);
-                                if (shortcutInfo.isEnabled()) {
-                                    Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
-                                    Map pinnedShortcut = new HashMap();
-                                    pinnedShortcut.put("shortcutId", shortcutInfo.getId() );
-                                    pinnedShortcut.put("package", shortcutInfo.getPackage() );
-                                    pinnedShortcut.put("label", shortcutInfo.getShortLabel().toString() );
-                                    pinnedShortcut.put("icon", drawableToBase64(shortcutIcon) );
-                                    pinnedShortcuts.add(pinnedShortcut);
-                                } else {
-                                    Log.d(TAG, "Disabled shortcut: " + shortcutInfo.getId());
+                                Log.d(TAG, shortcutInfos.size() + " pinned shortucts retrieved");
+
+                                for (int i = 0; i < shortcutInfos.size(); i++) {
+                                    ShortcutInfo shortcutInfo = shortcutInfos.get(i);
+                                    if (shortcutInfo.isEnabled()) {
+                                        Drawable shortcutIcon = launcher.getShortcutIconDrawable(shortcutInfo,0);
+                                        Map pinnedShortcut = new HashMap();
+                                        pinnedShortcut.put("shortcutId", shortcutInfo.getId() );
+                                        pinnedShortcut.put("package", shortcutInfo.getPackage() );
+                                        pinnedShortcut.put("label", shortcutInfo.getShortLabel().toString() );
+                                        pinnedShortcut.put("icon", drawableToBase64(shortcutIcon) );
+                                        pinnedShortcuts.add(pinnedShortcut);
+                                    } else {
+                                        Log.d(TAG, "Disabled shortcut: " + shortcutInfo.getId());
+                                    }
                                 }
+                            } catch (SecurityException se) {
+                                Log.e(TAG, "An error occured: " + se.getMessage());
                             }
 
                             Map responseMessage = new HashMap();

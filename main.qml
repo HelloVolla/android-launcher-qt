@@ -1002,7 +1002,7 @@ ApplicationWindow {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                         mainView.wallpaperId = message["wallpaperId"]
                     } else if (message["wallpaperId"] === undefined) {
-                        mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
+                        mainView.wallpaper = "/images/Summer_Mode_2x.png"
                         mainView.wallpaperId = "default"
                     }
                 } else if (type === 'volla.launcher.receiveTextResponse') {
