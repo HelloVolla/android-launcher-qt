@@ -526,6 +526,7 @@ LauncherPage {
                     currentCollectionModel.executeSelection(model, mainView.actionType.ShowGroup)
                 } else {
                     // todo: should be replaced by model id
+                    if (statusBadge.visible) statusBadge.visible = false
                     currentCollectionModel.executeSelection(model, mainView.actionType.ShowDetails)
                 }
             }

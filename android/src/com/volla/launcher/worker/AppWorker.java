@@ -58,7 +58,8 @@ public class AppWorker
                                 "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
                                 "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
                                 "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
-                                "com.elishaazaria.sayboard");
+                                "com.elishaazaria.sayboard", "com.jzhk.chlidmode", "com.jzhk.gamemode", "com.jzhk.tool",
+                                "com.google.android.apps.adm", "com.android.soundrecorder", "com.jzhk.easylauncher");
 
                             final List<String> mostUsed = Arrays.asList("com.android.dialer", "com.mediatek.camera",
                                 "com.simplemobiletools.dialer", "com.simplemobiletools.gallery.pro", "com.android.messaging",
@@ -113,8 +114,6 @@ public class AppWorker
                                     if (mostUsed.contains(ri.activityInfo.packageName)) {
                                         timeInForeground = timeInForeground + 10; // fall back for missing stats
                                     }
-
-                                    Log.d(TAG, "Statistic: " + timeInForeground);
 
                                     appInfo.put("statistic", (int)timeInForeground);
                                     appList.add(appInfo);
