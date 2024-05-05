@@ -108,7 +108,8 @@ LauncherPage {
     Flow {
         id: widgetsFlow
         visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
-        width: dotShortcut ? parent.width - mainView.innerSpacing * 9 : parent.width - mainView.innerSpacing * 5
+        width: parent.width
+        //height: parent.height / 3
         layoutDirection: Qt.RightToLeft
         spacing: mainView.innerSpacing
         anchors.bottom: parent.bottom
@@ -116,25 +117,29 @@ LauncherPage {
         anchors.rightMargin: mainView.innerSpacing
         anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
 
+        // LayoutMirroring.enabled: true
+
+        property double sideLength: 150
+
         Rectangle {
             color: "grey"
             border.color: Universal.foreground
-            width: 100
-            height: 100
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
         }
 
         Rectangle {
             color: "green"
             border.color: Universal.foreground
-            width: 100
-            height: 100
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
         }
 
         Rectangle {
             color: "blue"
             border.color: Universal.foreground
-            width: 100
-            height: 100
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
         }
     }
 
