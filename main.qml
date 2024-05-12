@@ -239,12 +239,12 @@ ApplicationWindow {
         property bool useVibration: settings.useHapticMenus
         property int maxTitleLength: 120
 
-        property string galleryApp: "com.simplemobiletools.gallery.pro"
-        property string calendarApp: "com.simplemobiletools.calendar.pro"
+        property string galleryApp: "org.fossify.gallery"
+        property string calendarApp: "org.fossify.calendar"
         property string cameraApp: "com.mediatek.camera"
-        property string phoneApp: "com.simplemobiletools.dialer" // "com.android.dialer"
-        property string notesApp: "com.simplemobiletools.notes.pro"
-        property var messageApp: ["com.android.mms", "com.simplemobiletools.smsmessenger", "com.android.messaging"];
+        property string phoneApp: "com.android.dialer"
+        property string notesApp: "org.fossify.notes"
+        property var messageApp: ["com.android.mms", "org.fossify.messages", "com.android.messaging"];
 
         property string cacheName: "VollaCacheDB"
         property string cacheDescription: "Messages cache"
@@ -935,6 +935,13 @@ ApplicationWindow {
                 springboard.children[0].item.removePlugin(pluginMetadata.id)
                 callback(true)
             }
+        }
+
+        function checkDefaultApp(apps) {
+            mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
+                        "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
+            mainView.calendarApp = apps.filter( el => el.package !== "org.fossiry.calendar" ).length > 0 ?
+                        "org.fossiry.calendar" : "com.simplemobiletools.calendar.pro"
         }
 
         WorkerScript {
