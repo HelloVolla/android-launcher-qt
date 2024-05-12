@@ -540,6 +540,7 @@ LauncherPage {
                     }
                 }
                 mainView.updateSpinner(false)
+                mainView.checkDefaultApps(getAllApps())
             } else if (type === "volla.launcher.receivedShortcut") {
                 console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
 
