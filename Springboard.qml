@@ -4,6 +4,7 @@ import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.2
+import QtPositioning 5.13
 import FileIO 1.0
 import AndroidNative 1.0 as AN
 
@@ -109,7 +110,6 @@ LauncherPage {
         id: widgetsFlow
         visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
         width: parent.width
-        //height: parent.height / 3
         layoutDirection: Qt.RightToLeft
         spacing: mainView.innerSpacing
         anchors.bottom: parent.bottom
@@ -117,15 +117,131 @@ LauncherPage {
         anchors.rightMargin: mainView.innerSpacing
         anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
 
-        // LayoutMirroring.enabled: true
-
         property double sideLength: 150
 
         Rectangle {
-            color: "grey"
+            id: weatherWidget
+            color: Universal.background
             border.color: Universal.foreground
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
+
+            property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
+            property string city: "Remscheid"
+            property double longitude: 51.17983000
+            property double latitude: 7.19250000
+
+            PositionSource {
+                id: src
+                updateInterval: 1000
+                active: true
+
+                onPositionChanged: {
+                    var coord = src.position.coordinate
+                    console.log("SpringBoard | Positioning is valid:", src.valid)
+                    console.log("SpringBoard | Positioning is active:", src.active)
+                    console.log("SpringBoard | Coordinate: ", src.position)
+                    coord = src.position.coordinate
+                    for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
+                    switch (src.sourceError) {
+                        case PositionSource.AccessError:
+                            console.debug("SpringBoard | PositionSource.AccessError")
+                            break
+                        case PositionSource.ClosedError:
+                            console.debug("SpringBoard | PositionSource.ClosedError")
+                            break
+                        case PositionSource.NoError:
+                            console.debug("SpringBoard | PositionSource.NoError")
+                            break
+                        case PositionSource.UnknownSourceError:
+                            console.debug("SpringBoard | PositionSource.UnknownSourceError")
+                            break
+                        default:
+                            console.debug("SpringBoard | Another error")
+                            break
+                    }
+                }
+            }
+
+            Component.onCompleted: {
+                getWeather(longitude, latitude)
+                src.start()
+                console.log("SpringBoard | Positioning completed")
+                console.log("SpringBoard | Positioning is valid:", src.valid)
+                console.log("SpringBoard | Positioning is active:", src.active)
+                var coord = src.position.coordinate
+                for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
+                switch (src.supportedPositioningMethods) {
+                case PositionSource.NoPositioningMethods:
+                    console.debug("SpringBoard | PositionSource.NoPositioningMethods")
+                    break
+                case PositionSource.SatellitePositioningMethods:
+                    console.debug("SpringBoard | PositionSource.SatellitePositioningMethods")
+                    break
+                case PositionSource.NonSatellitePositioningMethods:
+                    console.debug("SpringBoard | PositionSource.NonSatellitePositioningMethods")
+                    break
+                case PositionSource.AllPositioningMethods:
+                    console.debug("SpringBoard | PositionSource.AllPositioningMethods")
+                    break
+                default:
+                    console.debug("SpringBoard | Another method")
+                    break
+                }
+            }
+
+            Column {
+                width: parent.width
+                spacing: mainView.innerSpacing * 0.5
+                padding: mainView.innerSpacing * 0.5
+
+                Text {
+                    id: cityName
+                    color: Universal.foreground
+                    font.pointSize: mainView.mediumFontSize
+                    text: weatherWidget.city
+                }
+                Image {
+                    id: weatherImage
+                    height: 30
+                    fillMode: Image.PreserveAspectFit
+                }
+                Text {
+                    id: recentTemperature
+                    color: Universal.foreground
+                    font.pointSize: mainView.mediumFontSize
+                }
+                Text {
+                    id: dayTemperatures
+                    text: qsTr("text")
+                    color: Universal.foreground
+                    font.pointSize: mainView.smallFontSize
+                    opacity: 0.6
+                }
+            }
+
+            function getWeather (lat, lon) {
+                console.debug("Widget | Will request weather")
+                var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat  + "&lon=" + lon + "&units=metric&appid=" + apiKey
+                console.debug("Widget | Servie URL " + weatherUrl)
+                var weatherRequest = new XMLHttpRequest()
+                weatherRequest.onreadystatechange = function() {
+                    if (weatherRequest.readyState === XMLHttpRequest.DONE) {
+                        console.debug("Widget | Weather response: " + weatherRequest.status)
+                        if (weatherRequest.status === 200) {
+                            var weather = JSON.parse(weatherRequest.responseText)
+                            weatherImage.source = "https://openweathermap.org/img/wn/" + weather.current.weather[0].icon + "@2x.png"
+                            recentTemperature.text = weather.current.temp + "°C"
+                            dayTemperatures.text = weather.daily[0].temp.min + "°C  " + weather.daily[0].temp.max + "°C"
+                            //var link = "https://startpage.com/sp/search?query=" + inputString + "&segment=startpage.volla"
+                        } else {
+                            console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
+                        }
+                    }
+                }
+                weatherRequest.open("GET", weatherUrl)
+                weatherRequest.send()
+            }
         }
 
         Rectangle {
@@ -143,18 +259,20 @@ LauncherPage {
         }
     }
 
-//    Image {
-//        id: widgetsMockup
-//        source: Qt.resolvedUrl("/images/Widget_trio@2x.png")
-//        visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
-//        height: 320
-//        width: 320
-//        fillMode: Image.PreserveAspectFit
-//        anchors.bottom: parent.bottom
-//        anchors.right: parent.right
-//        anchors.rightMargin: mainView.innerSpacing
-//        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
-//    }
+    /**
+    Image {
+        id: widgetsMockup
+        source: Qt.resolvedUrl("/images/Widget_trio@2x.png")
+        visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
+        height: 320
+        width: 320
+        fillMode: Image.PreserveAspectFit
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: mainView.innerSpacing
+        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+    }
+    */
 
     ListView {
         id: listView
