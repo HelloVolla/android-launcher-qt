@@ -125,6 +125,7 @@ public class MessageWorker {
     }
 
     private static void updateMessageHandler(Map message, Activity activity) {
+        Log.d(TAG, "updateMessageHandler");
         Runnable runnable = new Runnable () {
               public void run() {
                    Looper.prepare();
@@ -145,7 +146,7 @@ public class MessageWorker {
             threadList.add( threadId );
         }
         for (String thId : threadList) {
-              Log.d(TAG, "Check messages of therad " + thId);
+              Log.d(TAG, "Check messages of updateMessageReadStatus " + thId);
               Uri uriSms = Uri.parse("content://sms/");
               String[] projection = {Telephony.Sms._ID, Telephony.Sms.THREAD_ID, Telephony.Sms.BODY, Telephony.Sms.TYPE,
                   Telephony.Sms.DATE, Telephony.Sms.ADDRESS, Telephony.Sms.READ};
@@ -155,7 +156,7 @@ public class MessageWorker {
               long cutOffTimeStamp = 0;
               try {
                   Cursor c = activity.getContentResolver().query(uriSms, projection, selection, selectionArgs, null);;
-                  Log.d(TAG,  "MessagesCount = " + c.getCount() );
+                  Log.d(TAG,  "MessagesCount updateMessageReadStatus = " + c.getCount() );
                   if (c.moveToFirst()) {
                                 for (int i = 0; i < c.getCount(); i++) {
 
