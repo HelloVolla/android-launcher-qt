@@ -106,158 +106,7 @@ LauncherPage {
         springBoard.plugins = springBoard.plugins.filter(el => el.metadata.id !== pluginId)
     }
 
-    Flow {
-        id: widgetsFlow
-        visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
-        width: parent.width
-        layoutDirection: Qt.RightToLeft
-        spacing: mainView.innerSpacing
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.rightMargin: mainView.innerSpacing
-        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
 
-        property double sideLength: 150
-
-        Rectangle {
-            id: weatherWidget
-            color: Universal.background
-            border.color: Universal.foreground
-            width: widgetsFlow.sideLength
-            height: widgetsFlow.sideLength
-
-            property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
-            property string city: "Remscheid"
-            property double longitude: 51.17983000
-            property double latitude: 7.19250000
-
-            PositionSource {
-                id: src
-                updateInterval: 1000
-                active: true
-
-                onPositionChanged: {
-                    var coord = src.position.coordinate
-                    console.log("SpringBoard | Positioning is valid:", src.valid)
-                    console.log("SpringBoard | Positioning is active:", src.active)
-                    console.log("SpringBoard | Coordinate: ", src.position)
-                    coord = src.position.coordinate
-                    for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
-                    switch (src.sourceError) {
-                        case PositionSource.AccessError:
-                            console.debug("SpringBoard | PositionSource.AccessError")
-                            break
-                        case PositionSource.ClosedError:
-                            console.debug("SpringBoard | PositionSource.ClosedError")
-                            break
-                        case PositionSource.NoError:
-                            console.debug("SpringBoard | PositionSource.NoError")
-                            break
-                        case PositionSource.UnknownSourceError:
-                            console.debug("SpringBoard | PositionSource.UnknownSourceError")
-                            break
-                        default:
-                            console.debug("SpringBoard | Another error")
-                            break
-                    }
-                }
-            }
-
-            Component.onCompleted: {
-                getWeather(longitude, latitude)
-                src.start()
-                console.log("SpringBoard | Positioning completed")
-                console.log("SpringBoard | Positioning is valid:", src.valid)
-                console.log("SpringBoard | Positioning is active:", src.active)
-                var coord = src.position.coordinate
-                for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
-                switch (src.supportedPositioningMethods) {
-                case PositionSource.NoPositioningMethods:
-                    console.debug("SpringBoard | PositionSource.NoPositioningMethods")
-                    break
-                case PositionSource.SatellitePositioningMethods:
-                    console.debug("SpringBoard | PositionSource.SatellitePositioningMethods")
-                    break
-                case PositionSource.NonSatellitePositioningMethods:
-                    console.debug("SpringBoard | PositionSource.NonSatellitePositioningMethods")
-                    break
-                case PositionSource.AllPositioningMethods:
-                    console.debug("SpringBoard | PositionSource.AllPositioningMethods")
-                    break
-                default:
-                    console.debug("SpringBoard | Another method")
-                    break
-                }
-            }
-
-            Column {
-                width: parent.width
-                spacing: mainView.innerSpacing * 0.5
-                padding: mainView.innerSpacing * 0.5
-
-                Text {
-                    id: cityName
-                    color: Universal.foreground
-                    font.pointSize: mainView.mediumFontSize
-                    text: weatherWidget.city
-                }
-                Image {
-                    id: weatherImage
-                    height: 30
-                    fillMode: Image.PreserveAspectFit
-                }
-                Text {
-                    id: recentTemperature
-                    color: Universal.foreground
-                    font.pointSize: mainView.mediumFontSize
-                }
-                Text {
-                    id: dayTemperatures
-                    text: qsTr("text")
-                    color: Universal.foreground
-                    font.pointSize: mainView.smallFontSize
-                    opacity: 0.6
-                }
-            }
-
-            function getWeather (lat, lon) {
-                console.debug("Widget | Will request weather")
-                var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat  + "&lon=" + lon + "&units=metric&appid=" + apiKey
-                console.debug("Widget | Servie URL " + weatherUrl)
-                var weatherRequest = new XMLHttpRequest()
-                weatherRequest.onreadystatechange = function() {
-                    if (weatherRequest.readyState === XMLHttpRequest.DONE) {
-                        console.debug("Widget | Weather response: " + weatherRequest.status)
-                        if (weatherRequest.status === 200) {
-                            var weather = JSON.parse(weatherRequest.responseText)
-                            weatherImage.source = "https://openweathermap.org/img/wn/" + weather.current.weather[0].icon + "@2x.png"
-                            recentTemperature.text = weather.current.temp + "°C"
-                            dayTemperatures.text = weather.daily[0].temp.min + "°C  " + weather.daily[0].temp.max + "°C"
-                            //var link = "https://startpage.com/sp/search?query=" + inputString + "&segment=startpage.volla"
-                        } else {
-                            console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
-                        }
-                    }
-                }
-                weatherRequest.open("GET", weatherUrl)
-                weatherRequest.send()
-            }
-        }
-
-        Rectangle {
-            color: "green"
-            border.color: Universal.foreground
-            width: widgetsFlow.sideLength
-            height: widgetsFlow.sideLength
-        }
-
-        Rectangle {
-            color: "blue"
-            border.color: Universal.foreground
-            width: widgetsFlow.sideLength
-            height: widgetsFlow.sideLength
-        }
-    }
 
     /**
     Image {
@@ -974,6 +823,216 @@ LauncherPage {
                     listModel.iteratePlugins(0, plugins.length)
                 }
             }
+        }
+    }
+
+    Flow {
+        id: widgetsFlow
+        visible: mainView.isTablet // && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
+        width: parent.width
+        layoutDirection: Qt.RightToLeft
+        spacing: mainView.innerSpacing
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: mainView.innerSpacing
+        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+
+        property double sideLength: 180
+
+        Rectangle {
+            id: weatherWidget
+            color: Universal.background
+            border.color: Universal.foreground
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
+
+            property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
+            property string city: "Remscheid"
+            property double longitude: 51.17983000
+            property double latitude: 7.19250000
+
+            PositionSource {
+                id: src
+                updateInterval: 1000
+                active: true
+
+                onPositionChanged: {
+                    var coord = src.position.coordinate
+                    console.log("SpringBoard | Positioning is valid:", src.valid)
+                    console.log("SpringBoard | Positioning is active:", src.active)
+                    console.log("SpringBoard | Coordinate: ", src.position)
+                    coord = src.position.coordinate
+                    for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
+                    switch (src.sourceError) {
+                        case PositionSource.AccessError:
+                            console.debug("SpringBoard | PositionSource.AccessError")
+                            break
+                        case PositionSource.ClosedError:
+                            console.debug("SpringBoard | PositionSource.ClosedError")
+                            break
+                        case PositionSource.NoError:
+                            console.debug("SpringBoard | PositionSource.NoError")
+                            break
+                        case PositionSource.UnknownSourceError:
+                            console.debug("SpringBoard | PositionSource.UnknownSourceError")
+                            break
+                        default:
+                            console.debug("SpringBoard | Another error")
+                            break
+                    }
+                }
+            }
+
+            Component.onCompleted: {
+                getWeather(longitude, latitude)
+                src.start()
+                console.log("SpringBoard | Positioning completed")
+                console.log("SpringBoard | Positioning is valid:", src.valid)
+                console.log("SpringBoard | Positioning is active:", src.active)
+                var coord = src.position.coordinate
+                for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
+                switch (src.supportedPositioningMethods) {
+                case PositionSource.NoPositioningMethods:
+                    console.debug("SpringBoard | PositionSource.NoPositioningMethods")
+                    break
+                case PositionSource.SatellitePositioningMethods:
+                    console.debug("SpringBoard | PositionSource.SatellitePositioningMethods")
+                    break
+                case PositionSource.NonSatellitePositioningMethods:
+                    console.debug("SpringBoard | PositionSource.NonSatellitePositioningMethods")
+                    break
+                case PositionSource.AllPositioningMethods:
+                    console.debug("SpringBoard | PositionSource.AllPositioningMethods")
+                    break
+                default:
+                    console.debug("SpringBoard | Another method")
+                    break
+                }
+            }
+
+            Column {
+                width: parent.width
+                spacing: mainView.innerSpacing * 0.5
+                padding: mainView.innerSpacing * 0.5
+
+                Button {
+                    id: cityName
+                    flat: true
+
+                    contentItem: Label {
+                        color: Universal.foreground
+                        font.pointSize: mainView.mediumFontSize
+                        text: weatherWidget.city
+                        elide: Text.ElideRight
+                    }
+
+                    onClicked: {
+                        console.debug("Widget | Clicked")
+                    }
+                }
+
+                Row {
+                    Image {
+                        id: weatherImage
+                        height: 60
+                        fillMode: Image.PreserveAspectFit
+                    }
+                    Text {
+                        id: recentTemperature
+                        height: 60
+                        color: Universal.foreground
+                        font.pointSize: mainView.largeFontSize
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+
+                Text {
+                    id: dayTemperatures
+                    text: qsTr("text")
+                    color: Universal.foreground
+                    font.pointSize: mainView.smallFontSize
+                    opacity: 0.6
+                }
+            }
+
+            Dialog {
+                id: locatioDialog
+                title: qsTr("Set location")
+                standardButtons: Dialog.Ok | Dialog.Cancel
+                padding: mainView.innerSpacing
+                spacing: mainView.innerSpacing
+                width: 400
+                height: 400
+
+                ListView {
+                    id: locationList
+
+                    header: TextField {
+                        id: locationField
+                        width: parent.width
+                        placeholderText: qsTr("Enter any location")
+                        onTextChanged: {
+                            locationModel.update(text)
+                        }
+                    }
+
+                    delegate: Button {
+                        width: parent.width
+                        flat: true
+                        text: model.location
+                        onClicked: {
+                            locationField.text = model
+                        }
+                    }
+
+                    model: ListModel {
+                        id: locationModel
+
+                        function update(text) {
+
+                        }
+                    }
+                }
+
+
+            }
+
+            function getWeather (lat, lon) {
+                console.debug("Widget | Will request weather")
+                var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat  + "&lon=" + lon + "&units=metric&appid=" + apiKey
+                console.debug("Widget | Servie URL " + weatherUrl)
+                var weatherRequest = new XMLHttpRequest()
+                weatherRequest.onreadystatechange = function() {
+                    if (weatherRequest.readyState === XMLHttpRequest.DONE) {
+                        console.debug("Widget | Weather response: " + weatherRequest.status)
+                        if (weatherRequest.status === 200) {
+                            var weather = JSON.parse(weatherRequest.responseText)
+                            weatherImage.source = "https://openweathermap.org/img/wn/" + weather.current.weather[0].icon + "@2x.png"
+                            recentTemperature.text = weather.current.temp + "°C"
+                            dayTemperatures.text = weather.daily[0].temp.min + "°C  " + weather.daily[0].temp.max + "°C"
+                            //var link = "https://startpage.com/sp/search?query=" + inputString + "&segment=startpage.volla"
+                        } else {
+                            console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
+                        }
+                    }
+                }
+                weatherRequest.open("GET", weatherUrl)
+                weatherRequest.send()
+            }
+        }
+
+        Rectangle {
+            color: "green"
+            border.color: Universal.foreground
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
+        }
+
+        Rectangle {
+            color: "blue"
+            border.color: Universal.foreground
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
         }
     }
 
