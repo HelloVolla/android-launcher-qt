@@ -240,7 +240,7 @@ ApplicationWindow {
         property int maxTitleLength: 120
 
         property string galleryApp: "org.fossify.gallery"
-        property string calendarApp: "org.fossify.calendar"
+        property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.android.dialer"
         property string notesApp: "org.fossify.notes"
