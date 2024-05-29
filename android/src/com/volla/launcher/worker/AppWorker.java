@@ -28,6 +28,7 @@ import java.util.GregorianCalendar;
 import java.io.ByteArrayOutputStream;
 import org.qtproject.qt5.android.QtNative;
 import androidnative.SystemDispatcher;
+import com.volla.launcher.storage.NotificationStorageManager;
 
 public class AppWorker
 {
@@ -35,6 +36,9 @@ public class AppWorker
 
     public static final String GET_APPS = "volla.launcher.appAction";
     public static final String GOT_APPS = "volla.launcher.appResponse";
+    public static final String GET_Notification = "volla.launcher.otherAppNotificationAction";
+    public static final String GOT_Notification = "volla.launcher.otherAppNotificationResponce";
+    public static final String CLEAR_RED_DOT = "volla.launcher.clearRedDot";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -129,6 +133,15 @@ public class AppWorker
 
                     Thread thread = new Thread(runnable);
                     thread.start();
+                } else if(type.equals(GET_Notification)) {
+                  NotificationStorageManager storageManager = new NotificationStorageManager(activity);
+                  Map<String, Integer> allCounts = storageManager.getAllNotificationCounts();
+                  Map<String, Map> reply = new HashMap<String, Map>();
+                  reply.put("Notification", allCounts );
+                  SystemDispatcher.dispatch(GOT_Notification,reply);
+                } else if (type.equals(CLEAR_RED_DOT)) {
+                     NotificationStorageManager storageManager = new NotificationStorageManager(activity);
+                     storageManager.clearNotificationCount((String) message.get("package"));
                 }
             }
         });
