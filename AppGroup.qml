@@ -27,6 +27,7 @@ Item {
 
     property bool unreadMessages: false
     property bool newCalls: false
+    property var notificationData:""
 
     property var iconMap: ({})
     property var labelMap: ({})
@@ -225,6 +226,7 @@ Item {
                             } else {
                                 AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
                             }
+                             AN.SystemDispatcher.dispatch("volla.launcher.clearRedDot", {"package": model.package})
                         }
                     }
                     onPressAndHold: {
@@ -261,7 +263,8 @@ Item {
                 Rectangle {
                     id: notificationBadge
                     visible: groupItem.messageApp.includes(model.package) ? groupItem.unreadMessages
-                                                                          : model.package === groupItem.phoneApp ? groupItem.newCalls                                                               : false
+                                                                          : model.package === groupItem.phoneApp ? groupItem.newCalls
+                                                                          : groupItem.notificationData.hasOwnProperty(model.package) ? true : false
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
@@ -415,6 +418,8 @@ Item {
                 } else if (type === "volla.launcher.threadsCountResponse") {
                     console.log("AppGroup " + groupIndex + " | Unread messages: " + message["threadsCount"])
                     groupItem.unreadMessages = message["threadsCount"] > 0
+                } else if(type === "volla.launcher.otherAppNotificationResponce") {
+                    groupItem.notificationData = message["Notification"]
                 }
             }
         }
