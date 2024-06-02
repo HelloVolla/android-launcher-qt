@@ -1090,7 +1090,7 @@ ApplicationWindow {
                     mainView.defaultActions = presets.quickmenu
                     if (presetDict.firstStart) mainView.resetActions()
                 }
-                if (presetDict.theme !== undefined) { // && settings.firstStart) {
+                if (presetDict.theme !== undefined && settings.firstStart) {
                     console.debug("AppWindow | Set default theme to " + presetDict.theme)
                     settings.theme = presetDict.theme
                 }
