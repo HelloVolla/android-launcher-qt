@@ -139,15 +139,6 @@ QString FileIO::readPresets()
 {
     QString mDataPath = "/system/etc/com.volla.launcher/volla_properties.json";
     qDebug() << "Data Path: " << mDataPath;
-    QDir myDir(mDataPath);
-    if (!myDir.exists()) {
-        bool ok = myDir.mkpath(mDataPath);
-        if(!ok) {
-            qWarning() << "Couldn't create dir. " << mDataPath;
-        }
-        qDebug() << "created directory path" << mDataPath;
-    }
-
     QFile file(mDataPath);
     QString fileContent;
     if ( file.open(QIODevice::ReadOnly) ) {

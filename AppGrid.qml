@@ -514,7 +514,7 @@ LauncherPage {
                         appLauncher.appGroups = new Array
                         appLauncher.createAppGroups(groupedApps)
                         // Workaround, if users didn't update the os version
-                        if (!appsString.contains("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
+                        if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
                     } else {
                         console.log("AppLauncher | Need to retrieve apps from system")
                         mainView.updateSpinner(true)

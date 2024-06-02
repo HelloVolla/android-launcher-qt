@@ -1067,30 +1067,32 @@ ApplicationWindow {
         property double lastContactsCheck: 0.0
 
         function checkCustomParameters() {
-            console.log("AppWindow | Presets: " + presets.readPresets())
-
             var rawPresets = presets.readPresets()
+
+            for (var i = 0; i < rawPresets.split("\n").length; i++) {
+                console.debug("AppWindow | presets " + rawPresets.split("\n")[i])
+            }
+
             if (rawPresets !== undefined && rawPresets.length > 0) {
                 var presetDict = JSON.parse(rawPresets)
 
                 if (presetDict.color !== undefined && presetDict.color.accent !== undefined) {
                     console.debug("AppWindow | Set accent color from "+ Universal.accent + " to " + presetDict.color.accent)
                     mainView.accentColor = presetDict.color.accent
-                    console.debug("AppWindow | Accent color is " + Universal.accent)
                 }
                 if (presetDict.feeds !== undefined && presetDict.feeds.length > 0) {
-                    console.debug("AppWindow | Set feeds to " + presetDict.feeds)
+                    console.debug("AppWindow | Set default feeds to " + presetDict.feeds)
                     mainView.defaultFeeds = presetDict.feeds
-                    if (settings.firstStart()) mainView.resetFeeds()
+                    if (settings.firstStart) mainView.resetFeeds()
                 }
-                if (presets.quickMenu !== undefined && presets.quickMenu.length > 0) {
-                    console.debug("AppWindow | Set default actions to " + presetDict.quickMenu)
-                    mainView.defaultActions = presets.quickMenu
-                    if (presetDict.firstStart()) mainView.resetActions()
+                if (presetDict.quickmenu !== undefined && presetDict.quickmenu.length > 0) {
+                    console.debug("AppWindow | Set default actions to " + presetDict.quickmenu)
+                    mainView.defaultActions = presets.quickmenu
+                    if (presetDict.firstStart) mainView.resetActions()
                 }
-                if (presets.theme !== undefined && settings.firstStart) {
-                    console.debug("AppWindow | Set theme to " + presetDict.theme)
-                    presetDict.theme = presetDict.theme
+                if (presetDict.theme !== undefined) { // && settings.firstStart) {
+                    console.debug("AppWindow | Set default theme to " + presetDict.theme)
+                    settings.theme = presetDict.theme
                 }
             }
         }
