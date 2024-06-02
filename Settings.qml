@@ -88,7 +88,7 @@ LauncherPage {
                         color: themeSettingsItem.menuState ? "white" : Universal.foreground
                         background: Rectangle {
                             anchors.fill: parent
-                            color: themeSettingsItem.menuState === true ? Universal.accent : "transparent"
+                            color: themeSettingsItem.menuState === true ? mainView.accentColor : "transparent"
                         }
 
                         Component.onCompleted: {
@@ -122,7 +122,7 @@ LauncherPage {
                         boldText: themeSettingsItem.selectedMenuItem === darkModeOption
                         textColor: "white"
                         textOpacity: themeSettingsItem.labelOpacity
-                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
                         fontPointSize: mainView.mediumFontSize
                     }
                     HighlightButton {
@@ -139,7 +139,7 @@ LauncherPage {
                         boldText: themeSettingsItem.selectedMenuItem === lightModeOption
                         textColor: "white"
                         textOpacity: themeSettingsItem.labelOpacity
-                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
                         fontPointSize: mainView.mediumFontSize
                     }
                     HighlightButton {
@@ -156,7 +156,7 @@ LauncherPage {
                         boldText: themeSettingsItem.selectedMenuItem === translucentModeOption
                         textColor: "white"
                         textOpacity: themeSettingsItem.labelOpacity
-                        backgroundColor: themeSettingsItem.menuState ? Universal.accent : "transparent"
+                        backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
                         fontPointSize: mainView.mediumFontSize
                     }
                 }
@@ -306,7 +306,7 @@ LauncherPage {
                         }
                         background: Rectangle {
                             anchors.fill: parent
-                            color: securitySettingsItem.menuState === true ? Universal.accent : "transparent"
+                            color: securitySettingsItem.menuState === true ? mainView.accentColor : "transparent"
                         }
 
                         onTextChanged: {
@@ -333,7 +333,7 @@ LauncherPage {
                         }
                         background: Rectangle {
                             anchors.fill: parent
-                            color: securitySettingsItem.menuState ? Universal.accent : "transparent"
+                            color: securitySettingsItem.menuState ? mainView.accentColor : "transparent"
                         }
                     }
                     Button {
@@ -363,7 +363,7 @@ LauncherPage {
                         }
                         background: Rectangle {
                             anchors.fill: parent
-                            color: securitySettingsItem.menuState ? Universal.accent : "transparent"
+                            color: securitySettingsItem.menuState ? mainView.accentColor : "transparent"
                         }
                     }
                 }
@@ -606,6 +606,9 @@ LauncherPage {
                                     if (passwordDialog.definePasswordMode && !keepPasswordCheckBox.checked
                                             && passwordField.text !== confirmationField.text) {
                                         mainView.showToast(qsTr("Wrong password confirmation"))
+                                    } else if (passwordDialog.definePasswordMode && !keepPasswordCheckBox.checked
+                                               && passwordField.text.length < 5) {
+                                        mainView.showToast(qsTr("Password needs at least four characters or numbers"))
                                     } else {
                                         AN.SystemDispatcher.dispatch(
                                                     "volla.launcher.securityModeAction",
@@ -692,7 +695,7 @@ LauncherPage {
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                "hasRemoveButton": true}
+                                "hasRemoveButton": true, "accentColor": mainView.accentColor }
                             var object = component.createObject(newsSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             newsSettingsItemColumn.newsCheckboxes.push(object)
@@ -774,7 +777,8 @@ LauncherPage {
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                "hasRemoveButton": getFilteredShortcuts(mainView.defaultActions, "id", shortcuts[i]["id"]).length === 0 }
+                                "hasRemoveButton": getFilteredShortcuts(mainView.defaultActions, "id", shortcuts[i]["id"]).length === 0,
+                                "accentColor": mainView.accentColor }
                             var object = component.createObject(shortcutSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             shortcutSettingsItemColumn.checkboxes.push(object)
@@ -789,7 +793,7 @@ LauncherPage {
                             "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                             "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                             "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                            "hasRemoveButton": true }
+                            "hasRemoveButton": true, "accentColor": mainView.accentColor }
                         var object = component.createObject(shortcutSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         shortcutSettingsItemColumn.checkboxes.push(object)
@@ -858,7 +862,7 @@ LauncherPage {
                     background: Rectangle {
                         implicitHeight:  contentItem.height
                         implicitWidth: 200
-                        color: Universal.accent
+                        color: mainView.accentColor
                         radius: mainView.innerSpacing
                     }
 
@@ -895,7 +899,7 @@ LauncherPage {
                                     "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                     "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                     "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                    "hasRemoveButton": true }
+                                    "hasRemoveButton": true, "accentColor": mainView.accentColor }
                                 var object = component.createObject(shortcutSettingsItemColumn, properties)
                                 shortcutSettingsItemColumn.checkboxes.push(object)
                                 appMenu.close()
@@ -955,7 +959,8 @@ LauncherPage {
                                 "text": qsTr("Signal"), "checked": sourceSettings.signalIsActivated,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "accentColor": mainView.accentColor}
                         var object = component.createObject(sourceSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         sourceSettingsItemColumn.checkboxes.push(object)
@@ -1045,7 +1050,8 @@ LauncherPage {
                                 "text": qsTr("DuckDuckGo"), "checked": mainView.getSearchMode() === mainView.searchMode.Duck,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true,
+                                "accentColor": mainView.accentColor }
                         var object = component.createObject(searchSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
@@ -1054,6 +1060,7 @@ LauncherPage {
                         properties["actionId"] = "startpage"
                         properties["text"] = qsTr("Startpage")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.StartPage
+                        properties["accentColor"] = mainView.accentColor
                         object = component.createObject(searchSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
@@ -1062,6 +1069,7 @@ LauncherPage {
                         properties["actionId"] = "metager"
                         properties["text"] = qsTr("MetaGer")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.MetaGer
+                        properties["accentColor"] = mainView.accentColor
                         object = component.createObject(searchSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
@@ -1140,7 +1148,8 @@ LauncherPage {
                                 "text": qsTr("Fullscreen"), "checked": designSettings.fullscreen,
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
-                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2 }
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "accentColor": mainView.accentColor }
                         var object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1149,6 +1158,7 @@ LauncherPage {
                         properties["actionId"] = "coloredIcons"
                         properties["text"] = qsTr("Use colored app icons")
                         properties["checked"] = designSettings.useColoredIcons
+                        properties["accentColor"] = mainView.accentColor
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1157,6 +1167,7 @@ LauncherPage {
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
+                        properties["accentColor"] = mainView.accentColor
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1165,6 +1176,7 @@ LauncherPage {
                         properties["actionId"] = "hapticMenus"
                         properties["text"] = qsTr("Use haptic menus")
                         properties["checked"] = designSettings.useHapticMenus
+                        properties["accentColor"] = mainView.accentColor
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1173,6 +1185,7 @@ LauncherPage {
                         properties["actionId"] = "useGroupedApps"
                         properties["text"] = qsTr("Show grouped apps")
                         properties["checked"] = designSettings.useGroupedApps
+                        properties["accentColor"] = mainView.accentColor
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1181,6 +1194,7 @@ LauncherPage {
                         properties["actionId"] = "useCategories"
                         properties["text"] = qsTr("Use app categories")
                         properties["checked"] = designSettings.useCategories
+                        properties["accentColor"] = mainView.accentColor
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1280,8 +1294,8 @@ LauncherPage {
                     implicitWidth: mainView.largeFontSize
                     implicitHeight: mainView.largeFontSize
                     radius: mainView.largeFontSize / 2
-                    color: Universal.accent
-                    border.color: Universal.accent
+                    color: mainView.accentColor
+                    border.color: mainView.accentColor
                 }
 
                 onValueChanged: {
@@ -1384,7 +1398,7 @@ LauncherPage {
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                "hasDescriptionButton": true }
+                                "hasDescriptionButton": true, "accentColor": mainView.accentColor }
                             var object = component.createObject(pluginSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             pluginSettingsItemColumn.checkboxes.push(object)
@@ -1583,7 +1597,7 @@ LauncherPage {
                             border.width: 1
                         }
                         onPressed: {
-                            resetNewsButtonBackground.color = Universal.accent
+                            resetNewsButtonBackground.color = mainView.accentColor
                         }
                         onClicked: {
                             resetNewsButtonBackground.color = "transparent"
@@ -1617,7 +1631,7 @@ LauncherPage {
                             border.width: 1
                         }
                         onPressed: {
-                            reseetShortcutsButtonBackground.color = Universal.accent
+                            reseetShortcutsButtonBackground.color = mainView.accentColor
                         }
                         onClicked: {
                             reseetShortcutsButtonBackground.color = "transparent"
@@ -1651,7 +1665,7 @@ LauncherPage {
                             border.width: 1
                         }
                         onPressed: {
-                            resetContactsButtonBackground.color = Universal.accent
+                            resetContactsButtonBackground.color = mainView.accentColor
                         }
                         onClicked: {
                             resetContactsButtonBackground.color = "transparent"
@@ -1685,7 +1699,7 @@ LauncherPage {
                             border.width: 1
                         }
                         onPressed: {
-                            reseetLauncherButtonBackground.color = Universal.accent
+                            reseetLauncherButtonBackground.color = mainView.accentColor
                         }
                         onClicked: {
                             reseetLauncherButtonBackground.color = "transparent"

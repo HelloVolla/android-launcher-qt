@@ -230,9 +230,8 @@ public class MessageWorker {
 
                                 for (int i = 0; i < numbers.size(); i++) {
                                     String number = ( String ) numbers.get(i);
-                                    Log.d(TAG, "Compare message address " + address + " with contact number " + number);
                                     if (address != null && address.endsWith(number.substring(1))) {
-                                        Log.d(TAG, "Match");
+                                        Log.d(TAG, "Message from " + number + " matched");
                                         matched = true;
                                         threadList.add( thId );
                                         break;

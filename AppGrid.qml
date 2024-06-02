@@ -245,6 +245,7 @@ LauncherPage {
                                "headerPointSize": mainView.mediumFontSize,
                                "innerSpacing": mainView.innerSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
+                               "accentColor": mainView.accentColor,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
                                "pinnedShortcuts": index === 0 ? appLauncher.pinnedShortcuts : new Array,
                                "apps": appGroupInfos["apps"]}
@@ -369,7 +370,7 @@ LauncherPage {
         background: Rectangle {
             id: menuBackground
             implicitWidth: contextMenu.menuWidth
-            color: Universal.accent
+            color: mainView.accentColor
             radius: mainView.innerSpacing
         }
 
@@ -512,6 +513,8 @@ LauncherPage {
                         var groupedApps = appLauncher.getGroupedApps(appsArray)
                         appLauncher.appGroups = new Array
                         appLauncher.createAppGroups(groupedApps)
+                        // Workaround, if users didn't update the os version
+                        if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
                     } else {
                         console.log("AppLauncher | Need to retrieve apps from system")
                         mainView.updateSpinner(true)

@@ -18,6 +18,7 @@ public:
     Q_INVOKABLE bool write(const QString& data);
     Q_INVOKABLE QString readPrivate();
     Q_INVOKABLE bool writePrivate(const QString& data);
+    Q_INVOKABLE QString readPresets();
 
     QString source() { return mSource; }
 

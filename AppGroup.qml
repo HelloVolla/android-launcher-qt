@@ -21,6 +21,8 @@ Item {
     property double headerPointSize
     property double backgroundOpacity
     property double desaturation: 1.0
+    property var accentColor
+
 
     property int groupIndex: 0
     property int selectedGroupIndex: 1
@@ -268,7 +270,7 @@ Item {
                     width: parent.width * 0.15
                     height: parent.width * 0.15
                     radius: height * 0.5
-                    color:  Universal.accent
+                    color:  accentColor
                 }
             }
 
