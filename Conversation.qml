@@ -185,6 +185,7 @@ LauncherPage {
 
     ListView {
         id: listView
+        clip: true
         anchors.top: parent.top
         width: parent.width
         height: parent.height
@@ -603,7 +604,7 @@ LauncherPage {
                         width: messageBox.width * widthFactor
                         text: model.m_ERROR !== undefined ? model.m_ERROR : ""
                         font.pointSize: mainView.smallFontSize
-                        color: Universal.accent
+                        color: mainView.accentColor
                         clip: true
                         opacity: 0.5
                         horizontalAlignment: Text.AlignLeft

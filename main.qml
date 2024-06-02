@@ -35,9 +35,7 @@ ApplicationWindow {
                   mainView.mediumFontSize = 16.0
                   mainView.smallFontSize = 14.0
               }
-              if (settings.sync) {
-                  settings.sync()
-              }
+              settings.sync()
               if (!appGridLoader.active) appGridLoader.active = true
               if (!springboardLoader.active) springboardLoader.active = true
               if (!settingsPageLoader.active) settingsPageLoader.active = true
@@ -54,22 +52,6 @@ ApplicationWindow {
               }
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
-              if (settings.firstStart) {
-                  console.debug("MainView", "Will start tutorial")
-                  var component = Qt.createComponent("/OnBoarding.qml")
-                  var properties = { "mainView" : mainView, "innerSpacing" : mainView.innerSpacing }
-                  if (component.status !== Component.Ready) {
-                      if (component.status === Component.Error)
-                          console.debug("MainView | Error: "+ component.errorString() );
-                  }
-                  var object = component.createObject(mainView, properties)
-                  object.open()
-                  settings.firstStart = false
-              } else if (!settings.sttChecked) {
-                  console.debug("MainView", "Will check stt availability")
-                  settings.sttChecked = true
-                  AN.SystemDispatcher.dispatch("volla.launcher.checkSttAvailability", {})
-              }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
               // Update app grid
@@ -234,6 +216,7 @@ ApplicationWindow {
         property var wallpaperId: ""
         property var backgroundOpacity: 1.0
         property var backgroundColor: Universal.background
+        property var accentColor: Universal.accent
         property var fontColor: Universal.foreground
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
@@ -1083,8 +1066,59 @@ ApplicationWindow {
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
 
+        function checkCustomParameters() {
+            console.log("AppWindow | Presets: " + presets.readPresets())
+
+            var rawPresets = presets.readPresets()
+            if (rawPresets !== undefined && rawPresets.length > 0) {
+                var presetDict = JSON.parse(rawPresets)
+
+                if (presetDict.color !== undefined && presetDict.color.accent !== undefined) {
+                    console.debug("AppWindow | Set accent color from "+ Universal.accent + " to " + presetDict.color.accent)
+                    mainView.accentColor = presetDict.color.accent
+                    console.debug("AppWindow | Accent color is " + Universal.accent)
+                }
+                if (presetDict.feeds !== undefined && presetDict.feeds.length > 0) {
+                    console.debug("AppWindow | Set feeds to " + presetDict.feeds)
+                    mainView.defaultFeeds = presetDict.feeds
+                    if (settings.firstStart()) mainView.resetFeeds()
+                }
+                if (presets.quickMenu !== undefined && presets.quickMenu.length > 0) {
+                    console.debug("AppWindow | Set default actions to " + presetDict.quickMenu)
+                    mainView.defaultActions = presets.quickMenu
+                    if (presetDict.firstStart()) mainView.resetActions()
+                }
+                if (presets.theme !== undefined && settings.firstStart) {
+                    console.debug("AppWindow | Set theme to " + presetDict.theme)
+                    presetDict.theme = presetDict.theme
+                }
+            }
+        }
+
         Component.onCompleted: {
-            console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
+            checkCustomParameters()
+
+//            console.log("AppWindow | Number of font families: " + Qt.fontFamilies().length)
+//            for (var i = 0; i < Qt.fontFamilies().length; i++) {
+//                console.log("AppWindow | FontFamily: " + Qt.fontFamilies()[i])
+//            }
+
+            if (settings.firstStart) {
+                console.debug("AppWindow | ", "Will start tutorial")
+                var component = Qt.createComponent("/OnBoarding.qml")
+                var properties = { "mainView" : mainView, "innerSpacing" : mainView.innerSpacing }
+                if (component.status !== Component.Ready) {
+                    if (component.status === Component.Error)
+                        console.debug("MainView | Error: "+ component.errorString() );
+                }
+                var object = component.createObject(mainView, properties)
+                object.open()
+                settings.firstStart = false
+            } else if (!settings.sttChecked) {
+                console.debug("MainView", "Will check stt availability")
+                settings.sttChecked = true
+                AN.SystemDispatcher.dispatch("volla.launcher.checkSttAvailability", {})
+            }
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)
             } else {
@@ -1109,6 +1143,10 @@ ApplicationWindow {
         id: toast
         text: qsTr("Not yet supported")
         longDuration: true
+    }
+
+    FileIO {
+        id: presets
     }
 
     FileIO {

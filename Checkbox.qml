@@ -14,6 +14,7 @@ CheckBox {
     property bool hasDescriptionButton: false
     property bool isToggle: false
     property int startX: 0
+    property var accentColor
 
     width: parent.width
     text: qsTr("Chip")
@@ -68,7 +69,7 @@ CheckBox {
         x: settingsCheckbox.leftPadding
         y: settingsCheckbox.height / 2 - circleSize / 2
         radius: width / 2
-        color: settingsCheckbox.checked ? Universal.accent : Universal.foreground
+        color: settingsCheckbox.checked ? accentColor : Universal.foreground
         opacity: settingsCheckbox.checked ? 1.0 : 0.3
     }
 
