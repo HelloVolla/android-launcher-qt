@@ -468,6 +468,10 @@
         <source>Couldn&apos;t load available plugins</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Password needs at least four characters or numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -553,6 +557,14 @@
     <message>
         <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
         <translation type="unfinished">Configure agora o reconhecimento de voz para a introdução de texto, que pode depois ativar através do símbolo do microfone no teclado.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

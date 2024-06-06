@@ -509,6 +509,10 @@
         <source>Couldn&apos;t load available plugins</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Password needs at least four characters or numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -694,6 +698,14 @@
     <message>
         <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
         <translation type="unfinished">Aseta nyt äänentunnistus tekstinsyöttöä varten, jonka voit aktivoida näppäimistön mikrofonisymbolin avulla.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Peruuta</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
     </message>
 </context>
 <context>
