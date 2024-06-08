@@ -106,23 +106,6 @@ LauncherPage {
         springBoard.plugins = springBoard.plugins.filter(el => el.metadata.id !== pluginId)
     }
 
-
-
-    /**
-    Image {
-        id: widgetsMockup
-        source: Qt.resolvedUrl("/images/Widget_trio@2x.png")
-        visible: mainView.isTablet && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
-        height: 320
-        width: 320
-        fillMode: Image.PreserveAspectFit
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.rightMargin: mainView.innerSpacing
-        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
-    }
-    */
-
     ListView {
         id: listView
         anchors.fill: parent
@@ -948,7 +931,6 @@ LauncherPage {
 
                 Text {
                     id: dayTemperatures
-                    text: qsTr("text")
                     color: Universal.foreground
                     font.pointSize: mainView.smallFontSize
                     opacity: 0.6
@@ -1022,17 +1004,41 @@ LauncherPage {
         }
 
         Rectangle {
-            color: "green"
+            id: clockWidget
+            color: "transparent"
             border.color: Universal.foreground
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
+
+            Image {
+                id: clockImage
+                source: "images/Clock_widget@2x.png"
+                anchors.fill: parent
+            }
         }
 
         Rectangle {
-            color: "blue"
+            id: noteWidget
+            color: "transparent"
             border.color: Universal.foreground
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
+
+            property String note
+
+            Component.onCompleted: {
+
+            }
+
+            Image {
+                id: noteImage
+                source: "images/Notes_widget@2x.png"
+                anchors.fill: parent
+            }
+
+            Column {
+
+            }
         }
     }
 
