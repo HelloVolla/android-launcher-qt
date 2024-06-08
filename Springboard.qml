@@ -825,7 +825,7 @@ LauncherPage {
         Rectangle {
             id: weatherWidget
             color: Universal.background
-            border.color: Universal.foreground
+            border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
 
@@ -1005,7 +1005,7 @@ LauncherPage {
 
         Rectangle {
             id: clockWidget
-            color: "transparent"
+            color: Universal.background
             border.color: Universal.foreground
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
@@ -1019,14 +1019,15 @@ LauncherPage {
 
         Rectangle {
             id: noteWidget
-            color: "transparent"
+            color: Universal.background
             border.color: Universal.foreground
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
 
-            property String note
+            property string note
 
             Component.onCompleted: {
+                var noteArr = mainView.getNotes()
 
             }
 
