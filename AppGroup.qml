@@ -269,6 +269,7 @@ Item {
                                                                           : groupItem.notificationData.hasOwnProperty(model.package) ? true : false
                     anchors.top: parent.top
                     anchors.left: parent.left
+                    anchors.topMargin: 6.0
                     anchors.leftMargin: (parent.width - parent.width * 0.6) * 0.5
                     width: parent.width * 0.15
                     height: parent.width * 0.15

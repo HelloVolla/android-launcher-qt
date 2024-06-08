@@ -310,7 +310,7 @@ LauncherPage {
                                                    || collectionPage.currentCollectionMode === mainView.collectionMode.Notes ?
                                                        contactBox.width - mainView.innerSpacing * 2 - contactRow.spacing
                                                      : contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
-                        property var gradientColer: Universal.background
+                        property var gradientColor: Universal.background
 
                         Label {
                             id: sourceLabel
@@ -345,11 +345,11 @@ LauncherPage {
                                 gradient: Gradient {
                                     GradientStop {
                                         position: 0.0
-                                        color: "#00000000"
+                                        color: "transparent"
                                     }
                                     GradientStop {
                                         position: 1.0
-                                        color: backgroundItem.isMenuStatus ? mainView.accemtColor : contactColumn.gradientColer
+                                        color: backgroundItem.isMenuStatus ? mainView.accentColor : contactColumn.gradientColor
                                     }
                                 }
                                 visible: mainView.backgroundOpacity === 1.0
@@ -411,11 +411,11 @@ LauncherPage {
                                     gradient: Gradient {
                                         GradientStop {
                                             position: 0.0
-                                            color: "#00000000"
+                                            color: "transparent"
                                         }
                                         GradientStop {
                                             position: 1.0
-                                            color: backgroundItem.isMenuStatus ? mainView.accentColor : contactColumn.gradientColer
+                                            color: backgroundItem.isMenuStatus ? mainView.accentColor : contactColumn.gradientColor
                                         }
                                     }
                                     visible: mainView.backgroundOpacity === 1.0
