@@ -175,6 +175,7 @@ LauncherPage {
     function updateNotifications() {
         AN.SystemDispatcher.dispatch("volla.launcher.callCountAction", {"is_read": 0})
         AN.SystemDispatcher.dispatch("volla.launcher.threadsCountAction", {"read": 0})
+        AN.SystemDispatcher.dispatch("volla.launcher.otherAppNotificationAction", {"read": 0})
     }
 
     function getAllApps() {

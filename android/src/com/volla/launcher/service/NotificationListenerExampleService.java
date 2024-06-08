@@ -40,6 +40,7 @@ import android.os.Parcelable;
 import android.graphics.Matrix;
 import com.volla.launcher.util.NotificationPlugin;
 import java.util.Map;
+import com.volla.launcher.storage.NotificationStorageManager;
 
 /**
  * MIT License
@@ -91,6 +92,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     private String lastAttachment ="";
     private String lastMessage ="";
     Map errorProperty;
+    private NotificationStorageManager storageManager;
+
     void NotificationListenerExampleService(){
 
     }
@@ -153,6 +156,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @Override
     public IBinder onBind(Intent intent) {
         repository = new MessageRepository(getApplication());
+        storageManager = new NotificationStorageManager(getApplication());
         return super.onBind(intent);
     }
 
@@ -160,7 +164,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
         Log.d(TAG, "onNotificationPosted");
-
+        storageManager.storeNotificationCount(sbn.getPackageName(), storageManager.getNotificationCount(sbn.getPackageName()) +1 );
         Log.d(TAG, "listeners size  : " +listeners.size());
         for (NotificationListener listener : listeners) {
             listener.onNotificationPosted(sbn);
@@ -175,7 +179,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             try {
             my_custom = sbn;
             notificationData = new NotificationData();
-	    errorProperty = new HashMap();
+            errorProperty = new HashMap();
             notificationData.id = sbn.getId();
             notificationData.key = sbn.getKey();
             notificationData.userHandle = sbn.getUser().describeContents();

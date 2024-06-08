@@ -67,6 +67,7 @@ DISTFILES += \
     android/src/com/volla/launcher/storage/MessageDatabase.java \
     android/src/com/volla/launcher/storage/MessageV2.java \
     android/src/com/volla/launcher/storage/MigrationFromVersion1To2.java \
+    android/src/com/volla/launcher/storage/NotificationStorageManager.java \
     android/src/com/volla/launcher/storage/Users.java \
     android/src/com/volla/launcher/storage/UsersDao.java \
     android/src/com/volla/launcher/util/MMSManager.java \
