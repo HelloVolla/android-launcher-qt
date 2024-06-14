@@ -1087,8 +1087,8 @@ ApplicationWindow {
                 }
                 if (presetDict.quickmenu !== undefined && presetDict.quickmenu.length > 0) {
                     console.debug("AppWindow | Set default actions to " + presetDict.quickmenu)
-                    mainView.defaultActions = presetDict.quickmenu
-                    if (presetDict.firstStart) mainView.resetActions()
+//                    mainView.defaultActions = presetDict.quickmenu
+//                    if (presetDict.firstStart) mainView.resetActions()
                 }
                 if (presetDict.theme !== undefined && settings.firstStart) {
                     console.debug("AppWindow | Set default theme to " + presetDict.theme)
