@@ -812,7 +812,7 @@ LauncherPage {
     Flow {
         id: widgetsFlow
         visible: mainView.isTablet // && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
-        width: parent.width
+        width: parent.width - mainView.innerSpacing
         layoutDirection: Qt.RightToLeft
         spacing: mainView.innerSpacing
         anchors.bottom: parent.bottom
