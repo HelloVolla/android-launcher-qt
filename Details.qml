@@ -229,7 +229,7 @@ LauncherPage {
                                .replace(/^(<p>\s*<\/p>\n)/gim, '')
 
         if (detailEdit.editMode) {
-            styledText = styledText.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
+            styledText = styledText.replace(/^(<p><\/p><p><\/p>$)/gim, '')
         }
 
 //        console.debug("----------------")
