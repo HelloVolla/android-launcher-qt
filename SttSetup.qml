@@ -115,6 +115,7 @@ Dialog {
 
                 onClicked: {
                     AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": "com.volla.vollaboard"})
+                    dialog.close()
                 }
             }
         }

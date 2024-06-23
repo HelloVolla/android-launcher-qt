@@ -225,18 +225,26 @@ public class AppUtil {
                         } else if (type.equals(GET_SECURITY_STATE)) {
                             try {
                                 Intent childModeSettings = pm.getLaunchIntentForPackage("com.volla.childmodesettings");
-                                boolean available = true;
+                                boolean isInstalled = true;
                                 try {
-                                    // check if available
+                                    // check if installed
                                     pm.getPackageInfo("com.volla.childmodesettings", 0);
                                 } catch (PackageManager.NameNotFoundException e) {
                                     // if not available set available as false
-                                    available = false;
+                                    isInstalled = false;
                                 }
                                 ChildModeManager childModeManager = ChildModeManager.getInstance(activity);
+                                boolean isAvailable = true;
+//                                try {
+//                                    // check if available
+//                                    isAvailable = childModeManager.isAvailable();
+//                                } catch (MethodNotFoundException e) {
+//                                    // outdated api library
+//                                }
                                 Map reply = new HashMap();
                                 reply.put("isActive", childModeManager.isActivate() );
-                                reply.put("isInstalled", available);
+                                reply.put("isAvailable", isAvailable );
+                                reply.put("isInstalled", isInstalled);
                                 SystemDispatcher.dispatch(GOT_SECURITY_STATE, reply);
                             } catch (Exception e) {
                                 Map reply = new HashMap();
@@ -251,7 +259,8 @@ public class AppUtil {
                             Map reply = new HashMap();
                             reply.put("isPasswordSet", childModeManager.isPasswortSet() );
                             SystemDispatcher.dispatch(GOT_IS_SECURITY_PW_SET, reply);
-                        } else if (type.equals(GET_IS_STT_AVAILABLE)) {                           InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        } else if (type.equals(GET_IS_STT_AVAILABLE)) {
+                            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                             List<InputMethodInfo> mInputMethodProperties = imm.getEnabledInputMethodList();
                             final int N = mInputMethodProperties.size();
                             boolean isActivated = false;

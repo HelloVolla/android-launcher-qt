@@ -77,6 +77,14 @@ public class MessageRepository {
             usersDao.deleteAllThreadsHavingTimeStampLessThen(threadAge);
     }
 
+    public void updateReadStatusInUserTableUsingThreadId(String threadId) {
+        usersDao.updateReadStatusInUserTableUsingThreadId(threadId);
+    }
+
+    public void updateReadStatusInUserTableUsingName(String uuid) { 
+        usersDao.updateReadStatusInUserTableUsingName(uuid);
+    }
+
 public Maybe<List<Users>> getAllUsers(long age) {
         Log.d("VollaNotification Calling getAllUsers","");
     return usersDao.getAllUsers(age).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
