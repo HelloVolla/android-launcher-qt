@@ -19,12 +19,16 @@ import android.provider.CallLog;
 import android.telecom.TelecomManager;
 import android.content.Context;
 import android.net.Uri;
+import android.speech.RecognizerIntent;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import org.qtproject.qt5.android.QtNative;
 import lineageos.childmode.ChildModeManager;
 import com.volla.launcher.activity.ReceiveTextActivity;
+
+import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.InputMethodInfo;
 
 public class AppUtil {
 
@@ -48,6 +52,9 @@ public class AppUtil {
     public static final String GOT_SECURITY_STATE = "volla.launcher.securityStateResponse";
     public static final String GET_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordAction";
     public static final String GOT_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordResponse";
+    public static final String GET_IS_STT_AVAILABLE = "volla.launcher.checkSttAvailability";
+    public static final String GOT_IS_STT_AVAILABLE = "volla.launcher.checkSttAvailabilityResponse";
+
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -87,7 +94,7 @@ public class AppUtil {
                             try {
                                 Intent app = pm.getLaunchIntentForPackage(packageName);
                                 activity.startActivity(app);
-                            } catch (SecurityException e){
+                            } catch (Exception e){
                                 PackageInfo pi;
                                 try {
                                     pi = activity.getPackageManager().getPackageInfo(packageName, 0);
@@ -244,6 +251,21 @@ public class AppUtil {
                             Map reply = new HashMap();
                             reply.put("isPasswordSet", childModeManager.isPasswortSet() );
                             SystemDispatcher.dispatch(GOT_IS_SECURITY_PW_SET, reply);
+                        } else if (type.equals(GET_IS_STT_AVAILABLE)) {                           InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            List<InputMethodInfo> mInputMethodProperties = imm.getEnabledInputMethodList();
+                            final int N = mInputMethodProperties.size();
+                            boolean isActivated = false;
+                            for (int i = 0; i < N; i++) {
+                                InputMethodInfo imi = mInputMethodProperties.get(i);
+                                Log.d(TAG, "Inputmethod: " + imi.getId());
+                                if (imi.getId().equals("com.volla.vollaboard/.ime.IME")) {
+                                    isActivated = true;
+                                    break;
+                                }
+                            }
+                            Map reply = new HashMap();
+                            reply.put("isActivated", isActivated );
+                            SystemDispatcher.dispatch(GOT_IS_STT_AVAILABLE, reply);
                         }
                     }
                 };

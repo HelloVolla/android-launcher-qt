@@ -71,11 +71,6 @@ QString FileIO::readPrivate()
         QString line;
         QTextStream t( &file );
         fileContent = t.readAll();
-//        do {
-//            line = t.readLine();
-//            fileContent += line;
-//         } while (!line.isNull());
-
         file.close();
     } else {
         emit error("Unable to open the file");
@@ -138,4 +133,22 @@ bool FileIO::writePrivate(const QString& data)
     file.close();
 
     return true;
+}
+
+QString FileIO::readPresets()
+{
+    QString mDataPath = "/system/etc/com.volla.launcher/volla_properties.json";
+    qDebug() << "Data Path: " << mDataPath;
+    QFile file(mDataPath);
+    QString fileContent;
+    if ( file.open(QIODevice::ReadOnly) ) {
+        QString line;
+        QTextStream t( &file );
+        fileContent = t.readAll();
+        file.close();
+    } else {
+        emit error("Unable to open the file");
+        return QString();
+    }
+    return fileContent;
 }

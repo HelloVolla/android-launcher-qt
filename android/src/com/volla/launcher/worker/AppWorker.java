@@ -1,4 +1,4 @@
-    package com.volla.launcher.worker;
+package com.volla.launcher.worker;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -35,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.qtproject.qt5.android.QtNative;
 import androidnative.SystemDispatcher;
+import com.volla.launcher.storage.NotificationStorageManager;
 
 public class AppWorker
 {
@@ -42,6 +43,9 @@ public class AppWorker
 
     public static final String GET_APPS = "volla.launcher.appAction";
     public static final String GOT_APPS = "volla.launcher.appResponse";
+    public static final String GET_Notification = "volla.launcher.otherAppNotificationAction";
+    public static final String GOT_Notification = "volla.launcher.otherAppNotificationResponce";
+    public static final String CLEAR_RED_DOT = "volla.launcher.clearRedDot";
     public static final String GET_RUNNING_APPS = "volla.launcher.runningAppsAction";
     public static final String GOT_RUNNING_APPS = "volla.launcher.runningAppsResponse";
     public static final String CLOSE_RUNNUNG_APPS = "volla.launcher.closeAppsAction";
@@ -66,10 +70,11 @@ public class AppWorker
                                 "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
                                 "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
                                 "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
-                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
+                                "com.android.quicksearchbox", "org.fossify.phone", "com.android.deskclock", "com.pri.pressure",
                                 "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
                                 "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
-                                "com.elishaazaria.sayboard");
+                                "com.elishaazaria.sayboard", "com.jzhk.chlidmode", "com.jzhk.gamemode", "com.jzhk.tool",
+                                "com.google.android.apps.adm", "com.android.soundrecorder", "com.jzhk.easylauncher", "com.simplemobiletools.dialer");
 
                             final List<String> mostUsed = Arrays.asList("com.android.dialer", "com.mediatek.camera",
                                 "com.simplemobiletools.dialer", "com.simplemobiletools.gallery.pro", "com.android.messaging",
@@ -125,8 +130,6 @@ public class AppWorker
                                         timeInForeground = timeInForeground + 10; // fall back for missing stats
                                     }
 
-                                    Log.d(TAG, "Statistic: " + timeInForeground);
-
                                     appInfo.put("statistic", (int)timeInForeground);
                                     appList.add(appInfo);
                                 }
@@ -141,6 +144,15 @@ public class AppWorker
 
                     Thread thread = new Thread(runnable);
                     thread.start();
+                } else if(type.equals(GET_Notification)) {
+                  NotificationStorageManager storageManager = new NotificationStorageManager(activity);
+                  Map<String, Integer> allCounts = storageManager.getAllNotificationCounts();
+                  Map<String, Map> reply = new HashMap<String, Map>();
+                  reply.put("Notification", allCounts );
+                  SystemDispatcher.dispatch(GOT_Notification,reply);
+                } else if (type.equals(CLEAR_RED_DOT)) {
+                     NotificationStorageManager storageManager = new NotificationStorageManager(activity);
+                     storageManager.clearNotificationCount((String) message.get("package"));
                 } else if (type.equals(GET_RUNNING_APPS)) {
                     Log.d(TAG, "Get running apps action called");
 

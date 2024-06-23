@@ -30,6 +30,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import com.volla.launcher.activity.ReceiveTextActivity;
+import com.volla.smssdk.SMSUpdateManager;
+import android.os.Looper;
+import android.os.Handler;
+
 
 public class MessageWorker {
 
@@ -45,6 +50,7 @@ public class MessageWorker {
     public static final String GOT_MMS_IMAGE  = "volla.launcher.mmsImageResponse";
     public static final String THREAD_ID = Telephony.TextBasedSmsColumns.THREAD_ID;
     public static final String RECIPIENT_IDs = Telephony.ThreadsColumns.RECIPIENT_IDS;
+    public static List<String> smsPid = new ArrayList<>();
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -61,6 +67,7 @@ public class MessageWorker {
                         if (type.equals(GET_CONVERSATION)) {
                             if (activity.checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
                                 getConversation(message, activity);
+                                updateMessageHandler(message, activity);
                             } else {
                                 Map reply = new HashMap();
                                 ArrayList<Map> messageList = new ArrayList();
@@ -117,6 +124,65 @@ public class MessageWorker {
         });
     }
 
+    private static void updateMessageHandler(Map message, Activity activity) {
+        Log.d(TAG, "updateMessageHandler");
+        Runnable runnable = new Runnable () {
+              public void run() {
+                   Looper.prepare();
+                   // Create a Handler associated with this thread's Looper
+                   Handler handler = new Handler();
+                   updateMessageReadStatus(message, activity);
+                   Looper.loop();
+                 }
+               };
+               Thread thread = new Thread(runnable);
+               thread.start();
+        }
+
+    static void updateMessageReadStatus(Map message, Activity activity) {
+        String threadId = (String) message.get("threadId");
+        ArrayList<String> threadList = new ArrayList();
+        if (threadId != null) {
+            threadList.add( threadId );
+        }
+        for (String thId : threadList) {
+              Log.d(TAG, "Check messages of updateMessageReadStatus " + thId);
+              Uri uriSms = Uri.parse("content://sms/");
+              String[] projection = {Telephony.Sms._ID, Telephony.Sms.THREAD_ID, Telephony.Sms.BODY, Telephony.Sms.TYPE,
+                  Telephony.Sms.DATE, Telephony.Sms.ADDRESS, Telephony.Sms.READ};
+              String selection = Telephony.Sms.THREAD_ID + " = ? AND " + Telephony.Sms.READ + " = ?";
+              String[] selectionArgs = {String.valueOf(thId), "0"};
+
+              long cutOffTimeStamp = 0;
+              try {
+                  Cursor c = activity.getContentResolver().query(uriSms, projection, selection, selectionArgs, null);;
+                  Log.d(TAG,  "MessagesCount updateMessageReadStatus = " + c.getCount());
+                  if (c.moveToFirst()) {
+                                for (int i = 0; i < c.getCount(); i++) {
+
+                                    String _id = c.getString(c.getColumnIndexOrThrow("_id"));
+                                    String thread_id = c.getString(c.getColumnIndexOrThrow("thread_id"));
+                                    String msg = c.getString(c.getColumnIndexOrThrow("body"));
+                                    String type = c.getString(c.getColumnIndexOrThrow("type"));
+                                    String date = c.getString(c.getColumnIndexOrThrow("date"));
+                                    String user = c.getString(c.getColumnIndexOrThrow("address"));
+                                    String read = c.getString(c.getColumnIndexOrThrow("read"));
+                                    Log.d(TAG, "read "+ read +" : _id "+ _id + " : thread_id "+thread_id + " : msg "+ msg +
+                                    " : type " +type + " : date " + date +" : user "+ user);
+                                    smsPid.add(_id);
+                                    c.moveToNext();
+                                }
+                            }
+                            c.close();
+              } catch (SQLiteException ex) {
+                  Log.d("SQLiteException", ex.getMessage());
+              }
+          }
+      ReceiveTextActivity receiveTextActivity = new ReceiveTextActivity();
+      receiveTextActivity.connectSmsUpdateManager(activity, smsPid);
+
+    }
+
     static void getConversation(Map message, Activity activity) {
         Log.d(TAG, "Invoked JAVA getConversation" );
 
@@ -164,9 +230,8 @@ public class MessageWorker {
 
                                 for (int i = 0; i < numbers.size(); i++) {
                                     String number = ( String ) numbers.get(i);
-                                    Log.d(TAG, "Compare message address " + address + " with contact number " + number);
                                     if (address != null && address.endsWith(number.substring(1))) {
-                                        Log.d(TAG, "Match");
+                                        Log.d(TAG, "Message from " + number + " matched");
                                         matched = true;
                                         threadList.add( thId );
                                         break;

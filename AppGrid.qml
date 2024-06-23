@@ -14,7 +14,100 @@ LauncherPage {
 
     property string textInput
     property real labelPointSize: 16
+    property var iconMap: {
+        "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
+        "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
+        "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
+        "com.simplemobiletools.contacts.pro": "/icons/people-contacts-agenda@4x.png",
+        "com.simplemobiletools.clock": "/icons/clock@4x.png",
+        "com.simplemobiletools.calendar.pro": "/icons/calendar@4x.png",
+        "com.simplemobiletools.filemanager.pro": "/icons/folder@4x.png",
+        "com.simplemobiletools.notes.pro": "/icons/notes@4x.png",
+        "com.simplemobiletools.calculator": "/icons/calculator@4x_104x104px.png",
+        "org.fossify.phone": "/icons/dial-phone@4x.png",
+        "org.fossify.smsmessenger": "/icons/message@4x.png",
+        "org.fossify.gallery": "/icons/photo-gallery@4x.png",
+        "org.fossify.contacts": "/icons/people-contacts-agenda@4x.png",
+        "org.fossify.clock": "/icons/clock@4x.png",
+        "org.fossify.calendar.": "/icons/calendar@4x.png",
+        "org.fossify.filemanager": "/icons/folder@4x.png",
+        "org.fossify.notes": "/icons/notes@4x.png",
+        "org.fossify.calculator": "/icons/calculator@4x_104x104px.png",
+        "com.contactoffice.mailfence": "/icons/email@4x.png",
+        "be.engie.smart": "/icons/engie@4x.png",
+        "be.bmid.itsme": "/icons/itsme@4x.png",
+        "com.facebook.lite": "/icons/facebook-lite@4x.png",
+        "nl.apcreation.woolsocks": "/icons/woolsocks@4x.png",
+        "com.zhiliaoapp.musically": "/icons/tiktok@4x.png",
+        "com.proximus.proximusplus": "/icons/my-proximus@4x.png",
+        "mobi.inthepocket.bcmc.bancontact": "/icons/payconiq@4x.png",
+        "com.symantec.mobilesecurity": "/icons/norton-360@4x.png",
+        "be.nexuzhealth.mobile.mynexuz": "/icons/my-nexuzhealth@4x.png",
+        "com.bookmark.money": "/icons/money-lover@4x.png",
+        "be.bpost.mybpost": "/icons/bpost@4x.png",
+        "be.ixor.doccle.android": "/icons/doccle@4x.png",
+        "com.themobilecompany.delijn": "/icons/de-lijn@4x.png",
+        "com.x8bit.bitwarden": "/icons/bitwarden@4x.png",
+        "com.beeper.chat": "/icons/beeper@4x.png",
+        "be.argenta.bankieren": "/icons/argenta@4x.png",
+        "com.android.dialer": "/icons/dial-phone@4x.png",
+        "com.android.mms" : "/icons/message@4x.png",
+        "com.android.messaging": "/icons/message@4x.png",
+        "com.google.android.apps.messaging" : "/icons/message@4x.png",
+        "net.osmand.plus": "/icons/route-directions-map@4x.png",
+        "com.mediatek.camera": "/icons/camera@4x.png",
+        "com.android.camera2": "/icons/camera@4x.png",
+        "com.android.gallery3d": "/icons/photo-gallery@4x.png",
+        "com.android.deskclock": "/icons/clock@4x.png",
+        "com.android.settings": "/icons/settings@4x.png",
+        "com.android.documentsui": "/icons/folder@4x.png",
+        "org.telegram.messenger": "/icons/telegram@4x.png",
+        "com.android.email": "/icons/email@4x.png",
+        "com.fsck.k9": "/icons/email@4x.png",
+        "com.google.android.gm": "/icons/email@4x.png",
+        "com.Slack": "/icons/slack@4x.png",
+        "org.mozilla.fennec_fdroid": "/icons/browser@4x.png",
+        "com.maxfour.music": "/icons/music@4x.png",
+        "com.instagram.android": "/icons/instagram@4x.png",
+        "com.github.yeriomin.yalpstore": "/icons/yalp-store@4x.png",
+        "com.aurora.store": "/icons/aurora-store-line@4x.png",
+        "com.amazon.mShop.android.shopping": "/icons/amazon@4x.png",
+        "de.hafas.android.db": "/icons/db-navigator@4x.png",
+        "com.dropbox.android": "/icons/dropbox@4x.png",
+        "org.fdroid.fdroid": "/icons/f-droid@4x.png",
+        "com.facebook.katana": "/icons/facebook@4x.png",
+        "de.gmx.mobile.android.mail": "/icons/gmx@4x.png",
+        "hideme.android.vpn.noPlayStore": "/icons/hide-me@4x.png",
+        "com.linkedin.android": "/icons/linkedin@4x.png",
+        "com.nextcloud.client": "/icons/nextcloud@4x.png",
+        "com.paypal.android.p2pmobile": "/icons/paypal@4x.png",
+        "com.skype.raider": "/icons/skype@4x.png",
+        "com.spotify.music": "/icons/spotify@4x.png",
+        "de.tutao.tutanota": "/icons/tutanota@4x.png",
+        "com.volla.launcher": "/icons/volla-settings@4x.png",
+        "de.web.mobile.android.mail": "/icons/web-de@4x.png",
+        "com.wetter.androidclient": "/icons/wetter-com@4x.png",
+        "com.whatsapp": "/icons/whats-app@4x.png",
+        "com.android.fmradio": "/icons/radio@4x_104x104px.png",
+        "at.bitfire.davdroid": "/icons/sync@4x_104x104px.png",
+        "org.thoughtcrime.securesms": "/icons/signal@4x_104x104px.png",
+        "de.baumann.weather": "/icons/weather@4x_104x104px.png",
+        "com.android.calculator2": "/icons/calculator@4x_104x104px.png",
+        "eu.siacs.conversations": "/icons/xmpp@4x_104x104px.png",
+        "one.socializer.android": "/icons/socializer@4x.png",
+        "im.status.ethereum": "/icons/status.im@4x.png",
+        "org.liberty.android.freeotpplus": "/icons/freeOTP@4x.png",
+        "com.kickstarter.kickstarter": "/icons/kickstarter@4x.png",
+        "com.ebay.kleinanzeigen": "/icons/ebay@4x.png",
+        "com.secuso.privacyFriendlyCodeScanner": "/icons/qr-scanner@4x.png",
+        "com.twitter.android": "/icons/twitter@4x.png",
+        "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
+    }
     property var labelMap: {
+        "com.simplemobiletools.filemanager.pro": qsTr("Files"),
+        "com.simplemobiletools.smsmessenger": qsTr("Messages"),
+        "org.fossify.filemanager": qsTr("Files"),
+        "org.fossify.smsmessenger": qsTr("Messages"),
         "mobi.inthepocket.bcmc.bancontact": qsTr("Bancontact"),
         "com.facebook.lite": qsTr("Facebook"),
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
@@ -22,12 +115,10 @@ LauncherPage {
         "com.fsck.k9": qsTr("Mail"),
         "at.bitfire.davdroid": qsTr("Sync"),
         "hideme.android.vpn.noPlayStore": qsTr("VPN"),
-        "com.simplemobiletools.filemanager.pro": qsTr("Files"),
         "com.aurora.store": qsTr("Store"),
         "com.aurora.adroid": qsTr("A-Droid"),
         "net.osmand.plus": qsTr("Maps"),
         "com.volla.launcher": qsTr("Settings"),
-        "com.simplemobiletools.smsmessenger": qsTr("Messages"),
         "com.android.fmradio" : qsTr("Radio"),
         "de.baumann.weather": qsTr("Weather")
     }
@@ -85,6 +176,7 @@ LauncherPage {
     function updateNotifications() {
         AN.SystemDispatcher.dispatch("volla.launcher.callCountAction", {"is_read": 0})
         AN.SystemDispatcher.dispatch("volla.launcher.threadsCountAction", {"read": 0})
+        AN.SystemDispatcher.dispatch("volla.launcher.otherAppNotificationAction", {"read": 0})
     }
 
     function getAllApps() {
@@ -156,6 +248,7 @@ LauncherPage {
                                "innerSpacing": mainView.innerSpacing,
                                "componentSpacing" : mainView.componentSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
+                               "accentColor": mainView.accentColor,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
                                "pinnedShortcuts": index === 0 ? appLauncher.pinnedShortcuts : new Array,
                                "apps": appGroupInfos["apps"]}
@@ -280,7 +373,7 @@ LauncherPage {
         background: Rectangle {
             id: menuBackground
             implicitWidth: contextMenu.menuWidth
-            color: Universal.accent
+            color: mainView.accentColor
             radius: mainView.innerSpacing
         }
 
@@ -423,6 +516,8 @@ LauncherPage {
                         var groupedApps = appLauncher.getGroupedApps(appsArray)
                         appLauncher.appGroups = new Array
                         appLauncher.createAppGroups(groupedApps)
+                        // Workaround, if users didn't update the os version
+                        if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
                     } else {
                         console.log("AppLauncher | Need to retrieve apps from system")
                         mainView.updateSpinner(true)
@@ -451,6 +546,7 @@ LauncherPage {
                     }
                 }
                 mainView.updateSpinner(false)
+                mainView.checkDefaultApps(getAllApps())
             } else if (type === "volla.launcher.receivedShortcut") {
                 console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
 

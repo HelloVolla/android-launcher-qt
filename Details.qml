@@ -40,7 +40,7 @@ LauncherPage {
                 height: mainView.smallFontSize * 0.6         
                 y: (pinButton.height - pinBadge.height) * 0.5
                 radius: height * 0.5
-                color: Universal.accent
+                color: mainView.accentColor
                 onVisibleChanged: {
                     dateLabel.leftPadding = pinBadge.visible ? 0.8 : 0.0
                 }

@@ -99,6 +99,8 @@
         <file>images/open-in-signal_dark_2x.png</file>
         <file>images/open-in-signal_light@2x.png</file>
         <file>images/open-in-signal_light_2x.png</file>
+        <file>SttSetup.qml</file>
+        <file>images/Summer_Mode_2x.png</file>
         <file>AppButton.qml</file>
         <file>images/Clock_widget@2x.png</file>
         <file>images/Notes_widget@2x.png</file>

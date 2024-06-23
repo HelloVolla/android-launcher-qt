@@ -36,9 +36,7 @@ ApplicationWindow {
                   mainView.mediumFontSize = 16.0
                   mainView.smallFontSize = 14.0
               }
-              if (settings.sync) {
-                  settings.sync()
-              }
+              settings.sync()
               if (!appGridLoader.active) appGridLoader.active = true
               if (!springboardLoader.active) springboardLoader.active = true
               if (!settingsPageLoader.active) settingsPageLoader.active = true
@@ -55,22 +53,6 @@ ApplicationWindow {
               }
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
-              if (settings.firstStart) {
-                  console.debug("MainView", "Will start tutorial")
-                  var component = Qt.createComponent("/OnBoarding.qml")
-                  var properties = { "mainView" : mainView, "innerSpacing" : mainView.innerSpacing }
-                  if (component.status !== Component.Ready) {
-                      if (component.status === Component.Error)
-                          console.debug("MainView | Error: "+ component.errorString() );
-                  }
-                  var object = component.createObject(mainView, properties)
-                  object.open()
-                  settings.firstStart = false
-              }
-              // Update app switcher
-              if (mainView.isTablet) {
-                  AN.SystemDispatcher.dispatch("volla.launcher.runningAppsAction", {})
-              }
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
               // Update app grid
@@ -252,6 +234,7 @@ ApplicationWindow {
         property var wallpaperId: ""
         property var backgroundOpacity: 1.0
         property var backgroundColor: Universal.background
+        property var accentColor: Universal.accent
         property var fontColor: Universal.foreground
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
@@ -259,12 +242,12 @@ ApplicationWindow {
         property bool isTablet: Screen.desktopAvailableWidth > 360
         property int maxTitleLength: 120
 
-        property string galleryApp: "com.simplemobiletools.gallery.pro"
+        property string galleryApp: "org.fossify.gallery"
         property string calendarApp: "com.simplemobiletools.calendar.pro"
         property string cameraApp: "com.mediatek.camera"
-        property string phoneApp: "com.simplemobiletools.dialer" // "com.android.dialer"
-        property string notesApp: "com.simplemobiletools.notes.pro"
-        property var messageApp: ["com.android.mms", "com.simplemobiletools.smsmessenger", "com.android.messaging"];
+        property string phoneApp: "com.android.dialer"
+        property string notesApp: "org.fossify.notes"
+        property var messageApp: ["com.android.mms", "org.fossify.messages", "com.android.messaging"];
         property var iconMap: {
             "com.contactoffice.mailfence": "/icons/email@4x.png",
             "be.engie.smart": "/icons/engie@4x.png",
@@ -1038,6 +1021,13 @@ ApplicationWindow {
             }
         }
 
+        function checkDefaultApp(apps) {
+            mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
+                        "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
+            mainView.calendarApp = apps.filter( el => el.package !== "org.fossiry.calendar" ).length > 0 ?
+                        "org.fossiry.calendar" : "com.simplemobiletools.calendar.pro"
+        }
+
         WorkerScript {
             id: contactsWorker
             source: "scripts/contacts.mjs"
@@ -1103,7 +1093,7 @@ ApplicationWindow {
                         mainView.wallpaper = "data:image/png;base64," + message["wallpaper"]
                         mainView.wallpaperId = message["wallpaperId"]
                     } else if (message["wallpaperId"] === undefined) {
-                        mainView.wallpaper = "/android/res/drawable/wallpaper_image.png"
+                        mainView.wallpaper = "/images/Summer_Mode_2x.png"
                         mainView.wallpaperId = "default"
                     }
                 } else if (type === 'volla.launcher.receiveTextResponse') {
@@ -1133,6 +1123,18 @@ ApplicationWindow {
                             mainView.switchTheme(mainView.theme.Dark, true)
                         }
                     }
+                } else if (type === "volla.launcher.checkSttAvailabilityResponse") {
+                    console.debug("MainView | STT activation status: " + message["isActivated"])
+                    if (!message["isActivated"]) {
+                        var component = Qt.createComponent("/SttSetup.qml")
+                        var properties = { "fontSize" : 18, "innerSpacing" : 22 }
+                        if (component.status !== Component.Ready) {
+                            if (component.status === Component.Error)
+                                console.debug("MainView | Error: "+ component.errorString() );
+                        }
+                        var object = component.createObject(mainView, properties)
+                        object.open()
+                    }
                 }
             }
         }
@@ -1157,6 +1159,7 @@ ApplicationWindow {
         property int searchMode: mainView.searchMode.StartPage
         property bool fullscreen: false
         property bool firstStart: true
+        property bool sttChecked: false
         property bool signalIsActivated: false
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
@@ -1164,8 +1167,61 @@ ApplicationWindow {
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
 
+        function checkCustomParameters() {
+            var rawPresets = presets.readPresets()
+
+            for (var i = 0; i < rawPresets.split("\n").length; i++) {
+                console.debug("AppWindow | presets " + rawPresets.split("\n")[i])
+            }
+
+            if (rawPresets !== undefined && rawPresets.length > 0) {
+                var presetDict = JSON.parse(rawPresets)
+
+                if (presetDict.color !== undefined && presetDict.color.accent !== undefined) {
+                    console.debug("AppWindow | Set accent color from "+ Universal.accent + " to " + presetDict.color.accent)
+                    mainView.accentColor = presetDict.color.accent
+                }
+                if (presetDict.feeds !== undefined && presetDict.feeds.length > 0) {
+                    console.debug("AppWindow | Set default feeds to " + presetDict.feeds)
+                    mainView.defaultFeeds = presetDict.feeds
+                    if (settings.firstStart) mainView.resetFeeds()
+                }
+                if (presetDict.quickmenu !== undefined && presetDict.quickmenu.length > 0) {
+                    console.debug("AppWindow | Set default actions to " + presetDict.quickmenu)
+                    mainView.defaultActions = presetDict.quickmenu
+                    if (presetDict.firstStart) mainView.resetActions()
+                }
+                if (presetDict.theme !== undefined && settings.firstStart) {
+                    console.debug("AppWindow | Set default theme to " + presetDict.theme)
+                    settings.theme = presetDict.theme
+                }
+            }
+        }
+
         Component.onCompleted: {
-            console.log("MainView | Current themes: " + Universal.theme + ", " + settings.theme)
+            checkCustomParameters()
+
+//            console.log("AppWindow | Number of font families: " + Qt.fontFamilies().length)
+//            for (var i = 0; i < Qt.fontFamilies().length; i++) {
+//                console.log("AppWindow | FontFamily: " + Qt.fontFamilies()[i])
+//            }
+
+            if (settings.firstStart) {
+                console.debug("AppWindow | ", "Will start tutorial")
+                var component = Qt.createComponent("/OnBoarding.qml")
+                var properties = { "mainView" : mainView, "innerSpacing" : mainView.innerSpacing }
+                if (component.status !== Component.Ready) {
+                    if (component.status === Component.Error)
+                        console.debug("MainView | Error: "+ component.errorString() );
+                }
+                var object = component.createObject(mainView, properties)
+                object.open()
+                settings.firstStart = false
+            } else if (!settings.sttChecked) {
+                console.debug("MainView", "Will check stt availability")
+                settings.sttChecked = true
+                AN.SystemDispatcher.dispatch("volla.launcher.checkSttAvailability", {})
+            }
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)
             } else {
@@ -1191,6 +1247,10 @@ ApplicationWindow {
         id: toast
         text: qsTr("Not yet supported")
         longDuration: true
+    }
+
+    FileIO {
+        id: presets
     }
 
     FileIO {

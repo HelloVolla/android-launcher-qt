@@ -696,7 +696,7 @@ LauncherPage {
 
             height: button.height
             width: parent.width
-            color: model.action < 20000 ? "transparent" : model.action === 20030 ? "#2f4f4f" : Universal.accent
+            color: model.action < 20000 ? "transparent" : mainView.accentColor
             Button {
                 id: button
                 width: parent.width - mainView.innerSpacing
@@ -1186,7 +1186,7 @@ LauncherPage {
                     mainView.updateCollectionPage(mainView.collectionMode.News)
                     break
                 case mainView.actionType.ShowGallery:
-                    console.log("Springboard | Show gallery")
+                    console.log("Springboard | Show gallery " + mainView.galleryApp)
                     AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": mainView.galleryApp})
                     break
                 case mainView.actionType.ShowCalendar:
@@ -1230,7 +1230,7 @@ LauncherPage {
             anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
             height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
-            color: Universal.accent
+            color: mainView.accentColor
             visible: true
             radius: roundedShortcutMenu ? rootMenuButton.width / 2 : 0
 
@@ -1277,7 +1277,7 @@ LauncherPage {
             visible: true
             height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
-            color: Universal.accent
+            color: mainView.accentColor
             radius: dotShortcut ? width * 0.5 : 0.0
             anchors.right: parent.right
             anchors.rightMargin: dotShortcut ? mainView.innerSpacing * 2 : 0

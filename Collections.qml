@@ -143,6 +143,7 @@ LauncherPage {
         id: listView
         anchors.fill: parent
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
+        clip: true
 
         header: Column {
             id: header
@@ -310,7 +311,7 @@ LauncherPage {
                                                    || collectionPage.currentCollectionMode === mainView.collectionMode.Notes ?
                                                        contactBox.width - mainView.innerSpacing * 2 - contactRow.spacing
                                                      : contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize  - contactRow.spacing
-                        property var gradientColer: Universal.background
+                        property var gradientColor: Universal.background
 
                         Label {
                             id: sourceLabel
@@ -345,11 +346,11 @@ LauncherPage {
                                 gradient: Gradient {
                                     GradientStop {
                                         position: 0.0
-                                        color: "#00000000"
+                                        color: "transparent"
                                     }
                                     GradientStop {
                                         position: 1.0
-                                        color: backgroundItem.isMenuStatus ? Universal.accent : contactColumn.gradientColer
+                                        color: backgroundItem.isMenuStatus ? mainView.accentColor : contactColumn.gradientColor
                                     }
                                 }
                                 visible: mainView.backgroundOpacity === 1.0
@@ -360,12 +361,21 @@ LauncherPage {
                             width: contactColumn.columnWidth
                             text: model.c_TEXT !== undefined ? model.c_TEXT : ""
                             font.pointSize: mainView.largeFontSize
-                            color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
+                            //renderType: Text.NativeRendering
+                            verticalAlignment: Text.AlignVCenter
                             lineHeight: 1.1
                             opacity: 0.9
+                            color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
                             wrapMode: Text.WordWrap
                             elide: Text.ElideRight
                             visible: model.c_TEXT !== undefined
+
+                            // Workaround
+//                            onLineLaidOut: {
+//                                console.log("Collection | LINE " + line.x + ", " + line.y)
+//                                line.x = 110
+//                                line.y = line.y * 1.5
+//                            }
                         }
                         Row {
                             id: statusRow
@@ -377,7 +387,7 @@ LauncherPage {
                                 height: mainView.smallFontSize * 0.6
                                 y: mainView.smallFontSize * 0.3
                                 radius: height * 0.5
-                                color: backgroundItem.isMenuStatus ? "transparent" : Universal.accent
+                                color: backgroundItem.isMenuStatus ? "transparent" : mainView.accentColor
                             }
                             Label {
                                 id: statusLabel
@@ -402,11 +412,11 @@ LauncherPage {
                                     gradient: Gradient {
                                         GradientStop {
                                             position: 0.0
-                                            color: "#00000000"
+                                            color: "transparent"
                                         }
                                         GradientStop {
                                             position: 1.0
-                                            color: backgroundItem.isMenuStatus ? Universal.accent : contactColumn.gradientColer
+                                            color: backgroundItem.isMenuStatus ? mainView.accentColor : contactColumn.gradientColor
                                         }
                                     }
                                     visible: mainView.backgroundOpacity === 1.0
@@ -452,7 +462,7 @@ LauncherPage {
                     width: collectionPage.iconSize * 0.25
                     height: collectionPage.iconSize * 0.25
                     radius: height * 0.5
-                    color: Universal.accent
+                    color: mainView.accentColor
                 }
                 Column {
                     id: contactMenu
@@ -527,13 +537,14 @@ LauncherPage {
                     currentCollectionModel.executeSelection(model, mainView.actionType.ShowGroup)
                 } else {
                     // todo: should be replaced by model id
+                    if (statusBadge.visible) statusBadge.visible = false
                     currentCollectionModel.executeSelection(model, mainView.actionType.ShowDetails)
                 }
             }
             onPressAndHold: {
                 if (currentCollectionMode === mainView.collectionMode.People) {
                     contactMenu.visible = true
-                    contactBox.color = Universal.accent
+                    contactBox.color = mainView.accentColor
                     preventStealing = true
                     isMenuStatus = true
                 }
@@ -625,9 +636,9 @@ LauncherPage {
             var now = new Date()
 
             collectionPage.threads.forEach(function (thread, index) {
-                console.log("Collections | Thread: " + thread["address"])
-                if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge) && thread["address"] !== undefined) {
-                    console.log("Collections | Thread matched: " + thread["address"])
+                console.log("Collections | Thread: " + thread["address"] + ", " + thread["person"])
+                if ((!thread["read"] || now.getTime() - thread["date"] < collectionPage.messageAge)
+                        && (thread["address"].length > 0 || thread["person"] !== undefined)) {
                     if (thread["isSignal"]) contactThreads[thread["person"]] = thread
                     else contactThreads[thread["address"]] = thread
                 }
@@ -750,7 +761,6 @@ LauncherPage {
             for (var i = 0; i < modelArr.length; i++) {
                 var aContact = modelArr[i]
                 if (aContact.c_ID === contactId) {
-                    console.log("Collections | Contact in list model matched")
                     aContact.c_ICON = contactImage
                     modelArr[i] = aContact
                     break
@@ -759,7 +769,6 @@ LauncherPage {
             for (i = 0; i < count; i++) {
                 var elem = get(i)
                 if (elem.c_ID === contactId) {
-                    console.log("Collections | Contact in list view matched")
                     elem.c_ICON = "data:image/png;base64," + contactImage
                     set(i, elem)
                     break
@@ -768,7 +777,6 @@ LauncherPage {
             for (i = 0; i < mainView.getContacts().length; i++) {
                 aContact = mainView.getContacts()[i]
                 if (aContact["id"] === contactId) {
-                    console.log("Collections | Contact in contacts matched")
                     aContact["icon"] = contactImage
                     mainView.getContacts()[i] = aContact
                     break
@@ -918,6 +926,7 @@ LauncherPage {
                     kind = "Signal"
                 }
 
+                cThread.c_SBADGE = thread["read"] === true ? false : true
                 cThread.c_STEXT = mainView.parseTime(Number(thread["date"])) + " • " + qsTr(kind)
                 cThread.c_TSTAMP = Number(thread["date"])
 
@@ -1381,7 +1390,7 @@ LauncherPage {
         icon.source: Qt.resolvedUrl("icons/notes@4x.png")
 
         onPressed: {
-            backgroundRec.color = Universal.accent
+            backgroundRec.color = mainView.accentColor
             opacity: 1.0
         }
 
@@ -1409,6 +1418,7 @@ LauncherPage {
                         || currentCollectionMode === mainView.collectionMode.Threads) {
                     message["messages"].forEach(function (aThread, index) {
                         aThread["isSignal"] = true
+                        aThread["read"] = true // workaround for allways false negative
 //                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
 //                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
 //                        }

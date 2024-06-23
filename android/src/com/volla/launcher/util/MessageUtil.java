@@ -44,7 +44,6 @@ public class MessageUtil {
 
     private static final String SMS_SEND_ACTION = "CTS_SMS_SEND_ACTION";
     private static final String SMS_DELIVERY_ACTION = "CTS_SMS_DELIVERY_ACTION";
-
     public static final int PERMISSIONS_REQUEST_SEND_SMS = 123;
 
     static {
