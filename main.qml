@@ -46,7 +46,7 @@ ApplicationWindow {
                   }
                   mainView.keepLastIndex = false
               } else {
-                  if (settings.showAppsAtStartup && mainView.currentIndex !== mainView.swipeIndex.Apps)
+                  if (settings.showAppsAtStartup && mainView.currentIndex === mainView.swipeIndex.Apps)
                       appGrid.children[0].item.updateNotifications()
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
@@ -1087,8 +1087,16 @@ ApplicationWindow {
                 }
                 if (presetDict.quickmenu !== undefined && presetDict.quickmenu.length > 0) {
                     console.debug("AppWindow | Set default actions to " + presetDict.quickmenu)
-//                    mainView.defaultActions = presetDict.quickmenu
-//                    if (presetDict.firstStart) mainView.resetActions()
+                    var isValid = true
+                    Object.keys(presetDict.quickmenu).forEach(function(key) {
+                        if (!isNaN(presetDict.quickmenu[key])) isValid = false
+                    })
+                    if (isValid) {
+                        mainView.defaultActions = presetDict.quickmenu
+                        if (presetDict.firstStart) mainView.resetActions()
+                    } else {
+                        console.debug("AppWindow | Preset actions for quick menu are invalid")
+                    }
                 }
                 if (presetDict.theme !== undefined && settings.firstStart) {
                     console.debug("AppWindow | Set default theme to " + presetDict.theme)
@@ -1132,7 +1140,7 @@ ApplicationWindow {
             if (signalIsActivated) {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
-            mainView.isActiveSignal = signalIsActivated
+            mainView.isActiveSignald = signalIsActivated
             mainView.useVibration = useHapticMenus
             if (settings.sync) {
                 settings.sync()

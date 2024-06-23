@@ -1417,7 +1417,7 @@ LauncherPage {
                         || currentCollectionMode === mainView.collectionMode.Threads) {
                     message["messages"].forEach(function (aThread, index) {
                         aThread["isSignal"] = true
-                        aThread["read"] = true // workaround for allways false negative
+                        //aThread["read"] = true // workaround for allways false negative
 //                        for (const [aThreadKey, aThreadValue] of Object.entries(aThread)) {
 //                            console.log("Collections | * " + aThreadKey + ": " + aThreadValue)
 //                        }
