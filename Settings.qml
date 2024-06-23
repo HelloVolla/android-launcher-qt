@@ -981,6 +981,7 @@ LauncherPage {
                             AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": active})
                             mainView.updateSettings("activateSignal", active)
                             sourceSettings.signalIsActivated = active
+                            mainView.isActiveSignal = active
                         }
                     }
 

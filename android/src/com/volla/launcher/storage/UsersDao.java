@@ -25,6 +25,13 @@ public interface UsersDao {
     @Query("DELETE FROM users WHERE timeStamp < :threadAge")
     void deleteAllThreadsHavingTimeStampLessThen(long threadAge);
 
+     @Query("UPDATE users SET read = true WHERE user_name = :thread_id")
+     void updateReadStatusInUserTableUsingThreadId(String thread_id);
+
+     @Query("UPDATE users SET read = true WHERE uuid = :uuid")
+     void updateReadStatusInUserTableUsingName(String uuid);
+
+
 //    @Query("SELECT * FROM users WHERE title IN ('Thanos ', 'Arvind Yadav') GROUP BY title ORDER BY timeStamp ASC ")
 //    Maybe<List<Message>> getMessageListBySender();
 //
