@@ -841,55 +841,16 @@ LauncherPage {
 
                 onPositionChanged: {
                     var coord = src.position.coordinate
-                    console.log("SpringBoard | Positioning is valid:", src.valid)
-                    console.log("SpringBoard | Positioning is active:", src.active)
-                    console.log("SpringBoard | Coordinate: ", src.position)
+                    console.log("Widget | Positioning has changed")
                     coord = src.position.coordinate
-                    for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
-                    switch (src.sourceError) {
-                        case PositionSource.AccessError:
-                            console.debug("SpringBoard | PositionSource.AccessError")
-                            break
-                        case PositionSource.ClosedError:
-                            console.debug("SpringBoard | PositionSource.ClosedError")
-                            break
-                        case PositionSource.NoError:
-                            console.debug("SpringBoard | PositionSource.NoError")
-                            break
-                        case PositionSource.UnknownSourceError:
-                            console.debug("SpringBoard | PositionSource.UnknownSourceError")
-                            break
-                        default:
-                            console.debug("SpringBoard | Another error")
-                            break
+                    for (var prop in coord) console.debug("Widget | Coord: " + prop + ", " + coord[prop])
+                    if (coord.isValid && (weatherWidget.longitude !== coord.longitude || weatherWidget.latitude !== coord.latitude)) {
+                        console.debug("Widget | Will update weather")
+                        weatherWidget.longitude = coord.longitude
+                        weatherWidget.latitude = coord.latitude
+                        weatherWidget.getLocation()
+                        weatherWidget.getWeather()
                     }
-                }
-            }
-
-            Component.onCompleted: {
-                getWeather(longitude, latitude)
-                src.start()
-                console.log("SpringBoard | Positioning completed")
-                console.log("SpringBoard | Positioning is valid:", src.valid)
-                console.log("SpringBoard | Positioning is active:", src.active)
-                var coord = src.position.coordinate
-                for (var prop in coord) console.debug("SpringBoard | Coord: " + prop + ", " + coord[prop])
-                switch (src.supportedPositioningMethods) {
-                case PositionSource.NoPositioningMethods:
-                    console.debug("SpringBoard | PositionSource.NoPositioningMethods")
-                    break
-                case PositionSource.SatellitePositioningMethods:
-                    console.debug("SpringBoard | PositionSource.SatellitePositioningMethods")
-                    break
-                case PositionSource.NonSatellitePositioningMethods:
-                    console.debug("SpringBoard | PositionSource.NonSatellitePositioningMethods")
-                    break
-                case PositionSource.AllPositioningMethods:
-                    console.debug("SpringBoard | PositionSource.AllPositioningMethods")
-                    break
-                default:
-                    console.debug("SpringBoard | Another method")
-                    break
                 }
             }
 
@@ -911,6 +872,7 @@ LauncherPage {
 
                     onClicked: {
                         console.debug("Widget | Clicked")
+                        Qt.openUrlExternally("https://startpage.com/sp/search?query=" + weatherWidget.city + "&segment=startpage.volla")
                     }
                 }
 
@@ -937,51 +899,76 @@ LauncherPage {
                 }
             }
 
+            /**
             Dialog {
-                id: locatioDialog
-                title: qsTr("Set location")
-                standardButtons: Dialog.Ok | Dialog.Cancel
-                padding: mainView.innerSpacing
-                spacing: mainView.innerSpacing
-                width: 400
-                height: 400
+                 id: locatioDialog
+                 title: qsTr("Set location")
+                 standardButtons: Dialog.Ok | Dialog.Cancel
+                 padding: mainView.innerSpacing
+                 spacing: mainView.innerSpacing
+                 width: 400
+                 height: 400
 
-                ListView {
-                    id: locationList
+                 ListView {
+                     id: locationList
 
-                    header: TextField {
-                        id: locationField
-                        width: parent.width
-                        placeholderText: qsTr("Enter any location")
-                        onTextChanged: {
-                            locationModel.update(text)
-                        }
-                    }
+                     header: TextField {
+                         id: locationField
+                         width: parent.width
+                         placeholderText: qsTr("Enter any location")
+                         onTextChanged: {
+                             locationModel.update(text)
+                         }
+                     }
 
-                    delegate: Button {
-                        width: parent.width
-                        flat: true
-                        text: model.location
-                        onClicked: {
-                            locationField.text = model
-                        }
-                    }
+                     delegate: Button {
+                         width: parent.width
+                         flat: true
+                         text: model.location
+                         onClicked: {
+                             locationField.text = model
+                         }
+                     }
 
-                    model: ListModel {
-                        id: locationModel
+                     model: ListModel {
+                         id: locationModel
 
-                        function update(text) {
+                         function update(text) {
 
+                         }
+                     }
+                 }
+            }
+            */
+
+            function getLocation() {
+                console.debug("Widget | Will request city name")
+                var cityUrl = "http://api.openweathermap.org/geo/1.0/reverse?lat=" + latitude + "&lon=" + longitude + "&limit=5&appid=" + apiKey
+                var cityRequest = new XMLHttpRequest()
+                cityRequest.onreadystatechange = function() {
+                    if (cityRequest.readyState === XMLHttpRequest.DONE) {
+                        console.debug("Widget | Location response: " + cityRequest.status)
+                        if (cityRequest.status === 200) {
+                            var cities = JSON.parse(cityRequest.responseText)
+                            var locale = Qt.locale().name.split('_')[0]
+                            var city = cities[0].local_names[locale]
+                            console.debug("Widget | City: " + city)
+                            if (city === undefined) city = cities[0].name
+                            console.debug("Widget | City: " + city)
+                            weatherWidget.city = city
+                        } else {
+                            console.error("Widget | Error retrieving weather: ", cityRequest.status, cityRequest.statusText)
                         }
                     }
                 }
-
-
+                cityRequest.open("GET", cityUrl)
+                cityRequest.send()
             }
 
-            function getWeather (lat, lon) {
+            function getWeather() {
                 console.debug("Widget | Will request weather")
-                var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat  + "&lon=" + lon + "&units=metric&appid=" + apiKey
+                var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + weatherWidget.latitude
+                        + "&lon=" + weatherWidget.longitude + "&units=metric&appid=" + apiKey
                 console.debug("Widget | Servie URL " + weatherUrl)
                 var weatherRequest = new XMLHttpRequest()
                 weatherRequest.onreadystatechange = function() {
@@ -992,7 +979,6 @@ LauncherPage {
                             weatherImage.source = "https://openweathermap.org/img/wn/" + weather.current.weather[0].icon + "@2x.png"
                             recentTemperature.text = weather.current.temp + "°C"
                             dayTemperatures.text = weather.daily[0].temp.min + "°C  " + weather.daily[0].temp.max + "°C"
-                            //var link = "https://startpage.com/sp/search?query=" + inputString + "&segment=startpage.volla"
                         } else {
                             console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
                         }
@@ -1031,14 +1017,14 @@ LauncherPage {
 
             }
 
-            Image {
-                id: noteImage
-                source: "images/Notes_widget@2x.png"
-                anchors.fill: parent
-            }
-
             Column {
+                width: parent.width
+                spacing: mainView.innerSpacing * 0.5
+                padding: mainView.innerSpacing * 0.5
 
+                Button {
+
+                }
             }
         }
     }
