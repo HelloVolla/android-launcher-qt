@@ -831,26 +831,35 @@ LauncherPage {
 
             property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
             property string city: "Remscheid"
-            property double longitude: 51.17983000
-            property double latitude: 7.19250000
+            property double longitude: 51.17983
+            property double latitude: 7.19250
 
             PositionSource {
                 id: src
                 updateInterval: 1000
                 active: true
 
+                function roundNumber(num, dec) {
+                  return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
+                }
+
                 onPositionChanged: {
                     var coord = src.position.coordinate
                     console.log("Widget | Positioning has changed")
                     coord = src.position.coordinate
-                    for (var prop in coord) console.debug("Widget | Coord: " + prop + ", " + coord[prop])
-                    if (coord.isValid && (weatherWidget.longitude !== coord.longitude || weatherWidget.latitude !== coord.latitude)) {
+                    var newLongitude = roundNumber(coord.longitude, 4)
+                    var newLatitude = roundNumber(coord.latitude, 4)
+                    if (coord.isValid && (weatherWidget.longitude !== newLongitude || weatherWidget.latitude !== newLatitude)) {
                         console.debug("Widget | Will update weather")
-                        weatherWidget.longitude = coord.longitude
-                        weatherWidget.latitude = coord.latitude
+                        console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
+                        console.debug("Widget | new ccord: " + newLongitude + ", " + newLatitude)
+                        console.debug("Widget | old ccord: " + weatherWidget.longitude + ", " + weatherWidget.latitude)
+                        weatherWidget.longitude = newLongitude
+                        weatherWidget.latitude = newLatitude
                         weatherWidget.getLocation()
                         weatherWidget.getWeather()
                     }
+
                 }
             }
 
@@ -1006,7 +1015,7 @@ LauncherPage {
         Rectangle {
             id: noteWidget
             color: Universal.background
-            border.color: Universal.foreground
+            border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
 
@@ -1014,16 +1023,49 @@ LauncherPage {
 
             Component.onCompleted: {
                 var noteArr = mainView.getNotes()
-
+                noteArr.sort(function(a, b) {
+                    var sortPinned = Number(b.pinned) - Number(a.pinned)
+                    if (sortPinned !== 0) {
+                        return sortPinned
+                    } else {
+                        return b.date - a.date
+                    }
+                })
+                if (noteArr.length > 0) {
+                    noteWidget.note = noteArr[0].content
+                    console.debug("Widget | Note: " + noteWidget.note)
+                }
             }
 
             Column {
-                width: parent.width
-                spacing: mainView.innerSpacing * 0.5
+                width: noteWidget.width
                 padding: mainView.innerSpacing * 0.5
+                // spacing: mainView.innerSpacing * 0.5
+
+
+                Image {
+                    id: notesIcon
+                    width: 40
+                    height: 40
+                    source: "icons/notes@4x.png"
+                }
 
                 Button {
+                    id: noteButton
+                    width: noteWidget.width - mainView.innerSpacing
+                    height: noteWidget.height - notesIcon.height - mainView.innerSpacing
+                    flat: true
+                    highlighted: false
 
+                    contentItem: Label {
+                        anchors.fill: noteButton
+                        text: noteWidget.note
+                        wrapMode: Text.WordWrap
+//                        background: Rectangle {
+//                            color: "transparent"
+//                            border.color: "transparent"
+//                        }
+                    }
                 }
             }
         }
