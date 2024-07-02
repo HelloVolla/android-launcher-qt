@@ -298,6 +298,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Log.d(TAG, "onNotificationPosted");
 
         int notificationCode = matchNotificationCode(sbn);
+	storageManager.clearNotificationCount(sbn.getPackageName());
         if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
             StatusBarNotification[] activeNotifications = this.getActiveNotifications();
             if(activeNotifications != null && activeNotifications.length > 0) {
