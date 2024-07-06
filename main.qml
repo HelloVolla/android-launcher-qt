@@ -766,6 +766,8 @@ ApplicationWindow {
         }
 
         function updateNote(noteId, content, pinned) {
+            if(content.length <= 0)
+                return 
             //console.debug("MainView | Update Note: " + noteId + ", " + content + ", " + pinned)
             var notesArr = mainView.getNotes()
             var note
