@@ -376,7 +376,15 @@ LauncherPage {
                     var plainText = detailEdit.getText(0, 10000)
 
                     if (plainText.length !== detailEdit.textLength) {
-                        mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
+                        mainView.updateNote(detailPage.currentDetailId, plainText.trim(), detailPage.currentDetailHasBadge)
+
+                        console.debug("----------------")
+                        var textArr = detailEdit.getText(0, 10000).split("\n")
+                        for (var l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
+                        console.debug("----------------")
+                        textArr = detailEdit.getFormattedText(0, 10000).split("\n")
+                        for (l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
+                        console.debug("================")
                     }
 
                     detailPage.prepareNoteView(plainText, detailEdit.cursorPosition)
@@ -389,7 +397,16 @@ LauncherPage {
                 if (activeFocus) {
                     detailFlickable.height = mainView.height * 0.46
                 } else {
-                    var plainText = detailEdit.getText(0, 10000)
+                    var plainText = detailEdit.getText(0, 10000).trim()
+
+                    console.debug("-------SAVE---------")
+                    var textArr = detailEdit.getText(0, 10000).split("\n")
+                    for (var l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
+                    console.debug("----------------")
+                    textArr = detailEdit.getFormattedText(0, 10000).split("\n")
+                    for (l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
+                    console.debug("================")
+
                     mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
                     detailEdit.editMode = false
                     detailFlickable.height = mainView.height

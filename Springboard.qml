@@ -4,6 +4,7 @@ import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.2
+import QtGraphicalEffects 1.12
 import QtPositioning 5.13
 import FileIO 1.0
 import AndroidNative 1.0 as AN
@@ -824,7 +825,7 @@ LauncherPage {
 
         Rectangle {
             id: weatherWidget
-            color: Universal.background
+            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
@@ -845,17 +846,17 @@ LauncherPage {
 
                 onPositionChanged: {
                     var coord = src.position.coordinate
-                    console.log("Widget | Positioning has changed")
-                    coord = src.position.coordinate
-                    var newLongitude = roundNumber(coord.longitude, 4)
-                    var newLatitude = roundNumber(coord.latitude, 4)
-                    if (coord.isValid && (weatherWidget.longitude !== newLongitude || weatherWidget.latitude !== newLatitude)) {
+                    var newLongitude = roundNumber(coord.longitude, 3)
+                    var newLatitude = roundNumber(coord.latitude, 3)
+                    if ((coord.isValid && (weatherWidget.longitude !== newLongitude || weatherWidget.latitude !== newLatitude))
+                        || (!coord.isValid && dayTemperatures.text.length === 0)) {
                         console.debug("Widget | Will update weather")
-                        console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
+                        //console.debug("Widget | isValid: " + coord.isValid)
+                        //console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
                         console.debug("Widget | new ccord: " + newLongitude + ", " + newLatitude)
                         console.debug("Widget | old ccord: " + weatherWidget.longitude + ", " + weatherWidget.latitude)
-                        weatherWidget.longitude = newLongitude
-                        weatherWidget.latitude = newLatitude
+                        if (newLongitude !== undefined) weatherWidget.longitude = newLongitude
+                        if (newLatitude !== undefined) weatherWidget.latitude = newLatitude
                         weatherWidget.getLocation()
                         weatherWidget.getWeather()
                     }
@@ -908,7 +909,6 @@ LauncherPage {
                 }
             }
 
-            /**
             Dialog {
                  id: locatioDialog
                  title: qsTr("Set location")
@@ -933,9 +933,13 @@ LauncherPage {
                      delegate: Button {
                          width: parent.width
                          flat: true
-                         text: model.location
+                         text: model.city
                          onClicked: {
-                             locationField.text = model
+                             weatherWidget.city = model.city
+                             weatherWidget.longitude = model.langitude
+                             weatherWidget.latitude = model.latitide
+                             locatioDialog.close()
+                             locationModel.clear()
                          }
                      }
 
@@ -943,12 +947,11 @@ LauncherPage {
                          id: locationModel
 
                          function update(text) {
-
+                            // todo: Search for location
                          }
                      }
                  }
             }
-            */
 
             function getLocation() {
                 console.debug("Widget | Will request city name")
@@ -1000,26 +1003,22 @@ LauncherPage {
 
         Rectangle {
             id: clockWidget
-            color: Universal.background
-            border.color: Universal.foreground
-            width: widgetsFlow.sideLength
-            height: widgetsFlow.sideLength
-
-            Image {
-                id: clockImage
-                source: "images/Clock_widget@2x.png"
-                anchors.fill: parent
-            }
-        }
-
-        Rectangle {
-            id: noteWidget
-            color: Universal.background
+            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
 
-            property string note
+            // todo
+        }
+
+        Rectangle {
+            id: noteWidget
+            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+            border.color: "grey"
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
+
+            property var note
 
             Component.onCompleted: {
                 var noteArr = mainView.getNotes()
@@ -1032,22 +1031,26 @@ LauncherPage {
                     }
                 })
                 if (noteArr.length > 0) {
-                    noteWidget.note = noteArr[0].content
-                    console.debug("Widget | Note: " + noteWidget.note)
+                    noteWidget.note = noteArr[0]
+                    console.debug("Widget | Note: " + noteWidget.note.content)
                 }
             }
 
             Column {
                 width: noteWidget.width
                 padding: mainView.innerSpacing * 0.5
-                // spacing: mainView.innerSpacing * 0.5
-
 
                 Image {
                     id: notesIcon
                     width: 40
                     height: 40
                     source: "icons/notes@4x.png"
+
+                    ColorOverlay {
+                        anchors.fill: notesIcon
+                        source: notesIcon
+                        color: Universal.foreground
+                    }
                 }
 
                 Button {
@@ -1058,13 +1061,20 @@ LauncherPage {
                     highlighted: false
 
                     contentItem: Label {
+                        id: noteLabel
                         anchors.fill: noteButton
-                        text: noteWidget.note
-                        wrapMode: Text.WordWrap
-//                        background: Rectangle {
-//                            color: "transparent"
-//                            border.color: "transparent"
-//                        }
+                        padding: 4
+                        text: noteWidget.note.content
+                        elide: Text.ElideRight
+                        textFormat: Text.RichText
+                        wrapMode: Text.Wrap
+                    }
+
+                    onClicked: {
+                        console.log("Widget | Note clicked")
+                        mainView.updateCollectionPage(mainView.collectionMode.Notes)
+                        mainView.updateDetailPage(mainView.detailMode.Note, noteWidget.note.id, undefined,
+                                                  noteWidget.note.date, noteWidget.note.content, noteWidget.note.pinned)
                     }
                 }
             }

@@ -185,6 +185,7 @@ LauncherPage {
              var appGroup = appLauncher.appGroups[i]
              allApps = allApps.concat(appGroup.apps)
         }
+        console.debug("AppGrid | Number of apps: " + allApps.length)
         return allApps
     }
 
@@ -273,7 +274,7 @@ LauncherPage {
         id: appLauncherFlickable
         anchors.fill: parent
         contentWidth: parent.width
-        contentHeight: appLauncherColumn.height        
+        contentHeight: appLauncherColumn.height
 
         Column {
             id: appLauncherColumn

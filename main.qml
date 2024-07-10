@@ -51,6 +51,8 @@ ApplicationWindow {
                       appGrid.children[0].item.updateNotifications()
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
+              // Check runnung apps
+              if (mainView.isTablet) AN.SystemDispatcher.dispatch("volla.launcher.runningAppsAction", {})
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
               // Check new pinned shortcut
@@ -1024,8 +1026,6 @@ ApplicationWindow {
         function checkDefaultApp(apps) {
             mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
                         "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
-            mainView.calendarApp = apps.filter( el => el.package !== "org.fossiry.calendar" ).length > 0 ?
-                        "org.fossiry.calendar" : "com.simplemobiletools.calendar.pro"
         }
 
         WorkerScript {
