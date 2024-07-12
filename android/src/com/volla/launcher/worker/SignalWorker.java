@@ -21,6 +21,7 @@ import com.volla.launcher.service.NotificationListenerExampleService;
 import androidx.core.app.NotificationManagerCompat;
 import com.volla.launcher.util.NotificationPlugin;
 import android.content.pm.PackageManager;
+import com.volla.launcher.storage.NotificationStorageManager;
 public class SignalWorker {
 
    private static final String TAG = "SignalWorker";
@@ -81,6 +82,7 @@ public class SignalWorker {
     static void retrieveMessageConversations(Map message, Activity activity){
         Log.d(TAG, "Invoked JAVA retrieveMessageConversations: " + message.toString());
         MessageRepository repository = new MessageRepository(QtNative.activity().getApplication());
+	NotificationStorageManager storageManager = new NotificationStorageManager(QtNative.activity().getApplication());
         ArrayList<Map> messageList = new ArrayList();
         String person = (String) message.get("person");
         String threadId = (String) message.get("threadId");
@@ -119,6 +121,7 @@ public class SignalWorker {
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
+	    storageManager.clearNotificationCount("org.thoughtcrime.securesms");
 	});
        } else {
            repository.getAllMessageByThreadId(threadId,timeFrame).subscribe(it -> {
@@ -153,6 +156,7 @@ public class SignalWorker {
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
+	    storageManager.clearNotificationCount("org.thoughtcrime.securesms");
             });
 
           }
