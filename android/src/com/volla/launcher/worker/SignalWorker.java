@@ -119,7 +119,8 @@ public class SignalWorker {
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
-	});
+            repository.updateReadStatusInUserTableUsingName(person);
+        });
        } else {
            repository.getAllMessageByThreadId(threadId,timeFrame).subscribe(it -> {
             for (Message m : it) {
@@ -153,6 +154,7 @@ public class SignalWorker {
             result.put("messagesCount", messageList.size());
             Log.d(TAG, "Will dispatch messages: " + result.toString());
             SystemDispatcher.dispatch(GOT_SIGNAL_MESSAGES, result);
+            repository.updateReadStatusInUserTableUsingThreadId(threadId);
             });
 
           }

@@ -87,6 +87,7 @@ Popup {
                 font.pointSize: mainView.mediumFontSize
                 onClicked: {
                     if (text === qsTr("Show demo")) {
+                        enabled = false
                         swipeView.showTextfieldDemo()
                     } else {
                         swipeView.currentIndex = 1
@@ -113,6 +114,7 @@ Popup {
                 font.pointSize: mainView.mediumFontSize
                 onClicked: {
                     if (text === qsTr("Show demo")) {
+                        enabled = false
                         swipeView.showRedDotDemo()
                     } else {
                         swipeView.currentIndex = 2
@@ -135,10 +137,12 @@ Popup {
                 id: button3
                 anchors.top: label3.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "Show demo"
+                text: qsTr("Show demo")
                 font.pointSize: mainView.mediumFontSize
                 onClicked: {
+                    console.debug("OnBoarding | Text " + text)
                     if (text === qsTr("Show demo")) {
+                        enabled = false
                         swipeView.showCollectionDemo()
                     } else {
                         swipeView.currentIndex = 3
@@ -161,7 +165,7 @@ Popup {
                 id: button4
                 anchors.top: label4.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "Show demo"
+                text: qsTr("Show demo")
                 font.pointSize: mainView.mediumFontSize
                 onClicked: {
                     if (text === qsTr("Show demo")) {
@@ -188,7 +192,7 @@ Popup {
                 id: button5
                 anchors.top: label5.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "Show demo"
+                text: qsTr("Show demo")
                 font.pointSize: mainView.mediumFontSize
                 onClicked: {
                     if (text === qsTr("Show demo")) {
@@ -224,6 +228,7 @@ Popup {
                             mainView.contacts = new Array
                             label1.text = qsTr("Learn about more use cases in the printed manual")
                             button1.text = qsTr("Next hint")
+                            button1.enabled = true
                         }, 2000)
                     }, 2000)
                 }, 2000)
@@ -236,6 +241,7 @@ Popup {
             timer.setTimeout(function() {
                 mainView.currentIndex = 2
                 button3.text = qsTr("Next hint")
+                button3.enabled = true
             }, 6000)
         }
 
@@ -247,6 +253,7 @@ Popup {
 
                 timer.setTimeout(function() {
                     button2.text = qsTr("Next hint")
+                    button2.enabled = true
                 }, 2000)
             }, 2000)
         }

@@ -46,6 +46,10 @@ LauncherPage {
                     designSettingsItemColumn.menuState = false
                     designSettingsItemColumn.destroyCheckboxes()
                 }
+                if (item !== pluginSettingsItemColumn && pluginSettingsItemColumn.checkboxes.length > 0) {
+                    pluginSettingsItemColumn.menuState = false
+                    pluginSettingsItemColumn.destroyCheckboxes()
+                }
                 if (item !== resetSettingsItemColumn && resetSettingsItemColumn.menuState) {
                     resetSettingsItemColumn.menuState = false
                 }
@@ -641,7 +645,7 @@ LauncherPage {
                             console.log("Settings | Security state: " + message["isActive"] + ", " + message["error"])
                             securitySettingsItemTitle.text = message["isActive"]  ? securityModeOnOption.text
                                                                                   : securityModeOffOption.text
-                            securitySettingsItem.visible = message["error"] === undefined && message["isInstalled"]
+                            securitySettingsItem.visible = message["error"] === undefined && message["isInstalled"] && message["isAvailable"]
                         } else if (type === "volla.launcher.checkSecurityPasswordResponse") {
                             console.log("Settings | Password is set: " + message["isPasswordSet"])
                             passwordDialog.backgroundColor = mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
@@ -981,6 +985,7 @@ LauncherPage {
                             AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": active})
                             mainView.updateSettings("activateSignal", active)
                             sourceSettings.signalIsActivated = active
+                            mainView.isActiveSignal = active
                         }
                     }
 
