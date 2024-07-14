@@ -130,7 +130,7 @@ LauncherPage {
         // load threads from further source
         // address (phone or contact), body (message), date, type
         console.debug("Collections | Signal is active: " + mainView.isSignalActive)
-        if (mainView.isActiveSignal) AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
+        if (mainView.isActiveSignal()) AN.SystemDispatcher.dispatch("volla.launcher.signalThreadsAction", filter)
     }
 
     function loadCalls(filter) {
@@ -1277,12 +1277,12 @@ LauncherPage {
                 var note = {"c_ID": rawNote["id"]}
                 note.c_STEXT = mainView.parseTime(rawNote.date)
                 note.c_TSTAMP = rawNote.date
-                var content = rawNote.content.replace(/$/gim, "\n")
-                var titleEnd = content.indexOf("\n")
+                var title = rawNote.content.replace(/($)/gm, "\n")
+                var titleEnd = title.indexOf("\n")
                 note.c_TEXT = titleEnd > 0 && titleEnd < mainView.maxTitleLength ?
-                            content.slice(0, titleEnd) : titleEnd > mainView.maxTitleLength ?
-                                content.slice(0, mainView.maxTitleLength) + "..." : content
-                note.c_CONTENT = content
+                                title.slice(0, titleEnd) : titleEnd > mainView.maxTitleLength ?
+                                title.slice(0, mainView.maxTitleLength) + "..." : title
+                note.c_CONTENT = rawNote.content
                 note.c_ICON = ""
                 note.c_SBADGE = rawNote.pinned
                 modelArr.push(note)

@@ -233,7 +233,6 @@ ApplicationWindow {
         property string cacheDescription: "Messages cache"
         property real cacheVersion: 1.0
         property int cacheSize: 1000
-        property bool isActiveSignal: false
 
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
             {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
@@ -789,7 +788,7 @@ ApplicationWindow {
                 note["pinned"] = false
                 notesArr.push(note)
             }
-            //console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
+            console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
             notesStore.write(JSON.stringify(notesArr))
             notes = notesArr
             if (mainView.count > mainView.swipeIndex.Collections) {
@@ -923,8 +922,10 @@ ApplicationWindow {
         function checkDefaultApp(apps) {
             mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
                         "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
-            mainView.calendarApp = apps.filter( el => el.package !== "org.fossiry.calendar" ).length > 0 ?
-                        "org.fossiry.calendar" : "com.simplemobiletools.calendar.pro"
+        }
+
+        function isActiveSignal() {
+            return settings.signalIsActivated
         }
 
         WorkerScript {
@@ -1108,11 +1109,6 @@ ApplicationWindow {
         Component.onCompleted: {
             checkCustomParameters()
 
-//            console.log("AppWindow | Number of font families: " + Qt.fontFamilies().length)
-//            for (var i = 0; i < Qt.fontFamilies().length; i++) {
-//                console.log("AppWindow | FontFamily: " + Qt.fontFamilies()[i])
-//            }
-
             if (settings.firstStart) {
                 console.debug("AppWindow | ", "Will start tutorial")
                 var component = Qt.createComponent("/OnBoarding.qml")
@@ -1140,9 +1136,8 @@ ApplicationWindow {
             if (signalIsActivated) {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
-            mainView.isActiveSignald = signalIsActivated
             mainView.useVibration = useHapticMenus
-            if (settings.sync) {
+            settings.sync()            if (settings.sync) {
                 settings.sync()
             }
         }
