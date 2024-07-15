@@ -37,7 +37,7 @@ LauncherPage {
                 id: pinBadge
                 visible: detailPage.currentDetailHasBadge
                 width: mainView.smallFontSize * 0.6
-                height: mainView.smallFontSize * 0.6         
+                height: mainView.smallFontSize * 0.6
                 y: (pinButton.height - pinBadge.height) * 0.5
                 radius: height * 0.5
                 color: mainView.accentColor
@@ -160,7 +160,8 @@ LauncherPage {
                 prepareWebArticleView(id)
                 break
             case mainView.detailMode.Note:
-                prepareNoteView(title)
+                detailEdit.lastCurserPosition = 0
+                prepareNoteView(title, 0)
                 break
             default:
                 console.log("DetailPage | Mode not yet implemented")
@@ -202,10 +203,6 @@ LauncherPage {
     function prepareNoteView(note, curserPosition) {
         console.log("Details | Process note " + currentDetailId + " with curser at " + curserPosition)
 
-//        console.debug("================")
-//        var noteArr = note.split("\n")
-//        for (var l = 0;l < noteArr.length; l++) console.debug("LINE: " + noteArr[l])
-
         detailEdit.isBlocked = true
         detailEdit.textLength = note.length
 
@@ -231,11 +228,6 @@ LauncherPage {
         if (detailEdit.editMode) {
             styledText = styledText.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
         }
-
-//        console.debug("----------------")
-//        var textArr = styledText.split("\n")
-//        for (l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
-//        console.debug("================")
 
         detailEdit.text = styledText
 
@@ -376,15 +368,7 @@ LauncherPage {
                     var plainText = detailEdit.getText(0, 10000)
 
                     if (plainText.length !== detailEdit.textLength) {
-                        mainView.updateNote(detailPage.currentDetailId, plainText.trim(), detailPage.currentDetailHasBadge)
-
-                        console.debug("----------------")
-                        var textArr = detailEdit.getText(0, 10000).split("\n")
-                        for (var l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
-                        console.debug("----------------")
-                        textArr = detailEdit.getFormattedText(0, 10000).split("\n")
-                        for (l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
-                        console.debug("================")
+                        mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
                     }
 
                     detailPage.prepareNoteView(plainText, detailEdit.cursorPosition)
@@ -397,18 +381,10 @@ LauncherPage {
                 if (activeFocus) {
                     detailFlickable.height = mainView.height * 0.46
                 } else {
-                    var plainText = detailEdit.getText(0, 10000).trim()
-
-                    console.debug("-------SAVE---------")
-                    var textArr = detailEdit.getText(0, 10000).split("\n")
-                    for (var l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
-                    console.debug("----------------")
-                    textArr = detailEdit.getFormattedText(0, 10000).split("\n")
-                    for (l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
-                    console.debug("================")
-
+                    var plainText = detailEdit.getText(0, 10000).replace(/[\u200B-\u200D\uFEFF\u200E\u200F]/g, '').trim()
                     mainView.updateNote(detailPage.currentDetailId, plainText, detailPage.currentDetailHasBadge)
                     detailEdit.editMode = false
+                    detailEdit.isBlocked = true
                     detailFlickable.height = mainView.height
                 }
             }
