@@ -1137,7 +1137,7 @@ ApplicationWindow {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
             mainView.useVibration = useHapticMenus
-            settings.sync()            if (settings.sync) {
+            if (settings.sync) {
                 settings.sync()
             }
         }
