@@ -120,7 +120,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     public void addListener(NotificationListener listener) {
         Log.d(TAG,"Adding Listener");
-	if(!listeners.contains(listener)){
+        if(!listeners.contains(listener)){
             listeners.add(listener);
         }
     }
@@ -216,18 +216,18 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 appIcon.compress(Bitmap.CompressFormat.PNG, 10, outStream);
                 bitmapData = outStream.toByteArray();
                 String largeIcon = Base64.encodeToString(bitmapData, Base64.NO_WRAP);
-		Log.d("com.volla.launcher", "image : "+largeIcon);
+                Log.d("com.volla.launcher", "image : "+largeIcon);
                 users.largeIcon = largeIcon;
             }
 
             // Droping the Notifications received for attachments but contains no attachment data
             Message msg = new Message();
             msg = storeNotificationMessage(sbn);
-	    if(msg == null){
+            if(msg == null){
               Log.d(TAG, "storeNotificationMessage returned null msg object");
-	      return;
-	    }
-	     if(msg.getText() != null &&  msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2){
+              return;
+            }
+             if(msg.getText() != null &&  msg.getText().contains("\uD83D\uDCF7") && msg.getLargeIcon().length() <=2){
                  msg.setLargeIcon("403");
            }
            if(msg.getLargeIcon() != null &&  msg.getLargeIcon().equalsIgnoreCase("403")){
@@ -236,7 +236,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
            } else {
                msg.setNotification("");
            }
-	    if(lastNotificationTime == msg.getTimeStamp()){
+            if(lastNotificationTime == msg.getTimeStamp()){
               if(msg.getLargeIcon() != null &&  msg.getLargeIcon().length() >= 10){
                     if(lastAttachment.equalsIgnoreCase(msg.getLargeIcon()) && lastMessage.equalsIgnoreCase(msg.getText())){
                         return;
@@ -245,12 +245,12 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                     return;
                 }
             }
-	    lastNotificationTime = msg.getTimeStamp();
-	    lastAttachment = msg.getLargeIcon();
-	    lastMessage = msg.getText();
-	    Log.d(TAG, "Keeping Volla notifications messages");
+            lastNotificationTime = msg.getTimeStamp();
+            lastAttachment = msg.getLargeIcon();
+            lastMessage = msg.getText();
+            Log.d(TAG, "Keeping Volla notifications messages");
             repository.insertMessage(msg);
- 
+
             users.uuid = msg.getSelfDisplayName();
             users.body = msg.getText();
             users.user_name = String.valueOf(msg.getUuid());
@@ -296,8 +296,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn){
         Log.d(TAG, "onNotificationPosted");
-
         int notificationCode = matchNotificationCode(sbn);
+        storageManager.clearNotificationCount(sbn.getPackageName());
         if(notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
             StatusBarNotification[] activeNotifications = this.getActiveNotifications();
             if(activeNotifications != null && activeNotifications.length > 0) {
@@ -318,7 +318,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Message msg = new Message();
         Bundle extras = NotificationCompat.getExtras(sbn.getNotification());
         if(!extras.containsKey(NotificationCompat.EXTRA_MESSAGES)){
-	    Log.d(TAG, "SBN does't contains EXTRA_MESSAGES");
+            Log.d(TAG, "SBN does't contains EXTRA_MESSAGES");
             return msg;
         }
         Parcelable[] messageArray =extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES);
@@ -356,21 +356,21 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 base64 = getBitmapFromUri(this,Uri.parse(Uri.decode(latestMessageBundle.get("uri").toString())));
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + e.getMessage());
-		e.printStackTrace();
+                e.printStackTrace();
             }
         } else {
                 Log.d(TAG, "No attachment URI available in latest message");
-	}
+        }
         return base64;
     }
 
     public String getBitmapFromUri(Context context, Uri uri) throws IOException {
         InputStream input;
-	String base64OfImage = "";
-	byte[] bitmapData = null;
+        String base64OfImage = "";
+        byte[] bitmapData = null;
         BitmapFactory.Options onlyBoundsOptions;
         try {
-	    context.grantUriPermission(context.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.grantUriPermission(context.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             input = context.getContentResolver().openInputStream(uri);
             onlyBoundsOptions = new BitmapFactory.Options();
             onlyBoundsOptions.inJustDecodeBounds = true;
@@ -379,7 +379,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         } catch (SecurityException se) {
             Log.e(TAG, se.getMessage());
             base64OfImage = "403";
-	    return base64OfImage;
+            return base64OfImage;
         }
         if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
             return base64OfImage;
@@ -389,7 +389,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
         input.close();
          try{
-	 if (bitmap == null) return base64OfImage;
+         if (bitmap == null) return base64OfImage;
                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
                 int maxHeight = 640;
                 int maxWidth = 640;
@@ -406,8 +406,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 Log.e(TAG, "Exception: " + e.getMessage());
                 e.printStackTrace();
             } finally {
-	       return base64OfImage;
-	    }
+               return base64OfImage;
+            }
     }
 
     public void storeMessage(Message msg){
