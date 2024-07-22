@@ -1035,6 +1035,7 @@ ApplicationWindow {
         function checkDefaultApp(apps) {
             mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
                         "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
+            console.debug("MainView | Gallery app: " + mainView.galleryApp)
         }
 
         WorkerScript {
@@ -1250,7 +1251,7 @@ ApplicationWindow {
             if (signalIsActivated) {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
-            mainView.isActiveSignald = signalIsActivated
+            mainView.isActiveSignal = signalIsActivated
             mainView.useVibration = useHapticMenus
             mainView.useColetedIdons = useColoredIcons
             if (settings.sync) {

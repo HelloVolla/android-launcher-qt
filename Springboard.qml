@@ -1066,7 +1066,7 @@ LauncherPage {
                         padding: 4
                         text: noteWidget.note.content
                         elide: Text.ElideRight
-                        textFormat: Text.RichText
+                        textFormat: Text.PlainText
                         wrapMode: Text.Wrap
                     }
 

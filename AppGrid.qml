@@ -39,7 +39,7 @@ LauncherPage {
 
     property int appCount: 0
     property int selectedGroup: 0
-    property int maxAppCount: 12
+    property int maxAppCount: mainView.isTablet ? 15 : 12
 
     property double lastAppsCheck: 0.0
 
