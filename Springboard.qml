@@ -947,7 +947,8 @@ LauncherPage {
                          id: locationModel
 
                          function update(text) {
-                            // todo: Search for location
+                             // todo: Search for location
+
                          }
                      }
                  }
