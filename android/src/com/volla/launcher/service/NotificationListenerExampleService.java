@@ -164,7 +164,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
         Log.d(TAG, "onNotificationPosted");
-        if(!sbn.getNotification().category.equalsIgnoreCase("msg")) {
+        if(sbn.getNotification().category != null && !sbn.getNotification().category.equalsIgnoreCase("msg")) {
             return;
         }
         storageManager.storeNotificationCount(sbn.getPackageName(), storageManager.getNotificationCount(sbn.getPackageName()) +1 );
