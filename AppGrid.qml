@@ -115,6 +115,7 @@ LauncherPage {
         "com.facebook.lite": qsTr("Facebook"),
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
         "com.google.android.gm" : qsTr("Mail"),
+        "eu.faircode.email" : qsTr("Mail"),
         "com.fsck.k9": qsTr("Mail"),
         "at.bitfire.davdroid": qsTr("Sync"),
         "hideme.android.vpn.noPlayStore": qsTr("VPN"),
