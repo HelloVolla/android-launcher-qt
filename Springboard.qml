@@ -542,7 +542,7 @@ LauncherPage {
                     case mainView.actionType.CreateEvent:
                         parseAndSaveEvent()
                         textInputArea.text = ""
-                        mainView.showToast("Event added to calendar")                       
+                        mainView.showToast("Event added to calendar")
                         break
                     case mainView.actionType.SendSignal:
                         idx = textInput.search(/\s/)
@@ -1010,6 +1010,11 @@ LauncherPage {
             height: widgetsFlow.sideLength
 
             // todo
+            Clock {
+                id: myClock
+                width: 180
+                height: 180
+            }
         }
 
         Rectangle {
@@ -1163,7 +1168,7 @@ LauncherPage {
                 console.log("Springboard | Update selected meneu item to " + selectedItem.text)
                 selectedMenuItem = selectedItem
             }
-        }        
+        }
 
         function createShortcuts(shortcuts) {
             var leftDistance = mainView.innerSpacing * 4
@@ -1370,3 +1375,9 @@ LauncherPage {
         }
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

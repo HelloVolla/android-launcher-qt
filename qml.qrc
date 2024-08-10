@@ -104,5 +104,15 @@
         <file>AppButton.qml</file>
         <file>images/Clock_widget@2x.png</file>
         <file>images/Notes_widget@2x.png</file>
+        <file>Clock.qml</file>
+        <file>images/01-black_hours.png</file>
+        <file>images/01-black_minutes.png</file>
+        <file>images/01-black_seconds.png</file>
+        <file>images/01-white_hours.png</file>
+        <file>images/01-white_minutes.png</file>
+        <file>images/01-white_seconds.png</file>
+        <file>images/Clock_01_black.png</file>
+        <file>images/Clock_01_white.png</file>
+        <file>images/center.png</file>
     </qresource>
 </RCC>
