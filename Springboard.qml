@@ -1008,7 +1008,6 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-
             // todo
             Clock {
                 id: myClock
