@@ -5,11 +5,10 @@ Item {
         width: 160
         height: 160
         transformOrigin: Item.Top
-        property string city
         property int hours
         property int minutes
         property int seconds
-        property real shift
+        property real shift : 2
         property bool night: false
         property bool internationalTime: true //Unset for local time
 
@@ -34,21 +33,23 @@ Item {
             anchors.fill: parent
             anchors.right: parent.right
 
-            Image { id: background; width: 160; height: 160; source: "images/Clock_01_white.png"; visible: clock.night == false }
-            Image { width: 160; height: 160; source: "images/Clock_01_black.png"; visible: clock.night == true }
+            Image { id: background; width: 160; height: 160;
+                source: mainView.backgroundColor === "white" ? "images/Clock_01_black.png" : "images/Clock_01_white.png"
+                visible: clock.night == false }
+
+            Image { width: 160; height: 160;
+                source: mainView.backgroundColor === "white" ? "images/Clock_01_black.png" : "images/Clock_01_white.png"
+                visible: clock.night == true }
 
 
             Image {
                 x: 76; y: 10
                 height: 140
-                rotation: -149.35
-                z: 5
-                transformOrigin: Item.Center
-                clip: false
-                source: "images/01-white_hours.png"
+                z: 1
+                source: mainView.backgroundColor === "white" ? "images/01-black_hours.png": "images/01-white_hours.png"
                 transform: Rotation {
                     id: hourRotation
-                    origin.x: 7.5; origin.y: 73;
+                    origin.x: 4; origin.y: 70;
                     angle: (clock.hours * 30) + (clock.minutes * 0.5)
                     Behavior on angle {
                         SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
@@ -57,15 +58,14 @@ Item {
             }
 
             Image {
-                x: 74.7; y: 9.2
+                x: 76; y: 9.2
                 width: 6
                 height: 140
-                z: 6
-                rotation: -59.09
-                source: "images/01-white_minutes.png"
+                z: 5
+                source: mainView.backgroundColor === "white" ?  "images/01-black_minutes.png" : "images/01-white_minutes.png"
                 transform: Rotation {
                     id: minuteRotation
-                    origin.x: 7.5; origin.y: 73;
+                    origin.x: 4; origin.y: 70;
                     angle: clock.minutes * 6
                     Behavior on angle {
                         SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
@@ -74,15 +74,14 @@ Item {
             }
 
             Image {
-                x: 73.8; y: 9
+                x: 77; y: 9.4
                 width: 6
                 height: 140
-                z: 10
-                rotation: 0.04
+                z: 6
                 source: "images/01-white_seconds.png"
                 transform: Rotation {
                     id: secondRotation
-                    origin.x: 7.5; origin.y: 70;
+                    origin.x: 2.7; origin.y: 70;
                     angle: clock.seconds * 6
                     Behavior on angle {
                         SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
@@ -94,27 +93,9 @@ Item {
                 x: 70
                 width: 20
                 height: 20
+                z: 10
                 transformOrigin: Item.Center
                 anchors.centerIn: background; source: "images/center.png"
             }
-
-            Text {
-                id: cityLabel
-                y: 210; anchors.horizontalCenter: parent.horizontalCenter
-                color: "white"
-                font.family: "Helvetica"
-                font.bold: true; font.pixelSize: 16
-                style: Text.Raised; styleColor: "black"
-                text: clock.city
-            }
         }
-
 }
-
-
-
-/*##^##
-Designer {
-    D{i:2;anchors_height:170;anchors_width:170;anchors_x:0;anchors_y:0}
-}
-##^##*/
