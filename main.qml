@@ -1109,6 +1109,11 @@ ApplicationWindow {
         Component.onCompleted: {
             checkCustomParameters()
 
+            if (Universal.theme !== settings.theme) {
+                mainView.switchTheme(settings.theme, firstStart)
+            } else {
+                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": firstStart})
+            }
             if (settings.firstStart) {
                 console.debug("AppWindow | ", "Will start tutorial")
                 var component = Qt.createComponent("/OnBoarding.qml")
@@ -1124,11 +1129,6 @@ ApplicationWindow {
                 console.debug("MainView", "Will check stt availability")
                 settings.sttChecked = true
                 AN.SystemDispatcher.dispatch("volla.launcher.checkSttAvailability", {})
-            }
-            if (Universal.theme !== settings.theme) {
-                mainView.switchTheme(settings.theme, firstStart)
-            } else {
-                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": firstStart})
             }
             if (fullscreen) {
                 appWindow.visibility = 5
