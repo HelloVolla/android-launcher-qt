@@ -10,7 +10,7 @@ Item {
         property int seconds
         property real shift : 2
         property bool night: false
-        property bool internationalTime: true //Unset for local time
+        property bool internationalTime: false //Unset for local time
 
         function timeChanged() {
             var date = new Date;
@@ -21,7 +21,7 @@ Item {
         }
 
         Timer {
-            interval: 100; running: true; repeat: true;
+            interval: 1000; running: true; repeat: true;
             onTriggered: clock.timeChanged()
         }
 
