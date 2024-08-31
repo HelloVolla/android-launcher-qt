@@ -882,7 +882,8 @@ LauncherPage {
 
                     onClicked: {
                         console.debug("Widget | Clicked")
-                        Qt.openUrlExternally("https://startpage.com/sp/search?query=" + weatherWidget.city + "&segment=startpage.volla")
+                        locatioDialog.open()
+                        //Qt.openUrlExternally("https://startpage.com/sp/search?query=" + weatherWidget.city + "&segment=startpage.volla")
                     }
                 }
 
@@ -907,51 +908,6 @@ LauncherPage {
                     font.pointSize: mainView.smallFontSize
                     opacity: 0.6
                 }
-            }
-
-            Dialog {
-                 id: locatioDialog
-                 title: qsTr("Set location")
-                 standardButtons: Dialog.Ok | Dialog.Cancel
-                 padding: mainView.innerSpacing
-                 spacing: mainView.innerSpacing
-                 width: 400
-                 height: 400
-
-                 ListView {
-                     id: locationList
-
-                     header: TextField {
-                         id: locationField
-                         width: parent.width
-                         placeholderText: qsTr("Enter any location")
-                         onTextChanged: {
-                             locationModel.update(text)
-                         }
-                     }
-
-                     delegate: Button {
-                         width: parent.width
-                         flat: true
-                         text: model.city
-                         onClicked: {
-                             weatherWidget.city = model.city
-                             weatherWidget.longitude = model.langitude
-                             weatherWidget.latitude = model.latitide
-                             locatioDialog.close()
-                             locationModel.clear()
-                         }
-                     }
-
-                     model: ListModel {
-                         id: locationModel
-
-                         function update(text) {
-                             // todo: Search for location
-
-                         }
-                     }
-                 }
             }
 
             function getLocation() {
@@ -1085,6 +1041,104 @@ LauncherPage {
                 }
             }
         }
+    }
+
+    Dialog {
+         id: locatioDialog
+         title: qsTr("Set location")
+         standardButtons:Dialog.Cancel
+         padding: mainView.innerSpacing
+         spacing: mainView.innerSpacing
+         width: 300
+         height: 400
+         x: parent.width - width
+         y: parent.height - height - 20
+         property var dialogy: y
+         TextField {
+             id: searchField
+             width: 180
+             height: 50
+             placeholderText: qsTr("Type Location")
+             color: mainView.fontColor
+             placeholderTextColor: "darkgrey"
+             focus: true
+             background: Rectangle {
+                 radius: 20
+                 color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                 border.color: "transparent"
+             }
+             onTextChanged: {
+                 if (searchField.text.length > 2) {
+                     locationModel.clear()
+                     var placeUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + searchField.text + "&limit=5&appid=" + weatherWidget.apiKey
+                     var placeRequest = new XMLHttpRequest()
+                     placeRequest.onreadystatechange = function() {
+                         if (placeRequest.readyState === XMLHttpRequest.DONE) {
+                             if (placeRequest.status === 200) {
+                                 var places = JSON.parse(placeRequest.responseText)
+                                 var locale = Qt.locale().name.split('_')[0]
+                                 for (var i = 0; i < places.length; i++) {
+                                     locationModel.append({ name: places[i].name,
+                                                              latitude: places[i].lat,
+                                                              longitude: places[i].lon,
+                                                              country: places[i].country})
+                                 }
+                             } else {
+                                 console.error("Widget | Error retrieving Place: ", placeRequest.status, placeRequest.statusText)
+                               }
+                         }
+                     }
+                     placeRequest.open("GET", placeUrl)
+                     placeRequest.send()
+                 }
+             }
+         }
+         ListView {
+             id: mlistView
+             y: 50
+             width: parent.width
+             height: 350
+             model: ListModel {
+                 id: locationModel
+             }
+             delegate: Button {
+                 width: parent.width
+                 flat: true
+                 Text {
+                     text: name + ", "+country
+                     color: Universal.foreground
+                     anchors.verticalCenter: parent.verticalCenter
+                     horizontalAlignment: Text.AlignLeft
+                     anchors.left: parent.left
+                     anchors.leftMargin: 10
+                }
+                onClicked: {
+                    weatherWidget.city = model.name + ", " + model.country
+                    weatherWidget.longitude = model.longitude
+                    weatherWidget.latitude  = model.latitude
+                    locatioDialog.close()
+                    locationModel.clear()
+                    searchField.clear()
+                    weatherWidget.getWeather()
+                }
+             }
+         }
+         onRejected: {
+             console.log("Dialog cancelled")
+             locationModel.clear()
+             searchField.clear()
+         }
+
+         Connections {
+             target: Qt.inputMethod
+             onKeyboardRectangleChanged: {
+                 if (Qt.inputMethod.keyboardRectangle.height > 120) {
+                     locatioDialog.y = (parent.height- (Qt.inputMethod.keyboardRectangle.height) )
+                 } else {
+                     locatioDialog.y = 816
+                 }
+             }
+         }
     }
 
     MouseArea {
