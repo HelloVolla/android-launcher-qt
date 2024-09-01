@@ -832,8 +832,8 @@ LauncherPage {
 
             property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
             property string city: "Remscheid"
-            property double longitude: 51.17983
-            property double latitude: 7.19250
+            property double longitude: 51.1798
+            property double latitude: 7.1925
 
             PositionSource {
                 id: src
@@ -841,7 +841,7 @@ LauncherPage {
                 active: true
 
                 function roundNumber(num, dec) {
-                  return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
+                  return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec)
                 }
 
                 onPositionChanged: {
@@ -855,12 +855,11 @@ LauncherPage {
                         //console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
                         console.debug("Widget | new ccord: " + newLongitude + ", " + newLatitude)
                         console.debug("Widget | old ccord: " + weatherWidget.longitude + ", " + weatherWidget.latitude)
-                        if (newLongitude !== undefined) weatherWidget.longitude = newLongitude
-                        if (newLatitude !== undefined) weatherWidget.latitude = newLatitude
+                        if (!isNaN(newLongitude)) weatherWidget.longitude = newLongitude
+                        if (!isNaN(newLatitude)) weatherWidget.latitude = newLatitude
                         weatherWidget.getLocation()
                         weatherWidget.getWeather()
                     }
-
                 }
             }
 
@@ -882,7 +881,8 @@ LauncherPage {
 
                     onClicked: {
                         console.debug("Widget | Clicked")
-                        Qt.openUrlExternally("https://startpage.com/sp/search?query=" + weatherWidget.city + "&segment=startpage.volla")
+                        //Qt.openUrlExternally("https://startpage.com/sp/search?query=" + weatherWidget.city + "&segment=startpage.volla")
+                        locatioDialog.open()
                     }
                 }
 
@@ -917,60 +917,155 @@ LauncherPage {
                  spacing: mainView.innerSpacing
                  width: 400
                  height: 400
+                 anchors.centerIn: Overlay.overlay
+
+                 property string locationInput
+                 property var geoRequest: new XMLHttpRequest()
+
+                 onLocationInputChanged: {
+                     locatioDialog.geoRequest.abort()
+                     getGeoCodes(locationInput)
+                 }
+
+                 TextField {
+                     id: locationField
+                     width: parent.width
+                     placeholderText: qsTr("Enter any location")
+                     color: mainView.fontColor
+                     background: Rectangle {
+                         color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                         border.color: "transparent"
+                     }
+                     Binding {
+                         target: locatioDialog
+                         property: "locationInput"
+                         value: locationField.displayText.toLowerCase()
+                     }
+                 }
 
                  ListView {
                      id: locationList
-
-                     header: TextField {
-                         id: locationField
-                         width: parent.width
-                         placeholderText: qsTr("Enter any location")
-                         onTextChanged: {
-                             locationModel.update(text)
-                         }
-                     }
+                     anchors.topMargin: mainView.innerSpacing
+                     anchors.top: locationField.bottom
+                     width: parent.width
+                     height: locatioDialog.height - locationField.height - 2 * locatioDialog.padding - locatioDialog.spacing
 
                      delegate: Button {
                          width: parent.width
                          flat: true
-                         text: model.city
+                         contentItem: Text {
+                             text: model.city
+                             color: mainView.fontColor
+                             horizontalAlignment: Text.AlignLeft
+                         }
                          onClicked: {
                              weatherWidget.city = model.city
-                             weatherWidget.longitude = model.langitude
-                             weatherWidget.latitude = model.latitide
+                             weatherWidget.longitude = model.lon
+                             weatherWidget.latitude = model.lat
                              locatioDialog.close()
                              locationModel.clear()
+                             weatherWidget.getWeather()
                          }
                      }
 
                      model: ListModel {
                          id: locationModel
 
-                         function update(text) {
-                             // todo: Search for location
+                         function update(modelArr) {
+                             console.debug("Widget | Update model: " + modelArr.length)
 
+                             var filteredModelDict = new Object
+                             var filteredModelItem
+                             var modelItem
+                             var found
+                             var i
+
+                             for (i = 0; i < modelArr.length; i++) {
+                                 filteredModelDict[modelArr[i].city] = modelArr[i]
+                             }
+
+                             var existingItemDict = new Object
+                             for (i = 0; i < count; ++i) {
+                                 var modelItemName = get(i).city
+                                 existingItemDict[modelItemName] = true
+                             }
+
+                             // remove items no longer in filtered set
+                             i = 0
+                             while (i < count) {
+                                 modelItemName = get(i).city
+                                 found = filteredModelDict.hasOwnProperty(modelItemName)
+                                 if (!found) {
+                                     console.log("Collections | Remove " + modelItemName)
+                                     remove(i)
+                                 } else {
+                                     i++
+                                 }
+                             }
+
+                             // add new items
+                             for (modelItemName in filteredModelDict) {
+                                 found = existingItemDict.hasOwnProperty(modelItemName)
+                                 if (!found) {
+                                     // for simplicity, just adding to end instead of corresponding position in original list
+                                     filteredModelItem = filteredModelDict[modelItemName]
+                                     console.log("Widget | Will append " + filteredModelItem.city)
+                                     append(filteredModelDict[modelItemName])
+                                 }
+                             }
                          }
                      }
+                 }
+
+                 function getGeoCodes(city) {
+                     console.debug("Widget | Will request cities: " + city)
+                     var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=20&appid=" + weatherWidget.apiKey
+                     geoRequest.onreadystatechange = function() {
+                         if (geoRequest.readyState === XMLHttpRequest.DONE) {
+                             console.debug("Widget | Geo location response: " + geoRequest.status)
+                             if (geoRequest.status === 200) {
+                                 var geoLocations = new Array
+                                 console.debug("Widget | Location response " + geoRequest.responseText)
+                                 var cities = JSON.parse(geoRequest.responseText)
+                                 var locale = Qt.locale().name.split('_')[0]
+                                 for (var i = 0; i < cities.length; i++) {
+                                     city = cities[i].hasOwnProperty("local_names") ? cities[i]["local_names"][locale] : cities[i].name
+                                     if (city === undefined) city = cities[i].name
+                                     console.debug("Widget | City: " + city)
+                                     var lat = cities[i].lat
+                                     var lon = cities[i].lon
+                                     geoLocations.push({"city": city, "lat": lat, "lon": lon})
+                                 }
+                                 locationModel.update(geoLocations)
+                             } else {
+                                 console.error("Widget | Error retrieving weather: ", cityRequest.status, cityRequest.statusText)
+                                 locationModel.update(new Array)
+                             }
+                         }
+                     }
+                     geoRequest.open("GET", geoUrl)
+                     geoRequest.send()
                  }
             }
 
             function getLocation() {
-                console.debug("Widget | Will request city name")
-                var cityUrl = "http://api.openweathermap.org/geo/1.0/reverse?lat=" + latitude + "&lon=" + longitude + "&limit=5&appid=" + apiKey
+                console.debug("Widget | Will request city name for " + weatherWidget.latitude, weatherWidget.longitude)
+                var cityUrl = "http://api.openweathermap.org/geo/1.0/reverse?lat="
+                        + weatherWidget.latitude + "&lon=" + weatherWidget.longitude + "&appid=" + apiKey
                 var cityRequest = new XMLHttpRequest()
                 cityRequest.onreadystatechange = function() {
                     if (cityRequest.readyState === XMLHttpRequest.DONE) {
                         console.debug("Widget | Location response: " + cityRequest.status)
                         if (cityRequest.status === 200) {
                             var cities = JSON.parse(cityRequest.responseText)
+                            console.debug("Widget | Raw: " + cityRequest.responseText)
                             var locale = Qt.locale().name.split('_')[0]
-                            var city = cities[0].local_names[locale]
-                            console.debug("Widget | City: " + city)
-                            if (city === undefined) city = cities[0].name
+                            var city = cities[0].hasOwnProperty("local_names") ? cities[0]["local_names"][locale] : cities[0].name
+                            if (city === undefined) city = cities[i].name
                             console.debug("Widget | City: " + city)
                             weatherWidget.city = city
                         } else {
-                            console.error("Widget | Error retrieving weather: ", cityRequest.status, cityRequest.statusText)
+                            console.error("Widget | Error retrieving location: ", cityRequest.status, cityRequest.statusText)
                         }
                     }
                 }
@@ -1375,9 +1470,3 @@ LauncherPage {
         }
     }
 }
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-##^##*/
