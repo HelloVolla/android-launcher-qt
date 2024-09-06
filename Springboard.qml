@@ -641,21 +641,21 @@ LauncherPage {
                                     pluginFunctions.push({
                                          "text": result[j].label,
                                          "action": mainView.actionType.ExecutePlugin,
-                                         "functionReference": {"pluginId": plugins[i].metadata.id, "functionId": result[j].functionId},
+                                         "functionReference": {"pluginId": pluginId, "functionId": result[j].functionId},
                                          "isFirstSuggestion": false
                                     })
                                 } else if (result[j].object !== undefined) {
                                     autocompletions.push({
                                         "text": result[j].label,
                                         "action": mainView.actionType.SuggestPluginEntity,
-                                        "object": {'pluginId': plugins[i].metadata.id, 'entity': result[j].object },
+                                        "object": {'pluginId': pluginId, 'entity': result[j].object },
                                         "isFirstSuggestion": false
                                     })
                                 } else {
                                     liveContent.push({
                                         "text": result[j].label,
                                         "action": mainView.actionType.LiveContentPlugin,
-                                        "functionReference": {"pluginId": plugins[i].metadata.id, "link": result[j].link !== undefined ? result[j].link : ""},
+                                        "functionReference": {"pluginId": pluginId, "link": result[j].link !== undefined ? result[j].link : ""},
                                         "isFirstSuggestion": false
                                     })
                                 }
