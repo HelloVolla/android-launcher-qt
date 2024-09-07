@@ -1095,6 +1095,15 @@ LauncherPage {
                 weatherRequest.open("GET", weatherUrl)
                 weatherRequest.send()
             }
+            Timer {
+                id: weather30MinuteTimer
+                interval: 1800000  // 30 minutes in milliseconds (30 * 60 * 1000)
+                repeat: true       // Set to true to repeat every 30 minutes
+                running: true      // Start the timer immediately
+                onTriggered: {
+                    weatherWidget.getWeather();  // Call the function to execute service
+                }
+            }
         }
 
         Rectangle {
