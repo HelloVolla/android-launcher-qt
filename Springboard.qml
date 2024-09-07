@@ -730,12 +730,12 @@ LauncherPage {
 
                 onClicked: {
                     console.log("Springboard | Menu item clicked")
-                    if (model["functionReference"] !== undefined) {
-                        console.debug("Springboard | Function: " + model.functionReference.pluginId)
-                        listModel.executeAction(model.text, model.action, new Object, model.functionReference)
+                    if (listView.model.get(index).functionReference !== undefined) {
+                        console.debug("Springboard | Function: " + listView.model.get(index).functionReference.pluginId)
+                        listModel.executeAction(model.text, model.action, new Object, listView.model.get(index).functionReference)
                     } else {
-                        console.debug("Springboard | Object: " + model.object)
-                        listModel.executeAction(model.text, model.action, model.object)
+                        console.debug("Springboard | Object: " + listView.model.get(index).object + " : model.text "+ model.text + " : model.action "+ model.action)
+                        listModel.executeAction(model.text, model.action, listView.model.get(index).object)
                     }
                 }
             }
