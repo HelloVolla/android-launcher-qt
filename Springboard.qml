@@ -1045,15 +1045,21 @@ LauncherPage {
 
     Dialog {
          id: locatioDialog
-         title: qsTr("Set location")
-         standardButtons:Dialog.Cancel
          padding: mainView.innerSpacing
          spacing: mainView.innerSpacing
          width: 300
          height: 400
-         x: parent.width - width
-         y: parent.height - height - 20
+
+         x: (Screen.width - locatioDialog.width)/2
+         y: (Screen.height - locatioDialog.height)/2
          property var dialogy: y
+         background: Rectangle {
+             anchors.fill: parent
+             color: mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
+                    ? "#292929" : "#CCCCCC"
+             border.color: "transparent"
+             radius: mainView.innerSpacing / 2
+         }
          TextField {
              id: searchField
              width: 180
@@ -1063,8 +1069,8 @@ LauncherPage {
              placeholderTextColor: "darkgrey"
              focus: true
              background: Rectangle {
-                 radius: 20
-                 color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                 color: mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
+                        ? "black" : "white"
                  border.color: "transparent"
              }
              onTextChanged: {
@@ -1106,7 +1112,7 @@ LauncherPage {
                  flat: true
                  Text {
                      text: name + ", "+country
-                     color: Universal.foreground
+                     color: mainView.fontColor
                      anchors.verticalCenter: parent.verticalCenter
                      horizontalAlignment: Text.AlignLeft
                      anchors.left: parent.left
@@ -1127,17 +1133,6 @@ LauncherPage {
              console.log("Dialog cancelled")
              locationModel.clear()
              searchField.clear()
-         }
-
-         Connections {
-             target: Qt.inputMethod
-             onKeyboardRectangleChanged: {
-                 if (Qt.inputMethod.keyboardRectangle.height > 120) {
-                     locatioDialog.y = (parent.height- (Qt.inputMethod.keyboardRectangle.height) )
-                 } else {
-                     locatioDialog.y = 816
-                 }
-             }
          }
     }
 
