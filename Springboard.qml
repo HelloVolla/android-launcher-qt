@@ -221,6 +221,7 @@ LauncherPage {
             id: listModel
 
             property int indexOfFirstSuggestion: -1
+            property int indexOfFirstFunction: -1
 
             function checkContacts(contact) {
                 var fullName = contact["name"].replace(/\s/g, "_")
@@ -389,8 +390,10 @@ LauncherPage {
             }
 
             function executeAction(actionValue, actionType, actionObj, functionReference) {
-                if (actionObj !== undefined) {
-                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": " + actionObj["id"])
+                if (functionReference !== undefined) {
+                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": function " + functionReference["pluginId"])
+                } else if (actionObj !== undefined) {
+                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": object " + actionObj["id"])
                 } else {
                     console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType)
                 }
@@ -583,7 +586,7 @@ LauncherPage {
                             textInputArea.forceActiveFocus()
                         }
                         break;
-                    case mainView.actionType.LiveContentPluginEntity:
+                    case mainView.actionType.LiveContentPlugin:
                         if (functionReference.link !== undefined && functionReference.link.length > 0) {
                             console.debug("Springboard | Will open link '" + functionReference.link + "' of plugin " + functionReference.pluginId)
                             Qt.openUrlExternally(functionReference.link)
@@ -630,7 +633,9 @@ LauncherPage {
 
                 for (var i = 0; i < length; i++) {
                     console.debug("Springboard | Execute plugin " + springBoard.plugins[i].metadata.id)
-                    springBoard.plugins[i].processInput(textInput, function (success, suggestions, pluginId) {
+                    if (selectedObj !== undefined)
+                        console.debug("Springboard | " + selectedObj.pluginId)
+                    springBoard.plugins[i].processInput(springBoard.textInput, function (success, suggestions, pluginId) {
                         var result = suggestions;
                         if (success) {
                             for (var j = 0; j < result.length; j++) {
@@ -661,7 +666,8 @@ LauncherPage {
                                 }
                             }
                             if (counter++ === length -1) {
-                                listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length
+                                listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length + liveContent.length
+                                listModel.indexOfFirstFunction = liveContent.length
                                 console.debug("Springboard | listModel.indexOfFirstSuggestion" + listModel.indexOfFirstSuggestion )
                                 for (i = 0; i < pluginFunctions.length; i++) {
                                     if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
@@ -682,7 +688,7 @@ LauncherPage {
                                     listView.model.append(autocompletions[i])
                                 }
                             }
-                        } else{
+                        } else {
                             console.debug("Springboard | Plugin returned success false")
                         }
                     }, selectedObj !== undefined && selectedObj.pluginId !== undefined ? selectedObj.entity : undefined)
@@ -694,20 +700,23 @@ LauncherPage {
 
         delegate: Rectangle {
             id: backgroundItem
-
             height: button.height
             width: parent.width
-            color: model.action < 20000 ? "transparent" : mainView.accentColor
+            color: model.action < 20000 ? "transparent" :
+                                          model.action < 20029 ? mainView.accentColor
+                                                               : "slategrey"
+
             Button {
                 id: button
                 width: parent.width - mainView.innerSpacing
                 leftPadding: mainView.innerSpacing
-                topPadding: model.index === 0 || model.index === listModel.indexOfFirstSuggestion ? mainView.innerSpacing : 0
+                topPadding: model.index === 0 || model.index === listModel.indexOfFirstSuggestion
+                            || model.index === listModel.indexOfFirstFunction ? mainView.innerSpacing : 0
                 bottomPadding: model.index === listModel.count - 1 || model.index === listModel.indexOfFirstSuggestion - 1
                                ? mainView.innerSpacing : mainView.innerSpacing / 2
                 anchors.top: parent.top
                 text: styledText(model.text, textInput.substring(textInput.indexOf("@") === 0 ? 1 : 0, textInput.length))
-                flat: model.action >= 20000 ? false : true
+                //flat: model.action >= 20000 ? false : true
                 contentItem: Text {
                     text: button.text
                     elide: Text.ElideRight
@@ -865,7 +874,6 @@ LauncherPage {
 
             Column {
                 width: parent.width
-                spacing: mainView.innerSpacing * 0.5
                 padding: mainView.innerSpacing * 0.5
 
                 Button {
@@ -881,31 +889,50 @@ LauncherPage {
 
                     onClicked: {
                         console.debug("Widget | Clicked")
-                        //Qt.openUrlExternally("https://startpage.com/sp/search?query=" + weatherWidget.city + "&segment=startpage.volla")
                         locatioDialog.open()
                     }
                 }
 
-                Row {
-                    Image {
-                        id: weatherImage
-                        height: 60
-                        fillMode: Image.PreserveAspectFit
-                    }
-                    Text {
-                        id: recentTemperature
-                        height: 60
-                        color: Universal.foreground
-                        font.pointSize: mainView.largeFontSize
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
+                Button {
+                    flat: true
+                    width: parent.width
+                    contentItem: Column {
+                        width: weatherWidget.width
 
-                Text {
-                    id: dayTemperatures
-                    color: Universal.foreground
-                    font.pointSize: mainView.smallFontSize
-                    opacity: 0.6
+                        Row {
+                            id: weatherReport
+                            width: parent.width
+
+                            Image {
+                                id: weatherImage
+                                height: 60
+                                fillMode: Image.PreserveAspectFit
+                            }
+                            Text {
+                                id: recentTemperature
+                                height: 60
+                                color: Universal.foreground
+                                font.pointSize: mainView.largeFontSize
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+
+                        Text {
+                            id: dayTemperatures
+                            width: parent.width
+                            topPadding: mainView.innerSpacing * 0.5
+                            color: Universal.foreground
+                            font.pointSize: mainView.smallFontSize
+                            opacity: 0.6
+                        }
+
+
+                    }
+
+                    onClicked: {
+                        console.debug("Widget | Will open website for weather report")
+                        Qt.openUrlExternally("https://startpage.com/sp/search?query=" + qsTr("weather") + " " + weatherWidget.city + "&segment=startpage.volla")
+                    }
                 }
             }
 
@@ -1095,6 +1122,7 @@ LauncherPage {
                 weatherRequest.open("GET", weatherUrl)
                 weatherRequest.send()
             }
+
             Timer {
                 id: weather30MinuteTimer
                 interval: 1800000  // 30 minutes in milliseconds (30 * 60 * 1000)
