@@ -922,6 +922,8 @@ ApplicationWindow {
         function checkDefaultApp(apps) {
             mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
                         "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
+            mainView.calendarApp = apps.filter( el => el.package !== "org.fossify.calendar" ).length > 0 ?
+                        "org.fossify.calendar" : "com.simplemobiletools.calendar.pro"
         }
 
         function isActiveSignal() {
