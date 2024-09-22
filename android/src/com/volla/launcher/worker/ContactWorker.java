@@ -186,6 +186,9 @@ public class ContactWorker {
             while (cp.moveToNext()) {
                 String number = cp.getString(cp.getColumnIndex(Phone.NUMBER)).replace(" ","");
                 int numberType = cp.getInt(cp.getColumnIndex(Phone.TYPE));
+
+
+
                 switch (numberType) {
                     case Phone.TYPE_HOME:
                         contact.put("phone.home", number);

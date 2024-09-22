@@ -28,7 +28,7 @@ LauncherPage {
         "org.fossify.gallery": "/icons/photo-gallery@4x.png",
         "org.fossify.contacts": "/icons/people-contacts-agenda@4x.png",
         "org.fossify.clock": "/icons/clock@4x.png",
-        "org.fossify.calendar.": "/icons/calendar@4x.png",
+        "org.fossify.calendar": "/icons/calendar@4x.png",
         "org.fossify.filemanager": "/icons/folder@4x.png",
         "org.fossify.notes": "/icons/notes@4x.png",
         "org.fossify.calculator": "/icons/calculator@4x_104x104px.png",
