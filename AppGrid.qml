@@ -15,6 +15,7 @@ LauncherPage {
     property real labelPointSize: 16
     property var iconMap: {
         "com.simplemobiletools.dialer": "/icons/dial-phone@4x.png",
+        "com.orange.phone": "/icons/dial-phone@4x.png",
         "com.simplemobiletools.smsmessenger": "/icons/message@4x.png",
         "com.simplemobiletools.gallery.pro": "/icons/photo-gallery@4x.png",
         "com.simplemobiletools.contacts.pro": "/icons/people-contacts-agenda@4x.png",
@@ -103,6 +104,7 @@ LauncherPage {
         "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png"
     }
     property var labelMap: {
+        "com.orange.phone": qsTr("Telefoon"),
         "com.simplemobiletools.filemanager.pro": qsTr("Files"),
         "com.simplemobiletools.smsmessenger": qsTr("Messages"),
         "org.fossify.filemanager": qsTr("Files"),
