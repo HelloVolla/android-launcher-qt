@@ -821,7 +821,7 @@ LauncherPage {
 
     Flow {
         id: widgetsFlow
-        visible: mainView.isTablet // && (mainView.backgroundColor.toString() === "#000000") || (mainView.backgroundColor.toString() === "black")
+        visible: mainView.isTablet && listModel.count === 0
         width: parent.width - mainView.innerSpacing
         layoutDirection: Qt.RightToLeft
         spacing: mainView.innerSpacing
@@ -1087,10 +1087,11 @@ LauncherPage {
                             var cities = JSON.parse(cityRequest.responseText)
                             console.debug("Widget | Raw: " + cityRequest.responseText)
                             var locale = Qt.locale().name.split('_')[0]
-                            var city = cities[0].hasOwnProperty("local_names") ? cities[0]["local_names"][locale] : cities[0].name
-                            if (city === undefined) city = cities[i].name
+                            if (cities.length > 0) {
+                                var city = cities[0].hasOwnProperty("local_names") ? cities[0]["local_names"][locale] : cities[0].name
+                            }
                             console.debug("Widget | City: " + city)
-                            weatherWidget.city = city
+                            if (city !== undefined) weatherWidget.city = city
                         } else {
                             console.error("Widget | Error retrieving location: ", cityRequest.status, cityRequest.statusText)
                         }
