@@ -32,6 +32,8 @@ LauncherPage {
         "org.fossify.filemanager": "/icons/folder@4x.png",
         "org.fossify.notes": "/icons/notes@4x.png",
         "org.fossify.calculator": "/icons/calculator@4x_104x104px.png",
+        "org.fossify.music": "/icons/music@4x.png",
+        "com.volla.messages": "/icons/volla-messages@4x.png",
         "com.contactoffice.mailfence": "/icons/email@4x.png",
         "be.engie.smart": "/icons/engie@4x.png",
         "be.bmid.itsme": "/icons/itsme@4x.png",
