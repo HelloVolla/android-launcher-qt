@@ -101,5 +101,6 @@
         <file>images/open-in-signal_light_2x.png</file>
         <file>SttSetup.qml</file>
         <file>images/Summer_Mode_2x.png</file>
+        <file>icons/volla-messages@4x.png</file>
     </qresource>
 </RCC>
