@@ -691,7 +691,7 @@ LauncherPage {
                         } else {
                             console.debug("Springboard | Plugin returned success false")
                         }
-                    }, selectedObj !== undefined && selectedObj.pluginId !== undefined ? selectedObj.entity : undefined)
+                    }, selectedObj !== undefined && selectedObj.pluginId !== undefined ? selectedObj : undefined)
                 }
             }
         }
