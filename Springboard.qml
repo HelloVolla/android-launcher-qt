@@ -722,6 +722,7 @@ LauncherPage {
                     elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
                     color: model.action < 20000 ? Universal.foreground : "white"
+                    wrapMode: Text.WordWrap
                 }
                 background: Rectangle {
                     color: "transparent"
