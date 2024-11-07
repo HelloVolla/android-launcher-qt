@@ -520,7 +520,7 @@ LauncherPage {
                         console.debug("AppLauncher | Will read app cache")
                         var appsArray = JSON.parse(appsString)
                         var groupedApps = appLauncher.getGroupedApps(appsArray)
-                        appLauncher.appGroups = new Array
+                        appLauncher.destroyAppGroups()
                         appLauncher.createAppGroups(groupedApps)
                         // Workaround, if users didn't update the os version
                         if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
