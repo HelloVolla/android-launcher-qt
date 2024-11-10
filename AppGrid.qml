@@ -35,6 +35,7 @@ LauncherPage {
         "org.fossify.musicplayer": "/icons/music@4x.png",
         "com.volla.messages": "/icons/volla-messages@4x.png",
         "com.contactoffice.mailfence": "/icons/email@4x.png",
+        "com.emclient.mailclient": "/icons/email@4x.png",     
         "be.engie.smart": "/icons/engie@4x.png",
         "be.bmid.itsme": "/icons/itsme@4x.png",
         "com.facebook.lite": "/icons/facebook-lite@4x.png",
@@ -49,7 +50,7 @@ LauncherPage {
         "be.ixor.doccle.android": "/icons/doccle@4x.png",
         "com.themobilecompany.delijn": "/icons/de-lijn@4x.png",
         "com.x8bit.bitwarden": "/icons/bitwarden@4x.png",
-        "com.beeper.chat": "/icons/beeper@4x.png",
+        "com.beeper.android": "/icons/beeper@4x.png",
         "be.argenta.bankieren": "/icons/argenta@4x.png",
         "com.android.dialer": "/icons/dial-phone@4x.png",
         "com.android.mms" : "/icons/message@4x.png",
@@ -119,6 +120,7 @@ LauncherPage {
         "org.mozilla.fennec_fdroid": qsTr("Browser"),
         "com.google.android.gm" : qsTr("Mail"),
         "eu.faircode.email" : qsTr("Mail"),
+        "com.emclient.mailclient" : qsTr("Mail"),
         "com.fsck.k9": qsTr("Mail"),
         "at.bitfire.davdroid": qsTr("Sync"),
         "hideme.android.vpn.noPlayStore": qsTr("VPN"),
@@ -520,10 +522,12 @@ LauncherPage {
                         console.debug("AppLauncher | Will read app cache")
                         var appsArray = JSON.parse(appsString)
                         var groupedApps = appLauncher.getGroupedApps(appsArray)
-                        appLauncher.appGroups = new Array
+                        appLauncher.destroyAppGroups()
                         appLauncher.createAppGroups(groupedApps)
-                        // Workaround, if users didn't update the os version
-                        if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
+                        // Reflect different OS versions and devices
+                        mainView.checkDefaultApps(appsArray)
+                        //if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
+                        //if (!appsString.includes("org.fossify.calendar")) mainView.galleryApp = "com.simplemobiletools.calendar.pro"
                     } else {
                         console.log("AppLauncher | Need to retrieve apps from system")
                         mainView.updateSpinner(true)
@@ -552,7 +556,7 @@ LauncherPage {
                     }
                 }
                 mainView.updateSpinner(false)
-                mainView.checkDefaultApps(getAllApps())
+                mainView.checkDefaultApps(message["apps"])
             } else if (type === "volla.launcher.receivedShortcut") {
                 console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
 
