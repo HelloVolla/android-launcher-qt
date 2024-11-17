@@ -108,20 +108,6 @@ ApplicationWindow {
             }
          }
 
-        Component.onCompleted: {
-            console.debug("MainView | on completed")
-            console.debug("MainView | ratio: " + Screen.devicePixelRatio)
-            console.debug("MainView | height: " + Screen.desktopAvailableHeight
-                          + ", " + Screen.desktopAvailableHeight / Screen.devicePixelRatio
-                          + ", " + innerSpacing / (Screen.desktopAvailableHeight / Screen.devicePixelRatio))
-            console.debug("MainView | width: " + Screen.desktopAvailableWidth
-                          + ", " + Screen.desktopAvailableWidth / Screen.devicePixelRatio
-                          + ", " + innerSpacing / (Screen.desktopAvailableWidth / Screen.devicePixelRatio))
-            var relativeWidth = Screen.desktopAvailableWidth / Screen.devicePixelRatio
-            var relativeSpacingFactor = innerSpacing / relativeWidth
-            console.debug("MainView | spacing: " + relativeSpacingFactor * relativeWidth)
-        }
-
         property real outerSpacing: Screen.desktopAvailableWidth > 360 ? 100 : 0
         property real innerSpacing : Screen.desktopAvailableWidth > 360 ? 22 : 22 // 22.0
         property real componentSpacing: Screen.desktopAvailableWidth > 360 ? 32 : 22
