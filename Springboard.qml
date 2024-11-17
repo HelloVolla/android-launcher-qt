@@ -1205,7 +1205,7 @@ LauncherPage {
                         id: noteLabel
                         anchors.fill: noteButton
                         padding: 4
-                        text: noteWidget.note.content
+                        text: noteWidget.note !== undefined ? noteWidget.note.content : ""
                         elide: Text.ElideRight
                         textFormat: Text.PlainText
                         wrapMode: Text.Wrap
