@@ -245,7 +245,7 @@ ApplicationWindow {
         property int maxTitleLength: 120
 
         property string galleryApp: "org.fossify.gallery"
-        property string calendarApp: "com.simplemobiletools.calendar.pro"
+        property string calendarApp: "org.fossify.calendar"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.android.dialer"
         property string notesApp: "org.fossify.notes"
@@ -344,7 +344,6 @@ ApplicationWindow {
         property string cacheDescription: "Messages cache"
         property real cacheVersion: 1.0
         property int cacheSize: 1000
-        property bool isActiveSignal: false
 
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
             {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
@@ -901,7 +900,7 @@ ApplicationWindow {
                 note["pinned"] = false
                 notesArr.push(note)
             }
-            //console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
+            console.debug("MainView | New JSON: " + JSON.stringify(notesArr))
             notesStore.write(JSON.stringify(notesArr))
             notes = notesArr
             if (mainView.count > mainView.swipeIndex.Collections) {
@@ -1032,10 +1031,19 @@ ApplicationWindow {
             }
         }
 
-        function checkDefaultApp(apps) {
-            mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
+        function checkDefaultApps(apps) {
+            console.debug("MainView | Will check apps")
+            console.debug(apps.filter( el => el.package === "org.fossify.gallery" ).length)
+            console.debug(apps.filter( el => el.package === "org.fossify.calendar" ).length)
+
+            mainView.galleryApp = apps.filter( el => el.package === "org.fossify.gallery" ).length > 0 ?
                         "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
-            console.debug("MainView | Gallery app: " + mainView.galleryApp)
+            mainView.calendarApp = apps.filter( el => el.package === "org.fossify.calendar" ).length > 0 ?
+                        "org.fossify.calendar" : "com.simplemobiletools.calendar.pro"
+        }
+
+        function isActiveSignal() {
+            return settings.signalIsActivated
         }
 
         WorkerScript {
@@ -1219,11 +1227,11 @@ ApplicationWindow {
         Component.onCompleted: {
             checkCustomParameters()
 
-//            console.log("AppWindow | Number of font families: " + Qt.fontFamilies().length)
-//            for (var i = 0; i < Qt.fontFamilies().length; i++) {
-//                console.log("AppWindow | FontFamily: " + Qt.fontFamilies()[i])
-//            }
-
+            if (Universal.theme !== settings.theme) {
+                mainView.switchTheme(settings.theme, firstStart)
+            } else {
+                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": firstStart})
+            }
             if (settings.firstStart) {
                 console.debug("AppWindow | ", "Will start tutorial")
                 var component = Qt.createComponent("/OnBoarding.qml")
@@ -1240,18 +1248,12 @@ ApplicationWindow {
                 settings.sttChecked = true
                 AN.SystemDispatcher.dispatch("volla.launcher.checkSttAvailability", {})
             }
-            if (Universal.theme !== settings.theme) {
-                mainView.switchTheme(settings.theme, firstStart)
-            } else {
-                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": firstStart})
-            }
             if (fullscreen) {
                 appWindow.visibility = 5
             }
             if (signalIsActivated) {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
-            mainView.isActiveSignal = signalIsActivated
             mainView.useVibration = useHapticMenus
             mainView.useColetedIdons = useColoredIcons
             if (settings.sync) {

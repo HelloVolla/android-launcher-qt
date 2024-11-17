@@ -115,6 +115,26 @@
         <source>Remove App</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>De Trein</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mynexuzhealth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bonsai</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MijnOnlineAgenda</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>

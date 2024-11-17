@@ -203,6 +203,10 @@ LauncherPage {
     function prepareNoteView(note, curserPosition) {
         console.log("Details | Process note " + currentDetailId + " with curser at " + curserPosition)
 
+        console.debug("================")
+        var noteArr = note.split("\n")
+        for (var l = 0;l < noteArr.length; l++) console.debug("LINE: " + noteArr[l])
+
         detailEdit.isBlocked = true
         detailEdit.textLength = note.length
 
@@ -228,6 +232,11 @@ LauncherPage {
         if (detailEdit.editMode) {
             styledText = styledText.replace(/^(<p><\/p><p><\/p>$)/gim, '<p>&#8203;</p>')
         }
+
+        console.debug("----------------")
+        var textArr = styledText.split("\n")
+        for (l = 0;l < textArr.length; l++) console.debug("LINE: " + textArr[l])
+        console.debug("================")
 
         detailEdit.text = styledText
 

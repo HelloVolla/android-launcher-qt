@@ -29,6 +29,12 @@ public class ContactWorker {
 
     private static final String TAG = "ContactWorker";
 
+    private static final String[] mobilePreDialNumbers = new String[] {
+        "+49152", "+49162", "+49172", "+49173", "+49174", "+49157", "+49159", "+49163", "+49176", "+49177", "+49178", "+49179", "+4915566",
+        "+4915888", "+43699", "+43680", "+43688", "+43681", "+43699", "+43664", "+43681", "+43681", "+43681", "+43681", "+43667", "+43676",
+        "+43650", "+43678", "+43650", "+43677", "+43677", "+43677", "+43676", "+43660", "+43699", "+43690", "+43678", "+43665", "+43686",
+        "+43670", "+43670", "+43670", "+4176", "+4177", "+4178", "+4179", "+4175"};
+
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
 
@@ -186,6 +192,11 @@ public class ContactWorker {
             while (cp.moveToNext()) {
                 String number = cp.getString(cp.getColumnIndex(Phone.NUMBER)).replace(" ","");
                 int numberType = cp.getInt(cp.getColumnIndex(Phone.TYPE));
+
+                if (startsWithAny(number, mobilePreDialNumbers)) {
+                    numberType = Phone.TYPE_MOBILE;
+                }
+
                 switch (numberType) {
                     case Phone.TYPE_HOME:
                         contact.put("phone.home", number);
@@ -307,4 +318,19 @@ public class ContactWorker {
 
         SystemDispatcher.dispatch("volla.launcher.checkContactResponse", responseMessage);
     }
+
+    static boolean startsWithAny(String number, String... preDialNumbers) {
+        if (number != null && number.length() > 0) {
+            int length = preDialNumbers.length;
+
+            for (int i = 0; i < length; ++i) {
+                String preDialNumber = preDialNumbers[i];
+                if (number.startsWith(preDialNumber)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
