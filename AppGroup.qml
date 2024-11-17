@@ -46,7 +46,6 @@ Item {
         } else {
             columnCount = 5
         }
-
     }
 
     onTextInputChanged: {

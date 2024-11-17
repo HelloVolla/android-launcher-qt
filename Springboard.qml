@@ -16,6 +16,7 @@ LauncherPage {
     property string textInput
     property bool textFocus
     property real menuheight: mainView.largeFontSize * 7 + mainView.innerSpacing * 10.5
+    property real menuWidth: 400.0
     property var textInputArea
     property var selectedObj
     property var headline
@@ -1223,7 +1224,7 @@ LauncherPage {
 
     MouseArea {
         id: shortcutMenu
-        width: mainView.isTablet ? Screen.desktopAvailableWidth / Screen.devicePixelRatio * 0.9
+        width: mainView.isTablet ? springBoard.menuWidth
                                  : Screen.desktopAvailableWidth / Screen.devicePixelRatio
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom

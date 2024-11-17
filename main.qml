@@ -20,14 +20,6 @@ ApplicationWindow {
 
     onClosing: close.accepted = false
 
-    onContentOrientationChanged: {
-        console.debug("Window | Screen orientation: " + contentOrientation, Screen.desktopAvailableWidth)
-    }
-
-    onMaximumWidthChanged: {
-        console.debug("Window | Max width: " + Screen.desktopAvailableWidth)
-    }
-
     Connections {
        target: Qt.application
        // @disable-check M16
