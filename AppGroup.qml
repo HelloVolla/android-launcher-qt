@@ -28,7 +28,7 @@ Item {
 
     property int groupIndex: 0
     property int selectedGroupIndex: 1
-    property int columnCount: Screen.desktopAvailableWidth > 360 ? 5 : 4
+    property int columnCount: Screen.desktopAvailableWidth < 360 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
 
     property bool unreadMessages: false
     property bool newCalls: false
@@ -38,6 +38,16 @@ Item {
     property var labelMap: ({})
     property var apps: []
     property var pinnedShortcuts: []
+
+    onWidthChanged: {
+        console.log("AppGroup | Width changed to " + width)
+        if (width > 820) {
+            columnCount = 8
+        } else {
+            columnCount = 5
+        }
+
+    }
 
     onTextInputChanged: {
         console.log("AppGroup " + groupIndex + " | onTextInputChanged")
