@@ -223,7 +223,7 @@ ApplicationWindow {
         property int maxTitleLength: 120
 
         property string galleryApp: "org.fossify.gallery"
-        property string calendarApp: "com.simplemobiletools.calendar.pro"
+        property string calendarApp: "org.fossify.calendar"
         property string cameraApp: "com.mediatek.camera"
         property string phoneApp: "com.android.dialer"
         property string notesApp: "org.fossify.notes"
@@ -919,10 +919,14 @@ ApplicationWindow {
             }
         }
 
-        function checkDefaultApp(apps) {
-            mainView.galleryApp = apps.filter( el => el.package !== "org.fossify.gallery" ).length > 0 ?
+        function checkDefaultApps(apps) {
+            console.debug("MainView | Will check apps")
+            console.debug(apps.filter( el => el.package === "org.fossify.gallery" ).length)
+            console.debug(apps.filter( el => el.package === "org.fossify.calendar" ).length)
+
+            mainView.galleryApp = apps.filter( el => el.package === "org.fossify.gallery" ).length > 0 ?
                         "org.fossify.gallery" : "com.simplemobiletools.gallery.pro"
-            mainView.calendarApp = apps.filter( el => el.package !== "org.fossify.calendar" ).length > 0 ?
+            mainView.calendarApp = apps.filter( el => el.package === "org.fossify.calendar" ).length > 0 ?
                         "org.fossify.calendar" : "com.simplemobiletools.calendar.pro"
         }
 

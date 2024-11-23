@@ -524,10 +524,12 @@ LauncherPage {
                         console.debug("AppLauncher | Will read app cache")
                         var appsArray = JSON.parse(appsString)
                         var groupedApps = appLauncher.getGroupedApps(appsArray)
-                        appLauncher.appGroups = new Array
+                        appLauncher.destroyAppGroups()
                         appLauncher.createAppGroups(groupedApps)
-                        // Workaround, if users didn't update the os version
-                        if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
+                        // Reflect different OS versions and devices
+                        mainView.checkDefaultApps(appsArray)
+                        //if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
+                        //if (!appsString.includes("org.fossify.calendar")) mainView.galleryApp = "com.simplemobiletools.calendar.pro"
                     } else {
                         console.log("AppLauncher | Need to retrieve apps from system")
                         mainView.updateSpinner(true)
@@ -556,7 +558,7 @@ LauncherPage {
                     }
                 }
                 mainView.updateSpinner(false)
-                mainView.checkDefaultApps(getAllApps())
+                mainView.checkDefaultApps(message["apps"])
             } else if (type === "volla.launcher.receivedShortcut") {
                 console.log("AppGrid | New pinned shortcut: " + message["shortcutId"])
 
