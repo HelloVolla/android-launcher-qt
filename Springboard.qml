@@ -588,7 +588,7 @@ LauncherPage {
                         break;
                     case mainView.actionType.LiveContentPlugin:
                         if (actionObj.link !== undefined && actionObj.link.length > 0) {
-                            console.debug("Springboard | Will open link '" + actionObj.link + "' of plugin " + functionReference.pluginId)
+                            console.debug("Springboard | Will open link '" + actionObj.link + "' of plugin " + actionObj.pluginId)
                             Qt.openUrlExternally(actionObj.link)
                         }
                         break;
@@ -617,15 +617,7 @@ LauncherPage {
                 if (textInput.length < 1) {
                     console.debug("Springboard | Will clear property")
                     selectedObj = undefined
-                    console.debug("Springboard | Will clear model")
-
-//                    while (listModel.count > 0) {
-//                        console.debug("Springboard | Will remove model item " + listModel.count)
-//                        listModel.remove(listModel.count -1)
-//                    }
-
                     listModel.clear()
-                    console.debug("Springboard | Did clear model")
                 } else {
                     springBoardWorker.sendMessage({
                         'selectedObj': springBoard.selectedObj, 'textInput': textInput,
