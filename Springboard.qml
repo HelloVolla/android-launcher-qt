@@ -390,11 +390,10 @@ LauncherPage {
                 return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}\s\S+/.test(textInput)
             }
 
-            function executeAction(actionValue, actionType, actionObj, functionReference) {
-                if (functionReference !== undefined) {
-                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": function " + functionReference["pluginId"])
-                } else if (actionObj !== undefined) {
-                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": object " + actionObj["id"])
+            function executeAction(actionValue, actionType, actionObj) {
+                if (actionObj !== undefined) {
+                    var octionObjId = actionObj.id !== undefined ? actionObj.id : actionObj.pluginId
+                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": object " + octionObjId)
                 } else {
                     console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType)
                 }
@@ -562,13 +561,13 @@ LauncherPage {
                         textInputArea.text = ""
                         break
                     case mainView.actionType.ExecutePlugin:
-                        console.log("Springboard | Will execute plugin " + functionReference.pluginId)
+                        console.log("Springboard | Will execute plugin " + actionObj.pluginId)
                         for (var i = 0; i < springBoard.plugins.length; i++) {
-                            if (functionReference.pluginId === springBoard.plugins[i].metadata.id) {
+                            if (actionObj.pluginId === springBoard.plugins[i].metadata.id) {
                                 if (selectedObj !== undefined) {
-                                    springBoard.plugins[i].executeInput(textInput, functionReference.functionId, selectedObj.entity)
+                                    springBoard.plugins[i].executeInput(textInput, actionObj.functionId, selectedObj.entity)
                                 } else {
-                                    springBoard.plugins[i].executeInput(textInput, functionReference.functionId)
+                                    springBoard.plugins[i].executeInput(textInput, actionObj.functionId)
                                 }
                             }
                         }
@@ -588,9 +587,9 @@ LauncherPage {
                         }
                         break;
                     case mainView.actionType.LiveContentPlugin:
-                        if (functionReference.link !== undefined && functionReference.link.length > 0) {
-                            console.debug("Springboard | Will open link '" + functionReference.link + "' of plugin " + functionReference.pluginId)
-                            Qt.openUrlExternally(functionReference.link)
+                        if (actionObj.link !== undefined && actionObj.link.length > 0) {
+                            console.debug("Springboard | Will open link '" + actionObj.link + "' of plugin " + functionReference.pluginId)
+                            Qt.openUrlExternally(actionObj.link)
                         }
                         break;
                     case mainView.actionType.SuggestContact:
@@ -616,7 +615,17 @@ LauncherPage {
                 console.log("Springboard | update model for " + textInput);
 
                 if (textInput.length < 1) {
+                    console.debug("Springboard | Will clear property")
+                    selectedObj = undefined
+                    console.debug("Springboard | Will clear model")
+
+//                    while (listModel.count > 0) {
+//                        console.debug("Springboard | Will remove model item " + listModel.count)
+//                        listModel.remove(listModel.count -1)
+//                    }
+
                     listModel.clear()
+                    console.debug("Springboard | Did clear model")
                 } else {
                     springBoardWorker.sendMessage({
                         'selectedObj': springBoard.selectedObj, 'textInput': textInput,
@@ -640,47 +649,52 @@ LauncherPage {
                         var result = suggestions;
                         if (success) {
                             for (var j = 0; j < result.length; j++) {
-                                if (result[j].label === undefined || result[j].label.length > 100) {
+                                if (result[j].label === undefined || result[j].label.length > 1000) {
                                     console.warn("Springboard | Missing or too long label of plugin suggestion")
+                                    console.debug("Springboard | Suggestion: " + result[j].label)
                                 }
+                                // plugin provides a function suggestion
                                 if (result[j].functionId !== undefined) {
                                     pluginFunctions.push({
                                          "text": result[j].label,
                                          "action": mainView.actionType.ExecutePlugin,
-                                         "functionReference": {"pluginId": pluginId, "functionId": result[j].functionId},
+                                         "actionObj": {"pluginId": pluginId, "functionId": result[j].functionId},
                                          "isFirstSuggestion": false
                                     })
+                                // plugin provides an autocompletion and entity suggestion
                                 } else if (result[j].object !== undefined) {
                                     autocompletions.push({
                                         "text": result[j].label,
                                         "action": mainView.actionType.SuggestPluginEntity,
-                                        "object": {'pluginId': pluginId, 'entity': result[j].object },
+                                        "actionObj": {'pluginId': pluginId, 'entity': result[j].object },
                                         "isFirstSuggestion": false
                                     })
+                                // plugin provides live content
                                 } else {
                                     liveContent.push({
                                         "text": result[j].label,
                                         "action": mainView.actionType.LiveContentPlugin,
-                                        "functionReference": {"pluginId": pluginId, "link": result[j].link !== undefined ? result[j].link : ""},
+                                        "actionObj": {"pluginId": pluginId, "link": result[j].link !== undefined ? result[j].link : ""},
                                         "isFirstSuggestion": false
                                     })
                                 }
                             }
+                            // group suggestions
                             if (counter++ === length -1) {
                                 listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length + liveContent.length
                                 listModel.indexOfFirstFunction = liveContent.length
                                 console.debug("Springboard | listModel.indexOfFirstSuggestion" + listModel.indexOfFirstSuggestion )
                                 for (i = 0; i < pluginFunctions.length; i++) {
                                     if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
-                                                                      && selectedObj.pluginId === pluginFunctions[i].functionReference.pluginId)) {
-                                        console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].functionReference.pluginId)
+                                                                      && selectedObj.pluginId === pluginFunctions[i].actionObj.pluginId)) {
+                                        console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].actionObj.pluginId)
                                         listView.model.insert(0, pluginFunctions[i])
                                     }
                                 }
                                 for (i = 0; i < liveContent.length; i++) {
                                     if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
-                                            && selectedObj.pluginId === liveContent[i].functionReference.pluginId)) {
-                                        console.debug("Springboard | Appending plugin live content: " + liveContent[i].functionReference.pluginId)
+                                            && selectedObj.pluginId === liveContent[i].actionObj.pluginId)) {
+                                        console.debug("Springboard | Appending plugin live content: " + liveContent[i].actionObj.pluginId)
                                         listView.model.insert(0, liveContent[i])
                                     }
                                 }
@@ -717,7 +731,6 @@ LauncherPage {
                                ? mainView.innerSpacing : mainView.innerSpacing / 2
                 anchors.top: parent.top
                 text: styledText(model.text, textInput.substring(textInput.indexOf("@") === 0 ? 1 : 0, textInput.length))
-                //flat: model.action >= 20000 ? false : true
                 contentItem: Text {
                     text: button.text
                     elide: Text.ElideRight
@@ -741,13 +754,8 @@ LauncherPage {
 
                 onClicked: {
                     console.log("Springboard | Menu item clicked")
-                    if (listView.model.get(index).functionReference !== undefined) {
-                        console.debug("Springboard | Function: " + listView.model.get(index).functionReference.pluginId)
-                        listModel.executeAction(model.text, model.action, new Object, listView.model.get(index).functionReference)
-                    } else {
-                        console.debug("Springboard | Object: " + listView.model.get(index).object + " : model.text "+ model.text + " : model.action "+ model.action)
-                        listModel.executeAction(model.text, model.action, listView.model.get(index).object)
-                    }
+                    console.debug("Springboard | Action: " + model.action + ", text: " + model.text + ", object: " + model.actionObj)
+                    listModel.executeAction(model.text, model.action, listView.model.get(index).actionObj)
                 }
             }
         }

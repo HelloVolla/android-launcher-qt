@@ -171,7 +171,7 @@ WorkerScript.onMessage = function(message) {
         found = existingSuggestionObj.hasOwnProperty(item)
         if (!found) {
             // for simplicity, just adding to end instead of corresponding position in original list
-            model.append({ "text": item[0], "action": item[1], "object": item[2] })
+            model.append({ "text": item[0], "action": item[1], "actionObj": item[2] })
         }
         console.debug("Springboard | Append Suggestion: " + item[0])
     });
