@@ -169,15 +169,16 @@ LauncherPage {
             }
             TextField {
                 id: textField
-                padding: mainView.innerSpacing
+                topPadding: mainView.componentSpacing
+                bottomPadding: mainView.componentSpacing
+                leftPadding: 0.0
+                rightPadding: 0.0
                 x: mainView.innerSpacing
                 width: parent.width -mainView.innerSpacing * 2
                 placeholderText: qsTr("Filter collections")
                 color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
                 font.pointSize: mainView.largeFontSize
-                leftPadding: 0.0
-                rightPadding: 0.0
                 background: Rectangle {
                     color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
@@ -232,8 +233,8 @@ LauncherPage {
                 color: "transparent"
                 width: parent.width
                 implicitHeight: contactMenu.visible ?
-                                    contactRow.height + contactMenu.height + mainView.innerSpacing
-                                  : contactRow.height + mainView.innerSpacing
+                                    contactRow.height + contactMenu.height + mainView.componentSpacing
+                                  : contactRow.height + mainView.componentSpacing
 
                 Row {
                     id: contactRow
@@ -440,7 +441,7 @@ LauncherPage {
                 Rectangle {
                     id: newsIconBox
                     anchors.top: contactBox.top
-                    anchors.topMargin: mainView.innerSpacing * 0.5
+                    anchors.topMargin: mainView.componentSpacing * 0.5
                     anchors.left: contactBox.left
                     anchors.leftMargin: mainView.innerSpacing
                     width: collectionPage.iconSize
@@ -454,7 +455,7 @@ LauncherPage {
                 Rectangle {
                     id: notificationBadge
                     anchors.top: contactBox.top
-                    anchors.topMargin: mainView.innerSpacing * 0.5
+                    anchors.topMargin: mainView.componentSpacing * 0.5
                     anchors.left: contactBox.left
                     anchors.leftMargin: mainView.innerSpacing
                     visible: model.c_BADGE !== undefined ? model.c_BADGE : false

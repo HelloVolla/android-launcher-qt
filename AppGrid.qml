@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.2
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtQuick.XmlListModel 2.12
@@ -9,7 +10,7 @@ import FileIO 1.0
 
 LauncherPage {
     id: appLauncher
-    anchors.fill: parent
+    anchors.fill: parent    
 
     property string textInput
     property real labelPointSize: 16
@@ -137,7 +138,7 @@ LauncherPage {
 
     property int appCount: 0
     property int selectedGroup: 0
-    property int maxAppCount: 12
+    property int maxAppCount: mainView.isTablet ? 15 : 12
 
     property double lastAppsCheck: 0.0
 
@@ -194,6 +195,7 @@ LauncherPage {
              var appGroup = appLauncher.appGroups[i]
              allApps = allApps.concat(appGroup.apps)
         }
+        console.debug("AppGrid | Number of apps: " + allApps.length)
         return allApps
     }
 
@@ -248,13 +250,14 @@ LauncherPage {
                                "groupIndex": index,
                                "selectedGroupIndex": appLauncher.selectedGroup,
                                "textInput": appLauncher.textInput,
-                               "iconMap": appLauncher.iconMap,
+                               "iconMap": mainView.iconMap,
                                "labelMap": appLauncher.labelMap,
                                "phoneApp": mainView.phoneApp,
                                "messageApp": mainView.messageApp,
                                "labelPointSize": appLauncher.labelPointSize,
                                "headerPointSize": mainView.mediumFontSize,
                                "innerSpacing": mainView.innerSpacing,
+                               "componentSpacing" : mainView.componentSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
                                "accentColor": mainView.accentColor,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
@@ -285,7 +288,7 @@ LauncherPage {
 
         Column {
             id: appLauncherColumn
-            width: parent.width
+            width: parent.width// - 2 * mainView.outerSpacing
 
             Label {
                 id: headerTitle
@@ -298,15 +301,16 @@ LauncherPage {
 
             TextField {
                 id: headerTextField
-                padding: mainView.innerSpacing
+                topPadding: mainView.componentSpacing
+                bottomPadding: mainView.componentSpacing
+                leftPadding: 0.0
+                rightPadding: 0.0
                 x: mainView.innerSpacing
                 width: parent.width - mainView.innerSpacing * 2
                 placeholderText: qsTr("Filter apps")
                 color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
                 font.pointSize: mainView.largeFontSize
-                leftPadding: 0.0
-                rightPadding: 0.0
 
                 background: Rectangle {
                     color: "transparent"
@@ -363,7 +367,6 @@ LauncherPage {
                 contextMenu.dismiss()
             }
         }
-
     }
 
     Menu {

@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.2
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.12
@@ -17,24 +18,38 @@ Item {
     property string textInput: ""
 
     property double innerSpacing
+    property double componentSpacing
     property double labelPointSize
     property double headerPointSize
     property double backgroundOpacity
     property double desaturation: 1.0
-    property var accentColor
-
-
     property int groupIndex: 0
     property int selectedGroupIndex: 1
+    property int columnCount: Screen.desktopAvailableWidth < 363 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
 
     property bool unreadMessages: false
     property bool newCalls: false
-    property var notificationData:""
 
+    property var accentColor
+    property var notificationData:""
     property var iconMap: ({})
     property var labelMap: ({})
     property var apps: []
     property var pinnedShortcuts: []
+
+    Component.onCompleted: {
+        console.debug("AppGroup | Screen width: " + Screen.desktopAvailableWidth)
+        columnCount = Screen.desktopAvailableWidth < 363 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+    }
+
+    onWidthChanged: {
+        console.log("AppGroup | Width changed to " + width)
+        if (width > 820) {
+            columnCount = 8
+        } else {
+            columnCount = 5
+        }
+    }
 
     onTextInputChanged: {
         console.log("AppGroup " + groupIndex + " | onTextInputChanged")
@@ -84,7 +99,7 @@ Item {
         id: groupColumn
         width: parent.width
         topPadding: groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
-                                                     groupItem.innerSpacing / 2 : groupItem.innerSpacing
+                                                     groupItem.componentSpacing / 2 : groupItem.componentSpacing
         Component.onCompleted: {
             groupHeader.visible = !groupGrid.visible
             groupHeader2.visible = groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
@@ -118,7 +133,10 @@ Item {
         Label {
             id: groupHeader2
             anchors.horizontalCenter: parent.horizontalCenter
-            padding: groupItem.innerSpacing / 2
+            topPadding: groupItem.componentSpacing / 2
+            bottomPadding: groupItem.componentSpacing / 2
+            leftPadding: groupItem.innerSpacing / 2
+            rightPadding: groupItem.innerSpacing / 2
             visible: false // groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
             text: groupHeader.text
             color: Universal.foreground
@@ -134,9 +152,9 @@ Item {
             id: groupGrid
             width: parent.width
             height: contentHeight
-            topMargin: groupItem.groupIndex > 0 ? groupItem.innerSpacing / 2 : 0
-            cellHeight: parent.width * 0.32
-            cellWidth: parent.width * 0.25
+            topMargin: groupItem.groupIndex > 0 ? groupItem.compnentSpacing / 2 : 0
+            cellHeight: parent.width / groupItem.columnCount * 1.28
+            cellWidth: parent.width / groupItem.columnCount
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
             interactive: false
 
@@ -146,8 +164,8 @@ Item {
 
             delegate: Rectangle {
                 id: gridCell
-                width: parent.width * 0.25
-                height: parent.width * 0.32
+                width: groupGrid.cellWidth
+                height: groupGrid.cellHeight
                 color: "transparent"
 
                 property var gradientColor: Universal.background
@@ -157,8 +175,8 @@ Item {
                     id: gridCircle
                     anchors.top: gridButton.top
                     anchors.horizontalCenter: parent.horizontalCenter
-                    height: parent.width * 0.6
-                    width: parent.width * 0.6
+                    height: parent.width * 0.55
+                    width: parent.width * 0.55
                     color: Universal.foreground
                     opacity: Universal.theme === Universal.Light ? 0.1 : 0.2
                     radius: width * 0.5
@@ -167,8 +185,7 @@ Item {
                 Button {
                     id: gridButton
                     anchors.top: parent.top
-                    anchors.topMargin: parent.width * 0.08 // Adjustment
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.centerIn: gridCell
                     topPadding: groupItem.innerSpacing / 2
                     width: parent.width
                     text: model.label
@@ -183,6 +200,7 @@ Item {
                                     ? Qt.resolvedUrl(groupItem.iconMap[model.package]) : "data:image/png;base64," + model.icon
                             width: gridButton.width * 0.35
                             height: gridButton.width * 0.35
+                            cache: false
 
                             ColorOverlay {
                                 anchors.fill: buttonIcon

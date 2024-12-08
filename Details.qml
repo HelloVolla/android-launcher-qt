@@ -37,7 +37,7 @@ LauncherPage {
                 id: pinBadge
                 visible: detailPage.currentDetailHasBadge
                 width: mainView.smallFontSize * 0.6
-                height: mainView.smallFontSize * 0.6         
+                height: mainView.smallFontSize * 0.6
                 y: (pinButton.height - pinBadge.height) * 0.5
                 radius: height * 0.5
                 color: mainView.accentColor

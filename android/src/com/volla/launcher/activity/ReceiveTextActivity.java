@@ -51,6 +51,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import com.volla.smssdk.SMSUpdateManager;
 import android.os.Looper;
+import android.content.pm.ActivityInfo;
 
 public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpdateManager.ServiceConnectionListener
 {
@@ -157,6 +158,23 @@ public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpd
         NotificationPlugin.getInstance(ReceiveTextActivity.this).registerListener();
         Log.d(TAG, "Android activity created");
         handler = new Handler(Looper.getMainLooper());
+
+        if (isTablet(this)) {
+            Log.d(TAG, "Runnning on tablet");
+            // Allow both portrait and landscape on tablets
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        } else {
+            Log.d(TAG, "Runnning on phone");
+            // Force portrait mode on phones
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    private boolean isTablet(Context context) {
+        Log.d(TAG, "isTablet() called");
+        return (ReceiveTextActivity.this.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 public void connectSmsUpdateManager(Context ctx, List<String> smsItems) {

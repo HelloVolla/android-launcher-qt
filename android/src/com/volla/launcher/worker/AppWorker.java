@@ -1,6 +1,9 @@
 package com.volla.launcher.worker;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.usage.UsageStatsManager;
 import android.app.usage.UsageStats;
 import android.app.AppOpsManager;
@@ -11,6 +14,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.content.Intent;
 import android.content.Context;
+import android.content.ComponentName;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +22,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.util.Base64;
+import android.util.Log;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,6 +32,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.qtproject.qt5.android.QtNative;
 import androidnative.SystemDispatcher;
 import com.volla.launcher.storage.NotificationStorageManager;
@@ -39,6 +46,9 @@ public class AppWorker
     public static final String GET_Notification = "volla.launcher.otherAppNotificationAction";
     public static final String GOT_Notification = "volla.launcher.otherAppNotificationResponce";
     public static final String CLEAR_RED_DOT = "volla.launcher.clearRedDot";
+    public static final String GET_RUNNING_APPS = "volla.launcher.runningAppsAction";
+    public static final String GOT_RUNNING_APPS = "volla.launcher.runningAppsResponse";
+    public static final String CLOSE_RUNNUNG_APPS = "volla.launcher.closeAppsAction";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -55,6 +65,7 @@ public class AppWorker
                             ArrayList<Map> appList = new ArrayList();
 
                             final PackageManager pm = activity.getPackageManager();
+
                             final List<String> packages = Arrays.asList("com.android.browser",
                                 "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
                                 "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
@@ -142,6 +153,88 @@ public class AppWorker
                 } else if (type.equals(CLEAR_RED_DOT)) {
                      NotificationStorageManager storageManager = new NotificationStorageManager(activity);
                      storageManager.clearNotificationCount((String) message.get("package"));
+                } else if (type.equals(GET_RUNNING_APPS)) {
+                    Log.d(TAG, "Get running apps action called");
+
+                    Runnable runnable = new Runnable () {
+
+                        public void run() {
+                            ArrayList<Map> appList = new ArrayList();
+
+                            final PackageManager pm = activity.getPackageManager();
+                            final List<String> packages = Arrays.asList("com.android.browser",
+                                "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
+                                "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
+                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
+                                "com.android.quicksearchbox", "com.android.dialer", "com.android.deskclock", "com.pri.pressure",
+                                "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
+                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
+                                "com.elishaazaria.sayboard");
+
+                            ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+                            List<ActivityManager.RunningTaskInfo> runningTaskInfos = am.getRunningTasks(100);
+                            List<String> activeApps = new ArrayList();
+
+                            for (int i = 0; i < runningTaskInfos.size(); i++) {
+                                ComponentName componentInfo = runningTaskInfos.get(i).topActivity;
+                                Log.d(TAG, "Running task: " + componentInfo.getPackageName());
+                                activeApps.add(componentInfo.getPackageName());
+                            }
+
+                            Intent i = new Intent(Intent.ACTION_MAIN, null);
+                            i.addCategory(Intent.CATEGORY_LAUNCHER);
+                            List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
+                            appList.ensureCapacity(availableActivities.size());
+
+                            for (ResolveInfo ri:availableActivities) {
+                                try {
+                                    ApplicationInfo packageInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
+
+                                    if (activeApps.contains(packageInfo.packageName) && !packages.contains(packageInfo.packageName)) {
+                                        Log.d(TAG, "Found package " + packageInfo.packageName);
+                                        Map appInfo = new HashMap();
+                                        appInfo.put("package", packageInfo.packageName);
+                                        appInfo.put("label", String.valueOf(ri.loadLabel(pm)));
+                                        appInfo.put("icon", AppWorker.drawableToBase64(ri.loadIcon(pm)));
+                                        appList.add(appInfo);
+                                    }
+                                } catch (Exception e) {
+                                    Log.w(TAG, "Unknown package name: " + e.toString());
+                                }
+                            }
+
+                            Map reply = new HashMap();
+                            reply.put("apps", appList );
+                            SystemDispatcher.dispatch(GOT_RUNNING_APPS, reply);
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                } else if (type.equals(CLOSE_RUNNUNG_APPS)) {
+                    Log.d(TAG, "Close running apps action called");
+
+                    Runnable runnable = new Runnable () {
+
+                        public void run() {
+                            try {
+                                Class<?> activityManagerClass = Class.forName("android.app.ActivityTaskManager");
+                                Method mRemoveAllVisibleRecentTasks;
+                                mRemoveAllVisibleRecentTasks = activityManagerClass.getMethod("removeAllVisibleRecentTasks");
+                                mRemoveAllVisibleRecentTasks.setAccessible(true);
+                                mRemoveAllVisibleRecentTasks.invoke(activity.getSystemService("activity_task"));
+                            }
+                            catch ( ClassNotFoundException e ) {
+                                Log.e(TAG, "No Such Class Found Exception: ", e);
+                            }
+                            catch ( Exception e ) {
+                                Log.e(TAG, "General Exception occurred", e);
+                            }
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
                 }
             }
         });
@@ -173,52 +266,6 @@ public class AppWorker
         final PackageManager pm = a.getPackageManager();
         Intent app=pm.getLaunchIntentForPackage(ID);
         return app;
-    }
-
-    public static String getApplist(Activity a){
-        String list="<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>";
-        final PackageManager pm = a.getPackageManager();
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
-        for (ResolveInfo ri:availableActivities) {
-            list+="<item>";
-            list+="<package>"+ri.activityInfo.packageName+"</package>";
-            list+="<label>"+String.valueOf(ri.loadLabel(pm))+"</label>";
-            Log.d("Icon", ri.activityInfo.packageName);
-            list+="<icon>"+AppWorker.drawableToBase64(ri.loadIcon(pm))+"</icon>";
-            list+="</item>";
-        }
-        list+="</root>";
-        return list;
-    }
-
-    public static String getApplistAsJSON(Activity a){
-        String json="[\n";
-        final PackageManager pm = a.getPackageManager();
-        final List<String> packages = Arrays.asList("com.android.browser", "com.android.gallery3d",
-            "com.android.music", "com.android.fmradio", "com.android.inputmethod.latin", "com.android.stk",
-            "com.android.calendar", "com.mediatek.filemanager", "com.mediatek.cellbroadcastreceiver",
-            "com.conena.navigation.gesture.control", "com.android.quicksearchbox");
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
-        for (ResolveInfo ri:availableActivities) {
-            Log.d("Found package", ri.activityInfo.packageName);
-
-            // todo: Remove. Workaround for beta demo purpose
-            if (!packages.contains(ri.activityInfo.packageName)) {
-                Log.d("Added package", ri.activityInfo.packageName);
-                json+="{\n";
-                json+="\"package\": \"" + ri.activityInfo.packageName + "\",\n";
-                json+="\"label\": \"" + String.valueOf(ri.loadLabel(pm)) + "\",\n";
-                json+="\"icon\": \"" + AppWorker.drawableToBase64(ri.loadIcon(pm)) + "\"\n";
-                json+="},\n";
-            }
-        }
-        json=json.substring(0,json.length()-2);
-        json+="\n]";
-        return json;
     }
 
     public static String drawableToBase64 (Drawable drawable) {

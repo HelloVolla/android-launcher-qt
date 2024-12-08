@@ -4,6 +4,8 @@ import QtQuick.Controls.Universal 2.12
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.2
+import QtGraphicalEffects 1.12
+import QtPositioning 5.13
 import FileIO 1.0
 import AndroidNative 1.0 as AN
 
@@ -14,6 +16,7 @@ LauncherPage {
     property string textInput
     property bool textFocus
     property real menuheight: mainView.largeFontSize * 7 + mainView.innerSpacing * 10.5
+    property real menuWidth: 400.0
     property var textInputArea
     property var selectedObj
     property var headline
@@ -22,6 +25,7 @@ LauncherPage {
                                 qsTr("Saturday"), qsTr("Sunday"), qsTr("tomorrow")]
     property var eventRegex
     property var plugins: new Array
+    property var appButtons: new Array
 
     property bool defaultSuggestions: false
     property bool dotShortcut: true
@@ -149,7 +153,10 @@ LauncherPage {
 
                     TextArea.flickable: TextArea {
                         id: textArea
-                        padding: mainView.innerSpacing
+                        topPadding: mainView.componentSpacing
+                        bottomPadding: mainView.innerSpacing
+                        leftPadding: 0.0
+                        rightPadding: mainView.innerSpacing
                         x: mainView.innerSpacing
                         width: parent.width
                         placeholderText: qsTr("Type anything")
@@ -157,7 +164,6 @@ LauncherPage {
                         placeholderTextColor: "darkgrey"
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
-                        leftPadding: 0.0
                         inputMethodHints: Qt.ImhNoPredictiveText
 
                         background: Rectangle {
@@ -190,10 +196,11 @@ LauncherPage {
 
                 Button {
                     id: deleteButton
+                    anchors.top: flickable.top
                     text: "<font color='#808080'>×</font>"
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
-                    topPadding: 0.0
+                    topPadding: mainView.innerSpacing === mainView.componentSpacing ? 0.0 : 18.0
                     visible: textArea.preeditText !== "" || textArea.text !== ""
 
                     onClicked: {
@@ -201,7 +208,6 @@ LauncherPage {
                         textArea.focus = false
                     }
                 }
-
             }
 
             Rectangle {
@@ -216,6 +222,7 @@ LauncherPage {
             id: listModel
 
             property int indexOfFirstSuggestion: -1
+            property int indexOfFirstFunction: -1
 
             function checkContacts(contact) {
                 var fullName = contact["name"].replace(/\s/g, "_")
@@ -383,9 +390,10 @@ LauncherPage {
                 return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}\s\S+/.test(textInput)
             }
 
-            function executeAction(actionValue, actionType, actionObj, functionReference) {
+            function executeAction(actionValue, actionType, actionObj) {
                 if (actionObj !== undefined) {
-                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": " + actionObj["id"])
+                    var octionObjId = actionObj.id !== undefined ? actionObj.id : actionObj.pluginId
+                    console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType + ": object " + octionObjId)
                 } else {
                     console.log("SpringBoard | Execute selection " + actionValue + ": " + actionType)
                 }
@@ -537,7 +545,7 @@ LauncherPage {
                     case mainView.actionType.CreateEvent:
                         parseAndSaveEvent()
                         textInputArea.text = ""
-                        mainView.showToast("Event added to calendar")                       
+                        mainView.showToast("Event added to calendar")
                         break
                     case mainView.actionType.SendSignal:
                         idx = textInput.search(/\s/)
@@ -553,13 +561,13 @@ LauncherPage {
                         textInputArea.text = ""
                         break
                     case mainView.actionType.ExecutePlugin:
-                        console.log("Springboard | Will execute plugin " + functionReference.pluginId)
+                        console.log("Springboard | Will execute plugin " + actionObj.pluginId)
                         for (var i = 0; i < springBoard.plugins.length; i++) {
-                            if (functionReference.pluginId === springBoard.plugins[i].metadata.id) {
+                            if (actionObj.pluginId === springBoard.plugins[i].metadata.id) {
                                 if (selectedObj !== undefined) {
-                                    springBoard.plugins[i].executeInput(textInput, functionReference.functionId, selectedObj.entity)
+                                    springBoard.plugins[i].executeInput(textInput, actionObj.functionId, selectedObj.entity)
                                 } else {
-                                    springBoard.plugins[i].executeInput(textInput, functionReference.functionId)
+                                    springBoard.plugins[i].executeInput(textInput, actionObj.functionId)
                                 }
                             }
                         }
@@ -576,6 +584,12 @@ LauncherPage {
                             mainView.showToast(qsTr("An error occured") + ": " + actionValue + ", " + actionObj)
                             textInputArea.text = ""
                             textInputArea.forceActiveFocus()
+                        }
+                        break;
+                    case mainView.actionType.LiveContentPlugin:
+                        if (actionObj.link !== undefined && actionObj.link.length > 0) {
+                            console.debug("Springboard | Will open link '" + actionObj.link + "' of plugin " + actionObj.pluginId)
+                            Qt.openUrlExternally(actionObj.link)
                         }
                         break;
                     case mainView.actionType.SuggestContact:
@@ -601,6 +615,8 @@ LauncherPage {
                 console.log("Springboard | update model for " + textInput);
 
                 if (textInput.length < 1) {
+                    console.debug("Springboard | Will clear property")
+                    selectedObj = undefined
                     listModel.clear()
                 } else {
                     springBoardWorker.sendMessage({
@@ -615,35 +631,63 @@ LauncherPage {
                 var counter = 0
                 var pluginFunctions = new Array
                 var autocompletions = new Array
+                var liveContent = new Array
+
                 for (var i = 0; i < length; i++) {
                     console.debug("Springboard | Execute plugin " + springBoard.plugins[i].metadata.id)
-                    springBoard.plugins[i].processInput(textInput, function (success, suggestions, pluginId) {
+                    if (selectedObj !== undefined)
+                        console.debug("Springboard | " + selectedObj.pluginId)
+                    springBoard.plugins[i].processInput(springBoard.textInput, function (success, suggestions, pluginId) {
                         var result = suggestions;
                         if (success) {
                             for (var j = 0; j < result.length; j++) {
-                                if (result[j].label === undefined || result[j].label.length > 100) {
+                                if (result[j].label === undefined || result[j].label.length > 1000) {
                                     console.warn("Springboard | Missing or too long label of plugin suggestion")
+                                    console.debug("Springboard | Suggestion: " + result[j].label)
                                 }
+                                // plugin provides a function suggestion
                                 if (result[j].functionId !== undefined) {
-                                    pluginFunctions.push({"text": result[j].label,
-                                                          "action": mainView.actionType.ExecutePlugin,
-                                                          "functionReference": {"pluginId": pluginId, "functionId": result[j].functionId},
-                                                          "isFirstSuggestion": false })
+                                    pluginFunctions.push({
+                                         "text": result[j].label,
+                                         "action": mainView.actionType.ExecutePlugin,
+                                         "actionObj": {"pluginId": pluginId, "functionId": result[j].functionId},
+                                         "isFirstSuggestion": false
+                                    })
+                                // plugin provides an autocompletion and entity suggestion
+                                } else if (result[j].object !== undefined) {
+                                    autocompletions.push({
+                                        "text": result[j].label,
+                                        "action": mainView.actionType.SuggestPluginEntity,
+                                        "actionObj": {'pluginId': pluginId, 'entity': result[j].object },
+                                        "isFirstSuggestion": false
+                                    })
+                                // plugin provides live content
                                 } else {
-                                    autocompletions.push({"text": result[j].label,
-                                                          "action": mainView.actionType.SuggestPluginEntity,
-                                                          "object": {'pluginId': pluginId, 'entity': result[j].object },
-                                                          "isFirstSuggestion": false })
+                                    liveContent.push({
+                                        "text": result[j].label,
+                                        "action": mainView.actionType.LiveContentPlugin,
+                                        "actionObj": {"pluginId": pluginId, "link": result[j].link !== undefined ? result[j].link : ""},
+                                        "isFirstSuggestion": false
+                                    })
                                 }
                             }
+                            // group suggestions
                             if (counter++ === length -1) {
-                                listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length
+                                listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length + liveContent.length
+                                listModel.indexOfFirstFunction = liveContent.length
                                 console.debug("Springboard | listModel.indexOfFirstSuggestion" + listModel.indexOfFirstSuggestion )
                                 for (i = 0; i < pluginFunctions.length; i++) {
                                     if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
-                                                                      && selectedObj.pluginId === pluginFunctions[i].functionReference.pluginId)) {
-                                        console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].functionReference.pluginId)
+                                                                      && selectedObj.pluginId === pluginFunctions[i].actionObj.pluginId)) {
+                                        console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].actionObj.pluginId)
                                         listView.model.insert(0, pluginFunctions[i])
+                                    }
+                                }
+                                for (i = 0; i < liveContent.length; i++) {
+                                    if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
+                                            && selectedObj.pluginId === liveContent[i].actionObj.pluginId)) {
+                                        console.debug("Springboard | Appending plugin live content: " + liveContent[i].actionObj.pluginId)
+                                        listView.model.insert(0, liveContent[i])
                                     }
                                 }
                                 for (i = 0; i < autocompletions.length; i++) {
@@ -651,10 +695,10 @@ LauncherPage {
                                     listView.model.append(autocompletions[i])
                                 }
                             }
-                        } else{
+                        } else {
                             console.debug("Springboard | Plugin returned success false")
                         }
-                    })
+                    }, selectedObj !== undefined && selectedObj.pluginId !== undefined ? selectedObj : undefined)
                 }
             }
         }
@@ -663,25 +707,28 @@ LauncherPage {
 
         delegate: Rectangle {
             id: backgroundItem
-
             height: button.height
             width: parent.width
-            color: model.action < 20000 ? "transparent" : mainView.accentColor
+            color: model.action < 20000 ? "transparent" :
+                                          model.action < 20029 ? mainView.accentColor
+                                                               : "slategrey"
+
             Button {
                 id: button
                 width: parent.width - mainView.innerSpacing
                 leftPadding: mainView.innerSpacing
-                topPadding: model.index === 0 || model.index === listModel.indexOfFirstSuggestion ? mainView.innerSpacing : 0
+                topPadding: model.index === 0 || model.index === listModel.indexOfFirstSuggestion
+                            || model.index === listModel.indexOfFirstFunction ? mainView.innerSpacing : 0
                 bottomPadding: model.index === listModel.count - 1 || model.index === listModel.indexOfFirstSuggestion - 1
                                ? mainView.innerSpacing : mainView.innerSpacing / 2
                 anchors.top: parent.top
                 text: styledText(model.text, textInput.substring(textInput.indexOf("@") === 0 ? 1 : 0, textInput.length))
-                flat: model.action >= 20000 ? false : true
                 contentItem: Text {
                     text: button.text
                     elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
                     color: model.action < 20000 ? Universal.foreground : "white"
+                    wrapMode: Text.WordWrap
                 }
                 background: Rectangle {
                     color: "transparent"
@@ -699,13 +746,8 @@ LauncherPage {
 
                 onClicked: {
                     console.log("Springboard | Menu item clicked")
-                    if (model["functionReference"] !== undefined) {
-                        console.debug("Springboard | Function: " + model.functionReference.pluginId)
-                        listModel.executeAction(model.text, model.action, new Object, model.functionReference)
-                    } else {
-                        console.debug("Springboard | Object: " + model.object)
-                        listModel.executeAction(model.text, model.action, model.object)
-                    }
+                    console.debug("Springboard | Action: " + model.action + ", text: " + model.text + ", object: " + model.actionObj)
+                    listModel.executeAction(model.text, model.action, listView.model.get(index).actionObj)
                 }
             }
         }
@@ -732,6 +774,33 @@ LauncherPage {
                     if (message["sent"]) {
                         textInputArea.text = ""
                     }
+                } else if (type === "volla.launcher.runningAppsResponse") {
+                    console.log("Springboard | " + message["apps"].length + " running apps received")
+                    for (var i = 0; i < springBoard.appButtons.length; i++) {
+                        var appButton = springBoard.appButtons[i]
+                        appButton.destroy()
+                    }
+                    closeAppsButton.visible = false
+                    springBoard.appButtons = new Array
+                    for (i = 0; i < message["apps"].length; i++) {
+                        var app = message["apps"][i]
+                        console.log("Springboard | Will create app button " + app.package)
+                        var component = Qt.createComponent("/AppButton.qml", appSwitcher)
+                        var properties = { "app": app,
+                                           "height": mainView.innerSpacing * 2,
+                                           "width":  mainView.innerSpacing * 2,
+                                           "iconSource": app.package in mainView.iconMap
+                                                         ? Qt.resolvedUrl(mainView.iconMap[app.package])
+                                                         : ("data:image/png;base64," + app.icon),
+                                           "hasColoredIcon": mainView.useColoredIcons }
+                        if (component.status !== Component.Ready) {
+                            if (component.status === Component.Error)
+                                console.debug("Springboard | Error: "+ component.errorString() );
+                        }
+                        var object = component.createObject(appSwitcher, properties)
+                        appButtons.push(object)
+                        closeAppsButton.visible = true
+                    }
                 }
             }
         }
@@ -745,8 +814,409 @@ LauncherPage {
                 console.log("Springboard | Number of plugins: " + springBoard.plugins.length)
 
                 listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
-                if(plugins.length > 0){
+                if (plugins.length > 0){
                     listModel.iteratePlugins(0, plugins.length)
+                }
+            }
+        }
+    }
+
+    Flow {
+        id: widgetsFlow
+        visible: mainView.isTablet && listModel.count === 0
+        width: parent.width - mainView.innerSpacing
+        layoutDirection: Qt.RightToLeft
+        spacing: mainView.innerSpacing
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: mainView.innerSpacing
+        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+
+        property double sideLength: 180
+
+        Rectangle {
+            id: weatherWidget
+            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+            border.color: "grey"
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
+
+            property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
+            property string city: "Remscheid"
+            property double longitude: 51.1798
+            property double latitude: 7.1925
+
+            PositionSource {
+                id: src
+                updateInterval: 1000
+                active: true
+
+                function roundNumber(num, dec) {
+                  return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec)
+                }
+
+                onPositionChanged: {
+                    var coord = src.position.coordinate
+                    var newLongitude = roundNumber(coord.longitude, 3)
+                    var newLatitude = roundNumber(coord.latitude, 3)
+                    if ((coord.isValid && (weatherWidget.longitude !== newLongitude || weatherWidget.latitude !== newLatitude))
+                        || (!coord.isValid && dayTemperatures.text.length === 0)) {
+                        console.debug("Widget | Will update weather")
+                        //console.debug("Widget | isValid: " + coord.isValid)
+                        //console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
+                        console.debug("Widget | new ccord: " + newLongitude + ", " + newLatitude)
+                        console.debug("Widget | old ccord: " + weatherWidget.longitude + ", " + weatherWidget.latitude)
+                        if (!isNaN(newLongitude)) weatherWidget.longitude = newLongitude
+                        if (!isNaN(newLatitude)) weatherWidget.latitude = newLatitude
+                        weatherWidget.getLocation()
+                        weatherWidget.getWeather()
+                    }
+                }
+            }
+
+            Column {
+                width: parent.width
+                padding: mainView.innerSpacing * 0.5
+
+                Button {
+                    id: cityName
+                    flat: true
+
+                    contentItem: Label {
+                        color: Universal.foreground
+                        font.pointSize: mainView.mediumFontSize
+                        text: weatherWidget.city
+                        elide: Text.ElideRight
+                    }
+
+                    onClicked: {
+                        console.debug("Widget | Clicked")
+                        locatioDialog.open()
+                    }
+                }
+
+                Button {
+                    flat: true
+                    width: parent.width
+                    contentItem: Column {
+                        width: weatherWidget.width
+
+                        Row {
+                            id: weatherReport
+                            width: parent.width
+
+                            Image {
+                                id: weatherImage
+                                height: 60
+                                fillMode: Image.PreserveAspectFit
+                            }
+                            Text {
+                                id: recentTemperature
+                                height: 60
+                                color: Universal.foreground
+                                font.pointSize: mainView.largeFontSize
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+
+                        Text {
+                            id: dayTemperatures
+                            width: parent.width
+                            topPadding: mainView.innerSpacing * 0.5
+                            color: Universal.foreground
+                            font.pointSize: mainView.smallFontSize
+                            opacity: 0.6
+                        }
+
+
+                    }
+
+                    onClicked: {
+                        console.debug("Widget | Will open website for weather report")
+                        Qt.openUrlExternally("https://startpage.com/sp/search?query=" + qsTr("weather") + " " + weatherWidget.city + "&segment=startpage.volla")
+                    }
+                }
+            }
+
+            Dialog {
+                 id: locatioDialog
+                 title: qsTr("Set location")
+                 standardButtons: Dialog.Ok | Dialog.Cancel
+                 padding: mainView.innerSpacing
+                 spacing: mainView.innerSpacing
+                 width: 400
+                 height: 400
+                 anchors.centerIn: Overlay.overlay
+
+                 property string locationInput
+                 property var geoRequest: new XMLHttpRequest()
+
+                 onLocationInputChanged: {
+                     locatioDialog.geoRequest.abort()
+                     getGeoCodes(locationInput)
+                 }
+
+                 TextField {
+                     id: locationField
+                     width: parent.width
+                     placeholderText: qsTr("Enter any location")
+                     color: mainView.fontColor
+                     background: Rectangle {
+                         color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                         border.color: "transparent"
+                     }
+                     Binding {
+                         target: locatioDialog
+                         property: "locationInput"
+                         value: locationField.displayText.toLowerCase()
+                     }
+                 }
+
+                 ListView {
+                     id: locationList
+                     anchors.topMargin: mainView.innerSpacing
+                     anchors.top: locationField.bottom
+                     width: parent.width
+                     height: locatioDialog.height - locationField.height - 2 * locatioDialog.padding - locatioDialog.spacing
+
+                     delegate: Button {
+                         width: parent.width
+                         flat: true
+                         contentItem: Text {
+                             text: model.city
+                             color: mainView.fontColor
+                             horizontalAlignment: Text.AlignLeft
+                         }
+                         onClicked: {
+                             weatherWidget.city = model.city
+                             weatherWidget.longitude = model.lon
+                             weatherWidget.latitude = model.lat
+                             locatioDialog.close()
+                             locationModel.clear()
+                             weatherWidget.getWeather()
+                         }
+                     }
+
+                     model: ListModel {
+                         id: locationModel
+
+                         function update(modelArr) {
+                             console.debug("Widget | Update model: " + modelArr.length)
+
+                             var filteredModelDict = new Object
+                             var filteredModelItem
+                             var modelItem
+                             var found
+                             var i
+
+                             for (i = 0; i < modelArr.length; i++) {
+                                 filteredModelDict[modelArr[i].city] = modelArr[i]
+                             }
+
+                             var existingItemDict = new Object
+                             for (i = 0; i < count; ++i) {
+                                 var modelItemName = get(i).city
+                                 existingItemDict[modelItemName] = true
+                             }
+
+                             // remove items no longer in filtered set
+                             i = 0
+                             while (i < count) {
+                                 modelItemName = get(i).city
+                                 found = filteredModelDict.hasOwnProperty(modelItemName)
+                                 if (!found) {
+                                     console.log("Collections | Remove " + modelItemName)
+                                     remove(i)
+                                 } else {
+                                     i++
+                                 }
+                             }
+
+                             // add new items
+                             for (modelItemName in filteredModelDict) {
+                                 found = existingItemDict.hasOwnProperty(modelItemName)
+                                 if (!found) {
+                                     // for simplicity, just adding to end instead of corresponding position in original list
+                                     filteredModelItem = filteredModelDict[modelItemName]
+                                     console.log("Widget | Will append " + filteredModelItem.city)
+                                     append(filteredModelDict[modelItemName])
+                                 }
+                             }
+                         }
+                     }
+                 }
+
+                 function getGeoCodes(city) {
+                     console.debug("Widget | Will request cities: " + city)
+                     var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=20&appid=" + weatherWidget.apiKey
+                     geoRequest.onreadystatechange = function() {
+                         if (geoRequest.readyState === XMLHttpRequest.DONE) {
+                             console.debug("Widget | Geo location response: " + geoRequest.status)
+                             if (geoRequest.status === 200) {
+                                 var geoLocations = new Array
+                                 console.debug("Widget | Location response " + geoRequest.responseText)
+                                 var cities = JSON.parse(geoRequest.responseText)
+                                 var locale = Qt.locale().name.split('_')[0]
+                                 for (var i = 0; i < cities.length; i++) {
+                                     city = cities[i].hasOwnProperty("local_names") ? cities[i]["local_names"][locale] : cities[i].name
+                                     if (city === undefined) city = cities[i].name
+                                     console.debug("Widget | City: " + city)
+                                     var lat = cities[i].lat
+                                     var lon = cities[i].lon
+                                     geoLocations.push({"city": city, "lat": lat, "lon": lon})
+                                 }
+                                 locationModel.update(geoLocations)
+                             } else {
+                                 console.error("Widget | Error retrieving weather: ", cityRequest.status, cityRequest.statusText)
+                                 locationModel.update(new Array)
+                             }
+                         }
+                     }
+                     geoRequest.open("GET", geoUrl)
+                     geoRequest.send()
+                 }
+            }
+
+            function getLocation() {
+                console.debug("Widget | Will request city name for " + weatherWidget.latitude, weatherWidget.longitude)
+                var cityUrl = "http://api.openweathermap.org/geo/1.0/reverse?lat="
+                        + weatherWidget.latitude + "&lon=" + weatherWidget.longitude + "&appid=" + apiKey
+                var cityRequest = new XMLHttpRequest()
+                cityRequest.onreadystatechange = function() {
+                    if (cityRequest.readyState === XMLHttpRequest.DONE) {
+                        console.debug("Widget | Location response: " + cityRequest.status)
+                        if (cityRequest.status === 200) {
+                            var cities = JSON.parse(cityRequest.responseText)
+                            console.debug("Widget | Raw: " + cityRequest.responseText)
+                            var locale = Qt.locale().name.split('_')[0]
+                            if (cities.length > 0) {
+                                var city = cities[0].hasOwnProperty("local_names") ? cities[0]["local_names"][locale] : cities[0].name
+                            }
+                            console.debug("Widget | City: " + city)
+                            if (city !== undefined) weatherWidget.city = city
+                        } else {
+                            console.error("Widget | Error retrieving location: ", cityRequest.status, cityRequest.statusText)
+                        }
+                    }
+                }
+                cityRequest.open("GET", cityUrl)
+                cityRequest.send()
+            }
+
+            function getWeather() {
+                console.debug("Widget | Will request weather")
+                var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + weatherWidget.latitude
+                        + "&lon=" + weatherWidget.longitude + "&units=metric&appid=" + apiKey
+                console.debug("Widget | Servie URL " + weatherUrl)
+                var weatherRequest = new XMLHttpRequest()
+                weatherRequest.onreadystatechange = function() {
+                    if (weatherRequest.readyState === XMLHttpRequest.DONE) {
+                        console.debug("Widget | Weather response: " + weatherRequest.status)
+                        if (weatherRequest.status === 200) {
+                            var weather = JSON.parse(weatherRequest.responseText)
+                            weatherImage.source = "https://openweathermap.org/img/wn/" + weather.current.weather[0].icon + "@2x.png"
+                            recentTemperature.text = weather.current.temp + "°C"
+                            dayTemperatures.text = weather.daily[0].temp.min + "°C  " + weather.daily[0].temp.max + "°C"
+                        } else {
+                            console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
+                        }
+                    }
+                }
+                weatherRequest.open("GET", weatherUrl)
+                weatherRequest.send()
+            }
+
+            Timer {
+                id: weather30MinuteTimer
+                interval: 1800000  // 30 minutes in milliseconds (30 * 60 * 1000)
+                repeat: true       // Set to true to repeat every 30 minutes
+                running: true      // Start the timer immediately
+                onTriggered: {
+                    weatherWidget.getWeather();  // Call the function to execute service
+                }
+            }
+        }
+
+        Rectangle {
+            id: clockWidget
+            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+            border.color: "grey"
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
+
+            // todo
+            Clock {
+                id: myClock
+                width: 180
+                height: 180
+            }
+        }
+
+        Rectangle {
+            id: noteWidget
+            color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+            border.color: "grey"
+            width: widgetsFlow.sideLength
+            height: widgetsFlow.sideLength
+
+            property var note
+
+            Component.onCompleted: {
+                var noteArr = mainView.getNotes()
+                noteArr.sort(function(a, b) {
+                    var sortPinned = Number(b.pinned) - Number(a.pinned)
+                    if (sortPinned !== 0) {
+                        return sortPinned
+                    } else {
+                        return b.date - a.date
+                    }
+                })
+                if (noteArr.length > 0) {
+                    noteWidget.note = noteArr[0]
+                    console.debug("Widget | Note: " + noteWidget.note.content)
+                }
+            }
+
+            Column {
+                width: noteWidget.width
+                padding: mainView.innerSpacing * 0.5
+
+                Image {
+                    id: notesIcon
+                    width: 40
+                    height: 40
+                    source: "icons/notes@4x.png"
+
+                    ColorOverlay {
+                        anchors.fill: notesIcon
+                        source: notesIcon
+                        color: Universal.foreground
+                    }
+                }
+
+                Button {
+                    id: noteButton
+                    width: noteWidget.width - mainView.innerSpacing
+                    height: noteWidget.height - notesIcon.height - mainView.innerSpacing
+                    flat: true
+                    highlighted: false
+
+                    contentItem: Label {
+                        id: noteLabel
+                        anchors.fill: noteButton
+                        padding: 4
+                        text: noteWidget.note !== undefined ? noteWidget.note.content : ""
+                        elide: Text.ElideRight
+                        textFormat: Text.PlainText
+                        wrapMode: Text.Wrap
+                    }
+
+                    onClicked: {
+                        console.log("Widget | Note clicked")
+                        mainView.updateCollectionPage(mainView.collectionMode.Notes)
+                        mainView.updateDetailPage(mainView.detailMode.Note, noteWidget.note.id, undefined,
+                                                  noteWidget.note.date, noteWidget.note.content, noteWidget.note.pinned)
+                    }
                 }
             }
         }
@@ -754,10 +1224,13 @@ LauncherPage {
 
     MouseArea {
         id: shortcutMenu
-        width: parent.width
+        width: mainView.isTablet ? springBoard.menuWidth
+                                 : springBoard.width
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right
+        anchors.rightMargin: -mainView.outerSpacing
+
         preventStealing: true
         enabled: !textInputArea.activeFocus && !defaultSuggestions
 
@@ -783,9 +1256,10 @@ LauncherPage {
             if (mouseX > rbPoint.x && mouseX < rbPoint.x + rootMenuButton.width
                     && mouseY > touchY && mouseY < touchY + touchHeight) {
                 console.log("Springboard | enable menu")
+                console.log("Springboard | width" + parent.width, shortcutMenu.width, shortcutColumn.width)
                 //shortcutBackground.visible = true
                 shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
-                shortcutBackground.width = roundedShortcutMenu ? parent.width - mainView.innerSpacing * 4 : parent.width
+                shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
                 shortcutBackground.height = shortcutColumn.height
                 shortcutColumn.opacity = 1
             }
@@ -829,11 +1303,11 @@ LauncherPage {
                 console.log("Springboard | Update selected meneu item to " + selectedItem.text)
                 selectedMenuItem = selectedItem
             }
-        }        
+        }
 
         function createShortcuts(shortcuts) {
-            var leftDistance = Screen.width / 4
-            var componentWidth = Screen.width - leftDistance
+            var leftDistance = mainView.innerSpacing * 4
+            var componentWidth = Screen.width > 360 ? Screen.width * 0.6 - leftDistance : Screen.width - leftDistance
             console.log("Springboard | Width " + componentWidth)
             for (var i = 0; i < shortcuts.length; i++) {
                 if (shortcuts[i]["activated"]) {
@@ -957,10 +1431,13 @@ LauncherPage {
             id: shortcutColumn
             visible: true // shortcutBackground.visible
             opacity: 0.0
-            width: parent.width
-            // height: menuheight
+            width: parent.width - mainView.innerSpacing * 2
             topPadding: mainView.innerSpacing * 1.5
+            rightPadding: mainView.innerSpacing
+            leftPadding: mainView.innerSpacing
             bottomPadding: mainView.innerSpacing
+            anchors.right: parent.right
+            anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 
@@ -985,6 +1462,51 @@ LauncherPage {
             anchors.rightMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
             anchors.bottom: parent.bottom
             anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+        }
+    }
+
+    Column {
+        id: appSwitcher
+        x: dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing
+        anchors.bottom: closeAppsButton.top
+        anchors.bottomMargin: mainView.innerSpacing
+        spacing: mainView.innerSpacing
+        visible: mainView.isTablet
+    }
+
+    Button {
+        id: closeAppsButton
+        x: dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+        width: mainView.innerSpacing * 2
+        height: mainView.innerSpacing * 2
+        visible: false
+        flat: true
+        background: Rectangle {
+            color: "transparent"
+            opacity: Universal.theme === Universal.Light ? 0.4 : 0.6
+            radius: width * 0.5
+            border.color: Universal.foreground
+        }
+        contentItem: Item {
+            anchors.fill: parent
+            Text {
+                opacity: 1.0
+                anchors.centerIn: parent
+                text: qsTr("x")
+                color: Universal.foreground
+            }
+        }
+        onClicked: {
+            console.log("Springboard | Close all apps")
+            var openApps = new Array
+            for (var i = 0; i < appButtons.length; i++) {
+                openApps.push(appButtons[i].app.package)
+            }
+            AN.SystemDispatcher.dispatch("volla.launcher.closeAppsAction", {"packages": openApps})
+            appSwitcher.visible = false;
+            closeAppsButton.visible = false;
         }
     }
 }
