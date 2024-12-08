@@ -23,21 +23,24 @@ Item {
     property double headerPointSize
     property double backgroundOpacity
     property double desaturation: 1.0
-    property var accentColor
-
-
     property int groupIndex: 0
     property int selectedGroupIndex: 1
-    property int columnCount: Screen.desktopAvailableWidth < 360 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+    property int columnCount: Screen.desktopAvailableWidth < 363 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
 
     property bool unreadMessages: false
     property bool newCalls: false
-    property var notificationData:""
 
+    property var accentColor
+    property var notificationData:""
     property var iconMap: ({})
     property var labelMap: ({})
     property var apps: []
     property var pinnedShortcuts: []
+
+    Component.onCompleted: {
+        console.debug("AppGroup | Screen width: " + Screen.desktopAvailableWidth)
+        columnCount = Screen.desktopAvailableWidth < 363 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+    }
 
     onWidthChanged: {
         console.log("AppGroup | Width changed to " + width)
@@ -197,6 +200,7 @@ Item {
                                     ? Qt.resolvedUrl(groupItem.iconMap[model.package]) : "data:image/png;base64," + model.icon
                             width: gridButton.width * 0.35
                             height: gridButton.width * 0.35
+                            cache: false
 
                             ColorOverlay {
                                 anchors.fill: buttonIcon

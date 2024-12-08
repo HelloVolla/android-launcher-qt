@@ -1391,7 +1391,7 @@ LauncherPage {
                                 }
                             }
                         };
-                        xhr.open("GET", dpluginListUrl);
+                        xhr.open("GET", pluginListUrl);
                         console.log("Settings | Sending available plugins request");
                         xhr.send();
                     }
