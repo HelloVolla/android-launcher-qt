@@ -1225,7 +1225,7 @@ LauncherPage {
     MouseArea {
         id: shortcutMenu
         width: mainView.isTablet ? springBoard.menuWidth
-                                 : Screen.desktopAvailableWidth / Screen.devicePixelRatio
+                                 : springBoard.width
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right

@@ -110,7 +110,7 @@ ApplicationWindow {
 
         property real outerSpacing: Screen.desktopAvailableWidth > 362 ? 100 : 0
         property real innerSpacing : Screen.desktopAvailableWidth > 362 ? 22 : 22 // 22.0
-        property real componentSpacing: 22 // Screen.desktopAvailableWidth > 362 ? 32 : 22
+        property real componentSpacing: Screen.desktopAvailableWidth > 362 ? 32 : 22
         property real headerFontSize: 36.0
         property real largeFontSize: 20.0
         property real mediumFontSize: 18.0
