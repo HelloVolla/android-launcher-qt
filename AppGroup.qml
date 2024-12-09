@@ -25,7 +25,7 @@ Item {
     property double desaturation: 1.0
     property int groupIndex: 0
     property int selectedGroupIndex: 1
-    property int columnCount: Screen.desktopAvailableWidth < 363 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+    property int columnCount: Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
 
     property bool unreadMessages: false
     property bool newCalls: false
@@ -39,7 +39,7 @@ Item {
 
     Component.onCompleted: {
         console.debug("AppGroup | Screen width: " + Screen.desktopAvailableWidth)
-        columnCount = Screen.desktopAvailableWidth < 363 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+        columnCount = Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
     }
 
     onWidthChanged: {

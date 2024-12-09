@@ -7,8 +7,8 @@ Page {
         anchors.fill: parent
         color: "transparent"
     }
-    anchors.topMargin: Screen.desktopAvailableWidth > 362 ? 22 : 0
-    anchors.bottomMargin: Screen.desktopAvailableWidth > 362 ? 22 : 0
-    anchors.leftMargin: Screen.desktopAvailableWidth > 362 ? 100 : 0
-    anchors.rightMargin: Screen.desktopAvailableWidth > 362 ? 100 : 0
+    anchors.topMargin: Screen.desktopAvailableWidth > 520 ? 22 : 0
+    anchors.bottomMargin: Screen.desktopAvailableWidth > 520 ? 22 : 0
+    anchors.leftMargin: Screen.desktopAvailableWidth > 520 ? 100 : 0
+    anchors.rightMargin: Screen.desktopAvailableWidth > 520 ? 100 : 0
 }
