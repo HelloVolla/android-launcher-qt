@@ -1224,12 +1224,11 @@ LauncherPage {
 
     MouseArea {
         id: shortcutMenu
-        width: mainView.isTablet ? springBoard.menuWidth
-                                 : springBoard.width
+        width: Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.rightMargin: -mainView.outerSpacing
+        anchors.rightMargin: 0 - mainView.outerSpacing
 
         preventStealing: true
         enabled: !textInputArea.activeFocus && !defaultSuggestions
@@ -1307,7 +1306,7 @@ LauncherPage {
 
         function createShortcuts(shortcuts) {
             var leftDistance = mainView.innerSpacing * 4
-            var componentWidth = Screen.width > 360 ? Screen.width * 0.6 - leftDistance : Screen.width - leftDistance
+            var componentWidth = Screen.width > 363 ? Screen.width * 0.6 - leftDistance : Screen.width - leftDistance
             console.log("Springboard | Width " + componentWidth)
             for (var i = 0; i < shortcuts.length; i++) {
                 if (shortcuts[i]["activated"]) {
