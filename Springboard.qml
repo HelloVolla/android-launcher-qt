@@ -1255,7 +1255,7 @@ LauncherPage {
             if (mouseX > rbPoint.x && mouseX < rbPoint.x + rootMenuButton.width
                     && mouseY > touchY && mouseY < touchY + touchHeight) {
                 console.log("Springboard | enable menu")
-                console.log("Springboard | width" + parent.width, shortcutMenu.width, shortcutColumn.width)
+                console.log("Springboard | width " + parent.width, shortcutMenu.width, shortcutColumn.width)
                 //shortcutBackground.visible = true
                 shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
                 shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
@@ -1306,7 +1306,7 @@ LauncherPage {
 
         function createShortcuts(shortcuts) {
             var leftDistance = mainView.innerSpacing * 4
-            var componentWidth = Screen.width > 363 ? Screen.width * 0.6 - leftDistance : Screen.width - leftDistance
+            var componentWidth = Screen.width > 520 ? Screen.width * 0.6 - leftDistance : Screen.width - leftDistance
             console.log("Springboard | Width " + componentWidth)
             for (var i = 0; i < shortcuts.length; i++) {
                 if (shortcuts[i]["activated"]) {
@@ -1428,7 +1428,7 @@ LauncherPage {
 
         Column {
             id: shortcutColumn
-            visible: true // shortcutBackground.visible
+            visible: true
             opacity: 0.0
             width: parent.width - mainView.innerSpacing * 2
             topPadding: mainView.innerSpacing * 1.5
