@@ -412,7 +412,7 @@ LauncherPage {
                                       true,
                                       mainView.settingsAction.CREATE,
                                       {"id": contextMenu.app["itemId"],
-                                       "name": qsTr("Open") + " " + contextMenu.app["label"],
+                                       "name": contextMenu.app["label"],
                                        "activated": true} )
             }
         }
