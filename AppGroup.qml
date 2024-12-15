@@ -25,7 +25,7 @@ Item {
     property double desaturation: 1.0
     property int groupIndex: 0
     property int selectedGroupIndex: 1
-    property int columnCount: Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+    property int columnCount: Screen.desktopAvailableWidth < 521 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
 
     property bool unreadMessages: false
     property bool newCalls: false
