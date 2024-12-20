@@ -125,6 +125,7 @@ LauncherPage {
         "eu.faircode.email" : qsTr("Mail"),
         "com.emclient.mailclient" : qsTr("Mail"),
         "net.thunderbird.android" : qsTr("Mail"),
+        "com.contactoffice.mailfence" : qsTr("Mail"),
         "com.fsck.k9": qsTr("Mail"),
         "com.blackberry.hub": qsTr("BlackBerry Hub"),
         "at.bitfire.davdroid": qsTr("Sync"),
