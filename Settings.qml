@@ -918,10 +918,16 @@ LauncherPage {
                     function setData(data) {
                         console.log("Settings | Menu size is " + data.length)
                         clear()
+                        data.forEach(function(app, i) {
+                            data[i].label = app.package in mainView.labelMap && app.shortcutId === undefined
+                                    ? qsTr(mainView.labelMap[app.package]) : app.label
+                            data[i].itemId = app.shortcutId !== undefined ? app.shortcutId : app.package
+                        })
                         for (var i = 0; i < data.length; i++) {
                             append(data[i])
                         }
                     }
+
                 }
             }
 
