@@ -186,7 +186,7 @@ Item {
                     id: gridButton
                     anchors.top: parent.top
                     anchors.centerIn: gridCell
-                    topPadding: groupItem.innerSpacing / 2
+                    topPadding: (gridCircle.height - buttonIcon.height) / 2 //groupItem.innerSpacing / 2
                     width: parent.width
                     text: model.label
                     contentItem: Column {

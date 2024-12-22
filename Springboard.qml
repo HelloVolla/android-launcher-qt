@@ -927,8 +927,6 @@ LauncherPage {
                             font.pointSize: mainView.smallFontSize
                             opacity: 0.6
                         }
-
-
                     }
 
                     onClicked: {
@@ -1129,8 +1127,8 @@ LauncherPage {
             Timer {
                 id: weather30MinuteTimer
                 interval: 1800000  // 30 minutes in milliseconds (30 * 60 * 1000)
-                repeat: true       // Set to true to repeat every 30 minutes
-                running: true      // Start the timer immediately
+                repeat: widgetsFlow.visible      // Set to true to repeat every 30 minutes
+                running: widgetsFlow.visible     // Start the timer immediately
                 onTriggered: {
                     weatherWidget.getWeather();  // Call the function to execute service
                 }
