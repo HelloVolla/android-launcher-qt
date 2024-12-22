@@ -152,7 +152,7 @@ Item {
             id: groupGrid
             width: parent.width
             height: contentHeight
-            topMargin: groupItem.groupIndex > 0 ? groupItem.compnentSpacing / 2 : 0
+            //topMargin: groupItem.groupIndex > 0 ? groupItem.compnentSpacing / 2 : 0
             cellHeight: parent.width / groupItem.columnCount * 1.28
             cellWidth: parent.width / groupItem.columnCount
             visible: groupItem.groupIndex === groupItem.selectedGroupIndex
