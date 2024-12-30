@@ -81,7 +81,7 @@ Item {
 
     onSelectedGroupIndexChanged: {
         console.log("AppGroup " + groupIndex + " | Selected group changed to " + selectedGroupIndex)
-        //groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ? groupItem.innerSpacing / 2 : groupItem.innerSpacing
+        groupColumn.topPadding = groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ? groupItem.innerSpacing / 2 : groupItem.innerSpacing
     }
 
     function showApps(appsShouldBeVisible) {
