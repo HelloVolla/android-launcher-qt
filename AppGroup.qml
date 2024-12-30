@@ -29,6 +29,9 @@ Item {
 
     property bool unreadMessages: false
     property bool newCalls: false
+    property bool isHeaderVisible: groupIndex !== selectedGroupIndex
+    property bool isHeader2Visible: groupIndex === selectedGroupIndex && groupIndex > 0 && groupLabel.toLowerCase()
+    property bool isGridVisible: groupIndex === selectedGroupIndex
 
     property var accentColor
     property var notificationData:""
@@ -78,8 +81,7 @@ Item {
 
     onSelectedGroupIndexChanged: {
         console.log("AppGroup " + groupIndex + " | Selected group changed to " + selectedGroupIndex)
-        groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
-                                         groupItem.innerSpacing / 2 : groupItem.innerSpacing
+        groupColumn.topPadding = groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ? groupItem.innerSpacing / 2 : groupItem.innerSpacing
     }
 
     function showApps(appsShouldBeVisible) {
@@ -100,13 +102,9 @@ Item {
         width: parent.width
         topPadding: groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
                                                      groupItem.componentSpacing / 2 : groupItem.componentSpacing
-        Component.onCompleted: {
-            groupHeader.visible = !groupGrid.visible
-            groupHeader2.visible = groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
-        }
-
         Button {
             id: groupHeader
+            visible: groupItem.isHeaderVisible
             anchors.horizontalCenter: parent.horizontalCenter
             flat: true
             text: groupItem.groupLabel
@@ -117,7 +115,6 @@ Item {
                 opacity: 0.5
                 font.pointSize: groupItem.headerPointSize
             }
-            visible: false // !groupGrid.visible
             background: Rectangle {
                 color: "transparent"
                 border.color: Universal.foreground
@@ -132,12 +129,12 @@ Item {
 
         Label {
             id: groupHeader2
+            visible: groupItem.isHeader2Visible
             anchors.horizontalCenter: parent.horizontalCenter
             topPadding: groupItem.componentSpacing / 2
             bottomPadding: groupItem.componentSpacing / 2
             leftPadding: groupItem.innerSpacing / 2
             rightPadding: groupItem.innerSpacing / 2
-            visible: false // groupGrid.visible && groupItem.groupIndex > 0 && groupItem.groupLabel.toLowerCase() !== "apps"
             text: groupHeader.text
             color: Universal.foreground
             opacity: 0.5
@@ -152,10 +149,9 @@ Item {
             id: groupGrid
             width: parent.width
             height: contentHeight
-            topMargin: groupItem.groupIndex > 0 ? groupItem.compnentSpacing / 2 : 0
             cellHeight: parent.width / groupItem.columnCount * 1.28
             cellWidth: parent.width / groupItem.columnCount
-            visible: groupItem.groupIndex === groupItem.selectedGroupIndex
+            visible: groupItem.isGridVisible
             interactive: false
 
             model: groupModel
