@@ -226,7 +226,7 @@ ApplicationWindow {
         property var fontColor: Universal.foreground
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
-        property bool useColetedIdons: settings.useColoredIcons
+        property bool useColoredIcons: settings.useColoredIcons
         property bool isTablet: Screen.desktopAvailableWidth > 520
         property int maxTitleLength: 120
 
@@ -1273,7 +1273,7 @@ ApplicationWindow {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
             }
             mainView.useVibration = useHapticMenus
-            mainView.useColetedIdons = useColoredIcons
+            mainView.useColoredIcons = useColoredIcons
             if (settings.sync) {
                 settings.sync()
             }
