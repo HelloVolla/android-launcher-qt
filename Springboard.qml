@@ -848,7 +848,7 @@ LauncherPage {
 
             PositionSource {
                 id: src
-                updateInterval: 1000
+                updateInterval: 60000
                 active: true
 
                 function roundNumber(num, dec) {
@@ -859,11 +859,14 @@ LauncherPage {
                     var coord = src.position.coordinate
                     var newLongitude = roundNumber(coord.longitude, 3)
                     var newLatitude = roundNumber(coord.latitude, 3)
-                    if ((coord.isValid && (weatherWidget.longitude !== newLongitude || weatherWidget.latitude !== newLatitude))
+                    if ((coord.isValid && (Math.abs(mainView.longitude - newLongitude) >= 0.10 || Math.abs(mainView.latitude
+                                                                                                           - newLatitude) >= 0.10))
                         || (!coord.isValid && dayTemperatures.text.length === 0)) {
                         console.debug("Widget | Will update weather")
                         //console.debug("Widget | isValid: " + coord.isValid)
                         //console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
+                        mainView.latitude = coord.latitude;
+                        mainView.longitude = coord.longitude;
                         console.debug("Widget | new ccord: " + newLongitude + ", " + newLatitude)
                         console.debug("Widget | old ccord: " + weatherWidget.longitude + ", " + weatherWidget.latitude)
                         if (!isNaN(newLongitude)) weatherWidget.longitude = newLongitude
