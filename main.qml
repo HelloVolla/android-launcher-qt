@@ -227,9 +227,6 @@ ApplicationWindow {
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
         property bool useColoredIcons: settings.useColoredIcons
-        property string city: settings.city
-        property double longitude: settings.longitude
-        property double latitude: settings.latitude
         property bool isTablet: Screen.desktopAvailableWidth > 520
         property int maxTitleLength: 120
 
@@ -1201,9 +1198,6 @@ ApplicationWindow {
         property bool sttChecked: false
         property bool signalIsActivated: false
         property bool useColoredIcons: false
-        property double longitude: 51.1798
-        property double latitude: 7.1925
-        property string city: "Remscheid"
         property bool showAppsAtStartup: false
         property bool useHapticMenus: true
         property double blurEffect: 60.0

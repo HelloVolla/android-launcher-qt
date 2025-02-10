@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.12
 import QtPositioning 5.13
+import Qt.labs.settings 1.0
 import FileIO 1.0
 import AndroidNative 1.0 as AN
 
@@ -21,8 +22,8 @@ LauncherPage {
     property var selectedObj
     property var headline
 
-    property var eventGlossar: [qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"), qsTr("Thursday"), qsTr("Friday"),
-                                qsTr("Saturday"), qsTr("Sunday"), qsTr("tomorrow")]
+    property var eventGlossar: [qsTr("Sunday"), qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"), qsTr("Thursday"), qsTr("Friday"),
+                                qsTr("Saturday"), qsTr("tomorrow")]
     property var eventRegex
     property var plugins: new Array
     property var appButtons: new Array
@@ -44,7 +45,7 @@ LauncherPage {
             eventRegexStr = eventRegexStr.concat(eventGlossar[i])
             if (i < eventGlossar.length - 1) eventRegexStr = eventRegexStr.concat("|")
         }
-        eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S.*)")
+        eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S(.*\\n?)*)")
         eventRegex = new RegExp(eventRegexStr, "gim")
 
         var installedPlugins = mainView.getInstalledPlugins()
@@ -311,11 +312,12 @@ LauncherPage {
                 var pattern2 = /^(\d{2,4})\/(\d{1,2})\/(\d{1,2})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
                 if (eventRegex.test(textInput)) {
                     var day = d.getDay()
-                    var plannedDay = eventGlossar.indexOf(textInput.replace(eventRegex, '$1'))
+                     var plannedDay = eventGlossar.indexOf(textInput.replace(eventRegex, '$1'))
                     var daysToAdd = plannedDay > day ? plannedDay - day : 7 - plannedDay
-                    if (plannedDay === 8) daysToAdd = 1
+                    if (daysToAdd === 8) daysToAdd = 1
                     var eventDate = new Date()
                     eventDate.setDate(eventDate.getDate() + daysToAdd)
+                    console.debug("Springboard | eventDate: " + eventDate)
                     var year = eventDate.getFullYear()
                     var date = eventDate.getDate()
                     var month = eventDate.getMonth()
@@ -842,14 +844,15 @@ LauncherPage {
             height: widgetsFlow.sideLength
 
             property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
-            property string city: "Remscheid"
-            property double longitude: 51.1798
-            property double latitude: 7.1925
+            property string city: weatherSettings.city
+            property double longitude:  weatherSettings.longitude
+            property double latitude: weatherSettings.latitude
+            property bool isManuallyDefined: weatherSettings.isManuallyDefined
 
             PositionSource {
                 id: src
                 updateInterval: 60000
-                active: true
+                active: widgetsFlow.visible && !weatherWidget.isManuallyDefined
 
                 function roundNumber(num, dec) {
                   return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec)
@@ -859,14 +862,14 @@ LauncherPage {
                     var coord = src.position.coordinate
                     var newLongitude = roundNumber(coord.longitude, 3)
                     var newLatitude = roundNumber(coord.latitude, 3)
-                    if ((coord.isValid && (Math.abs(mainView.longitude - newLongitude) >= 0.10 || Math.abs(mainView.latitude
-                                                                                                           - newLatitude) >= 0.10))
+                    if ((coord.isValid && (Math.abs(mainView.longitude - newLongitude) >= 0.10
+                                           || Math.abs(mainView.latitude - newLatitude) >= 0.10))
                         || (!coord.isValid && dayTemperatures.text.length === 0)) {
                         console.debug("Widget | Will update weather")
                         //console.debug("Widget | isValid: " + coord.isValid)
                         //console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
-                        mainView.latitude = coord.latitude;
-                        mainView.longitude = coord.longitude;
+                        weatherWidget.latitude = coord.latitude;
+                        weatherWidget.longitude = coord.longitude;
                         console.debug("Widget | new ccord: " + newLongitude + ", " + newLatitude)
                         console.debug("Widget | old ccord: " + weatherWidget.longitude + ", " + weatherWidget.latitude)
                         if (!isNaN(newLongitude)) weatherWidget.longitude = newLongitude
@@ -995,6 +998,10 @@ LauncherPage {
                              locatioDialog.close()
                              locationModel.clear()
                              weatherWidget.getWeather()
+                             weatherSettings.city = model.city
+                             weatherSettings.longitude = model.lon
+                             weatherSettings.latitude = model.lat
+                             weatherSettings.sync()
                          }
                      }
 
@@ -1134,6 +1141,23 @@ LauncherPage {
                 running: widgetsFlow.visible     // Start the timer immediately
                 onTriggered: {
                     weatherWidget.getWeather();  // Call the function to execute service
+                }
+            }
+
+            Settings {
+                id: weatherSettings
+                property string city: "Remscheid"
+                property double longitude: 51.1798
+                property double latitude: 7.1925
+                property bool isManuallyDefined: false
+
+                Component.objectName: {
+                    if (weatherSettings.isManuallyDefined && weatherWidget.city !== weatherSettings.city) {
+                        weatherWidget.city = weatherSettings.city
+                        weatherWidget.longitude = weatherSettings.longitude
+                        weatherWidget.latitude = weatherSettings.latitude
+                        weatherWidget.getWeather()
+                    }
                 }
             }
         }
