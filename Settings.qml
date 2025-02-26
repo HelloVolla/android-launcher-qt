@@ -96,16 +96,19 @@ LauncherPage {
                         }
 
                         Component.onCompleted: {
-                            theme = themeSettings.theme
-                            switch (themeSettings.theme) {
+                            theme = mainView.vollaTheme
+                            switch (mainView.vollaTheme) {
                             case mainView.theme.Dark:
                                 text = qsTr("Dark Mode")
                                 break
                             case mainView.theme.Light:
                                 text = qsTr("Light Mode")
                                 break
-                            case mainView.theme.Translucent:
-                                text = qsTr("Translucent Mode")
+                            case mainView.theme.DarkTranslucent:
+                                text = qsTr("Dark Translucent Mode")
+                                break
+                            case mainView.theme.LightTranslucent:
+                                text = qsTr("Light Translucent Mode")
                                 break
                             default:
                                 console.log("Settings | Unknown theme selected: " + mainView.theme)
@@ -147,17 +150,34 @@ LauncherPage {
                         fontPointSize: mainView.mediumFontSize
                     }
                     HighlightButton {
-                        id: translucentModeOption
+                        id: darkTranslucentModeOption
 
-                        property var theme: mainView.theme.Translucent
+                        property var theme: mainView.theme.DarkTranslucent
+
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing
+                        width: parent.width
+                        visible: themeSettingsItem.menuState
+                        text: qsTr("Dark Translucent Mode")
+                        boldText: themeSettingsItem.selectedMenuItem === darkTranslucentModeOption
+                        textColor: "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
+                        fontPointSize: mainView.mediumFontSize
+                    }
+                    HighlightButton {
+                        id: lightTranslucentModeOption
+
+                        property var theme: mainView.theme.LightTranslucent
 
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
                         bottomPadding: mainView.innerSpacing * 2
                         width: parent.width
                         visible: themeSettingsItem.menuState
-                        text: qsTr("Translucent Mode")
-                        boldText: themeSettingsItem.selectedMenuItem === translucentModeOption
+                        text: qsTr("Light Translucent Mode")
+                        boldText: themeSettingsItem.selectedMenuItem === lightTranslucentModeOption
                         textColor: "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
@@ -206,16 +226,32 @@ LauncherPage {
                 onMouseYChanged: {
                     var firstPoint = mapFromItem(darkModeOption, 0, 0)
                     var secondPoint = mapFromItem(lightModeOption, 0, 0)
-                    var thirdPoint = mapFromItem(translucentModeOption, 0, 0)
+                    var thirdPoint = mapFromItem(darkTranslucentModeOption, 0, 0)
+                    var forthPoint = mapFromItem(lightTranslucentModeOption, 0, 0)
+                    if(firstPoint.y === 0){
+                        firstPoint.y = firstPoint.y+darkModeOption.height
+                    }
+                    if(secondPoint.y === 0){
+                        secondPoint.y = firstPoint.y+lightModeOption.height
+                    }
+                    if(thirdPoint.y === 0){
+                        thirdPoint.y = secondPoint.y+darkModeOption.height
+                    }
+                    if(forthPoint.y === 0){
+                        forthPoint.y = thirdPoint.y+darkModeOption.height
+                    }
+
                     var selectedItem
 
                     if (mouseY > firstPoint.y && mouseY < firstPoint.y + darkModeOption.height) {
                         selectedItem = darkModeOption
                     } else if (mouseY > secondPoint.y && mouseY < secondPoint.y + lightModeOption.height) {
                         selectedItem = lightModeOption
-                    } else if (mouseY > thirdPoint.y && mouseY < thirdPoint.y + translucentModeOption.height) {
-                        selectedItem = translucentModeOption
-                    } else {
+                    } else if (mouseY > thirdPoint.y && mouseY < thirdPoint.y + darkTranslucentModeOption.height) {
+                        selectedItem = darkTranslucentModeOption
+                    } else if (mouseY > forthPoint.y && mouseY < forthPoint.y + lightTranslucentModeOption.height) {
+                        selectedItem = lightTranslucentModeOption
+                    }else {
                         selectedItem = themeSettingsItemTitle
                     }
                     if (selectedMenuItem !== selectedItem) {
@@ -231,8 +267,10 @@ LauncherPage {
                     console.log("Settings | Execute mode selection: " + selectedMenuItem.text + ", " + selectedMenuItem.theme)
                     if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== themeSettingsItemTitle) {
                         themeSettingsItemTitle.text = selectedMenuItem.text
+                        themeSettingsItemTitle.theme = selectedMenuItem.theme
 
                         themeSettings.theme = selectedMenuItem.theme
+                        mainView.vollaTheme = themeSettings.theme
 
                         if (themeSettings.sync) {
                             themeSettings.sync()
@@ -247,9 +285,13 @@ LauncherPage {
                                 console.log("Setting | Enable light mode")
                                 mainView.switchTheme(mainView.theme.Light, true)
                                 break
-                            case mainView.theme.Translucent:
-                                console.log("Setting | Enable translucent mode")
-                                mainView.switchTheme(mainView.theme.Translucent, true)
+                            case mainView.theme.DarkTranslucent:
+                                console.log("Setting | Enable Dark translucent mode")
+                                mainView.switchTheme(mainView.theme.DarkTranslucent, true)
+                                break
+                            case mainView.theme.LightTranslucent:
+                                console.log("Setting | Enable Light translucent mode")
+                                mainView.switchTheme(mainView.theme.LightTranslucent, true)
                                 break
                             default:
                                 console.log("Settings | Unknown theme selected: " + themeSettings.theme)

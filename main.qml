@@ -146,8 +146,10 @@ ApplicationWindow {
         property var theme: {
             'Light': 0,
             'Dark': 1,
-            'Translucent': 2
+            'LightTranslucent': 2,
+            'DarkTranslucent': 3
         }
+        property var vollaTheme : 1
         property var actionType: {
             'SuggestContact': 0,
             'SuggestPluginEntity' : 1,
@@ -552,6 +554,7 @@ ApplicationWindow {
         }
 
         function switchTheme(theme, updateLockScreen) {
+            mainView.vollaTheme = theme
             if (settings.sync) {
                 settings.sync()
             }
@@ -569,11 +572,17 @@ ApplicationWindow {
                 mainView.backgroundColor = "white"
                 mainView.fontColor = "black"
                 break
-            case mainView.theme.Translucent:
+            case mainView.theme.DarkTranslucent:
                 Universal.theme = Universal.Dark
                 mainView.backgroundOpacity = 0.3
                 mainView.backgroundColor = "transparent"
                 mainView.fontColor = "white"
+            break
+            case mainView.theme.LightTranslucent:
+                Universal.theme = Universal.Light
+                mainView.backgroundOpacity = 0.3
+                mainView.backgroundColor = "transparent"
+                mainView.fontColor = "black"
                 break
             default:
                 console.log("MainView | Not supported theme: " + theme)
@@ -1153,10 +1162,20 @@ ApplicationWindow {
                     }
                 } else if (type === "volla.launcher.uiModeChanged") {
                     if (message["uiMode"] !== settings.theme) {
+                        settings.theme = message["uiMode"]
                         if (message["uiMode"] === mainView.theme.Light) {
-                            mainView.switchTheme(mainView.theme.Light, (settings.theme !== mainView.theme.Translucent))
-                        } else if (message["uiMode"] === mainView.theme.Dark && settings.theme !== mainView.theme.Translucent) {
-                            mainView.switchTheme(mainView.theme.Dark, true)
+                            if(mainView.vollaTheme !== undefined && (mainView.vollaTheme === mainView.theme.LightTranslucent || mainView.vollaTheme === mainView.theme.DarkTranslucent)){
+                                mainView.switchTheme(mainView.theme.LightTranslucent, true)
+                            } else {
+                                mainView.switchTheme(mainView.theme.Light, true)
+                            }
+
+                        } else if (message["uiMode"] === mainView.theme.Dark) {
+                            if(mainView.vollaTheme !== undefined && (mainView.vollaTheme == mainView.theme.LightTranslucent || mainView.vollaTheme == mainView.theme.DarkTranslucent)){
+                                mainView.switchTheme(mainView.theme.DarkTranslucent, true)
+                            } else {
+                                mainView.switchTheme(mainView.theme.Dark, true)
+                            }
                         }
                     }
                 } else if (type === "volla.launcher.checkSttAvailabilityResponse") {
