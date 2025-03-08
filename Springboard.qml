@@ -42,11 +42,11 @@ LauncherPage {
         shortcutMenu.updateShortcuts(mainView.getActions())
         var eventRegexStr = "^("
         for (var i = 0; i < eventGlossar.length; i++) {
-            eventRegexStr = eventRegexStr.concat(eventGlossar[i])
+            eventRegexStr = eventRegexStr.concat(eventGlossar[i].toLowerCase())
             if (i < eventGlossar.length - 1) eventRegexStr = eventRegexStr.concat("|")
         }
-        eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})?-?(\\d{1,2}\\:?\\d{0,2})?\\s?(am|pm|uhr\\s)?(\\S(.*\\n?)*)")
-        eventRegex = new RegExp(eventRegexStr, "gim")
+        eventRegexStr = eventRegexStr.concat(")\\s(\\d{1,2}\\:?\\d{0,2})\\s?(am|pm|uhr)?(\\s-\\s)?(\\d{1,2}\\:?\\d{0,2})?\\s(am|pm|uhr)?\\s?(\\S(.*\\n?)*)")
+        eventRegex = new RegExp(eventRegexStr, "im")
 
         var installedPlugins = mainView.getInstalledPlugins()
         for (i = 0; i < installedPlugins.length; i++) {
@@ -308,66 +308,63 @@ LauncherPage {
 
             function parseAndSaveEvent() {
                 var d = new Date()
-                var pattern1 = /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
-                var pattern2 = /^(\d{2,4})\/(\d{1,2})\/(\d{1,2})?\s(\d{1,2}\:?\d{0,2})?-?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr\s)?(\S.*)/gim
+
                 if (eventRegex.test(textInput)) {
+                    console.debug("Springboard | Inpus: " + textInput)
+                    var matches = eventRegex.exec(textInput)
+                    for (var i = 0; i < matches.length; i++) {
+                        console.debug("Springboard | " + i + " group: " + matches[i])
+                    }
                     var day = d.getDay()
-                     var plannedDay = eventGlossar.indexOf(textInput.replace(eventRegex, '$1'))
+                    var plannedDay = eventGlossar.indexOf(matches[0].toLowerCase())
                     var daysToAdd = plannedDay > day ? plannedDay - day : 7 - plannedDay
                     if (daysToAdd === 8) daysToAdd = 1
                     var eventDate = new Date()
                     eventDate.setDate(eventDate.getDate() + daysToAdd)
-                    console.debug("Springboard | eventDate: " + eventDate)
                     var year = eventDate.getFullYear()
                     var date = eventDate.getDate()
                     var month = eventDate.getMonth()
-                    var beginhour = textInput.replace(eventRegex, '$2') !== "" ?
-                                parseInt(textInput.replace(eventRegex, '$2').split(":")[0]) : -1
-                    var beginMinute = beginhour > - 1 && textInput.replace(eventRegex, '$2').split(":")[1] !== undefined ?
-                                parseInt(textInput.replace(eventRegex, '$2').split(":")[1]) : 0
-                    var endHour = textInput.replace(eventRegex, '$3') !== "" ?
-                                parseInt(textInput.replace(eventRegex, '$3').split(":")[0]) : -1
-                    var endMinute = beginhour > - 1 && textInput.replace(eventRegex, '$3').split(":")[1] !== undefined ?
-                                parseInt(textInput.replace(eventRegex, '$3').split(":")[1]) : 0
+                    var beginhour = matches[1] !== undefined ? parseInt(matches[1].split(":")[0]) : -1
+                    var beginMinute = beginhour > - 1 && matches[1].split(":")[1] !== undefined ? parseInt(matches[1].split(":")[1]) : 0
+                    var endHour = matches[5] !== undefined ? parseInt(matches[5].split(":")[0]) : -1
+                    var endMinute = beginhour > - 1 && matches[5].split(":")[1] !== undefined ? parseInt(matches[5].split(":")[1]) : 0
                     if (beginhour > -1 && endHour < 0) {
                         endHour = beginhour + 1
                         endMinute = beginMinute
                     }
-                    if (textInput.replace(eventRegex, '$4').toLocaleLowerCase() === "pm") {
-                        beginhour = beginhour + 12
-                        endHour = endHour + 12
-                    }
+                    if (matches[3] !== undefined && matches[3].toLowerCase === "pm") beginhour = beginhour + 12
+                    if (matches[6] !== undefined && matches[6].toLowerCase === "pm") endHour = endHour + 12
                     var allDay = beginhour < 0
-                    var title = textInput.replace(eventRegex, '$5').split("\n",2)[0]
-                    var description = textInput.replace(eventRegex, '$5').split("\n",2)[1] !== undefined ?
-                                textInput.replace(eventRegex, '$5').split("\n",2)[1] : ""
+                    var title = matches[7] !== undefined ? matches[7].split("\n",2)[0]: ""
+                    var description = matches[7] !== undefined && matches[7].split("\n",2)[1] !== undefined ? matches[7].split("\n",2)[1] : ""
                 } else {
+                    var pattern1 = /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})?\s(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr)?(\s?-\s?)?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr)?\s?(\S(.*\n?)*)/im
+                    var pattern2 = /^(\d{2,4})\/(\d{1,2})\/(\d{1,2})?\s(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr)?(\s?-\s?)?(\d{1,2}\:?\d{0,2})?\s?(am|pm|uhr)?\s?(\S(.*\n?)*)/im
                     var pattern = pattern1.test(textInput) ? pattern1 : pattern2
-                    date = parseInt(textInput.replace(pattern, '$1'))
-                    month = parseInt(textInput.replace(pattern, '$2')) - 1
-                    year = textInput.replace(pattern, '$3') === "" ?
-                                d.getFullYear() : parseInt(textInput.replace(pattern, '$3'))
+                    matches = pattern.exec(textInput)
+                    for (i = 0; i < matches.length; i++) {
+                        console.debug("Springboard | " + i + " group: " + matches[i])
+                    }
+                    date = parseInt(matches[1])
+                    month = parseInt(matches[2]) - 1
+                    year = matches[3] === undefined ? d.getFullYear() : parseInt(matches[3])
                     if (year < 100) year = 2000 + year
-                    beginhour = textInput.replace(pattern, '$4') !== "" ?
-                                parseInt(textInput.replace(pattern, '$4').split(":")[0]) : -1
-                    beginMinute = beginhour > - 1 && textInput.replace(pattern, '$4').split(":")[1] !== undefined ?
-                                parseInt(textInput.replace(pattern, '$4').split(":")[1]) : 0
-                    endHour = textInput.replace(pattern, '$5') !== "" ?
-                                parseInt(textInput.replace(pattern, '$5').split(":")[0]) : -1
-                    endMinute = beginhour > - 1 && textInput.replace(pattern, '$5').split(":")[1] !== undefined ?
-                                parseInt(textInput.replace(pattern, '$5').split(":")[1]) : 0
+                    beginhour = matches[4] !== undefined ? parseInt(matches[4].split(":")[0]) : -1
+                    beginMinute = beginhour > - 1 && matches[4].split(":")[1] !== undefined ? parseInt(matches[4].split(":")[1]).split(":")[1] : 0
+                    if (matches[5] !== undefined && matches[5].toLowerCase() === "pm") beginhour = beginhour + 12
+                    endHour = matches[7]  !== undefined ? parseInt(matches[7].split(":")[0]) : -1
+                    endMinute = endHour > - 1 && matches[6].split(":")[1] !== undefined ? parseInt(matches[6].split(":")[1]) : 0
+                    if (matches[8] !== undefined && matches[8].toLowerCase() === "pm") {
+                        if (matches[5] === undefined) beginhour = beginhour + 12
+                        endHour = endHour + 12
+                    }
                     if (beginhour > -1 && endHour < 0) {
                         endHour = beginhour + 1
                         endMinute = beginMinute
-                    }
-                    if (textInput.replace(pattern, '$6').toLocaleLowerCase() === "pm") {
-                        beginhour = beginhour + 12
-                        endHour = endHour + 12
                     }
                     allDay = beginhour < 0
-                    title = textInput.replace(pattern, '$7').split("\n",2)[0]
-                    description = textInput.replace(pattern, '$7').split("\n",2)[1] !== undefined ?
-                                textInput.replace(pattern, '$7').split("\n",2)[1] : ""
+                    title = matches[9] !== undefined ? matches[9].split("\n",2)[0] : ""
+                    description = title.split("\n",2)[1] !== undefined ? title.split("\n",2)[1] : ""
                 }
 
                 if (!allDay) {
