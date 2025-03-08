@@ -352,9 +352,9 @@ LauncherPage {
                     beginhour = matches[4] !== undefined ? parseInt(matches[4].split(":")[0]) : -1
                     beginMinute = beginhour > - 1 && matches[4].split(":")[1] !== undefined ? parseInt(matches[4].split(":")[1]).split(":")[1] : 0
                     if (matches[5] !== undefined && matches[5].toLowerCase() === "pm") beginhour = beginhour + 12
-                    endHour = matches[6]  !== undefined ? parseInt(matches[6].split(":")[0]) : -1
+                    endHour = matches[7]  !== undefined ? parseInt(matches[7].split(":")[0]) : -1
                     endMinute = endHour > - 1 && matches[6].split(":")[1] !== undefined ? parseInt(matches[6].split(":")[1]) : 0
-                    if (matches[7] !== undefined && matches[7].toLowerCase() === "pm") {
+                    if (matches[8] !== undefined && matches[8].toLowerCase() === "pm") {
                         if (matches[5] === undefined) beginhour = beginhour + 12
                         endHour = endHour + 12
                     }
@@ -363,8 +363,8 @@ LauncherPage {
                         endMinute = beginMinute
                     }
                     allDay = beginhour < 0
-                    title = matches[9].split("\n",2)[0]
-                    description = matches[9].split("\n",2)[1] !== undefined ? matches[9].split("\n",2)[1] : ""
+                    title = matches[9] !== undefined ? matches[9].split("\n",2)[0] : ""
+                    description = title.split("\n",2)[1] !== undefined ? title.split("\n",2)[1] : ""
                 }
 
                 if (!allDay) {
