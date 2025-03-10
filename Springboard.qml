@@ -58,7 +58,11 @@ LauncherPage {
         target: Qt.inputMethod
 
         onKeyboardRectangleChanged: {
-            console.log("Springboard | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle)
+            console.debug("Springboard | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle + ", focus: " + textInputArea.activeFocus)
+            if (Qt.rect(0, 0, 0, 0) === Qt.inputMethod.keyboardRectangle && textInputArea.activeFocus) {
+                console.debug("Springboard | Reactivate keyboard")
+                Qt.inputMethod.show()
+            }
         }
     }
 
