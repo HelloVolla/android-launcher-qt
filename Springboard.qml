@@ -1152,7 +1152,7 @@ LauncherPage {
                 property double latitude: 7.1925
                 property bool isManuallyDefined: false
 
-                Component.objectName: {
+                Component.onCompleted: {
                     if (weatherSettings.isManuallyDefined && weatherWidget.city !== weatherSettings.city) {
                         weatherWidget.city = weatherSettings.city
                         weatherWidget.longitude = weatherSettings.longitude

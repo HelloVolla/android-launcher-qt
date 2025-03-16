@@ -15,6 +15,7 @@ import android.content.pm.ResolveInfo;
 import android.content.Intent;
 import android.content.Context;
 import android.content.ComponentName;
+import android.telecom.TelecomManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -70,15 +71,23 @@ public class AppWorker
                                 "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
                                 "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
                                 "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
-                                "com.android.quicksearchbox", "org.fossify.phone", "com.android.deskclock", "com.pri.pressure",
+                                "com.android.quicksearchbox", "com.android.deskclock", "com.pri.pressure",
                                 "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
                                 "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
                                 "com.elishaazaria.sayboard", "com.jzhk.chlidmode", "com.jzhk.gamemode", "com.jzhk.tool",
-                                "com.google.android.apps.adm", "com.android.soundrecorder", "com.jzhk.easylauncher", "com.simplemobiletools.dialer");
+                                "com.google.android.apps.adm", "com.android.soundrecorder", "com.jzhk.easylauncher");
 
                             final List<String> mostUsed = Arrays.asList("com.android.dialer", "com.mediatek.camera",
-                                "com.simplemobiletools.dialer", "com.simplemobiletools.gallery.pro", "com.android.messaging",
-                                "org.mozilla.fennec_fdroid", "com.simplemobiletools.gallery.pro", "com.simplemobiletools.calendar.pro");
+                                "org.fossify.phone", "org.fossify.gallery", "org.fossify.smsmessenger",
+                                "org.mozilla.fennec_fdroid", "org.fossify.contacts", "org.fossify.calendar");
+
+                            TelecomManager manager = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+                            String phoneApp = manager.getDefaultDialerPackage();
+                            String appToHide = phoneApp.equals("org.fossify.phone") ? "com.android.dialer" : "org.fossify.phone";
+
+                            ArrayList<String> appsToHide = new ArrayList();
+                            appsToHide.addAll(packages);
+                            appsToHide.add(appToHide);
 
                             List<UsageStats> queryUsageStats = new LinkedList();
 
@@ -100,7 +109,7 @@ public class AppWorker
                             for (ResolveInfo ri:availableActivities) {
                                 Log.d(TAG, "Found package " + ri.activityInfo.packageName);
 
-                                if (!packages.contains(ri.activityInfo.packageName)) {
+                                if (!appsToHide.contains(ri.activityInfo.packageName)) {
                                     Map appInfo = new HashMap();
                                     appInfo.put("package", ri.activityInfo.packageName);
                                     appInfo.put("label", String.valueOf(ri.loadLabel(pm)));
