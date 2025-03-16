@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="3.0.10" android:versionCode="410" android:installLocation="auto">
+<manifest package="com.volla.launcher" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="3.0.11" android:versionCode="411" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="29"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -123,7 +123,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- %%INSERT_PERMISSIONS -->
+
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>

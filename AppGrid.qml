@@ -77,7 +77,6 @@ LauncherPage {
              var appGroup = appLauncher.appGroups[i]
              allApps = allApps.concat(appGroup.apps)
         }
-        console.debug("AppGrid | Number of apps: " + allApps.length)
         return allApps
     }
 
@@ -393,8 +392,8 @@ LauncherPage {
         target: AN.SystemDispatcher
         onDispatched: {
             if (type === "volla.launcher.appCountResponse") {
-                if (message["appCount"] !== settings.appCount) {
-                    console.log("AppGrid | Number of apps: " + message["appCount"], ", " + settings.appCount)
+                 if (message["appCount"] !== settings.appCount) {
+                    console.log("AppGrid | Number of apps: " + message["appCount"] + ", " + settings.appCount)
                     settings.appCount = message["appCount"]
                     mainView.updateSpinner(true)
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
@@ -411,13 +410,16 @@ LauncherPage {
                         appLauncher.createAppGroups(groupedApps)
                         // Reflect different OS versions and devices
                         mainView.checkDefaultApps(appsArray)
-                        //if (!appsString.includes("org.fossify.gallery")) mainView.galleryApp = "com.simplemobiletools.gallery.pro"
-                        //if (!appsString.includes("org.fossify.calendar")) mainView.galleryApp = "com.simplemobiletools.calendar.pro"
+                        // Check default phone app
+                        AN.SystemDispatcher.dispatch("volla.launcher.checkPhoneAppAction", new Object)
                     } else {
                         console.log("AppLauncher | Need to retrieve apps from system")
                         mainView.updateSpinner(true)
                         AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
                     }
+                } else {
+                    console.debug("AppLauncher | Will check default phone app")
+                    AN.SystemDispatcher.dispatch("volla.launcher.checkPhoneAppAction", new Object)
                 }
             } else if (type === "volla.launcher.appResponse") {
                 console.log("AppGrid | " + message["appsCount"] + " app infos received")
@@ -497,6 +499,18 @@ LauncherPage {
                     if (appGroup !== undefined) {
                         appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
                     }
+                }
+            } else if (type === "volla.launcher.checkPhoneAppResponse") {
+                console.log("AppGrid | Default phone app received: " + message["phoneApp"])
+                getAllApps()
+                var index = getAllApps().findIndex( element => {
+                    if (element.package === "com.android.dialer") {
+                        return true;
+                    }
+                })
+                if (index > -1 && "com.android.dialer" === message["phoneApp"]) {
+                    console.debug("AppGrid | Will update apps")
+                    AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
                 }
             }
         }

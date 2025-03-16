@@ -23,6 +23,7 @@ import android.speech.RecognizerIntent;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Arrays;
 import org.qtproject.qt5.android.QtNative;
 import lineageos.childmode.ChildModeManager;
 import com.volla.launcher.activity.ReceiveTextActivity;
@@ -54,7 +55,8 @@ public class AppUtil {
     public static final String GOT_IS_SECURITY_PW_SET = "volla.launcher.checkSecurityPasswordResponse";
     public static final String GET_IS_STT_AVAILABLE = "volla.launcher.checkSttAvailability";
     public static final String GOT_IS_STT_AVAILABLE = "volla.launcher.checkSttAvailabilityResponse";
-
+    public static final String GET_PHONE_APP = "volla.launcher.checkPhoneAppAction";
+    public static final String GOT_PHONE_APP = "volla.launcher.checkPhoneAppResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -69,12 +71,34 @@ public class AppUtil {
 
                     public void run() {
                         if (type.equals(GET_APP_COUNT)) {
+                            List<String> packages = Arrays.asList("com.android.browser",
+                                "com.android.gallery3d", "com.android.music", "com.android.inputmethod.latin", "com.android.stk",
+                                "com.mediatek.filemanager", "com.android.calendar", "com.android.documentsui", "com.google.android.gms",
+                                "com.mediatek.cellbroadcastreceiver", "com.conena.navigation.gesture.control", "rkr.simplekeyboard.inputmethod",
+                                "com.android.quicksearchbox", "com.android.deskclock", "com.pri.pressure",
+                                "com.mediatek.gnss.nonframeworklbs", "system.volla.startup", "com.volla.startup", "com.aurora.services",
+                                "com.android.soundrecorder", "com.google.android.dialer", "com.simplemobiletools.thankyou",
+                                "com.elishaazaria.sayboard", "com.jzhk.chlidmode", "com.jzhk.gamemode", "com.jzhk.tool",
+                                "com.google.android.apps.adm", "com.android.soundrecorder", "com.jzhk.easylauncher");
+
                             Intent i = new Intent(Intent.ACTION_MAIN, null);
                             i.addCategory(Intent.CATEGORY_LAUNCHER);
                             List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
 
+                            Log.d(TAG, "App count: " + availableActivities.size());
+
+                            int appCounter = 0;
+
+                            for (ResolveInfo ri:availableActivities) {
+                                if (!packages.contains(ri.activityInfo.packageName)) {
+                                    appCounter++;
+                                }
+                            }
+
+                            Log.d(TAG, "App count: " + appCounter);
+
                             Map responseMessage = new HashMap();
-                            responseMessage.put("appCount", availableActivities.size());
+                            responseMessage.put("appCount", appCounter - 1); // Subtract phone app duplicate
 
                             SystemDispatcher.dispatch(GOT_APP_COUNT, responseMessage);
                         } else if (type.equals(OPEN_CAM)) {
@@ -275,6 +299,12 @@ public class AppUtil {
                             Map reply = new HashMap();
                             reply.put("isActivated", isActivated );
                             SystemDispatcher.dispatch(GOT_IS_STT_AVAILABLE, reply);
+                        } else if (type.equals(GET_PHONE_APP)) {
+                            TelecomManager manager = (TelecomManager) activity.getSystemService(Context.TELECOM_SERVICE);
+                            String phoneApp = manager.getDefaultDialerPackage();
+                            Map reply = new HashMap();
+                            reply.put("phoneApp", phoneApp );
+                            SystemDispatcher.dispatch(GOT_PHONE_APP, reply);
                         }
                     }
                 };
