@@ -123,6 +123,7 @@ public class LayoutUtil {
                                 && wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId
                                 && updateLockScreen) {
                                 Log.d(TAG, "Update lock screen wallpaper");
+                               /**
                                 try {
                                     if (value == 2 || value == 3) {
                                         Log.d(TAG, "Clear lock screen wallpaper");
@@ -132,7 +133,7 @@ public class LayoutUtil {
                                     }
                                 } catch (IOException e) {
                                     Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
-                                }
+                                } **/
                             }
                         }
                     };
