@@ -878,6 +878,10 @@ ApplicationWindow {
             return stored
         }
 
+        function updateWidgets(widgetId, isVisible) {
+            springboard.children[0].item.updateWidgets(widgetId, isVisible)
+        }
+
         function getSearchMode() {
             return settings.searchMode
         }

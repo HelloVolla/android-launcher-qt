@@ -50,6 +50,10 @@ LauncherPage {
                     pluginSettingsItemColumn.menuState = false
                     pluginSettingsItemColumn.destroyCheckboxes()
                 }
+                if (item !== widgetsSettingsItemColumn && widgetsSettingsItemColumn.checkboxes.length > 0) {
+                    widgetsSettingsItemColumn.menuState = false
+                    widgetsSettingsItemColumn.destroyCheckboxes()
+                }
                 if (item !== resetSettingsItemColumn && resetSettingsItemColumn.menuState) {
                     resetSettingsItemColumn.menuState = false
                 }
@@ -1314,6 +1318,109 @@ LauncherPage {
                     console.log("Settings | Blurr filter chanded to " + value)
                     designSettings.blurEffect = value
                     mainView.updateSettings("blurEffect", value)
+                }
+            }
+
+            Item {
+                id: widgetsSettingsItem
+                width: parent.width
+                implicitHeight: widgetsSettingsItemColumn.height
+                visible: mainView.isTablet
+
+                property var defaultWidgets : [{ "id": 0, "name": qsTr("Weather"), "active": widgetsSettings.weatherWidgetIsVisible },
+                                               { "id": 1, "name": qsTr("Clock"), "active": widgetsSettings.clockWidgetIsVisible },
+                                               { "id": 2, "name": qsTr("Note"), "active": widgetsSettings.noteWidgetIsVisible }]
+
+                Column {
+                    id: widgetsSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+
+                    HighlightButton {
+                        id: widgetsSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        text: qsTr("Widgets")
+                        boldText: widgetsSettingsItemColumn.menuState
+                        onClicked: {
+                            widgetsSettingsItemColumn.menuState = !widgetsSettingsItemColumn.menuState
+                            if (widgetsSettingsItemColumn.menuState) {
+                                console.log("Settings | Will create checkboxes")
+                                widgetsSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(widgetsSettingsItemColumn)
+                            } else {
+                                console.log("Settings | Will destroy checkboxes")
+                                widgetsSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        for (var i = 0; i < widgetsSettingsItem.defaultWidgets.length; i++) {
+                            var component = Qt.createComponent("/Checkbox.qml", widgetsSettingsItemColumn)
+                            var properties = { "actionId": widgetsSettingsItem.defaultWidgets[i].id,
+                                "text": widgetsSettingsItem.defaultWidgets[i].name,
+                                "checked": widgetsSettingsItem.defaultWidgets[i].active,
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "hasRemoveButton": false, // Relevant as soon more widgets can be installed
+                                "accentColor": mainView.accentColor }
+                            var object = component.createObject(widgetsSettingsItemColumn, properties)
+                            object.activeCheckbox = true
+                            widgetsSettingsItemColumn.checkboxes.push(object)
+                        }
+                        console.log("Settings | Checkboxes created")
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < widgetsSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = widgetsSettingsItemColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        widgetsSettingsItemColumn.checkboxes = new Array
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update settings for " + actionId + ", " + active)
+
+                        switch (actionId) {
+                            case 0:
+                                widgetsSettings.weatherWidgetIsVisible = active
+                                break
+                            case 1:
+                                widgetsSettings.clockWidgetIsVisible = active
+                                break
+                            case 2:
+                                widgetsSettings.noteWidgetIsVisible = active
+                                break
+                            default:
+                                break
+                        }
+
+                        widgetsSettingsItem.defaultWidgets[actionId].active = active
+                        widgetsSettings.sync()
+                        mainView.updateWidgets(actionId, active)
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
+                }
+
+                Settings {
+                    id: widgetsSettings
+                    property bool clockWidgetIsVisible: true
+                    property bool weatherWidgetIsVisible: true
+                    property bool noteWidgetIsVisible: true
+
+                    Component.onCompleted: {
+
+                    }
                 }
             }
 
