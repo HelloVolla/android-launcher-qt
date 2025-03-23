@@ -86,6 +86,24 @@ LauncherPage {
         }
     }
 
+    function updateWidgets(widgetId, isVisible) {
+        widgetsSettings.sync()
+
+        switch (widgetId) {
+            case 0:
+                widgetsSettings.weatherWidgetIsVisible = isVisible
+                break
+            case 1:
+                widgetsSettings.clockWidgetIsVisible = isVisible
+                break
+            case 2:
+                widgetsSettings.noteWidgetIsVisible = isVisible
+                break
+            default:
+                break
+        }
+    }
+
     function updateHeadlineColor() {
         springBoard.headline.color = mainView.fontColor
     }
@@ -843,6 +861,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
+            visible: widgetsSettings.weatherWidgetIsVisible
 
             property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
             property string city: weatherSettings.city
@@ -863,9 +882,9 @@ LauncherPage {
                     var coord = src.position.coordinate
                     var newLongitude = roundNumber(coord.longitude, 3)
                     var newLatitude = roundNumber(coord.latitude, 3)
-                    if ((coord.isValid && (Math.abs(mainView.longitude - newLongitude) >= 0.10
-                                           || Math.abs(mainView.latitude - newLatitude) >= 0.10))
-                        || (!coord.isValid && dayTemperatures.text.length === 0)) {
+                    if (src.active &&
+                        ((coord.isValid && (Math.abs(mainView.longitude - newLongitude) >= 0.10 || Math.abs(mainView.latitude - newLatitude) >= 0.10))
+                        || (!coord.isValid && dayTemperatures.text.length === 0))) {
                         console.debug("Widget | Will update weather")
                         //console.debug("Widget | isValid: " + coord.isValid)
                         //console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
@@ -1169,6 +1188,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
+            visible: widgetsSettings.clockWidgetIsVisible
 
             // todo
             Clock {
@@ -1184,6 +1204,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
+            visible: widgetsSettings.noteWidgetIsVisible
 
             property var note
 
@@ -1245,6 +1266,31 @@ LauncherPage {
                     }
                 }
             }
+        }
+
+        Settings {
+            id: widgetsSettings
+            property bool clockWidgetIsVisible: true
+            property bool weatherWidgetIsVisible: true
+            property bool noteWidgetIsVisible: true
+
+            onClockWidgetIsVisibleChanged: {
+                console.debug("Springborad | Clock widget visibility changed to " + clockWidgetIsVisible)
+            }
+
+            onWeatherWidgetIsVisibleChanged: {
+                console.debug("Springborad | Weather widget visibility changed to " + weatherWidgetIsVisible)
+            }
+
+            onNoteWidgetIsVisibleChanged: {
+                console.debug("Springborad | Note widget visibility changed to " + noteWidgetIsVisible)
+            }
+
+//            Component.onCompleted: {
+//                weatherWidget.visible = weatherWidgetIsVisible
+//                clockWidget.visible = clockWidgetIsVisible
+//                noteWidget.visible = noteWidgetIsVisible
+//            }
         }
     }
 

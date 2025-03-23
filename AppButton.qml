@@ -29,6 +29,7 @@ Button {
             id: appIcon
             anchors.centerIn: parent
             source: iconSource
+            cache: false
             width: appButton.width * 0.65
             height: appButton.width * 0.65
 
