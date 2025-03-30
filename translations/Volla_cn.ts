@@ -53,83 +53,63 @@
     </message>
     <message>
         <source>Files</source>
-        <translation>文件</translation>
+        <translation type="vanished">文件</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation>地图</translation>
+        <translation type="vanished">地图</translation>
     </message>
     <message>
         <source>Browser</source>
-        <translation>浏览器</translation>
+        <translation type="vanished">浏览器</translation>
     </message>
     <message>
         <source>Mail</source>
-        <translation>邮件</translation>
+        <translation type="vanished">邮件</translation>
     </message>
     <message>
         <source>Sync</source>
-        <translation>同步</translation>
+        <translation type="vanished">同步</translation>
     </message>
     <message>
         <source>VPN</source>
-        <translation>VPN</translation>
+        <translation type="vanished">VPN</translation>
     </message>
     <message>
         <source>Store</source>
-        <translation>商店</translation>
+        <translation type="vanished">商店</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>设置</translation>
+        <translation type="vanished">设置</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation>消息</translation>
+        <translation type="vanished">消息</translation>
     </message>
     <message>
         <source>Radio</source>
-        <translation>收音机</translation>
+        <translation type="vanished">收音机</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation>天气</translation>
+        <translation type="vanished">天气</translation>
     </message>
     <message>
         <source>Bancontact</source>
-        <translation>Bancontact</translation>
+        <translation type="vanished">Bancontact</translation>
     </message>
     <message>
         <source>Facebook</source>
-        <translation>Facebook</translation>
+        <translation type="vanished">Facebook</translation>
     </message>
     <message>
         <source>A-Droid</source>
-        <translation>A-Droid</translation>
+        <translation type="vanished">A-Droid</translation>
     </message>
     <message>
         <source>Remove App</source>
         <translation>卸载应用</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>De Trein</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mynexuzhealth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bonsai</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MijnOnlineAgenda</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -488,6 +468,22 @@
         <source>Password needs at least four characters or numbers</source>
         <translation>密码需要至少4个字符或数字</translation>
     </message>
+    <message>
+        <source>Weather</source>
+        <translation type="unfinished">天气</translation>
+    </message>
+    <message>
+        <source>Clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -566,6 +562,22 @@
     <message>
         <source>Please reset contacts and try again.</source>
         <translation>请重设联系人并重试</translation>
+    </message>
+    <message>
+        <source>weather</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter any location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -788,6 +800,82 @@
     <message>
         <source>Couldn&apos;t load plugin</source>
         <translation>不能加载插件</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished">文件</translation>
+    </message>
+    <message>
+        <source>Messages</source>
+        <translation type="unfinished">消息</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bancontact</source>
+        <translation type="unfinished">Bancontact</translation>
+    </message>
+    <message>
+        <source>De Trein</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mynexuzhealth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bonsai</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MijnOnlineAgenda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Facebook</source>
+        <translation type="unfinished">Facebook</translation>
+    </message>
+    <message>
+        <source>Browser</source>
+        <translation type="unfinished">浏览器</translation>
+    </message>
+    <message>
+        <source>Mail</source>
+        <translation type="unfinished">邮件</translation>
+    </message>
+    <message>
+        <source>Sync</source>
+        <translation type="unfinished">同步</translation>
+    </message>
+    <message>
+        <source>VPN</source>
+        <translation type="unfinished">VPN</translation>
+    </message>
+    <message>
+        <source>Store</source>
+        <translation type="unfinished">商店</translation>
+    </message>
+    <message>
+        <source>A-Droid</source>
+        <translation type="unfinished">A-Droid</translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation type="unfinished">地图</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished">设置</translation>
+    </message>
+    <message>
+        <source>Radio</source>
+        <translation type="unfinished">收音机</translation>
+    </message>
+    <message>
+        <source>Weather</source>
+        <translation type="unfinished">天气</translation>
     </message>
 </context>
 </TS>

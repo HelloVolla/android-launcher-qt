@@ -5,7 +5,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.12
-import QtPositioning 5.13
+import QtPositioning 5.11
 import Qt.labs.settings 1.0
 import FileIO 1.0
 import AndroidNative 1.0 as AN
