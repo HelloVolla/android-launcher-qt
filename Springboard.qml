@@ -872,7 +872,7 @@ LauncherPage {
             PositionSource {
                 id: src
                 updateInterval: 60000
-                active: widgetsFlow.visible && !weatherWidget.isManuallyDefined
+                active: true
 
                 function roundNumber(num, dec) {
                   return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec)
@@ -882,12 +882,15 @@ LauncherPage {
                     var coord = src.position.coordinate
                     var newLongitude = roundNumber(coord.longitude, 3)
                     var newLatitude = roundNumber(coord.latitude, 3)
-                    if (src.active &&
-                        ((coord.isValid && (Math.abs(mainView.longitude - newLongitude) >= 0.10 || Math.abs(mainView.latitude - newLatitude) >= 0.10))
-                        || (!coord.isValid && dayTemperatures.text.length === 0))) {
+                    console.debug("Widget | Position changed")
+                    console.debug("Widget | PositionSource isActive: " + src.active)
+                    console.debug("Widget | Position isManuallyDefinded: " + weatherWidget.isManuallyDefined)
+                    console.debug("Widget | isValid: " + coord.isValid)
+                    console.debug("Widget | coord: " + coord.longitude + ", " + coord.latitude)
+                    if (weatherWidget.visible && !weatherWidget.isManuallyDefined && coord.isValid &&
+                        (Math.abs(mainView.longitude - newLongitude) >= 0.10 || Math.abs(mainView.latitude - newLatitude) >= 0.10)) {
                         console.debug("Widget | Will update weather")
-                        //console.debug("Widget | isValid: " + coord.isValid)
-                        //console.debug("Widget | new ccord: " + coord.longitude + ", " + coord.latitude)
+
                         weatherWidget.latitude = coord.latitude;
                         weatherWidget.longitude = coord.longitude;
                         console.debug("Widget | new ccord: " + newLongitude + ", " + newLatitude)
@@ -1015,13 +1018,15 @@ LauncherPage {
                              weatherWidget.city = model.city
                              weatherWidget.longitude = model.lon
                              weatherWidget.latitude = model.lat
-                             locatioDialog.close()
-                             locationModel.clear()
-                             weatherWidget.getWeather()
+                             weatherSettings.isManuallyDefined = true
                              weatherSettings.city = model.city
                              weatherSettings.longitude = model.lon
                              weatherSettings.latitude = model.lat
                              weatherSettings.sync()
+                             console.debug("Widget | Setting saved: " + weatherSettings.city)
+                             weatherWidget.getWeather()
+                             locatioDialog.close()
+                             locationModel.clear()
                          }
                      }
 
@@ -1082,7 +1087,6 @@ LauncherPage {
                              console.debug("Widget | Geo location response: " + geoRequest.status)
                              if (geoRequest.status === 200) {
                                  var geoLocations = new Array
-                                 console.debug("Widget | Location response " + geoRequest.responseText)
                                  var cities = JSON.parse(geoRequest.responseText)
                                  var locale = Qt.locale().name.split('_')[0]
                                  for (var i = 0; i < cities.length; i++) {
@@ -1133,7 +1137,7 @@ LauncherPage {
 
             function getWeather() {
                 console.debug("Widget | Will request weather")
-                var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + weatherWidget.latitude
+                var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + weatherWidget.latitude
                         + "&lon=" + weatherWidget.longitude + "&units=metric&appid=" + apiKey
                 console.debug("Widget | Servie URL " + weatherUrl)
                 var weatherRequest = new XMLHttpRequest()
@@ -1142,9 +1146,9 @@ LauncherPage {
                         console.debug("Widget | Weather response: " + weatherRequest.status)
                         if (weatherRequest.status === 200) {
                             var weather = JSON.parse(weatherRequest.responseText)
-                            weatherImage.source = "https://openweathermap.org/img/wn/" + weather.current.weather[0].icon + "@2x.png"
-                            recentTemperature.text = weather.current.temp + "°C"
-                            dayTemperatures.text = weather.daily[0].temp.min + "°C  " + weather.daily[0].temp.max + "°C"
+                            weatherImage.source = "https://openweathermap.org/img/wn/" + weather.weather[0].icon + "@2x.png"
+                            recentTemperature.text = weather.main.temp + "°C"
+                            dayTemperatures.text = weather.main.temp_min + "°C - " + weather.main.temp_max + "°C"
                         } else {
                             console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
                         }
@@ -1157,9 +1161,11 @@ LauncherPage {
             Timer {
                 id: weather30MinuteTimer
                 interval: 1800000  // 30 minutes in milliseconds (30 * 60 * 1000)
-                repeat: widgetsFlow.visible      // Set to true to repeat every 30 minutes
-                running: widgetsFlow.visible     // Start the timer immediately
+                repeat: weatherWidget.visible      // Set to true to repeat every 30 minutes
+                running: weatherWidget.visible     // Start the timer immediately
+                triggeredOnStart: true
                 onTriggered: {
+                    console.debug("Widget | Weather triggered")
                     weatherWidget.getWeather();  // Call the function to execute service
                 }
             }
@@ -1167,12 +1173,14 @@ LauncherPage {
             Settings {
                 id: weatherSettings
                 property string city: "Remscheid"
-                property double longitude: 51.1798
-                property double latitude: 7.1925
+                property double longitude: 7.1925
+                property double latitude: 51.1798
                 property bool isManuallyDefined: false
 
                 Component.onCompleted: {
+                    weatherWidget.isManuallyDefined = weatherSettings.isManuallyDefined
                     if (weatherSettings.isManuallyDefined && weatherWidget.city !== weatherSettings.city) {
+                        console.debug("Widget | Settings. Update city property: " + weatherSettings.city)
                         weatherWidget.city = weatherSettings.city
                         weatherWidget.longitude = weatherSettings.longitude
                         weatherWidget.latitude = weatherSettings.latitude
