@@ -48,6 +48,10 @@ WorkerScript.onMessage = function(message) {
         return pattern1.test(textInput.trim()) || pattern2.test(textInput.trim()) || eventRegex.test(textInput.trim())
     }
 
+    function textInputCouldBeNewContact() {
+        return /([0-9a-zäüöA-Z-ÄÜÖß]+)(\s[0-9a-zäüöA-Z-ÄÜÖß]+)?\s(\+?[\d\s]+)/.test(textInput)
+    }
+
     var filteredSuggestionObj = new Array
     var indexOfFirstSuggestion = 0
     var suggestion

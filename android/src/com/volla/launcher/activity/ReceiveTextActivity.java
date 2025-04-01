@@ -177,14 +177,14 @@ public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpd
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-public void connectSmsUpdateManager(Context ctx, List<String> smsItems) {
+    public void connectSmsUpdateManager(Context ctx, List<String> smsItems) {
     this.smsPid = smsItems;
     smsUpdateManager = new SMSUpdateManager(ctx, this);
     smsUpdateManager.start();
     }
 
-@Override
-   public void onServiceConnected() {
+    @Override
+    public void onServiceConnected() {
        if(smsPid != null && smsPid.size() > 0){
            Log.d(TAG, "SMS database update called ");
            int item = smsUpdateManager.smsUpdate(smsPid);
@@ -194,8 +194,8 @@ public void connectSmsUpdateManager(Context ctx, List<String> smsItems) {
         Log.d(TAG, "SMS database updated ");
    }
 
-   @Override
-   public void onServiceDisconnected() {
+    @Override
+    public void onServiceDisconnected() {
 
    }
 
@@ -347,7 +347,6 @@ public void connectSmsUpdateManager(Context ctx, List<String> smsItems) {
                 .build();
         notificationManager.notify("VollaOS", 1, notification);
     }
-
 
     public class NotificationBroadcastReceiver extends BroadcastReceiver {
         @Override

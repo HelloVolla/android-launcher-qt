@@ -4,158 +4,63 @@
 <context>
     <name>AppGrid</name>
     <message>
-        <location filename="../AppGrid.qml" line="113"/>
-        <source>Bancontact</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="118"/>
-        <source>Facebook</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="119"/>
-        <source>Browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="120"/>
-        <location filename="../AppGrid.qml" line="121"/>
-        <location filename="../AppGrid.qml" line="122"/>
-        <source>Mail</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="123"/>
-        <source>Sync</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="124"/>
-        <source>VPN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="108"/>
-        <location filename="../AppGrid.qml" line="110"/>
-        <source>Files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="125"/>
-        <source>Store</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="126"/>
-        <source>A-Droid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="127"/>
-        <source>Maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="128"/>
         <source>Settings</source>
-        <translation type="unfinished">Inställningar</translation>
+        <translation type="obsolete">Inställningar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="109"/>
-        <location filename="../AppGrid.qml" line="111"/>
-        <source>Messages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="112"/>
-        <source>Music</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="114"/>
-        <source>De Trein</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="115"/>
-        <source>Mynexuzhealth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../AppGrid.qml" line="90"/>
         <location filename="../AppGrid.qml" line="116"/>
-        <source>Bonsai</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="117"/>
-        <source>MijnOnlineAgenda</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="129"/>
-        <source>Radio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="130"/>
-        <source>Weather</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AppGrid.qml" line="205"/>
-        <location filename="../AppGrid.qml" line="231"/>
-        <location filename="../AppGrid.qml" line="234"/>
+        <location filename="../AppGrid.qml" line="119"/>
         <source>Most used</source>
         <translation type="unfinished">Mest använda</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="218"/>
+        <location filename="../AppGrid.qml" line="103"/>
         <source>Other apps</source>
         <translation type="unfinished">Andra appar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="228"/>
+        <location filename="../AppGrid.qml" line="113"/>
         <source>apps</source>
         <translation type="unfinished">apps</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="292"/>
+        <location filename="../AppGrid.qml" line="178"/>
         <source>Apps</source>
         <translation type="unfinished">Appar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="302"/>
+        <location filename="../AppGrid.qml" line="191"/>
         <source>Filter apps</source>
         <translation type="unfinished">Filtrera appar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="389"/>
+        <location filename="../AppGrid.qml" line="275"/>
         <source>Add to shortcuts</source>
         <translation type="unfinished">Lägg till genvägar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="408"/>
+        <location filename="../AppGrid.qml" line="294"/>
         <source>Open</source>
         <translation type="unfinished">Öppna</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="418"/>
+        <location filename="../AppGrid.qml" line="304"/>
         <source>Open App</source>
         <translation type="unfinished">Öppna app</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="418"/>
+        <location filename="../AppGrid.qml" line="304"/>
         <source>Open Shortcut</source>
         <translation type="unfinished">Öppna genväg</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="451"/>
+        <location filename="../AppGrid.qml" line="337"/>
         <source>Remove App</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="470"/>
+        <location filename="../AppGrid.qml" line="356"/>
         <source>Remove Bookmark</source>
         <translation type="unfinished">Ta bort bokmärke</translation>
     </message>
@@ -164,12 +69,12 @@
         <translation type="obsolete">Ta bort genväg</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="585"/>
+        <location filename="../AppGrid.qml" line="476"/>
         <source>New pinned shortcut</source>
         <translation type="unfinished">Ny genväg med fasthållning</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="592"/>
+        <location filename="../AppGrid.qml" line="483"/>
         <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Den fasthållna genvägen finns redan</translation>
     </message>
@@ -261,73 +166,73 @@
         <translation type="unfinished">Hitta anteckningar ...</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="175"/>
+        <location filename="../Collections.qml" line="178"/>
         <source>Filter collections</source>
         <translation type="unfinished">Filtrera samlingar</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="478"/>
+        <location filename="../Collections.qml" line="479"/>
         <source>Call</source>
         <translation type="unfinished">Ring upp</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="486"/>
+        <location filename="../Collections.qml" line="487"/>
         <source>Send Message</source>
         <translation type="unfinished">Skicka ett meddelande</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="494"/>
+        <location filename="../Collections.qml" line="495"/>
         <source>Send Email</source>
         <translation type="unfinished">Skicka ett e-postmeddelande</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="502"/>
+        <location filename="../Collections.qml" line="503"/>
         <source>Open Contact</source>
         <translation type="unfinished">Öppna kontakt</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="509"/>
+        <location filename="../Collections.qml" line="510"/>
         <source>Open in Signal</source>
         <translation type="unfinished">Öppet i signalen</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="674"/>
+        <location filename="../Collections.qml" line="675"/>
         <source>Private</source>
         <translation type="unfinished">Privat</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="726"/>
+        <location filename="../Collections.qml" line="727"/>
         <source>New message</source>
         <translation type="unfinished">Nytt meddelande</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="734"/>
+        <location filename="../Collections.qml" line="735"/>
         <source>New calls</source>
         <translation type="unfinished">Missade samtal</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="734"/>
+        <location filename="../Collections.qml" line="735"/>
         <source>New call</source>
         <translation type="unfinished">Missat samtal</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="908"/>
-        <location filename="../Collections.qml" line="913"/>
+        <location filename="../Collections.qml" line="909"/>
+        <location filename="../Collections.qml" line="914"/>
         <source>You</source>
         <translation type="unfinished">Du</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1017"/>
+        <location filename="../Collections.qml" line="1018"/>
         <source>Could not load RSS feed: </source>
         <translation type="unfinished">Kunde inte läsa in RSS-flödet</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1045"/>
+        <location filename="../Collections.qml" line="1046"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ogiltigt RSS-flöde</translation>
     </message>
     <message>
-        <location filename="../Collections.qml" line="1065"/>
+        <location filename="../Collections.qml" line="1066"/>
         <source>Missing RSS item: </source>
         <translation type="unfinished">RSS-meddelandet saknas: </translation>
     </message>
@@ -340,29 +245,29 @@
         <translation type="unfinished">Koversation</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="246"/>
+        <location filename="../Conversation.qml" line="249"/>
         <source>Filter messages ...</source>
         <translation type="unfinished">Filtrera meddelanden ...</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="386"/>
+        <location filename="../Conversation.qml" line="387"/>
         <source>Type your message</source>
         <translation type="unfinished">Open in Signal</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="660"/>
-        <location filename="../Conversation.qml" line="782"/>
+        <location filename="../Conversation.qml" line="657"/>
+        <location filename="../Conversation.qml" line="776"/>
         <source>Attached image is not available for preview</source>
         <translation type="unfinished">bilden är inte tillgänglig för förhandsgranskning</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="743"/>
-        <location filename="../Conversation.qml" line="854"/>
+        <location filename="../Conversation.qml" line="742"/>
+        <location filename="../Conversation.qml" line="850"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Stöds ännu inte</translation>
     </message>
     <message>
-        <location filename="../Conversation.qml" line="899"/>
+        <location filename="../Conversation.qml" line="895"/>
         <source>Message not sent</source>
         <translation type="unfinished">Meddelande inte skickat</translation>
     </message>
@@ -471,165 +376,185 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../Settings.qml" line="62"/>
+        <location filename="../Settings.qml" line="66"/>
         <source>Settings</source>
         <translation type="unfinished">Inställningar</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="89"/>
-        <location filename="../Settings.qml" line="102"/>
-        <location filename="../Settings.qml" line="125"/>
+        <location filename="../Settings.qml" line="93"/>
+        <location filename="../Settings.qml" line="106"/>
+        <location filename="../Settings.qml" line="129"/>
         <source>Dark Mode</source>
         <translation type="unfinished">Mörkt läge</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="105"/>
-        <location filename="../Settings.qml" line="142"/>
+        <location filename="../Settings.qml" line="109"/>
+        <location filename="../Settings.qml" line="146"/>
         <source>Light Mode</source>
         <translation type="unfinished">Ljust läge</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="108"/>
-        <location filename="../Settings.qml" line="159"/>
+        <location filename="../Settings.qml" line="112"/>
+        <location filename="../Settings.qml" line="163"/>
         <source>Translucent Mode</source>
         <translation type="unfinished">Genomskinligt läge</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="290"/>
-        <location filename="../Settings.qml" line="330"/>
+        <location filename="../Settings.qml" line="294"/>
+        <location filename="../Settings.qml" line="334"/>
         <source>Security mode is OFF</source>
         <translation type="unfinished">Säkerhetsläget är avstängt</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="353"/>
+        <location filename="../Settings.qml" line="357"/>
         <source>Security mode is ON</source>
         <translation type="unfinished">Säkerhetsläget är på on</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="490"/>
+        <location filename="../Settings.qml" line="494"/>
         <source>Enter password</source>
         <translation type="unfinished">Ange lösenord</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="516"/>
+        <location filename="../Settings.qml" line="520"/>
         <source>Repeat password</source>
         <translation type="unfinished">Upprepa lösenordet</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="547"/>
+        <location filename="../Settings.qml" line="551"/>
         <source>Keep existing Password</source>
         <translation type="unfinished">Behåll det befintliga lösenordet</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="570"/>
+        <location filename="../Settings.qml" line="574"/>
         <source>Cancel</source>
         <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="595"/>
-        <location filename="../Settings.qml" line="1487"/>
+        <location filename="../Settings.qml" line="599"/>
+        <location filename="../Settings.qml" line="1601"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="612"/>
+        <location filename="../Settings.qml" line="616"/>
         <source>Wrong password confirmation</source>
         <translation type="unfinished">Bekräftelse av felaktigt lösenord</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="615"/>
+        <location filename="../Settings.qml" line="619"/>
         <source>Password needs at least four characters or numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="642"/>
+        <location filename="../Settings.qml" line="646"/>
         <source>Wrong password</source>
         <translation type="unfinished">Felaktigt lösenord</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="677"/>
+        <location filename="../Settings.qml" line="681"/>
         <source>News Channels</source>
         <translation type="unfinished">Nyhetskanaler</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="759"/>
+        <location filename="../Settings.qml" line="763"/>
         <source>Shortcuts</source>
         <translation type="unfinished">Genvägar</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="896"/>
-        <location filename="../Settings.qml" line="898"/>
+        <location filename="../Settings.qml" line="900"/>
         <location filename="../Settings.qml" line="902"/>
+        <location filename="../Settings.qml" line="906"/>
         <source>Open</source>
         <translation type="unfinished">Öppna</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="946"/>
+        <location filename="../Settings.qml" line="956"/>
         <source>Source settings</source>
         <translation type="unfinished">Inställningar för källan</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="963"/>
+        <location filename="../Settings.qml" line="973"/>
         <source>Signal</source>
         <translation type="unfinished">Signal</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1003"/>
+        <location filename="../Settings.qml" line="1013"/>
         <source>Signal app is not installed</source>
         <translation type="unfinished">Signal-appen är inte installerad</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1335"/>
+        <location filename="../Settings.qml" line="1330"/>
+        <source>Weather</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="1331"/>
+        <source>Clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="1332"/>
+        <source>Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="1345"/>
+        <source>Widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="1449"/>
         <source>Springboard Skills</source>
         <translation>Kompetenssprångbräda</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1384"/>
+        <location filename="../Settings.qml" line="1498"/>
         <source>Couldn&apos;t load available plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1694"/>
+        <location filename="../Settings.qml" line="1808"/>
         <source>Reset launcher</source>
         <translation type="unfinished">Återställ startprogrammet</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1037"/>
+        <location filename="../Settings.qml" line="1047"/>
         <source>Search engines</source>
         <translation type="unfinished">Sökmaskiner</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1135"/>
+        <location filename="../Settings.qml" line="1145"/>
         <source>Display and menus</source>
         <translation type="unfinished">Display and menus</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1191"/>
+        <location filename="../Settings.qml" line="1201"/>
         <source>Show grouped apps</source>
         <translation type="unfinished">Visa grupperade appar</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1200"/>
+        <location filename="../Settings.qml" line="1210"/>
         <source>Use app categories</source>
         <translation type="unfinished">Använd appkategorier</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1572"/>
+        <location filename="../Settings.qml" line="1686"/>
         <source>Reset options</source>
         <translation type="unfinished">Återställ alternativen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1592"/>
+        <location filename="../Settings.qml" line="1706"/>
         <source>Reset news feeds</source>
         <translation type="unfinished">Återställ nyhetsflöden</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1626"/>
+        <location filename="../Settings.qml" line="1740"/>
         <source>Reset shorcuts</source>
         <translation type="unfinished">Återställ genvägar</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1660"/>
+        <location filename="../Settings.qml" line="1774"/>
         <source>Reload contacts</source>
         <translation type="unfinished">Reload contacts</translation>
     </message>
@@ -638,17 +563,17 @@
         <translation type="obsolete">StartPage</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1055"/>
+        <location filename="../Settings.qml" line="1065"/>
         <source>DuckDuckGo</source>
         <translation type="unfinished">DuckDuckGo</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1066"/>
+        <location filename="../Settings.qml" line="1076"/>
         <source>Startpage</source>
         <translation type="unfinished">Startpage</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1075"/>
+        <location filename="../Settings.qml" line="1085"/>
         <source>MetaGer</source>
         <translation type="unfinished">MetaGer</translation>
     </message>
@@ -657,27 +582,27 @@
         <translation type="obsolete">Experimentell</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1153"/>
+        <location filename="../Settings.qml" line="1163"/>
         <source>Fullscreen</source>
         <translation type="unfinished">Helskärm</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1164"/>
+        <location filename="../Settings.qml" line="1174"/>
         <source>Use colored app icons</source>
         <translation type="unfinished">Använd färgade appsymboler</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1173"/>
+        <location filename="../Settings.qml" line="1183"/>
         <source>Show apps at startup</source>
         <translation type="unfinished">Visa appar på startbildskärmen</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1182"/>
+        <location filename="../Settings.qml" line="1192"/>
         <source>Use haptic menus</source>
         <translation type="unfinished">Använd haptiska menyer</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1280"/>
+        <location filename="../Settings.qml" line="1291"/>
         <source>Background blur</source>
         <translation type="unfinished">bakgrundsoskärpa</translation>
     </message>
@@ -685,88 +610,108 @@
 <context>
     <name>Springboard</name>
     <message>
-        <location filename="../Springboard.qml" line="21"/>
+        <location filename="../Springboard.qml" line="25"/>
         <source>Monday</source>
         <translation type="unfinished">Måndag</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="21"/>
+        <location filename="../Springboard.qml" line="25"/>
         <source>Tuesday</source>
         <translation type="unfinished">Tisdag</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="21"/>
+        <location filename="../Springboard.qml" line="25"/>
         <source>Wednesday</source>
         <translation type="unfinished">Onsdag</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="21"/>
+        <location filename="../Springboard.qml" line="25"/>
         <source>Thursday</source>
         <translation type="unfinished">Torsdag</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="21"/>
+        <location filename="../Springboard.qml" line="25"/>
         <source>Friday</source>
         <translation type="unfinished">Fredag</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="22"/>
+        <location filename="../Springboard.qml" line="26"/>
         <source>Saturday</source>
         <translation type="unfinished">Lördag</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="22"/>
+        <location filename="../Springboard.qml" line="25"/>
         <source>Sunday</source>
         <translation type="unfinished">Söndag</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="22"/>
+        <location filename="../Springboard.qml" line="26"/>
         <source>tomorrow</source>
         <translation type="unfinished">imorgon</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="121"/>
+        <location filename="../Springboard.qml" line="148"/>
         <source>Springboard</source>
         <translation type="unfinished">Språngbrädan</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="155"/>
+        <location filename="../Springboard.qml" line="185"/>
         <source>Type anything</source>
         <translation type="unfinished">Skriva någonting</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="253"/>
+        <location filename="../Springboard.qml" line="283"/>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
         <translation type="unfinished">Tyvärr kunde jag inte hitta ett telefonnummer för denna kontakt</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="256"/>
-        <location filename="../Springboard.qml" line="278"/>
+        <location filename="../Springboard.qml" line="286"/>
+        <location filename="../Springboard.qml" line="308"/>
         <source>Sorry. I couldn&apos;t identify the contact</source>
         <translation type="unfinished">Tyvärr kunde jag inte hitta kontakten</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="535"/>
+        <location filename="../Springboard.qml" line="564"/>
         <source>New note saved</source>
         <translation type="unfinished">Ny anteckning sparad</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="576"/>
-        <location filename="../Springboard.qml" line="590"/>
+        <location filename="../Springboard.qml" line="605"/>
+        <location filename="../Springboard.qml" line="625"/>
         <source>An error occured</source>
         <translation type="unfinished">Ett fel inträffade</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="592"/>
+        <location filename="../Springboard.qml" line="627"/>
         <source>Please reset contacts and try again.</source>
         <translation type="unfinished">Återställ kontakterna och försök igen.</translation>
+    </message>
+    <message>
+        <location filename="../Springboard.qml" line="960"/>
+        <source>weather</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Springboard.qml" line="967"/>
+        <source>Set location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Springboard.qml" line="986"/>
+        <source>Enter any location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Springboard.qml" line="1568"/>
+        <source>x</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sorry. Contact has no mobile phone number</source>
         <translation type="obsolete">Tyvärr har kontakten inget mobilnummer</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="470"/>
+        <location filename="../Springboard.qml" line="499"/>
         <source>Sorry. Contact has no email address</source>
         <translation type="unfinished">Tyvärr har kontakten ingen e-postadress</translation>
     </message>
@@ -831,19 +776,19 @@
         <translation type="obsolete">Aktuella nyheter</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="409"/>
-        <location filename="../Springboard.qml" line="418"/>
-        <location filename="../Springboard.qml" line="427"/>
-        <location filename="../Springboard.qml" line="436"/>
-        <location filename="../Springboard.qml" line="448"/>
+        <location filename="../Springboard.qml" line="438"/>
+        <location filename="../Springboard.qml" line="447"/>
+        <location filename="../Springboard.qml" line="456"/>
+        <location filename="../Springboard.qml" line="465"/>
         <location filename="../Springboard.qml" line="477"/>
-        <location filename="../Springboard.qml" line="484"/>
-        <location filename="../Springboard.qml" line="491"/>
+        <location filename="../Springboard.qml" line="506"/>
+        <location filename="../Springboard.qml" line="513"/>
+        <location filename="../Springboard.qml" line="520"/>
         <source>Sorry, no contact was selected</source>
         <translation type="unfinished">Det var ingen kontakt utvald</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="453"/>
+        <location filename="../Springboard.qml" line="482"/>
         <source>Sorry, the mobile phone number is unknown</source>
         <translation type="unfinished">Tyvärr är telefonnummret okänd</translation>
     </message>
@@ -852,7 +797,7 @@
         <translation type="obsolete">Din anteckning har sparats</translation>
     </message>
     <message>
-        <location filename="../Springboard.qml" line="916"/>
+        <location filename="../Springboard.qml" line="1461"/>
         <source>My event</source>
         <translation type="unfinished">Mitt evenemang</translation>
     </message>
@@ -910,158 +855,259 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.qml" line="14"/>
+        <location filename="../main.qml" line="15"/>
         <source>Volla</source>
         <translation type="unfinished">Volla</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="180"/>
+        <location filename="../main.qml" line="186"/>
         <source>Send message</source>
         <translation type="unfinished">Skicka ett meddelande</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="180"/>
+        <location filename="../main.qml" line="186"/>
         <source>Send email</source>
         <translation type="unfinished">Skicka ett e-postmeddelande</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="185"/>
+        <location filename="../main.qml" line="191"/>
         <source>Create note</source>
         <translation type="unfinished">Skapa en anteckning</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="185"/>
+        <location filename="../main.qml" line="191"/>
         <source>Search web</source>
         <translation type="unfinished">Sök i webben</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="182"/>
+        <location filename="../main.qml" line="188"/>
         <source>Call</source>
         <translation type="unfinished">Ring upp</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="181"/>
+        <location filename="../main.qml" line="187"/>
         <source>Send home email</source>
         <translation type="unfinished">Skicka ett hem-e-postmeddelande</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="181"/>
+        <location filename="../main.qml" line="187"/>
         <source>Send work email</source>
         <translation type="unfinished">Skicka ett jobb-e-postmeddelande</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="182"/>
+        <location filename="../main.qml" line="188"/>
         <source>Send other email</source>
         <translation type="unfinished">Skicka ett annat e-postmededelande</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="183"/>
+        <location filename="../main.qml" line="189"/>
         <source>Call on cell phone</source>
         <translation type="unfinished">Ring på mobiltelefonen</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="183"/>
+        <location filename="../main.qml" line="189"/>
         <source>Call at home</source>
         <translation type="unfinished">Ring hem</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="184"/>
+        <location filename="../main.qml" line="190"/>
         <source>Call at work</source>
         <translation type="unfinished">Ring på jobbet</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="184"/>
+        <location filename="../main.qml" line="190"/>
         <source>Call other phone</source>
         <translation type="unfinished">Ring en annan telefon</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="186"/>
+        <location filename="../main.qml" line="192"/>
         <source>Open in browser</source>
         <translation type="unfinished">Öppna i webbläsaren</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="186"/>
+        <location filename="../main.qml" line="192"/>
         <source>Add feed to collection</source>
         <translation type="unfinished">Lägg till flödet i samlingen</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="187"/>
+        <location filename="../main.qml" line="193"/>
         <source>Open Contact</source>
         <translation type="unfinished">Öppna kontakt</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="187"/>
-        <location filename="../main.qml" line="245"/>
+        <location filename="../main.qml" line="193"/>
+        <location filename="../main.qml" line="374"/>
         <source>Show Notes</source>
         <translation type="unfinished">Visa anteckningar</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="187"/>
+        <location filename="../main.qml" line="193"/>
         <source>Send Signal message</source>
         <translation type="unfinished">Skicka signalmeddelande</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="188"/>
+        <location filename="../main.qml" line="194"/>
         <source>Add to Calender</source>
         <translation type="unfinished">Lägg till i kalendern</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="188"/>
+        <location filename="../main.qml" line="194"/>
         <source>Show in Signal</source>
         <translation type="unfinished">Show in Signal</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="203"/>
+        <location filename="../main.qml" line="209"/>
         <source>Missing message text</source>
         <translation type="unfinished">Meddelandet har ingen text</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="205"/>
+        <location filename="../main.qml" line="211"/>
         <source>Generic failure</source>
         <translation type="unfinished">Generiskt fel</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="206"/>
+        <location filename="../main.qml" line="212"/>
         <source>No service</source>
         <translation type="unfinished">Ingen tjänst</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="207"/>
+        <location filename="../main.qml" line="213"/>
         <source>Null PDU</source>
         <translation type="unfinished">Noll PDU</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="208"/>
+        <location filename="../main.qml" line="214"/>
         <source>Radio off</source>
         <translation type="unfinished">Stäng av radion</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="209"/>
+        <location filename="../main.qml" line="215"/>
         <source>Message delivered</source>
         <translation type="unfinished">Meddelandet levererad</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="210"/>
+        <location filename="../main.qml" line="216"/>
         <source>Message not delivered</source>
         <translation type="unfinished">Meddelandet inte levererad</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="240"/>
+        <location filename="../main.qml" line="334"/>
+        <location filename="../main.qml" line="336"/>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="335"/>
+        <location filename="../main.qml" line="337"/>
+        <source>Messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="338"/>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="339"/>
+        <source>Bancontact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="340"/>
+        <source>De Trein</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="341"/>
+        <source>Mynexuzhealth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="342"/>
+        <source>Bonsai</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="343"/>
+        <source>MijnOnlineAgenda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="344"/>
+        <source>Facebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="345"/>
+        <source>Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="346"/>
+        <location filename="../main.qml" line="347"/>
+        <location filename="../main.qml" line="348"/>
+        <location filename="../main.qml" line="349"/>
+        <location filename="../main.qml" line="350"/>
+        <source>Mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="351"/>
+        <source>Sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="352"/>
+        <source>VPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="353"/>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="354"/>
+        <source>A-Droid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="355"/>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="356"/>
+        <source>Settings</source>
+        <translation type="unfinished">Inställningar</translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="357"/>
+        <source>Radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="358"/>
+        <source>Weather</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.qml" line="369"/>
         <source>Show Dialer</source>
         <translation type="unfinished">Visa telefonen</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="241"/>
+        <location filename="../main.qml" line="370"/>
         <source>Camera</source>
         <translation type="unfinished">Kameran</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="243"/>
+        <location filename="../main.qml" line="372"/>
         <source>Agenda</source>
         <translation type="unfinished">Agendan</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="242"/>
+        <location filename="../main.qml" line="371"/>
         <source>Gallery</source>
         <translation type="unfinished">Galleriet</translation>
     </message>
@@ -1070,105 +1116,105 @@
         <translation type="obsolete">Anteckningar</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="244"/>
+        <location filename="../main.qml" line="373"/>
         <source>Create Event</source>
         <translation type="unfinished">Skapa ett evenemang</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="248"/>
+        <location filename="../main.qml" line="377"/>
         <source>Recent People</source>
         <translation type="unfinished">Aktuella kontakter</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="247"/>
+        <location filename="../main.qml" line="376"/>
         <source>Recent Threads</source>
         <translation type="unfinished">Aktuella konversationer</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="246"/>
+        <location filename="../main.qml" line="375"/>
         <source>Recent News</source>
         <translation type="unfinished">Nyheter</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="473"/>
+        <location filename="../main.qml" line="603"/>
         <source>Just now</source>
         <translation type="unfinished">Just nu</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="475"/>
+        <location filename="../main.qml" line="605"/>
         <source>minutes ago</source>
         <translation type="unfinished">minuter innan</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="478"/>
-        <location filename="../main.qml" line="480"/>
+        <location filename="../main.qml" line="608"/>
+        <location filename="../main.qml" line="610"/>
         <source>Today</source>
         <translation type="unfinished">idag</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="484"/>
-        <location filename="../main.qml" line="486"/>
+        <location filename="../main.qml" line="614"/>
+        <location filename="../main.qml" line="616"/>
         <source>Yesterday</source>
         <translation type="unfinished">igår</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="532"/>
+        <location filename="../main.qml" line="662"/>
         <source>New Subscrption</source>
         <translation type="unfinished">Nytt abonnemang</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="534"/>
+        <location filename="../main.qml" line="664"/>
         <source>You have already subscribed the feed</source>
         <translation type="unfinished">Du har redan prenumererat på kanalen</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="557"/>
+        <location filename="../main.qml" line="687"/>
         <source>Invalid news ID</source>
         <translation type="unfinished">Ogiltig nyhets-ID</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="617"/>
+        <location filename="../main.qml" line="747"/>
         <source>Invalid RSS feed: </source>
         <translation type="unfinished">Ogiltigt RSS-flöde: </translation>
     </message>
     <message>
-        <location filename="../main.qml" line="204"/>
+        <location filename="../main.qml" line="210"/>
         <source>Message sent</source>
         <translation type="unfinished">Meddelandet skickat</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="588"/>
+        <location filename="../main.qml" line="718"/>
         <source>Error because of too much redirects</source>
         <translation type="unfinished">Fel på grund av för många omdirigeringar</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="600"/>
+        <location filename="../main.qml" line="730"/>
         <source>Could not load a valid feed</source>
         <translation type="unfinished">Du har alresdy prenumererat på feed</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="724"/>
+        <location filename="../main.qml" line="854"/>
         <source>New shortcut</source>
         <translation type="unfinished">Ny genväg</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="726"/>
+        <location filename="../main.qml" line="856"/>
         <source>You have alresdy added the shortcut</source>
         <translation type="unfinished">Du har redan tillfogat genvägen</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="853"/>
-        <location filename="../main.qml" line="858"/>
+        <location filename="../main.qml" line="987"/>
+        <location filename="../main.qml" line="992"/>
         <source>Reset successful</source>
         <translation type="unfinished">Återställning lyckad</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="904"/>
+        <location filename="../main.qml" line="1038"/>
         <source>Couldn&apos;t load plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.qml" line="1151"/>
+        <location filename="../main.qml" line="1290"/>
         <source>Not yet supported</source>
         <translation type="unfinished">Stöds ännu inte</translation>
     </message>

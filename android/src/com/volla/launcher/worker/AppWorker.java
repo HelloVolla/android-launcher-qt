@@ -278,8 +278,6 @@ public class AppWorker
     }
 
     public static String drawableToBase64 (Drawable drawable) {
-//        Log.d("Class", drawable.getClass().toString());
-
         Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
