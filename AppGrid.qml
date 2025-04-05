@@ -286,6 +286,9 @@ LauncherPage {
                 console.log("AppGrid | Column completed")
                 AN.SystemDispatcher.dispatch("volla.launcher.getShortcuts", {})
                 //AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
+                if (customSettings.customGroupsJSON) {
+                       customGroups = JSON.parse(customSettings.customGroupsJSON);
+                   }
             }
 
             function showGroup(groupIndex) {
