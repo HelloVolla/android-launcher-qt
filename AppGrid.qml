@@ -93,8 +93,30 @@ LauncherPage {
     }
 
     function getGroupedApps(apps) {
+        enableCustomGroup = false;
         var groupedApps = new Array
+        if (settings.useCategories && !settings.useGroupedApps) {
+            console.debug("AppGrid | settings.useGroupedApps nly use categoy is true")
+            apps.sort(function(a, b) {
+                if (a.category > b.category) return 1
+                else if (a.category < b.category) return -1
+                else return 0
+            })
+            var groupLabel
+            var someApps
+            for (var i = 0; i < apps.length; i++) {
+                var app = apps[i]
 
+                var category = app.category !== "" ? app.category : qsTr("Other apps")
+                if (category !== groupLabel) {
+                    if (groupLabel !== undefined) groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                    groupLabel = category
+                    someApps = new Array
+                }
+                someApps.push(app)
+            }
+            groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+        }
         if (settings.useGroupedApps) {
             apps.sort(function(a, b) { return b["statistic"] - a["statistic"] })
 
