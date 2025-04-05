@@ -339,6 +339,15 @@ LauncherPage {
             radius: mainView.innerSpacing
         }
 
+        onClosed: {
+                console.log("AppGrid | Context menu dismissed!");
+            for (var i = toKeepMenuItems.length-1; i>=0; i--) {
+                contextMenu.removeItem(toKeepMenuItems[i])
+                contextMenu.implicitHeight -= contextMenu.menuItemHeight + mainView.innerSpacing;
+            }
+            toKeepMenuItems = []
+        }
+
         MenuItem {
             id: addShortCutItem
             anchors.margins: mainView.innerSpacing
