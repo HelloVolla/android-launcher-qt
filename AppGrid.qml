@@ -16,6 +16,9 @@ LauncherPage {
     property real labelPointSize: 16
 
     property var appGroups: [] // QML elements with app grids
+    property var customGroups: []
+    property var toKeepMenuItems: []
+    property bool enableCustomGroup: false
     property var pinnedShortcuts: []
 
     property int appCount: 0
@@ -23,6 +26,15 @@ LauncherPage {
     property int maxAppCount: mainView.isTablet ? 15 : 12
 
     property double lastAppsCheck: 0.0
+
+    Settings {
+        id: customSettings
+        property string customGroupsJSON: "[]"
+    }
+
+    function saveCustomGroups() {
+        customSettings.customGroupsJSON = JSON.stringify(customGroups);
+    }
 
     onTextInputChanged: {
         console.log("AppGrid | Text input changed: " + appLauncher.textInput)
