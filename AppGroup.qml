@@ -125,6 +125,10 @@ Item {
             onClicked: {
                 groupItem.parent.showGroup(groupItem.groupIndex)
             }
+            onPressAndHold: {
+                groupItem.parent.updateGroupDialog(groupItem.groupLabel)
+
+            }
         }
 
         Label {

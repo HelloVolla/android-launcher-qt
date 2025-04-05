@@ -55,13 +55,10 @@ LauncherPage {
             }
         } else if (key === "useCategories") {
             settings.useCategories = value
-
-            if (settings.useGroupedApps) {
                 appLauncher.selectedGroup = 0
                 var apps = getAllApps()
                 appLauncher.destroyAppGroups()
                 appLauncher.createAppGroups(getGroupedApps(apps))
-            }
         } else if (key === "useGroupedApps") {
             settings.useGroupedApps = value
             appLauncher.selectedGroup = 0
@@ -222,6 +219,48 @@ LauncherPage {
         appLauncher.appGroups = new Array
     }
 
+    function updateGroup(groupLabel, updatedGroupLabel) {
+        var newGroupName = ""
+        if(updatedGroupLabel !== undefined && updatedGroupLabel.length > 1 ){
+            newGroupName = updatedGroupLabel
+        }
+
+        for (var j =0; j< appLauncher.appGroups.length; j++) {
+            var appGroup = appLauncher.appGroups[j]
+
+            for (var i =0; i < appGroup.apps.length; i++) {
+                if(appGroup.apps[i]["customCategory"] !== undefined && appGroup.apps[i]["customCategory"] === groupLabel) {
+                    appGroup.apps[i]["customCategory"] = newGroupName;
+                    appLauncher.appGroups[j] = appGroup
+                }
+            }
+        }
+        for (var i = 0; i < customGroups.length; i++) {
+            console.log("AppGrid | customGroups "+customGroups.toString())
+            console.log("AppGrid | JSON.stringify(customGroups) "+JSON.stringify(customGroups))
+             console.log("AppGrid | customGroups[i] "+customGroups[i])
+             if(customGroups[i] === groupLabel) {
+                 console.log("AppGrid | newGroupName "+newGroupName)
+                 if(newGroupName.length <= 0){
+                     console.log("AppGrid | removing group ")
+                     //We need to rempve this group
+                     customGroups.splice(i, 1);
+                     //customGroups = customGroups;
+                 } else {
+                     //We need to update the previoud group
+                     console.log("AppGrid | updating group ")
+                     customGroups[i] = newGroupName
+                 }
+                  console.log("AppGrid | customGroups "+customGroups.toString())
+                 console.log("AppGrid | JSON.stringify(customGroups) "+JSON.stringify(customGroups))
+             }
+        }
+        saveCustomGroups()
+        updateAppLauncher("useGroupedApps",false)
+        var app = getAllApps()
+        appsCache.writePrivate(JSON.stringify(app))
+    }
+
     Flickable {
         id: appLauncherFlickable
         anchors.fill: parent
@@ -301,6 +340,15 @@ LauncherPage {
                 }
             }
 
+            function updateGroupDialog(groupLabel, updatedGroupLabel) {
+                if(!enableCustomGroup)
+                    return
+                updateDialogTitle.text = qsTr("Do you want to update" + groupLabel + " group");
+                updateCustomGroupDialog.currentGroupName = groupLabel
+                customGroupLabel.text = groupLabel
+                updateCustomGroupDialog.open()
+            }
+
             function openContextMenu(app, gridCell, gridView) {
                 contextMenu.app = app
                 contextMenu.gridView = gridView
@@ -316,6 +364,128 @@ LauncherPage {
 
             function closeContextMenu() {
                 contextMenu.dismiss()
+            }
+            Dialog {
+                id: updateCustomGroupDialog
+                anchors.centerIn: parent
+                width: parent.width - mainView.innerSpacing * 4
+                modal: true
+                dim: false
+
+                property var backgroundColor: "#292929"
+                property var currentGroupName : ""
+                onOpened: {
+                    newCustomGroup.text = ""
+                    height: dialogTitle.height + newCustomGroup.height +
+                            mainView.innerSpacing * 2
+                }
+
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: customGroupDialog.backgroundColor
+                    border.color: "transparent"
+                    radius: mainView.innerSpacing / 2
+                }
+
+                enter: Transition {
+                     NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
+                }
+
+                exit: Transition {
+                    NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
+                }
+
+                contentItem: Column {
+                    id: updateDialogColumn
+
+                    Label {
+                        id: updateDialogTitle
+                        text: qsTr("Update or delete Group Name")
+                        wrapMode: Text.WordWrap
+                        color: mainView.fontColor
+                        font.pointSize: mainView.mediumFontSize
+                        bottomPadding: mainView.innerSpacing
+                        background: Rectangle {
+                            color: "transparent"
+                            border.color: "transparent"
+                        }
+                    }
+
+                    TextField {
+                        id: customGroupLabel
+                        width: parent.width
+                        color: mainView.fontColor
+                        placeholderTextColor: "darkgrey"
+                        font.pointSize: mainView.mediumFontSize
+                        background: Rectangle {
+                            color: mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
+                                   ? "black" : "white"
+                            border.color: "transparent"
+                        }
+                    }
+
+
+                    Row {
+                        width: parent.width
+                        topPadding: mainView.innerSpacing
+                        spacing: mainView.innerSpacing
+
+                        Button {
+                            id: deleteButton
+                            flat: true
+                            padding: mainView.innerSpacing / 2
+                            width: parent.width / 2 - mainView.innerSpacing / 2
+                            text: qsTr("Delete")
+
+                            contentItem: Text {
+                                text: deleteButton.text
+                                color: mainView.fontColor
+                                font.pointSize: mainView.mediumFontSize
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "gray"
+                            }
+
+                            onClicked: {
+                                updateCustomGroupDialog.close()
+                                // Need to delete this group hence passing second argument as blank
+                                updateGroup(updateCustomGroupDialog.currentGroupName,"")
+                            }
+                        }
+
+                        Button {
+                            id: resetButton
+                            width: parent.width / 2 - mainView.innerSpacing / 2
+                            padding: mainView.innerSpacing / 2
+                            flat: true
+                            text: qsTr("Rename")
+
+                            contentItem: Text {
+                                text: resetButton.text
+                                color: mainView.fontColor
+                                font.pointSize: mainView.mediumFontSize
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            background: Rectangle {
+                                color: "transparent"
+                                border.color: "gray"
+                            }
+
+                            onClicked: {
+                                if (customGroupLabel.text !== updateCustomGroupDialog.currentGroupName) {
+                                    //Will only update the group if it's name is changed from previous name
+                                    updateGroup(updateCustomGroupDialog.currentGroupName,customGroupLabel.text)
+                                }
+                                updateCustomGroupDialog.close()
+                                }
+                            }
+                        }
+                    }
+
             }
         }
     }
