@@ -465,8 +465,243 @@ LauncherPage {
                 }
             }
         }
+
+        function addMenuItem(groupTitle, currentApp, handler) {
+            var menuItem = menuItemComponent.createObject(contextMenu);
+            menuItem.text = groupTitle;
+            if(groupTitle === currentApp["customCategory"]){
+                menuItem.text = "Remove from " + menuItem.text
+            } else {
+                menuItem.text = "Add to " + menuItem.text
+            }
+
+            menuItem.onTriggered.connect(function() {
+                    handler(groupTitle,currentApp,menuItem ); // Pass title to the handler
+                });
+            contextMenu.addItem(menuItem); // Add the menu item to the menu
+            toKeepMenuItems.push(menuItem)
+        }
+
+        function myHandler(groupTitle, appPackage,menuItem) {
+            updateApp(appPackage, groupTitle)
+        }
+
+        function updateApp(appPackage, customGroupName, menuItem) {
+            for (var j =0; j< appLauncher.appGroups.length; j++) {
+                var appGroup = appLauncher.appGroups[j]
+                for (var i =0; i < appGroup.apps.length; i++){
+                    if(appGroup.apps[i]["package"] === appPackage["package"]) {
+                        let jsonObject = appGroup.apps[i];
+                        if(jsonObject["customCategory"] !== undefined && jsonObject["customCategory"] === customGroupName){
+                            jsonObject["customCategory"] = "";
+                        } else {
+                            jsonObject["customCategory"] = customGroupName;
+                        }
+
+                        appGroup.apps[i] = jsonObject;
+                        if(appGroup.apps[i]["customCategory"] !== undefined){
+                            console.debug("AppGrid | customCategory: " + appGroup.apps[i]["customCategory"])
+                        }
+                        appLauncher.appGroups[j] = appGroup
+                    }
+                }
+            }
+            updateAppLauncher("useGroupedApps",false)
+            var app = getAllApps()
+            appsCache.writePrivate(JSON.stringify(app))
+        }
     }
 
+    Component {
+        id: menuItemComponent
+        MenuItem {
+            anchors.margins: mainView.innerSpacing
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: contextMenu.menuWidth
+                text: parent.text
+                font: parent.font
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+        }
+    }
+
+    MouseArea {
+        id: shortcutMenu
+        height: mainView.innerSpacing * 4
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: 0 - mainView.outerSpacing
+
+        preventStealing: true
+        enabled: true
+
+        property var selectedMenuItem: rootMenuButton
+        width: 120
+
+
+        onClicked: {
+            console.log("Springboard | clicked")
+            customGroupDialog.backgroundColor = mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
+                    ? "#292929" : "#CCCCCC"
+            customGroupDialog.open();
+
+        }
+        Rectangle {
+            id: rootMenuButton
+            width: 60
+            height: 60
+            visible: true
+            //color: mainView.accentColor
+            color: "#292929"
+            radius: width * 0.5
+            anchors.right: parent.right
+            anchors.rightMargin: mainView.innerSpacing * 2
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: mainView.innerSpacing * 2
+            Text {
+                width: 60
+                height: 60
+                text: "+"
+                rightPadding: 0
+                bottomPadding: 0
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                   clip: false
+                   transformOrigin: Item.Center
+                   lineHeight: 0
+                   font.pixelSize: 40
+                   color: "white"
+            }
+        }
+    }
+
+    Dialog {
+        id: customGroupDialog
+
+        anchors.centerIn: parent
+        width: parent.width - mainView.innerSpacing * 4
+        modal: true
+        dim: false
+
+        property var backgroundColor: "#292929"
+        property bool definePasswordMode: false
+        property bool isPasswordSet: false
+
+        onOpened: {
+            newCustomGroup.text = ""
+            height: dialogTitle.height + newCustomGroup.height +
+                    mainView.innerSpacing * 2
+        }
+
+        background: Rectangle {
+            anchors.fill: parent
+            color: customGroupDialog.backgroundColor
+            border.color: "transparent"
+            radius: mainView.innerSpacing / 2
+        }
+
+        enter: Transition {
+             NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
+        }
+
+        exit: Transition {
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
+        }
+
+        contentItem: Column {
+            id: dialogColumn
+
+            Label {
+                id: dialogTitle
+                text: qsTr("Create a Custom Group")
+                color: mainView.fontColor
+                font.pointSize: mainView.mediumFontSize
+                bottomPadding: mainView.innerSpacing
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "transparent"
+                }
+            }
+
+            TextField {
+                id: newCustomGroup
+                width: parent.width
+                color: mainView.fontColor
+                placeholderTextColor: "darkgrey"
+                font.pointSize: mainView.mediumFontSize
+                background: Rectangle {
+                    color: mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
+                           ? "black" : "white"
+                    border.color: "transparent"
+                }
+            }
+
+
+            Row {
+                width: parent.width
+                topPadding: mainView.innerSpacing
+                spacing: mainView.innerSpacing
+
+                Button {
+                    id: cancelButton
+                    flat: true
+                    padding: mainView.innerSpacing / 2
+                    width: parent.width / 2 - mainView.innerSpacing / 2
+                    text: qsTr("Cancel")
+
+                    contentItem: Text {
+                        text: cancelButton.text
+                        color: mainView.fontColor
+                        font.pointSize: mainView.mediumFontSize
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    background: Rectangle {
+                        color: "transparent"
+                        border.color: "gray"
+                    }
+
+                    onClicked: {
+                        customGroupDialog.close()
+                    }
+                }
+
+                Button {
+                    id: okButton
+                    width: parent.width / 2 - mainView.innerSpacing / 2
+                    padding: mainView.innerSpacing / 2
+                    flat: true
+                    text: qsTr("Create")
+
+                    contentItem: Text {
+                        text: okButton.text
+                        color: mainView.fontColor
+                        font.pointSize: mainView.mediumFontSize
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    background: Rectangle {
+                        color: "transparent"
+                        border.color: "gray"
+                    }
+
+                    onClicked: {
+                         console.log("AppGrid | Clicked Ok Button: "+newCustomGroup.text)
+                            customGroupDialog.close()
+                        customGroups.push(newCustomGroup.text)
+                        console.log("AppGrid | Clicked Ok Button: "+customGroups.length)
+                            saveCustomGroups();
+                        }
+                    }
+                }
+            }
+
+    }
     Connections {
         target: AN.SystemDispatcher
         onDispatched: {
