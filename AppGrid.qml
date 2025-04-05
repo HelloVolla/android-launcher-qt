@@ -305,6 +305,12 @@ LauncherPage {
                 contextMenu.app = app
                 contextMenu.gridView = gridView
                 contextMenu.isPinnedShortcut = app.shortcutId !== undefined && app.shortcutId.length > 0
+                if(enableCustomGroup){
+                    for (var i = 0; i < customGroups.length; i++) {
+                         contextMenu.addMenuItem(qsTr(customGroups[i]), contextMenu.app , contextMenu.myHandler);
+                        contextMenu.implicitHeight += contextMenu.menuItemHeight + mainView.innerSpacing;
+                    }
+                }
                 contextMenu.popup(gridCell)
             }
 
