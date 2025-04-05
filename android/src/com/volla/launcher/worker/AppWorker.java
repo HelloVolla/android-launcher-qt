@@ -140,6 +140,7 @@ public class AppWorker
                                     }
 
                                     appInfo.put("statistic", (int)timeInForeground);
+                                    appInfo.put("customCategory","");
                                     appList.add(appInfo);
                                 }
                             }
