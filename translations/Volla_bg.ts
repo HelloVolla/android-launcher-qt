@@ -310,7 +310,7 @@
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="unfinished">прозрачен режим</translation>
+        <translation type="obsolete">прозрачен режим</translation>
     </message>
     <message>
         <source>News Channels</source>
@@ -475,6 +475,14 @@
     <message>
         <source>Widgets</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark Translucent Mode</source>
+        <translation type="unfinished">Тъмно полупрозрачен режим</translation>
+    </message>
+    <message>
+        <source>Light Translucent Mode</source>
+        <translation type="unfinished">Светъл полупрозрачен режим</translation>
     </message>
 </context>
 <context>

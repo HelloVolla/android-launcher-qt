@@ -278,7 +278,7 @@
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation>Празрысты рэжым</translation>
+        <translation type="vanished">Празрысты рэжым</translation>
     </message>
     <message>
         <source>News Channels</source>
@@ -434,6 +434,14 @@
     </message>
     <message>
         <source>Widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark Translucent Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Light Translucent Mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

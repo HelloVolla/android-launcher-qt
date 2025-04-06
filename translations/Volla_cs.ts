@@ -278,7 +278,7 @@
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="unfinished">Průsvitný režim</translation>
+        <translation type="obsolete">Průsvitný režim</translation>
     </message>
     <message>
         <source>Security mode is OFF</source>
@@ -435,6 +435,14 @@
     <message>
         <source>Widgets</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark Translucent Mode</source>
+        <translation type="unfinished">Tmavý průsvitný režim</translation>
+    </message>
+    <message>
+        <source>Light Translucent Mode</source>
+        <translation type="unfinished">Světlý průsvitný režim</translation>
     </message>
 </context>
 <context>
