@@ -93,7 +93,7 @@ public class LayoutUtil {
                                     Log.d(TAG, "Set night mode and black wallpaper");
                                     wallpaperId = R.drawable.wallpaper_black;
                                 } else {
-                                    Log.d(TAG, "Set nidhgt mode and system wallpaper");
+                                    Log.d(TAG, "Set dark mode and system wallpaper");
                                     Log.d(TAG, "Retrieve system wallpaper" );
                                     if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                                         wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
@@ -111,7 +111,19 @@ public class LayoutUtil {
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
-                                wallpaperId = R.drawable.wallpaper_white;
+
+                                if (value == 0) {
+                                    Log.d(TAG, "Set light mode and white wallpaper");
+                                    wallpaperId = R.drawable.wallpaper_white;
+                                } else {
+                                    Log.d(TAG, "Set light mode and system wallpaper");
+                                    Log.d(TAG, "Retrieve system wallpaper" );
+                                    if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                        wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                                    } else {
+                                        wallpaperId = R.drawable.wallpaper_image;
+                                    }
+                                }
 
                                 Log.d(TAG, "Will change system ui mode to " + UiModeManager.MODE_NIGHT_NO);
                                 umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
@@ -123,7 +135,6 @@ public class LayoutUtil {
                                 && wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId
                                 && updateLockScreen) {
                                 Log.d(TAG, "Update lock screen wallpaper");
-                               /**
                                 try {
                                     if (value == 2 || value == 3) {
                                         Log.d(TAG, "Clear lock screen wallpaper");
@@ -133,7 +144,7 @@ public class LayoutUtil {
                                     }
                                 } catch (IOException e) {
                                     Log.d(TAG, "Couldn't load white wallpaper: " + e.getMessage());
-                                } **/
+                                }
                             }
                         }
                     };
