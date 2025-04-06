@@ -273,10 +273,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Translucent Mode</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>News Channels</source>
         <translation></translation>
     </message>
@@ -431,6 +427,14 @@
     <message>
         <source>Widgets</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark Translucent Mode</source>
+        <translation type="unfinished">Modo translúcido escuro</translation>
+    </message>
+    <message>
+        <source>Light Translucent Mode</source>
+        <translation type="unfinished">Modo translúcido claro</translation>
     </message>
 </context>
 <context>

@@ -310,7 +310,7 @@
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="unfinished">priehľadný režim</translation>
+        <translation type="obsolete">priehľadný režim</translation>
     </message>
     <message>
         <source>News Channels</source>
@@ -475,6 +475,14 @@
     <message>
         <source>Widgets</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark Translucent Mode</source>
+        <translation type="unfinished">Tmavý priesvitný režim</translation>
+    </message>
+    <message>
+        <source>Light Translucent Mode</source>
+        <translation type="unfinished">Tmavý priesvitný režim</translation>
     </message>
 </context>
 <context>

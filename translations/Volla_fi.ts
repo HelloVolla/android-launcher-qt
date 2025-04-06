@@ -311,7 +311,7 @@
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="unfinished">läpinäkyvä tila</translation>
+        <translation type="obsolete">läpinäkyvä tila</translation>
     </message>
     <message>
         <source>News Channels</source>
@@ -476,6 +476,14 @@
     <message>
         <source>Widgets</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark Translucent Mode</source>
+        <translation type="unfinished">Tumma läpikuultava tila</translation>
+    </message>
+    <message>
+        <source>Light Translucent Mode</source>
+        <translation type="unfinished">Kevyt läpikuultava tila</translation>
     </message>
 </context>
 <context>

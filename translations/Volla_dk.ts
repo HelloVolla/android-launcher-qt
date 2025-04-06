@@ -278,7 +278,7 @@
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="unfinished">Gennemskinnelig stil</translation>
+        <translation type="obsolete">Gennemskinnelig stil</translation>
     </message>
     <message>
         <source>Security mode is OFF</source>
@@ -439,6 +439,14 @@
     <message>
         <source>Widgets</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark Translucent Mode</source>
+        <translation type="unfinished">Mørk gennemskinnelig tilstand</translation>
+    </message>
+    <message>
+        <source>Light Translucent Mode</source>
+        <translation type="unfinished">Let gennemskinnelig tilstand</translation>
     </message>
 </context>
 <context>
