@@ -43,25 +43,26 @@ public class LayoutUtil {
             public void onDispatched(String type, Map message) {
                 if (type.equals(SET_COLOR)) {
                     final int value = (int) message.get("value");
+                    boolean isDarkActive = (value == 1 || value == 3 ) ? true : false;
                     final boolean updateLockScreen = (boolean) message.get("updateLockScreen");
                     final Activity activity = QtNative.activity();
 
-                    Log.d(TAG, "Will change lock screen clock color for value " + value + " to " + (value > 0 ? "white" : "black"));
+                    Log.d(TAG, "Will change lock screen clock color for value " + value + " to " + (isDarkActive ? "white" : "black"));
 
                     Intent intent = new Intent();
                     intent.setAction("android.widget.VollaClock.action.CHANGE_COLORS");
-                    intent.putExtra("android.widget.VollaClock.param.HOURS", (value > 0 ? Color.WHITE : Color.BLACK));
-                    intent.putExtra("android.widget.VollaClock.param.DATE", (value > 0 ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("android.widget.VollaClock.param.HOURS", (isDarkActive ? Color.WHITE : Color.BLACK));
+                    intent.putExtra("android.widget.VollaClock.param.DATE", (isDarkActive ? Color.WHITE : Color.BLACK));
                     activity.sendBroadcast(intent);
 
                     Intent i = new Intent();
                     i.setAction("com.volla.simpleappstheme.action.CHANGE_COLORS");
-                    i.putExtra("com.volla.simpleappstheme.param.TEXT_COLOR", (value > 0 ? Color.WHITE : -13421773));
-                    i.putExtra("com.volla.simpleappstheme.param.BACKGROUND_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
-                    i.putExtra("com.volla.simpleappstheme.param.PRIMARY_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
-                    i.putExtra("com.volla.simpleappstheme.param.ACCENT_COLOR", (value > 0 ? Color.WHITE : Color.BLACK));
-                    i.putExtra("com.volla.simpleappstheme.param.APP_ICON_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
-                    i.putExtra("com.volla.simpleappstheme.param.NAVIGATION_BAR_COLOR", (value > 0 ? Color.BLACK : Color.WHITE));
+                    i.putExtra("com.volla.simpleappstheme.param.TEXT_COLOR", (isDarkActive ? Color.WHITE : -13421773));
+                    i.putExtra("com.volla.simpleappstheme.param.BACKGROUND_COLOR", (isDarkActive ? Color.BLACK : Color.WHITE));
+                    i.putExtra("com.volla.simpleappstheme.param.PRIMARY_COLOR", (isDarkActive ? Color.BLACK : Color.WHITE));
+                    i.putExtra("com.volla.simpleappstheme.param.ACCENT_COLOR", (isDarkActive ? Color.WHITE : Color.BLACK));
+                    i.putExtra("com.volla.simpleappstheme.param.APP_ICON_COLOR", (isDarkActive ? Color.BLACK : Color.WHITE));
+                    i.putExtra("com.volla.simpleappstheme.param.NAVIGATION_BAR_COLOR", (isDarkActive  ? Color.BLACK : Color.WHITE));
 
                     PackageManager packageManager = activity.getPackageManager();
                     List<ResolveInfo> infos = packageManager.queryBroadcastReceivers(i, 0);
@@ -82,8 +83,8 @@ public class LayoutUtil {
                             int wallpaperId;
                             UiModeManager umm = (UiModeManager) activity.getSystemService(Context.UI_MODE_SERVICE);
 
-                            if (value > 0) {
-                                // dark or translucent mode
+                            if (isDarkActive) {
+                                // dark or dark translucent mode
                                 int flags = w.getDecorView().getSystemUiVisibility();
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
@@ -92,7 +93,7 @@ public class LayoutUtil {
                                     Log.d(TAG, "Set night mode and black wallpaper");
                                     wallpaperId = R.drawable.wallpaper_black;
                                 } else {
-                                    Log.d(TAG, "Set nidhgt mode and system wallpaper");
+                                    Log.d(TAG, "Set dark mode and system wallpaper");
                                     Log.d(TAG, "Retrieve system wallpaper" );
                                     if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                                         wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
@@ -110,7 +111,19 @@ public class LayoutUtil {
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                                 w.getDecorView().setSystemUiVisibility(flags);
-                                wallpaperId = R.drawable.wallpaper_white;
+
+                                if (value == 0) {
+                                    Log.d(TAG, "Set light mode and white wallpaper");
+                                    wallpaperId = R.drawable.wallpaper_white;
+                                } else {
+                                    Log.d(TAG, "Set light mode and system wallpaper");
+                                    Log.d(TAG, "Retrieve system wallpaper" );
+                                    if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                        wallpaperId = wm.getWallpaperId(WallpaperManager.FLAG_SYSTEM);
+                                    } else {
+                                        wallpaperId = R.drawable.wallpaper_image;
+                                    }
+                                }
 
                                 Log.d(TAG, "Will change system ui mode to " + UiModeManager.MODE_NIGHT_NO);
                                 umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
@@ -123,7 +136,7 @@ public class LayoutUtil {
                                 && updateLockScreen) {
                                 Log.d(TAG, "Update lock screen wallpaper");
                                 try {
-                                    if (value == 2) {
+                                    if (value == 2 || value == 3) {
                                         Log.d(TAG, "Clear lock screen wallpaper");
                                         wm.clear(WallpaperManager.FLAG_LOCK);
                                     } else {
