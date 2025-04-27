@@ -1130,6 +1130,18 @@ LauncherPage {
                         object = component.createObject(searchSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
+
+                        if (mainView.searchEngine !== undefined) {
+                            component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                            properties["actionId"] = "custom"
+                            properties["text"] = mainView.searchEngineName
+                            properties["checked"] = mainView.getSearchMode() === mainView.searchMode.Custom
+                            properties["accentColor"] = mainView.accentColor
+                            object = component.createObject(searchSettingsItemColumn, properties)
+                            object.activeCheckbox = true
+                            searchSettingsItemColumn.checkboxes.push(object)
+                        }
+
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -1157,6 +1169,8 @@ LauncherPage {
                             mainView.updateSearchMode(mainView.searchMode.StartPage)
                         } else if (actionId === "metager" && active) {
                             mainView.updateSearchMode(mainView.searchMode.MetaGer)
+                        } else if (actionId === "custom" && active) {
+                            mainView.updateSearchMode(mainView.searchMode.Custom)
                         }
                     }
                 }
