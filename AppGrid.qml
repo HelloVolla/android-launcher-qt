@@ -451,7 +451,6 @@ LauncherPage {
 
                             onClicked: {
                                 updateCustomGroupDialog.close()
-                                // Need to delete this group hence passing second argument as blank
                                 updateGroup(updateCustomGroupDialog.currentGroupName,"")
                             }
                         }
@@ -477,7 +476,6 @@ LauncherPage {
 
                             onClicked: {
                                 if (customGroupLabel.text !== updateCustomGroupDialog.currentGroupName) {
-                                    //Will only update the group if it's name is changed from previous name
                                     updateGroup(updateCustomGroupDialog.currentGroupName,customGroupLabel.text)
                                 }
                                 updateCustomGroupDialog.close()
@@ -510,7 +508,6 @@ LauncherPage {
         }
 
         onClosed: {
-                console.log("AppGrid | Context menu dismissed!");
             for (var i = toKeepMenuItems.length-1; i>=0; i--) {
                 contextMenu.removeItem(toKeepMenuItems[i])
                 contextMenu.implicitHeight -= contextMenu.menuItemHeight + mainView.innerSpacing;
@@ -738,13 +735,10 @@ LauncherPage {
         visible: mainView.isTablet
         preventStealing: true
         enabled: true
-
         property var selectedMenuItem: rootMenuButton
         width: 120
 
-
         onClicked: {
-            console.log("Springboard | clicked")
             customGroupDialog.backgroundColor = mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
                     ? "#292929" : "#CCCCCC"
             customGroupDialog.open();
