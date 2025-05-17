@@ -1198,7 +1198,7 @@ LauncherPage {
 
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "useGroupedApps"
-                        properties["text"] = qsTr("Show grouped apps")
+                        properties["text"] = qsTr("Show freuqntly used apps")
                         properties["checked"] = designSettings.useGroupedApps
                         properties["accentColor"] = mainView.accentColor
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1207,7 +1207,7 @@ LauncherPage {
 
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "useCategories"
-                        properties["text"] = qsTr("Use app categories")
+                        properties["text"] = qsTr("Show app categories")
                         properties["checked"] = designSettings.useCategories
                         properties["accentColor"] = mainView.accentColor
                         object = component.createObject(designSettingsItemColumn, properties)

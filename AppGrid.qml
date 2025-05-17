@@ -492,7 +492,7 @@ LauncherPage {
 
     Menu {
         id: contextMenu
-        implicitHeight: addShortCutItem.height + openAppItem.height + removeAppItem.height + removePinnedShortcutItem.height + mainView.innerSpacing
+        implicitHeight: addShortCutItem.height + openAppItem.height + createCustomGroup.height + removeAppItem.height + removePinnedShortcutItem.height + mainView.innerSpacing
         topPadding: mainView.innerSpacing / 2
 
         property double menuWidth: 250.0
@@ -544,6 +544,35 @@ LauncherPage {
                                        "activated": true} )
             }
         }
+
+        Binding {
+            target: createCustomGroup
+            property: "visible"
+            value: !mainView.isTablet
+        }
+
+        MenuItem {
+            id: createCustomGroup
+            anchors.margins: mainView.innerSpacing
+            visible: true
+            text: qsTr("Create a Custom Group")
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: contextMenu.menuWidth
+                text: qsTr("Create a Custom Group")
+                font: createCustomGroup.font
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            onClicked: {
+                customGroupDialog.open();
+            }
+        }
+
+
         MenuItem {
             id: openAppItem
             anchors.margins: mainView.innerSpacing
@@ -706,7 +735,7 @@ LauncherPage {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: 0 - mainView.outerSpacing
-
+        visible: mainView.isTablet
         preventStealing: true
         enabled: true
 
@@ -725,7 +754,7 @@ LauncherPage {
             id: rootMenuButton
             width: 60
             height: 60
-            visible: true
+            visible: mainView.isTablet
             //color: mainView.accentColor
             color: "#292929"
             radius: width * 0.5
