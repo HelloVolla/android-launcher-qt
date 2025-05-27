@@ -1217,8 +1217,6 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        property string searchEngineName: ""
-        property string searchEngineUrl: ""
         property int theme: mainView.theme.Dark
         property int searchMode: mainView.searchMode.StartPage
         property bool fullscreen: false
@@ -1267,11 +1265,14 @@ ApplicationWindow {
                     console.debug("AppWindow | Set default theme to " + presetDict.theme)
                     settings.theme = presetDict.theme
                 }
-                if (presetDict.searchengine !== undefined && settings.firstStart) {
-                    console.debug("AppWindow | Set search engine to "+ presetDict.searchengine.name)
-                    settings.searchMode = mainView.searchMode.Custom
-                    settings.searchEngineName = presetDict.searchengine.name
-                    settings.searchEngineUrl = presetDict.searchengine.url
+                if (presetDict.searchengine !== undefined && presetDict.searchengine.url !== undefined && presetDict.searchengine.name !== undefined) {
+                    console.debug("AppWindow | Set additional search engine to "+ presetDict.searchengine.name)
+                    mainView.searchEngineName = presetDict.searchengine.name
+                    mainView.searchEngineUrl = presetDict.searchengine.url
+                    if (settings.firstStart) {
+                        console.debug("AppWindow | Set default search engine to "+ presetDict.searchengine.name)
+                        settings.searchMode = mainView.searchMode.Custom
+                    }
                 }
             }
         }
@@ -1305,10 +1306,6 @@ ApplicationWindow {
             }
             if (signalIsActivated) {
                 AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": signalIsActivated})
-            }
-            if (searchMode === mainView.searchMode.Custom) {
-                mainView.searchEngineUrl = settings.searchEngineUrl
-                mainView.searchEngineName = settings.searchEngineName
             }
             mainView.useVibration = useHapticMenus
             mainView.useColoredIcons = useColoredIcons
