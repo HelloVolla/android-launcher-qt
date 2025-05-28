@@ -1131,7 +1131,7 @@ LauncherPage {
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
 
-                        if (mainView.searchEngineName !== undefined) {
+                        if (mainView.searchEngineName !== undefined && mainView.searchEngineName.length > 0) {
                             component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                             properties["actionId"] = "custom"
                             properties["text"] = mainView.searchEngineName
