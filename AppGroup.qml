@@ -190,8 +190,6 @@ Item {
                         Image {
                             id: buttonIcon
                             anchors.horizontalCenter: parent.horizontalCenter
-                            //anchors.left: parent.left
-                            //anchors.leftMargin: gridCell.width * 0.25
                             source: model.package in groupItem.iconMap && (model.shortcutId === undefined || model.shortcutId.length === 0) && desaturation === 1.0
                                     ? Qt.resolvedUrl(groupItem.iconMap[model.package]) : "data:image/png;base64," + model.icon
                             width: gridButton.width * 0.35
@@ -237,10 +235,9 @@ Item {
                                     AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": groupItem.phoneApp})
                                 }
                             } else if (model.shortcutId !== undefined && model.shortcutId.length > 0) {
-                                AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
-                                                             {"shortcutId": model.shortcutId, "package": model.package})
+                                AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut", {"shortcutId": model.shortcutId, "package": model.package})
                             } else {
-                                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package})
+                                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package, "class": model.className})
                             }
                              AN.SystemDispatcher.dispatch("volla.launcher.clearRedDot", {"package": model.package})
                         }
@@ -289,6 +286,23 @@ Item {
                     height: parent.width * 0.15
                     radius: height * 0.5
                     color:  accentColor
+                }
+
+                Rectangle {
+                    id: cloneBadge
+                    visible: model.userHandle > 0 && model.package in groupItem.iconMap
+                    anchors.bottom: gridCircle.bottom
+                    anchors.right: gridCircle.right
+                    width: parent.width * 0.15
+                    height: parent.width * 0.15
+                    radius: height * 0.5
+                    color:  accentColor
+
+                    Component.objectName: {
+                        color.r = 1 - color.r
+                        color.g = 1 - color.g
+                        color.b = 1 - color.b
+                    }
                 }
             }
 

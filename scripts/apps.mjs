@@ -5,7 +5,7 @@ WorkerScript.onMessage = function(message) {
     apps.forEach(function(app, i) {
         apps[i].label = app.package in labelMap && app.shortcutId === undefined
                 ? qsTr(labelMap[app.package]) : app.label
-        apps[i].itemId = app.shortcutId !== undefined ? app.shortcutId : app.package
+        apps[i].itemId = app.shortcutId !== undefined ? app.shortcutId : app.appId
     })
 
     apps.sort(function(a, b) {

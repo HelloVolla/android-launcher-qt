@@ -111,19 +111,18 @@ public class AppWorker
                             for (UserHandle uh:uhl) {
                                 Log.d(TAG, "Apps for " + uh.toString());
                                 List<LauncherActivityInfo> lal = la.getActivityList(null, uh);
-                                for (LauncherActivityInfo lai:lal) {
-//                                    Log.d(TAG, lai.getComponentName().getPackageName() + ", " + lai.getLabel() + ", " + lai.getName());
-//                                    if ((lai.getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-//                                            Log.d(TAG, ">> package is not system package");
-//                                    }
 
+                                for (LauncherActivityInfo lai:lal) {
                                     if (!appsToHide.contains(lai.getComponentName().getPackageName())
                                         && (isMainUserHandle || (lai.getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) == 0)) {
 
                                         Log.d(TAG, "Found package: " + lai.getComponentName() + ", " + lai.getLabel() + ", " + lai.getApplicationInfo());
 
                                         Map appInfo = new HashMap();
+                                        appInfo.put("appId", lai.getComponentName().getPackageName() + "." + uh.toString());
                                         appInfo.put("package", lai.getComponentName().getPackageName());
+                                        appInfo.put("className", lai.getComponentName().getClassName());
+                                        appInfo.put("userHandle", Integer.parseInt(uh.toString().substring(11, uh.toString().length() - 1)));
                                         appInfo.put("label", lai.getLabel());
                                         appInfo.put("icon", AppWorker.drawableToBase64(lai.getBadgedIcon(0)));
 
@@ -152,49 +151,6 @@ public class AppWorker
                                 }
                                 isMainUserHandle = false;
                             }
-
-//                            Intent i = new Intent(Intent.ACTION_MAIN, null);
-//                            i.addCategory(Intent.CATEGORY_LAUNCHER);
-//                            List<ResolveInfo> availableActivities = pm.queryIntentActivities(i, 0);
-//                            appList.ensureCapacity(availableActivities.size());
-
-//                            for (ResolveInfo ri:availableActivities) {
-//                                Log.d(TAG, "Found package " + ri.activityInfo.packageName);
-
-//                                if (!appsToHide.contains(ri.activityInfo.packageName)) {
-//                                    Map appInfo = new HashMap();
-//                                    appInfo.put("package", ri.activityInfo.packageName);
-//                                    appInfo.put("label", String.valueOf(ri.loadLabel(pm)));
-//                                    appInfo.put("icon", AppWorker.drawableToBase64(ri.loadIcon(pm)));
-
-//                                    try {
-//                                        ApplicationInfo applicationInfo = pm.getApplicationInfo(ri.activityInfo.packageName, 0);
-//                                        int appCategory = applicationInfo.category;
-//                                        if (appCategory > -1) {
-//                                            appInfo.put("category", (String) ApplicationInfo.getCategoryTitle(activity, appCategory));
-//                                        } else {
-//                                            appInfo.put("category", "");
-//                                        }
-//                                    } catch (Exception e) {
-//                                        Log.w(TAG, "Unknown package name: " + e.toString());
-//                                    }
-
-//                                    long timeInForeground = 0;
-
-//                                    for (UsageStats us : queryUsageStats) {
-//                                        if (us.getPackageName().equalsIgnoreCase(ri.activityInfo.packageName)) {
-//                                            timeInForeground = us.getTotalTimeInForeground();
-//                                            break;
-//                                        }
-//                                    }
-//                                    if (mostUsed.contains(ri.activityInfo.packageName)) {
-//                                        timeInForeground = timeInForeground + 10; // fall back for missing stats
-//                                    }
-
-//                                    appInfo.put("statistic", (int)timeInForeground);
-//                                    appList.add(appInfo);
-//                                }
-//                            }
 
                             Map reply = new HashMap();
                             reply.put("apps", appList );
