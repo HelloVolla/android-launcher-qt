@@ -247,7 +247,7 @@ LauncherPage {
                  console.log("AppGrid | JSON.stringify(customGroups) "+JSON.stringify(customGroups))
              }
         }
-        saveCustomGroups()
+        settings.customGroupsJSON = JSON.stringify(customGroups);
         updateAppLauncher("useGroupedApps",false)
         var app = getAllApps()
         appsCache.writePrivate(JSON.stringify(app))
@@ -317,8 +317,8 @@ LauncherPage {
                 console.log("AppGrid | Column completed")
                 AN.SystemDispatcher.dispatch("volla.launcher.getShortcuts", {})
                 //AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
-                if (customSettings.customGroupsJSON) {
-                       customGroups = JSON.parse(customSettings.customGroupsJSON);
+                if (settings.customGroupsJSON) {
+                       customGroups = JSON.parse(settings.customGroupsJSON);
                    }
             }
 
