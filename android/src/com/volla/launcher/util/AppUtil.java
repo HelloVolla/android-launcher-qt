@@ -119,7 +119,7 @@ public class AppUtil {
                             String packageName = (String) message.get("appId");
                             String className = (String) message.get("class");
 
-                            if (className == null) {
+                            if (className != null) {
                                 LauncherApps la = (LauncherApps)activity.getSystemService(Context.LAUNCHER_APPS_SERVICE);
                                 ComponentName cn = new ComponentName(packageName, className);
                                 UserHandle uh = UserHandle.getUserHandleForUid(10);
