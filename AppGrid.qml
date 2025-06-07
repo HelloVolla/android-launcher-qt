@@ -820,6 +820,7 @@ LauncherPage {
                         customGroupDialog.close()
                         customGroups.push(newCustomGroup.text)
                         settings.customGroupsJSON = JSON.stringify(customGroups);
+                        contextMenu.updateApp(contextMenu.app, newCustomGroup.text)
 
                         // todo: show new group and remove app from shown group
                     }
