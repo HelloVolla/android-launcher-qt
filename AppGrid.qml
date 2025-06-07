@@ -10,7 +10,7 @@ import FileIO 1.0
 
 LauncherPage {
     id: appLauncher
-    anchors.fill: parent    
+    anchors.fill: parent
 
     property string textInput
     property real labelPointSize: 16
@@ -813,9 +813,10 @@ LauncherPage {
 
                     onClicked: {
                         console.log("AppGrid | Clicked Ok Button: " + newCustomGroup.text)
-
-                        // todo: check uniqueness of group
-
+                        if (customGroups.some(function(group) { return group.toLowerCase() === newCustomGroup.text.toLowerCase(); })) {
+                            mainView.showToast(qsTr("Group already exists: ") + newCustomGroup.text)
+                            return
+                        }
                         customGroupDialog.close()
                         customGroups.push(newCustomGroup.text)
                         settings.customGroupsJSON = JSON.stringify(customGroups);
