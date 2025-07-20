@@ -125,6 +125,10 @@ Item {
             onClicked: {
                 groupItem.parent.showGroup(groupItem.groupIndex)
             }
+
+            onPressAndHold: {
+                groupItem.parent.openGroupContextMenu(groupHeader, groupGrid)
+            }
         }
 
         Label {
@@ -222,7 +226,7 @@ Item {
                     }
                     onClicked: {
                         if (groupGrid.currentIndex > -1) {
-                            groupItem.parent.closeContextMenu()
+                            groupItem.parent.closeAppContextMenu()
                             groupGrid.currentIndex = -1
                         } else if (model.package.length > 0) {
                             console.log("App Group | App " + model.label + " selected")
@@ -244,7 +248,7 @@ Item {
                     }
                     onPressAndHold: {
                         groupGrid.currentIndex = index
-                        groupItem.parent.openContextMenu(model, gridCell, groupGrid)
+                        groupItem.parent.openAppContextMenu(model, gridCell, groupGrid)
                     }
                 }
 

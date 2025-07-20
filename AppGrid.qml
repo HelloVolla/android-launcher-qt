@@ -44,12 +44,12 @@ LauncherPage {
         } else if (key === "useCategories") {
             settings.useCategories = value
 
-            if (settings.useGroupedApps) {
+            //if (settings.useGroupedApps) {
                 appLauncher.selectedGroup = 0
                 var apps = getAllApps()
                 appLauncher.destroyAppGroups()
                 appLauncher.createAppGroups(getGroupedApps(apps))
-            }
+            //}
         } else if (key === "useGroupedApps") {
             settings.useGroupedApps = value
             appLauncher.selectedGroup = 0
@@ -83,6 +83,10 @@ LauncherPage {
     function getGroupedApps(apps) {
         var groupedApps = new Array
 
+        // A. Group most frequent apps
+        // B. Group apps by categries
+        // C. Show custom app groups, of not A or B
+
         if (settings.useGroupedApps) {
             apps.sort(function(a, b) { return b["statistic"] - a["statistic"] })
 
@@ -91,39 +95,58 @@ LauncherPage {
 
                 if (settings.useCategories) {
                     var remainingApps = apps.slice(appLauncher.maxAppCount)
-                    remainingApps.sort(function(a, b) {
-                        if (a.category > b.category) return 1
-                        else if (a.category < b.category) return -1
-                        else return 0
-                    })
-                    var groupLabel
-                    var someApps
-                    for (var i = 0; i < remainingApps.length; i++) {
-                        var app = remainingApps[i]
-                        var category = app.category !== "" ? app.category : qsTr("Other apps")
-                        if (category !== groupLabel) {
-                            if (groupLabel !== undefined) groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
-                            groupLabel = category
-                            someApps = new Array
-                        }
-                        someApps.push(app)
-                    }
-                    groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                    createAppGroupsByCategory(remainingApps, groupedApps, false) // todo: test updated dictionary
                 } else {
                     groupedApps.push( { "groupLabel": qsTr("apps"), "apps": apps.slice(appLauncher.maxAppCount) } )
                 }
             } else {
                 groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
             }
+        } else if (settings.useCategories) {
+            createAppGroupsByCategory(apps, groupedApps, false)
         } else {
-            groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps } )
+            // Check available custom groups
+            var customGroups = settings.getCustomGroups()
+            for (var app in apps ) {
+                //var filteredGroups = customGroups.filter(customGroup => customGroup.includes(app.package))
+                var filteredGroups = Object.keys(customGroups).reduce(function (filtered, key) {
+                    if (customGroups[key].includes(app.package)) filtered[key] = customGroups[key];
+                    return filtered;
+                }, {})
+                if (filteredGroups.length > 0) app.customCategory = Object.keys(filteredGroups)[0]
+            }
+            apps.sort(function(a, b) { return b["customCategory"] - a["customCategory"] })
+            createAppGroupsByCategory(apps, groupedApps, true)
         }
 
         return groupedApps
     }
 
+    function createAppGroupsByCategory(appsToGroup, groupedApps, useCustomGroups) {
+
+        var categoryKey = useCustomGroups ? "customCategory" : "category"
+        appsToGroup.sort(function(a, b) {
+            if (a[categoryKey] > b[categoryKey]) return 1
+            else if (a[categoryKey] < b[categoryKey]) return -1
+            else return 0
+        })
+        var groupLabel
+        var someApps = new Array
+        for (var i = 0; i < appsToGroup.length; i++) {
+            var app = appsToGroup[i]
+            var category = app[categoryKey] !== "" ? app[categoryKey] : qsTr("Other apps")
+            if (category !== groupLabel) {
+                if (groupLabel !== undefined) groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                groupLabel = category
+                someApps = new Array
+            }
+            someApps.push(app)
+        }
+        groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+    }
+
     function createAppGroups(groupedApps) {
-        console.log("AppGrid | Will create app grids for " + groupedApps.length + " groups.")
+        console.log("AppGrid | Will create app grids for " + groupedApps.length + " group(s).")
         groupedApps.forEach(function(appGroupInfos, index) {
             console.log("AppGrid | Will create group " + index)
             var component = Qt.createComponent("/AppGroup.qml", appLauncherColumn)
@@ -159,6 +182,45 @@ LauncherPage {
             appGroup.destroy()
         }
         appLauncher.appGroups = new Array
+    }
+
+    function updateCustomGroups(appToUpdate, appGroupName) {
+        console.debug("AppGrid | updateCustomGroups: " + appToUpdate + ", " + appGroupName)
+        var customGroups = settings.getCustomGroups()
+        var customGroup = customGroups[appGroupName]
+
+        // 1. Update custom catregory for app
+        var apps = appLauncher.getAllApps()
+        var app = apps.filter(e => e.package === appToUpdate)[0]
+        if (appGroupName !== undefined) {
+            app.customCategory = appGroupName
+            // Add to group
+            if (customGroup !== undefined) {
+                customGroup.push(appToUpdate)
+            } else {
+                customGroup = [appToUpdate]
+            }
+            customGroups[appGroupName] = customGroup
+        } else {
+            app.delete(customCategory)
+            // Remove from group
+            if (customGroup !== undefined) {
+                customGroup.splice(customGroup.indexOf(appGroupName, 1))
+                customGroups[appGroupName] = customGroup
+            }
+        }
+
+        // 2. Update custom groups
+        settings.setCustomGroups(customGroups)
+
+        // 3. Update UI
+        for (var i = 0; i < appLauncher.appGroups.length; i++) {
+            var appGroup = appLauncher.appGroups[i]
+            appGroup.destroy()
+        }
+        var groupedApps = appLauncher.getGroupedApps(apps)
+        appLauncher.appGroups = new Array
+        appLauncher.createAppGroups(groupedApps)
     }
 
     Flickable {
@@ -237,34 +299,51 @@ LauncherPage {
                 }
             }
 
-            function openContextMenu(app, gridCell, gridView) {
-                contextMenu.app = app
-                contextMenu.gridView = gridView
-                contextMenu.isPinnedShortcut = app.shortcutId !== undefined && app.shortcutId.length > 0
-                contextMenu.popup(gridCell)
+            function openAppContextMenu(app, gridCell, gridView) {
+                appContextMenu.app = app
+                appContextMenu.gridView = gridView
+                appContextMenu.isPinnedShortcut = app.shortcutId !== undefined && app.shortcutId.length > 0
+                appContextMenu.canBeDeleted = false
+                appContextMenu.useCustomGroups = !(settings.useGroupedApps || settings.useCategories)
+                if (appContextMenu.useCustomGroups) appContextMenu.createCustomGroupMenuItems()
+                appContextMenu.popup(gridCell)
             }
 
-            function closeContextMenu() {
-                contextMenu.dismiss()
+            function closeAppContextMenu() {
+               appContextMenu.dismiss()
+            }
+
+            function openGroupContextMenu(appGroup, groupButton, gridView) {
+                groupContextMenu.appGroupName = appGroup
+                groupContextMenu.appGridView = gridView
+                groupContextMenu.popup(groupButton)
             }
         }
     }
 
     Menu {
-        id: contextMenu
-        implicitHeight: addShortCutItem.height + openAppItem.height + removeAppItem.height + removePinnedShortcutItem.height + mainView.innerSpacing
+        id: appContextMenu
+        implicitHeight: addShortCutItem.height  + openAppItem.height + removeAppItem.height  + removePinnedShortcutItem.height
+                        + addToNewGroupItem.height + removeFromGroupItem.height + enableCustomGroupsItem.height + mainView.innerSpacing
         topPadding: mainView.innerSpacing / 2
+
+        // todo: A. Add to new group, if no automized group is selected
+        //       B. Remove from group, if assigned to a group
+        //       C. Enable custom groups, if automized group enabled
+        //       D. Add to ...
 
         property double menuWidth: 250.0
         property var app
         property var gridView
+        property var customGroupMenuItems: new Array
         property bool isPinnedShortcut: false
         property bool canBeDeleted: false
+        property bool useCustomGroups: false
         property int menuItemHeight: 40
 
         background: Rectangle {
             id: menuBackground
-            implicitWidth: contextMenu.menuWidth
+            implicitWidth: appContextMenu.menuWidth
             color: mainView.accentColor
             radius: mainView.innerSpacing
         }
@@ -275,7 +354,7 @@ LauncherPage {
             text: qsTr("Add to shortcuts")
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
-                width: contextMenu.menuWidth
+                width: appContextMenu.menuWidth
                 text: addShortCutItem.text
                 font: addShortCutItem.font
                 horizontalAlignment: Text.AlignHCenter
@@ -285,13 +364,13 @@ LauncherPage {
                 color: "transparent"
             }
             onClicked: {
-                console.log("AppGrid | App " + contextMenu.app["label"] + " selected for shortcuts");
-                contextMenu.gridView.currentIndex = -1
+                console.log("AppGrid | App " + appContextMenu.app["label"] + " selected for shortcuts");
+                appContextMenu.gridView.currentIndex = -1
                 mainView.updateAction(contextMenu.app["itemId"],
                                       true,
                                       mainView.settingsAction.CREATE,
-                                      {"id": contextMenu.app["itemId"],
-                                       "name": qsTr("Open") + " " + contextMenu.app["label"],
+                                      {"id": appContextMenu.app["itemId"],
+                                       "name": qsTr("Open") + " " + appContextMenu.app["label"],
                                        "activated": true} )
             }
         }
@@ -300,8 +379,8 @@ LauncherPage {
             anchors.margins: mainView.innerSpacing
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
-                width: contextMenu.menuWidth
-                text: contextMenu.isPinnedShortcut ? qsTr("Open Shortcut") : qsTr("Open App")
+                width:appContextMenu.menuWidth
+                text:appContextMenu.isPinnedShortcut ? qsTr("Open Shortcut") : qsTr("Open App")
                 horizontalAlignment: Text.AlignHCenter
             }
             background: Rectangle {
@@ -309,12 +388,12 @@ LauncherPage {
                 color: "transparent"
             }
             onClicked: {
-                console.log("AppGrid | App " + contextMenu.
+                console.log("AppGrid | App " + appContextMenu.
                             app["label"] + " selected to open");
-                contextMenu.gridView.currentIndex = -1
+                appContextMenu.gridView.currentIndex = -1
                 if (contextMenu.isPinnedShortcut) {
                     AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
-                                                 {"shortcutId": contextMenu.app["itemId"], "package": contextMenu.app["package"]})
+                                                 {"shortcutId": appContextMenu.app["itemId"], "package": appContextMenu.app["package"]})
                 } else if (contextMenu.app.package === mainView.phoneApp) {
                     if (appLauncher.newCalls) {
                         AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "log"})
@@ -323,17 +402,17 @@ LauncherPage {
                         AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp})
                     }
                 } else {
-                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": contextMenu.app["package"]})
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": appContextMenu.app["package"]})
                 }
             }
         }
         MenuItem {
             id: removeAppItem
             anchors.margins: mainView.innerSpacing
-            height: removeAppItem.visible ? contextMenu.menuItemHeight : 0
+            height: removeAppItem.visible ? appContextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
-                width: contextMenu.menuWidth
+                width: appContextMenu.menuWidth
                 text: qsTr("Remove App")
                 horizontalAlignment: Text.AlignHCenter
             }
@@ -341,18 +420,18 @@ LauncherPage {
                 anchors.fill: parent
                 color: "transparent"
             }
-            visible: contextMenu.canBeDeleted
+            visible: appContextMenu.canBeDeleted
             onClicked: {
-                    AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId": contextMenu.app["package"]})
+                    AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId":appcontextMenu.app["package"]})
             }
         }
         MenuItem {
             id: removePinnedShortcutItem
             anchors.margins: mainView.innerSpacing
-            height: removePinnedShortcutItem.visible ? contextMenu.menuItemHeight : 0
+            height: removePinnedShortcutItem.visible ? appContextMenu.menuItemHeight : 0
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
-                width: contextMenu.menuWidth
+                width: appContextMenu.menuWidth
                 text: qsTr("Remove Bookmark")
                 horizontalAlignment: Text.AlignHCenter
             }
@@ -360,11 +439,11 @@ LauncherPage {
                 anchors.fill: parent
                 color: "transparent"
             }
-            visible: contextMenu.isPinnedShortcut
+            visible: appContextMenu.isPinnedShortcut
             onClicked: {
-                console.log("AppGrid | App " + contextMenu.app.shortcutId + " selected to remove a shortcut");
-                contextMenu.gridView.currentIndex = -1
-                var shortcutId = contextMenu.app["itemId"]
+                console.log("AppGrid | App " + appContextMenu.app.shortcutId + " selected to remove a shortcut");
+                appContextMenu.gridView.currentIndex = -1
+                var shortcutId = appContextMenu.app["itemId"]
                 for (var i = 0; i < appLauncher.appGroups.length; i++) {
                     var appGroup = appLauncher.appGroups[i]
                     appGroup.removePinnedShortcut(shortcutId)
@@ -373,16 +452,231 @@ LauncherPage {
                 disabledPinnedShortcuts.disableShortcut(shortcutId)
             }
         }
-
-        onAboutToShow: {
-            AN.SystemDispatcher.dispatch("volla.launcher.canDeleteAppAction", {"appId": contextMenu.app["package"]})
+        MenuItem {
+            id: addToNewGroupItem
+            visible: appContextMenu.useCustomGroups
+            anchors.margins: mainView.innerSpacing
+            height: addToNewGroupItem.visible ? appContextMenu.menuItemHeight : 0
+            text: qsTr("Add to new group")
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: appContextMenu.menuWidth
+                text: addToNewGroupItem.text
+                font: addToNewGroupItem.font
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            onClicked: {
+                groupDialog.app = appContextMenu.app
+                groupDialog.open()
+            }
+        }
+        MenuItem {
+            id: removeFromGroupItem
+            visible: appContextMenu.useCustomGroups && appContextMenu.app.customCategory !== undefined
+            anchors.margins: mainView.innerSpacing
+            height: removeFromGroupItem.visible ? appContextMenu.menuItemHeight : 0
+            text: qsTr("Remove from group")
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: appContextMenu.menuWidth
+                text: removeFromGroupItem.text
+                font: removeFromGroupItem.font
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            onClicked: {
+                appContextMenu.updateCustomGroups(appContextMenu.app)
+            }
+        }
+        MenuItem {
+            id: enableCustomGroupsItem
+            visible: !appContextMenu.useCustomGroups
+            anchors.margins: mainView.innerSpacing
+            height: enableCustomGroupsItem.visible ? appContextMenu.menuItemHeight : 0
+            text: qsTr("Use custom groups")
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: appContextMenu.menuWidth
+                text: enableCustomGroupsItem.text
+                font: enableCustomGroupsItem.font
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            onClicked: {
+                console.log("AppGrid | Enable custom groups");
+                settings.useGroupedApps = false
+                settings.useCategories = false
+                settings.sync()
+                var apps = getAllApps()
+                appLauncher.destroyAppGroups()
+                appLauncher.selectedGroup = 0
+                appLauncher.createAppGroups(getGroupedApps(apps))
+            }
         }
 
-        Connections {
-            target: AN.SystemDispatcher
-            onDispatched: {
-                if (type === "volla.launcher.canDeleteAppResponce") {
-                    contextMenu.canBeDeleted = message["canDeleteApp"]
+        onAboutToShow: {
+            AN.SystemDispatcher.dispatch("volla.launcher.canDeleteAppAction", {"appId": appContextMenu.app["package"]})
+        }
+
+        onAboutToHide: {
+            for (var i = 0; i < customGroupMenuItems.length; i++) {
+                var customGroupMenuItem = customGroupMenuItems[i]
+                appContextMenu.removeItem(customGroupMenuItem)
+                customGroupMenuItem.destroy()
+            }
+            customGroupMenuItems = new Array
+        }
+
+        function createCustomGroupMenuItems() {
+            var customGroups = settings.getCustomGroups()
+            Object.keys(customGroups).forEach(key => {
+                // Perform operations with key and object[key]
+                var component = Qt.createComponent("/AppGridMenuItem.qml")
+                var properties = { "height": appContextMenu.menuItemHeight, "innerSpacing" : mainView.innerSpacing,
+                                   "labelPointSize" : appLauncher.labelPointSize, "labelWidth" : appContextMenu.menuWidth,
+                                   "appPackageName" : app.package, "title" : key}
+                var object = component.createObject(null, properties)
+                appContextMenu.addItem(object)
+                appContextMenu.implicitHeight += appContextMenu.menuItemHeight
+                customGroupMenuItems.push(object)
+            });
+        }
+   }
+
+    Menu {
+        id: groupContextMenu
+
+        property var appGroupName
+        property var appGridView
+
+        // todo: implement
+
+    }
+
+    Dialog {
+        id: groupDialog
+
+        anchors.centerIn: parent
+        width: parent.width - mainView.innerSpacing * 4
+        modal: true
+        dim: false
+
+        property var app
+        property string groupName: ""
+
+        background: Rectangle {
+            anchors.fill: parent
+            color: "#292929"
+            border.color: "transparent"
+            radius: mainView.innerSpacing / 2
+        }
+
+        enter: Transition {
+             NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
+        }
+
+        exit: Transition {
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
+        }
+
+        contentItem: Column {
+            id: groupDialogColumn
+
+            Label {
+                id: dialogTitle
+                text: qsTr("Group name")
+                color: mainView.fontColor
+                font.pointSize: mainView.mediumFontSize
+                bottomPadding: mainView.innerSpacing
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "transparent"
+                }
+            }
+
+            TextField {
+                id: groupNameField
+                width: parent.width
+                color: mainView.fontColor
+                text: groupDialog.groupName
+                maximumLength: 80
+                wrapMode: Text.NoWrap
+                placeholderText: qsTr("Enter a group name")
+                placeholderTextColor: "darkgrey"
+                font.pointSize: mainView.mediumFontSize
+                background: Rectangle {
+                    color: mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
+                           ? "black" : "white"
+                    border.color: "transparent"
+                }
+            }
+
+            Row {
+                width: parent.width
+                topPadding: mainView.innerSpacing
+                spacing: mainView.innerSpacing
+
+                Button {
+                    id: cancelButton
+                    flat: true
+                    padding: mainView.innerSpacing / 2
+                    width: parent.width / 2 - mainView.innerSpacing / 2
+                    text: qsTr("Cancel")
+
+                    contentItem: Text {
+                        text: cancelButton.text
+                        color: mainView.fontColor
+                        font.pointSize: mainView.mediumFontSize
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    background: Rectangle {
+                        color: "transparent"
+                        border.color: "gray"
+                    }
+
+                    onClicked: {
+                        groupDialog.close()
+                    }
+                }
+
+                Button {
+                    id: okButton
+                    width: parent.width / 2 - mainView.innerSpacing / 2
+                    padding: mainView.innerSpacing / 2
+                    flat: true
+                    text: qsTr("Ok")
+
+                    contentItem: Text {
+                        text: okButton.text
+                        color: mainView.fontColor
+                        font.pointSize: mainView.mediumFontSize
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    background: Rectangle {
+                        color: "transparent"
+                        border.color: "gray"
+                    }
+
+                    onClicked: {
+                        if (groupDialog.groupName.length > 0) {
+                            updateCustomGroups(groupDialog.app, groupDialog.groupName)
+                            groupDialog.close()
+                        } else {
+                            mainView.showToast(qsTr("Group name must have at least one character."))
+                        }
+                    }
                 }
             }
         }
@@ -392,7 +686,7 @@ LauncherPage {
         target: AN.SystemDispatcher
         onDispatched: {
             if (type === "volla.launcher.appCountResponse") {
-                 if (message["appCount"] !== settings.appCount) {
+                if (message["appCount"] !== settings.appCount) {
                     console.log("AppGrid | Number of apps: " + message["appCount"] + ", " + settings.appCount)
                     settings.appCount = message["appCount"]
                     mainView.updateSpinner(true)
@@ -512,6 +806,8 @@ LauncherPage {
                     console.debug("AppGrid | Will update apps")
                     AN.SystemDispatcher.dispatch("volla.launcher.appAction", new Object)
                 }
+            } else if (type === "volla.launcher.canDeleteAppResponce") {
+               appContextMenu.canBeDeleted = message["canDeleteApp"]
             }
         }
     }
@@ -523,6 +819,20 @@ LauncherPage {
         property bool useCategories: false
         property int appCount: 0
         property double lastAppCountCheck: 0.0
+        property string customGroups: ""
+
+        function getCustomGroups() {
+            if (settings.customGroups !== undefined && settings.customGroups.length > 0) {
+                return JSON.parse(settings.customGroups)
+            } else {
+                return new Object
+            }
+        }
+
+        function setCustomGroups(updatedCustomGroups) {
+            settings.customGroups = JSON.stringify(updatedCustomGroups)
+            settings.sync()
+        }
     }
 
     FileIO {

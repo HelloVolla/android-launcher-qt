@@ -115,5 +115,6 @@
         <file>images/Clock_01_white.png</file>
         <file>images/center.png</file>
         <file>icons/volla-messages@4x.png</file>
+        <file>AppGridMenuItem.qml</file>
     </qresource>
 </RCC>
