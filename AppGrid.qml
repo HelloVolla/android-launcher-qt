@@ -560,7 +560,14 @@ LauncherPage {
         property var appGridView
 
         // todo: implement
+        MenuItem {
+            id: removeMenuItem
 
+
+        }
+        MenuItem {
+            id: editMenuItem
+        }
     }
 
     Dialog {
