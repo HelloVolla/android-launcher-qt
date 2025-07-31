@@ -213,7 +213,7 @@ LauncherPage {
         var styledText = note.slice()
         var urlRegex = /(((https?:\/\/)|([^\s]+\.))[^\s,]+)/g;
         styledText = styledText.replace(urlRegex, function(url,b,c) {
-            var url2 = !c.startsWith('http') ?  'http://' + url : url;
+            var url2 = !c.startsWith('http') ?  'https://' + url : url;
             return '<a href="' +url2+ '" target="_blank">' + url + '</a>';
         })
 
