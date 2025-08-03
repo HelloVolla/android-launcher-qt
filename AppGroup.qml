@@ -24,7 +24,7 @@ Item {
     property double backgroundOpacity
     property double desaturation: 1.0
     property int groupIndex: 0
-    property int selectedGroupIndex: 1
+    property int selectedGroupIndex: 0
     property int columnCount: Screen.desktopAvailableWidth < 521 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
 
     property bool unreadMessages: false
@@ -81,7 +81,9 @@ Item {
 
     onSelectedGroupIndexChanged: {
         console.log("AppGroup " + groupIndex + " | Selected group changed to " + selectedGroupIndex)
-        groupColumn.topPadding = groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ? groupItem.innerSpacing / 2 : groupItem.innerSpacing
+        groupColumn.topPadding = groupItem.groupIndex === 0 ?
+                    0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
+                        groupItem.innerSpacing / 2 : groupItem.innerSpacing
     }
 
     function showApps(appsShouldBeVisible) {
@@ -100,8 +102,9 @@ Item {
     Column {
         id: groupColumn
         width: parent.width
-        topPadding: groupItem.groupIndex === 0 ? 0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
-                                                     groupItem.componentSpacing / 2 : groupItem.componentSpacing
+        topPadding: groupItem.groupIndex === 0 ?
+                        0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
+                            groupItem.innerSpacing / 2 : groupItem.innerSpacing
         Button {
             id: groupHeader
             visible: groupItem.isHeaderVisible
@@ -124,6 +127,10 @@ Item {
 
             onClicked: {
                 groupItem.parent.showGroup(groupItem.groupIndex)
+            }
+
+            onPressAndHold: {
+                groupItem.parent.openGroupContextMenu(groupHeader, groupGrid)
             }
         }
 
@@ -222,7 +229,7 @@ Item {
                     }
                     onClicked: {
                         if (groupGrid.currentIndex > -1) {
-                            groupItem.parent.closeContextMenu()
+                            groupItem.parent.closeAppContextMenu()
                             groupGrid.currentIndex = -1
                         } else if (model.package.length > 0) {
                             console.log("App Group | App " + model.label + " selected")
@@ -244,7 +251,7 @@ Item {
                     }
                     onPressAndHold: {
                         groupGrid.currentIndex = index
-                        groupItem.parent.openContextMenu(model, gridCell, groupGrid)
+                        groupItem.parent.openAppContextMenu(model, gridCell, groupGrid)
                     }
                 }
 

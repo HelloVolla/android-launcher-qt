@@ -1,0 +1,29 @@
+import QtQuick 2.0
+import QtQuick.Controls 2.5
+
+MenuItem {
+    id: appGridMenuItem
+
+    property var appLauncher
+    property string appPackageName
+    property string appGroup
+    property double innerSpacing
+    property double labelPointSize
+    property double labelWidth
+
+    anchors.margins: innerSpacing
+    font.pointSize: labelPointSize
+    contentItem: Label {
+        width: labelWidth
+        text: qsTr("Add to ") + appGridMenuItem.appGroup
+        font: appGridMenuItem.font
+        horizontalAlignment: Text.AlignHCenter
+    }
+    background: Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+    }
+    onClicked: {
+        appLauncher.updateCustomGroupOfApp(appPackageName, appGroup)
+    }
+}
