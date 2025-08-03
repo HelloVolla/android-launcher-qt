@@ -43,13 +43,10 @@ LauncherPage {
             }
         } else if (key === "useCategories") {
             settings.useCategories = value
-
-            //if (settings.useGroupedApps) {
-                appLauncher.selectedGroup = 0
-                var apps = getAllApps()
-                appLauncher.destroyAppGroups()
-                appLauncher.createAppGroups(getGroupedApps(apps))
-            //}
+            appLauncher.selectedGroup = 0
+            var apps = getAllApps()
+            appLauncher.destroyAppGroups()
+            appLauncher.createAppGroups(getGroupedApps(apps))
         } else if (key === "useGroupedApps") {
             settings.useGroupedApps = value
             appLauncher.selectedGroup = 0
@@ -81,6 +78,7 @@ LauncherPage {
     }
 
     function getGroupedApps(apps) {
+        console.debug("AppGrid | getGroupedApps: " + apps.length + " apps")
         var groupedApps = new Array
 
         // A. Group most frequent apps
@@ -100,22 +98,21 @@ LauncherPage {
                     groupedApps.push( { "groupLabel": qsTr("apps"), "apps": apps.slice(appLauncher.maxAppCount) } )
                 }
             } else {
-                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0,) } )
+                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0) } )
             }
         } else if (settings.useCategories) {
             createAppGroupsByCategory(apps, groupedApps, false)
         } else {
-            // Check available custom groups
             var customGroups = settings.getCustomGroups()
-            for (var app in apps ) {
-                //var filteredGroups = customGroups.filter(customGroup => customGroup.includes(app.package))
-                var filteredGroups = Object.keys(customGroups).reduce(function (filtered, key) {
-                    if (customGroups[key].includes(app.package)) filtered[key] = customGroups[key];
-                    return filtered;
-                }, {})
-                if (filteredGroups.length > 0) app.customCategory = Object.keys(filteredGroups)[0]
-            }
-            apps.sort(function(a, b) { return b["customCategory"] - a["customCategory"] })
+            console.debug("AppGrid | getGroupedApps: customGroups " + Object.keys(customGroups).length)
+            console.debug("AppGrid | getGroupedApps: customGroups " + JSON.stringify(customGroups))
+            apps.forEach(function (app, index) {
+                var filteredGroupNames = Object.keys(customGroups).filter(key => customGroups[key].includes(app.package))
+                if (filteredGroupNames.length > 0) {
+                    app.customCategory = filteredGroupNames[0]
+                }
+            })
+            //apps.sort(function(a, b) { return b["customCategory"] - a["customCategory"] })
             createAppGroupsByCategory(apps, groupedApps, true)
         }
 
@@ -123,25 +120,32 @@ LauncherPage {
     }
 
     function createAppGroupsByCategory(appsToGroup, groupedApps, useCustomGroups) {
+        console.debug("AppGrid | createAppGroupsByCategory: ", appsToGroup.length, groupedApps.length, useCustomGroups)
 
         var categoryKey = useCustomGroups ? "customCategory" : "category"
         appsToGroup.sort(function(a, b) {
-            if (a[categoryKey] > b[categoryKey]) return 1
-            else if (a[categoryKey] < b[categoryKey]) return -1
+            var aa = a[categoryKey] !== undefined ? a[categoryKey] : ""
+            var bb = b[categoryKey] !== undefined ? b[categoryKey] : ""
+            if (aa > bb) return 1
+            else if (aa < bb) return -1
             else return 0
         })
         var groupLabel
-        var someApps = new Array
+        var someApps
         for (var i = 0; i < appsToGroup.length; i++) {
             var app = appsToGroup[i]
-            var category = app[categoryKey] !== "" ? app[categoryKey] : qsTr("Other apps")
+            var category = app[categoryKey] === undefined || app[categoryKey] === "" ? qsTr("Other apps") : app[categoryKey]
             if (category !== groupLabel) {
-                if (groupLabel !== undefined) groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                if (groupLabel !== undefined) {
+                    console.debug("AppGrid | createAppGroupsByCategory: Will push " + groupLabel + ": " + someApps.length)
+                    groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
+                }
                 groupLabel = category
                 someApps = new Array
             }
             someApps.push(app)
         }
+        console.debug("AppGrid | createAppGroupsByCategory: Will finally push " + groupLabel + ": " + someApps.length)
         groupedApps.push({"groupLabel": groupLabel, "apps": someApps})
     }
 
@@ -184,13 +188,12 @@ LauncherPage {
         appLauncher.appGroups = new Array
     }
 
-    function updateCustomGroups(appToUpdate, appGroupName) {
-        console.debug("AppGrid | updateCustomGroups: " + appToUpdate + ", " + appGroupName)
+    function updateCustomGroupOfApp(appToUpdate, appGroupName) {
+        console.debug("AppGrid | updateCustomGroupOfApp: " + appToUpdate + ", " + appGroupName)
         var customGroups = settings.getCustomGroups()
         var customGroup = customGroups[appGroupName]
-
-        // 1. Update custom catregory for app
         var apps = appLauncher.getAllApps()
+
         var app = apps.filter(e => e.package === appToUpdate)[0]
         if (appGroupName !== undefined) {
             app.customCategory = appGroupName
@@ -201,23 +204,59 @@ LauncherPage {
                 customGroup = [appToUpdate]
             }
             customGroups[appGroupName] = customGroup
+
         } else {
-            app.delete(customCategory)
-            // Remove from group
-            if (customGroup !== undefined) {
-                customGroup.splice(customGroup.indexOf(appGroupName, 1))
-                customGroups[appGroupName] = customGroup
+                app.delete(customCategory)
+                // Remove from group
+                if (customGroup !== undefined) {
+                    customGroup.splice(customGroup.indexOf(appGroupName, 1))
+                    customGroups[appGroupName] = customGroup
+                }
             }
-        }
 
-        // 2. Update custom groups
-        settings.setCustomGroups(customGroups)
+        updateCustomGroupedAppGrid(apps, customGroups)
+    }
 
-        // 3. Update UI
+    function updateCustomGroup(oldGroupName, newGroupName) {
+        console.debug("AppGrid | updateCustomGroup: " + oldGroupName + ", " + newGroupName)
+        var customGroups = settings.getCustomGroups()
+        var customGroup = customGroups[oldGroupName]
+        var apps = appLauncher.getAllApps()
+        customGroup.forEach(function (item, index) {
+            var app = apps.filter(e => e.package === item.package)[0]
+            app.customCategory = newGroupName
+        })
+        customGroups[newGroupName] = customGroup
+        customGroups = Object.fromEntries(
+            Object.entries(customGroups).filter(([key]) => key !== oldGroupName)
+        )
+        updateCustomGroupedAppGrid(apps, customGroups)
+    }
+
+    function removeCustomGroup(appGroupName) {
+        console.debug("AppGrid | removeCustomGroup: " + appGroupName)
+        var customGroups = settings.getCustomGroups()
+        var customGroup = customGroups[appGroupName]
+        var apps = appLauncher.getAllApps()
+        customGroup.forEach(function (appPackage, index) {
+            apps.forEach(function (app, index) {
+                if (app.package === appPackage) delete app.customCategory
+            })
+        })
+        delete customGroups[appGroupName]
+        updateCustomGroupedAppGrid(apps, customGroups)
+    }
+
+    function updateCustomGroupedAppGrid(apps, updatedCustomGroups) {
+        settings.setCustomGroups(updatedCustomGroups)
+
         for (var i = 0; i < appLauncher.appGroups.length; i++) {
             var appGroup = appLauncher.appGroups[i]
             appGroup.destroy()
         }
+
+        console.debug("AppGrid | Number of apps: " + apps.length)
+
         var groupedApps = appLauncher.getGroupedApps(apps)
         appLauncher.appGroups = new Array
         appLauncher.createAppGroups(groupedApps)
@@ -314,7 +353,7 @@ LauncherPage {
             }
 
             function openGroupContextMenu(appGroup, groupButton, gridView) {
-                groupContextMenu.appGroupName = appGroup
+                groupContextMenu.appGroupName = appGroup.text
                 groupContextMenu.appGridView = gridView
                 groupContextMenu.popup(groupButton)
             }
@@ -323,17 +362,11 @@ LauncherPage {
 
     Menu {
         id: appContextMenu
-        implicitHeight: addShortCutItem.height  + openAppItem.height + removeAppItem.height  + removePinnedShortcutItem.height
-                        + addToNewGroupItem.height + removeFromGroupItem.height + enableCustomGroupsItem.height + mainView.innerSpacing
         topPadding: mainView.innerSpacing / 2
-
-        // todo: A. Add to new group, if no automized group is selected
-        //       B. Remove from group, if assigned to a group
-        //       C. Enable custom groups, if automized group enabled
-        //       D. Add to ...
+        bottomPadding: mainView.innerSpacing / 2
 
         property double menuWidth: 250.0
-        property var app
+        property var app: new Object
         property var gridView
         property var customGroupMenuItems: new Array
         property bool isPinnedShortcut: false
@@ -341,8 +374,14 @@ LauncherPage {
         property bool useCustomGroups: false
         property int menuItemHeight: 40
 
+        onAppChanged: {
+            if (app !== undefined && app !== null) console.debug("AppGrid | App of context menu: " + appContextMenu.app.package)
+            else console.debug("AppGrid | App of context menu: " + appContextMenu.app)
+            implicitHeight: addShortCutItem.height  + openAppItem.height + removeAppItem.height  + removePinnedShortcutItem.height
+                            + addToNewGroupItem.height + removeFromGroupItem.height + enableCustomGroupsItem.height + mainView.innerSpacing
+        }
+
         background: Rectangle {
-            id: menuBackground
             implicitWidth: appContextMenu.menuWidth
             color: mainView.accentColor
             radius: mainView.innerSpacing
@@ -476,7 +515,7 @@ LauncherPage {
         }
         MenuItem {
             id: removeFromGroupItem
-            visible: appContextMenu.useCustomGroups && appContextMenu.app.customCategory !== undefined
+            visible: appContextMenu.useCustomGroups && appContextMenu.app !== null && appContextMenu.app.customCategory !== undefined
             anchors.margins: mainView.innerSpacing
             height: removeFromGroupItem.visible ? appContextMenu.menuItemHeight : 0
             text: qsTr("Remove from group")
@@ -492,7 +531,7 @@ LauncherPage {
                 color: "transparent"
             }
             onClicked: {
-                appContextMenu.updateCustomGroups(appContextMenu.app)
+                appContextMenu.updateCustomGroupOfApp(appContextMenu.app.package)
             }
         }
         MenuItem {
@@ -526,6 +565,7 @@ LauncherPage {
 
         onAboutToShow: {
             AN.SystemDispatcher.dispatch("volla.launcher.canDeleteAppAction", {"appId": appContextMenu.app["package"]})
+            implicitHeight: appContextMenu.count * appContextMenu.menuItemHeight
         }
 
         onAboutToHide: {
@@ -539,15 +579,16 @@ LauncherPage {
 
         function createCustomGroupMenuItems() {
             var customGroups = settings.getCustomGroups()
+            console.log("AppGrid | createCustomGroupMenuItems: " + Object.keys(customGroups).length)
             Object.keys(customGroups).forEach(key => {
-                // Perform operations with key and object[key]
-                var component = Qt.createComponent("/AppGridMenuItem.qml")
+                console.log("AppGrid | createCustomGroupMenuItems: " + key)
+                var component = Qt.createComponent("/AppGridMenuItem.qml", appContextMenu)
                 var properties = { "height": appContextMenu.menuItemHeight, "innerSpacing" : mainView.innerSpacing,
                                    "labelPointSize" : appLauncher.labelPointSize, "labelWidth" : appContextMenu.menuWidth,
-                                   "appPackageName" : app.package, "title" : key}
-                var object = component.createObject(null, properties)
+                                   "appPackageName" : app.package, "appGroup" : key, "appLauncher": appLauncher}
+                var object = component.createObject(appContextMenu, properties)
                 appContextMenu.addItem(object)
-                appContextMenu.implicitHeight += appContextMenu.menuItemHeight
+                console.log("AppGrid | createCustomGroupMenuItems: Menu items " + appContextMenu.count)
                 customGroupMenuItems.push(object)
             });
         }
@@ -555,18 +596,58 @@ LauncherPage {
 
     Menu {
         id: groupContextMenu
+        implicitHeight: removeMenuItem.height + editMenuItem.height + mainView.innerSpacing
+        topPadding: mainView.innerSpacing / 2
+
+        background: Rectangle {
+            implicitWidth: appContextMenu.menuWidth
+            color: mainView.accentColor
+            radius: mainView.innerSpacing
+        }
 
         property var appGroupName
         property var appGridView
 
-        // todo: implement
         MenuItem {
             id: removeMenuItem
-
-
+            anchors.margins: mainView.innerSpacing
+            text: qsTr("Remove group")
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: removeMenuItem.menuWidth
+                text: removeMenuItem.text
+                font: removeMenuItem.font
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            onClicked: {
+                console.log("AppGrid | Remove group " + groupContextMenu.appGroupName);
+                appLauncher.removeCustomGroup(groupContextMenu.appGroupName)
+            }
         }
         MenuItem {
             id: editMenuItem
+            anchors.margins: mainView.innerSpacing
+            text: qsTr("Edit groupname")
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: editMenuItem.menuWidth
+                text: editMenuItem.text
+                font: editMenuItem.font
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            onClicked: {
+                console.log("AppGrid | Edit group " + groupContextMenu.appGroupName);
+                groupDialog.groupName = groupContextMenu.appGroupName
+                groupDialog.open()
+            }
         }
     }
 
@@ -580,6 +661,10 @@ LauncherPage {
 
         property var app
         property string groupName: ""
+
+        onGroupNameChanged: {
+            groupNameField.text = groupName
+        }
 
         background: Rectangle {
             anchors.fill: parent
@@ -615,7 +700,6 @@ LauncherPage {
                 id: groupNameField
                 width: parent.width
                 color: mainView.fontColor
-                text: groupDialog.groupName
                 maximumLength: 80
                 wrapMode: Text.NoWrap
                 placeholderText: qsTr("Enter a group name")
@@ -654,6 +738,7 @@ LauncherPage {
 
                     onClicked: {
                         groupDialog.close()
+                        groupNameField.text = ""
                     }
                 }
 
@@ -677,9 +762,14 @@ LauncherPage {
                     }
 
                     onClicked: {
-                        if (groupDialog.groupName.length > 0) {
-                            updateCustomGroups(groupDialog.app, groupDialog.groupName)
+                        if (groupNameField.text.trim().length > 0) {
+                            if (groupDialog.groupName.length === 0) {
+                                updateCustomGroupOfApp(groupDialog.app.package, groupNameField.text.trim())
+                            } else {
+                                updateCustomGroup(groupDialog.groupName, groupNameField.text.trim())
+                            }
                             groupDialog.close()
+                            groupNameField.text = ""
                         } else {
                             mainView.showToast(qsTr("Group name must have at least one character."))
                         }

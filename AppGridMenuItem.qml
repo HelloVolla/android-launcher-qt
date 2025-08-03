@@ -4,7 +4,9 @@ import QtQuick.Controls 2.5
 MenuItem {
     id: appGridMenuItem
 
+    property var appLauncher
     property string appPackageName
+    property string appGroup
     property double innerSpacing
     property double labelPointSize
     property double labelWidth
@@ -13,7 +15,7 @@ MenuItem {
     font.pointSize: labelPointSize
     contentItem: Label {
         width: labelWidth
-        text: appGridMenuItem.text
+        text: qsTr("Add to ") + appGridMenuItem.appGroup
         font: appGridMenuItem.font
         horizontalAlignment: Text.AlignHCenter
     }
@@ -22,6 +24,6 @@ MenuItem {
         color: "transparent"
     }
     onClicked: {
-        appGridMenuItem.parent.updateCustomGroups(appPackageName, text)
+        appLauncher.updateCustomGroupOfApp(appPackageName, appGroup)
     }
 }
