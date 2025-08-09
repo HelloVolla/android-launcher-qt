@@ -61,7 +61,54 @@
     </message>
     <message>
         <source>Remove App</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poista sovellus</translation>
+    </message>
+    <message>
+        <source>Add to new group</source>
+        <translation type="unfinished">Lisää uuteen ryhmään</translation>
+    </message>
+    <message>
+        <source>Remove from group</source>
+        <translation type="unfinished">Poista ryhmästä</translation>
+    </message>
+    <message>
+        <source>Use custom groups</source>
+        <translation type="unfinished">Käytä mukautettuja ryhmiä</translation>
+    </message>
+    <message>
+        <source>Remove group</source>
+        <translation type="unfinished">Poista ryhmä</translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished">Muokkaa ryhmän nimeä</translation>
+    </message>
+    <message>
+        <source>Group name</source>
+        <translation type="unfinished">Ryhmän nimi</translation>
+    </message>
+    <message>
+        <source>Enter a group name</source>
+        <translation type="unfinished">Syötä ryhmän nimi</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Peruuta</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
+        <source>Group name must have at least one character.</source>
+        <translation type="unfinished">Ryhmän nimessä on oltava vähintään yksi merkki.</translation>
+    </message>
+</context>
+<context>
+    <name>AppGridMenuItem</name>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished">Lisää </translation>
     </message>
 </context>
 <context>
@@ -423,7 +470,7 @@
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation type="unfinished">Näytä ryhmitellyt sovellukset</translation>
+        <translation type="obsolete">Näytä ryhmitellyt sovellukset</translation>
     </message>
     <message>
         <source>Use app categories</source>
@@ -484,6 +531,10 @@
     <message>
         <source>Light Translucent Mode</source>
         <translation type="unfinished">Kevyt läpikuultava tila</translation>
+    </message>
+    <message>
+        <source>Show frequently used apps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
