@@ -1477,7 +1477,13 @@ LauncherPage {
                         // Workaround for web shortcuts
                         Qt.openUrlExternally(selectedMenuItem.actionId)
                     } else {
-                        AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                        var appDesctiptor = selectedMenuItem.actionId.split("/")
+                        if (appDesctiptor.length === 1) {
+                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                        } else {
+                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": appDesctiptor[0], "class": appDesctiptor[1],
+                                                                                         "userHandle": appDesctiptor[2], "isCloned": true})
+                        }
                     }
                     break
             }
