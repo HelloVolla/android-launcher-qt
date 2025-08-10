@@ -244,9 +244,11 @@ Item {
                             } else if (model.shortcutId !== undefined && model.shortcutId.length > 0) {
                                 AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut", {"shortcutId": model.shortcutId, "package": model.package})
                             } else {
-                                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": model.package, "class": model.className})
+                                AN.SystemDispatcher.dispatch("volla.launcher.runAppAction",
+                                                             {"appId": model.package, "class": model.className,
+                                                              "userHandle": model.userHandle, "isCloned": model.isCloned})
                             }
-                             AN.SystemDispatcher.dispatch("volla.launcher.clearRedDot", {"package": model.package})
+                            AN.SystemDispatcher.dispatch("volla.launcher.clearRedDot", {"package": model.package})
                         }
                     }
                     onPressAndHold: {
@@ -297,7 +299,7 @@ Item {
 
                 Rectangle {
                     id: cloneBadge
-                    visible: model.userHandle > 0 && model.package in groupItem.iconMap
+                    visible: model.isCloned > 0 && model.package in groupItem.iconMap
                     anchors.bottom: gridCircle.bottom
                     anchors.right: gridCircle.right
                     width: parent.width * 0.15

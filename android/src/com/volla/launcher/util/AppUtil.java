@@ -118,13 +118,26 @@ public class AppUtil {
                         } else if (type.equals(RUN_APP)) {
                             String packageName = (String) message.get("appId");
                             String className = (String) message.get("class");
+                            boolean isCloned = (boolean) message.get("isCloned");
+                            double userHandle = (double) message.get("userHandle");
 
-                            if (className != null) {
+                            Log.d(TAG, packageName + ", " + className + ", " + String.valueOf((int)userHandle) + ", " + String.valueOf(isCloned));
+
+                            if (className != null && isCloned) {
                                 LauncherApps la = (LauncherApps)activity.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+                                List<UserHandle> uhl = la.getProfiles();
+                                UserHandle appUh = null;
+                                for (UserHandle uh:uhl) {
+                                    if (uh.toString().endsWith(String.valueOf((int)userHandle) + "}")) {
+                                        appUh = uh;
+                                        break;
+                                    }
+                                }
                                 ComponentName cn = new ComponentName(packageName, className);
-                                UserHandle uh = UserHandle.getUserHandleForUid(10);
-                                la.startMainActivity(cn, uh, null, null);
+                                Log.d(TAG, "Will start cloned app" + appUh.toString());
+                                la.startMainActivity(cn, appUh, null, null);
                             } else {
+                                Log.d(TAG, "Will start non cloned app");
                                 try {
                                     Intent app = pm.getLaunchIntentForPackage(packageName);
                                     activity.startActivity(app);

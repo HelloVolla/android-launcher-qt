@@ -25,7 +25,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.util.Base64;
 import android.util.Log;
 import java.lang.reflect.Method;
@@ -107,6 +106,7 @@ public class AppWorker
 
                             LauncherApps la = (LauncherApps)activity.getSystemService(Context.LAUNCHER_APPS_SERVICE);
                             List<UserHandle> uhl = la.getProfiles();
+
                             boolean isMainUserHandle = true;
                             for (UserHandle uh:uhl) {
                                 Log.d(TAG, "Apps for " + uh.toString());
@@ -123,6 +123,7 @@ public class AppWorker
                                         appInfo.put("package", lai.getComponentName().getPackageName());
                                         appInfo.put("className", lai.getComponentName().getClassName());
                                         appInfo.put("userHandle", Integer.parseInt(uh.toString().substring(11, uh.toString().length() - 1)));
+                                        appInfo.put("isCloned", !isMainUserHandle);
                                         appInfo.put("label", lai.getLabel());
                                         appInfo.put("icon", AppWorker.drawableToBase64(lai.getBadgedIcon(0)));
 
