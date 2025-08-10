@@ -61,7 +61,54 @@
     </message>
     <message>
         <source>Remove App</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odebrat aplikaci</translation>
+    </message>
+    <message>
+        <source>Add to new group</source>
+        <translation type="unfinished">Přidat do nové skupiny</translation>
+    </message>
+    <message>
+        <source>Remove from group</source>
+        <translation type="unfinished">Odebrat ze skupiny</translation>
+    </message>
+    <message>
+        <source>Use custom groups</source>
+        <translation type="unfinished">Použít vlastní skupiny</translation>
+    </message>
+    <message>
+        <source>Remove group</source>
+        <translation type="unfinished">Odebrat skupinu</translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished">Upravit název skupiny</translation>
+    </message>
+    <message>
+        <source>Group name</source>
+        <translation type="unfinished">Název skupiny</translation>
+    </message>
+    <message>
+        <source>Enter a group name</source>
+        <translation type="unfinished">dejte název skupiny</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Zrušit</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
+        <source>Group name must have at least one character.</source>
+        <translation type="unfinished">Název skupiny musí obsahovat alespoň jeden znak.</translation>
+    </message>
+</context>
+<context>
+    <name>AppGridMenuItem</name>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished">Přidat do </translation>
     </message>
 </context>
 <context>
@@ -374,7 +421,7 @@
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation type="unfinished">Zobrazit seskupené aplikace</translation>
+        <translation type="obsolete">Zobrazit seskupené aplikace</translation>
     </message>
     <message>
         <source>Use app categories</source>
@@ -443,6 +490,10 @@
     <message>
         <source>Light Translucent Mode</source>
         <translation type="unfinished">Světlý průsvitný režim</translation>
+    </message>
+    <message>
+        <source>Show frequently used apps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -61,7 +61,54 @@
     </message>
     <message>
         <source>Remove App</source>
+        <translation type="unfinished">Fjern app</translation>
+    </message>
+    <message>
+        <source>Add to new group</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from group</source>
+        <translation type="unfinished">Fjern fra gruppe</translation>
+    </message>
+    <message>
+        <source>Use custom groups</source>
+        <translation type="unfinished">Brug brugerdefinerede grupper</translation>
+    </message>
+    <message>
+        <source>Remove group</source>
+        <translation type="unfinished">Fjern gruppe</translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished">Rediger gruppenavn</translation>
+    </message>
+    <message>
+        <source>Group name</source>
+        <translation type="unfinished">Gruppenavn</translation>
+    </message>
+    <message>
+        <source>Enter a group name</source>
+        <translation type="unfinished">Indtast et gruppenavn</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Annuller</translation>
+    </message>
+    <message>
+        <source>Group name must have at least one character.</source>
+        <translation type="unfinished">Gruppenavnet skal bestå af mindst ét tegn.</translation>
+    </message>
+</context>
+<context>
+    <name>AppGridMenuItem</name>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished">Føj til </translation>
     </message>
 </context>
 <context>
@@ -374,7 +421,7 @@
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation type="unfinished">Vis grupperede apps</translation>
+        <translation type="obsolete">Vis grupperede apps</translation>
     </message>
     <message>
         <source>Use app categories</source>
@@ -447,6 +494,10 @@
     <message>
         <source>Light Translucent Mode</source>
         <translation type="unfinished">Let gennemskinnelig tilstand</translation>
+    </message>
+    <message>
+        <source>Show frequently used apps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

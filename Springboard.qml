@@ -1084,7 +1084,7 @@ LauncherPage {
 
                  function getGeoCodes(city) {
                      console.debug("Widget | Will request cities: " + city)
-                     var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=20&appid=" + weatherWidget.apiKey
+                     var geoUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=20&appid=" + weatherWidget.apiKey
                      geoRequest.onreadystatechange = function() {
                          if (geoRequest.readyState === XMLHttpRequest.DONE) {
                              console.debug("Widget | Geo location response: " + geoRequest.status)
@@ -1114,7 +1114,7 @@ LauncherPage {
 
             function getLocation() {
                 console.debug("Widget | Will request city name for " + weatherWidget.latitude, weatherWidget.longitude)
-                var cityUrl = "http://api.openweathermap.org/geo/1.0/reverse?lat="
+                var cityUrl = "https://api.openweathermap.org/geo/1.0/reverse?lat="
                         + weatherWidget.latitude + "&lon=" + weatherWidget.longitude + "&appid=" + apiKey
                 var cityRequest = new XMLHttpRequest()
                 cityRequest.onreadystatechange = function() {
@@ -1477,7 +1477,13 @@ LauncherPage {
                         // Workaround for web shortcuts
                         Qt.openUrlExternally(selectedMenuItem.actionId)
                     } else {
-                        AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                        var appDesctiptor = selectedMenuItem.actionId.split("/")
+                        if (appDesctiptor.length === 1) {
+                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                        } else {
+                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": appDesctiptor[0], "class": appDesctiptor[1],
+                                                                                         "userHandle": appDesctiptor[2], "isCloned": true})
+                        }
                     }
                     break
             }

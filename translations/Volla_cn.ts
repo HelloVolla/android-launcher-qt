@@ -111,6 +111,53 @@
         <source>Remove App</source>
         <translation>卸载应用</translation>
     </message>
+    <message>
+        <source>Add to new group</source>
+        <translation type="unfinished">添加到新组</translation>
+    </message>
+    <message>
+        <source>Remove from group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use custom groups</source>
+        <translation type="unfinished">从组中移除</translation>
+    </message>
+    <message>
+        <source>Remove group</source>
+        <translation type="unfinished">删除组</translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished">编辑组名称</translation>
+    </message>
+    <message>
+        <source>Group name</source>
+        <translation type="unfinished">组名称</translation>
+    </message>
+    <message>
+        <source>Enter a group name</source>
+        <translation type="unfinished">输入组名称</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">确认</translation>
+    </message>
+    <message>
+        <source>Group name must have at least one character.</source>
+        <translation type="unfinished">组名必须至少包含一个字符。</translation>
+    </message>
+</context>
+<context>
+    <name>AppGridMenuItem</name>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished">添加到</translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>
@@ -430,7 +477,7 @@
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation>展示分组应用</translation>
+        <translation type="vanished">展示分组应用</translation>
     </message>
     <message>
         <source>Use app categories</source>
@@ -491,6 +538,10 @@
     <message>
         <source>Light Translucent Mode</source>
         <translation type="unfinished">半透明模式</translation>
+    </message>
+    <message>
+        <source>Show frequently used apps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

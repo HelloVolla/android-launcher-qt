@@ -61,7 +61,54 @@
     </message>
     <message>
         <source>Remove App</source>
+        <translation type="unfinished">Премахване на приложение</translation>
+    </message>
+    <message>
+        <source>Add to new group</source>
+        <translation type="unfinished">Добави към нова група</translation>
+    </message>
+    <message>
+        <source>Remove from group</source>
+        <translation type="unfinished">Премахване от група</translation>
+    </message>
+    <message>
+        <source>Use custom groups</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove group</source>
+        <translation type="unfinished">Използвайте персонализирани групи</translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished">Редактиране на името на групата</translation>
+    </message>
+    <message>
+        <source>Group name</source>
+        <translation type="unfinished">Име на групата</translation>
+    </message>
+    <message>
+        <source>Enter a group name</source>
+        <translation type="unfinished">Въведете име на група</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Скасаваць</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Добра</translation>
+    </message>
+    <message>
+        <source>Group name must have at least one character.</source>
+        <translation type="unfinished">Името на групата трябва да съдържа поне един символ.</translation>
+    </message>
+</context>
+<context>
+    <name>AppGridMenuItem</name>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished">Добави към </translation>
     </message>
 </context>
 <context>
@@ -382,7 +429,7 @@
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation>Паказаць групаваныя праграмы</translation>
+        <translation type="vanished">Паказаць групаваныя праграмы</translation>
     </message>
     <message>
         <source>Use app categories</source>
@@ -442,6 +489,10 @@
     </message>
     <message>
         <source>Light Translucent Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show frequently used apps</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

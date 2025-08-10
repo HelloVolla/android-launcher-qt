@@ -405,12 +405,15 @@ LauncherPage {
             onClicked: {
                 console.log("AppGrid | App " + appContextMenu.app["label"] + " selected for shortcuts");
                 appContextMenu.gridView.currentIndex = -1
-                mainView.updateAction(contextMenu.app["itemId"],
-                                      true,
-                                      mainView.settingsAction.CREATE,
-                                      {"id": appContextMenu.app["itemId"],
-                                       "name": qsTr("Open") + " " + appContextMenu.app["label"],
-                                       "activated": true} )
+                var appId = appContextMenu.app.isCloned ? appContextMenu.app.package + "/" + appContextMenu.app.className + "/" + appContextMenu.app.userHandle
+                                                        : appContextMenu.app.package
+                var shortcut = appContextMenu.app.isCloned ? {"id": appId,
+                                                              "name": qsTr("Open") + " " + appContextMenu.app.label + " 2",
+                                                              "activated": true}
+                                                           : {"id": appId,
+                                                              "name": qsTr("Open") + " " + appContextMenu.app.label,
+                                                              "activated": true}
+                mainView.updateAction(appId, true, mainView.settingsAction.CREATE, shortcut )
             }
         }
         MenuItem {
@@ -796,6 +799,10 @@ LauncherPage {
                     if (appsString.length > 0) {
                         console.debug("AppLauncher | Will read app cache")
                         var appsArray = JSON.parse(appsString)
+                        // Workaround for update to release 4 with cloned app support
+                        for (var app in appsArray) {
+                            if (app.isCloned === undefined) app.isCloned = false
+                        }
                         var groupedApps = appLauncher.getGroupedApps(appsArray)
                         appLauncher.destroyAppGroups()
                         appLauncher.createAppGroups(groupedApps)

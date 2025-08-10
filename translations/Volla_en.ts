@@ -55,6 +55,53 @@
         <source>Remove App</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add to new group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use custom groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter a group name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group name must have at least one character.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AppGridMenuItem</name>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>
@@ -369,10 +416,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show grouped apps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Use app categories</source>
         <translation type="unfinished"></translation>
     </message>
@@ -430,6 +473,10 @@
     </message>
     <message>
         <source>Light Translucent Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show frequently used apps</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

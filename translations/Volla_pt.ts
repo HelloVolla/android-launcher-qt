@@ -57,7 +57,54 @@
     </message>
     <message>
         <source>Remove App</source>
+        <translation type="unfinished">Usuń aplikację</translation>
+    </message>
+    <message>
+        <source>Add to new group</source>
+        <translation type="unfinished">Dodaj do nowej grupy</translation>
+    </message>
+    <message>
+        <source>Remove from group</source>
+        <translation type="unfinished">Usuń z grupy</translation>
+    </message>
+    <message>
+        <source>Use custom groups</source>
+        <translation type="unfinished">Użyj grup niestandardowych</translation>
+    </message>
+    <message>
+        <source>Remove group</source>
+        <translation type="unfinished">Usuń grupę</translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished">Edit groupname</translation>
+    </message>
+    <message>
+        <source>Group name</source>
+        <translation type="unfinished">Nazwa grupy</translation>
+    </message>
+    <message>
+        <source>Enter a group name</source>
+        <translation type="unfinished">Wpisz nazwę grupy</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Ok</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group name must have at least one character.</source>
+        <translation type="unfinished">Nazwa grupy musi zawierać co najmniej jeden znak.</translation>
+    </message>
+</context>
+<context>
+    <name>AppGridMenuItem</name>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished">Dodaj do </translation>
     </message>
 </context>
 <context>
@@ -374,7 +421,7 @@
     </message>
     <message>
         <source>Show grouped apps</source>
-        <translation type="unfinished">Mostrar aplicações agrupadas</translation>
+        <translation type="obsolete">Mostrar aplicações agrupadas</translation>
     </message>
     <message>
         <source>Use app categories</source>
@@ -435,6 +482,10 @@
     <message>
         <source>Light Translucent Mode</source>
         <translation type="unfinished">Modo translúcido claro</translation>
+    </message>
+    <message>
+        <source>Show frequently used apps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
