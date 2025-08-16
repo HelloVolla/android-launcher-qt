@@ -11,12 +11,12 @@
         <location filename="../AppGrid.qml" line="92"/>
         <location filename="../AppGrid.qml" line="101"/>
         <source>Most used</source>
-        <translation type="unfinished">Meest gebruikt</translation>
+        <translation type="unfinished">Meestgebruikt</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="137"/>
         <source>Other apps</source>
-        <translation type="unfinished">Most used</translation>
+        <translation type="unfinished">Andere apps</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="98"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../AppGrid.qml" line="292"/>
         <source>Filter apps</source>
-        <translation>Filter Apps</translation>
+        <translation>Filter apps</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="393"/>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../AppGrid.qml" line="689"/>
         <source>Group name</source>
-        <translation type="unfinished">groepnaam</translation>
+        <translation type="unfinished">Groepsnaam</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="705"/>
@@ -95,31 +95,31 @@
     </message>
     <message>
         <source>Open Applicatie</source>
-        <translation type="vanished">Applicatie Openen</translation>
+        <translation type="vanished">Open applicatie</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="422"/>
         <source>Open Shortcut</source>
-        <translation>Snelkoppeling openen</translation>
+        <translation>Open snelkoppeling</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="422"/>
         <source>Open App</source>
-        <translation type="unfinished">App openen</translation>
+        <translation type="unfinished">Open app</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="455"/>
         <source>Remove App</source>
-        <translation>Applicatie Verwijderen</translation>
+        <translation>Verwijder app</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="474"/>
         <source>Remove Bookmark</source>
-        <translation>Bladwijzer verwijderen</translation>
+        <translation>Verwijder bladwijzer</translation>
     </message>
     <message>
         <source>Remove Shortcut</source>
-        <translation type="vanished">Snelkoppeling verwijderen</translation>
+        <translation type="vanished">Verwijder snelkoppeling</translation>
     </message>
     <message>
         <location filename="../AppGrid.qml" line="867"/>
@@ -129,7 +129,7 @@
     <message>
         <location filename="../AppGrid.qml" line="874"/>
         <source>Pinned shortcut already exists</source>
-        <translation>De vastgezette link bestaat al</translation>
+        <translation>De vastgezette snelkoppeling bestaat al</translation>
     </message>
 </context>
 <context>
@@ -144,7 +144,7 @@
     <name>Browser</name>
     <message>
         <source>Show Dialer</source>
-        <translation type="vanished">Toon telefoon</translation>
+        <translation type="vanished">Toon nummerkiezer</translation>
     </message>
     <message>
         <source>Open Camera</source>
@@ -185,7 +185,7 @@
         <location filename="../Collections.qml" line="59"/>
         <location filename="../Collections.qml" line="157"/>
         <source>People</source>
-        <translation>Contactpersonen</translation>
+        <translation>Contacten</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="60"/>
@@ -220,7 +220,7 @@
     <message>
         <location filename="../Collections.qml" line="89"/>
         <source>Find note ...</source>
-        <translation type="unfinished">Zoek noot...</translation>
+        <translation type="unfinished">Zoek notitie...</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="178"/>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../Collections.qml" line="479"/>
         <source>Call</source>
-        <translation>Opbellen</translation>
+        <translation>Bellen</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="487"/>
@@ -250,7 +250,7 @@
     <message>
         <location filename="../Collections.qml" line="510"/>
         <source>Open in Signal</source>
-        <translation type="unfinished">Open in Signaal</translation>
+        <translation type="unfinished">Open in Signal</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="675"/>
@@ -265,33 +265,33 @@
     <message>
         <location filename="../Collections.qml" line="735"/>
         <source>New calls</source>
-        <translation>Gemiste oproepen</translation>
+        <translation>Nieuwe oproepen</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="735"/>
         <source>New call</source>
-        <translation>Gemiste oproep</translation>
+        <translation>Nieuwe oproep</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="909"/>
         <location filename="../Collections.qml" line="914"/>
         <source>You</source>
-        <translation>U</translation>
+        <translation>Jij</translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="1018"/>
         <source>Could not load RSS feed: </source>
-        <translation>Kon RSS feed niet laden: </translation>
+        <translation>Kon rss-feed niet laden: </translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="1046"/>
         <source>Invalid RSS feed: </source>
-        <translation>Ongeldige RSS feed: </translation>
+        <translation>Ongeldige rss-feed: </translation>
     </message>
     <message>
         <location filename="../Collections.qml" line="1066"/>
         <source>Missing RSS item: </source>
-        <translation>Ontbrekend RSS bericht: </translation>
+        <translation>Ontbrekend rss-item: </translation>
     </message>
 </context>
 <context>
@@ -299,7 +299,7 @@
     <message>
         <location filename="../Conversation.qml" line="207"/>
         <source>Conversation</source>
-        <translation>Gesprekken</translation>
+        <translation>Gesprek</translation>
     </message>
     <message>
         <location filename="../Conversation.qml" line="249"/>
@@ -315,7 +315,7 @@
         <location filename="../Conversation.qml" line="657"/>
         <location filename="../Conversation.qml" line="776"/>
         <source>Attached image is not available for preview</source>
-        <translation type="unfinished">afbeelding is niet beschikbaar als voorbeeld</translation>
+        <translation type="unfinished">Geen voorvertoning beschikbaar voor bijgevoegde afbeelding</translation>
     </message>
     <message>
         <location filename="../Conversation.qml" line="742"/>
@@ -370,7 +370,7 @@
     <message>
         <location filename="../OnBoarding.qml" line="77"/>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished">Begin met schrijven en krijg suggesties voor voltooiing en functies</translation>
+        <translation type="unfinished">Begin met schrijven en ontvang suggesties voor voltooiing en functies</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="86"/>
@@ -389,7 +389,7 @@
     <message>
         <location filename="../OnBoarding.qml" line="104"/>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished">Raak de rode stip aan, sleep naar een menu-item en laat los voor uw selectie.</translation>
+        <translation type="unfinished">Raak de rode stip aan, sleep naar een menu-item en laat los voor jouw selectie.</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="131"/>
@@ -417,12 +417,12 @@
     <message>
         <location filename="../OnBoarding.qml" line="200"/>
         <source>Finish</source>
-        <translation type="unfinished">Afwerking</translation>
+        <translation type="unfinished">Afronden</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="224"/>
         <source>Hello World</source>
-        <translation type="unfinished">Hallo Wereld</translation>
+        <translation type="unfinished">Hallo wereld</translation>
     </message>
     <message>
         <location filename="../OnBoarding.qml" line="229"/>
@@ -458,17 +458,17 @@
         <location filename="../Settings.qml" line="336"/>
         <location filename="../Settings.qml" line="376"/>
         <source>Security mode is OFF</source>
-        <translation type="unfinished">Beveiligingsmodus is UIT</translation>
+        <translation type="unfinished">Beveiligingsmodus staat UIT</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="399"/>
         <source>Security mode is ON</source>
-        <translation type="unfinished">Beveiligingsmodus is AAN</translation>
+        <translation type="unfinished">Beveiligingsmodus staat AAN</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="536"/>
         <source>Enter password</source>
-        <translation type="unfinished">Wachtwoord invoeren</translation>
+        <translation type="unfinished">Voer wachtwoord in</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="562"/>
@@ -494,22 +494,22 @@
     <message>
         <location filename="../Settings.qml" line="658"/>
         <source>Wrong password confirmation</source>
-        <translation type="unfinished">Bevestiging van een verkeerd wachtwoord</translation>
+        <translation type="unfinished">Wachtwoorden komen niet overeen</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="661"/>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Het wachtwoord moet tenminste uit vier karakters of nummers bestaan</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="688"/>
         <source>Wrong password</source>
-        <translation type="unfinished">Verkeerd wachtwoord.</translation>
+        <translation type="unfinished">Verkeerd wachtwoord</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="723"/>
         <source>News Channels</source>
-        <translation>Nieuwskanalen</translation>
+        <translation>Nieuwsfeeds</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="805"/>
@@ -526,7 +526,7 @@
     <message>
         <location filename="../Settings.qml" line="998"/>
         <source>Source settings</source>
-        <translation type="unfinished">Bron instellingen</translation>
+        <translation type="unfinished">Broninstellingen</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1015"/>
@@ -536,22 +536,22 @@
     <message>
         <location filename="../Settings.qml" line="1055"/>
         <source>Signal app is not installed</source>
-        <translation type="unfinished">Signal app is niet geïnstalleerd</translation>
+        <translation type="unfinished">Signal-app is niet geïnstalleerd</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1257"/>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toon veelgebruikte apps</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1386"/>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weer</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1387"/>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klok</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1388"/>
@@ -561,7 +561,7 @@
     <message>
         <location filename="../Settings.qml" line="1401"/>
         <source>Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Widgets</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1505"/>
@@ -576,7 +576,7 @@
     <message>
         <location filename="../Settings.qml" line="1864"/>
         <source>Reset launcher</source>
-        <translation>Startscherm-app resetten</translation>
+        <translation>Reset laucher</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1089"/>
@@ -587,13 +587,13 @@
         <location filename="../Settings.qml" line="112"/>
         <location filename="../Settings.qml" line="166"/>
         <source>Dark Translucent Mode</source>
-        <translation type="unfinished">Donkere doorschijnende modus</translation>
+        <translation type="unfinished">Donkere transparante modus</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="115"/>
         <location filename="../Settings.qml" line="183"/>
         <source>Light Translucent Mode</source>
-        <translation type="unfinished">Licht doorschijnende modus</translation>
+        <translation type="unfinished">Heldere transparante modus</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1201"/>
@@ -617,21 +617,21 @@
     <message>
         <location filename="../Settings.qml" line="1762"/>
         <source>Reset news feeds</source>
-        <translation type="unfinished">Reset nieuws feeds</translation>
+        <translation type="unfinished">Reset nieuwsfeeds</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1796"/>
         <source>Reset shorcuts</source>
-        <translation type="unfinished">Sneltoetsen resetten</translation>
+        <translation type="unfinished">Reset snelkoppelingen</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1830"/>
         <source>Reload contacts</source>
-        <translation type="unfinished">Contacten herladen</translation>
+        <translation type="unfinished">Herlaad contacten</translation>
     </message>
     <message>
         <source>StartPage</source>
-        <translation type="obsolete">Startpagina</translation>
+        <translation type="obsolete">StartPage</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1107"/>
@@ -660,12 +660,12 @@
     <message>
         <location filename="../Settings.qml" line="1230"/>
         <source>Use colored app icons</source>
-        <translation>Gebruik gekleurde app iconen</translation>
+        <translation>Gebruik gekleurde appiconen</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1239"/>
         <source>Show apps at startup</source>
-        <translation>Apps tonen bij opstarten</translation>
+        <translation>Toon apps bij opstarten</translation>
     </message>
     <message>
         <location filename="../Settings.qml" line="1248"/>
@@ -703,22 +703,22 @@
     <message>
         <location filename="../Springboard.qml" line="25"/>
         <source>Friday</source>
-        <translation type="unfinished">Venerdì</translation>
+        <translation type="unfinished">Vrijdag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="26"/>
         <source>Saturday</source>
-        <translation type="unfinished">Sabato</translation>
+        <translation type="unfinished">Zaterdag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="25"/>
         <source>Sunday</source>
-        <translation type="unfinished">Domenica</translation>
+        <translation type="unfinished">Zondag</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="26"/>
         <source>tomorrow</source>
-        <translation type="unfinished">domani</translation>
+        <translation type="unfinished">morgen</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="148"/>
@@ -733,7 +733,7 @@
     <message>
         <location filename="../Springboard.qml" line="283"/>
         <source>Sorry. I couldn&apos;t find a phone number for this contact</source>
-        <translation>Sorry. Ik kon geen telefoonnummer vinden voor dit contact.</translation>
+        <translation>Sorry. Ik kon geen telefoonnummer vinden voor dit contact</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="286"/>
@@ -744,38 +744,38 @@
     <message>
         <location filename="../Springboard.qml" line="567"/>
         <source>New note saved</source>
-        <translation type="unfinished">Nuova nota salvata</translation>
+        <translation type="unfinished">Nieuwe notitie opgeslagen</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="608"/>
         <location filename="../Springboard.qml" line="628"/>
         <source>An error occured</source>
-        <translation type="unfinished">Si è verificato un errore</translation>
+        <translation type="unfinished">Er ging iets mis</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="630"/>
         <source>Please reset contacts and try again.</source>
-        <translation type="unfinished">Resettare i contatti e riprovare.</translation>
+        <translation type="unfinished">Reset contacten en probeer het opnieuw alsjeblieft</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="966"/>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">weer</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="973"/>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stel locatie in</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="992"/>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voer een locatie in</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="1579"/>
         <source>x</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">x</translation>
     </message>
     <message>
         <source>Sorry. Contact has no mobile phone number</source>
@@ -804,7 +804,7 @@
     </message>
     <message>
         <source>Call</source>
-        <translation type="obsolete">Oproep</translation>
+        <translation type="obsolete">Bellen</translation>
     </message>
     <message>
         <source>Open in browser</source>
@@ -812,11 +812,11 @@
     </message>
     <message>
         <source>Add feed to collection</source>
-        <translation type="obsolete">Kanaal toevoegen aan de collectie</translation>
+        <translation type="obsolete">Feed toevoegen aan de collectie</translation>
     </message>
     <message>
         <source>Make Call</source>
-        <translation type="obsolete">Opbellen</translation>
+        <translation type="obsolete">Bellen</translation>
     </message>
     <message>
         <source>Create Message</source>
@@ -865,7 +865,7 @@
     </message>
     <message>
         <source>Your note was successfully stored</source>
-        <translation type="vanished">Uw notitie werd succesvol opgeslagen</translation>
+        <translation type="vanished">Jouw notitie werd succesvol opgeslagen</translation>
     </message>
     <message>
         <location filename="../Springboard.qml" line="1472"/>
@@ -953,7 +953,7 @@
     <message>
         <location filename="../main.qml" line="191"/>
         <source>Call</source>
-        <translation>Opbellen</translation>
+        <translation>Bellen</translation>
     </message>
     <message>
         <location filename="../main.qml" line="190"/>
@@ -963,7 +963,7 @@
     <message>
         <location filename="../main.qml" line="190"/>
         <source>Send work email</source>
-        <translation>Werk e-mail versturen</translation>
+        <translation>Zakelijke e-mail versturen</translation>
     </message>
     <message>
         <location filename="../main.qml" line="191"/>
@@ -973,7 +973,7 @@
     <message>
         <location filename="../main.qml" line="192"/>
         <source>Call on cell phone</source>
-        <translation>Oproep op mobiele telefoon</translation>
+        <translation>Bel mobiele telefoon</translation>
     </message>
     <message>
         <location filename="../main.qml" line="192"/>
@@ -983,7 +983,7 @@
     <message>
         <location filename="../main.qml" line="193"/>
         <source>Call at work</source>
-        <translation>Bel op het werk</translation>
+        <translation>Bel het werk</translation>
     </message>
     <message>
         <location filename="../main.qml" line="193"/>
@@ -1014,17 +1014,17 @@
     <message>
         <location filename="../main.qml" line="196"/>
         <source>Send Signal message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verstuur Signal-bericht</translation>
     </message>
     <message>
         <location filename="../main.qml" line="197"/>
         <source>Add to Calender</source>
-        <translation type="unfinished">Aggiungi al calendario</translation>
+        <translation type="unfinished">Voeg toe aan kalender</translation>
     </message>
     <message>
         <location filename="../main.qml" line="197"/>
         <source>Show in Signal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toon in Signal</translation>
     </message>
     <message>
         <location filename="../main.qml" line="212"/>
@@ -1034,7 +1034,7 @@
     <message>
         <location filename="../main.qml" line="214"/>
         <source>Generic failure</source>
-        <translation>Generieke fout</translation>
+        <translation>Algemene fout</translation>
     </message>
     <message>
         <location filename="../main.qml" line="215"/>
@@ -1065,53 +1065,53 @@
         <location filename="../main.qml" line="339"/>
         <location filename="../main.qml" line="341"/>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestanden</translation>
     </message>
     <message>
         <location filename="../main.qml" line="340"/>
         <location filename="../main.qml" line="342"/>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Berichten</translation>
     </message>
     <message>
         <location filename="../main.qml" line="343"/>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muziek</translation>
     </message>
     <message>
         <location filename="../main.qml" line="344"/>
         <source>Bancontact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bancontact</translation>
     </message>
     <message>
         <location filename="../main.qml" line="345"/>
         <source>De Trein</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">De Trein</translation>
     </message>
     <message>
         <location filename="../main.qml" line="346"/>
         <source>Mynexuzhealth</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mynexuzhealth</translation>
     </message>
     <message>
         <location filename="../main.qml" line="347"/>
         <source>Bonsai</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bonsai</translation>
     </message>
     <message>
         <location filename="../main.qml" line="348"/>
         <source>MijnOnlineAgenda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MijnOnlineAgenda</translation>
     </message>
     <message>
         <location filename="../main.qml" line="349"/>
         <source>Facebook</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Facebook</translation>
     </message>
     <message>
         <location filename="../main.qml" line="350"/>
         <source>Browser</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Browser</translation>
     </message>
     <message>
         <location filename="../main.qml" line="351"/>
@@ -1120,32 +1120,32 @@
         <location filename="../main.qml" line="354"/>
         <location filename="../main.qml" line="355"/>
         <source>Mail</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mail</translation>
     </message>
     <message>
         <location filename="../main.qml" line="356"/>
         <source>Sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sync</translation>
     </message>
     <message>
         <location filename="../main.qml" line="357"/>
         <source>VPN</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">VPN</translation>
     </message>
     <message>
         <location filename="../main.qml" line="358"/>
         <source>Store</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Store</translation>
     </message>
     <message>
         <location filename="../main.qml" line="359"/>
         <source>A-Droid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">A-Droid</translation>
     </message>
     <message>
         <location filename="../main.qml" line="360"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kaarten</translation>
     </message>
     <message>
         <location filename="../main.qml" line="361"/>
@@ -1155,12 +1155,12 @@
     <message>
         <location filename="../main.qml" line="362"/>
         <source>Radio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radio</translation>
     </message>
     <message>
         <location filename="../main.qml" line="363"/>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weer</translation>
     </message>
     <message>
         <location filename="../main.qml" line="374"/>
@@ -1180,17 +1180,17 @@
     <message>
         <location filename="../main.qml" line="742"/>
         <source>Could not load a valid feed</source>
-        <translation type="unfinished">Impossibile caricare un feed valido</translation>
+        <translation type="unfinished">Kan geldige feed niet inladen</translation>
     </message>
     <message>
         <source>You have already added the shortcut</source>
-        <translation type="obsolete">Avete già aggiunto la scorciatoia</translation>
+        <translation type="obsolete">Je hebt de snelkoppeling al toegevoegd</translation>
     </message>
     <message>
         <location filename="../main.qml" line="999"/>
         <location filename="../main.qml" line="1004"/>
         <source>Reset successful</source>
-        <translation type="unfinished">Azzeramento riuscito</translation>
+        <translation type="unfinished">Reset gelukt</translation>
     </message>
     <message>
         <location filename="../main.qml" line="376"/>
@@ -1245,23 +1245,23 @@
     </message>
     <message>
         <location filename="../main.qml" line="674"/>
-        <source>New Subscrption</source>
+        <source>New Subscription</source>
         <translation>Nieuw abonnement</translation>
     </message>
     <message>
         <location filename="../main.qml" line="676"/>
         <source>You have already subscribed the feed</source>
-        <translation>Je hebt je al geabonneerd op het kanaal</translation>
+        <translation>Je hebt je al geabonneerd op de feed</translation>
     </message>
     <message>
         <location filename="../main.qml" line="699"/>
         <source>Invalid news ID</source>
-        <translation>Ongeldige Nieuws ID</translation>
+        <translation>Ongeldige nieuws-id</translation>
     </message>
     <message>
         <location filename="../main.qml" line="759"/>
         <source>Invalid RSS feed: </source>
-        <translation>Ongeldige RSS feed: </translation>
+        <translation>Ongeldige rss-feed: </translation>
     </message>
     <message>
         <location filename="../main.qml" line="213"/>
@@ -1270,7 +1270,7 @@
     </message>
     <message>
         <source>You have alresdy subscribed the feed</source>
-        <translation type="obsolete">U bent al geabonneerd op de feed</translation>
+        <translation type="obsolete">Je bent al geabonneerd op de feed</translation>
     </message>
     <message>
         <location filename="../main.qml" line="730"/>
@@ -1284,13 +1284,13 @@
     </message>
     <message>
         <location filename="../main.qml" line="868"/>
-        <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <source>You have already added the shortcut</source>
+        <translation type="unfinished">Je hebt de snelkoppeling al toegevoegd</translation>
     </message>
     <message>
         <location filename="../main.qml" line="1050"/>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kan de plugin niet laden</translation>
     </message>
     <message>
         <location filename="../main.qml" line="1321"/>
