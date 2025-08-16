@@ -1150,8 +1150,8 @@ LauncherPage {
                         if (weatherRequest.status === 200) {
                             var weather = JSON.parse(weatherRequest.responseText)
                             weatherImage.source = "https://openweathermap.org/img/wn/" + weather.weather[0].icon + "@2x.png"
-                            recentTemperature.text = weather.main.temp + "°C"
-                            dayTemperatures.text = weather.main.temp_min + "°C - " + weather.main.temp_max + "°C"
+                            recentTemperature.text = truncateToOneDecimal(weather.main.temp) + "°C"
+                            dayTemperatures.text = truncateToOneDecimal(weather.main.temp_min) + "°C - " + truncateToOneDecimal(weather.main.temp_max) + "°C"
                         } else {
                             console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
                         }
@@ -1159,6 +1159,9 @@ LauncherPage {
                 }
                 weatherRequest.open("GET", weatherUrl)
                 weatherRequest.send()
+            }
+            function truncateToOneDecimal(val) {
+                return val.toString().split(".")[0] + "." + val.toString().split(".")[1][0];
             }
 
             Timer {
