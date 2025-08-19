@@ -65,7 +65,7 @@
     </message>
     <message>
         <source>Add to new group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Føj til ny gruppe</translation>
     </message>
     <message>
         <source>Remove from group</source>
@@ -465,23 +465,23 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke indlæse tilgængelige plugins</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Adgangskoden skal bestå af mindst fire tegn eller tal.</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vejr</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ur</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bemærk</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -497,7 +497,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vis ofte anvendte apps</translation>
     </message>
 </context>
 <context>
@@ -580,19 +580,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vejr</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indstil placering</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indtast en placering</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
+        <translation type="unfinished">Der har ikke været nogen udgående opkald i de sidste dage.</translation>
     </message>
 </context>
 <context>
@@ -822,23 +826,23 @@
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Du har allerede tilføjet genvejen..</translation>
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke indlæse plugin</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filer</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beskeder</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Musik</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -890,7 +894,7 @@
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kort</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -902,7 +906,11 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vejr</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">Ring op igen</translation>
     </message>
 </context>
 </TS>

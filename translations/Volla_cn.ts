@@ -117,7 +117,7 @@
     </message>
     <message>
         <source>Remove from group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从组中移除</translation>
     </message>
     <message>
         <source>Use custom groups</source>
@@ -521,11 +521,11 @@
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">时钟</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">注意</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -541,7 +541,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">显示常用应用程序</translation>
     </message>
 </context>
 <context>
@@ -624,19 +624,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">天气</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">设置位置</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">输入位置</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
+        <translation type="unfinished">最近几天没有拨出电话。</translation>
     </message>
 </context>
 <context>
@@ -870,7 +874,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">音乐</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -935,6 +939,10 @@
     <message>
         <source>Weather</source>
         <translation type="unfinished">天气</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">拨</translation>
     </message>
 </context>
 </TS>

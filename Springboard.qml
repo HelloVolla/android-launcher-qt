@@ -799,7 +799,7 @@ LauncherPage {
                         textInputArea.text = ""
                     }
                 } else if (type === "volla.launcher.runningAppsResponse") {
-                    console.log("Springboard | " + message["apps"].length + " running apps received")
+                    console.log("Springboard | onDispatched: " + message["apps"].length + " running apps received")
                     for (var i = 0; i < springBoard.appButtons.length; i++) {
                         var appButton = springBoard.appButtons[i]
                         appButton.destroy()
@@ -824,6 +824,13 @@ LauncherPage {
                         var object = component.createObject(appSwitcher, properties)
                         appButtons.push(object)
                         closeAppsButton.visible = true
+                    }
+                } else if (type === "volla.launcher.recentCallResponse") {
+                    if (message.calls.length > 0) {
+                        console.log("Springboard | onDispatched: " + message.calls.length + " recent call(s)")
+                        util.makeCall({"number": message.calls[0].number, "intent": "call"})
+                    } else {
+                        mainView.showToast(qsTr("There was no outgoing call in the last days."))
                     }
                 }
             }
@@ -1473,6 +1480,11 @@ LauncherPage {
                 case mainView.actionType.CreateEvent:
                     console.log("Springboard | Create event")
                     AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
+                    break
+                case mainView.actionType.Redial:
+                    console.log("Springboard | Redial")
+                    var callAge = 84000 * 2 // two days in milli seconds
+                    AN.SystemDispatcher.dispatch("volla.launcher.recentCallAction", {"date": callAge})
                     break
                 default:
                     console.log("Springboard | Open app or shortcut")

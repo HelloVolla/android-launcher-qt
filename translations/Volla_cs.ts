@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aplikace</translation>
     </message>
     <message>
         <source>Apps</source>
@@ -461,23 +461,23 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nelze načíst dostupné pluginy</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heslo musí obsahovat alespoň čtyři znaky nebo číslice.</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Počasí</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hodiny</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poznámka</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -493,7 +493,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zobrazit často používané aplikace</translation>
     </message>
 </context>
 <context>
@@ -576,19 +576,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Počasí</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nastavit polohu</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zadejte místo</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is no outgoing call in the last days.</source>
+        <translation type="unfinished">V posledních dnech nebyl uskutečněn žádný odchozí hovor.</translation>
     </message>
 </context>
 <context>
@@ -810,19 +814,19 @@
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nelze načíst plugin</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Soubory</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zprávy</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hudba</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -874,7 +878,7 @@
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mapy</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -886,7 +890,11 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Počasí</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">Opakované volání</translation>
     </message>
 </context>
 </TS>

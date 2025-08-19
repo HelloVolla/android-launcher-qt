@@ -184,7 +184,8 @@ ApplicationWindow {
             'SendSignal' : 20027,
             'OpenSignalContact' : 20028,
             'ExecutePlugin': 20029,
-            'LiveContentPlugin': 20030
+            'LiveContentPlugin': 20030,
+            'Redial': 20031
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -194,7 +195,7 @@ ApplicationWindow {
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"),
             "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection"),
             "OpenContact" : qsTr("Open Contact"), "ShowNotes": qsTr("Show Notes"), "SendSignal" : qsTr("Send Signal message"),
-            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal")
+            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal"), "Redial" : qsTr("Redial")
         }
         property var swipeIndex: {
             'Preferences' : 0,
@@ -372,6 +373,7 @@ ApplicationWindow {
             {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
             {"id" : "https://www.theguardian.com/world/rss", "name": "The Guardian", "activated" : true, "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
         property var defaultActions: [{"id" : actionType.ShowDialer, "name" : qsTr("Show Dialer"), "activated" : true},
+            {"id" : actionType.Redial, "name" : qsTr("Redial"), "activated" : true},
             {"id" : actionType.OpenCam, "name": qsTr("Camera"), "activated" : true},
             {"id" : actionType.ShowGallery, "name": qsTr("Gallery"), "activated" : true},
             {"id" : actionType.ShowCalendar, "name": qsTr("Agenda"), "activated" : true},
@@ -380,7 +382,6 @@ ApplicationWindow {
             {"id" : actionType.ShowNews, "name": qsTr("Recent News"), "activated" : true},
             {"id" : actionType.ShowThreads, "name": qsTr("Recent Threads"), "activated" : true},
             {"id" : actionType.ShowContacts, "name": qsTr("Recent People"), "activated" : true}]
-
         property var timeStamp: 0
         property var lastCheckOfThreads: 0
         property var lastCheckOfCalls: 0
@@ -839,7 +840,10 @@ ApplicationWindow {
         function getActions() {
             var actions = shortcuts.read()
             console.log("MainView | Retrieved shortcuts: " + actions)
-            return actions.length > 0 ? JSON.parse(actions) : mainView.defaultActions
+            var actionArr = actions.length > 0 ? JSON.parse(actions) : mainView.defaultActions
+            var find = actionArr.find(a => a.id === 20031)
+            if (find.length === 0) actionArr.push({"id" : actionType.Redial, "name" : qsTr("Redial"), "activated" : true})
+            return actionArr
         }
 
         function updateAction(actionId, isActive, sAction, newAction) {

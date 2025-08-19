@@ -28,6 +28,8 @@ public class CallWorker {
     public static final String GOT_CALL_COUNT = "volla.launcher.callCountResponse";
     public static final String GET_CONVERSATION = "volla.launcher.callConversationAction";
     public static final String GOT_CONVERSATION = "volla.launcher.callConversationResponse";
+    public static final String GET_RECENT_CALL = "volla.launcher.recentCallAction";
+    public static final String GOT_RECENT_CALL = "volla.launcher.recentCallResponse";
 
     static {
         SystemDispatcher.addListener(new SystemDispatcher.Listener() {
@@ -48,6 +50,23 @@ public class CallWorker {
                                 reply.put("calls", callList );
                                 reply.put("callsCount", callList.size() );
                                 SystemDispatcher.dispatch(GOT_CALLS, reply);
+                            }
+                        }
+                    };
+
+                    Thread thread = new Thread(runnable);
+                    thread.start();
+                } else if (type.equals(GET_RECENT_CALL)) {
+                    Runnable runnable = new Runnable () {
+                        public void run() {
+                            if (activity.checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+                                getCalls(message, GOT_RECENT_CALL, activity);
+                            } else {
+                                Map reply = new HashMap();
+                                ArrayList<Map> callList = new ArrayList();
+                                reply.put("calls", callList );
+                                reply.put("callsCount", callList.size() );
+                                SystemDispatcher.dispatch(GOT_RECENT_CALL, reply);
                             }
                         }
                     };
@@ -192,7 +211,9 @@ public class CallWorker {
                         call.put("date", Long.toString(d));
                         call.put("is_read", state == 0 ? false : true);
 
-                        callList.add( call );
+                        if (!responseType.equals(GOT_RECENT_CALL) || type == CallLog.Calls.OUTGOING_TYPE) {
+                            callList.add( call );
+                        }
                     }
                 }
 

@@ -502,23 +502,23 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Käytettävissä olevia laajennuksia ei voitu ladata</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salasana on oltava vähintään neljä merkkiä tai numeroa.</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sää</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kello</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Huomautus</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -534,7 +534,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Näytä usein käytetyt sovellukset</translation>
     </message>
 </context>
 <context>
@@ -717,19 +717,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sää</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aseta sijainti</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Syötä mikä tahansa sijaintiSyötä sijainti</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
+        <translation type="unfinished">Viime päivinä ei ole ollut lähteviä puheluita.</translation>
     </message>
 </context>
 <context>
@@ -955,19 +959,19 @@
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pluginia ei voitu ladata</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tiedostot</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viestit</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Musiikki</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -1019,7 +1023,7 @@
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kartat</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -1031,7 +1035,11 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sää</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">Uudelleensoitto</translation>
     </message>
 </context>
 </TS>

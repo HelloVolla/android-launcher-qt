@@ -37,11 +37,11 @@
     </message>
     <message>
         <source>apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">aplicativos</translation>
     </message>
     <message>
         <source>Other apps</source>
-        <translation type="unfinished">Other apps</translation>
+        <translation type="unfinished">Outras aplicações</translation>
     </message>
     <message>
         <source>New pinned shortcut</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Está bem</translation>
     </message>
     <message>
         <source>Group name must have at least one character.</source>
@@ -409,7 +409,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Está bem</translation>
     </message>
     <message>
         <source>Wrong password confirmation</source>
@@ -453,23 +453,23 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Não foi possível carregar os plugins disponíveis</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">A palavra-passe deve ter pelo menos quatro caracteres ou números</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Clima</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Relógio</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nota</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -485,7 +485,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostrar aplicações utilizadas com frequência</translation>
     </message>
 </context>
 <context>
@@ -568,19 +568,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">clima</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Definir localização</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Insira um local</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
+        <translation type="unfinished">Não houve chamadas efetuadas nos últimos dias.</translation>
     </message>
 </context>
 <context>
@@ -595,7 +599,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Está bem</translation>
     </message>
 </context>
 <context>
@@ -802,19 +806,19 @@
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Não foi possível carregar o plugin</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arquivos</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mensagens</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Música</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -866,11 +870,11 @@
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mapas</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Configurações</translation>
     </message>
     <message>
         <source>Radio</source>
@@ -878,7 +882,11 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Clima</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">Rediscar</translation>
     </message>
 </context>
 </TS>

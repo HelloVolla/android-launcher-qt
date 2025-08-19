@@ -500,23 +500,23 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impossibile caricare i plugin disponibili</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La password deve contenere almeno quattro caratteri o numeri.</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meteo</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Orologio</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nota</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -532,7 +532,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostra le app utilizzate di frequente</translation>
     </message>
 </context>
 <context>
@@ -715,19 +715,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meteo</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Imposta posizione</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inserisci qualsiasi località</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is no outgoing call in the last days.</source>
+        <translation type="unfinished">Non ci sono chiamate in uscita negli ultimi giorni.</translation>
     </message>
 </context>
 <context>
@@ -957,23 +961,23 @@
     </message>
     <message>
         <source>You have alresdy added the shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hai già aggiunto il collegamento.</translation>
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impossibile caricare il plugin</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">File</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Messaggi</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Musica</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -1025,7 +1029,7 @@
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mappe</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -1037,7 +1041,11 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meteo</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">Ricomponi</translation>
     </message>
 </context>
 </TS>
