@@ -799,7 +799,7 @@ LauncherPage {
                         textInputArea.text = ""
                     }
                 } else if (type === "volla.launcher.runningAppsResponse") {
-                    console.log("Springboard | " + message["apps"].length + " running apps received")
+                    console.log("Springboard | onDispatched: " + message["apps"].length + " running apps received")
                     for (var i = 0; i < springBoard.appButtons.length; i++) {
                         var appButton = springBoard.appButtons[i]
                         appButton.destroy()
@@ -824,6 +824,13 @@ LauncherPage {
                         var object = component.createObject(appSwitcher, properties)
                         appButtons.push(object)
                         closeAppsButton.visible = true
+                    }
+                } else if (type === "volla.launcher.recentCallResponse") {
+                    if (message.calls.length > 0) {
+                        console.log("Springboard | onDispatched: " + message.calls.length + " recent call(s)")
+                        util.makeCall({"number": message.calls[0].number, "intent": "call"})
+                    } else {
+                        mainView.showToast(qsTr("There was no outgoing call in the last days."))
                     }
                 }
             }
@@ -1150,8 +1157,8 @@ LauncherPage {
                         if (weatherRequest.status === 200) {
                             var weather = JSON.parse(weatherRequest.responseText)
                             weatherImage.source = "https://openweathermap.org/img/wn/" + weather.weather[0].icon + "@2x.png"
-                            recentTemperature.text = weather.main.temp + "°C"
-                            dayTemperatures.text = weather.main.temp_min + "°C - " + weather.main.temp_max + "°C"
+                            recentTemperature.text = truncateToOneDecimal(weather.main.temp) + "°C"
+                            dayTemperatures.text = truncateToOneDecimal(weather.main.temp_min) + "°C - " + truncateToOneDecimal(weather.main.temp_max) + "°C"
                         } else {
                             console.error("Widget | Error retrieving weather: ", weatherRequest.status, weatherRequest.statusText)
                         }
@@ -1159,6 +1166,9 @@ LauncherPage {
                 }
                 weatherRequest.open("GET", weatherUrl)
                 weatherRequest.send()
+            }
+            function truncateToOneDecimal(val) {
+                return val.toString().split(".")[0] + "." + val.toString().split(".")[1][0];
             }
 
             Timer {
@@ -1471,18 +1481,26 @@ LauncherPage {
                     console.log("Springboard | Create event")
                     AN.SystemDispatcher.dispatch("volla.launcher.createEventAction", {"title": qsTr("My event")})
                     break
+                case mainView.actionType.Redial:
+                    console.log("Springboard | Redial")
+                    var callAge = 84000 * 2 // two days in milli seconds
+                    AN.SystemDispatcher.dispatch("volla.launcher.recentCallAction", {"date": callAge})
+                    break
                 default:
                     console.log("Springboard | Open app or shortcut")
                     if (selectedMenuItem.actionId.startsWith("http")) {
                         // Workaround for web shortcuts
                         Qt.openUrlExternally(selectedMenuItem.actionId)
                     } else {
-                        var appDesctiptor = selectedMenuItem.actionId.split("/")
+                        var appDesctiptor = selectedMenuItem.actionId.split("|")
                         if (appDesctiptor.length === 1) {
                             AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": selectedMenuItem.actionId})
+                        } else if (appDesctiptor.length === 2) {
+                            AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut", {"shortcutId": appDesctiptor[0],
+                                                             "package": appDesctiptor[1]})
                         } else {
-                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": appDesctiptor[0], "class": appDesctiptor[1],
-                                                                                         "userHandle": appDesctiptor[2], "isCloned": true})
+                            AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": appDesctiptor[0],
+                                                             "class": appDesctiptor[1], "userHandle": appDesctiptor[2], "isCloned": true})
                         }
                     }
                     break

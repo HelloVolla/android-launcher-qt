@@ -501,23 +501,23 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nedalo sa načítať dostupné pluginy</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heslo musí obsahovať aspoň štyri znaky alebo číslice.</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Počasie</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hodiny</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poznámka</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -533,7 +533,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zobraziť často používané aplikácie</translation>
     </message>
 </context>
 <context>
@@ -718,19 +718,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">počasie</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nastaviť polohu</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zadajte miesto</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
+        <translation type="unfinished">V posledných dňoch neboli žiadne odchádzajúce hovory.</translation>
     </message>
 </context>
 <context>
@@ -957,19 +961,19 @@
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plugin sa nepodarilo načítať</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Súbory</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Správy</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hudba</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -1021,7 +1025,7 @@
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mapy</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -1033,7 +1037,11 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Počasie</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">Opakované volanie</translation>
     </message>
 </context>
 </TS>

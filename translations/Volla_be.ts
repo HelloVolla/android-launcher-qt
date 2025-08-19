@@ -590,6 +590,10 @@
         <source>x</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>There is no outgoing call in the last days.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -886,6 +890,10 @@
     </message>
     <message>
         <source>Weather</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redial</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

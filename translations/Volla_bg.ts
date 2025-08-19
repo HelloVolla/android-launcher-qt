@@ -41,7 +41,7 @@
     </message>
     <message>
         <source>apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">приложения</translation>
     </message>
     <message>
         <source>Other apps</source>
@@ -61,35 +61,35 @@
     </message>
     <message>
         <source>Remove App</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Премахване на приложение</translation>
     </message>
     <message>
         <source>Add to new group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добави към нова група</translation>
     </message>
     <message>
         <source>Remove from group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Премахване от група</translation>
     </message>
     <message>
         <source>Use custom groups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Използвайте персонализирани групи</translation>
     </message>
     <message>
         <source>Remove group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Премахване на група</translation>
     </message>
     <message>
         <source>Edit groupname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактиране на името на групата</translation>
     </message>
     <message>
         <source>Group name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Име на групата</translation>
     </message>
     <message>
         <source>Enter a group name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Въведете име на група</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -101,14 +101,14 @@
     </message>
     <message>
         <source>Group name must have at least one character.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Името на групата трябва да съдържа поне един символ.</translation>
     </message>
 </context>
 <context>
     <name>AppGridMenuItem</name>
     <message>
         <source>Add to </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добави към </translation>
     </message>
 </context>
 <context>
@@ -501,23 +501,23 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не можаха да се заредят наличните плъгини.</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Паролата трябва да съдържа най-малко четири символа или цифри..</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Времето</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Часовник</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Забележка</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -533,7 +533,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Показване на често използвани приложения</translation>
     </message>
 </context>
 <context>
@@ -716,19 +716,23 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">време</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Задаване на местоположение</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Въведете местоположение</translation>
     </message>
     <message>
         <source>x</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
+        <translation type="unfinished">През последните дни няма изходящи обаждания.</translation>
     </message>
 </context>
 <context>
@@ -954,19 +958,19 @@
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не може да се зареди плъгин</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Файлове</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Съобщения</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Музика</translation>
     </message>
     <message>
         <source>Bancontact</source>
@@ -1030,7 +1034,11 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Времето</translation>
+    </message>
+    <message>
+        <source>Redial</source>
+        <translation type="unfinished">Преизбиране</translation>
     </message>
 </context>
 </TS>

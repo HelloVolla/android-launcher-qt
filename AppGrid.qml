@@ -405,14 +405,16 @@ LauncherPage {
             onClicked: {
                 console.log("AppGrid | App " + appContextMenu.app["label"] + " selected for shortcuts");
                 appContextMenu.gridView.currentIndex = -1
-                var appId = appContextMenu.app.isCloned ? appContextMenu.app.package + "/" + appContextMenu.app.className + "/" + appContextMenu.app.userHandle
+                if (appContextMenu.app.shortcutId !== undefined && appContextMenu.app.shortcutId.length > 0) {
+                    console.debug("AbbGrid | ShortcutId: " + appContextMenu.app.shortcutId + ", " + appContextMenu.app.package)
+                    var appId = appContextMenu.app.shortcutId + "|" + appContextMenu.app.package
+                    var shortcut = {"id": appId, "name": qsTr("Open") + " " + appContextMenu.app.label,  "activated": true}
+                } else {
+                    appId = appContextMenu.app.isCloned ? appContextMenu.app.package + "|" + appContextMenu.app.className + "|" + appContextMenu.app.userHandle
                                                         : appContextMenu.app.package
-                var shortcut = appContextMenu.app.isCloned ? {"id": appId,
-                                                              "name": qsTr("Open") + " " + appContextMenu.app.label + " 2",
-                                                              "activated": true}
-                                                           : {"id": appId,
-                                                              "name": qsTr("Open") + " " + appContextMenu.app.label,
-                                                              "activated": true}
+                    shortcut = appContextMenu.app.isCloned ? {"id": appId, "name": qsTr("Open") + " " + appContextMenu.app.label + " 2", "activated": true}
+                                                           : {"id": appId, "name": qsTr("Open") + " " + appContextMenu.app.label, "activated": true}
+                }
                 mainView.updateAction(appId, true, mainView.settingsAction.CREATE, shortcut )
             }
         }
