@@ -13,6 +13,7 @@
 #include <QtAndroidExtras/QAndroidJniEnvironment>
 
 const QVector<QString> permissions({"android.permission.READ_CONTACTS",
+                                    "android.permission.WRITE_CONTACTS",
                                     "android.permission.READ_SMS",
                                     "android.permission.SEND_SMS",
                                     "android.permission.READ_CALL_LOG",
@@ -71,6 +72,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.VibrationUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.ShortcutUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.SignalUtil");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.ContactUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.SignalWorker");
 
     QQmlApplicationEngine engine;

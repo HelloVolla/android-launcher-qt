@@ -642,6 +642,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished">最近几天没有拨出电话。</translation>
     </message>
+    <message>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -943,6 +947,10 @@
     <message>
         <source>Redial</source>
         <translation type="unfinished">拨</translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
+        <translation type="unfinished">创建新联系人</translation>
     </message>
 </context>
 </TS>

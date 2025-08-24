@@ -735,6 +735,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished">Viime päivinä ei ole ollut lähteviä puheluita.</translation>
     </message>
+    <message>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -1040,6 +1044,10 @@
     <message>
         <source>Redial</source>
         <translation type="unfinished">Uudelleensoitto</translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
+        <translation type="unfinished">Luo uusi yhteystieto</translation>
     </message>
 </context>
 </TS>

@@ -586,6 +586,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished">Não houve chamadas efetuadas nos últimos dias.</translation>
     </message>
+    <message>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -887,6 +891,10 @@
     <message>
         <source>Redial</source>
         <translation type="unfinished">Rediscar</translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
+        <translation type="unfinished">Criar novo contacto</translation>
     </message>
 </context>
 </TS>

@@ -592,7 +592,15 @@
     </message>
     <message>
         <source>There is no outgoing call in the last days.</source>
-        <translation type="unfinished">V posledních dnech nebyl uskutečněn žádný odchozí hovor.</translation>
+        <translation type="obsolete">V posledních dnech nebyl uskutečněn žádný odchozí hovor.</translation>
+    </message>
+    <message>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -895,6 +903,10 @@
     <message>
         <source>Redial</source>
         <translation type="unfinished">Opakované volání</translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
+        <translation type="unfinished">Vytvořit nový kontakt</translation>
     </message>
 </context>
 </TS>

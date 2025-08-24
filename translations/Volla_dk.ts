@@ -598,6 +598,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished">Der har ikke været nogen udgående opkald i de sidste dage.</translation>
     </message>
+    <message>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -911,6 +915,10 @@
     <message>
         <source>Redial</source>
         <translation type="unfinished">Ring op igen</translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
+        <translation type="unfinished">Opret ny kontakt</translation>
     </message>
 </context>
 </TS>

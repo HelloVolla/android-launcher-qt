@@ -736,6 +736,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished">V posledných dňoch neboli žiadne odchádzajúce hovory.</translation>
     </message>
+    <message>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -1042,6 +1046,10 @@
     <message>
         <source>Redial</source>
         <translation type="unfinished">Opakované volanie</translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
+        <translation type="unfinished">Vytvoriť nový kontakt</translation>
     </message>
 </context>
 </TS>

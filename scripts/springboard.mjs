@@ -49,7 +49,7 @@ WorkerScript.onMessage = function(message) {
     }
 
     function textInputCouldBeNewContact() {
-        return /([0-9a-zäüöA-Z-ÄÜÖß]+)(\s[0-9a-zäüöA-Z-ÄÜÖß]+)?\s(\+?[\d\s]+)/.test(textInput)
+        return /([0-9a-zäüöA-Z-ÄÜÖß]+)\s?([0-9a-zäüöA-Z-ÄÜÖß]+)?\s(\+?[\d\s]+)\s?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63})?/.test(textInput)
     }
 
     var filteredSuggestionObj = new Array
@@ -88,6 +88,9 @@ WorkerScript.onMessage = function(message) {
             filteredSuggestionObj[0] = [actionName.SendEmail, actionType.SendEmail]
         } else if (textInputCouldBeEvent()) {
             filteredSuggestionObj[0] = [actionName.CreateEvent, actionType.CreateEvent]
+            filteredSuggestionObj[1] = [actionName.CreateNote, actionType.CreateNote]
+        } else if (textInputCouldBeNewContact()) {
+            filteredSuggestionObj[0] = [actionName.CreateContact, actionType.CreateContact]
             filteredSuggestionObj[1] = [actionName.CreateNote, actionType.CreateNote]
         } else if (textInputHasMultiLines()) {
             filteredSuggestionObj[0] = [actionName.CreateNote, actionType.CreateNote]
