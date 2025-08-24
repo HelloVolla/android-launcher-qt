@@ -545,6 +545,7 @@ LauncherPage {
 
                         TextField {
                             id: passwordField
+                            enabled: !keepPasswordCheckBox.checked
                             echoMode: TextField.Password
                             width: parent.width
                             color: mainView.fontColor
@@ -573,6 +574,7 @@ LauncherPage {
 
                         TextField {
                             id: confirmationField
+                            enabled: !keepPasswordCheckBox.checked
                             echoMode: TextField.Password
                             width: parent.width
                             color: mainView.fontColor

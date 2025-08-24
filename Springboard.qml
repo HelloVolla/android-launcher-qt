@@ -403,6 +403,21 @@ LauncherPage {
                 }
             }
 
+            function parseAndSaveContact() {
+                var matches = /([0-9a-zäüöA-Z-ÄÜÖß]+)\s?([0-9a-zäüöA-Z-ÄÜÖß]+)?\s(\+?[\d\s]+)\s?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63})?/.exec(textInput.trim())
+                for (var i = 0; i < matches.length; i++) {
+                    console.debug("Springboard | " + i + " group of contact: " + matches[i])
+                }
+                var firstName = matches[1]
+                var lastName = matches[2] !== undefined ? matches[1] : ""
+                var phoneNumber = matches[3]
+                var email = matches[4] !== undefined ? matches[4] : ""
+                var contact = { "name": firstName + " " + lastName, "phoneNumber" : phoneNumber }
+                if (email.length > 0) contact.email = email
+                if (/(^\+49)|(^01[5-7][1-9])/.test(phoneNumber)) contact.isMobile = true
+                AN.SystemDispatcher.dispatch("volla.launcher.createContactAction", contact)
+            }
+
             function textInputStartsWithPhoneNumber() {
                 return /^\+?\d{4,}(\s\S+)?/.test(textInput)
             }
@@ -571,6 +586,11 @@ LauncherPage {
                         textInputArea.text = ""
                         mainView.showToast("Event added to calendar")
                         break
+                    case mainView.actionType.CreateContact:
+                        parseAndSaveContact()
+                        textInputArea.text = ""
+                        mainView.showToast(qsTr("New contact saved"))
+                        break
                     case mainView.actionType.SendSignal:
                         idx = textInput.search(/\s/)
                         message = textInput.substring(idx+1, textInput.length)
@@ -734,8 +754,7 @@ LauncherPage {
             height: button.height
             width: parent.width
             color: model.action < 20000 ? "transparent" :
-                                          model.action < 20029 ? mainView.accentColor
-                                                               : "slategrey"
+                                          model.action < 20029 || model.action > 20030 ? mainView.accentColor : "slategrey"
 
             Button {
                 id: button

@@ -734,6 +734,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished">През последните дни няма изходящи обаждания.</translation>
     </message>
+    <message>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -1039,6 +1043,10 @@
     <message>
         <source>Redial</source>
         <translation type="unfinished">Преизбиране</translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
+        <translation type="unfinished">Създаване на нов контакт</translation>
     </message>
 </context>
 </TS>

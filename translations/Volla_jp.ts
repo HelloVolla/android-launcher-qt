@@ -575,7 +575,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>There is no outgoing call in the last days.</source>
+        <source>New contact saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -878,6 +882,10 @@
     </message>
     <message>
         <source>Redial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create new contact</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
