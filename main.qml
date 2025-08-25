@@ -186,11 +186,12 @@ ApplicationWindow {
             'ExecutePlugin': 20029,
             'LiveContentPlugin': 20030,
             'Redial': 20031,
-            'CreateContact' : 20032
+            'CreateContact' : 20032,
+            'CreateSpeedDial' : 20033
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
-            "SendEmailToOther": qsTr("Send other email"), "MakeCall": qsTr("Call"),
+            "SendEmailToOther": qsTr("Send other email"), "MakeCall": qsTr("Call"), "CreateSpeedDial" : qsTr("Create speed dial"),
             "MakeCallToMobile": qsTr("Call on cell phone"), "MakeCallToHome": qsTr("Call at home"),
             "MakeCallToWork": qsTr("Call at work"), "MakeCallToOther": qsTr("Call other phone"),
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"), "CreateContact" : qsTr("Create new contact"),

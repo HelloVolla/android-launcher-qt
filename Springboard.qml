@@ -629,13 +629,13 @@ LauncherPage {
                             textInputArea.text = ""
                             textInputArea.forceActiveFocus()
                         }
-                        break;
+                        break
                     case mainView.actionType.LiveContentPlugin:
                         if (actionObj.link !== undefined && actionObj.link.length > 0) {
                             console.debug("Springboard | Will open link '" + actionObj.link + "' of plugin " + actionObj.pluginId)
                             Qt.openUrlExternally(actionObj.link)
                         }
-                        break;
+                        break
                     case mainView.actionType.SuggestContact:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
                         if (actionObj !== undefined && actionValue !== undefined) {
@@ -651,7 +651,23 @@ LauncherPage {
                             textInputArea.text = ""
                             textInputArea.forceActiveFocus()
                         }
-                        break;
+                        break
+                    case mainView.actionType.CreateSpeedDial:
+                        console.log("Springboard | Will create speed dial")
+                        if (selectedObj !== undefined) {
+                            if (selectedObj["phone.mobile"] !== undefined) phoneNumber = selectedObj["phone.mobile"]
+                            else if (selectedObj["phone.work"] !== undefined) phoneNumber = selectedObj["phone.work"]
+                            else if (selectedObj["phone.home"] !== undefined) phoneNumber = selectedObj["phone.home"]
+                            else if (selectedObj["phone.other"] !== undefined) phoneNumber = selectedObj["phone.other"]
+                            if (phoneNumber !== undefined && phoneNumber.length > 0) {
+                                var shortcut = {"id": "tel:" + phoneNumber, "name": qsTr("Speed dial") + " " + selectedObj.name,  "activated": true}
+                                mainView.updateAction(shortcut["id"], true, mainView.settingsAction.CREATE, shortcut )
+                            }
+                            textInputArea.text = ""
+                        } else {
+                            mainView.showToast(qsTr("Sorry, no contact was selected"))
+                        }
+                        break
                 }
             }
 
@@ -1510,6 +1526,9 @@ LauncherPage {
                     if (selectedMenuItem.actionId.startsWith("http")) {
                         // Workaround for web shortcuts
                         Qt.openUrlExternally(selectedMenuItem.actionId)
+                    } else if (selectedMenuItem.actionId.startsWith("tel")) {
+                        var phoneNumber = selectedMenuItem.actionId.split(":")[1]
+                        util.makeCall({"number": phoneNumber, "intent": "call"})
                     } else {
                         var appDesctiptor = selectedMenuItem.actionId.split("|")
                         if (appDesctiptor.length === 1) {
