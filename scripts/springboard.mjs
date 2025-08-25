@@ -122,6 +122,9 @@ WorkerScript.onMessage = function(message) {
                 if (selectedObj["phone.signal"] !== undefined && selectedObj["phone.signal"].length > 0) {
                     filteredSuggestionObj.push([actionName.OpenSignalContact, actionType.OpenSignalContact])
                 }
+                if (phoneNumberCount > 0) {
+                    filteredSuggestionObj.push([actionName.CreateSpeedDial, actionType.CreateSpeedDial])
+                }
             } else {
                 console.log("SpringBoard | No contact selected")
             }

@@ -602,6 +602,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Speed dial</source>
+        <translation type="unfinished">Rychlá volba</translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -907,6 +911,10 @@
     <message>
         <source>Create new contact</source>
         <translation type="unfinished">Vytvořit nový kontakt</translation>
+    </message>
+    <message>
+        <source>Create speed dial</source>
+        <translation type="unfinished">Vytvořit rychlou volbu</translation>
     </message>
 </context>
 </TS>

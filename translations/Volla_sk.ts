@@ -740,6 +740,10 @@
         <source>New contact saved</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Speed dial</source>
+        <translation type="unfinished">Rýchla voľba</translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -1050,6 +1054,10 @@
     <message>
         <source>Create new contact</source>
         <translation type="unfinished">Vytvoriť nový kontakt</translation>
+    </message>
+    <message>
+        <source>Create speed dial</source>
+        <translation type="unfinished">Vytvoriť rýchlu voľbu</translation>
     </message>
 </context>
 </TS>

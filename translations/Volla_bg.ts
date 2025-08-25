@@ -738,6 +738,10 @@
         <source>New contact saved</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Speed dial</source>
+        <translation type="unfinished">Бързо набиране</translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -1047,6 +1051,10 @@
     <message>
         <source>Create new contact</source>
         <translation type="unfinished">Създаване на нов контакт</translation>
+    </message>
+    <message>
+        <source>Create speed dial</source>
+        <translation type="unfinished">Създаване на бързо набиране</translation>
     </message>
 </context>
 </TS>

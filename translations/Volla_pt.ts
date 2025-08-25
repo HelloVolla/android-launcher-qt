@@ -590,6 +590,10 @@
         <source>New contact saved</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Speed dial</source>
+        <translation type="unfinished">Discagem rápida</translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -895,6 +899,10 @@
     <message>
         <source>Create new contact</source>
         <translation type="unfinished">Criar novo contacto</translation>
+    </message>
+    <message>
+        <source>Create speed dial</source>
+        <translation type="unfinished">Criar marcação rápida</translation>
     </message>
 </context>
 </TS>

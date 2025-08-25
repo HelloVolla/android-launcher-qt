@@ -739,6 +739,10 @@
         <source>New contact saved</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Speed dial</source>
+        <translation type="unfinished">Pikavalinta</translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -1048,6 +1052,10 @@
     <message>
         <source>Create new contact</source>
         <translation type="unfinished">Luo uusi yhteystieto</translation>
+    </message>
+    <message>
+        <source>Create speed dial</source>
+        <translation type="unfinished">Luo pikavalinta</translation>
     </message>
 </context>
 </TS>

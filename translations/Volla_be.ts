@@ -598,6 +598,10 @@
         <source>There was no outgoing call in the last days.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Speed dial</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -902,6 +906,10 @@
     </message>
     <message>
         <source>Create new contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create speed dial</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

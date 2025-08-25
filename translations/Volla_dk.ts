@@ -602,6 +602,10 @@
         <source>New contact saved</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Speed dial</source>
+        <translation type="unfinished">Hurtigopkald</translation>
+    </message>
 </context>
 <context>
     <name>SttSetup</name>
@@ -919,6 +923,10 @@
     <message>
         <source>Create new contact</source>
         <translation type="unfinished">Opret ny kontakt</translation>
+    </message>
+    <message>
+        <source>Create speed dial</source>
+        <translation type="unfinished">Opret hurtigopkald</translation>
     </message>
 </context>
 </TS>
