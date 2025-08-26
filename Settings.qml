@@ -545,7 +545,7 @@ LauncherPage {
 
                         TextField {
                             id: passwordField
-                            enabled: !keepPasswordCheckBox.checked
+                            enabled: !keepPasswordCheckBox.checked || !keepPasswordCheckBox.visible
                             echoMode: TextField.Password
                             width: parent.width
                             color: mainView.fontColor
