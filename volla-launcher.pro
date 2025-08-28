@@ -100,7 +100,8 @@ DISTFILES += \
     translations/Volla_no.ts \
     translations/Volla_pl.ts \
     translations/Volla_ru.ts \
-    translations/Volla_sr.ts
+    translations/Volla_sr.ts \
+    translations/Volla_hi.ts
 
 TRANSLATIONS += \
     translations/Volla_de.ts \
@@ -123,4 +124,5 @@ TRANSLATIONS += \
     translations/Volla_pl.ts \
     translations/Volla_sr.ts \
     translations/Volla_ru.ts \
-    translations/Volla_no.ts
+    translations/Volla_no.ts \
+    translations/Volla_hi.ts
