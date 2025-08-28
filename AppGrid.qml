@@ -365,7 +365,7 @@ LauncherPage {
         topPadding: mainView.innerSpacing / 2
         bottomPadding: mainView.innerSpacing / 2
 
-        property double menuWidth: 250.0
+        property double menuWidth: 250
         property var app: new Object
         property var gridView
         property var customGroupMenuItems: new Array
@@ -435,10 +435,10 @@ LauncherPage {
                 console.log("AppGrid | App " + appContextMenu.
                             app["label"] + " selected to open");
                 appContextMenu.gridView.currentIndex = -1
-                if (contextMenu.isPinnedShortcut) {
+                if (appContextMenu.isPinnedShortcut) {
                     AN.SystemDispatcher.dispatch("volla.launcher.launchShortcut",
                                                  {"shortcutId": appContextMenu.app["itemId"], "package": appContextMenu.app["package"]})
-                } else if (contextMenu.app.package === mainView.phoneApp) {
+                } else if (appContextMenu.app.package === mainView.phoneApp) {
                     if (appLauncher.newCalls) {
                         AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "log"})
                         AN.SystemDispatcher.dispatch("volla.launcher.updateCallsAsRead", { })
@@ -446,7 +446,9 @@ LauncherPage {
                         AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp})
                     }
                 } else {
-                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": appContextMenu.app["package"]})
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction",
+                                                 {"appId": appContextMenu.app.package, "class": appContextMenu.app.className,
+                                                  "userHandle": appContextMenu.app.userHandle, "isCloned": appContextMenu.app.isCloned})
                 }
             }
         }
@@ -466,7 +468,7 @@ LauncherPage {
             }
             visible: appContextMenu.canBeDeleted
             onClicked: {
-                    AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId":appcontextMenu.app["package"]})
+                    AN.SystemDispatcher.dispatch("volla.launcher.deleteAppAction", {"appId":appContextMenu.app["package"]})
             }
         }
         MenuItem {
@@ -543,7 +545,7 @@ LauncherPage {
             id: enableCustomGroupsItem
             visible: !appContextMenu.useCustomGroups
             anchors.margins: mainView.innerSpacing
-            height: enableCustomGroupsItem.visible ? appContextMenu.menuItemHeight : 0
+            //height: enableCustomGroupsItem.visible ? appContextMenu.menuItemHeight : 0
             text: qsTr("Use custom groups")
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
@@ -551,6 +553,7 @@ LauncherPage {
                 text: enableCustomGroupsItem.text
                 font: enableCustomGroupsItem.font
                 horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
             }
             background: Rectangle {
                 anchors.fill: parent
