@@ -118,8 +118,14 @@ public class AppUtil {
                         } else if (type.equals(RUN_APP)) {
                             String packageName = (String) message.get("appId");
                             String className = (String) message.get("class");
-                            boolean isCloned = (boolean) message.get("isCloned");
-                            double userHandle = (double) message.get("userHandle");
+                            boolean isCloned = false;
+                            if (message.get("isCloned") != null) {
+                                isCloned = (boolean) message.get("isCloned");
+                            }
+                            double userHandle = 0;
+                            if (message.get("userHandle") != null) {
+                                userHandle = (double) message.get("userHandle");
+                            }
 
                             Log.d(TAG, packageName + ", " + className + ", " + String.valueOf((int)userHandle) + ", " + String.valueOf(isCloned));
 
