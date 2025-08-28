@@ -14,10 +14,11 @@ MenuItem {
     anchors.margins: innerSpacing
     font.pointSize: labelPointSize
     contentItem: Label {
-        width: labelWidth
+        width: appGridMenuItem.labelWidth
         text: qsTr("Add to ") + appGridMenuItem.appGroup
         font: appGridMenuItem.font
         horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.WordWrap
     }
     background: Rectangle {
         anchors.fill: parent
