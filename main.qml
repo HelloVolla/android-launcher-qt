@@ -233,21 +233,26 @@ ApplicationWindow {
         property var fontColor: Universal.foreground
         
         function getContrastColor(hexColor) {
-            // Convert hex to RGB
-            var r, g, b;
-            if (hexColor.startsWith("#")) {
-                r = parseInt(hexColor.substr(1, 2), 16);
-                g = parseInt(hexColor.substr(3, 2), 16);
-                b = parseInt(hexColor.substr(5, 2), 16);
-            } else {
-                return "white"; // Fallback for system colors
+            // If no custom accent color is set (default/system color), always use white text
+            if (settings.customAccentColor === "" || settings.customAccentColor.length === 0) {
+                return "white";
             }
             
-            // Calculate luminance using WCAG formula
-            var luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            // For custom hex colors, calculate proper contrast
+            if (hexColor.startsWith("#")) {
+                var r = parseInt(hexColor.substr(1, 2), 16);
+                var g = parseInt(hexColor.substr(3, 2), 16);
+                var b = parseInt(hexColor.substr(5, 2), 16);
+                
+                // Calculate luminance using WCAG formula
+                var luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                
+                // Return black for light colors, white for dark colors
+                return luminance > 0.5 ? "black" : "white";
+            }
             
-            // Return black for light colors, white for dark colors
-            return luminance > 0.5 ? "black" : "white";
+            // Fallback for any other case
+            return "white";
         }
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
