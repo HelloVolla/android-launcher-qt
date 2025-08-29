@@ -1015,7 +1015,14 @@ ApplicationWindow {
                 settings.useHapticMenus = value
                 mainView.useVibration = value
             } else if (key === "leftHandedMenu") {
+                var previousValue = settings.leftHandedMenu
                 settings.leftHandedMenu = value
+                // If switching from left-handed to right-handed (true -> false), refresh Springboard
+                if (previousValue === true && value === false) {
+                    console.log("MainView | Refreshing Springboard due to left->right menu switch")
+                    springboardLoader.active = false
+                    springboardLoader.active = true
+                }
             } else if (key === "showAppsAtStartup") {
                 settings.showAppsAtStartup = value
             } else if (key === "activateSignal") {
