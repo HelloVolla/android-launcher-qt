@@ -192,9 +192,10 @@ LauncherPage {
         console.debug("AppGrid | updateCustomGroupOfApp: " + appToUpdate + ", " + appGroupName)
         var customGroups = settings.getCustomGroups()
         var customGroup = customGroups[appGroupName]
+        console.debug("AppGrid | updateCustomGroupOfApp: " + JSON.stringify(customGroup))
         var apps = appLauncher.getAllApps()
-
         var app = apps.filter(e => e.package === appToUpdate)[0]
+
         if (appGroupName !== undefined) {
             app.customCategory = appGroupName
             // Add to group
@@ -204,15 +205,22 @@ LauncherPage {
                 customGroup = [appToUpdate]
             }
             customGroups[appGroupName] = customGroup
-
         } else {
-                app.delete(customCategory)
-                // Remove from group
-                if (customGroup !== undefined) {
-                    customGroup.splice(customGroup.indexOf(appGroupName, 1))
+            customGroup = customGroups[app.customCategory]
+            delete app.customCategory
+            // Remove from group
+            if (customGroup !== undefined) {
+                customGroup.splice(customGroup.indexOf(appGroupName, 1))
+                if (customGroup.count > 0) {
                     customGroups[appGroupName] = customGroup
+                } else {
+                    delete customGroups[appGroupName]
+                }
+                for (const [key, value] of Object.entries(customGroups)) {
+                  console.log(`${key}: ${value}`);
                 }
             }
+        }
 
         updateCustomGroupedAppGrid(apps, customGroups)
     }
@@ -538,17 +546,18 @@ LauncherPage {
                 color: "transparent"
             }
             onClicked: {
-                appContextMenu.updateCustomGroupOfApp(appContextMenu.app.package)
+                appLauncher.updateCustomGroupOfApp(appContextMenu.app.package)
             }
         }
         MenuItem {
             id: enableCustomGroupsItem
             visible: !appContextMenu.useCustomGroups
             anchors.margins: mainView.innerSpacing
-            //height: enableCustomGroupsItem.visible ? appContextMenu.menuItemHeight : 0
+            height: enableCustomGroupsItem.visible ? enableCustomGroupsItemLabel.height : 0
             text: qsTr("Use custom groups")
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
+                id: enableCustomGroupsItemLabel
                 width: appContextMenu.menuWidth
                 text: enableCustomGroupsItem.text
                 font: enableCustomGroupsItem.font
