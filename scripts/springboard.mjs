@@ -49,7 +49,7 @@ WorkerScript.onMessage = function(message) {
     }
 
     function textInputCouldBeNewContact() {
-        return /([0-9a-zäüöA-Z-ÄÜÖß]+)\s?([0-9a-zäüöA-Z-ÄÜÖß]+)?\s(\+?[\d\s]+)\s?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63})?/.test(textInput)
+        return /(^[0-9a-zäüöA-Z-ÄÜÖß]+)\s?([0-9a-zäüöA-Z-ÄÜÖß]+)?\s(\+?[\d\s]+)\s?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63})?/.test(textInput)
     }
 
     var filteredSuggestionObj = new Array

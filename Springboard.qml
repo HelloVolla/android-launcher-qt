@@ -372,7 +372,7 @@ LauncherPage {
                     year = matches[3] === undefined ? d.getFullYear() : parseInt(matches[3])
                     if (year < 100) year = 2000 + year
                     beginhour = matches[4] !== undefined ? parseInt(matches[4].split(":")[0]) : -1
-                    beginMinute = beginhour > - 1 && matches[4].split(":")[1] !== undefined ? parseInt(matches[4].split(":")[1]).split(":")[1] : 0
+                    beginMinute = beginhour > - 1 && matches[4].split(":")[1] !== undefined ? parseInt(matches[4].split(":")[1]) : 0
                     if (matches[5] !== undefined && matches[5].toLowerCase() === "pm") beginhour = beginhour + 12
                     endHour = matches[7]  !== undefined ? parseInt(matches[7].split(":")[0]) : -1
                     endMinute = endHour > - 1 && matches[6].split(":")[1] !== undefined ? parseInt(matches[6].split(":")[1]) : 0
