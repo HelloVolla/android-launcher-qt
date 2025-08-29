@@ -1398,6 +1398,24 @@ LauncherPage {
                 value: designSettings.blurEffect
                 visible: false
 
+                background: Rectangle {
+                    x: blurSlider.leftPadding
+                    y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
+                    implicitWidth: 200
+                    implicitHeight: 4
+                    width: blurSlider.availableWidth
+                    height: implicitHeight
+                    radius: 2
+                    color: "lightgray"
+
+                    Rectangle {
+                        width: blurSlider.visualPosition * parent.width
+                        height: parent.height
+                        color: mainView.accentColor
+                        radius: 2
+                    }
+                }
+
                 handle: Rectangle {
                     x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
                     y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
