@@ -786,7 +786,7 @@ LauncherPage {
                     text: button.text
                     elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
-                    color: model.action < 20000 ? Universal.foreground : "white"
+                    color: model.action < 20000 ? Universal.foreground : mainView.accentTextColor
                     wrapMode: Text.WordWrap
                 }
                 background: Rectangle {
