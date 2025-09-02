@@ -131,7 +131,7 @@ LauncherPage {
                         visible: themeSettingsItem.menuState
                         text: qsTr("Dark Mode")
                         boldText: themeSettingsItem.selectedMenuItem === darkModeOption
-                        textColor: "white"
+                        textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
                         fontPointSize: mainView.mediumFontSize
@@ -148,7 +148,7 @@ LauncherPage {
                         visible: themeSettingsItem.menuState
                         text: qsTr("Light Mode")
                         boldText: themeSettingsItem.selectedMenuItem === lightModeOption
-                        textColor: "white"
+                        textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
                         fontPointSize: mainView.mediumFontSize
@@ -165,7 +165,7 @@ LauncherPage {
                         visible: themeSettingsItem.menuState
                         text: qsTr("Dark Translucent Mode")
                         boldText: themeSettingsItem.selectedMenuItem === darkTranslucentModeOption
-                        textColor: "white"
+                        textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
                         fontPointSize: mainView.mediumFontSize
@@ -182,7 +182,7 @@ LauncherPage {
                         visible: themeSettingsItem.menuState
                         text: qsTr("Light Translucent Mode")
                         boldText: themeSettingsItem.selectedMenuItem === lightTranslucentModeOption
-                        textColor: "white"
+                        textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
                         fontPointSize: mainView.mediumFontSize
@@ -308,6 +308,42 @@ LauncherPage {
                 Settings {
                     id: themeSettings
                     property int theme: mainView.theme.Dark
+                }
+            }
+
+            Item {
+                width: parent.width
+                height: accentColorColumn.height
+
+                Column {
+                    id: accentColorColumn
+                    width: parent.width
+
+                    Button {
+                        width: parent.width
+                        height: mainView.largeFontSize + mainView.innerSpacing * 2
+                        text: qsTr("Accent Color")
+                        font.pointSize: mainView.mediumFontSize
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        flat: true
+
+                        Rectangle {
+                            anchors.right: parent.right
+                            anchors.rightMargin: mainView.innerSpacing
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: height
+                            height: parent.height * 0.6
+                            color: mainView.accentColor
+                            radius: 4
+                            border.width: 1
+                            border.color: Universal.foreground
+                        }
+
+                        onClicked: {
+                            colorDialog.open()
+                        }
+                    }
                 }
             }
 
@@ -1362,6 +1398,24 @@ LauncherPage {
                 value: designSettings.blurEffect
                 visible: false
 
+                background: Rectangle {
+                    x: blurSlider.leftPadding
+                    y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
+                    implicitWidth: 200
+                    implicitHeight: 4
+                    width: blurSlider.availableWidth
+                    height: implicitHeight
+                    radius: 2
+                    color: "lightgray"
+
+                    Rectangle {
+                        width: blurSlider.visualPosition * parent.width
+                        height: parent.height
+                        color: mainView.accentColor
+                        radius: 2
+                    }
+                }
+
                 handle: Rectangle {
                     x: blurSlider.leftPadding + blurSlider.visualPosition * (blurSlider.availableWidth - width)
                     y: blurSlider.topPadding + blurSlider.availableHeight / 2 - height / 2
@@ -1889,6 +1943,88 @@ LauncherPage {
                 Behavior on implicitHeight {
                     NumberAnimation {
                         duration: 250.0
+                    }
+                }
+            }
+        }
+    }
+    
+    Dialog {
+        id: colorDialog
+        title: qsTr("Choose Accent Color")
+        width: mainView.isTablet ? 400 : Math.min(parent.width - 40, 350)
+        height: 340
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 3
+        modal: true
+        background: Rectangle {
+            color: Universal.background
+            radius: 8
+        }
+        
+        property var predefinedColors: [
+            "#ff5722", "#e91e63", "#9c27b0", "#673ab7",
+            "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4",
+            "#009688", "#4caf50", "#8bc34a", "#cddc39",
+            "#ffeb3b", "#ffc107", "#ff9800", "#ff5722"
+        ]
+        
+        contentItem: Column {
+            spacing: 12
+            
+            Grid {
+                id: colorGrid
+                width: parent.width - 24
+                anchors.horizontalCenter: parent.horizontalCenter
+                columns: 4
+                rowSpacing: 4
+                columnSpacing: 4
+                
+                Repeater {
+                    model: colorDialog.predefinedColors
+                    
+                    Rectangle {
+                        width: (colorGrid.width - 12) / 4
+                        height: 50
+                        color: modelData
+                        radius: 4
+                        border.width: mainView.accentColor === modelData ? 3 : 1
+                        border.color: mainView.accentColor === modelData ? "white" : "#888888"
+                        
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                mainView.updateSettings("customAccentColor", modelData)
+                                colorDialog.close()
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Row {
+                width: parent.width - 24
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 8
+                
+                Button {
+                    id: resetButton
+                    width: (parent.width - parent.spacing) / 2
+                    height: 40
+                    text: qsTr("Reset to Default")
+                    onClicked: {
+                        mainView.updateSettings("customAccentColor", "")
+                        colorDialog.close()
+                    }
+                }
+                
+                Button {
+                    id: closeButton
+                    width: (parent.width - parent.spacing) / 2
+                    height: 40
+                    text: qsTr("Close")
+                    onClicked: {
+                        colorDialog.close()
                     }
                 }
             }

@@ -7,7 +7,7 @@ Label {
     id: shortCut
     font.pointSize: labelFontSize
     anchors.left: parent.left
-    color: "white"
+    color: mainView.accentTextColor
     elide: Text.ElideRight
     wrapMode: Text.NoWrap
 

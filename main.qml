@@ -229,7 +229,31 @@ ApplicationWindow {
         property var backgroundOpacity: 1.0
         property var backgroundColor: Universal.background
         property var accentColor: Universal.accent
+        property var accentTextColor: getContrastColor(accentColor)
         property var fontColor: Universal.foreground
+        
+        function getContrastColor(hexColor) {
+            // If no custom accent color is set (default/system color), always use white text
+            if (settings.customAccentColor === "" || settings.customAccentColor.length === 0) {
+                return "white";
+            }
+            
+            // For custom hex colors, calculate proper contrast
+            if (hexColor.startsWith("#")) {
+                var r = parseInt(hexColor.substr(1, 2), 16);
+                var g = parseInt(hexColor.substr(3, 2), 16);
+                var b = parseInt(hexColor.substr(5, 2), 16);
+                
+                // Calculate luminance using WCAG formula
+                var luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                
+                // Return black for light colors, white for dark colors
+                return luminance > 0.5 ? "black" : "white";
+            }
+            
+            // Fallback for any other case
+            return "white";
+        }
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
         property bool useColoredIcons: settings.useColoredIcons
@@ -994,6 +1018,10 @@ ApplicationWindow {
                 settings.showAppsAtStartup = value
             } else if (key === "activateSignal") {
                 settings.signalIsActivated = value
+            } else if (key === "customAccentColor") {
+                settings.customAccentColor = value
+                mainView.accentColor = value.length > 0 ? value : Universal.accent
+                mainView.accentTextColor = getContrastColor(mainView.accentColor)
             }
             if (settings.sync) {
                 settings.sync()
@@ -1234,6 +1262,7 @@ ApplicationWindow {
         property bool useHapticMenus: true
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
+        property string customAccentColor: ""
 
         function checkCustomParameters() {
             var rawPresets = presets.readPresets()
@@ -1285,6 +1314,11 @@ ApplicationWindow {
 
         Component.onCompleted: {
             checkCustomParameters()
+            
+            if (settings.customAccentColor.length > 0) {
+                mainView.accentColor = settings.customAccentColor
+                mainView.accentTextColor = getContrastColor(mainView.accentColor)
+            }
 
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)
