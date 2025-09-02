@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>Remove Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выдаліце ​​закладку</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -73,7 +73,7 @@
     </message>
     <message>
         <source>Use custom groups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выкарыстоўвайце карыстацкія групы</translation>
     </message>
     <message>
         <source>Remove group</source>
@@ -229,11 +229,11 @@
     </message>
     <message>
         <source>Message not sent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Паведамленне не адпраўлена</translation>
     </message>
     <message>
         <source>Attached image is not available for preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Далучанае малюнак недаступны для папярэдняга прагляду</translation>
     </message>
 </context>
 <context>
@@ -270,43 +270,43 @@
     <name>OnBoarding</name>
     <message>
         <source>Start writing and get suggestions for completion and functions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пачніце пісаць і атрымліваць прапановы па завяршэнні і функцыях</translation>
     </message>
     <message>
         <source>Show demo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Паказаць дэманстрацыю</translation>
     </message>
     <message>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дакраніся да чырвонай кропкі, перацягніце пункт меню і адпусціце для выбару.</translation>
     </message>
     <message>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выкарыстоўвайце разумныя калекцыі змесціва для нядаўніх кантактаў, паведамленняў, навін і нататак</translation>
     </message>
     <message>
         <source>Swipe to the right to see the app overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Правядзіце праверку направа, каб убачыць агляд прыкладання</translation>
     </message>
     <message>
         <source>Next hint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Наступны намёк</translation>
     </message>
     <message>
         <source>Swipe to the right to see the launcher settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Правядзіце права направа, каб убачыць налады пуска</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Канчаць</translation>
     </message>
     <message>
         <source>Hello World</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Прывітанне, свет</translation>
     </message>
     <message>
         <source>Learn about more use cases in the printed manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Даведайцеся пра дадатковыя выпадкі выкарыстання ў друкаваным кіраўніцтве</translation>
     </message>
 </context>
 <context>
@@ -449,11 +449,11 @@
     </message>
     <message>
         <source>Reset launcher</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Скід пускавы ўстаноўкі</translation>
     </message>
     <message>
         <source>Signal app is not installed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дадатак сігналу не ўстаноўлена</translation>
     </message>
     <message>
         <source>Springboard Skills</source>
@@ -461,39 +461,39 @@
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не мог загрузіць даступныя убудовы</translation>
     </message>
     <message>
         <source>Password needs at least four characters or numbers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пароль мае патрэбу як мінімум чатыры знакі альбо лічбы</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Надвор'е</translation>
     </message>
     <message>
         <source>Clock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Гадзіннік</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Банкнота</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Віджэты</translation>
     </message>
     <message>
         <source>Dark Translucent Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цёмны напаўпразрысты рэжым</translation>
     </message>
     <message>
         <source>Light Translucent Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Святло напаўпразрысты рэжым</translation>
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Паказаць часта выкарыстоўваюцца прыкладанні</translation>
     </message>
 </context>
 <context>
@@ -568,46 +568,46 @@
     </message>
     <message>
         <source>An error occured</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Адбылася памылка</translation>
     </message>
     <message>
         <source>Please reset contacts and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калі ласка, скіньце кантакты і паспрабуйце яшчэ раз.</translation>
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Надвор'е</translation>
     </message>
     <message>
         <source>Set location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Усталюйце месцазнаходжанне</translation>
     </message>
     <message>
         <source>Enter any location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Увядзіце любое месца</translation>
     </message>
     <message>
         <source>x</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">x</translation>
     </message>
     <message>
         <source>New contact saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новы кантакт выратаваны</translation>
     </message>
     <message>
         <source>There was no outgoing call in the last days.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">У апошнія дні не было выходнага званка.</translation>
     </message>
     <message>
         <source>Speed dial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Хуткага набору</translation>
     </message>
 </context>
 <context>
-    <name>SttSetup</name>
+    <name>Setup</name>
     <message>
         <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цяпер усталюйце распазнаванне голасу для ўводу тэксту, які вы можаце актываваць пры дапамозе значка мікрафона на клавіятуры.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -785,7 +785,7 @@
         <translation>Новы ярлык</translation>
     </message>
     <message>
-        <source>You have alresdy added the shortcut</source>
+        <source>You have already added the shortcut</source>
         <translation>Вы ўжо дадалі ярлык</translation>
     </message>
     <message>
@@ -822,71 +822,71 @@
     </message>
     <message>
         <source>Couldn&apos;t load plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не мог загрузіць убудова</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Падаваць</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Паведамленні</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Музыка</translation>
     </message>
     <message>
-        <source>Bancontact</source>
-        <translation type="unfinished"></translation>
+        <source>Ban contact</source>
+        <translation type="unfinished">Забарона кантакт</translation>
     </message>
     <message>
         <source>De Trein</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дэ Трэйн</translation>
     </message>
     <message>
-        <source>Mynexuzhealth</source>
-        <translation type="unfinished"></translation>
+        <source>My health</source>
+        <translation type="unfinished">Маё здароўе</translation>
     </message>
     <message>
         <source>Bonsai</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Бонсай</translation>
     </message>
     <message>
         <source>MijnOnlineAgenda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MijnOnlineAgenda </translation>
     </message>
     <message>
         <source>Facebook</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Facebook </translation>
     </message>
     <message>
         <source>Browser</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Аглядальнік</translation>
     </message>
     <message>
         <source>Mail</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aglyklykk</translation>
     </message>
     <message>
         <source>Sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сінхрон</translation>
     </message>
     <message>
         <source>VPN</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">VPN</translation>
     </message>
     <message>
         <source>Store</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запас</translation>
     </message>
     <message>
-        <source>A-Droid</source>
-        <translation type="unfinished"></translation>
+        <source>F-Droid</source>
+        <translation type="unfinished">F-Droid</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Карты</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -894,23 +894,23 @@
     </message>
     <message>
         <source>Radio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Радыё</translation>
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Надвор'е</translation>
     </message>
     <message>
         <source>Redial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">чырвоны</translation>
     </message>
     <message>
         <source>Create new contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Стварыце новы кантакт</translation>
     </message>
     <message>
         <source>Create speed dial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> Стварыце хуткасны набор</translation>
     </message>
 </context>
 </TS>
