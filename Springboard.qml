@@ -1355,8 +1355,10 @@ LauncherPage {
         width: Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
         height: dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.rightMargin: 0 - mainView.outerSpacing
+        anchors.right: settings.leftHandedMenu ? undefined : parent.right
+        anchors.left: settings.leftHandedMenu ? parent.left : undefined
+        anchors.rightMargin: settings.leftHandedMenu ? undefined : (0 - mainView.outerSpacing)
+        anchors.leftMargin: settings.leftHandedMenu ? (0 - mainView.outerSpacing) : undefined
 
         preventStealing: true
         enabled: !textInputArea.activeFocus && !defaultSuggestions
@@ -1549,8 +1551,10 @@ LauncherPage {
             id: shortcutBackground
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
-            anchors.right: parent.right
-            anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
+            anchors.right: settings.leftHandedMenu ? undefined : parent.right
+            anchors.left: settings.leftHandedMenu ? parent.left : undefined
+            anchors.rightMargin: settings.leftHandedMenu ? undefined : (roundedShortcutMenu ? mainView.innerSpacing * 2 : 0)
+            anchors.leftMargin: settings.leftHandedMenu ? (roundedShortcutMenu ? mainView.innerSpacing * 2 : 0) : undefined
             height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
             color: mainView.accentColor
@@ -1580,8 +1584,10 @@ LauncherPage {
             rightPadding: mainView.innerSpacing
             leftPadding: mainView.innerSpacing
             bottomPadding: mainView.innerSpacing
-            anchors.right: parent.right
-            anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
+            anchors.right: settings.leftHandedMenu ? undefined : parent.right
+            anchors.left: settings.leftHandedMenu ? parent.left : undefined
+            anchors.rightMargin: settings.leftHandedMenu ? undefined : (roundedShortcutMenu ? mainView.innerSpacing * 2 : 0)
+            anchors.leftMargin: settings.leftHandedMenu ? (roundedShortcutMenu ? mainView.innerSpacing * 2 : 0) : undefined
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 
@@ -1602,8 +1608,10 @@ LauncherPage {
             width: dotShortcut ? mainView.innerSpacing * 2 : parent.width
             color: mainView.accentColor
             radius: dotShortcut ? width * 0.5 : 0.0
-            anchors.right: parent.right
-            anchors.rightMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
+            anchors.right: settings.leftHandedMenu ? undefined : parent.right
+            anchors.left: settings.leftHandedMenu ? parent.left : undefined
+            anchors.rightMargin: settings.leftHandedMenu ? undefined : (dotShortcut ? mainView.innerSpacing * 2 : 0)
+            anchors.leftMargin: settings.leftHandedMenu ? (dotShortcut ? mainView.innerSpacing * 2 : 0) : undefined
             anchors.bottom: parent.bottom
             anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
         }
@@ -1611,7 +1619,9 @@ LauncherPage {
 
     Column {
         id: appSwitcher
-        x: dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing
+        x: settings.leftHandedMenu ? 
+            (parent.width - (dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing) - width) :
+            (dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing)
         anchors.bottom: closeAppsButton.top
         anchors.bottomMargin: mainView.innerSpacing
         spacing: mainView.innerSpacing
@@ -1620,7 +1630,9 @@ LauncherPage {
 
     Button {
         id: closeAppsButton
-        x: dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing
+        x: settings.leftHandedMenu ? 
+            (parent.width - (dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 2)) :
+            (dotShortcut ? mainView.innerSpacing * 2 - mainView.outerSpacing : 0 - mainView.outerSpacing)
         anchors.bottom: parent.bottom
         anchors.bottomMargin: dotShortcut ? mainView.innerSpacing * 2 : 0
         width: mainView.innerSpacing * 2
