@@ -891,8 +891,6 @@ ApplicationWindow {
                 case mainView.settingsAction.CREATE:
                     if (matched === false) {
                         actions.push(newAction)
-                        stored = shortcuts.write(JSON.stringify(actions))
-                        console.log("MainView | Did store Shortcut: " + stored)
                         showToast(qsTr("New shortcut") + ": " + newAction.name)
                     } else {
                         showToast(qsTr("You have alresdy added the shortcut"))
@@ -901,20 +899,20 @@ ApplicationWindow {
                 case mainView.settingsAction.UPDATE:
                     if (matched === true) {
                         actions[i] = action
-                        stored = shortcuts.write(JSON.stringify(actions))
-                        console.log("MainView | Did store shortcuts: " + stored)
+                    } else if (actionId === actionType.Redial) {
+                        actions.push({ "id": actionType.Redial, "name": qsTr("Redial"), "activated" : isActive })
                     }
                     break
                 case mainView.settingsAction.REMOVE:
                     if (matched === true) {
                         actions.splice(i, 1)
-                        stored = shortcuts.write(JSON.stringify(actions))
-                        console.log("MainView | Did store shortcuts: " + stored)
                     }
                     break
                 default:
                     break
             }
+            stored = shortcuts.write(JSON.stringify(actions))
+            console.log("MainView | Did store Shortcut: " + stored)
 
             springboard.children[0].item.updateShortcuts(actions)
             return stored

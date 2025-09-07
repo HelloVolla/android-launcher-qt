@@ -863,7 +863,7 @@ LauncherPage {
                 } else if (type === "volla.launcher.recentCallResponse") {
                     if (message.calls.length > 0) {
                         console.log("Springboard | onDispatched: " + message.calls.length + " recent call(s)")
-                        util.makeCall({"number": message.calls[0].number, "intent": "dial"})
+                        util.makeCall({"number": message.calls[0].number, "intent": "call"})
                     } else {
                         mainView.showToast(qsTr("There was no outgoing call in the last days."))
                     }

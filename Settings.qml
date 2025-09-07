@@ -311,42 +311,6 @@ LauncherPage {
                 }
             }
 
-            Item {
-                width: parent.width
-                height: accentColorColumn.height
-
-                Column {
-                    id: accentColorColumn
-                    width: parent.width
-
-                    Button {
-                        width: parent.width
-                        height: mainView.largeFontSize + mainView.innerSpacing * 2
-                        text: qsTr("Accent Color")
-                        font.pointSize: mainView.mediumFontSize
-                        leftPadding: mainView.innerSpacing
-                        rightPadding: mainView.innerSpacing
-                        flat: true
-
-                        Rectangle {
-                            anchors.right: parent.right
-                            anchors.rightMargin: mainView.innerSpacing
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: height
-                            height: parent.height * 0.6
-                            color: mainView.accentColor
-                            radius: 4
-                            border.width: 1
-                            border.color: Universal.foreground
-                        }
-
-                        onClicked: {
-                            colorDialog.open()
-                        }
-                    }
-                }
-            }
-
             MouseArea {
                 id: securitySettingsItem
                 width: parent.width
@@ -1360,6 +1324,7 @@ LauncherPage {
                             if (!running) {
                                 blurLabel.visible = designSettingsItemColumn.menuState
                                 blurSlider.visible = designSettingsItemColumn.menuState
+                                colorButton.visible = designSettingsItemColumn.menuState
                             }
                         }
                     }
@@ -1430,6 +1395,38 @@ LauncherPage {
                     console.log("Settings | Blurr filter chanded to " + value)
                     designSettings.blurEffect = value
                     mainView.updateSettings("blurEffect", value)
+                }
+            }
+
+            Button {
+                id: colorButton
+                width: parent.width
+                height: mainView.largeFontSize + mainView.innerSpacing * 2
+                text: qsTr("Accent Color")
+                font.pointSize: mainView.mediumFontSize
+                padding: mainView.innerSpacing
+                flat: true
+                visible: false
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    horizontalAlignment : Text.AlignLeft
+                }
+
+                Rectangle {
+                    anchors.right: parent.right
+                    anchors.rightMargin: mainView.innerSpacing
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: height
+                    height: parent.height * 0.6
+                    color: mainView.accentColor
+                    radius: 4
+                    border.width: 1
+                    border.color: Universal.foreground
+                }
+
+                onClicked: {
+                    colorDialog.open()
                 }
             }
 
