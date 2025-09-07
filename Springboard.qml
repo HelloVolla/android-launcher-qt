@@ -786,7 +786,7 @@ LauncherPage {
                     text: button.text
                     elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
-                    color: model.action < 20000 ? Universal.foreground : "white"
+                    color: model.action < 20000 ? Universal.foreground : mainView.accentTextColor
                     wrapMode: Text.WordWrap
                 }
                 background: Rectangle {
@@ -863,7 +863,7 @@ LauncherPage {
                 } else if (type === "volla.launcher.recentCallResponse") {
                     if (message.calls.length > 0) {
                         console.log("Springboard | onDispatched: " + message.calls.length + " recent call(s)")
-                        util.makeCall({"number": message.calls[0].number, "intent": "dial"})
+                        util.makeCall({"number": message.calls[0].number, "intent": "call"})
                     } else {
                         mainView.showToast(qsTr("There was no outgoing call in the last days."))
                     }

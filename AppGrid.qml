@@ -231,13 +231,11 @@ LauncherPage {
         var customGroup = customGroups[oldGroupName]
         var apps = appLauncher.getAllApps()
         customGroup.forEach(function (item, index) {
-            var app = apps.filter(e => e.package === item.package)[0]
+            var app = apps.filter(e => e.package === item)[0]
             app.customCategory = newGroupName
         })
         customGroups[newGroupName] = customGroup
-        customGroups = Object.fromEntries(
-            Object.entries(customGroups).filter(([key]) => key !== oldGroupName)
-        )
+        delete customGroups[oldGroupName]
         updateCustomGroupedAppGrid(apps, customGroups)
     }
 
@@ -553,7 +551,7 @@ LauncherPage {
             id: enableCustomGroupsItem
             visible: !appContextMenu.useCustomGroups
             anchors.margins: mainView.innerSpacing
-            height: enableCustomGroupsItem.visible ? enableCustomGroupsItemLabel.height : 0
+            height: enableCustomGroupsItem.visible ? enableCustomGroupsItem.implicitHeight : 0
             text: qsTr("Use custom groups")
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
@@ -582,7 +580,7 @@ LauncherPage {
 
         onAboutToShow: {
             AN.SystemDispatcher.dispatch("volla.launcher.canDeleteAppAction", {"appId": appContextMenu.app["package"]})
-            implicitHeight: appContextMenu.count * appContextMenu.menuItemHeight
+            enableCustomGroupsItem.height = !appContextMenu.useCustomGroups ? Math.max(enableCustomGroupsItem.implicitHeight) : 0
         }
 
         onAboutToHide: {
@@ -677,7 +675,13 @@ LauncherPage {
         dim: false
 
         property var app
+        property var backgroundColor: "#292929"
         property string groupName: ""
+
+        onAboutToShow: {
+            groupDialog.backgroundColor = mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
+                    ? "#292929" : "#CCCCCC"
+        }
 
         onGroupNameChanged: {
             groupNameField.text = groupName
@@ -685,7 +689,7 @@ LauncherPage {
 
         background: Rectangle {
             anchors.fill: parent
-            color: "#292929"
+            color: groupDialog.backgroundColor
             border.color: "transparent"
             radius: mainView.innerSpacing / 2
         }
