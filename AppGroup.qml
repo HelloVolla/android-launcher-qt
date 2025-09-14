@@ -253,7 +253,7 @@ Item {
                     }
                     onPressAndHold: {
                         groupGrid.currentIndex = index
-                        groupItem.parent.openAppContextMenu(model, gridCell, groupGrid)
+                        groupItem.parent.openAppContextMenu(groupModel.modelArr[index], gridCell, groupGrid)
                     }
                 }
 

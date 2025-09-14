@@ -5,7 +5,7 @@ MenuItem {
     id: appGridMenuItem
 
     property var appLauncher
-    property string appPackageName
+    property string appId
     property string appGroup
     property double innerSpacing
     property double labelPointSize
@@ -25,6 +25,6 @@ MenuItem {
         color: "transparent"
     }
     onClicked: {
-        appLauncher.updateCustomGroupOfApp(appPackageName, appGroup)
+        appLauncher.updateCustomGroupOfApp(appId, appGroup)
     }
 }
