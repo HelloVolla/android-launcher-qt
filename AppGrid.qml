@@ -46,13 +46,13 @@ LauncherPage {
             appLauncher.selectedGroup = 0
             var apps = getAllApps()
             appLauncher.destroyAppGroups()
-            appLauncher.createAppGroups(getGroupedApps(apps))
+            appLauncher.createAppGroups(getGroupedAppsAndShortcuts(apps))
         } else if (key === "useGroupedApps") {
             settings.useGroupedApps = value
             appLauncher.selectedGroup = 0
             apps = getAllApps()
             appLauncher.destroyAppGroups()
-            appLauncher.createAppGroups(getGroupedApps(apps))
+            appLauncher.createAppGroups(getGroupedAppsAndShortcuts(apps))
         } else if (key === "coloredIcons") {
             settings.useColoredIcons = value
             for (i = 0; i < appLauncher.appGroups.length; i++) {
@@ -77,8 +77,8 @@ LauncherPage {
         return allApps
     }
 
-    function getGroupedApps(apps) {
-        console.debug("AppGrid | getGroupedApps: " + apps.length + " apps")
+    function getGroupedAppsAndShortcuts(apps) {
+        console.debug("AppGrid | getGroupedAppsAndShortcuts: " + apps.length + " apps")
         var groupedApps = new Array
 
         // A. Group most frequent apps
@@ -89,7 +89,8 @@ LauncherPage {
             apps.sort(function(a, b) { return b["statistic"] - a["statistic"] })
 
             if (apps.length > appLauncher.maxAppCount) {
-                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0, appLauncher.maxAppCount) } )
+                var appsAndShortcuts = apps.slice(0, appLauncher.maxAppCount).concat(appLauncher.pinnedShortcuts)
+                groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": appsAndShortcuts} )
 
                 if (settings.useCategories) {
                     var remainingApps = apps.slice(appLauncher.maxAppCount)
@@ -101,19 +102,22 @@ LauncherPage {
                 groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0) } )
             }
         } else if (settings.useCategories) {
-            createAppGroupsByCategory(apps, groupedApps, false)
+            appsAndShortcuts = apps.concat(appLauncher.pinnedShortcuts)
+            createAppGroupsByCategory(appsAndShortcuts, groupedApps, false)
         } else {
             var customGroups = settings.getCustomGroups()
-            console.debug("AppGrid | getGroupedApps: customGroups " + Object.keys(customGroups).length)
-            console.debug("AppGrid | getGroupedApps: customGroups " + JSON.stringify(customGroups))
-            apps.forEach(function (app, index) {
-                var filteredGroupNames = Object.keys(customGroups).filter(key => customGroups[key].includes(app.package))
+            console.debug("AppGrid | getGroupedAppsAndShortcuts: customGroups " + Object.keys(customGroups).length)
+            console.debug("AppGrid | getGroupedAppsAndShortcuts: customGroups " + JSON.stringify(customGroups))
+            appsAndShortcuts = apps.concat(appLauncher.pinnedShortcuts)
+            appsAndShortcuts.forEach(function (app, index) {
+                var itemId = app.shortcutId !== undefined ? app.shortcutId : app.package
+                var filteredGroupNames = Object.keys(customGroups).filter(key => customGroups[key].includes(itemId))
                 if (filteredGroupNames.length > 0) {
                     app.customCategory = filteredGroupNames[0]
                 }
             })
-            //apps.sort(function(a, b) { return b["customCategory"] - a["customCategory"] })
-            createAppGroupsByCategory(apps, groupedApps, true)
+            //appsAndShortcuts.sort(function(a, b) { return b["customCategory"] - a["customCategory"] })
+            createAppGroupsByCategory(appsAndShortcuts, groupedApps, true)
         }
 
         return groupedApps
@@ -153,6 +157,8 @@ LauncherPage {
         console.log("AppGrid | Will create app grids for " + groupedApps.length + " group(s).")
         groupedApps.forEach(function(appGroupInfos, index) {
             console.log("AppGrid | Will create group " + index)
+            var apps = appGroupInfos.apps.filter(e => e.shortcutId === undefined)
+            var pinnedShortcuts = appGroupInfos.apps.filter(e => e.shortcutId !== undefined)
             var component = Qt.createComponent("/AppGroup.qml", appLauncherColumn)
             var properties = { "groupLabel": appGroupInfos["groupLabel"],
                                "groupIndex": index,
@@ -169,8 +175,8 @@ LauncherPage {
                                "backgroundOpacity": mainView.backgroundOpacity,
                                "accentColor": mainView.accentColor,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
-                               "pinnedShortcuts": index === 0 ? appLauncher.pinnedShortcuts : new Array,
-                               "apps": appGroupInfos["apps"]}
+                               "pinnedShortcuts": pinnedShortcuts !== undefined ? pinnedShortcuts : new Array,
+                               "apps": apps !== undefined ? apps : new Array}
             if (component.status !== Component.Ready) {
                 if (component.status === Component.Error)
                     console.debug("AppGrid | Error: "+ component.errorString() );
@@ -193,13 +199,12 @@ LauncherPage {
         var customGroups = settings.getCustomGroups()
         var customGroup = customGroups[appGroupName]
         console.debug("AppGrid | updateCustomGroupOfApp: " + JSON.stringify(customGroup))
-        var apps = appLauncher.getAllApps()
-        var app = apps.filter(e => e.package === appToUpdate)[0]
-
+        var apps = appLauncher.getAllApps().concat(appLauncher.pinnedShortcuts)
+        var app = apps.filter(e => e.package === appToUpdate || (e.shortcutId !== undefined && e.shortcutId === appToUpdate))[0]
         if (appGroupName !== undefined) {
             app.customCategory = appGroupName
             // Add to group
-            if (customGroup !== undefined) {
+            if (customGroup !== undefined && !customGroup.includes(appToUpdate)) {
                 customGroup.push(appToUpdate)
             } else {
                 customGroup = [appToUpdate]
@@ -216,9 +221,6 @@ LauncherPage {
                 } else {
                     delete customGroups[appGroupName]
                 }
-                for (const [key, value] of Object.entries(customGroups)) {
-                  console.log(`${key}: ${value}`);
-                }
             }
         }
 
@@ -229,7 +231,7 @@ LauncherPage {
         console.debug("AppGrid | updateCustomGroup: " + oldGroupName + ", " + newGroupName)
         var customGroups = settings.getCustomGroups()
         var customGroup = customGroups[oldGroupName]
-        var apps = appLauncher.getAllApps()
+        var apps = appLauncher.getAllApps().concat(appLauncher.pinnedShortcuts)
         customGroup.forEach(function (item, index) {
             var app = apps.filter(e => e.package === item)[0]
             app.customCategory = newGroupName
@@ -243,7 +245,7 @@ LauncherPage {
         console.debug("AppGrid | removeCustomGroup: " + appGroupName)
         var customGroups = settings.getCustomGroups()
         var customGroup = customGroups[appGroupName]
-        var apps = appLauncher.getAllApps()
+        var apps = appLauncher.getAllApps().concat(appLauncher.pinnedShortcuts)
         customGroup.forEach(function (appPackage, index) {
             apps.forEach(function (app, index) {
                 if (app.package === appPackage) delete app.customCategory
@@ -263,7 +265,7 @@ LauncherPage {
 
         console.debug("AppGrid | Number of apps: " + apps.length)
 
-        var groupedApps = appLauncher.getGroupedApps(apps)
+        var groupedApps = appLauncher.getGroupedAppsAndShortcuts(apps)
         appLauncher.appGroups = new Array
         appLauncher.createAppGroups(groupedApps)
     }
@@ -381,7 +383,7 @@ LauncherPage {
         property int menuItemHeight: 40
 
         onAppChanged: {
-            if (app !== undefined && app !== null) console.debug("AppGrid | App of context menu: " + appContextMenu.app.package)
+            if (app !== undefined && app !== null) console.debug("AppGrid | App of context menu: " + appContextMenu.app.itemId)
             else console.debug("AppGrid | App of context menu: " + appContextMenu.app)
             implicitHeight: addShortCutItem.height  + openAppItem.height + removeAppItem.height  + removePinnedShortcutItem.height
                             + addToNewGroupItem.height + removeFromGroupItem.height + enableCustomGroupsItem.height + mainView.innerSpacing
@@ -574,7 +576,7 @@ LauncherPage {
                 var apps = getAllApps()
                 appLauncher.destroyAppGroups()
                 appLauncher.selectedGroup = 0
-                appLauncher.createAppGroups(getGroupedApps(apps))
+                appLauncher.createAppGroups(getGroupedAppsAndShortcuts(apps))
             }
         }
 
@@ -594,13 +596,12 @@ LauncherPage {
 
         function createCustomGroupMenuItems() {
             var customGroups = settings.getCustomGroups()
-            console.log("AppGrid | createCustomGroupMenuItems: " + Object.keys(customGroups).length)
             Object.keys(customGroups).forEach(key => {
-                console.log("AppGrid | createCustomGroupMenuItems: " + key)
+                console.log("AppGrid | createCustomGroupMenuItems: Create custom group " + key)
                 var component = Qt.createComponent("/AppGridMenuItem.qml", appContextMenu)
                 var properties = { "height": appContextMenu.menuItemHeight, "innerSpacing" : mainView.innerSpacing,
                                    "labelPointSize" : appLauncher.labelPointSize, "labelWidth" : appContextMenu.menuWidth,
-                                   "appPackageName" : app.package, "appGroup" : key, "appLauncher": appLauncher}
+                                   "appId" : app.itemId, "appGroup" : key, "appLauncher": appLauncher}
                 var object = component.createObject(appContextMenu, properties)
                 appContextMenu.addItem(object)
                 console.log("AppGrid | createCustomGroupMenuItems: Menu items " + appContextMenu.count)
@@ -821,7 +822,7 @@ LauncherPage {
                         for (var app in appsArray) {
                             if (app.isCloned === undefined) app.isCloned = false
                         }
-                        var groupedApps = appLauncher.getGroupedApps(appsArray)
+                        var groupedApps = appLauncher.getGroupedAppsAndShortcuts(appsArray)
                         appLauncher.destroyAppGroups()
                         appLauncher.createAppGroups(groupedApps)
                         // Reflect different OS versions and devices
@@ -844,7 +845,7 @@ LauncherPage {
                 }
                 settings.lastAppCountCheck = new Date().valueOf()
                 console.log("App Launcher | Did store apps: " + appsCache.writePrivate(JSON.stringify(message["apps"])))
-                groupedApps = appLauncher.getGroupedApps(message["apps"])
+                groupedApps = appLauncher.getGroupedAppsAndShortcuts(message["apps"])
                 if (appLauncher.appGroups.length !== groupedApps.lemgth) {
                     for (var i = 0; i < appLauncher.appGroups.length; i++) {
                         var appGroup = appLauncher.appGroups[i]
@@ -869,11 +870,11 @@ LauncherPage {
                                 "icon": message["icon"] }
 
                 if (shortcut["shortcutId"] === undefined) {
-                    mainView.showToast("ERROR: Undefined Shortcut Id")
+                    mainView.showToast("ERROR: Undefined shortcut id")
                     return
                 }
                 if (shortcut["icon"] === undefined) {
-                    mainView.showToast("ERROR: Undefined Shortcut Icin")
+                    mainView.showToast("ERROR: Undefined shortcut icon")
                     return
                 }
 
@@ -911,10 +912,16 @@ LauncherPage {
                         }
                     }
                     appLauncher.pinnedShortcuts = pinnedShortcuts
-                    appGroup = appGroups[0]
-                    if (appGroup !== undefined) {
-                        appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
+                    if (settings.useGroupedApps || settings.useCategories) {
+                        appGroup = appGroups[0]
+                        if (appGroup !== undefined) {
+                            appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
+                        }
+                    } else {
+                        updateCustomGroupedAppGrid(getAllApps(), settings.getCustomGroups())
                     }
+
+
                 }
             } else if (type === "volla.launcher.checkPhoneAppResponse") {
                 console.log("AppGrid | Default phone app received: " + message["phoneApp"])
