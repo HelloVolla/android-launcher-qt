@@ -1272,6 +1272,15 @@ LauncherPage {
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
 
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "leftHandedMenu"
+                        properties["text"] = qsTr("Left-handed quick menu")
+                        properties["checked"] = designSettings.leftHandedMenu
+                        properties["accentColor"] = mainView.accentColor
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -1311,6 +1320,10 @@ LauncherPage {
                             designSettings.useCategories = active
                             designSettings.sync()
                             mainView.updateGridView("useCategories", active)
+                        } else if (actionId === "leftHandedMenu") {
+                            designSettings.leftHandedMenu = active
+                            designSettings.sync()
+                            mainView.updateSettings("leftHandedMenu", active)
                         }
                     }
                 }
@@ -1338,6 +1351,7 @@ LauncherPage {
                     property bool useCategories: false
                     property bool showAppsAtStartup: false
                     property bool useHapticMenus: true
+                    property bool leftHandedMenu: false
                     property double blurEffect: 30
                 }
             }
