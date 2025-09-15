@@ -428,7 +428,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reset shorcuts</source>
+        <source>Reset shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -749,7 +749,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New Subscrption</source>
+        <source>New Subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
