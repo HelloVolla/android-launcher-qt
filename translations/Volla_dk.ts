@@ -97,7 +97,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Annuller</translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Group name must have at least one character.</source>
@@ -146,11 +146,11 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Noter</translation>
+        <translation type="unfinished">Notater</translation>
     </message>
     <message>
         <source>Find note ...</source>
-        <translation type="unfinished">Find note ...</translation>
+        <translation type="unfinished">Find notat ...</translation>
     </message>
     <message>
         <source>Filter collections</source>
@@ -278,11 +278,11 @@
     </message>
     <message>
         <source>Touch the red dot, drag to a menu item and release for your selection.</source>
-        <translation type="unfinished">Berør den røde prik, træk til et menupunkt, og slip for at vælge.</translation>
+        <translation type="unfinished">Tryk på den røde prik, stryg til et menupunkt og slip for at vælge.</translation>
     </message>
     <message>
         <source>Use smart content collections for recent contacts, messages, news and notes</source>
-        <translation type="unfinished">Brug smarte indholdssamlinger til seneste kontakter, beskeder, nyheder og noter</translation>
+        <translation type="unfinished">Brug smarte indholdssamlinger til seneste kontakter, beskeder, nyheder og notater</translation>
     </message>
     <message>
         <source>Swipe to the right to see the app overview</source>
@@ -317,15 +317,15 @@
     </message>
     <message>
         <source>Dark Mode</source>
-        <translation type="unfinished">Mørk stil</translation>
+        <translation type="unfinished">Mørk modus</translation>
     </message>
     <message>
         <source>Light Mode</source>
-        <translation type="unfinished">Lys stil</translation>
+        <translation type="unfinished">Lys modus</translation>
     </message>
     <message>
         <source>Translucent Mode</source>
-        <translation type="obsolete">Gennemskinnelig stil</translation>
+        <translation type="obsolete">Transparent modus</translation>
     </message>
     <message>
         <source>Security mode is OFF</source>
@@ -353,7 +353,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Annuller</translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Wrong password confirmation</source>
@@ -457,7 +457,7 @@
     </message>
     <message>
         <source>Signal app is not installed</source>
-        <translation type="unfinished">Signal-appen er ikke installeret</translation>
+        <translation type="unfinished">Signal er ikke installeret</translation>
     </message>
     <message>
         <source>Springboard Skills</source>
@@ -481,19 +481,19 @@
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished">Bemærk</translation>
+        <translation type="unfinished">Notat</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Widgets</translation>
     </message>
     <message>
         <source>Dark Translucent Mode</source>
-        <translation type="unfinished">Mørk gennemskinnelig tilstand</translation>
+        <translation type="unfinished">Mørk transparent tilstand</translation>
     </message>
     <message>
         <source>Light Translucent Mode</source>
-        <translation type="unfinished">Let gennemskinnelig tilstand</translation>
+        <translation type="unfinished">Lys transparent tilstand</translation>
     </message>
     <message>
         <source>Show frequently used apps</source>
@@ -564,7 +564,7 @@
     </message>
     <message>
         <source>New note saved</source>
-        <translation type="unfinished">Ny note gemt</translation>
+        <translation type="unfinished">Nyt notat gemt</translation>
     </message>
     <message>
         <source>My event</source>
@@ -600,7 +600,7 @@
     </message>
     <message>
         <source>New contact saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny kontakt gemt</translation>
     </message>
     <message>
         <source>Speed dial</source>
@@ -619,7 +619,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Annuller</translation>
+        <translation type="unfinished">Ok</translation>
     </message>
 </context>
 <context>
@@ -670,7 +670,7 @@
     </message>
     <message>
         <source>Create note</source>
-        <translation type="unfinished">Opret note</translation>
+        <translation type="unfinished">Opret notat</translation>
     </message>
     <message>
         <source>Search web</source>
@@ -690,7 +690,7 @@
     </message>
     <message>
         <source>Show Notes</source>
-        <translation type="unfinished">Vis noter</translation>
+        <translation type="unfinished">Vis notater</translation>
     </message>
     <message>
         <source>Send Signal message</source>
