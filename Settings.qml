@@ -86,7 +86,6 @@ LauncherPage {
                     Label {
                         id: themeSettingsItemTitle
 
-                        property var theme: themeSettings.theme
 
                         padding: mainView.innerSpacing
                         width: parent.width
@@ -100,8 +99,7 @@ LauncherPage {
                         }
 
                         Component.onCompleted: {
-                            theme = mainView.vollaTheme
-                            switch (mainView.vollaTheme) {
+                            switch (themeSettings.theme) {
                             case mainView.theme.Dark:
                                 text = qsTr("Dark Mode")
                                 break
@@ -271,10 +269,7 @@ LauncherPage {
                     console.log("Settings | Execute mode selection: " + selectedMenuItem.text + ", " + selectedMenuItem.theme)
                     if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== themeSettingsItemTitle) {
                         themeSettingsItemTitle.text = selectedMenuItem.text
-                        themeSettingsItemTitle.theme = selectedMenuItem.theme
-
                         themeSettings.theme = selectedMenuItem.theme
-                        mainView.vollaTheme = themeSettings.theme
 
                         if (themeSettings.sync) {
                             themeSettings.sync()

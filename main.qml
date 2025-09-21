@@ -150,7 +150,6 @@ ApplicationWindow {
             'LightTranslucent': 2,
             'DarkTranslucent': 3
         }
-        property var vollaTheme : 1
         property var actionType: {
             'SuggestContact': 0,
             'SuggestPluginEntity' : 1,
@@ -254,6 +253,7 @@ ApplicationWindow {
             // Fallback for any other case
             return "white";
         }
+
         property var vibrationDuration: 50
         property bool useVibration: settings.useHapticMenus
         property bool useColoredIcons: settings.useColoredIcons
@@ -584,7 +584,7 @@ ApplicationWindow {
         }
 
         function switchTheme(theme, updateLockScreen) {
-            mainView.vollaTheme = theme
+            settings.theme = theme
             if (settings.sync) {
                 settings.sync()
             }
@@ -1202,16 +1202,17 @@ ApplicationWindow {
                 } else if (type === "volla.launcher.uiModeChanged") {
                     if (message["uiMode"] !== settings.theme) {
                         settings.theme = message["uiMode"]
+                        settings.sync()
                         if (message["uiMode"] === mainView.theme.Light) {
-                            if(mainView.vollaTheme !== undefined && (mainView.vollaTheme === mainView.theme.LightTranslucent || mainView.vollaTheme === mainView.theme.DarkTranslucent)){
-                                mainView.switchTheme(mainView.theme.LightTranslucent, true)
+                            if (settings.theme === mainView.theme.LightTranslucent || settings.theme === mainView.theme.DarkTranslucent) {
+                                mainView.switchTheme(mainView.theme.LightTranslucent, false)
                             } else {
                                 mainView.switchTheme(mainView.theme.Light, true)
                             }
 
                         } else if (message["uiMode"] === mainView.theme.Dark) {
-                            if(mainView.vollaTheme !== undefined && (mainView.vollaTheme == mainView.theme.LightTranslucent || mainView.vollaTheme == mainView.theme.DarkTranslucent)){
-                                mainView.switchTheme(mainView.theme.DarkTranslucent, true)
+                            if (settings.theme === mainView.theme.LightTranslucent || settings.theme === mainView.theme.DarkTranslucent) {
+                                mainView.switchTheme(mainView.theme.DarkTranslucent, false)
                             } else {
                                 mainView.switchTheme(mainView.theme.Dark, true)
                             }
@@ -1311,6 +1312,7 @@ ApplicationWindow {
         }
 
         Component.onCompleted: {
+            console.debug("MainView | Settings onCompleted")
             checkCustomParameters()
             
             if (settings.customAccentColor.length > 0) {

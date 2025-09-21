@@ -271,7 +271,7 @@ LauncherPage {
                 font.weight: Font.Black
                 topPadding: mainView.innerSpacing
                 color: Universal.foreground
-                wrapMode: Text.WordWrap
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
             Label {
                 id: author
