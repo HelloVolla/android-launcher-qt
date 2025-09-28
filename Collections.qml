@@ -1353,7 +1353,17 @@ LauncherPage {
             var i;
             for (n = 0; n < count; n++) {
                 for (i=n+1; i < count; i++) {
-                    if ((!get(n).c_SBADGE && get(i).c_SBADGE) || get(n).c_TSTAMP < get(i).c_TSTAMP) {
+                    if (get(n).c_TSTAMP < get(i).c_TSTAMP) {
+                        console.log("Collections | move")
+                        move(i, n, 1);
+                        n = 0;
+                    }
+                }
+            }
+            for (n = 0; n < count; n++) {
+                console.log("Collections | n: " + n)
+                for (i=n+1; i < count; i++) {
+                    if (!get(n).c_SBADGE && get(i).c_SBADGE) {
                         move(i, n, 1);
                         n = 0;
                     }

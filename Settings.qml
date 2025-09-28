@@ -192,10 +192,8 @@ LauncherPage {
                         duration: 250.
                         onRunningChanged: {
                             if (!running && themeSettingsItem.menuState) {
-                                console.log("Settings | Switch on mode options labels")
                                 themeSettingsItem.labelOpacity = 1.0
                             } else if (running && !themeSettingsItem.menuState) {
-                                console.log("Settings | Switch off mode option labels")
                                 themeSettingsItem.labelOpacity = 0.0
                             }
                         }
@@ -654,7 +652,7 @@ LauncherPage {
                                             && passwordField.text !== confirmationField.text) {
                                         mainView.showToast(qsTr("Wrong password confirmation"))
                                     } else if (passwordDialog.definePasswordMode && !keepPasswordCheckBox.checked
-                                               && passwordField.text.length < 5) {
+                                               && passwordField.text.length < 4) {
                                         mainView.showToast(qsTr("Password needs at least four characters or numbers"))
                                     } else {
                                         AN.SystemDispatcher.dispatch(
