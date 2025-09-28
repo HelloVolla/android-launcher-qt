@@ -1403,6 +1403,7 @@ LauncherPage {
                 flat: true
                 visible: false
                 contentItem: Text {
+                    color: Universal.foreground
                     text: parent.text
                     font: parent.font
                     horizontalAlignment : Text.AlignLeft
