@@ -1012,6 +1012,15 @@ ApplicationWindow {
             } else if (key === "useHapticMenus") {
                 settings.useHapticMenus = value
                 mainView.useVibration = value
+            } else if (key === "leftHandedMenu") {
+                var previousValue = settings.leftHandedMenu
+                settings.leftHandedMenu = value
+                // If switching from left-handed to right-handed (true -> false), refresh Springboard
+                if (previousValue === true && value === false) {
+                    console.log("MainView | Refreshing Springboard due to left->right menu switch")
+                    springboardLoader.active = false
+                    springboardLoader.active = true
+                }
             } else if (key === "showAppsAtStartup") {
                 settings.showAppsAtStartup = value
             } else if (key === "activateSignal") {
@@ -1259,6 +1268,7 @@ ApplicationWindow {
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
         property bool useHapticMenus: true
+        property bool leftHandedMenu: false
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
         property string customAccentColor: ""

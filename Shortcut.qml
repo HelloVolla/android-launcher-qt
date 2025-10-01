@@ -7,9 +7,11 @@ Label {
     id: shortCut
     font.pointSize: labelFontSize
     anchors.left: parent.left
+    anchors.right: parent.right
     color: mainView.accentTextColor
     elide: Text.ElideRight
     wrapMode: Text.NoWrap
+    horizontalAlignment: settings.leftHandedMenu ? Text.AlignLeft : Text.AlignLeft
 
     property var actionId
     property double labelFontSize
