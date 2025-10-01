@@ -1444,7 +1444,8 @@ LauncherPage {
                     var properties = { "actionId": shortcuts[i]["id"],
                         "text": shortcuts[i]["name"],
                         "labelFontSize": mainView.largeFontSize,
-                        "leftPadding": leftDistance,
+                        "leftPadding": settings.leftHandedMenu ? 0 : leftDistance,
+                        "rightPadding": settings.leftHandedMenu ? leftDistance : 0,
                         "bottomPadding": mainView.innerSpacing,
                         "width": componentWidth }
                     if (component.status !== Component.Ready) {
