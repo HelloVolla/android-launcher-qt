@@ -479,6 +479,26 @@
         <source>Show frequently used apps</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Left-handed quick menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>

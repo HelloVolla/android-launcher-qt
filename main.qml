@@ -258,6 +258,7 @@ ApplicationWindow {
         property bool useVibration: settings.useHapticMenus
         property bool useColoredIcons: settings.useColoredIcons
         property bool isTablet: Screen.desktopAvailableWidth > 520
+        property bool useLeftHandedMenu: settings.leftHandedMenu
         property int maxTitleLength: 120
 
         property string searchEngineName
@@ -1013,14 +1014,12 @@ ApplicationWindow {
                 settings.useHapticMenus = value
                 mainView.useVibration = value
             } else if (key === "leftHandedMenu") {
-                var previousValue = settings.leftHandedMenu
                 settings.leftHandedMenu = value
-                // If switching from left-handed to right-handed (true -> false), refresh Springboard
-                if (previousValue === true && value === false) {
-                    console.log("MainView | Refreshing Springboard due to left->right menu switch")
-                    springboardLoader.active = false
-                    springboardLoader.active = true
-                }
+                console.log("MainView | Refreshing Springboard due to quick menu side switch")
+                springboardLoader.active = false
+                springboardLoader.active = true
+                if (mainView.isTablet) AN.SystemDispatcher.dispatch("volla.launcher.runningAppsAction", {})
+                springboard.children[0].item.updateShortcuts(getActions())
             } else if (key === "showAppsAtStartup") {
                 settings.showAppsAtStartup = value
             } else if (key === "activateSignal") {
@@ -1359,6 +1358,12 @@ ApplicationWindow {
             }
             mainView.useVibration = useHapticMenus
             mainView.useColoredIcons = useColoredIcons
+//            if (mainView.useLeftHandedMenu !== leftHandedMenu) {
+//                mainView.useLeftHandedMenu = leftHandedMenu
+//                springboardLoader.active = false
+//                springboardLoader.active = true
+//                springboard.children[0].item.updateShortcuts(getActions())
+//            }
             if (settings.sync) {
                 settings.sync()
             }
