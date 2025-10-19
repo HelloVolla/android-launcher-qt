@@ -65,7 +65,7 @@
     </message>
     <message>
         <source>Edit group name</source>
-        <translation type="unfinished">Edytuj nazwę grupy</translation>
+        <translation type="obsolete">Edytuj nazwę grupy</translation>
     </message>
     <message>
         <source>Group name</source>
@@ -94,6 +94,10 @@
     <message>
         <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Skrót przypięty już istnieje.</translation>
+    </message>
+    <message>
+        <source>Edit groupname</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -479,6 +483,26 @@
         <source>Reset launcher</source>
         <translation type="unfinished">Zresetuj program uruchamiający</translation>
     </message>
+    <message>
+        <source>Left-handed quick menu</source>
+        <translation type="unfinished">Szybkie menu dla osób leworęcznych</translation>
+    </message>
+    <message>
+        <source>Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -686,7 +710,7 @@
     </message>
     <message>
         <source>Add to Calendar</source>
-        <translation type="unfinished">Dodaj do kalendarza</translation>
+        <translation type="obsolete">Dodaj do kalendarza</translation>
     </message>
     <message>
         <source>Show in Signal</source>
@@ -786,7 +810,7 @@
     </message>
     <message>
         <source>F-Droid</source>
-        <translation type="unfinished">F-Droid</translation>
+        <translation type="obsolete">F-Droid</translation>
     </message>
     <message>
         <source>Maps</source>
@@ -854,7 +878,7 @@
     </message>
     <message>
         <source>New Subscription</source>
-        <translation type="unfinished">Nowa subskrypcja</translation>
+        <translation type="obsolete">Nowa subskrypcja</translation>
     </message>
     <message>
         <source>You have already subscribed the feed</source>
@@ -882,7 +906,7 @@
     </message>
     <message>
         <source>You have already added the shortcut</source>
-        <translation type="unfinished">Skrót został już dodany.</translation>
+        <translation type="obsolete">Skrót został już dodany.</translation>
     </message>
     <message>
         <source>Reset successful</source>
@@ -895,6 +919,22 @@
     <message>
         <source>Not yet supported</source>
         <translation type="unfinished">Jeszcze nie obsługiwane</translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A-Droid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Subscrption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have alresdy added the shortcut</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

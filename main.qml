@@ -258,6 +258,7 @@ ApplicationWindow {
         property bool useVibration: settings.useHapticMenus
         property bool useColoredIcons: settings.useColoredIcons
         property bool isTablet: Screen.desktopAvailableWidth > 520
+        property bool useLeftHandedMenu: settings.leftHandedMenu
         property int maxTitleLength: 120
 
         property string searchEngineName
@@ -1012,6 +1013,13 @@ ApplicationWindow {
             } else if (key === "useHapticMenus") {
                 settings.useHapticMenus = value
                 mainView.useVibration = value
+            } else if (key === "leftHandedMenu") {
+                settings.leftHandedMenu = value
+                console.log("MainView | Refreshing Springboard due to quick menu side switch")
+                springboardLoader.active = false
+                springboardLoader.active = true
+                if (mainView.isTablet) AN.SystemDispatcher.dispatch("volla.launcher.runningAppsAction", {})
+                springboard.children[0].item.updateShortcuts(getActions())
             } else if (key === "showAppsAtStartup") {
                 settings.showAppsAtStartup = value
             } else if (key === "activateSignal") {
@@ -1259,6 +1267,7 @@ ApplicationWindow {
         property bool useColoredIcons: false
         property bool showAppsAtStartup: false
         property bool useHapticMenus: true
+        property bool leftHandedMenu: false
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
         property string customAccentColor: ""
@@ -1349,6 +1358,12 @@ ApplicationWindow {
             }
             mainView.useVibration = useHapticMenus
             mainView.useColoredIcons = useColoredIcons
+//            if (mainView.useLeftHandedMenu !== leftHandedMenu) {
+//                mainView.useLeftHandedMenu = leftHandedMenu
+//                springboardLoader.active = false
+//                springboardLoader.active = true
+//                springboard.children[0].item.updateShortcuts(getActions())
+//            }
             if (settings.sync) {
                 settings.sync()
             }

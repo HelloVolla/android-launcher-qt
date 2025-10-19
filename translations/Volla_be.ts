@@ -469,7 +469,7 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished">Надвор'е</translation>
+        <translation type="unfinished">Надвор&apos;е</translation>
     </message>
     <message>
         <source>Clock</source>
@@ -494,6 +494,41 @@
     <message>
         <source>Show frequently used apps</source>
         <translation type="unfinished">Паказаць часта выкарыстоўваюцца прыкладанні</translation>
+    </message>
+    <message>
+        <source>Left-handed quick menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Setup</name>
+    <message>
+        <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
+        <translation type="obsolete">Цяпер усталюйце распазнаванне голасу для ўводу тэксту, які вы можаце актываваць пры дапамозе значка мікрафона на клавіятуры.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Скасаваць</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="obsolete">Добра</translation>
     </message>
 </context>
 <context>
@@ -576,7 +611,7 @@
     </message>
     <message>
         <source>weather</source>
-        <translation type="unfinished">Надвор'е</translation>
+        <translation type="unfinished">Надвор&apos;е</translation>
     </message>
     <message>
         <source>Set location</source>
@@ -604,7 +639,7 @@
     </message>
 </context>
 <context>
-    <name>Setup</name>
+    <name>SttSetup</name>
     <message>
         <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
         <translation type="unfinished">Цяпер усталюйце распазнаванне голасу для ўводу тэксту, які вы можаце актываваць пры дапамозе значка мікрафона на клавіятуры.</translation>
@@ -786,7 +821,7 @@
     </message>
     <message>
         <source>You have already added the shortcut</source>
-        <translation>Вы ўжо дадалі ярлык</translation>
+        <translation type="vanished">Вы ўжо дадалі ярлык</translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -838,7 +873,7 @@
     </message>
     <message>
         <source>Ban contact</source>
-        <translation type="unfinished">Забарона кантакт</translation>
+        <translation type="obsolete">Забарона кантакт</translation>
     </message>
     <message>
         <source>De Trein</source>
@@ -846,7 +881,7 @@
     </message>
     <message>
         <source>My health</source>
-        <translation type="unfinished">Маё здароўе</translation>
+        <translation type="obsolete">Маё здароўе</translation>
     </message>
     <message>
         <source>Bonsai</source>
@@ -882,7 +917,7 @@
     </message>
     <message>
         <source>F-Droid</source>
-        <translation type="unfinished">F-Droid</translation>
+        <translation type="obsolete">F-Droid</translation>
     </message>
     <message>
         <source>Maps</source>
@@ -898,7 +933,7 @@
     </message>
     <message>
         <source>Weather</source>
-        <translation type="unfinished">Надвор'е</translation>
+        <translation type="unfinished">Надвор&apos;е</translation>
     </message>
     <message>
         <source>Redial</source>
@@ -911,6 +946,22 @@
     <message>
         <source>Create speed dial</source>
         <translation type="unfinished"> Стварыце хуткасны набор</translation>
+    </message>
+    <message>
+        <source>Bancontact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mynexuzhealth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A-Droid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have alresdy added the shortcut</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
