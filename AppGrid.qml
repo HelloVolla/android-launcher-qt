@@ -200,7 +200,12 @@ LauncherPage {
         var customGroup = customGroups[appGroupName]
         console.debug("AppGrid | updateCustomGroupOfApp: " + JSON.stringify(customGroup))
         var apps = appLauncher.getAllApps().concat(appLauncher.pinnedShortcuts)
-        var app = apps.filter(e => e.package === appToUpdate || (e.shortcutId !== undefined && e.shortcutId === appToUpdate))[0]
+//        for (var i = 0; i < apps.length; i++) {
+//            Object.keys(apps[i]).forEach(function(key) {
+//                console.debug(key, apps[i][key]);
+//            })
+//        }
+        var app = apps.filter(e => e.appId === appToUpdate || (e.shortcutId !== undefined && e.shortcutId === appToUpdate))[0]
         if (appGroupName !== undefined) {
             app.customCategory = appGroupName
             // Add to group
@@ -385,6 +390,9 @@ LauncherPage {
         onAppChanged: {
             if (app !== undefined && app !== null) console.debug("AppGrid | App of context menu: " + appContextMenu.app.itemId)
             else console.debug("AppGrid | App of context menu: " + appContextMenu.app)
+//            Object.keys(app).forEach(function(key) {
+//                console.debug(key, app[key]);
+//            })
             implicitHeight: addShortCutItem.height  + openAppItem.height + removeAppItem.height  + removePinnedShortcutItem.height
                             + addToNewGroupItem.height + removeFromGroupItem.height + enableCustomGroupsItem.height + mainView.innerSpacing
         }

@@ -24,94 +24,94 @@
         <translation type="unfinished">Aplicaciones</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="287"/>
+        <location filename="../AppGrid.qml" line="292"/>
         <source>Apps</source>
         <translation type="unfinished">Aplicaciones</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="300"/>
+        <location filename="../AppGrid.qml" line="305"/>
         <source>Filter apps</source>
         <translation type="unfinished">Filtrar aplicaciones</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="401"/>
+        <location filename="../AppGrid.qml" line="409"/>
         <source>Add to shortcuts</source>
         <translation type="unfinished">añadir a los accesos directos</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="419"/>
-        <location filename="../AppGrid.qml" line="423"/>
-        <location filename="../AppGrid.qml" line="424"/>
+        <location filename="../AppGrid.qml" line="427"/>
+        <location filename="../AppGrid.qml" line="431"/>
+        <location filename="../AppGrid.qml" line="432"/>
         <source>Open</source>
         <translation type="unfinished">abrir</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="435"/>
+        <location filename="../AppGrid.qml" line="443"/>
         <source>Open App</source>
         <translation type="unfinished">abrir la aplicación</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="435"/>
+        <location filename="../AppGrid.qml" line="443"/>
         <source>Open Shortcut</source>
         <translation type="unfinished">Abrir acceso directo</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="470"/>
+        <location filename="../AppGrid.qml" line="478"/>
         <source>Remove App</source>
         <translation type="unfinished">Eliminar aplicación</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="489"/>
+        <location filename="../AppGrid.qml" line="497"/>
         <source>Remove Bookmark</source>
         <translation type="unfinished">Eliminar marcador</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="514"/>
+        <location filename="../AppGrid.qml" line="522"/>
         <source>Add to new group</source>
         <translation type="unfinished">Añadir a un nuevo grupo</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="536"/>
+        <location filename="../AppGrid.qml" line="544"/>
         <source>Remove from group</source>
         <translation type="unfinished">Eliminar del grupo</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="557"/>
+        <location filename="../AppGrid.qml" line="565"/>
         <source>Use custom groups</source>
         <translation type="unfinished">Grupos personalizados</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="630"/>
+        <location filename="../AppGrid.qml" line="638"/>
         <source>Remove group</source>
         <translation type="unfinished">Eliminar grupo</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="650"/>
+        <location filename="../AppGrid.qml" line="658"/>
         <source>Edit groupname</source>
         <translation type="unfinished">Editar nombre del grupo</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="711"/>
+        <location filename="../AppGrid.qml" line="719"/>
         <source>Group name</source>
         <translation type="unfinished">Nombre del grupo</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="727"/>
+        <location filename="../AppGrid.qml" line="735"/>
         <source>Enter a group name</source>
         <translation type="unfinished">troduzca un nombre para el grupo.</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="747"/>
+        <location filename="../AppGrid.qml" line="755"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancelar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="772"/>
+        <location filename="../AppGrid.qml" line="780"/>
         <source>Ok</source>
         <translation type="unfinished">Vale</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="796"/>
+        <location filename="../AppGrid.qml" line="804"/>
         <source>Group name must have at least one character.</source>
         <translation type="unfinished">El nombre del grupo debe tener al menos un carácter.</translation>
     </message>
@@ -120,12 +120,12 @@
         <translation type="obsolete">Eliminar el acceso directo</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="893"/>
+        <location filename="../AppGrid.qml" line="901"/>
         <source>New pinned shortcut</source>
         <translation type="unfinished">Nuevo acceso directo anclado</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="900"/>
+        <location filename="../AppGrid.qml" line="908"/>
         <source>Pinned shortcut already exists</source>
         <translation type="unfinished">El acceso directo anclado ya existe</translation>
     </message>

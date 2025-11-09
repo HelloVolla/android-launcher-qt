@@ -24,74 +24,74 @@
         <translation type="unfinished">apps</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="287"/>
+        <location filename="../AppGrid.qml" line="292"/>
         <source>Apps</source>
         <translation>Apps</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="300"/>
+        <location filename="../AppGrid.qml" line="305"/>
         <source>Filter apps</source>
         <translation>Filter apps</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="401"/>
+        <location filename="../AppGrid.qml" line="409"/>
         <source>Add to shortcuts</source>
         <translation>Toevoegen aan snelkoppelingen</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="419"/>
-        <location filename="../AppGrid.qml" line="423"/>
-        <location filename="../AppGrid.qml" line="424"/>
+        <location filename="../AppGrid.qml" line="427"/>
+        <location filename="../AppGrid.qml" line="431"/>
+        <location filename="../AppGrid.qml" line="432"/>
         <source>Open</source>
         <translation>Openen</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="514"/>
+        <location filename="../AppGrid.qml" line="522"/>
         <source>Add to new group</source>
         <translation type="unfinished">Toevoegen aan nieuwe groep</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="536"/>
+        <location filename="../AppGrid.qml" line="544"/>
         <source>Remove from group</source>
         <translation type="unfinished">Verwijderen uit groep</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="557"/>
+        <location filename="../AppGrid.qml" line="565"/>
         <source>Use custom groups</source>
         <translation type="unfinished">Aangepaste groepen gebruiken</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="630"/>
+        <location filename="../AppGrid.qml" line="638"/>
         <source>Remove group</source>
         <translation type="unfinished">Groep verwijderen</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="650"/>
+        <location filename="../AppGrid.qml" line="658"/>
         <source>Edit groupname</source>
         <translation type="unfinished">Groepsnaam bewerken</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="711"/>
+        <location filename="../AppGrid.qml" line="719"/>
         <source>Group name</source>
         <translation type="unfinished">Groepsnaam</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="727"/>
+        <location filename="../AppGrid.qml" line="735"/>
         <source>Enter a group name</source>
         <translation type="unfinished">Voer een groepsnaam in</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="747"/>
+        <location filename="../AppGrid.qml" line="755"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuleren</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="772"/>
+        <location filename="../AppGrid.qml" line="780"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="796"/>
+        <location filename="../AppGrid.qml" line="804"/>
         <source>Group name must have at least one character.</source>
         <translation type="unfinished">De groepsnaam moet uit ten minste één teken bestaan.</translation>
     </message>
@@ -100,22 +100,22 @@
         <translation type="vanished">Open applicatie</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="435"/>
+        <location filename="../AppGrid.qml" line="443"/>
         <source>Open Shortcut</source>
         <translation>Open snelkoppeling</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="435"/>
+        <location filename="../AppGrid.qml" line="443"/>
         <source>Open App</source>
         <translation type="unfinished">Open app</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="470"/>
+        <location filename="../AppGrid.qml" line="478"/>
         <source>Remove App</source>
         <translation>Verwijder app</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="489"/>
+        <location filename="../AppGrid.qml" line="497"/>
         <source>Remove Bookmark</source>
         <translation>Verwijder bladwijzer</translation>
     </message>
@@ -124,12 +124,12 @@
         <translation type="vanished">Verwijder snelkoppeling</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="893"/>
+        <location filename="../AppGrid.qml" line="901"/>
         <source>New pinned shortcut</source>
         <translation>Nieuwe vastgezette snelkoppeling</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="900"/>
+        <location filename="../AppGrid.qml" line="908"/>
         <source>Pinned shortcut already exists</source>
         <translation>De vastgezette snelkoppeling bestaat al</translation>
     </message>
