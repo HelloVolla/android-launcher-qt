@@ -102,6 +102,17 @@
         <source>Add to </source>
         <translation>में जोड़ें</translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">पसंदीदा</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">पसंदीदा</translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>

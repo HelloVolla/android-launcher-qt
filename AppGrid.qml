@@ -13,6 +13,7 @@ LauncherPage {
     anchors.fill: parent    
 
     property string textInput
+    property string favoritsLabel: "AAAA"
     property real labelPointSize: 16
 
     property var appGroups: [] // QML elements with app grids
@@ -116,7 +117,6 @@ LauncherPage {
                     app.customCategory = filteredGroupNames[0]
                 }
             })
-            //appsAndShortcuts.sort(function(a, b) { return b["customCategory"] - a["customCategory"] })
             createAppGroupsByCategory(appsAndShortcuts, groupedApps, true)
         }
 
@@ -125,11 +125,11 @@ LauncherPage {
 
     function createAppGroupsByCategory(appsToGroup, groupedApps, useCustomGroups) {
         console.debug("AppGrid | createAppGroupsByCategory: ", appsToGroup.length, groupedApps.length, useCustomGroups)
-
         var categoryKey = useCustomGroups ? "customCategory" : "category"
+
         appsToGroup.sort(function(a, b) {
-            var aa = a[categoryKey] !== undefined ? a[categoryKey] : ""
-            var bb = b[categoryKey] !== undefined ? b[categoryKey] : ""
+            var aa = a[categoryKey] !== undefined ? a[categoryKey] : "ZZZZ"
+            var bb = b[categoryKey] !== undefined ? b[categoryKey] : "ZZZZ"
             if (aa > bb) return 1
             else if (aa < bb) return -1
             else return 0
@@ -205,7 +205,7 @@ LauncherPage {
 //                console.debug(key, apps[i][key]);
 //            })
 //        }
-        var app = apps.filter(e => e.appId === appToUpdate || (e.shortcutId !== undefined && e.shortcutId === appToUpdate))[0]
+        var app = apps.filter(e => e.package === appToUpdate || (e.shortcutId !== undefined && e.shortcutId === appToUpdate))[0]
         if (appGroupName !== undefined) {
             app.customCategory = appGroupName
             // Add to group
@@ -604,12 +604,17 @@ LauncherPage {
 
         function createCustomGroupMenuItems() {
             var customGroups = settings.getCustomGroups()
+
+            console.debug("AppGrid | Categories: " + JSON.stringify(customGroups))
+            if (Object.keys(customGroups).indexOf(favoritsLabel) === -1) customGroups[favoritsLabel] = new Array
+
             Object.keys(customGroups).forEach(key => {
                 console.log("AppGrid | createCustomGroupMenuItems: Create custom group " + key)
                 var component = Qt.createComponent("/AppGridMenuItem.qml", appContextMenu)
+                var appId = app.shortcutId !== undefined ? app.shortcutId : app.package
                 var properties = { "height": appContextMenu.menuItemHeight, "innerSpacing" : mainView.innerSpacing,
                                    "labelPointSize" : appLauncher.labelPointSize, "labelWidth" : appContextMenu.menuWidth,
-                                   "appId" : app.itemId, "appGroup" : key, "appLauncher": appLauncher}
+                                   "appId" : appId, "appGroup" : key, "appLauncher": appLauncher}
                 var object = component.createObject(appContextMenu, properties)
                 appContextMenu.addItem(object)
                 console.log("AppGrid | createCustomGroupMenuItems: Menu items " + appContextMenu.count)

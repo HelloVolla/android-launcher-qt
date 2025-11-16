@@ -158,6 +158,17 @@
         <source>Add to </source>
         <translation type="unfinished">添加到</translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">夹</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">夹</translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>

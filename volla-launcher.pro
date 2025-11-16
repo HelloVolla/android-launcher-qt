@@ -96,12 +96,7 @@ DISTFILES += \
     android/src/com/volla/launcher/worker/ContactWorker.java \
     android/src/com/volla/launcher/worker/MessageWorker.java \
     android/src/com/volla/launcher/worker/WallpaperWorker.java \
-    android/src/com/volla/launcher/worker/AppWorker.java \ \
-    translations/Volla_no.ts \
-    translations/Volla_pl.ts \
-    translations/Volla_ru.ts \
-    translations/Volla_sr.ts \
-    translations/Volla_hi.ts
+    android/src/com/volla/launcher/worker/AppWorker.java
 
 TRANSLATIONS += \
     translations/Volla_de.ts \
@@ -116,7 +111,7 @@ TRANSLATIONS += \
     translations/Volla_fi.ts \
     translations/Volla_it.ts \
     translations/Volla_sk.ts \
-    translations/Volla_jp.ts \
+    translations/Volla_ja.ts \
     translations/Volla_en.ts \
     translations/Volla_pt.ts \
     translations/Volla_cs.ts \

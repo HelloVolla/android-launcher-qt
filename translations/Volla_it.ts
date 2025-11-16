@@ -110,6 +110,17 @@
         <source>Add to </source>
         <translation type="unfinished">Aggiungi a </translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Preferiti</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Preferiti</translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>

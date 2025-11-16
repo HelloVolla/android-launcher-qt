@@ -110,6 +110,17 @@
         <source>Add to </source>
         <translation type="unfinished">Добави към </translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Любими</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Любими</translation>
+    </message>
 </context>
 <context>
     <name>Browser</name>

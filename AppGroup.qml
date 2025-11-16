@@ -105,6 +105,7 @@ Item {
         topPadding: groupItem.groupIndex === 0 ?
                         0 : groupItem.groupIndex === 1 && groupItem.selectedGroupIndex === 0 ?
                             groupItem.innerSpacing / 2 : groupItem.innerSpacing
+
         Button {
             id: groupHeader
             visible: groupItem.isHeaderVisible
@@ -112,7 +113,7 @@ Item {
             flat: true
             text: groupItem.groupLabel
             contentItem: Label {
-                text: groupHeader.text
+                text: groupHeader.text === "AAAA" ? qsTr("Favorits") : groupHeader.text
                 padding: groupItem.innerSpacing / 2
                 color: Universal.foreground
                 opacity: 0.5
@@ -130,7 +131,7 @@ Item {
             }
 
             onPressAndHold: {
-                groupItem.parent.openGroupContextMenu(groupHeader, groupGrid)
+                if (groupHeader.text !== "AAAA") groupItem.parent.openGroupContextMenu(groupHeader, groupGrid)
             }
         }
 

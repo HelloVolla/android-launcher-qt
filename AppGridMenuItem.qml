@@ -15,7 +15,7 @@ MenuItem {
     font.pointSize: labelPointSize
     contentItem: Label {
         width: appGridMenuItem.labelWidth
-        text: qsTr("Add to ") + appGridMenuItem.appGroup
+        text: appGridMenuItem.appGroup === "AAAA" ? "★ " + qsTr("Add to ") + qsTr("Favorits") : qsTr("Add to ") + appGridMenuItem.appGroup
         font: appGridMenuItem.font
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap

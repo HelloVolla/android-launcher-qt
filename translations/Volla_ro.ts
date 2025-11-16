@@ -8,8 +8,8 @@
         <translation type="obsolete">setări</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="93"/>
-        <location filename="../AppGrid.qml" line="102"/>
+        <location filename="../AppGrid.qml" line="94"/>
+        <location filename="../AppGrid.qml" line="103"/>
         <source>Most used</source>
         <translation type="unfinished">Cele mai utilizate</translation>
     </message>
@@ -19,7 +19,7 @@
         <translation type="unfinished">Alte aplicații</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="99"/>
+        <location filename="../AppGrid.qml" line="100"/>
         <source>apps</source>
         <translation type="unfinished">apps</translation>
     </message>
@@ -81,37 +81,37 @@
         <translation type="unfinished">Utilizați grupuri personalizate</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="638"/>
+        <location filename="../AppGrid.qml" line="643"/>
         <source>Remove group</source>
         <translation type="unfinished">Eliminare grup</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="658"/>
+        <location filename="../AppGrid.qml" line="663"/>
         <source>Edit groupname</source>
         <translation type="unfinished">Editați numele grupului</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="719"/>
+        <location filename="../AppGrid.qml" line="724"/>
         <source>Group name</source>
         <translation type="unfinished">Numele grupului</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="735"/>
+        <location filename="../AppGrid.qml" line="740"/>
         <source>Enter a group name</source>
         <translation type="unfinished">Introduceți numele grupului</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="755"/>
+        <location filename="../AppGrid.qml" line="760"/>
         <source>Cancel</source>
         <translation type="unfinished">Anulează</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="780"/>
+        <location filename="../AppGrid.qml" line="785"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="804"/>
+        <location filename="../AppGrid.qml" line="809"/>
         <source>Group name must have at least one character.</source>
         <translation type="unfinished">Numele grupului trebuie să conțină cel puțin un caracter.</translation>
     </message>
@@ -120,12 +120,12 @@
         <translation type="obsolete">Eliminarea comenzii rapide</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="901"/>
+        <location filename="../AppGrid.qml" line="906"/>
         <source>New pinned shortcut</source>
         <translation type="unfinished">Noua comandă rapidă fixată</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="908"/>
+        <location filename="../AppGrid.qml" line="913"/>
         <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Accesul direct fixat există deja</translation>
     </message>
@@ -136,6 +136,19 @@
         <location filename="../AppGridMenuItem.qml" line="18"/>
         <source>Add to </source>
         <translation type="unfinished">Adăugați la </translation>
+    </message>
+    <message>
+        <location filename="../AppGridMenuItem.qml" line="18"/>
+        <source>Favorits</source>
+        <translation type="unfinished">Favorite</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <location filename="../AppGroup.qml" line="116"/>
+        <source>Favorits</source>
+        <translation type="unfinished">Favorite</translation>
     </message>
 </context>
 <context>
