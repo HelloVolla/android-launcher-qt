@@ -106,6 +106,17 @@
         <source>Add to </source>
         <translation type="unfinished">Dodaj do </translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoritos</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoritos</translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>

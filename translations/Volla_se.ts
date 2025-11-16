@@ -8,8 +8,8 @@
         <translation type="obsolete">Inställningar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="93"/>
-        <location filename="../AppGrid.qml" line="102"/>
+        <location filename="../AppGrid.qml" line="94"/>
+        <location filename="../AppGrid.qml" line="103"/>
         <source>Most used</source>
         <translation type="unfinished">Mest använda</translation>
     </message>
@@ -19,7 +19,7 @@
         <translation type="unfinished">Andra appar</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="99"/>
+        <location filename="../AppGrid.qml" line="100"/>
         <source>apps</source>
         <translation type="unfinished">apps</translation>
     </message>
@@ -81,37 +81,37 @@
         <translation type="unfinished">Använd anpassade grupper</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="638"/>
+        <location filename="../AppGrid.qml" line="643"/>
         <source>Remove group</source>
         <translation type="unfinished">Ta bort grupp</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="658"/>
+        <location filename="../AppGrid.qml" line="663"/>
         <source>Edit groupname</source>
         <translation type="unfinished">Redigera gruppnamn</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="719"/>
+        <location filename="../AppGrid.qml" line="724"/>
         <source>Group name</source>
         <translation type="unfinished">Gruppnamn</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="735"/>
+        <location filename="../AppGrid.qml" line="740"/>
         <source>Enter a group name</source>
         <translation type="unfinished">Ange ett gruppnamn</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="755"/>
+        <location filename="../AppGrid.qml" line="760"/>
         <source>Cancel</source>
         <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="780"/>
+        <location filename="../AppGrid.qml" line="785"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="804"/>
+        <location filename="../AppGrid.qml" line="809"/>
         <source>Group name must have at least one character.</source>
         <translation type="unfinished">Gruppnamnet måste innehålla minst ett tecken.</translation>
     </message>
@@ -120,12 +120,12 @@
         <translation type="obsolete">Ta bort genväg</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="901"/>
+        <location filename="../AppGrid.qml" line="906"/>
         <source>New pinned shortcut</source>
         <translation type="unfinished">Ny genväg med fasthållning</translation>
     </message>
     <message>
-        <location filename="../AppGrid.qml" line="908"/>
+        <location filename="../AppGrid.qml" line="913"/>
         <source>Pinned shortcut already exists</source>
         <translation type="unfinished">Den fasthållna genvägen finns redan</translation>
     </message>
@@ -136,6 +136,19 @@
         <location filename="../AppGridMenuItem.qml" line="18"/>
         <source>Add to </source>
         <translation type="unfinished">Lägg till </translation>
+    </message>
+    <message>
+        <location filename="../AppGridMenuItem.qml" line="18"/>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoriter</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <location filename="../AppGroup.qml" line="116"/>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoriter</translation>
     </message>
 </context>
 <context>

@@ -110,6 +110,17 @@
         <source>Add to </source>
         <translation type="unfinished">Føj til </translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoritter</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoritter</translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>

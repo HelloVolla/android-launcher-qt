@@ -102,6 +102,17 @@
         <source>Add to </source>
         <translation type="unfinished">Legg til i </translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoritter</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Favoritter</translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>

@@ -110,6 +110,17 @@
         <source>Add to </source>
         <translation type="unfinished">Přidat do </translation>
     </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Oblíbené</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">Oblíbené</translation>
+    </message>
 </context>
 <context>
     <name>Checkbox</name>

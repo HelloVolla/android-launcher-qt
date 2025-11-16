@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="jp_JP">
+<TS version="2.1" language="ja_JA">
 <context>
     <name>AppGrid</name>
     <message>
@@ -100,7 +100,22 @@
     <name>AppGridMenuItem</name>
     <message>
         <source>Add to</source>
-        <translation type="unfinished">追加する</translation>
+        <translation type="obsolete">追加する</translation>
+    </message>
+    <message>
+        <source>Add to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">お気に入り</translation>
+    </message>
+</context>
+<context>
+    <name>AppGroup</name>
+    <message>
+        <source>Favorits</source>
+        <translation type="unfinished">お気に入り</translation>
     </message>
 </context>
 <context>
@@ -429,7 +444,7 @@
     </message>
     <message>
         <source>Reset shortcuts</source>
-        <translation type="unfinished">ショートカットをリセット</translation>
+        <translation type="obsolete">ショートカットをリセット</translation>
     </message>
     <message>
         <source>Reset launcher</source>
@@ -478,6 +493,45 @@
     <message>
         <source>Show frequently used apps</source>
         <translation type="unfinished">よく使うアプリを表示</translation>
+    </message>
+    <message>
+        <source>Left-handed quick menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset shorcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Setup</name>
+    <message>
+        <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
+        <translation type="obsolete">音声認識によるテキスト入力の設定を行います。設定後、キーボードのマイクアイコンを使用して起動できます。</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">キャンセル</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="obsolete">了解</translation>
     </message>
 </context>
 <context>
@@ -588,7 +642,7 @@
     </message>
 </context>
 <context>
-    <name>Setup</name>
+    <name>SttSetup</name>
     <message>
         <source>Now set up voice recognition for text input, which you can then activate using the microphone icon on the keyboard.</source>
         <translation type="unfinished">音声認識によるテキスト入力の設定を行います。設定後、キーボードのマイクアイコンを使用して起動できます。</translation>
@@ -750,7 +804,7 @@
     </message>
     <message>
         <source>New Subscription</source>
-        <translation type="unfinished">新規購読</translation>
+        <translation type="obsolete">新規購読</translation>
     </message>
     <message>
         <source>You have already subscribed the feed</source>
@@ -770,7 +824,7 @@
     </message>
     <message>
         <source>You have already added the shortcut</source>
-        <translation type="unfinished">ショートカットは既に追加されています</translation>
+        <translation type="obsolete">ショートカットは既に追加されています</translation>
     </message>
     <message>
         <source>Not yet supported</source>
@@ -798,7 +852,7 @@
     </message>
     <message>
         <source>Add to Calendar</source>
-        <translation type="unfinished">カレンダーに追加</translation>
+        <translation type="obsolete">カレンダーに追加</translation>
     </message>
     <message>
         <source>Show in Signal</source>
@@ -866,7 +920,7 @@
     </message>
     <message>
         <source>F-Droid</source>
-        <translation type="unfinished">F-Droid</translation>
+        <translation type="obsolete">F-Droid</translation>
     </message>
     <message>
         <source>Maps</source>
@@ -895,6 +949,22 @@
     <message>
         <source>Create speed dial</source>
         <translation type="unfinished">スピードダイヤルを作成する</translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A-Droid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Subscrption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have alresdy added the shortcut</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
