@@ -230,6 +230,7 @@ ApplicationWindow {
         property var accentColor: Universal.accent
         property var accentTextColor: getContrastColor(accentColor)
         property var fontColor: Universal.foreground
+        property string fontFamily: "Source Sans Pro"
         
         function getContrastColor(hexColor) {
             // If no custom accent color is set (default/system color), always use white text
