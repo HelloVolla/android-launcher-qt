@@ -55,6 +55,8 @@ ApplicationWindow {
               if (mainView.isTablet) AN.SystemDispatcher.dispatch("volla.launcher.runningAppsAction", {})
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
+              // Check system fint
+              AN.SystemDispatcher.dispatch("volla.launcher.fontAction", {})
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
               // Update app grid
@@ -589,7 +591,7 @@ ApplicationWindow {
             if (settings.sync) {
                 settings.sync()
             }
-            console.log("MainView | Swith theme to " + theme + ", " + settings.theme)
+            console.log("MainView | Switch theme to " + theme + ", " + settings.theme)
             switch (theme) {
             case mainView.theme.Dark:
                 Universal.theme = Universal.Dark
@@ -608,7 +610,7 @@ ApplicationWindow {
                 mainView.backgroundOpacity = 0.3
                 mainView.backgroundColor = "transparent"
                 mainView.fontColor = "white"
-            break
+                break
             case mainView.theme.LightTranslucent:
                 Universal.theme = Universal.Light
                 mainView.backgroundOpacity = 0.3
@@ -1198,6 +1200,7 @@ ApplicationWindow {
                         console.log("MainView | Invalid RSS feed url")
                     }
                 } else if (type === "volla.launcher.uiModeResponse") {
+                    console.debug("MainView | volla.launcher.uiModeResponse")
                     mainView.switchTheme(message["uiMode"], false)
                 } else if (type === "volla.launcher.messageResponse") {
                     console.log("MainView | onDispatched: " + type)
@@ -1208,21 +1211,27 @@ ApplicationWindow {
                         mainView.showToast(qsTr(mainView.notifications[message["text"]]))
                     }
                 } else if (type === "volla.launcher.uiModeChanged") {
+                    console.debug("MainView | volla.launcher.uiModeChanged")
                     if (message["uiMode"] !== settings.theme) {
-                        settings.theme = message["uiMode"]
-                        settings.sync()
                         if (message["uiMode"] === mainView.theme.Light) {
-                            if (settings.theme === mainView.theme.LightTranslucent || settings.theme === mainView.theme.DarkTranslucent) {
+                            if (settings.theme === mainView.theme.DarkTranslucent) {
                                 mainView.switchTheme(mainView.theme.LightTranslucent, false)
-                            } else {
+                                settings.theme = mainView.theme.LightTranslucent
+                                settings.sync()
+                            } else if (settings.theme === mainView.theme.Dark) {
                                 mainView.switchTheme(mainView.theme.Light, true)
+                                settings.theme = mainView.theme.Light
+                                settings.sync()
                             }
-
                         } else if (message["uiMode"] === mainView.theme.Dark) {
-                            if (settings.theme === mainView.theme.LightTranslucent || settings.theme === mainView.theme.DarkTranslucent) {
+                            if (settings.theme === mainView.theme.LightTranslucent) {
                                 mainView.switchTheme(mainView.theme.DarkTranslucent, false)
-                            } else {
+                                settings.theme = mainView.theme.DarkTranslucent
+                                settings.sync()
+                            } else if (settings.theme === mainView.theme.Light) {
                                 mainView.switchTheme(mainView.theme.Dark, true)
+                                settings.theme = mainView.theme.Dark
+                                settings.sync()
                             }
                         }
                     }
@@ -1238,6 +1247,8 @@ ApplicationWindow {
                         var object = component.createObject(mainView, properties)
                         object.open()
                     }
+                } else if (type === "volla.launcher.fontResponse") {
+                    console.debug("MainView | System font: " + message["font"])
                 }
             }
         }

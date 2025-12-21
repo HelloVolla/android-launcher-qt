@@ -18,6 +18,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.fonts.SystemFonts;
+import android.graphics.fonts.Font;
 import android.util.Log;
 import android.os.Bundle;
 import android.os.Build;
@@ -30,6 +32,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Set;
 import java.io.ByteArrayOutputStream;
 import androidnative.SystemDispatcher;
 import androidnative.AndroidNativeActivity;
@@ -96,6 +100,13 @@ public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpd
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreated() called");
+
+//        Set<Font> sfs = SystemFonts.getAvailableFonts();
+//        Iterator<Font> fontIterator = sfs.iterator();
+//        while(fontIterator.hasNext()) {
+//           Font f = fontIterator.next();
+//           Log.d(TAG, "Font: " + f.getFile());
+//        }
 
         // Workaround for blank activity
         // https://forum.qt.io/topic/90189/android-e-qt-java-surface-1-not-found/2
