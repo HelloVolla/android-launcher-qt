@@ -101,12 +101,12 @@ public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpd
 
         Log.d(TAG, "onCreated() called");
 
-        Set<Font> sfs = SystemFonts.getAvailableFonts();
-        Iterator<Font> fontIterator = sfs.iterator();
-        while(fontIterator.hasNext()) {
-           Font f = fontIterator.next();
-           Log.d(TAG, "Font: " + f.getFile());
-        }
+//        Set<Font> sfs = SystemFonts.getAvailableFonts();
+//        Iterator<Font> fontIterator = sfs.iterator();
+//        while(fontIterator.hasNext()) {
+//           Font f = fontIterator.next();
+//           Log.d(TAG, "Font: " + f.getFile());
+//        }
 
         // Workaround for blank activity
         // https://forum.qt.io/topic/90189/android-e-qt-java-surface-1-not-found/2

@@ -16,10 +16,10 @@ LauncherPage {
         pluginSettingsItemColumn.loadAvailablePlugins()
     }
 
-    Component.onCompleted: {
-        var fonts = Qt.fontFamilies()
-        for (var i = 0; i < fonts.length; i++) console.debug("Settings | Font: " + fonts[i])
-    }
+//    Component.onCompleted: {
+//        var fonts = Qt.fontFamilies()
+//        for (var i = 0; i < fonts.length; i++) console.debug("Settings | Font: " + fonts[i])
+//    }
 
     Flickable {
         anchors.fill: parent
