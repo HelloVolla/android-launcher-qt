@@ -375,7 +375,7 @@ ApplicationWindow {
             "be.sncbnmbs.b2cmobapp": qsTr("De Trein"),
             "be.nexuzhealth.mobile.mynexuz": qsTr("Mynexuzhealth"),
             "com.codesynd.cashfree": qsTr("Bonsai"),
-            "be.introlution.myonlinecalendar": qsTr("MijnOnlineAgenda"),
+            "be.introlution.myonlinecalendar": qsTr("Medische Afspraken"),
             "com.facebook.lite": qsTr("Facebook"),
             "org.mozilla.fennec_fdroid": qsTr("Browser"),
             "com.google.android.gm" : qsTr("Mail"),
@@ -391,6 +391,8 @@ ApplicationWindow {
             "com.volla.launcher": qsTr("Settings"),
             "com.android.fmradio" : qsTr("Radio"),
             "de.baumann.weather": qsTr("Weather")
+            "co.prestosole.clima": qsTr("Weer")
+            "com.vdk.prod": qsTr("Vdk Bank")
         }
 
         property string cacheName: "VollaCacheDB"
