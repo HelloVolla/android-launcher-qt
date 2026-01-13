@@ -391,7 +391,7 @@ ApplicationWindow {
             "com.volla.launcher": qsTr("Settings"),
             "com.android.fmradio" : qsTr("Radio"),
             "de.baumann.weather": qsTr("Weather")
-            "co.prestosole.clima": qsTr("Weer")
+            "co.prestosole.clima": qsTr("Weather")
             "com.vdk.prod": qsTr("Vdk Bank")
         }
 
