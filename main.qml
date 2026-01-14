@@ -393,6 +393,7 @@ ApplicationWindow {
             "de.baumann.weather": qsTr("Weather"),
             "co.prestosole.clima": qsTr("Weather"),
             "org.cygnusx1.continuum": qsTr("Reddit"),
+            "com.lscsmartconnection.smart": qsTr("Camera Thuis"),
             "com.vdk.prod": qsTr("Vdk Bank")
         }
 
