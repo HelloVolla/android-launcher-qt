@@ -392,6 +392,7 @@ ApplicationWindow {
             "com.android.fmradio" : qsTr("Radio"),
             "de.baumann.weather": qsTr("Weather"),
             "co.prestosole.clima": qsTr("Weather"),
+            "org.cygnusx1.continuum": qsTr("Reddit"),
             "com.vdk.prod": qsTr("Vdk Bank")
         }
 
