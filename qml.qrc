@@ -116,5 +116,6 @@
         <file>images/center.png</file>
         <file>icons/volla-messages@4x.png</file>
         <file>AppGridMenuItem.qml</file>
+        <file>icons/volla-hub_156x156.png</file>
     </qresource>
 </RCC>

@@ -282,7 +282,7 @@ ApplicationWindow {
             "com.simplemobiletools.notes.pro": "/icons/notes@4x.png",
             "com.simplemobiletools.calculator": "/icons/calculator@4x_104x104px.png",
             "org.fossify.phone": "/icons/dial-phone@4x.png",
-            "org.fossify.smsmessenger": "/icons/message@4x.png",
+            "org.fossify.messages": "/icons/message@4x.png",
             "org.fossify.gallery": "/icons/photo-gallery@4x.png",
             "org.fossify.contacts": "/icons/people-contacts-agenda@4x.png",
             "org.fossify.clock": "/icons/clock@4x.png",
@@ -363,7 +363,8 @@ ApplicationWindow {
             "com.secuso.privacyFriendlyCodeScanner": "/icons/qr-scanner@4x.png",
             "com.twitter.android": "/icons/twitter@4x.png",
             "com.commerzbank.photoTAN": "/icons/photoTAN@4x.png",
-            "com.volla.messages": "/icons/volla-messages@4x.png"
+            "com.volla.messages": "/icons/volla-messages@4x.png",
+            "com.volla.hub": "/icons/volla-hub_156x156"
         }
         property var labelMap: {
             "com.simplemobiletools.filemanager.pro": qsTr("Files"),

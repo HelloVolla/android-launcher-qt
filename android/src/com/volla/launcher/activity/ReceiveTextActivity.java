@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+//import android.content.om.IOverlayManager;
 import android.util.Base64;
 import java.util.Map;
 import java.util.HashMap;
@@ -101,12 +102,12 @@ public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpd
 
         Log.d(TAG, "onCreated() called");
 
-//        Set<Font> sfs = SystemFonts.getAvailableFonts();
-//        Iterator<Font> fontIterator = sfs.iterator();
-//        while(fontIterator.hasNext()) {
-//           Font f = fontIterator.next();
-//           Log.d(TAG, "Font: " + f.getFile());
-//        }
+        Set<Font> sfs = SystemFonts.getAvailableFonts();
+        Iterator<Font> fontIterator = sfs.iterator();
+        while(fontIterator.hasNext()) {
+           Font f = fontIterator.next();
+           Log.d(TAG, "Font: " + f.getFile());
+        }
 
         // Workaround for blank activity
         // https://forum.qt.io/topic/90189/android-e-qt-java-surface-1-not-found/2
@@ -179,6 +180,16 @@ public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpd
             // Force portrait mode on phones
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+
+//        IOverlayManager overlayManager = IOverlayManager.Stub.asInterface(
+//            ServiceManager.getService(Context.OVERLAY_SERVICE)
+//        );
+
+//        List<OverlayInfo> overlays = overlayManager.getOverlayInfosForTarget("android", UserHandle.USER_SYSTEM);
+
+//        for (OverlayInfo info : overlays) {
+//            Log.d(TAG, info.packageName + " enabled=" + info.isEnabled());
+//        }
     }
 
     private boolean isTablet(Context context) {
