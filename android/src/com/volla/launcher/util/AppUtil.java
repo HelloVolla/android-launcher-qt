@@ -124,7 +124,7 @@ public class AppUtil {
                             }
                             double userHandle = 0;
                             if (message.get("userHandle") != null) {
-                                userHandle = (double) message.get("userHandle");
+                                userHandle = (int) message.get("userHandle");
                             }
 
                             Log.d(TAG, packageName + ", " + className + ", " + String.valueOf((int)userHandle) + ", " + String.valueOf(isCloned));

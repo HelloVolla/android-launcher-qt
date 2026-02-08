@@ -1341,6 +1341,9 @@ ApplicationWindow {
                 mainView.accentTextColor = getContrastColor(mainView.accentColor)
             }
 
+            // Todo: Check font setting
+            // regularFont.source = "/font/poppins.tiff"
+
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)
             } else {
