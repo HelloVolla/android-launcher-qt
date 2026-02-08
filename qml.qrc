@@ -117,5 +117,9 @@
         <file>icons/volla-messages@4x.png</file>
         <file>AppGridMenuItem.qml</file>
         <file>icons/volla-hub_156x156.png</file>
+        <file>fonts/NotoColorEmoji_WindowsCompatible.ttf</file>
+        <file>fonts/Poppins-Bold.ttf</file>
+        <file>fonts/Poppins-Italic.ttf</file>
+        <file>fonts/Poppins-Regular.ttf</file>
     </qresource>
 </RCC>

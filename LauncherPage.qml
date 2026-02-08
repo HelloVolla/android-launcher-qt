@@ -11,4 +11,12 @@ Page {
     anchors.bottomMargin: Screen.desktopAvailableWidth > 520 ? 22 : 0
     anchors.leftMargin: Screen.desktopAvailableWidth > 520 ? 100 : 0
     anchors.rightMargin: Screen.desktopAvailableWidth > 520 ? 100 : 0
+
+    FontLoader {
+        id: regularFont
+    }
+
+    FontLoader {
+            source: "qrc:/fonts/NotoColorEmoji_WindowsCompatible.ttf"
+    }
 }
