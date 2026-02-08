@@ -233,7 +233,7 @@ Item {
                             groupItem.parent.closeAppContextMenu()
                             groupGrid.currentIndex = -1
                         } else if (model.package.length > 0) {
-                            console.log("App Group | App " + model.label + " selected")
+                            console.log("AppGroup | App " + model.label + " selected")
                             // As a workaround for a missing feature in the phone app
                             if (model.package === groupItem.phoneApp) {
                                 if (groupItem.newCalls) {
@@ -247,14 +247,19 @@ Item {
                             } else {
                                 AN.SystemDispatcher.dispatch("volla.launcher.runAppAction",
                                                              {"appId": model.package, "class": model.className,
-                                                              "userHandle": model.userHandle, "isCloned": model.isCloned})
+                                                              "userHandle": Math.floor(model.userHandle), "isCloned": model.isCloned})
                             }
                             AN.SystemDispatcher.dispatch("volla.launcher.clearRedDot", {"package": model.package})
                         }
                     }
                     onPressAndHold: {
                         groupGrid.currentIndex = index
-                        groupItem.parent.openAppContextMenu(groupModel.modelArr[index], gridCell, groupGrid)
+                        if (model.shortcutId !== undefined && model.shortcutId.length > 0) {
+                            var modelElem = groupModel.modelArr.filter(modelElem => modelElem.shortcutId === model.shortcutId)
+                        } else {
+                            modelElem = groupModel.modelArr.filter(modelElem => modelElem.package === model.package)
+                        }
+                        groupItem.parent.openAppContextMenu(modelElem[0], gridCell, groupGrid)
                     }
                 }
 
@@ -335,6 +340,7 @@ Item {
                 groupHeader.text = groupLabel.toLowerCase() === "apps"  ? "+" + groupModel.count + " " + groupLabel : groupLabel
                 groupItem.visible = groupModel.count > 0
             }
+
             Component.onCompleted: {
                 console.debug("AppGroup " + groupIndex + " | Workerscript established" );
                 isReady = true
@@ -351,9 +357,9 @@ Item {
             property var modelArr: new Array
             property var pendingMessage
 
-            onCountChanged: {
-                console.log("AppGroup " + groupIndex + " | Number of grid itens changed: " + count)
-            }
+//            onCountChanged: {
+//                console.log("AppGroup " + groupIndex + " | Number of grid itens changed: " + count)
+//            }
 
             // Call this method, if apps or shortcuts have been changed
             function prepareModel() {
@@ -367,7 +373,7 @@ Item {
                         "text" : groupItem.textInput
                     })
                 } else {
-                    console.debug("AppGroup " + groupIndex + " | Will define pending message for script status " + groupModelWorker.status)
+                    console.debug("AppGroup " + groupIndex + " | Will define pending message for script")
                     pendingMessage = {
                         "apps": groupItem.pinnedShortcuts.concat(groupItem.apps),
                         "labelMap" : groupItem.labelMap,
