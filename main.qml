@@ -1342,7 +1342,8 @@ ApplicationWindow {
             }
 
             // Todo: Check font setting
-            // regularFont.source = "/font/poppins.tiff"
+//            regularFont.source = "/fonts/Poppins-Regular.ttf"
+//            console.debug("MainView | Regular font: " + regularFont.name)
 
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)
@@ -1373,12 +1374,6 @@ ApplicationWindow {
             }
             mainView.useVibration = useHapticMenus
             mainView.useColoredIcons = useColoredIcons
-//            if (mainView.useLeftHandedMenu !== leftHandedMenu) {
-//                mainView.useLeftHandedMenu = leftHandedMenu
-//                springboardLoader.active = false
-//                springboardLoader.active = true
-//                springboard.children[0].item.updateShortcuts(getActions())
-//            }
             if (settings.sync) {
                 settings.sync()
             }

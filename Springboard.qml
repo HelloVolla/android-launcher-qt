@@ -37,6 +37,10 @@ LauncherPage {
         listModel.update()
     }
 
+    FontLoader {
+        id: regularFont
+    }
+
     Component.onCompleted: {
         listModel.update()
         shortcutMenu.updateShortcuts(mainView.getActions())
@@ -52,6 +56,9 @@ LauncherPage {
         for (i = 0; i < installedPlugins.length; i++) {
             addPlugin(mainView.getInstalledPluginSource(installedPlugins[i].id), installedPlugins[i].id)
         }
+
+        regularFont.source = "/fonts/Poppins-Regular.ttf"
+        console.debug("Springboard | Regular font: " + regularFont.name)
     }
 
     Connections {
@@ -149,6 +156,7 @@ LauncherPage {
                 width: parent.width
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
+                //font.family: regularFont.name
 
                 background: Rectangle {
                     color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
