@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.telephony.gsm.SmsManager;
 import android.widget.Toast;
 import android.graphics.Bitmap;
@@ -235,12 +236,20 @@ public class MessageUtil {
 
                             Log.d(TAG, "Will send Signal message to " + number);
 
-                            Intent intent = new Intent(Intent.ACTION_SENDTO);
-                            intent.setPackage("org.thoughtcrime.securesms");
-                            intent.setData(Uri.parse("smsto:" + number));
-                            intent.putExtra("sms_body", text);
-                            if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                                activity.startActivity(intent);
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+                            sendIntent.setType("text/plain");
+
+                            String signalPackage = "org.thoughtcrime.securesms";
+
+                            Intent signalIntent = createSignalSpecificIntent(activity, sendIntent, signalPackage);
+
+                            if (signalIntent != null) {
+                                Log.d(TAG, "Use signal intent");
+                                activity.startActivity(signalIntent);
+                            } else {
+                                activity.startActivity(Intent.createChooser(sendIntent, "Send with Signal"));
                             }
                         }
                     };
@@ -263,5 +272,20 @@ public class MessageUtil {
         }
 
         return value;
+    }
+
+    static Intent createSignalSpecificIntent(Context context, Intent baseIntent, String targetPackage) {
+        PackageManager packageManager = context.getPackageManager();
+        java.util.List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(baseIntent, 0);
+
+        for (ResolveInfo resolveInfo : resolveInfoList) {
+            Log.d(TAG, "Package name: " + resolveInfo.activityInfo.packageName);
+            if (resolveInfo.activityInfo.packageName.equals(targetPackage)) {
+                Intent intent = new Intent(baseIntent);
+                intent.setPackage(targetPackage);
+                return intent;
+            }
+        }
+        return null;
     }
 }

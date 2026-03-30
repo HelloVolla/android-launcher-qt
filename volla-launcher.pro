@@ -74,6 +74,7 @@ DISTFILES += \
     android/src/com/volla/launcher/util/MMSManager.java \
     android/src/com/volla/launcher/util/NotificationPlugin.java \
     android/src/com/volla/launcher/util/NotificationUtils.java \
+    android/src/com/volla/launcher/util/OverlayReflect.java \
     android/src/com/volla/launcher/util/Settings.java \
     android/src/com/volla/launcher/util/ShortcutUtil.java \
     android/src/com/volla/launcher/util/SignalUtil.java \
