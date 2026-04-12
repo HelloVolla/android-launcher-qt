@@ -7,12 +7,14 @@ MenuItem {
     property var appLauncher
     property string appId
     property string appGroup
+    property string fontFamilyName
     property double innerSpacing
     property double labelPointSize
     property double labelWidth
 
     anchors.margins: innerSpacing
     font.pointSize: labelPointSize
+    font.family: fontFamilyName
     contentItem: Label {
         width: appGridMenuItem.labelWidth
         text: appGridMenuItem.appGroup === "AAAA" ? "★ " + qsTr("Add to ") + qsTr("Favorits") : qsTr("Add to ") + appGridMenuItem.appGroup

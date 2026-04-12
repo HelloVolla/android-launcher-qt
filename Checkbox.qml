@@ -6,6 +6,7 @@ import QtQuick.Controls.Universal 2.12
 CheckBox {
     id: settingsCheckbox
 
+    property string fontFamilyName
     property double labelFontSize
     property double circleSize
     property var actionId
@@ -26,11 +27,68 @@ CheckBox {
         elide: Text.ElideRight
         width: parent.width - leftPadding * 2 - removeButton.width
         leftPadding: settingsCheckbox.indicator.width + settingsCheckbox.spacing
+        font.family: fontFamilyName
         font.pointSize: labelFontSize
         font.weight: Font.Normal
         color: Universal.foreground
         opacity: settingsCheckbox.checked ? 1.0 : 0.7
         verticalAlignment: Text.AlignVCenter
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Poppins-Regular.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Poppins-Bold.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Poppins-Italic.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/selawk.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/selawkb.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Lato-Regular.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Lato-Bold.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Lato-Italic.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Rubik-Regular.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Rubik-Bold.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/Rubik-Italic.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/IBMPlexSans-Regular.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/IBMPlexSans-Bold.ttf"
+    }
+
+    FontLoader {
+        source: "qrc:/fonts/IBMPlexSans-Italic.ttf"
     }
 
     Button {
@@ -40,6 +98,7 @@ CheckBox {
         leftPadding: settingsCheckbox.leftPadding
         flat: true
         text: "<font color='#808080'>×</font>"
+        font.family: fontFamilyName
         font.pointSize: labelFontSize
         onClicked: {
             console.log("Checkbox | Remove item from settings: " + settingsCheckbox.text)
@@ -55,6 +114,7 @@ CheckBox {
         leftPadding: settingsCheckbox.leftPadding
         flat: true
         text: "<font color='#808080'>ⓘ</font>"
+        font.family: fontFamilyName
         font.pointSize: labelFontSize
         onClicked: {
             console.log("Checkbox | Show description: " + settingsCheckbox.text)

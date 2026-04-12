@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import org.qtproject.qt5.android.QtNative;
 import com.volla.launcher.R;
+import com.volla.launcher.util.OverlayReflect;
 
 public class LayoutUtil {
 
@@ -158,9 +159,7 @@ public class LayoutUtil {
                     Runnable runnable = new Runnable () {
                         public void run() {
                             int resId = Resources.getSystem().getIdentifier("config_bodyFontFamily", "string", "android");
-                            String systemFont;
-                            if (resId == 0) systemFont = "";
-                            else systemFont = Resources.getSystem().getString(resId);
+                            String systemFont = OverlayReflect.getEnabledFontOverlay();
                             Map responseMessage = new HashMap();
                             responseMessage.put("font", systemFont);
                             SystemDispatcher.dispatch(GOT_SYSTEM_FONT, responseMessage);

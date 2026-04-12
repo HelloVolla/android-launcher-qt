@@ -55,7 +55,7 @@ ApplicationWindow {
               if (mainView.isTablet) AN.SystemDispatcher.dispatch("volla.launcher.runningAppsAction", {})
               // Start onboarding for the first start of the app
               console.log("MainView | First start: " + settings.firstStart)
-              // Check system fint
+              // Check system font
               AN.SystemDispatcher.dispatch("volla.launcher.fontAction", {})
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
@@ -117,6 +117,7 @@ ApplicationWindow {
         property real largeFontSize: 20.0
         property real mediumFontSize: 18.0
         property real smallFontSize: 16.0
+        property string mainFontName: "Noto Sans"
 
         property var collectionMode : {
             'People' : 0,
@@ -436,6 +437,10 @@ ApplicationWindow {
 
         onBackgroundOpacityChanged: {
             updateGridView("backgroundOpacity", backgroundOpacity)
+        }
+
+        FontLoader {
+            id: regularFont
         }
 
         Item {
@@ -1250,6 +1255,23 @@ ApplicationWindow {
                     }
                 } else if (type === "volla.launcher.fontResponse") {
                     console.debug("MainView | System font: " + message["font"])
+
+                    if (message["font"] === "com.android.overlay.font.poppins") {
+                        mainView.mainFontName = "Poppins"
+                        regularFont.name = "Poppins"
+                    } else if (message["font"] === "com.android.overlay.font.roboto") {
+                        mainView.mainFontName = "Roboto"
+                    } else if (message["font"] === "com.volla.overlay.font.plex") {
+                        mainView.mainFontName = "IBM Plex Sans"
+                    } else if (message["font"] === "org.lineageos.overlay.font.rubik") {
+                        mainView.mainFontName = "Rubik"
+                    } else if (message["font"] === "org.lineageos.overlay.font.lato") {
+                        mainView.mainFontName = "Lato"
+                    } else if (message["font"] === "com.android.overlay.font.selawik") {
+                        mainView.mainFontName = "Selavik"
+                    } else {
+                        mainView.mainFontName = "Noto Sans"
+                    }
                 }
             }
         }
@@ -1340,10 +1362,6 @@ ApplicationWindow {
                 mainView.accentColor = settings.customAccentColor
                 mainView.accentTextColor = getContrastColor(mainView.accentColor)
             }
-
-            // Todo: Check font setting
-//            regularFont.source = "/fonts/Poppins-Regular.ttf"
-//            console.debug("MainView | Regular font: " + regularFont.name)
 
             if (Universal.theme !== settings.theme) {
                 mainView.switchTheme(settings.theme, firstStart)

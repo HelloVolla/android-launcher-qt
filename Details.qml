@@ -52,6 +52,7 @@ LauncherPage {
                 width: parent.width - 2 * mainView.innerSpacing - pinButton.width - trashButton.width - pinBadge.width - noteShareButton.width
                 height: pinButton.height
                 text: detailPage.currentDetailAuthorAndDate
+                font.family: regularFont.name
                 font.pointSize: mainView.mediumFontSize
                 color: mainView.fontColor
                 opacity: 0.6
@@ -267,6 +268,7 @@ LauncherPage {
             Label {
                 id: title
                 width: parent.width - 2 * mainView.innerSpacing
+                font.family: regularFont.name
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
                 topPadding: mainView.innerSpacing
@@ -277,6 +279,7 @@ LauncherPage {
                 id: author
                 width: parent.width - 2 * mainView.innerSpacing
                 lineHeight: 1.1
+                font.family: regularFont.name
                 font.pointSize: mainView.smallFontSize
                 color: Universal.foreground
                 opacity: 0.7
@@ -294,6 +297,7 @@ LauncherPage {
                 Button {
                     id: openButton
                     text: qsTr("Open in browser")
+                    font.family: regularFont.name
                     font.pointSize: mainView.smallFontSize
                     visible: title.text.length > 0
                     rightPadding: mainView.innerSpacing
@@ -305,6 +309,7 @@ LauncherPage {
                 Button {
                     id: shareButton
                     text: qsTr("Share")
+                    font.family: regularFont.name
                     font.pointSize: mainView.smallFontSize
                     visible: title.text.length > 0
                     onClicked: {
@@ -323,6 +328,7 @@ LauncherPage {
                 id: text
                 width: parent.width - 2 * mainView.innerSpacing
                 lineHeight: 1.1
+                font.family: regularFont.name
                 font.pointSize: mainView.largeFontSize
                 color: Universal.foreground
                 wrapMode: Text.WordWrap
@@ -352,6 +358,7 @@ LauncherPage {
             leftPadding: mainView.innerSpacing
             rightPadding: mainView.innerSpacing
             bottomPadding: mainView.innerSpacing
+            font.family: regularFont.name
             font.pointSize: mainView.largeFontSize
             wrapMode: TextEdit.Wrap
             textFormat: TextEdit.RichText
@@ -413,7 +420,6 @@ LauncherPage {
                 console.log("DetailPage | title: " + message.title)
                 console.log("DetailPage | image: " + message.imageUrl)
                 console.log("DetailPage | video: " + message.videoUrl)
-//                console.log("DetailPage | html: " + message.html)
 
                 title.text = currentTitle !== undefined ? currentTitle : message.title
 
@@ -422,7 +428,6 @@ LauncherPage {
                     html = html.replace("</h1>", "</strong>")
                     html = html.replace(/((<p>){2,})/g, "<p>")
                     html = html.replace(/((<\/p>){2,})/g, "</p>")
-//                    console.log("DetailPage | html: " + html)
 
                     text.text = html
                 }
