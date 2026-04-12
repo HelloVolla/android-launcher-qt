@@ -69,6 +69,7 @@ LauncherPage {
                 padding: mainView.innerSpacing
                 width: parent.width - 2 * mainView.innerSpacing
                 text: qsTr("Settings")
+                font.family: regularFont.name
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
                 bottomPadding: mainView.innerSpacing
@@ -95,6 +96,7 @@ LauncherPage {
                         padding: mainView.innerSpacing
                         width: parent.width
                         text: qsTr("Dark Mode")
+                        font.family: regularFont.name
                         font.pointSize: mainView.largeFontSize
                         font.weight: themeSettingsItem.menuState ? Font.Black : Font.Normal
                         color: themeSettingsItem.menuState ? "white" : Universal.foreground
@@ -137,6 +139,7 @@ LauncherPage {
                         textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
+                        font.family: regularFont.name
                         fontPointSize: mainView.mediumFontSize
                     }
                     HighlightButton {
@@ -154,6 +157,7 @@ LauncherPage {
                         textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
+                        font.family: regularFont.name
                         fontPointSize: mainView.mediumFontSize
                     }
                     HighlightButton {
@@ -171,6 +175,7 @@ LauncherPage {
                         textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
+                        font.family: regularFont.name
                         fontPointSize: mainView.mediumFontSize
                     }
                     HighlightButton {
@@ -188,6 +193,7 @@ LauncherPage {
                         textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
+                        font.family: regularFont.name
                         fontPointSize: mainView.mediumFontSize
                     }
                 }
@@ -336,6 +342,7 @@ LauncherPage {
                             Text {
                                 text: securitySettingsItemTitle.text
                                 width: parent.width - securitySettingsItemTitleIcon.width - mainView.innerSpacing
+                                font.family: regularFont.name
                                 font.pointSize: mainView.largeFontSize
                                 font.weight: securitySettingsItem.menuState ? Font.Black : Font.Normal
                                 color: securitySettingsItem.menuState ? "white" : Universal.foreground
@@ -374,6 +381,7 @@ LauncherPage {
                         text: qsTr("Security mode is OFF")
                         contentItem: Text {
                             text: securityModeOffOption.text
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             font.weight: securitySettingsItem.selectedMenuItem === securityModeOffOption ? Font.Black : Font.Normal
                             color: "white"
@@ -399,6 +407,7 @@ LauncherPage {
                             Text {
                                 text: securityModeOnOption.text
                                 width: parent.width - securityModeOnOptionIcon.width - mainView.innerSpacing
+                                font.family: regularFont.name
                                 font.pointSize: mainView.mediumFontSize
                                 font.weight: securitySettingsItem.selectedMenuItem === securityModeOnOption ? Font.Black : Font.Normal
                                 color: "white"
@@ -533,6 +542,7 @@ LauncherPage {
                             id: dialogTitle
                             text: qsTr("Enter password")
                             color: mainView.fontColor
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             bottomPadding: mainView.innerSpacing
                             background: Rectangle {
@@ -548,6 +558,7 @@ LauncherPage {
                             width: parent.width
                             color: mainView.fontColor
                             placeholderTextColor: "darkgrey"
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             background: Rectangle {
                                 color: mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
@@ -562,6 +573,7 @@ LauncherPage {
                             color: mainView.fontColor
                             topPadding: mainView.innerSpacing
                             bottomPadding: mainView.innerSpacing
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             visible: passwordDialog.definePasswordMode
                             background: Rectangle {
@@ -577,6 +589,7 @@ LauncherPage {
                             width: parent.width
                             color: mainView.fontColor
                             placeholderTextColor: "darkgrey"
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             visible: passwordDialog.definePasswordMode
                             background: Rectangle {
@@ -599,6 +612,7 @@ LauncherPage {
                                 width: parent.width - leftPadding
                                 leftPadding: 2 * mainView.innerSpacing
                                 color: mainView.fontColor
+                                font.family: regularFont.name
                                 font.pointSize: mainView.mediumFontSize
                             }
                         }
@@ -618,6 +632,7 @@ LauncherPage {
                                 contentItem: Text {
                                     text: cancelButton.text
                                     color: mainView.fontColor
+                                    font.family: regularFont.name
                                     font.pointSize: mainView.mediumFontSize
                                     horizontalAlignment: Text.AlignHCenter
                                 }
@@ -643,6 +658,7 @@ LauncherPage {
                                 contentItem: Text {
                                     text: okButton.text
                                     color: mainView.fontColor
+                                    font.family: regularFont.name
                                     font.pointSize: mainView.mediumFontSize
                                     horizontalAlignment: Text.AlignHCenter
                                 }
@@ -828,7 +844,7 @@ LauncherPage {
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": getFilteredShortcuts(mainView.defaultActions, "id", shortcuts[i]["id"]).length === 0,
-                                "accentColor": mainView.accentColor }
+                                "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
                             var object = component.createObject(shortcutSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             shortcutSettingsItemColumn.checkboxes.push(object)
@@ -843,7 +859,7 @@ LauncherPage {
                             "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                             "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                             "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                            "hasRemoveButton": true, "accentColor": mainView.accentColor }
+                            "hasRemoveButton": true, "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
                         var object = component.createObject(shortcutSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         shortcutSettingsItemColumn.checkboxes.push(object)
@@ -896,6 +912,7 @@ LauncherPage {
                 bottomPadding: mainView.innerSpacing / 2
                 flat: true
                 text: "+"
+                font.family: regularFont.name
                 font.pointSize: mainView.largeFontSize
                 visible: false
 
@@ -928,6 +945,7 @@ LauncherPage {
                             contentItem: Text {
                                 text: model.label
                                 color: mainView.fontColor
+                                font.family: regularFont.name
                                 font.pointSize: mainView.mediumFontSize
                                 elide: Text.ElideRight
                             }
@@ -949,7 +967,7 @@ LauncherPage {
                                     "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                     "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                     "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                    "hasRemoveButton": true, "accentColor": mainView.accentColor }
+                                    "hasRemoveButton": true, "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
                                 var object = component.createObject(shortcutSettingsItemColumn, properties)
                                 shortcutSettingsItemColumn.checkboxes.push(object)
                                 appMenu.close()
@@ -1016,7 +1034,7 @@ LauncherPage {
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                "accentColor": mainView.accentColor}
+                                "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name}
                         var object = component.createObject(sourceSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         sourceSettingsItemColumn.checkboxes.push(object)
@@ -1108,7 +1126,7 @@ LauncherPage {
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2, "isToggle": true,
-                                "accentColor": mainView.accentColor }
+                                "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
                         var object = component.createObject(searchSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
@@ -1118,6 +1136,7 @@ LauncherPage {
                         properties["text"] = qsTr("Startpage")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.StartPage
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(searchSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
@@ -1127,6 +1146,7 @@ LauncherPage {
                         properties["text"] = qsTr("MetaGer")
                         properties["checked"] = mainView.getSearchMode() === mainView.searchMode.MetaGer
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(searchSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
@@ -1137,6 +1157,7 @@ LauncherPage {
                             properties["text"] = mainView.searchEngineName
                             properties["checked"] = mainView.getSearchMode() === mainView.searchMode.Custom
                             properties["accentColor"] = mainView.accentColor
+                            properties["fontFamilyName"] = regularFont.name
                             object = component.createObject(searchSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             searchSettingsItemColumn.checkboxes.push(object)
@@ -1220,7 +1241,7 @@ LauncherPage {
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                "accentColor": mainView.accentColor }
+                                "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
                         var object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1230,6 +1251,7 @@ LauncherPage {
                         properties["text"] = qsTr("Use colored app icons")
                         properties["checked"] = designSettings.useColoredIcons
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1239,6 +1261,8 @@ LauncherPage {
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
+
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1248,6 +1272,7 @@ LauncherPage {
                         properties["text"] = qsTr("Use haptic menus")
                         properties["checked"] = designSettings.useHapticMenus
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1257,6 +1282,7 @@ LauncherPage {
                         properties["text"] = qsTr("Show frequently used apps")
                         properties["checked"] = designSettings.useGroupedApps
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1266,6 +1292,7 @@ LauncherPage {
                         properties["text"] = qsTr("Use app categories")
                         properties["checked"] = designSettings.useCategories
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1275,6 +1302,7 @@ LauncherPage {
                         properties["text"] = qsTr("Left-handed quick menu")
                         properties["checked"] = designSettings.leftHandedMenu
                         properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
@@ -1360,6 +1388,7 @@ LauncherPage {
                 leftPadding: mainView.innerSpacing
                 rightPadding: mainView.innerSpacing
                 text: qsTr("Background blur")
+                font.family: regularFont.name
                 font.pointSize: mainView.mediumFontSize
                 visible: false
             }
@@ -1415,6 +1444,7 @@ LauncherPage {
                 width: parent.width
                 height: mainView.largeFontSize + mainView.innerSpacing * 2
                 text: qsTr("Accent Color")
+                font.family: regularFont.name
                 font.pointSize: mainView.mediumFontSize
                 padding: mainView.innerSpacing
                 flat: true
@@ -1489,7 +1519,7 @@ LauncherPage {
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
                                 "hasRemoveButton": false, // Relevant as soon more widgets can be installed
-                                "accentColor": mainView.accentColor }
+                                "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
                             var object = component.createObject(widgetsSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             widgetsSettingsItemColumn.checkboxes.push(object)
@@ -1569,6 +1599,7 @@ LauncherPage {
                         contentItem: Text {
                             width: parent.width - 2 * pluginSettingsItemButton.padding
                             text: qsTr("Springboard Skills")
+                            font.family: regularFont.name
                             font.pointSize: mainView.largeFontSize
                             font.weight: pluginSettingsItemColumn.menuState ? Font.Black : Font.Normal
                             color: Universal.foreground
@@ -1639,7 +1670,7 @@ LauncherPage {
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
-                                "hasDescriptionButton": true, "accentColor": mainView.accentColor }
+                                "hasDescriptionButton": true, "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
                             var object = component.createObject(pluginSettingsItemColumn, properties)
                             object.activeCheckbox = true
                             pluginSettingsItemColumn.checkboxes.push(object)
@@ -1708,6 +1739,7 @@ LauncherPage {
                             text: pluginDialog.dialogDescritpion
                             color: mainView.fontColor
                             wrapMode: Text.WordWrap
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             background: Rectangle {
                                 color: "transparent"
@@ -1725,6 +1757,7 @@ LauncherPage {
                             contentItem: Text {
                                 text: okButton.text
                                 color: mainView.fontColor
+                                font.family: regularFont.name
                                 font.pointSize: mainView.mediumFontSize
                                 horizontalAlignment: Text.AlignHCenter
                             }
@@ -1826,6 +1859,7 @@ LauncherPage {
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reset news feeds")
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
@@ -1860,6 +1894,7 @@ LauncherPage {
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reset shorcuts")
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
@@ -1894,6 +1929,7 @@ LauncherPage {
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reload contacts")
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground
@@ -1928,6 +1964,7 @@ LauncherPage {
                         contentItem: Text {
                             width: parent.width - 2 * resetSettingsItemButton.padding
                             text: qsTr("Reset launcher")
+                            font.family: regularFont.name
                             font.pointSize: mainView.mediumFontSize
                             font.weight: Font.Normal
                             color: Universal.foreground

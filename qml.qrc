@@ -121,5 +121,16 @@
         <file>fonts/Poppins-Bold.ttf</file>
         <file>fonts/Poppins-Italic.ttf</file>
         <file>fonts/Poppins-Regular.ttf</file>
+        <file>fonts/selawk.ttf</file>
+        <file>fonts/selawkb.ttf</file>
+        <file>fonts/Lato-Bold.ttf</file>
+        <file>fonts/Lato-Italic.ttf</file>
+        <file>fonts/Lato-Regular.ttf</file>
+        <file>fonts/Rubik-Bold.ttf</file>
+        <file>fonts/Rubik-Italic.ttf</file>
+        <file>fonts/Rubik-Regular.ttf</file>
+        <file>fonts/IBMPlexSans-Bold.ttf</file>
+        <file>fonts/IBMPlexSans-Italic.ttf</file>
+        <file>fonts/IBMPlexSans-Regular.ttf</file>
     </qresource>
 </RCC>

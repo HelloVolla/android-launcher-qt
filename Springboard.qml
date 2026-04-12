@@ -37,10 +37,6 @@ LauncherPage {
         listModel.update()
     }
 
-    FontLoader {
-        id: regularFont
-    }
-
     Component.onCompleted: {
         listModel.update()
         shortcutMenu.updateShortcuts(mainView.getActions())
@@ -56,9 +52,6 @@ LauncherPage {
         for (i = 0; i < installedPlugins.length; i++) {
             addPlugin(mainView.getInstalledPluginSource(installedPlugins[i].id), installedPlugins[i].id)
         }
-
-        regularFont.source = "/fonts/Poppins-Regular.ttf"
-        console.debug("Springboard | Regular font: " + regularFont.name)
     }
 
     Connections {
@@ -156,7 +149,7 @@ LauncherPage {
                 width: parent.width
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
-                //font.family: regularFont.name
+                font.family: regularFont.name
 
                 background: Rectangle {
                     color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
@@ -194,6 +187,7 @@ LauncherPage {
                         color: mainView.fontColor
                         placeholderTextColor: "darkgrey"
                         font.pointSize: mainView.largeFontSize
+                        font.family: regularFont.name
                         wrapMode: Text.WordWrap
                         inputMethodHints: Qt.ImhNoPredictiveText
 
@@ -230,6 +224,7 @@ LauncherPage {
                     anchors.top: flickable.top
                     text: "<font color='#808080'>×</font>"
                     font.pointSize: mainView.largeFontSize * 2
+                    font.family: regularFont.name
                     flat: true
                     topPadding: mainView.innerSpacing === mainView.componentSpacing ? 0.0 : 18.0
                     visible: textArea.preeditText !== "" || textArea.text !== ""
@@ -794,6 +789,7 @@ LauncherPage {
                     text: button.text
                     elide: Text.ElideRight
                     font.pointSize: mainView.largeFontSize
+                    font.family: regularFont.name
                     color: model.action < 20000 ? Universal.foreground : mainView.accentTextColor
                     wrapMode: Text.WordWrap
                 }
@@ -1394,7 +1390,10 @@ LauncherPage {
                     && mouseY > touchY && mouseY < touchY + touchHeight) {
                 console.log("Springboard | enable menu")
                 console.log("Springboard | width " + parent.width, shortcutMenu.width, shortcutColumn.width)
-                //shortcutBackground.visible = true
+                for (var i = 0; i < shortcutColumn.shortcutLabels.length; i++) {
+                    var shortcutLabel = shortcutColumn.shortcutLabels[i]
+                    shortcutLabel.font.family = regularFont.name
+                }
                 shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
                 shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
                 shortcutBackground.height = shortcutColumn.height

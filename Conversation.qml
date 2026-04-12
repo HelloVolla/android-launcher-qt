@@ -207,6 +207,7 @@ LauncherPage {
                 text: qsTr("Conversation")
                 clip: mainView.backgroundOpacity === 1.0 ? true : false
                 elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone : Text.ElideRight
+                font.family: regularFont.name
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
                 background: Rectangle {
@@ -249,6 +250,7 @@ LauncherPage {
                 placeholderText: qsTr("Filter messages ...")
                 color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
+                font.family: regularFont.name
                 font.pointSize: mainView.largeFontSize
                 background: Rectangle {
                     color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
@@ -267,6 +269,7 @@ LauncherPage {
                 Button {
                     id: deleteButton
                     text: "<font color='#808080'>×</font>"
+                    font.family: regularFont.name
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
                     topPadding: 0.0
@@ -387,6 +390,7 @@ LauncherPage {
                         placeholderText: qsTr("Type your message")
                         color: mainView.fontColor
                         placeholderTextColor: "darkgrey"
+                        font.family: regularFont.name
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         inputMethodHints: Qt.ImhNoPredictiveText
@@ -524,6 +528,7 @@ LauncherPage {
                         text: model.m_TEXT !== undefined ? messageBox.parseMessage(model.m_TEXT) : ""
                         linkColor: "lightgrey"
                         lineHeight: 1.1
+                        font.family: regularFont.name
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         visible: !model.m_IS_SENT && model.m_TEXT !== undefined
@@ -541,6 +546,7 @@ LauncherPage {
                         bottomPadding: model.m_IMAGE === undefined ? 0 : 6.0
                         width: messageBox.width * widthFactor
                         text: model.m_STEXT
+                        font.family: regularFont.name
                         font.pointSize: mainView.smallFontSize
                         clip: true
                         opacity: 0.7
@@ -556,6 +562,7 @@ LauncherPage {
                         text: model.m_TEXT !== undefined ? messageBox.parseMessage(model.m_TEXT) : ""
                         linkColor: "lightgrey"
                         lineHeight: 1.1
+                        font.family: regularFont.name
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         opacity: 0.8
@@ -575,6 +582,7 @@ LauncherPage {
                         bottomPadding: model.m_IMAGE === undefined ? 0 : 6.0
                         width: messageBox.width * widthFactor
                         text: model.m_STEXT
+                        font.family: regularFont.name
                         font.pointSize: mainView.smallFontSize
                         clip: true
                         opacity: 0.7
@@ -604,6 +612,7 @@ LauncherPage {
                         bottomPadding: 6.0
                         width: messageBox.width * widthFactor
                         text: model.m_ERROR !== undefined ? model.m_ERROR : ""
+                        font.family: regularFont.name
                         font.pointSize: mainView.smallFontSize
                         color: mainView.accentColor
                         clip: true

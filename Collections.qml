@@ -155,6 +155,7 @@ LauncherPage {
                 width: parent.width - mainView.innerSpacing
                 x: mainView.innerSpacing
                 text: qsTr("People")
+                font.family: regularFont.name
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
                 background: Rectangle {
@@ -178,6 +179,7 @@ LauncherPage {
                 placeholderText: qsTr("Filter collections")
                 color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
+                font.family: regularFont.name
                 font.pointSize: mainView.largeFontSize
                 background: Rectangle {
                     color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
@@ -196,6 +198,7 @@ LauncherPage {
                 Button {
                     id: deleteButton
                     text: "<font color='#808080'>×</font>"
+                    font.family: regularFont.name
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
                     topPadding: 0.0
@@ -263,6 +266,7 @@ LauncherPage {
                             verticalAlignment: Text.AlignVCenter
                             color: Universal.foreground
                             opacity: 0.9
+                            font.family: regularFont.name
                             font.pointSize: mainView.largeFontSize
 
                             function getInitials() {
@@ -318,6 +322,7 @@ LauncherPage {
                             topPadding: model.c_STITLE !== undefined ? 8.0 : 0.0
                             width: contactBox.width - mainView.innerSpacing * 2 - collectionPage.iconSize - contactRow.spacing
                             text: model.c_STITLE !== undefined ? model.c_STITLE : ""
+                            font.family: regularFont.name
                             font.pointSize: mainView.smallFontSize
                             color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
                             lineHeight: 1.1
@@ -330,6 +335,7 @@ LauncherPage {
                             topPadding: model.c_TITLE !== undefined ? 8.0 : 0.0
                             width: contactColumn.columnWidth
                             text: model.c_TITLE !== undefined ? model.c_TITLE : ""
+                            font.family: regularFont.name
                             font.pointSize: mainView.largeFontSize
                             font.weight: Font.Black
                             color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
@@ -360,6 +366,7 @@ LauncherPage {
                             id: textLabel
                             width: contactColumn.columnWidth
                             text: model.c_TEXT !== undefined ? model.c_TEXT : ""
+                            font.family: regularFont.name
                             font.pointSize: mainView.largeFontSize
                             //renderType: Text.NativeRendering
                             verticalAlignment: Text.AlignVCenter
@@ -396,6 +403,7 @@ LauncherPage {
                                            contactColumn.columnWidth - statusBadge.width - statusRow.spacing
                                          : contactColumn.columnWidth
                                 text: model.c_STEXT !== undefined ? model.c_STEXT : ""
+                                font.family: regularFont.name
                                 font.pointSize: mainView.smallFontSize
                                 color: backgroundItem.isMenuStatus ? "white" : mainView.fontColor
                                 clip: mainView.backgroundOpacity === 1.0 ? true : false
@@ -477,6 +485,7 @@ LauncherPage {
                         id: callLabel
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Call")
+                        font.family: regularFont.name
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                         visible: model.c_PHONE !== undefined
@@ -485,6 +494,7 @@ LauncherPage {
                         id: messageLabel
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Send Message")
+                        font.family: regularFont.name
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                         visible: model.c_MOBILE !== undefined
@@ -493,6 +503,7 @@ LauncherPage {
                         id: emailLabel
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Send Email")
+                        font.family: regularFont.name
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                         visible: model.c_EMAIL !== undefined
@@ -501,6 +512,7 @@ LauncherPage {
                         id: contactLabel
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Open Contact")
+                        font.family: regularFont.name
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                     }
@@ -508,6 +520,7 @@ LauncherPage {
                         id: openSignalContactLabel
                         height: mainView.mediumFontSize * 1.2
                         text: qsTr("Open in Signal")
+                        font.family: regularFont.name
                         font.pointSize: mainView.mediumFontSize
                         color: "white"
                         visible: model.c_SIGNAL !== undefined
