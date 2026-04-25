@@ -33,6 +33,7 @@ Item {
     property bool isHeaderVisible: groupIndex !== selectedGroupIndex
     property bool isHeader2Visible: groupIndex === selectedGroupIndex && groupIndex > 0 && groupLabel.toLowerCase()
     property bool isGridVisible: groupIndex === selectedGroupIndex
+    property bool showAppNames: true
 
     property var accentColor
     property var notificationData:""
@@ -197,7 +198,7 @@ Item {
                     width: parent.width
                     text: model.label
                     contentItem: Column {
-                        spacing: gridCell.width * 0.25
+                        spacing: groupItem.showAppNames ? gridCell.width * 0.25 : 0
                         Image {
                             id: buttonIcon
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -225,6 +226,7 @@ Item {
                             font.pointSize: groupItem.labelPointSize
                             clip: groupItem.backgroundOpacity === 1.0 ? true : false
                             elide: groupItem.backgroundOpacity === 1.0 ? Text.ElideNone :  Text.ElideRight
+                            visible: groupItem.showAppNames
                         }
                     }
                     flat:true
