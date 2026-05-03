@@ -22,15 +22,14 @@ ApplicationWindow {
 
     Connections {
        target: Qt.application
-       // @disable-check M16
+       // @disable-check M16  
        onStateChanged: {
-          if (Qt.application.state === Qt.ApplicationActive) {              
+          if (Qt.application.state === Qt.ApplicationActive) {
               if (isActive) return
               isActive = true
               // Application go in active state
               console.log("MainView | Application became active")
               if (Qt.fontFamilies().indexOf("Noto Sans") > -1) {
-                  console.debug("APP: Use smaller font size")
                   mainView.headerFontSize = 34.0
                   mainView.largeFontSize = 18.0
                   mainView.mediumFontSize = 16.0
@@ -117,7 +116,7 @@ ApplicationWindow {
         property real largeFontSize: 20.0
         property real mediumFontSize: 18.0
         property real smallFontSize: 16.0
-        property string mainFontName: "Noto Sans"
+        //property string mainFontName: Qt.font({pointSize: 10}).family
 
         property var collectionMode : {
             'People' : 0,
@@ -222,7 +221,7 @@ ApplicationWindow {
                                       "RadioOff": qsTr("Radio off"),
                                       "MessageDelivered": qsTr("Message delivered"),
                                       "MessageNotDelivered": qsTr("Message not delivered")}
-        property var contacts: new Array
+        property var contacts
         property var notes: new Array
         property var loadingContacts: new Array
         property bool isLoadingContacts: false
@@ -419,6 +418,11 @@ ApplicationWindow {
         property var redirectCount: 0
         property var maxRedirectCount: 1
         property bool keepLastIndex: false
+
+//        Component.onCompleted: {
+//            var fonts = Qt.fontFamilies()
+//            for (var i = 0; i < fonts.length; i++) console.debug("Settings | Font: " + fonts[i])
+//        }
 
         onCurrentIndexChanged: {
             console.debug("MainView | Index changed to " + currentIndex)
@@ -1036,6 +1040,8 @@ ApplicationWindow {
                 settings.customAccentColor = value
                 mainView.accentColor = value.length > 0 ? value : Universal.accent
                 mainView.accentTextColor = getContrastColor(mainView.accentColor)
+            } else if (key === "keepLockscreenWallpaper") {
+                settings.keepLockscreenWallpaper = value
             }
             if (settings.sync) {
                 settings.sync()
@@ -1180,7 +1186,7 @@ ApplicationWindow {
                         mainView.isLoadingContacts = true
                         mainView.updateSpinner(true)
                         AN.SystemDispatcher.dispatch("volla.launcher.contactAction", {})
-                    } else if (mainView.contacts.length === 0 && !mainView.isLoadingContacts) {
+                    } else if (mainView.contacts === undefined && !mainView.isLoadingContacts) {
                         mainView.timeStamp = new Date()
                         var contactsStr = contactsCache.readPrivate()
                         console.log("MainView | Did read contacts with length " + contactsStr.length)
@@ -1257,20 +1263,21 @@ ApplicationWindow {
                     console.debug("MainView | System font: " + message["font"])
 
                     if (message["font"] === "com.android.overlay.font.poppins") {
-                        mainView.mainFontName = "Poppins"
-                        regularFont.name = "Poppins"
+                        //mainView.mainFontName = "Poppins"
+                        font.family = "Poppins"
                     } else if (message["font"] === "com.android.overlay.font.roboto") {
-                        mainView.mainFontName = "Roboto"
+                        font.family = "Roboto"
                     } else if (message["font"] === "com.volla.overlay.font.plex") {
-                        mainView.mainFontName = "IBM Plex Sans"
+                        font.family = "IBM Plex Sans"
                     } else if (message["font"] === "org.lineageos.overlay.font.rubik") {
-                        mainView.mainFontName = "Rubik"
+                        font.family = "Rubik"
                     } else if (message["font"] === "org.lineageos.overlay.font.lato") {
-                        mainView.mainFontName = "Lato"
+                        font.family = "Lato"
                     } else if (message["font"] === "com.android.overlay.font.selawik") {
-                        mainView.mainFontName = "Selavik"
+                        font.family = "Selawik"
                     } else {
-                        mainView.mainFontName = "Noto Sans"
+                        console.debug("Swipeview | Standard font")
+                        font.family = "Noto Sans"
                     }
                 }
             }
@@ -1294,6 +1301,7 @@ ApplicationWindow {
         id: settings
         property int theme: mainView.theme.Dark
         property int searchMode: mainView.searchMode.StartPage
+        property bool keepLockscreenWallpaper: false
         property bool fullscreen: false
         property bool firstStart: true
         property bool sttChecked: false

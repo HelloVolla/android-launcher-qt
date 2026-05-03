@@ -16,7 +16,6 @@ Item {
     property var messageApp
     property string phoneApp
     property string textInput: ""
-    property string fontFamilyName
 
     property double innerSpacing
     property double componentSpacing
@@ -118,7 +117,6 @@ Item {
                 padding: groupItem.innerSpacing / 2
                 color: Universal.foreground
                 opacity: 0.5
-                font.family: fontFamilyName
                 font.pointSize: groupItem.headerPointSize
             }
             background: Rectangle {
@@ -148,7 +146,6 @@ Item {
             text: groupHeader.text
             color: Universal.foreground
             opacity: 0.5
-            font.family: fontFamilyName
             font.pointSize: groupItem.labelPointSize
             background: Rectangle {
                 color: "transparent"
@@ -221,7 +218,6 @@ Item {
                             horizontalAlignment: contentWidth > gridButton.width - groupItem.innerSpacing ? Text.AlignLeft
                                                                                                           : Text.AlignHCenter
                             text: gridButton.text
-                            font.family: fontFamilyName
                             font.pointSize: groupItem.labelPointSize
                             clip: groupItem.backgroundOpacity === 1.0 ? true : false
                             elide: groupItem.backgroundOpacity === 1.0 ? Text.ElideNone :  Text.ElideRight
