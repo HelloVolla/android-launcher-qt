@@ -16,11 +16,6 @@ LauncherPage {
         pluginSettingsItemColumn.loadAvailablePlugins()
     }
 
-//    Component.onCompleted: {
-//        var fonts = Qt.fontFamilies()
-//        for (var i = 0; i < fonts.length; i++) console.debug("Settings | Font: " + fonts[i])
-//    }
-
     Flickable {
         anchors.fill: parent
         contentWidth: parent.width
@@ -193,7 +188,6 @@ LauncherPage {
                         textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
-                        font.family: regularFont.name
                         fontPointSize: mainView.mediumFontSize
                     }
                 }
@@ -287,19 +281,19 @@ LauncherPage {
                         switch (themeSettings.theme) {
                             case mainView.theme.Dark:
                                 console.log("Setting | Enable dark mode")
-                                mainView.switchTheme(mainView.theme.Dark, true)
+                                mainView.switchTheme(mainView.theme.Dark, !designSettings.keepLockscreenWallpaper)
                                 break
                             case mainView.theme.Light:
                                 console.log("Setting | Enable light mode")
-                                mainView.switchTheme(mainView.theme.Light, true)
+                                mainView.switchTheme(mainView.theme.Light, !designSettings.keepLockscreenWallpaper)
                                 break
                             case mainView.theme.DarkTranslucent:
                                 console.log("Setting | Enable Dark translucent mode")
-                                mainView.switchTheme(mainView.theme.DarkTranslucent, true)
+                                mainView.switchTheme(mainView.theme.DarkTranslucent, !designSettings.keepLockscreenWallpaper)
                                 break
                             case mainView.theme.LightTranslucent:
                                 console.log("Setting | Enable Light translucent mode")
-                                mainView.switchTheme(mainView.theme.LightTranslucent, true)
+                                mainView.switchTheme(mainView.theme.LightTranslucent, !designSettings.keepLockscreenWallpaper)
                                 break
                             default:
                                 console.log("Settings | Unknown theme selected: " + themeSettings.theme)
@@ -1307,6 +1301,16 @@ LauncherPage {
                         object.activeCheckbox = true
                         designSettingsItemColumn.checkboxes.push(object)
 
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "keepLockscreenWallpaper"
+                        properties["text"] = qsTr("Keep the wallpaper unchanged")
+                        properties["checked"] = designSettings.leftHandedMenu
+                        properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
                         console.log("Settings | Checkboxes created")
                     }
 
@@ -1350,6 +1354,10 @@ LauncherPage {
                             designSettings.leftHandedMenu = active
                             designSettings.sync()
                             mainView.updateSettings("leftHandedMenu", active)
+                        } else if (actionId === "keepLockscreenWallpaper") {
+                            designSettings.keepLockscreenWallpaper = active
+                            designSettings.sync()
+                            mainView.updateSettings("keepLockscreenWallpaper", active)
                         }
                     }
                 }
@@ -1378,6 +1386,7 @@ LauncherPage {
                     property bool showAppsAtStartup: false
                     property bool useHapticMenus: true
                     property bool leftHandedMenu: false
+                    property bool keepLockscreenWallpaper: false
                     property double blurEffect: 30
                 }
             }
@@ -1477,11 +1486,13 @@ LauncherPage {
                 id: widgetsSettingsItem
                 width: parent.width
                 implicitHeight: widgetsSettingsItemColumn.height
-                visible: mainView.isTablet
+                // visible: mainView.isTablet
 
                 property var defaultWidgets : [{ "id": 0, "name": qsTr("Weather"), "active": widgetsSettings.weatherWidgetIsVisible },
                                                { "id": 1, "name": qsTr("Clock"), "active": widgetsSettings.clockWidgetIsVisible },
-                                               { "id": 2, "name": qsTr("Note"), "active": widgetsSettings.noteWidgetIsVisible }]
+                                               { "id": 2, "name": qsTr("Note"), "active": widgetsSettings.noteWidgetIsVisible },
+                                               { "id": 3, "name": qsTr("Dialer"), "active": widgetsSettings.dialerWidgetIsVisible }]
+
 
                 Column {
                     id: widgetsSettingsItemColumn
@@ -1548,6 +1559,9 @@ LauncherPage {
                             case 2:
                                 widgetsSettings.noteWidgetIsVisible = active
                                 break
+                            case 3:
+                                widgetsSettings.dialerWidgetIsVisible = active
+                                break
                             default:
                                 break
                         }
@@ -1566,9 +1580,10 @@ LauncherPage {
 
                 Settings {
                     id: widgetsSettings
-                    property bool clockWidgetIsVisible: true
-                    property bool weatherWidgetIsVisible: true
-                    property bool noteWidgetIsVisible: true
+                    property bool clockWidgetIsVisible: mainView.isTablet ? true : false
+                    property bool weatherWidgetIsVisible: mainView.isTablet ? true : false
+                    property bool noteWidgetIsVisible: mainView.isTablet ? true : false
+                    property bool dialerWidgetIsVisible: false
 
                     Component.onCompleted: {
 
@@ -1803,17 +1818,23 @@ LauncherPage {
                                     resetContactsButton.visible = true
                                     timer.setTimeout(function() {
                                         resetLauncherButton.visible = true
+                                        timer.setTimeout(function() {
+                                            restartLauncherButton.visible = true
+                                        }, 50)
                                     }, 50)
                                 }, 50)
                             }, 50)
                         } else {
-                            resetLauncherButton.visible = false
+                            restartLauncherButton.visible = false
                             timer.setTimeout(function() {
-                                resetContactsButton.visible = false
+                                resetLauncherButton.visible = false
                                 timer.setTimeout(function() {
-                                    reseetShortcutsButton.visible = false
+                                    resetContactsButton.visible = false
                                     timer.setTimeout(function() {
-                                        resetNewsButton.visible = false
+                                        reseetShortcutsButton.visible = false
+                                        timer.setTimeout(function() {
+                                            resetNewsButton.visible = false
+                                        }, 50)
                                     }, 50)
                                 }, 50)
                             }, 50)
@@ -1983,6 +2004,41 @@ LauncherPage {
                             reseetLauncherButtonBackground.color = "transparent"
                             resetSettingsItemColumn.menuState = false
                             mainView.resetLauncher()
+                        }
+                    }
+
+                    Button {
+                        id: restartLauncherButton
+                        flat: true
+                        highlighted: true
+                        visible: false
+                        x: mainView.innerSpacing
+                        topPadding: mainView.innerSpacing / 2
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing / 2
+                        contentItem: Text {
+                            width: parent.width - 2 * resetSettingsItemButton.padding
+                            text: qsTr("Restart app")
+                            font.family: regularFont.name
+                            font.pointSize: mainView.mediumFontSize
+                            font.weight: Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            id: restartLauncherButtonBackground
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: Universal.foreground
+                            border.width: 1
+                        }
+                        onPressed: {
+                            restartLauncherButtonBackground.color = mainView.accentColor
+                        }
+                        onClicked: {
+                            restartLauncherButtonBackground.color = "transparent"
+                            resetSettingsItemColumn.menuState = false
+                            Qt.quit()
                         }
                     }
                 }

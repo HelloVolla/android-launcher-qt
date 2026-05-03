@@ -15,7 +15,6 @@ Button {
     contentItem: Text {
         id: buttonText
         width: parent.width - 2 * root.padding
-        font.family: regularFont.name
         font.pointSize: root.fontPointSize
         font.weight: root.boldText ? Font.Black : Font.Normal
         text: root.text

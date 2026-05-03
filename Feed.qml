@@ -134,7 +134,6 @@ LauncherPage {
                         clip: mainView.backgroundOpacity === 1.0 ? true : false
                         elide: mainView.backgroundOpacity === 1.0 ? Text.ElideNone : Text.ElideRight
                         verticalAlignment: Text.AlignVCenter
-                        font.family: regularFont.name
                         font.pointSize: mainView.headerFontSize
                         font.weight: Font.Black
                         Binding {
@@ -170,7 +169,6 @@ LauncherPage {
                     placeholderText: qsTr("Filter news ...")
                     color: mainView.fontColor
                     placeholderTextColor: "darkgrey"
-                    font.family: regularFont.name
                     font.pointSize: mainView.largeFontSize
                     leftPadding: 0.0
                     rightPadding: 0.0
@@ -191,7 +189,6 @@ LauncherPage {
                     Button {
                         id: deleteButton
                         text: "<font color='#808080'>×</font>"
-                        font.family: regularFont.name
                         font.pointSize: mainView.largeFontSize * 2
                         flat: true
                         topPadding: 0.0
@@ -258,7 +255,6 @@ LauncherPage {
                                                      : newsBox.width - mainView.innerSpacing
                             text: model.n_STITLE !== undefined ? model.n_STITLE : ""
                             lineHeight: 1.1
-                            font.family: regularFont.name
                             font.pointSize: mainView.smallFontSize
                             opacity: 0.7
                             visible: model.n_STITLE !== undefined && model.n_STITLE.length > 0
@@ -274,7 +270,6 @@ LauncherPage {
                                                      : newsBox.width - mainView.innerSpacing
                             text: model.n_TEXT
                             lineHeight: 1.1
-                            font.family: regularFont.name
                             font.pointSize: mainView.largeFontSize
                             wrapMode: Text.WordWrap
                             elide: Text.ElideRight
@@ -289,7 +284,6 @@ LauncherPage {
                                                      : newsBox.width - mainView.innerSpacing
                             text: getDateString()
                             lineHeight: 1.1
-                            font.family: regularFont.name
                             font.pointSize: mainView.smallFontSize
                             opacity: 0.7
                             visible: model.n_DATE !== undefined && model.n_DATE.length > 0

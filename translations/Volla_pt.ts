@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>Add to new group</source>
-        <translation type="unfinished">Dodaj do nowej grupy</translation>
+        <translation type="unfinished">Adicionar a novo grupo</translation>
     </message>
     <message>
         <source>Remove from group</source>
@@ -104,7 +104,7 @@
     <name>AppGridMenuItem</name>
     <message>
         <source>Add to </source>
-        <translation type="unfinished">Dodaj do </translation>
+        <translation type="unfinished">Adicionar a </translation>
     </message>
     <message>
         <source>Favorits</source>

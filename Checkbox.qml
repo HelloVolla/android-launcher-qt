@@ -6,7 +6,6 @@ import QtQuick.Controls.Universal 2.12
 CheckBox {
     id: settingsCheckbox
 
-    property string fontFamilyName
     property double labelFontSize
     property double circleSize
     property var actionId
@@ -27,7 +26,6 @@ CheckBox {
         elide: Text.ElideRight
         width: parent.width - leftPadding * 2 - removeButton.width
         leftPadding: settingsCheckbox.indicator.width + settingsCheckbox.spacing
-        font.family: fontFamilyName
         font.pointSize: labelFontSize
         font.weight: Font.Normal
         color: Universal.foreground
@@ -98,7 +96,6 @@ CheckBox {
         leftPadding: settingsCheckbox.leftPadding
         flat: true
         text: "<font color='#808080'>×</font>"
-        font.family: fontFamilyName
         font.pointSize: labelFontSize
         onClicked: {
             console.log("Checkbox | Remove item from settings: " + settingsCheckbox.text)
@@ -114,7 +111,6 @@ CheckBox {
         leftPadding: settingsCheckbox.leftPadding
         flat: true
         text: "<font color='#808080'>ⓘ</font>"
-        font.family: fontFamilyName
         font.pointSize: labelFontSize
         onClicked: {
             console.log("Checkbox | Show description: " + settingsCheckbox.text)

@@ -291,7 +291,6 @@ LauncherPage {
                 topPadding: mainView.innerSpacing * 2
                 x: mainView.innerSpacing
                 text: qsTr("Apps")
-                font.family: regularFont.name
                 font.pointSize: mainView.headerFontSize
                 font.weight: Font.Black
             }
@@ -307,7 +306,6 @@ LauncherPage {
                 placeholderText: qsTr("Filter apps")
                 color: mainView.fontColor
                 placeholderTextColor: "darkgrey"
-                font.family: regularFont.name
                 font.pointSize: mainView.largeFontSize
 
                 background: Rectangle {
@@ -324,7 +322,6 @@ LauncherPage {
                 Button {
                     id: headerDeleteButton
                     text: "<font color='#808080'>×</font>"
-                    font.family: regularFont.name
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
                     topPadding: 0.0
@@ -411,7 +408,6 @@ LauncherPage {
             id: addShortCutItem
             anchors.margins: mainView.innerSpacing
             text: qsTr("Add to shortcuts")
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: appContextMenu.menuWidth
@@ -442,7 +438,6 @@ LauncherPage {
         MenuItem {
             id: openAppItem
             anchors.margins: mainView.innerSpacing
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width:appContextMenu.menuWidth
@@ -478,7 +473,6 @@ LauncherPage {
             id: removeAppItem
             anchors.margins: mainView.innerSpacing
             height: removeAppItem.visible ? appContextMenu.menuItemHeight : 0
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: appContextMenu.menuWidth
@@ -498,7 +492,6 @@ LauncherPage {
             id: removePinnedShortcutItem
             anchors.margins: mainView.innerSpacing
             height: removePinnedShortcutItem.visible ? appContextMenu.menuItemHeight : 0
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: appContextMenu.menuWidth
@@ -528,7 +521,6 @@ LauncherPage {
             anchors.margins: mainView.innerSpacing
             height: addToNewGroupItem.visible ? appContextMenu.menuItemHeight : 0
             text: qsTr("Add to new group")
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: appContextMenu.menuWidth
@@ -551,7 +543,6 @@ LauncherPage {
             anchors.margins: mainView.innerSpacing
             height: removeFromGroupItem.visible ? appContextMenu.menuItemHeight : 0
             text: qsTr("Remove from group")
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: appContextMenu.menuWidth
@@ -573,7 +564,6 @@ LauncherPage {
             anchors.margins: mainView.innerSpacing
             height: enableCustomGroupsItem.visible ? enableCustomGroupsItem.implicitHeight : 0
             text: qsTr("Use custom groups")
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 id: enableCustomGroupsItemLabel
@@ -652,7 +642,6 @@ LauncherPage {
             id: removeMenuItem
             anchors.margins: mainView.innerSpacing
             text: qsTr("Remove group")
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: removeMenuItem.menuWidth
@@ -673,7 +662,6 @@ LauncherPage {
             id: editMenuItem
             anchors.margins: mainView.innerSpacing
             text: qsTr("Edit groupname")
-            font.family: regularFont.name
             font.pointSize: appLauncher.labelPointSize
             contentItem: Label {
                 width: editMenuItem.menuWidth
@@ -736,7 +724,6 @@ LauncherPage {
                 id: dialogTitle
                 text: qsTr("Group name")
                 color: mainView.fontColor
-                font.family: regularFont.name
                 font.pointSize: mainView.mediumFontSize
                 bottomPadding: mainView.innerSpacing
                 background: Rectangle {
@@ -753,7 +740,6 @@ LauncherPage {
                 wrapMode: Text.NoWrap
                 placeholderText: qsTr("Enter a group name")
                 placeholderTextColor: "darkgrey"
-                font.family: regularFont.name
                 font.pointSize: mainView.mediumFontSize
                 background: Rectangle {
                     color: mainView.fontColor.toString() === "white" || mainView.fontColor.toString() === "#ffffff"
@@ -777,7 +763,6 @@ LauncherPage {
                     contentItem: Text {
                         text: cancelButton.text
                         color: mainView.fontColor
-                        font.family: regularFont.name
                         font.pointSize: mainView.mediumFontSize
                         horizontalAlignment: Text.AlignHCenter
                     }
@@ -803,7 +788,6 @@ LauncherPage {
                     contentItem: Text {
                         text: okButton.text
                         color: mainView.fontColor
-                        font.family: regularFont.name
                         font.pointSize: mainView.mediumFontSize
                         horizontalAlignment: Text.AlignHCenter
                     }
@@ -979,6 +963,12 @@ LauncherPage {
         property int appCount: 0
         property double lastAppCountCheck: 0.0
         property string customGroups: ""
+
+        onUseCategoriesChanged: {
+            if (!useCategories) {
+
+            }
+        }
 
         function getCustomGroups() {
             if (settings.customGroups !== undefined && settings.customGroups.length > 0) {
