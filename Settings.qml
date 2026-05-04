@@ -1251,6 +1251,16 @@ LauncherPage {
                         designSettingsItemColumn.checkboxes.push(object)
 
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "showAppNames"
+                        properties["text"] = qsTr("Show app names")
+                        properties["checked"] = designSettings.showAppNames
+                        properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
@@ -1334,6 +1344,10 @@ LauncherPage {
                             designSettings.sync()
                             mainView.updateGridView("coloredIcons", active)
                             mainView.useColoredIcons = active
+                        } else if (actionId === "showAppNames") {
+                            designSettings.showAppNames = active
+                            designSettings.sync()
+                            mainView.updateGridView("showAppNames", active)
                         } else if (actionId === "startupIndex") {
                             designSettings.showAppsAtStartup = active
                             designSettings.sync()
@@ -1385,6 +1399,7 @@ LauncherPage {
                     property bool useCategories: false
                     property bool showAppsAtStartup: false
                     property bool useHapticMenus: true
+                    property bool showAppNames: true
                     property bool leftHandedMenu: false
                     property bool keepLockscreenWallpaper: false
                     property double blurEffect: 30
