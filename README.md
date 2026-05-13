@@ -33,9 +33,9 @@ Look in the script [build_package_android](build_package_android) for more detai
 ## License
 
 ```
-Volla Licence 1.0
+Volla Licence 2.0
 
-Copyright (c) 2020 Hallo Welt Systeme UG
+Copyright (c) 2024 Volla Systeme GmbH
 
 Permission is hereby granted, free of charge, to any person receiving or obtaining a copy
 of this software and/or the accompanying respectively associated documentation files
