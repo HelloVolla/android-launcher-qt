@@ -1501,12 +1501,11 @@ LauncherPage {
                 id: widgetsSettingsItem
                 width: parent.width
                 implicitHeight: widgetsSettingsItemColumn.height
-                // visible: mainView.isTablet
 
-                property var defaultWidgets : [{ "id": 0, "name": qsTr("Weather"), "active": widgetsSettings.weatherWidgetIsVisible },
-                                               { "id": 1, "name": qsTr("Clock"), "active": widgetsSettings.clockWidgetIsVisible },
-                                               { "id": 2, "name": qsTr("Note"), "active": widgetsSettings.noteWidgetIsVisible },
-                                               { "id": 3, "name": qsTr("Dialer"), "active": widgetsSettings.dialerWidgetIsVisible }]
+                property var defaultWidgets : [{ "id": 0, "name": qsTr("Weather"), "active": widgetsSettings.weatherWgtIsVisible },
+                                               { "id": 1, "name": qsTr("Clock"), "active": widgetsSettings.clockWgtIsVisible },
+                                               { "id": 2, "name": qsTr("Note"), "active": widgetsSettings.noteWgtIsVisible },
+                                               { "id": 3, "name": qsTr("Dialer"), "active": widgetsSettings.dialerWgtIsVisible }]
 
 
                 Column {
@@ -1566,16 +1565,16 @@ LauncherPage {
 
                         switch (actionId) {
                             case 0:
-                                widgetsSettings.weatherWidgetIsVisible = active
+                                widgetsSettings.weatherWdtIsVisible = active
                                 break
                             case 1:
-                                widgetsSettings.clockWidgetIsVisible = active
+                                widgetsSettings.clockWgtIsVisible = active
                                 break
                             case 2:
-                                widgetsSettings.noteWidgetIsVisible = active
+                                widgetsSettings.noteWgtIsVisible = active
                                 break
                             case 3:
-                                widgetsSettings.dialerWidgetIsVisible = active
+                                widgetsSettings.dialerWgtIsVisible = active
                                 break
                             default:
                                 break
@@ -1595,14 +1594,10 @@ LauncherPage {
 
                 Settings {
                     id: widgetsSettings
-                    property bool clockWidgetIsVisible: mainView.isTablet ? true : false
-                    property bool weatherWidgetIsVisible: mainView.isTablet ? true : false
-                    property bool noteWidgetIsVisible: mainView.isTablet ? true : false
-                    property bool dialerWidgetIsVisible: false
-
-                    Component.onCompleted: {
-
-                    }
+                    property bool clockWgtIsVisible: mainView.isTablet ? true : false
+                    property bool weatherWgtIsVisible: mainView.isTablet ? true : false
+                    property bool noteWgtIsVisible: mainView.isTablet ? true : false
+                    property bool dialerWgtIsVisible: false
                 }
             }
 

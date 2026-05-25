@@ -518,6 +518,22 @@
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Show app names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep the wallpaper unchanged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dialer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart app</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>

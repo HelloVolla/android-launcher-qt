@@ -158,7 +158,7 @@ Item {
             id: groupGrid
             width: parent.width
             height: contentHeight
-            cellHeight: parent.width / groupItem.columnCount * 1.28
+            cellHeight: groupItem.showAppNames ? parent.width / groupItem.columnCount * 1.28 : parent.width / groupItem.columnCount
             cellWidth: parent.width / groupItem.columnCount
             visible: groupItem.isGridVisible
             interactive: false
