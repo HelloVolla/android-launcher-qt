@@ -121,4 +121,5 @@ TRANSLATIONS += \
     translations/Volla_sr.ts \
     translations/Volla_ru.ts \
     translations/Volla_no.ts \
-    translations/Volla_hi.ts
+    translations/Volla_hi.ts \
+    translations/Volla_tr.ts

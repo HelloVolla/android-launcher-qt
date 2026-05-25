@@ -91,14 +91,16 @@ LauncherPage {
 
         switch (widgetId) {
             case 0:
-                widgetsSettings.weatherWidgetIsVisible = isVisible
+                widgetsSettings.weatherWgtIsVisible = isVisible
                 break
             case 1:
-                widgetsSettings.clockWidgetIsVisible = isVisible
+                widgetsSettings.clockWgtIsVisible = isVisible
                 break
             case 2:
-                widgetsSettings.noteWidgetIsVisible = isVisible
+                widgetsSettings.noteWgtIsVisible = isVisible
                 break
+            case 3:
+                widgetsSettings.dialerWgtIsVisible = isVisible
             default:
                 break
         }
@@ -906,7 +908,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.weatherWidgetIsVisible
+            visible: widgetsSettings.weatherWgtIsVisible
 
             property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
             property string city: weatherSettings.city
@@ -1244,7 +1246,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.clockWidgetIsVisible
+            visible: widgetsSettings.clockWgtIsVisible
 
             // todo
             Clock {
@@ -1260,7 +1262,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.noteWidgetIsVisible
+            visible: widgetsSettings.noteWgtIsVisible
 
             property var note
 
@@ -1330,7 +1332,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.dialerWidgetIsVisible
+            visible: widgetsSettings.dialerWgtIsVisible
 
             GridView {
                 id: dialerGrid
@@ -1423,26 +1425,25 @@ LauncherPage {
 
         Settings {
             id: widgetsSettings
-            property bool clockWidgetIsVisible: mainView.isTablet ? true : false
-            property bool weatherWidgetIsVisible: mainView.isTablet ? true : false
-            property bool noteWidgetIsVisible: mainView.isTablet ? true : false
-            property bool dialerWidgetIsVisible: false
+            property bool clockWgtIsVisible: mainView.isTablet ? true : false
+            property bool weatherWgtIsVisible: mainView.isTablet ? true : false
+            property bool noteWgtIsVisible: mainView.isTablet ? true : false
+            property bool dialerWgtIsVisible: false
 
-            onClockWidgetIsVisibleChanged: {
+            onClockWgtIsVisibleChanged: {
                 console.debug("Springborad | Clock widget visibility changed to " + clockWidgetIsVisible)
             }
 
-            onWeatherWidgetIsVisibleChanged: {
-                console.debug("Springborad | Weather widget visibility changed to " + weatherWidgetIsVisible)
+            onWeatherWgtIsVisibleChanged: {
+                console.debug("Springborad | Weather widget visibility changed to " + weatherWgtIsVisible)
             }
 
-            onNoteWidgetIsVisibleChanged: {
-                console.debug("Springborad | Note widget visibility changed to " + noteWidgetIsVisible)
+            onNoteWgtIsVisibleChanged: {
+                console.debug("Springborad | Note widget visibility changed to " + noteWgtIsVisible)
             }
 
-            onDialerWidgetIsVisibleChanged: {
-                console.debug("Springborad | Dialer widget visibility changed to " + dialerWidgetIsVisible)
-
+            onDialerWgtIsVisibleChanged: {
+                console.debug("Springborad | Dialer widget visibility changed to " + dialerWgtIsVisible)
             }
         }
     }
