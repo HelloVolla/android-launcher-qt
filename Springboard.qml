@@ -1689,7 +1689,7 @@ LauncherPage {
             visible: true
             opacity: 0.0
             width:  parent.width - mainView.innerSpacing * 2
-            topPadding: mainView.innerSpacing * 1.5
+            topPadding: mainView.innerSpacing * 2
             rightPadding: mainView.innerSpacing
             leftPadding: mainView.innerSpacing
             bottomPadding: mainView.innerSpacing

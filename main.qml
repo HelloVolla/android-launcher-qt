@@ -116,7 +116,6 @@ ApplicationWindow {
         property real largeFontSize: 20.0
         property real mediumFontSize: 18.0
         property real smallFontSize: 16.0
-        //property string mainFontName: Qt.font({pointSize: 10}).family
 
         property var collectionMode : {
             'People' : 0,
@@ -419,11 +418,6 @@ ApplicationWindow {
         property var maxRedirectCount: 1
         property bool keepLastIndex: false
 
-//        Component.onCompleted: {
-//            var fonts = Qt.fontFamilies()
-//            for (var i = 0; i < fonts.length; i++) console.debug("Settings | Font: " + fonts[i])
-//        }
-
         onCurrentIndexChanged: {
             console.debug("MainView | Index changed to " + currentIndex)
             switch (currentIndex) {
@@ -623,7 +617,7 @@ ApplicationWindow {
                 break
             case mainView.theme.LightTranslucent:
                 Universal.theme = Universal.Light
-                mainView.backgroundOpacity = 0.3
+                mainView.backgroundOpacity = 0.0
                 mainView.backgroundColor = "transparent"
                 mainView.fontColor = "black"
                 break
