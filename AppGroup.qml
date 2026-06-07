@@ -25,7 +25,8 @@ Item {
     property double desaturation: 1.0
     property int groupIndex: 0
     property int selectedGroupIndex: 0
-    property int columnCount: Screen.desktopAvailableWidth < 521 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+    property bool useSixColumns: false
+    property int columnCount: useSixColumns ? 6 : (Screen.desktopAvailableWidth < 521 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5)
 
     property bool unreadMessages: false
     property bool newCalls: false
@@ -43,15 +44,29 @@ Item {
 
     Component.onCompleted: {
         console.debug("AppGroup | Screen width: " + Screen.desktopAvailableWidth)
-        columnCount = Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+        if (!useSixColumns) {
+            columnCount = Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
+        }
     }
 
     onWidthChanged: {
         console.log("AppGroup | Width changed to " + width)
-        if (width > 820) {
+        if (useSixColumns) {
+            columnCount = 6
+        } else if (width > 820) {
             columnCount = 8
         } else {
             columnCount = 5
+        }
+    }
+
+    onUseSixColumnsChanged: {
+        if (useSixColumns) {
+            columnCount = 6
+        } else if (width > 820) {
+            columnCount = 8
+        } else {
+            columnCount = Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
         }
     }
 

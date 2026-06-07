@@ -1261,6 +1261,16 @@ LauncherPage {
                         designSettingsItemColumn.checkboxes.push(object)
 
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
+                        properties["actionId"] = "useSixColumns"
+                        properties["text"] = qsTr("Use 6 columns")
+                        properties["checked"] = designSettings.useSixColumns
+                        properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
+                        object = component.createObject(designSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        designSettingsItemColumn.checkboxes.push(object)
+
+                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
@@ -1348,6 +1358,10 @@ LauncherPage {
                             designSettings.showAppNames = active
                             designSettings.sync()
                             mainView.updateGridView("showAppNames", active)
+                        } else if (actionId === "useSixColumns") {
+                            designSettings.useSixColumns = active
+                            designSettings.sync()
+                            mainView.updateGridView("useSixColumns", active)
                         } else if (actionId === "startupIndex") {
                             designSettings.showAppsAtStartup = active
                             designSettings.sync()
@@ -1402,6 +1416,7 @@ LauncherPage {
                     property bool showAppNames: true
                     property bool leftHandedMenu: false
                     property bool keepLockscreenWallpaper: false
+                    property bool useSixColumns: false
                     property double blurEffect: 30
                 }
             }

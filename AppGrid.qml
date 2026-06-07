@@ -66,6 +66,12 @@ LauncherPage {
                 appGroup = appLauncher.appGroups[i]
                 appGroup.showAppNames = value
             }
+        } else if (key === "useSixColumns") {
+            settings.useSixColumns = value
+            for (i = 0; i < appLauncher.appGroups.length; i++) {
+                appGroup = appLauncher.appGroups[i]
+                appGroup.useSixColumns = value
+            }
         }
     }
 
@@ -183,6 +189,7 @@ LauncherPage {
                                "accentColor": mainView.accentColor,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
                                "showAppNames": settings.showAppNames,
+                               "useSixColumns": settings.useSixColumns,
                                "pinnedShortcuts": pinnedShortcuts !== undefined ? pinnedShortcuts : new Array,
                                "apps": apps !== undefined ? apps : new Array}
             if (component.status !== Component.Ready) {
@@ -968,6 +975,7 @@ LauncherPage {
         property bool useGroupedApps: true
         property bool useCategories: false
         property bool showAppNames: true
+        property bool useSixColumns: false
         property int appCount: 0
         property double lastAppCountCheck: 0.0
         property string customGroups: ""
