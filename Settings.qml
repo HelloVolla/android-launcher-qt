@@ -1580,7 +1580,7 @@ LauncherPage {
 
                         switch (actionId) {
                             case 0:
-                                widgetsSettings.weatherWdtIsVisible = active
+                                widgetsSettings.weatherWgtIsVisible = active
                                 break
                             case 1:
                                 widgetsSettings.clockWgtIsVisible = active
