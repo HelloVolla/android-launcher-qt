@@ -1204,6 +1204,7 @@ LauncherPage {
                 weatherRequest.open("GET", weatherUrl)
                 weatherRequest.send()
             }
+
             function truncateToOneDecimal(val) {
                 return val.toString().split(".")[0] + "." + val.toString().split(".")[1][0];
             }
