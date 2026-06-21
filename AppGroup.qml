@@ -25,8 +25,9 @@ Item {
     property double desaturation: 1.0
     property int groupIndex: 0
     property int selectedGroupIndex: 0
-    property bool useSixColumns: false
-    property int columnCount: useSixColumns ? 6 : (Screen.desktopAvailableWidth < 521 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5)
+    property int appColumns: 0
+    property real fontScale: 1.0
+    property int columnCount: computeColumnCount(width > 0 ? width : Screen.desktopAvailableWidth)
 
     property bool unreadMessages: false
     property bool newCalls: false
@@ -42,32 +43,32 @@ Item {
     property var apps: []
     property var pinnedShortcuts: []
 
+    function computeColumnCount(availableWidth) {
+        if (appColumns > 0) return appColumns
+        var w = availableWidth > 0 ? availableWidth : Screen.desktopAvailableWidth
+        var targetCellWidth = 100 * fontScale
+        var cols = Math.round(w / targetCellWidth)
+        if (cols < 4) cols = 4
+        if (cols > 8) cols = 8
+        return cols
+    }
+
     Component.onCompleted: {
-        console.debug("AppGroup | Screen width: " + Screen.desktopAvailableWidth)
-        if (!useSixColumns) {
-            columnCount = Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
-        }
+        console.debug("AppGroup | Screen width: " + Screen.desktopAvailableWidth + ", fontScale: " + fontScale)
+        columnCount = computeColumnCount(width)
     }
 
     onWidthChanged: {
         console.log("AppGroup | Width changed to " + width)
-        if (useSixColumns) {
-            columnCount = 6
-        } else if (width > 820) {
-            columnCount = 8
-        } else {
-            columnCount = 5
-        }
+        columnCount = computeColumnCount(width)
     }
 
-    onUseSixColumnsChanged: {
-        if (useSixColumns) {
-            columnCount = 6
-        } else if (width > 820) {
-            columnCount = 8
-        } else {
-            columnCount = Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
-        }
+    onAppColumnsChanged: {
+        columnCount = computeColumnCount(width)
+    }
+
+    onFontScaleChanged: {
+        columnCount = computeColumnCount(width)
     }
 
     onTextInputChanged: {
@@ -173,7 +174,7 @@ Item {
             id: groupGrid
             width: parent.width
             height: contentHeight
-            cellHeight: groupItem.showAppNames ? parent.width / groupItem.columnCount * 1.28 : parent.width / groupItem.columnCount
+            cellHeight: groupItem.showAppNames ? parent.width / groupItem.columnCount * (1.0 + 0.28 * groupItem.fontScale) : parent.width / groupItem.columnCount
             cellWidth: parent.width / groupItem.columnCount
             visible: groupItem.isGridVisible
             interactive: false
@@ -234,7 +235,7 @@ Item {
                             horizontalAlignment: contentWidth > gridButton.width - groupItem.innerSpacing ? Text.AlignLeft
                                                                                                           : Text.AlignHCenter
                             text: gridButton.text
-                            font.pointSize: groupItem.labelPointSize
+                            font.pointSize: groupItem.labelPointSize * groupItem.fontScale
                             clip: groupItem.backgroundOpacity === 1.0 ? true : false
                             elide: groupItem.backgroundOpacity === 1.0 ? Text.ElideNone :  Text.ElideRight
                             visible: groupItem.showAppNames

@@ -1261,16 +1261,6 @@ LauncherPage {
                         designSettingsItemColumn.checkboxes.push(object)
 
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
-                        properties["actionId"] = "useSixColumns"
-                        properties["text"] = qsTr("Use 6 columns")
-                        properties["checked"] = designSettings.useSixColumns
-                        properties["accentColor"] = mainView.accentColor
-                        properties["fontFamilyName"] = regularFont.name
-                        object = component.createObject(designSettingsItemColumn, properties)
-                        object.activeCheckbox = true
-                        designSettingsItemColumn.checkboxes.push(object)
-
-                        component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
                         properties["checked"] = designSettings.showAppsAtStartup
@@ -1358,10 +1348,14 @@ LauncherPage {
                             designSettings.showAppNames = active
                             designSettings.sync()
                             mainView.updateGridView("showAppNames", active)
-                        } else if (actionId === "useSixColumns") {
-                            designSettings.useSixColumns = active
+                        } else if (actionId === "appColumns") {
+                            designSettings.appColumns = active
                             designSettings.sync()
-                            mainView.updateGridView("useSixColumns", active)
+                            mainView.updateGridView("appColumns", active)
+                        } else if (actionId === "fontScale") {
+                            designSettings.fontScale = active
+                            designSettings.sync()
+                            mainView.updateGridView("fontScale", active)
                         } else if (actionId === "startupIndex") {
                             designSettings.showAppsAtStartup = active
                             designSettings.sync()
@@ -1397,6 +1391,10 @@ LauncherPage {
                         onRunningChanged: {
                             console.log("Settings | Running changed to " + running)
                             if (!running) {
+                                columnsLabel.visible = designSettingsItemColumn.menuState
+                                columnsSlider.visible = designSettingsItemColumn.menuState
+                                fontScaleLabel.visible = designSettingsItemColumn.menuState
+                                fontScaleSlider.visible = designSettingsItemColumn.menuState
                                 blurLabel.visible = designSettingsItemColumn.menuState
                                 blurSlider.visible = designSettingsItemColumn.menuState
                                 colorButton.visible = designSettingsItemColumn.menuState
@@ -1416,8 +1414,135 @@ LauncherPage {
                     property bool showAppNames: true
                     property bool leftHandedMenu: false
                     property bool keepLockscreenWallpaper: false
-                    property bool useSixColumns: false
+                    property int appColumns: 0
+                    property real fontScale: 1.0
                     property double blurEffect: 30
+                }
+            }
+
+            Label {
+                id: columnsLabel
+                topPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
+                text: qsTr("Columns") + ": " + (designSettings.appColumns === 0 ? qsTr("Auto") : designSettings.appColumns)
+                font.family: regularFont.name
+                font.pointSize: mainView.mediumFontSize
+                visible: false
+            }
+
+            Slider {
+                id: columnsSlider
+                topPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
+                width: parent.width
+                from: 0
+                to: 5
+                stepSize: 1
+                snapMode: Slider.SnapAlways
+                value: columnsSlider.toSliderIndex(designSettings.appColumns)
+                visible: false
+
+                readonly property var columnValues: [0, 4, 5, 6, 7, 8]
+
+                function toSliderIndex(cols) {
+                    var idx = columnValues.indexOf(cols)
+                    return idx < 0 ? 0 : idx
+                }
+
+                background: Rectangle {
+                    x: columnsSlider.leftPadding
+                    y: columnsSlider.topPadding + columnsSlider.availableHeight / 2 - height / 2
+                    implicitWidth: 200
+                    implicitHeight: 4
+                    width: columnsSlider.availableWidth
+                    height: implicitHeight
+                    radius: 2
+                    color: "lightgray"
+
+                    Rectangle {
+                        width: columnsSlider.visualPosition * parent.width
+                        height: parent.height
+                        color: mainView.accentColor
+                        radius: 2
+                    }
+                }
+
+                handle: Rectangle {
+                    x: columnsSlider.leftPadding + columnsSlider.visualPosition * (columnsSlider.availableWidth - width)
+                    y: columnsSlider.topPadding + columnsSlider.availableHeight / 2 - height / 2
+                    implicitWidth: mainView.largeFontSize
+                    implicitHeight: mainView.largeFontSize
+                    radius: mainView.largeFontSize / 2
+                    color: mainView.accentColor
+                    border.color: mainView.accentColor
+                }
+
+                onValueChanged: {
+                    var v = columnValues[Math.round(value)]
+                    console.log("Settings | App columns changed to " + v)
+                    designSettings.appColumns = v
+                    mainView.updateGridView("appColumns", v)
+                }
+            }
+
+            Label {
+                id: fontScaleLabel
+                topPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
+                text: qsTr("App label size") + ": " + Math.round(fontScaleSlider.value * 100) + "%"
+                font.family: regularFont.name
+                font.pointSize: mainView.mediumFontSize
+                visible: false
+            }
+
+            Slider {
+                id: fontScaleSlider
+                topPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
+                width: parent.width
+                from: 0.8
+                to: 1.4
+                stepSize: 0.1
+                snapMode: Slider.SnapAlways
+                value: designSettings.fontScale
+                visible: false
+
+                background: Rectangle {
+                    x: fontScaleSlider.leftPadding
+                    y: fontScaleSlider.topPadding + fontScaleSlider.availableHeight / 2 - height / 2
+                    implicitWidth: 200
+                    implicitHeight: 4
+                    width: fontScaleSlider.availableWidth
+                    height: implicitHeight
+                    radius: 2
+                    color: "lightgray"
+
+                    Rectangle {
+                        width: fontScaleSlider.visualPosition * parent.width
+                        height: parent.height
+                        color: mainView.accentColor
+                        radius: 2
+                    }
+                }
+
+                handle: Rectangle {
+                    x: fontScaleSlider.leftPadding + fontScaleSlider.visualPosition * (fontScaleSlider.availableWidth - width)
+                    y: fontScaleSlider.topPadding + fontScaleSlider.availableHeight / 2 - height / 2
+                    implicitWidth: mainView.largeFontSize
+                    implicitHeight: mainView.largeFontSize
+                    radius: mainView.largeFontSize / 2
+                    color: mainView.accentColor
+                    border.color: mainView.accentColor
+                }
+
+                onValueChanged: {
+                    console.log("Settings | Font scale changed to " + value)
+                    designSettings.fontScale = value
+                    mainView.updateGridView("fontScale", value)
                 }
             }
 
