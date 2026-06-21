@@ -66,6 +66,18 @@ LauncherPage {
                 appGroup = appLauncher.appGroups[i]
                 appGroup.showAppNames = value
             }
+        } else if (key === "appColumns") {
+            settings.appColumns = value
+            for (i = 0; i < appLauncher.appGroups.length; i++) {
+                appGroup = appLauncher.appGroups[i]
+                appGroup.appColumns = value
+            }
+        } else if (key === "fontScale") {
+            settings.fontScale = value
+            for (i = 0; i < appLauncher.appGroups.length; i++) {
+                appGroup = appLauncher.appGroups[i]
+                appGroup.fontScale = value
+            }
         }
     }
 
@@ -183,6 +195,8 @@ LauncherPage {
                                "accentColor": mainView.accentColor,
                                "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
                                "showAppNames": settings.showAppNames,
+                               "appColumns": settings.appColumns,
+                               "fontScale": settings.fontScale,
                                "pinnedShortcuts": pinnedShortcuts !== undefined ? pinnedShortcuts : new Array,
                                "apps": apps !== undefined ? apps : new Array}
             if (component.status !== Component.Ready) {
@@ -968,6 +982,8 @@ LauncherPage {
         property bool useGroupedApps: true
         property bool useCategories: false
         property bool showAppNames: true
+        property int appColumns: 0
+        property real fontScale: 1.0
         property int appCount: 0
         property double lastAppCountCheck: 0.0
         property string customGroups: ""
