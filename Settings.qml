@@ -1145,6 +1145,16 @@ LauncherPage {
                         object.activeCheckbox = true
                         searchSettingsItemColumn.checkboxes.push(object)
 
+                        component = Qt.createComponent("/Checkbox.qml", searchSettingsItemColumn)
+                        properties["actionId"] = "brave"
+                        properties["text"] = qsTr("Brave")
+                        properties["checked"] = mainView.getSearchMode() === mainView.searchMode.Brave
+                        properties["accentColor"] = mainView.accentColor
+                        properties["fontFamilyName"] = regularFont.name
+                        object = component.createObject(searchSettingsItemColumn, properties)
+                        object.activeCheckbox = true
+                        searchSettingsItemColumn.checkboxes.push(object)
+
                         if (mainView.searchEngineName !== undefined && mainView.searchEngineName.length > 0) {
                             component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                             properties["actionId"] = "custom"
@@ -1184,6 +1194,8 @@ LauncherPage {
                             mainView.updateSearchMode(mainView.searchMode.StartPage)
                         } else if (actionId === "metager" && active) {
                             mainView.updateSearchMode(mainView.searchMode.MetaGer)
+                        } else if (actionId === "brave" && active) {
+                            mainView.updateSearchMode(mainView.searchMode.Brave)
                         } else if (actionId === "custom" && active) {
                             mainView.updateSearchMode(mainView.searchMode.Custom)
                         }
