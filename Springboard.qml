@@ -134,115 +134,125 @@ LauncherPage {
     }
 
     ListView {
-        id: listView
-        anchors.fill: parent
-        headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayHeader : ListView.InlineHeader
+            id: listView
+            anchors.fill: parent
+            clip: false  // WICHTIG: Damit der Header beim Ziehen sichtbar bleibt (Overbounds)
+            headerPositioning: ListView.InlineHeader // Header ist Teil der scrollbaren Liste
 
-        header: Column {
-            id: header
-            width: parent.width
-            z: 2
+            // Einfache Logik: Prüfen beim Loslassen, ob wir weiter als 80px gezogen wurden
+            onMovementEnded: {
+                // contentY ist negativ, wenn man nach unten zieht (über den Anfang hinaus)
+                // -80 bedeutet: 80 Pixel nach unten gezogen
+                if (contentY < -80) {
+                    console.log("Trigger: Pull > 80px (ContentY: " + contentY + ")")
 
-            Label {
-                id: headline
-                topPadding: mainView.innerSpacing * 2
-                x: mainView.innerSpacing
-                text: qsTr("Springboard")
-                width: parent.width
-                font.pointSize: mainView.headerFontSize
-                font.weight: Font.Black
-
-                background: Rectangle {
-                    color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-                    border.color: "transparent"
+                    if (textInputArea) {
+                        // Kurze Verzögerung, damit die visuelle Rückfederung beginnen kann
+                        Qt.callLater(function() {
+                            if (textInputArea.activeFocus) {
+                                // Tastatur war an -> jetzt ausschalten
+                                textInputArea.focus = false
+                                Qt.inputMethod.hide()
+                                console.log("Debug: Tastatur geschlossen")
+                            } else {
+                                // Tastatur war aus -> jetzt einschalten
+                                textInputArea.forceActiveFocus()
+                                Qt.inputMethod.show()
+                                console.log("Debug: Tastatur geöffnet")
+                            }
+                        })
+                    }
                 }
-
-                Binding {
-                    target: springBoard
-                    property: "headline"
-                    value: headline
-                }
+                // Wenn < 80px gezogen: ListView federt automatisch zurück (Standardverhalten)
             }
 
-            Row {
+            header: Item {
                 width: parent.width
+                height: mainView.largeFontSize * 7 + mainView.innerSpacing * 10.5
+                z: 2
 
-                Flickable {
-                    id: flickable
-                    width: parent.width - mainView.innerSpacing * 2
-                    height: Math.min(contentHeight, 200)
-                    contentWidth: width
-                    contentHeight: textArea.implicitHeight
-                    clip: true
-                    flickableDirection: Flickable.VerticalFlick
+                Column {
+                    width: parent.width
+                    anchors.top: parent.top
 
-                    TextArea.flickable: TextArea {
-                        id: textArea
-                        topPadding: mainView.componentSpacing
-                        bottomPadding: mainView.innerSpacing
-                        leftPadding: 0.0
-                        rightPadding: mainView.innerSpacing
+                    Label {
+                        id: headline
+                        topPadding: mainView.innerSpacing * 2
                         x: mainView.innerSpacing
+                        text: qsTr("Springboard")
                         width: parent.width
-                        placeholderText: qsTr("Type anything")
-                        color: mainView.fontColor
-                        placeholderTextColor: "darkgrey"
-                        font.pointSize: mainView.largeFontSize
-                        wrapMode: Text.WordWrap
-                        inputMethodHints: Qt.ImhNoPredictiveText
+                        font.pointSize: mainView.headerFontSize
+                        font.weight: Font.Black
+                        color: textInputArea.activeFocus ? "grey" : mainView.fontColor
 
                         background: Rectangle {
-                            color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                            color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                             border.color: "transparent"
+                            height: parent.height
                         }
 
                         Binding {
                             target: springBoard
-                            property: "textInput"
-                            value: textArea.text
-                        }
-                        Binding {
-                            target: springBoard
-                            property: "textFocus"
-                            value: activeFocus
-                        }
-                        Binding {
-                            target: springBoard
-                            property: "textInputArea"
-                            value: textArea
-                        }
-
-                        onActiveFocusChanged: {
-                            headline.color = textArea.activeFocus ? "grey" : mainView.fontColor
+                            property: "headline"
+                            value: headline
                         }
                     }
-                    ScrollBar.vertical: ScrollBar {}
-                }
 
-                Button {
-                    id: deleteButton
-                    anchors.top: flickable.top
-                    text: "<font color='#808080'>×</font>"
-                    font.pointSize: mainView.largeFontSize * 2
-                    flat: true
-                    topPadding: mainView.innerSpacing === mainView.componentSpacing ? 0.0 : 18.0
-                    visible: textArea.preeditText !== "" || textArea.text !== ""
+                    Row {
+                        width: parent.width
 
-                    onClicked: {
-                        textArea.text = ""
-                        textArea.focus = false
+                        Flickable {
+                            id: flickable
+                            width: parent.width - mainView.innerSpacing * 2
+                            height: Math.min(contentHeight, 200)
+                            contentWidth: width
+                            contentHeight: textArea.implicitHeight
+                            clip: false
+                            flickableDirection: Flickable.VerticalFlick
+                            interactive: false // Wichtig: Damit die Haupt-ListView den Scroll übernimmt
+
+                            TextArea.flickable: TextArea {
+                                id: textArea
+                                topPadding: mainView.componentSpacing
+                                bottomPadding: mainView.innerSpacing
+                                leftPadding: 0.0
+                                rightPadding: mainView.innerSpacing
+                                x: mainView.innerSpacing
+                                width: parent.width
+                                placeholderText: qsTr("Type anything")
+                                color: mainView.fontColor
+                                placeholderTextColor: "darkgrey"
+                                font.pointSize: mainView.largeFontSize
+                                wrapMode: Text.WordWrap
+                                inputMethodHints: Qt.ImhNoPredictiveText
+                                background: Rectangle { color: "transparent"; border.color: "transparent" }
+
+                                Binding { target: springBoard; property: "textInput"; value: textArea.text }
+                                Binding { target: springBoard; property: "textFocus"; value: activeFocus }
+                                Binding { target: springBoard; property: "textInputArea"; value: textArea }
+                            }
+                            ScrollBar.vertical: ScrollBar {}
+                        }
+
+                        Button {
+                            id: deleteButton
+                            anchors.top: flickable.top
+                            text: "<font color='#808080'>×</font>"
+                            font.pointSize: mainView.largeFontSize * 2
+                            flat: true
+                            visible: textArea.preeditText !== "" || textArea.text !== ""
+                            onClicked: { textArea.text = ""; textArea.focus = false }
+                        }
+                    }
+
+                    Rectangle {
+                        width: parent.width
+                        height: 1.1
+                        color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
+                        border.color: "transparent"
                     }
                 }
             }
-
-            Rectangle {
-                width: parent.width
-                color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
-                border.color: "transparent"
-                height: 1.1
-            }
-        }
-
         model: ListModel {
             id: listModel
 
@@ -411,7 +421,7 @@ LauncherPage {
                     console.debug("Springboard | " + i + " group of contact: " + matches[i])
                 }
                 var firstName = matches[1]
-                var lastName = matches[2] !== undefined ? matches[1] : ""
+                var lastName = matches[2] !== undefined ? matches[2] : ""
                 var phoneNumber = matches[3]
                 var email = matches[4] !== undefined ? matches[4] : ""
                 var contact = { "name": firstName + " " + lastName, "phoneNumber" : phoneNumber }
