@@ -560,6 +560,9 @@ LauncherPage {
                         case mainView.searchMode.MetaGer:
                             Qt.openUrlExternally("https://metager.de/meta/meta.ger3?eingabe=" + message + "&ref=hellovolla")
                             break
+                        case mainView.searchMode.Brave:
+                            Qt.openUrlExternally("https://search.brave.com/search?q=" + message)
+                            break
                         case mainView.searchMode.Custom:
                             Qt.openUrlExternally(mainView.searchEngineUrl + message)
                             break
