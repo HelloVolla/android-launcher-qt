@@ -103,14 +103,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Favorits</source>
+        <source>Favorites</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AppGroup</name>
     <message>
-        <source>Favorits</source>
+        <source>Favorites</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -816,7 +816,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You have alresdy added the shortcut</source>
+        <source>You have already added the shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -844,7 +844,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add to Calender</source>
+        <source>Add to Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
