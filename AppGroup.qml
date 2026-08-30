@@ -42,12 +42,10 @@ Item {
     property var pinnedShortcuts: []
 
     Component.onCompleted: {
-        console.debug("AppGroup | Screen width: " + Screen.desktopAvailableWidth)
         columnCount = Screen.desktopAvailableWidth < 446 ? 4 : Screen.desktopAvailableWidth > 800 ? 8 : 5
     }
 
     onWidthChanged: {
-        console.log("AppGroup | Width changed to " + width)
         if (width > 820) {
             columnCount = 8
         } else {

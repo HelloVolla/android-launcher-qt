@@ -398,9 +398,9 @@ ApplicationWindow {
         property real cacheVersion: 1.0
         property int cacheSize: 1000
 
-        property string defaultFeedIconUrl: ""
+        property string defaultFeedIconUrl: Qt.resolvedUrl("/icons/fallback-feed.png")
         property var defaultFeeds: [{"id" : "https://www.nzz.ch/recent.rss", "name" : "NZZ", "activated" : true, "icon": "https://assets.static-nzz.ch/nzz/app/static/favicon/favicon-128.png?v=3"},
-            {"id" : "https://www.chip.de/rss/rss_topnews.xml", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
+            {"id" : "https://www.chip.de/news/rss", "name": "Chip Online", "activated" : true, "icon": "https://www.chip.de/fec/assets/favicon/apple-touch-icon.png?v=01"},
             {"id" : "https://www.theguardian.com/world/rss", "name": "The Guardian", "activated" : true, "icon":  "https://assets.guim.co.uk/images/favicons/6a2aa0ea5b4b6183e92d0eac49e2f58b/57x57.png"}]
         property var defaultActions: [{"id" : actionType.ShowDialer, "name" : qsTr("Show Dialer"), "activated" : true},
             {"id" : actionType.OpenCam, "name": qsTr("Camera"), "activated" : true},
