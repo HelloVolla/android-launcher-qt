@@ -132,5 +132,6 @@
         <file>fonts/IBMPlexSans-Bold.ttf</file>
         <file>fonts/IBMPlexSans-Italic.ttf</file>
         <file>fonts/IBMPlexSans-Regular.ttf</file>
+        <file>icons/fallback-feed.png</file>
     </qresource>
 </RCC>

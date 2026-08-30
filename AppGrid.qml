@@ -205,8 +205,6 @@ LauncherPage {
     function updateCustomGroupOfApp(appToUpdate, appGroupName) {
         console.debug("AppGrid | updateCustomGroupOfApp: " + appToUpdate + ", " + appGroupName)
         var customGroups = settings.getCustomGroups()
-        var customGroup = customGroups[appGroupName]
-        console.debug("AppGrid | updateCustomGroupOfApp: " + JSON.stringify(customGroup))
         var apps = appLauncher.getAllApps().concat(appLauncher.pinnedShortcuts)
 //        for (var i = 0; i < apps.length; i++) {
 //            Object.keys(apps[i]).forEach(function(key) {
@@ -215,6 +213,7 @@ LauncherPage {
 //        }
         var app = apps.filter(e => e.package === appToUpdate || (e.shortcutId !== undefined && e.shortcutId === appToUpdate))[0]
         if (appGroupName !== undefined) {
+            var customGroup = customGroups[appGroupName]
             app.customCategory = appGroupName
             // Add to group
             if (customGroup !== undefined && !customGroup.includes(appToUpdate)) {
@@ -225,10 +224,11 @@ LauncherPage {
             customGroups[appGroupName] = customGroup
         } else {
             customGroup = customGroups[app.customCategory]
+            appGroupName = app.customCategory
             delete app.customCategory
             // Remove from group
             if (customGroup !== undefined) {
-                customGroup.splice(customGroup.indexOf(appGroupName, 1))
+                customGroup = customGroup.filter(element => element !== appToUpdate);
                 if (customGroup.count > 0) {
                     customGroups[appGroupName] = customGroup
                 } else {
