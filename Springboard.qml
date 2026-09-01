@@ -138,9 +138,31 @@ LauncherPage {
         anchors.fill: parent
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayHeader : ListView.InlineHeader
 
+        onMovementEnded: {
+             if (contentY < -80) {
+                console.log("Trigger: Pull > 80px (ContentY: " + contentY + ")")
+
+                if (textInputArea) {
+                    Qt.callLater(function() {
+                        if (textInputArea.activeFocus) {
+                            textInputArea.focus = false
+                            Qt.inputMethod.hide()
+                            console.debug("Springboard | Hide keyboard")
+                        } else {
+                            textInputArea.forceActiveFocus()
+                            Qt.inputMethod.show()
+                            console.debug("Springboard | Show keyboard")
+
+                        }
+                    })
+                }
+            }
+            // Wenn < 80px gezogen: ListView federt automatisch zurück (Standardverhalten)
+        }
+
         header: Column {
-            id: header
             width: parent.width
+            anchors.top: parent.top
             z: 2
 
             Label {
@@ -153,7 +175,7 @@ LauncherPage {
                 font.weight: Font.Black
 
                 background: Rectangle {
-                    color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
+                    color: mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
                     border.color: "transparent"
                 }
 
@@ -190,32 +212,17 @@ LauncherPage {
                         font.pointSize: mainView.largeFontSize
                         wrapMode: Text.WordWrap
                         inputMethodHints: Qt.ImhNoPredictiveText
-
-                        background: Rectangle {
-                            color:  mainView.backgroundOpacity === 1.0 ? mainView.backgroundColor : "transparent"
-                            border.color: "transparent"
-                        }
-
-                        Binding {
-                            target: springBoard
-                            property: "textInput"
-                            value: textArea.text
-                        }
-                        Binding {
-                            target: springBoard
-                            property: "textFocus"
-                            value: activeFocus
-                        }
-                        Binding {
-                            target: springBoard
-                            property: "textInputArea"
-                            value: textArea
-                        }
+                        background: Rectangle { color: "transparent"; border.color: "transparent" }
 
                         onActiveFocusChanged: {
                             headline.color = textArea.activeFocus ? "grey" : mainView.fontColor
                         }
+
+                        Binding { target: springBoard; property: "textInput"; value: textArea.text }
+                        Binding { target: springBoard; property: "textFocus"; value: activeFocus }
+                        Binding { target: springBoard; property: "textInputArea"; value: textArea }
                     }
+
                     ScrollBar.vertical: ScrollBar {}
                 }
 
@@ -225,21 +232,16 @@ LauncherPage {
                     text: "<font color='#808080'>×</font>"
                     font.pointSize: mainView.largeFontSize * 2
                     flat: true
-                    topPadding: mainView.innerSpacing === mainView.componentSpacing ? 0.0 : 18.0
                     visible: textArea.preeditText !== "" || textArea.text !== ""
-
-                    onClicked: {
-                        textArea.text = ""
-                        textArea.focus = false
-                    }
+                    onClicked: { textArea.text = ""; textArea.focus = false }
                 }
             }
 
             Rectangle {
                 width: parent.width
+                height: 1.1
                 color: mainView.backgroundOpacity === 1.0 ? Universal.background : "transparent"
                 border.color: "transparent"
-                height: 1.1
             }
         }
 
@@ -411,7 +413,7 @@ LauncherPage {
                     console.debug("Springboard | " + i + " group of contact: " + matches[i])
                 }
                 var firstName = matches[1]
-                var lastName = matches[2] !== undefined ? matches[1] : ""
+                var lastName = matches[2] !== undefined ? matches[2] : ""
                 var phoneNumber = matches[3]
                 var email = matches[4] !== undefined ? matches[4] : ""
                 var contact = { "name": firstName + " " + lastName, "phoneNumber" : phoneNumber }
@@ -549,6 +551,9 @@ LauncherPage {
                             break
                         case mainView.searchMode.MetaGer:
                             Qt.openUrlExternally("https://metager.de/meta/meta.ger3?eingabe=" + message + "&ref=hellovolla")
+                            break
+                        case mainView.searchMode.Brave:
+                            Qt.openUrlExternally("https://search.brave.com/search?q=" + message)
                             break
                         case mainView.searchMode.Custom:
                             Qt.openUrlExternally(mainView.searchEngineUrl + message)
