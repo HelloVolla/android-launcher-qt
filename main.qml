@@ -143,8 +143,8 @@ ApplicationWindow {
             'Duck' : 0,
             'StartPage' : 1,
             'MetaGer' : 2,
-            'Brave' : 3,
-            'Custom' : 4
+            'Custom' : 3,
+            'Brave' : 4,
         }
         property var theme: {
             'Light': 0,
