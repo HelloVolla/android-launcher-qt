@@ -18,8 +18,10 @@ public:
     ~assistant_worker() override;
 
 public slots:
+    // Initialize the assistant worker.
     void init(const QString &configPath);
-
+    
+    // Ask the assistant a question.
     void ask(const QString &userPrompt);
 
 signals:
@@ -29,6 +31,7 @@ signals:
     void errorOccurred(const QString &message);
 
 private:
+    // Append userprompt to the state messages buffer.
     bool updateMessages(const std::string &userPrompt);
 
     model_config m_config;
