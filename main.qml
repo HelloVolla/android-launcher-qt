@@ -187,7 +187,8 @@ ApplicationWindow {
             'LiveContentPlugin': 20030,
             'Redial': 20031,
             'CreateContact' : 20032,
-            'CreateSpeedDial' : 20033
+            'CreateSpeedDial' : 20033,
+            'AskAssistant' : 20034
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -197,7 +198,8 @@ ApplicationWindow {
             "CreateNote": qsTr("Create note"), "SearchWeb": qsTr("Search web"), "CreateContact" : qsTr("Create new contact"),
             "OpenURL": qsTr("Open in browser"), "AddFeed": qsTr("Add feed to collection"),
             "OpenContact" : qsTr("Open Contact"), "ShowNotes": qsTr("Show Notes"), "SendSignal" : qsTr("Send Signal message"),
-            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal"), "Redial" : qsTr("Redial")
+            "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal"), "Redial" : qsTr("Redial"),
+            "AskAssistant" : qsTr("Ask Volla Assistant")
         }
         property var swipeIndex: {
             'Preferences' : 0,
