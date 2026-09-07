@@ -158,6 +158,11 @@ WorkerScript.onMessage = function(message) {
         }
     }
 
+
+    if (!textInputHasContactPrefix() && textInput.trim().length > 2) {
+        filteredSuggestionObj.push([actionName.AskAssistant, actionType.AskAssistant])
+    }
+
     var existingSuggestionObj = new Object
     for (i = 0; i < model.count; ++i) {
         suggestion = model.get(i).text
