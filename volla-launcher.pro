@@ -17,6 +17,44 @@ SOURCES += \
         fileio.cpp \
         main.cpp
 
+# On-device assistant. Opt-in, because it needs the volla_assistant_native
+# checkout and its prebuilt libraries:  qmake CONFIG+=assistant
+ASSISTANT_ROOT = $$PWD/../volla_assistant_native
+
+assistant {
+    !exists($$ASSISTANT_ROOT/assistant-core/include/config.h) {
+        error("CONFIG+=assistant but no assistant core at $$ASSISTANT_ROOT")
+    }
+
+    DEFINES += VOLLA_ASSISTANT
+
+    SOURCES += assistant_jni.cpp
+
+    INCLUDEPATH += $$ASSISTANT_ROOT/assistant-core/include \
+                   $$ASSISTANT_ROOT/ai-agents/include \
+                   $$ASSISTANT_ROOT/third_party/llama.cpp/include \
+                   $$ASSISTANT_ROOT/third_party/llama.cpp/ggml/include \
+                   $$ASSISTANT_ROOT/third_party/llama.cpp/vendor
+
+    LIBS += -L$$ASSISTANT_ROOT/build \
+            -linference -lstates -lconfig -lprompt \
+            -lagent_core -lsession_config -lllama.cpp
+
+    android {
+        # Application.mk builds arm64 only.
+        ANDROID_ABIS = arm64-v8a
+
+        ANDROID_EXTRA_LIBS += \
+            $$ASSISTANT_ROOT/build/libllama.cpp.so \
+            $$ASSISTANT_ROOT/build/libstates.so \
+            $$ASSISTANT_ROOT/build/libconfig.so \
+            $$ASSISTANT_ROOT/build/libprompt.so \
+            $$ASSISTANT_ROOT/build/libinference.so \
+            $$ASSISTANT_ROOT/build/libagent_core.so \
+            $$ASSISTANT_ROOT/build/libsession_config.so
+    }
+}
+
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -53,6 +91,8 @@ HEADERS += \
 
 DISTFILES += \
     LICENSE.txt \
+    android/src/com/volla/launcher/worker/AssistantNative.java \
+    android/src/com/volla/launcher/worker/AssistantWorker.java \
     android/src/com/volla/launcher/models/Action.java \
     android/src/com/volla/launcher/models/Message.java \
     android/src/com/volla/launcher/models/Notification.java \
