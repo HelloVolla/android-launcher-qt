@@ -1,9 +1,6 @@
 /*
  * JNI bridge between com.volla.launcher.worker.AssistantNative and the
  * assistant core libraries.
- *
- * The core keeps one global llama context, so the Java side must serialise
- * every call onto a single thread.
  */
 
 #include <jni.h>
@@ -338,7 +335,6 @@ Java_com_volla_launcher_worker_AssistantNative_extractAgentId(JNIEnv *env, jobje
     return env->NewStringUTF(id.c_str());
 }
 
-// --- agents -----------------------------------------------------------------
 
 JNIEXPORT jint JNICALL
 Java_com_volla_launcher_worker_AssistantNative_agentInit(JNIEnv *env, jobject,
