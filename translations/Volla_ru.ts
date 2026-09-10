@@ -530,6 +530,14 @@
         <source>Restart app</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Brave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To add a news source, enter the URL of an RSS or Atom feed into the text field on the springboard or share the URL from your browser with the Volla app.</source>
+        <translation type="unfinished">Чтобы добавить источник новостей, введите URL-адрес RSS- или Atom-канала в текстовое поле на стартовом экране или отправьте этот URL-адрес из браузера в приложение Volla.</translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>

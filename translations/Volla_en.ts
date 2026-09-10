@@ -103,14 +103,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Favorites</source>
+        <source>Favorits</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AppGroup</name>
     <message>
-        <source>Favorites</source>
+        <source>Favorits</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -526,6 +526,14 @@
         <source>Restart app</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Brave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To add a news source, enter the URL of an RSS or Atom feed into the text field on the springboard or share the URL from your browser with the Volla app.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Springboard</name>
@@ -816,10 +824,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You have already added the shortcut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Not yet supported</source>
         <translation type="unfinished"></translation>
     </message>
@@ -841,10 +845,6 @@
     </message>
     <message>
         <source>Send Signal message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -941,6 +941,14 @@
     </message>
     <message>
         <source>Create speed dial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to Calender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have alresdy added the shortcut</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
