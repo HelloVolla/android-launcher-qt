@@ -743,6 +743,24 @@ LauncherPage {
                                 newsSettingsItemColumn.destroyCheckboxes()
                             }
                         }
+
+                        Button {
+                            id: mewsDescriptionButton
+                            anchors.right: parent.right
+                            topPadding: mainView.innerSpacing / 2
+                            rightPadding: mainView.innerSpacing
+                            leftPadding: mainView.innerSpacing
+                            flat: true
+                            text: "<font color='#808080'>ⓘ</font>"
+                            font.pointSize: mainView.mediumFontSize
+                            onClicked: {
+                                console.log("Settings | Show news description")
+                                infoDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff" || mainView.fontColor.toString() === "white" ? "#292929" : "#CCCCCC"
+                                infoDialog.dialogDescritpion = qsTr("To add a news source, enter the URL of an RSS or Atom feed into the text field on the springboard or share the URL from your browser with the Volla app.")
+                                infoDialog.open()
+                            }
+                            visible: newsSettingsItemColumn.menuState
+                        }
                     }
 
                     function createCheckboxes() {
@@ -1626,8 +1644,8 @@ LauncherPage {
                     property bool menuState: false
                     property var checkboxes: new Array
                     property var availablePlugins: new Array
-                    property var dpluginListUrl: "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/dev/VollaPluginList.json"
-                    property var pluginListUrl: "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugin/master/VollaPluginList.json"
+                    property var dpluginListUrl: "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugins/dev/VollaPluginList.json"
+                    property var pluginListUrl: "https://raw.githubusercontent.com/HelloVolla/android-launcher-plugins/master/VollaPluginList.json"
 
                     Button {
                         id: pluginSettingsItemButton
@@ -1659,13 +1677,13 @@ LauncherPage {
                      }
 
                     function loadAvailablePlugins() {
-                        console.log("Settings | Load plugins")
+                        console.log("Settings | Load plugins from " + pluginListUrl)
                         availablePlugins = new Array
                         var xhr = new XMLHttpRequest();
                         var temp;
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === XMLHttpRequest.DONE) {
-                                console.log("Settings | got plugins request responce")
+                                console.log("Settings | Got plugins request response")
                                 if (xhr.status === 200) {
                                     console.log("Settings | plugin responste status 200")
                                     var jsonData = JSON.parse(xhr.responseText)
@@ -1686,7 +1704,7 @@ LauncherPage {
                                     }
                                 } else {
                                     mainView.showToast(qsTr("Couldn't load available plugins"))
-                                    console.error("Settings | Error retrieving available plugins:", xhr.status, xhr.statusText)
+                                    console.error("Settings | Error retrieving available plugins:", xhr.status)
                                     availablePlugins = mainView.getInstalledPlugins()
                                     for (i = 0; i < availablePlugins.length; i++) {
                                         availablePlugins[i].isEnabled = true
@@ -1724,13 +1742,13 @@ LauncherPage {
                     }
 
                     function showDescription(actionId) {
-                        pluginDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                        infoDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff" || mainView.fontColor.toString() === "white" ? "#292929" : "#CCCCCC"
                         for (var i = 0; i < pluginSettingsItemColumn.availablePlugins.length; i++) {
                             if (pluginSettingsItemColumn.availablePlugins[i].id === actionId) {
-                                pluginDialog.dialogDescritpion = pluginSettingsItemColumn.availablePlugins[i].description
+                                infoDialog.dialogDescritpion = pluginSettingsItemColumn.availablePlugins[i].description
                             }
                         }
-                        pluginDialog.open()
+                        infoDialog.open()
                     }
 
                     function updateSettings(actionId, active) {
@@ -1745,69 +1763,6 @@ LauncherPage {
                                 }
                             }
                         })
-                    }
-                }
-
-                Dialog {
-                    id: pluginDialog
-
-                    anchors.centerIn: parent
-                    width: parent.width - mainView.innerSpacing * 4
-                    modal: true
-                    dim: false
-
-                    property var backgroundColor: "#292929"
-                    property var dialogDescritpion: ""
-
-                    background: Rectangle {
-                        anchors.fill: parent
-                        color: pluginDialog.backgroundColor
-                        border.color: "transparent"
-                        radius: mainView.innerSpacing / 2
-                    }
-
-                    contentItem: Column {
-                        spacing: mainView.innerSpacing / 2
-
-                        Label {
-                            id: pluginDialogTitle
-                            width: parent.width
-                            padding: mainView.innerSpacing / 2
-                            text: pluginDialog.dialogDescritpion
-                            color: mainView.fontColor
-                            wrapMode: Text.WordWrap
-                            font.family: regularFont.name
-                            font.pointSize: mainView.mediumFontSize
-                            background: Rectangle {
-                                color: "transparent"
-                                border.color: "transparent"
-                            }
-                        }
-                        Button {
-                            id: pluginOkButton
-                            anchors.right: parent.right
-                            width: parent.width / 2 - mainView.innerSpacing / 2
-                            padding: mainView.innerSpacing / 2
-                            flat: true
-                            text: qsTr("Ok")
-
-                            contentItem: Text {
-                                text: okButton.text
-                                color: mainView.fontColor
-                                font.family: regularFont.name
-                                font.pointSize: mainView.mediumFontSize
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-
-                            background: Rectangle {
-                                color: "transparent"
-                                border.color: "gray"
-                            }
-
-                            onClicked: {
-                                pluginDialog.close()
-                            }
-                        }
                     }
                 }
 
@@ -2073,6 +2028,70 @@ LauncherPage {
             }
         }
     }
+
+    Dialog {
+        id: infoDialog
+
+        anchors.centerIn: parent
+        width: parent.width - mainView.innerSpacing * 4
+        modal: true
+        dim: false
+
+        property var backgroundColor: "#292929"
+        property var dialogDescritpion: ""
+
+        background: Rectangle {
+            anchors.fill: parent
+            color: infoDialog.backgroundColor
+            border.color: "transparent"
+            radius: mainView.innerSpacing / 2
+        }
+
+        contentItem: Column {
+            spacing: mainView.innerSpacing / 2
+
+            Label {
+                id: infoDialogTitle
+                width: parent.width
+                padding: mainView.innerSpacing / 2
+                text: infoDialog.dialogDescritpion
+                color: mainView.fontColor
+                wrapMode: Text.WordWrap
+                font.family: regularFont.name
+                font.pointSize: mainView.mediumFontSize
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "transparent"
+                }
+            }
+
+            Button {
+                id: pluginOkButton
+                anchors.right: parent.right
+                width: parent.width / 2 - mainView.innerSpacing / 2
+                padding: mainView.innerSpacing / 2
+                flat: true
+                text: qsTr("Ok")
+
+                contentItem: Text {
+                    text: okButton.text
+                    color: mainView.fontColor
+                    font.family: regularFont.name
+                    font.pointSize: mainView.mediumFontSize
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "gray"
+                }
+
+                onClicked: {
+                    infoDialog.close()
+                }
+            }
+        }
+    }
     
     Dialog {
         id: colorDialog
@@ -2084,7 +2103,7 @@ LauncherPage {
         modal: true
         background: Rectangle {
             color: Universal.background
-            radius: 8
+            radius: mainView.innerSpacing / 2
         }
         
         property var predefinedColors: [
