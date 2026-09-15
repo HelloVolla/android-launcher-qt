@@ -496,7 +496,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished">Mostrar aplicações utilizadas com frequência</translation>
+        <translation type="unfinished">Mostrar aplicações frequentes</translation>
     </message>
     <message>
         <source>Left-handed quick menu</source>
