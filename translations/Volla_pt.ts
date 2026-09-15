@@ -37,7 +37,7 @@
     </message>
     <message>
         <source>apps</source>
-        <translation type="unfinished">aplicativos</translation>
+        <translation type="unfinished">Aplicativos</translation>
     </message>
     <message>
         <source>Other apps</source>
@@ -57,7 +57,7 @@
     </message>
     <message>
         <source>Remove App</source>
-        <translation type="unfinished">Usuń aplikację</translation>
+        <translation type="unfinished">Remover aplicação</translation>
     </message>
     <message>
         <source>Add to new group</source>
@@ -65,27 +65,27 @@
     </message>
     <message>
         <source>Remove from group</source>
-        <translation type="unfinished">Usuń z grupy</translation>
+        <translation type="unfinished">Remover do grupo</translation>
     </message>
     <message>
         <source>Use custom groups</source>
-        <translation type="unfinished">Użyj grup niestandardowych</translation>
+        <translation type="unfinished">Utilize grupos personalizados</translation>
     </message>
     <message>
         <source>Remove group</source>
-        <translation type="unfinished">Usuń grupę</translation>
+        <translation type="unfinished">Remover grupo</translation>
     </message>
     <message>
         <source>Edit groupname</source>
-        <translation type="unfinished">Edit groupname</translation>
+        <translation type="unfinished">Editar nome do grupo</translation>
     </message>
     <message>
         <source>Group name</source>
-        <translation type="unfinished">Nazwa grupy</translation>
+        <translation type="unfinished">Nome do grupo</translation>
     </message>
     <message>
         <source>Enter a group name</source>
-        <translation type="unfinished">Wpisz nazwę grupy</translation>
+        <translation type="unfinished">Escolha o nome do grupo</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -93,11 +93,11 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Está bem</translation>
+        <translation type="unfinished">Aceitar</translation>
     </message>
     <message>
         <source>Group name must have at least one character.</source>
-        <translation type="unfinished">Nazwa grupy musi zawierać co najmniej jeden znak.</translation>
+        <translation type="unfinished">O nome do grupo precisa de pelo menos um caractere.</translation>
     </message>
 </context>
 <context>
@@ -420,7 +420,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Está bem</translation>
+        <translation type="unfinished">Aceitar</translation>
     </message>
     <message>
         <source>Wrong password confirmation</source>
@@ -460,7 +460,7 @@
     </message>
     <message>
         <source>Springboard Skills</source>
-        <translation>Umiejętności Springboard</translation>
+        <translation>Competências do Trampolin</translation>
     </message>
     <message>
         <source>Couldn&apos;t load available plugins</source>
@@ -496,7 +496,7 @@
     </message>
     <message>
         <source>Show frequently used apps</source>
-        <translation type="unfinished">Mostrar aplicações utilizadas com frequência</translation>
+        <translation type="unfinished">Mostrar aplicações frequentes</translation>
     </message>
     <message>
         <source>Left-handed quick menu</source>
@@ -520,19 +520,19 @@
     </message>
     <message>
         <source>Show app names</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostrar nome das aplicações</translation>
     </message>
     <message>
         <source>Keep the wallpaper unchanged</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Manter o fundo sem alerações</translation>
     </message>
     <message>
         <source>Dialer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Telefone</translation>
     </message>
     <message>
         <source>Restart app</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Reiniciar aplicação</translation>
     </message>
     <message>
         <source>Brave</source>
@@ -662,7 +662,7 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Está bem</translation>
+        <translation type="unfinished">Aceitar</translation>
     </message>
 </context>
 <context>
