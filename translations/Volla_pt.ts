@@ -524,7 +524,7 @@
     </message>
     <message>
         <source>Keep the wallpaper unchanged</source>
-        <translation type="unfinished">Manter o fundo actual</translation>
+        <translation type="unfinished">Manter o fundo sem alerações</translation>
     </message>
     <message>
         <source>Dialer</source>
