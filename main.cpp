@@ -2,6 +2,7 @@
 #include <QtQuick>
 #include <QtAndroidExtras/QtAndroid>
 
+#include "assistant.h"
 #include "fileio.h"
 
 #ifdef Q_OS_ANDROID
@@ -74,11 +75,12 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.SignalUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.ContactUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.SignalWorker");
-#ifdef VOLLA_ASSISTANT
-    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.AssistantWorker");
-#endif
 
     QQmlApplicationEngine engine;
+
+    Assistant assistant;
+    engine.rootContext()->setContextProperty("assistant", &assistant);
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
