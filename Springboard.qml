@@ -30,15 +30,14 @@ LauncherPage {
 
 
     property bool isCurrentPage: mainView.currentIndex === mainView.swipeIndex.Springboard
-    property bool assistantPreloadTried: false
-    property bool assistantReady: false
     property bool defaultSuggestions: false
     property bool dotShortcut: true
     property bool roundedShortcutMenu: true
 
     onIsCurrentPageChanged: {
-        if (isCurrentPage)
+        if (isCurrentPage){
             startAssistant()
+        }
     }
 
     onTextInputChanged: {
@@ -119,21 +118,38 @@ LauncherPage {
         springBoard.headline.color = mainView.fontColor
     }
 
-    // Load the model as soon as the user lands on the springboard, so it is
-    // ready by the time they finish typing.
+    // Load the model as soon as the user lands on the springboard.
     function startAssistant() {
-        if (springBoard.assistantPreloadTried)
+        if (!assistant.available)
             return
-        springBoard.assistantPreloadTried = true
         console.log("Springboard | Preloading assistant")
-        AN.SystemDispatcher.dispatch("volla.launcher.assistantInitAction", { })
+        assistant.init()
     }
 
     function askAssistant(prompt) {
         console.log("Springboard | Ask assistant: " + prompt)
-        mainView.showToast(springBoard.assistantReady ? qsTr("Thinking...")
-                                                      : qsTr("Starting the assistant..."))
-        AN.SystemDispatcher.dispatch("volla.launcher.assistantAction", {"prompt": prompt})
+        mainView.showToast(assistant.ready ? qsTr("Thinking...")
+                                           : qsTr("Starting the assistant..."))
+        assistant.ask(prompt)
+    }
+
+    Connections {
+        target: assistant
+
+        onReadyChanged: {
+            console.log("Springboard | Assistant ready: " + assistant.ready)
+        }
+
+        onResponse: {
+            // Show message in a toast temporary
+            console.log("Springboard | Assistant replied: " + text)
+            mainView.showToast(text)
+        }
+
+        onError: {
+            console.warn("Springboard | Assistant error: " + message)
+            mainView.showToast(message)
+        }
     }
 
     function addPlugin(pluginSource, pluginId) {
@@ -891,16 +907,6 @@ LauncherPage {
                         appButtons.push(object)
                         closeAppsButton.visible = true
                     }
-                } else if (type === "volla.launcher.assistantReadyResponse") {
-                    console.log("Springboard | Assistant is ready")
-                    springBoard.assistantReady = true
-                } else if (type === "volla.launcher.assistantResponse") {
-                    // Show message in a toast temporary
-                    console.log("Springboard | Assistant replied: " + message["response"])
-                    mainView.showToast(message["response"])
-                } else if (type === "volla.launcher.assistantErrorResponse") {
-                    console.warn("Springboard | Assistant error: " + message["message"])
-                    mainView.showToast(message["message"])
                 } else if (type === "volla.launcher.recentCallResponse") {
                     if (message.calls.length > 0) {
                         console.log("Springboard | onDispatched: " + message.calls.length + " recent call(s)")
