@@ -18,9 +18,6 @@ public:
     explicit AssistantEngine(QObject *parent = nullptr);
     ~AssistantEngine() override;
 
-    // Called from the inference callback, on this object's thread.
-    void reportPartial(const QString &text);
-
 public slots:
     void load();
     void query(const QString &prompt);
@@ -30,7 +27,6 @@ signals:
     // The engine freed its state and has to be loaded again before the next query.
     void unloaded();
     void failed(const QString &message);
-    void partial(const QString &text);
     void answered(const QString &text);
 
 private:
@@ -64,7 +60,6 @@ public slots:
 signals:
     void readyChanged();
     void error(const QString &message);
-    void partialResponse(const QString &text);
     void response(const QString &text);
 
     void loadRequested();
