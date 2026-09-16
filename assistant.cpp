@@ -19,8 +19,6 @@ namespace {
 llama_inference g_inference;
 state_type g_state;
 
-AssistantEngine *g_streaming = nullptr;
-
 void releaseAssistant()
 {
     free_ptr(&g_state);
@@ -98,13 +96,6 @@ void appendAssistantTurn()
 
 } // namespace
 
-// Defined by the host application; the assistant core calls it once per token.
-void callPartiallyUpdate(const char *text)
-{
-    if (g_streaming != nullptr)
-        g_streaming->reportPartial(toString(text));
-}
-
 #endif // VOLLA_ASSISTANT
 
 AssistantEngine::AssistantEngine(QObject *parent)
@@ -118,11 +109,6 @@ AssistantEngine::~AssistantEngine()
     if (m_loaded)
         releaseAssistant();
 #endif
-}
-
-void AssistantEngine::reportPartial(const QString &text)
-{
-    emit partial(text);
 }
 
 void AssistantEngine::unload()
@@ -254,9 +240,7 @@ void AssistantEngine::query(const QString &prompt)
 
     qDebug() << "Assistant | Running inference";
 
-    g_streaming = this;
     const int res = run_inference_stream(&g_inference, &g_state);
-    g_streaming = nullptr;
 
     if (res != 0) {
         unload();
@@ -306,7 +290,6 @@ Assistant::Assistant(QObject *parent)
             m_startRequested = false;
         emit error(message);
     });
-    connect(m_engine, &AssistantEngine::partial, this, &Assistant::partialResponse);
     connect(m_engine, &AssistantEngine::answered, this, &Assistant::response);
 
     m_thread.start();
