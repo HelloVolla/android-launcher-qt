@@ -1,6 +1,6 @@
 QT += quick androidextras
 
-CONFIG += c++11 lrelease embed_translations
+CONFIG += c++11 lrelease embed_translations assistant
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -14,44 +14,56 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        assistant.cpp \
         fileio.cpp \
         main.cpp
 
-# On-device assistant. Opt-in, because it needs the volla_assistant_native
-# checkout and its prebuilt libraries:  qmake CONFIG+=assistant
-ASSISTANT_ROOT = $$PWD/../volla_assistant_native
+
+isEmpty(ASSISTANT_ROOT): ASSISTANT_ROOT = $$(VOLLA_ASSISTANT_ROOT)
+
+!isEmpty(ASSISTANT_ROOT) {
+    isEmpty(ASSISTANT_INCLUDES) {
+        ASSISTANT_INCLUDES = $$ASSISTANT_ROOT/assistant-core/include \
+                             $$ASSISTANT_ROOT/ai-agents/include \
+                             $$ASSISTANT_ROOT/third_party/llama.cpp/include \
+                             $$ASSISTANT_ROOT/third_party/llama.cpp/ggml/include \
+                             $$ASSISTANT_ROOT/third_party/llama.cpp/vendor
+    }
+    isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/build
+}
+
+ASSISTANT_LIB_NAMES = inference states config prompt agent_core session_config llama.cpp
+
+assistant:isEmpty(ASSISTANT_INCLUDES) {
+    warning("No assistant path given (ASSISTANT_ROOT or VOLLA_ASSISTANT_ROOT) - building without the on-device assistant")
+    CONFIG -= assistant
+}
+
+assistant:for(dir, ASSISTANT_INCLUDES) {
+    !exists($$dir) {
+        warning("Assistant headers not found at $$dir - building without the on-device assistant")
+        CONFIG -= assistant
+    }
+}
+
+assistant:for(name, ASSISTANT_LIB_NAMES) {
+    !exists($$ASSISTANT_LIBDIR/lib$${name}.so) {
+        warning("Assistant library lib$${name}.so not found in $$ASSISTANT_LIBDIR - building without the on-device assistant")
+        CONFIG -= assistant
+    }
+}
 
 assistant {
-    !exists($$ASSISTANT_ROOT/assistant-core/include/config.h) {
-        error("CONFIG+=assistant but no assistant core at $$ASSISTANT_ROOT")
-    }
-
     DEFINES += VOLLA_ASSISTANT
 
-    SOURCES += assistant_jni.cpp
+    INCLUDEPATH += $$ASSISTANT_INCLUDES
 
-    INCLUDEPATH += $$ASSISTANT_ROOT/assistant-core/include \
-                   $$ASSISTANT_ROOT/ai-agents/include \
-                   $$ASSISTANT_ROOT/third_party/llama.cpp/include \
-                   $$ASSISTANT_ROOT/third_party/llama.cpp/ggml/include \
-                   $$ASSISTANT_ROOT/third_party/llama.cpp/vendor
+    LIBS += -L$$ASSISTANT_LIBDIR
+    for(name, ASSISTANT_LIB_NAMES): LIBS += -l$$name
 
-    LIBS += -L$$ASSISTANT_ROOT/build \
-            -linference -lstates -lconfig -lprompt \
-            -lagent_core -lsession_config -lllama.cpp
-
-    android {
-        # Application.mk builds arm64 only.
-        ANDROID_ABIS = arm64-v8a
-
-        ANDROID_EXTRA_LIBS += \
-            $$ASSISTANT_ROOT/build/libllama.cpp.so \
-            $$ASSISTANT_ROOT/build/libstates.so \
-            $$ASSISTANT_ROOT/build/libconfig.so \
-            $$ASSISTANT_ROOT/build/libprompt.so \
-            $$ASSISTANT_ROOT/build/libinference.so \
-            $$ASSISTANT_ROOT/build/libagent_core.so \
-            $$ASSISTANT_ROOT/build/libsession_config.so
+    android:!assistant_no_bundle {
+        for(name, ASSISTANT_LIB_NAMES): \
+            ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/lib$${name}.so
     }
 }
 
@@ -87,12 +99,11 @@ contains(ANDROID_TARGET_ARCH,x86) {
 }
 
 HEADERS += \
+    assistant.h \
     fileio.h
 
 DISTFILES += \
     LICENSE.txt \
-    android/src/com/volla/launcher/worker/AssistantNative.java \
-    android/src/com/volla/launcher/worker/AssistantWorker.java \
     android/src/com/volla/launcher/models/Action.java \
     android/src/com/volla/launcher/models/Message.java \
     android/src/com/volla/launcher/models/Notification.java \
