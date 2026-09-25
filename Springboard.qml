@@ -1726,6 +1726,30 @@ LauncherPage {
                 property var shortcutLabelheight: mainView.largeFontSize + mainView.innerSpacing + 8
             }
 
+            ScrollBar.vertical: ScrollBar {
+                id: scrollBar
+                size: shortcutFlickable.height / shortcutFlickable.contentHeight
+                position: shortcutFlickable.contentY / shortcutFlickable.contentHeight
+                active: shortcutFlickable.contentHeight > shortcutFlickable.height
+                width: 4
+                contentItem: Rectangle {
+                    implicitWidth: 4
+                    implicitHeight: 40
+                    radius: 2
+                    color: mainView.accentColor
+                    opacity: scrollBar.active ? 0.6 : 0
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 150
+                        }
+                    }
+                }
+                background: Rectangle {
+                    implicitWidth: 4
+                    color: "transparent"
+                }
+            }
+
             Behavior on opacity {
                 NumberAnimation {
                     duration: 200
