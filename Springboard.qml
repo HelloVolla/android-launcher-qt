@@ -72,7 +72,7 @@ LauncherPage {
 
     function updateShortcutMenuState(opened) {
         if (opened) {
-            var maxHeight = mainView.height * 0.77
+            var maxHeight = mainView.height * 0.90
             var contentHeight = shortcutColumn.topPadding * 2 + shortcutColumn.bottomPadding
                     + shortcutColumn.shortcutLabels.length * (mainView.largeFontSize + mainView.innerSpacing + 2)
             var finalHeight = Math.min(contentHeight, maxHeight)
@@ -1736,8 +1736,8 @@ LauncherPage {
                     implicitWidth: 4
                     implicitHeight: 40
                     radius: 2
-                    color: mainView.accentColor
-                    opacity: scrollBar.active ? 0.6 : 0
+                    color: mainView.accentTextColor
+                    opacity: scrollBar.active ? 0.7 : 0
                     Behavior on opacity {
                         NumberAnimation {
                             duration: 150
