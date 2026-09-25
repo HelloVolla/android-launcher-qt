@@ -73,7 +73,7 @@ LauncherPage {
     function updateShortcutMenuState(opened) {
         if (opened) {
             var maxHeight = mainView.height * 0.90
-            var contentHeight = shortcutColumn.topPadding * 2 + shortcutColumn.bottomPadding
+            var contentHeight = shortcutColumn.topPadding + shortcutColumn.bottomPadding
                     + shortcutColumn.shortcutLabels.length * (mainView.largeFontSize + mainView.innerSpacing + 2)
             var finalHeight = Math.min(contentHeight, maxHeight)
             shortcutMenu.height = finalHeight + mainView.innerSpacing * 1.5
