@@ -72,16 +72,14 @@ LauncherPage {
 
     function updateShortcutMenuState(opened) {
         if (opened) {
-            shortcutMenu.height = shortcutColumn.height + mainView.innerSpacing * 1.5
-            shortcutBackground.width = roundedShortcutMenu ? parent.width - mainView.innerSpacing * 4 : parent.width
-            shortcutBackground.height = shortcutColumn.height
+            shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
+            shortcutBackground.height = shortcutMenu.height
             shortcutColumn.opacity = 1
         } else {
             shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
             shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             shortcutColumn.opacity = 0
-            shortcutMenu.executeSelection()
-            shortcutMenu.selectedMenuItem = rootMenuButton
+            shortcutMenu.width = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
             shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         }
     }
@@ -1486,8 +1484,8 @@ LauncherPage {
             console.log("Springboard | entered")
 
             width = Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
-            height = shortcutColumn.topPadding * 2 + shortcutColumn.bottomPadding
-                    + shortcutColumn.shortcutLabels.length * (mainView.largeFontSize + mainView.innerSpacing + 2)
+            height = shortcutColumn.topPadding + shortcutColumn.bottomPadding
+                    + shortcutColumn.shortcutLabels.length * shortcutColumn.shortcutLabelheight
 
             var rbPoint = mapFromItem(rootMenuButton, 0, 0)
             var touchY = dotShortcut ? rbPoint.y : rbPoint.y - rootMenuButton.height
@@ -1495,37 +1493,25 @@ LauncherPage {
             if (mouseX > rbPoint.x && mouseX < rbPoint.x + rootMenuButton.width
                     && mouseY > touchY && mouseY < touchY + touchHeight) {
                 console.log("Springboard | enable menu")
-                var shortcutBackgroundHeight = shortcutColumn.topPadding * 2 + shortcutColumn.bottomPadding
-                        + shortcutColumn.shortcutLabels.length * (mainView.largeFontSize + mainView.innerSpacing + 2)
-                shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
-                shortcutBackground.height = shortcutBackgroundHeight
-                shortcutColumn.opacity = 1
+                updateShortcutMenuState(true)
             }
         }
 
         onExited: {
             console.log("Springboard | exited")
             if (shortcutColumn.opacity > 0) {
-                shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
-                shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
-                shortcutColumn.opacity = 0
+                updateShortcutMenuState(false)
                 shortcutMenu.executeSelection()
                 selectedMenuItem = rootMenuButton
-                shortcutMenu.width = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
-                shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
             }
         }
 
         onCanceled: {
             console.log("Springboard | cancelled")
             if (shortcutColumn.opacity > 0) {
-                shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
-                shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
-                shortcutColumn.opacity = 0
+                updateShortcutMenuState(false)
                 selectedMenuItem = rootMenuButton
-                shortcutMenu.width = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
-                shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
-            }
+           }
         }
 
         onPositionChanged: {
@@ -1566,7 +1552,6 @@ LauncherPage {
                             console.debug("Springboard | Error: "+ component.errorString() )
                     }
                     var object = component.createObject(shortcutColumn, properties)
-                    shortcutColumn.shortcutLabelheight = object.height
                     shortcutColumn.shortcutLabels.push(object)
                 }
             }
@@ -1708,7 +1693,7 @@ LauncherPage {
 
             property int duration: 200
             property var shortcutLabels: new Array
-            property var shortcutLabelheight: 0
+            property var shortcutLabelheight: mainView.largeFontSize + mainView.innerSpacing + 8
 
             Behavior on opacity {
                 NumberAnimation {
