@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QStandardPaths>
 
 #ifdef VOLLA_ASSISTANT
@@ -61,6 +62,20 @@ int validUtf8PrefixLength(const char *text)
 QString toString(const char *text)
 {
     return QString::fromUtf8(text, validUtf8PrefixLength(text));
+}
+
+
+QString stripThinking(const QString &text)
+{
+    QString answer = text;
+    answer.remove(QRegularExpression(QStringLiteral("<think>.*?</think>"),
+                                     QRegularExpression::DotMatchesEverythingOption));
+
+    const int unterminated = answer.indexOf(QStringLiteral("<think>"));
+    if (unterminated >= 0)
+        answer.truncate(unterminated);
+
+    return answer.trimmed();
 }
 
 void appendUserTurn(const QString &prompt, bool thinker)
@@ -250,7 +265,7 @@ void AssistantEngine::query(const QString &prompt)
 
     appendAssistantTurn();
 
-    const QString answer = toString(g_state.assistant_response);
+    const QString answer = stripThinking(toString(g_state.assistant_response));
 
     if (is_agent_called(answer.toStdString())) {
         const QString agentId = QString::fromStdString(extract_agent_id(answer.toStdString()));

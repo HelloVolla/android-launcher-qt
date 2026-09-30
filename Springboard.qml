@@ -28,6 +28,9 @@ LauncherPage {
     property var plugins: new Array
     property var appButtons: new Array
 
+    property string assistantResponse: ""
+    property bool assistantThinking: false
+
 
     property bool isCurrentPage: mainView.currentIndex === mainView.swipeIndex.Springboard
     property bool defaultSuggestions: false
@@ -128,8 +131,8 @@ LauncherPage {
 
     function askAssistant(prompt) {
         console.log("Springboard | Ask assistant: " + prompt)
-        mainView.showToast(assistant.ready ? qsTr("Thinking...")
-                                           : qsTr("Starting the assistant..."))
+        springBoard.assistantResponse = ""
+        springBoard.assistantThinking = true
         assistant.ask(prompt)
     }
 
@@ -141,20 +144,21 @@ LauncherPage {
         }
 
         onResponse: {
-            // Show message in a toast temporary
             console.log("Springboard | Assistant replied: " + text)
-            mainView.showToast(text)
+            springBoard.assistantThinking = false
+            springBoard.assistantResponse = text
         }
 
         onError: {
             console.warn("Springboard | Assistant error: " + message)
+            springBoard.assistantThinking = false
             mainView.showToast(message)
         }
     }
 
     function addPlugin(pluginSource, pluginId) {
         console.debug("Springboard | Plugin " + pluginId + " source length: " + pluginSource.length)
-        //console.debug("Springboard | Plugin " + pluginId + " source: " + pluginSource)
+
         try {
             var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId)
             console.debug("Springboard | Plugin " + qmlObject.metadata.id + " created")
@@ -273,6 +277,72 @@ LauncherPage {
                     onClicked: {
                         textArea.text = ""
                         textArea.focus = false
+                        springBoard.assistantResponse = ""
+                        springBoard.assistantThinking = false
+                    }
+                }
+            }
+
+            Rectangle {
+                id: assistantBox
+                x: mainView.innerSpacing
+                width: parent.width - mainView.innerSpacing * 2
+                height: visible ? assistantContent.height + mainView.innerSpacing : 0
+                visible: springBoard.assistantThinking || springBoard.assistantResponse !== ""
+                color: "white"
+                radius: mainView.innerSpacing / 3
+                border.color: "#e0e0e0"
+
+                Item {
+                    id: assistantContent
+                    x: mainView.innerSpacing / 2
+                    y: mainView.innerSpacing / 2
+                    width: parent.width - mainView.innerSpacing
+                    height: springBoard.assistantThinking ? thinkingRow.height
+                                                          : answerFlickable.height
+
+                    Row {
+                        id: thinkingRow
+                        visible: springBoard.assistantThinking
+                        spacing: mainView.innerSpacing / 2
+
+                        BusyIndicator {
+                            running: springBoard.assistantThinking
+                            width: mainView.mediumFontSize * 2
+                            height: width
+                        }
+
+                        Label {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: assistant.ready ? qsTr("Thinking...")
+                                                  : qsTr("Starting the assistant...")
+                            color: "#444444"
+                            font.pointSize: mainView.mediumFontSize
+                        }
+                    }
+
+                    Flickable {
+                        id: answerFlickable
+                        visible: !springBoard.assistantThinking
+                        width: parent.width
+                        height: Math.min(contentHeight, springBoard.height * 0.4)
+                        contentWidth: width
+                        contentHeight: answerText.implicitHeight
+                        clip: true
+                        flickableDirection: Flickable.VerticalFlick
+
+                        TextEdit {
+                            id: answerText
+                            width: parent.width
+                            text: springBoard.assistantResponse
+                            readOnly: true
+                            selectByMouse: true
+                            wrapMode: Text.WordWrap
+                            color: "#202020"
+                            font.pointSize: mainView.mediumFontSize
+                        }
+
+                        ScrollBar.vertical: ScrollBar {}
                     }
                 }
             }
@@ -814,7 +884,8 @@ LauncherPage {
 
         delegate: Rectangle {
             id: backgroundItem
-            height: button.height
+            visible: !springBoard.assistantThinking
+            height: visible ? button.height : 0
             width: parent.width
             color: model.action < 20000 ? "transparent" :
                                           model.action < 20029 || model.action > 20030 ? mainView.accentColor : "slategrey"
