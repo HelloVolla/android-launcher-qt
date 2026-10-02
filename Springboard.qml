@@ -16,6 +16,7 @@ LauncherPage {
 
     property string textInput
     property bool textFocus
+    property bool searchKeyboardWasVisible: false
     property real menuheight: mainView.largeFontSize * 7 + mainView.innerSpacing * 10.5
     property real menuWidth: 400.0
     property var textInputArea
@@ -59,9 +60,14 @@ LauncherPage {
 
         onKeyboardRectangleChanged: {
             console.debug("Springboard | Keyboard rectangle: " + Qt.inputMethod.keyboardRectangle + ", focus: " + textInputArea.activeFocus)
-            if (Qt.rect(0, 0, 0, 0) === Qt.inputMethod.keyboardRectangle && textInputArea.activeFocus) {
-                console.debug("Springboard | Reactivate keyboard")
-                Qt.inputMethod.show()
+            if (Qt.inputMethod.keyboardRectangle.height > 0) {
+                springBoard.searchKeyboardWasVisible = true
+            } else {
+                if (springBoard.searchKeyboardWasVisible && textInputArea.activeFocus) {
+                    console.debug("Springboard | Clear search focus after keyboard closed")
+                    textInputArea.focus = false
+                }
+                springBoard.searchKeyboardWasVisible = false
             }
         }
     }
@@ -123,25 +129,21 @@ LauncherPage {
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.OverlayHeader : ListView.InlineHeader
 
         onMovementEnded: {
-             if (contentY < -80) {
+            if (contentY < -80 && textInputArea) {
                 console.log("Trigger: Pull > 80px (ContentY: " + contentY + ")")
 
-                if (textInputArea) {
-                    Qt.callLater(function() {
-                        if (textInputArea.activeFocus) {
-                            textInputArea.focus = false
-                            Qt.inputMethod.hide()
-                            console.debug("Springboard | Hide keyboard")
-                        } else {
-                            textInputArea.forceActiveFocus()
-                            Qt.inputMethod.show()
-                            console.debug("Springboard | Show keyboard")
-
-                        }
-                    })
-                }
+                Qt.callLater(function() {
+                    if (textInputArea.activeFocus) {
+                        textInputArea.focus = false
+                        Qt.inputMethod.hide()
+                        console.debug("Springboard | Hide keyboard")
+                    } else {
+                        textInputArea.forceActiveFocus()
+                        Qt.inputMethod.show()
+                        console.debug("Springboard | Show keyboard")
+                    }
+                })
             }
-            // Wenn < 80px gezogen: ListView federt automatisch zurück (Standardverhalten)
         }
 
         header: Column {
