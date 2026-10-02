@@ -84,26 +84,6 @@ LauncherPage {
         }
     }
 
-    function updateWidgets(widgetId, isVisible) {
-        widgetsSettings.sync()
-
-        switch (widgetId) {
-            case 0:
-                widgetsSettings.weatherWgtIsVisible = isVisible
-                break
-            case 1:
-                widgetsSettings.clockWgtIsVisible = isVisible
-                break
-            case 2:
-                widgetsSettings.noteWgtIsVisible = isVisible
-                break
-            case 3:
-                widgetsSettings.dialerWgtIsVisible = isVisible
-            default:
-                break
-        }
-    }
-
     function updateHeadlineColor() {
         springBoard.headline.color = mainView.fontColor
     }
@@ -911,7 +891,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.weatherWgtIsVisible
+            visible: mainView.getSetting("weatherWgtIsVisible")
 
             property string apiKey: "488297aabb1676640ac7fc10a6c5a2d1"
             property string city: weatherSettings.city
@@ -1250,7 +1230,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.clockWgtIsVisible
+            visible: mainView.getSetting("clockWgtIsVisible")
 
             // todo
             Clock {
@@ -1266,7 +1246,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.noteWgtIsVisible
+            visible: mainView.getSetting("noteWgtIsVisible")
 
             property var note
 
@@ -1336,7 +1316,7 @@ LauncherPage {
             border.color: "grey"
             width: widgetsFlow.sideLength
             height: widgetsFlow.sideLength
-            visible: widgetsSettings.dialerWgtIsVisible
+            visible: mainView.getSetting("dialerWgtIsVisible")
 
             GridView {
                 id: dialerGrid
@@ -1427,29 +1407,6 @@ LauncherPage {
             }
         }
 
-        Settings {
-            id: widgetsSettings
-            property bool clockWgtIsVisible: mainView.isTablet ? true : false
-            property bool weatherWgtIsVisible: mainView.isTablet ? true : false
-            property bool noteWgtIsVisible: mainView.isTablet ? true : false
-            property bool dialerWgtIsVisible: false
-
-            onClockWgtIsVisibleChanged: {
-                console.debug("Springborad | Clock widget visibility changed to " + clockWidgetIsVisible)
-            }
-
-            onWeatherWgtIsVisibleChanged: {
-                console.debug("Springborad | Weather widget visibility changed to " + weatherWgtIsVisible)
-            }
-
-            onNoteWgtIsVisibleChanged: {
-                console.debug("Springborad | Note widget visibility changed to " + noteWgtIsVisible)
-            }
-
-            onDialerWgtIsVisibleChanged: {
-                console.debug("Springborad | Dialer widget visibility changed to " + dialerWgtIsVisible)
-            }
-        }
     }
 
     MouseArea {
