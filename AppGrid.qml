@@ -983,12 +983,6 @@ LauncherPage {
         property double lastAppCountCheck: 0.0
         property string customGroups: ""
 
-        onUseCategoriesChanged: {
-            if (!useCategories) {
-
-            }
-        }
-
         function getCustomGroups() {
             if (settings.customGroups !== undefined && settings.customGroups.length > 0) {
                 return JSON.parse(settings.customGroups)

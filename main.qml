@@ -46,8 +46,11 @@ ApplicationWindow {
                   }
                   mainView.keepLastIndex = false
               } else {
-                  if (settings.showAppsAtStartup && mainView.currentIndex === mainView.swipeIndex.Apps)
-                      appGrid.children[0].item.updateNotifications()
+                  if (settings.showAppsAtStartup
+                          && mainView.currentIndex === mainView.swipeIndex.Apps
+                          && appGridLoader.item) {
+                      appGridLoader.item.updateNotifications()
+                  }
                   mainView.currentIndex = settings.showAppsAtStartup ? mainView.swipeIndex.Apps : mainView.swipeIndex.Springboard
               }
               // Check runnung apps
@@ -58,8 +61,10 @@ ApplicationWindow {
               AN.SystemDispatcher.dispatch("volla.launcher.fontAction", {})
               // Check new pinned shortcut
               AN.SystemDispatcher.dispatch("volla.launcher.checkNewShortcut", {})
-              // Update app grid
-              AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
+              // The app grid may still be loading after returning from the background.
+              if (appGridLoader.status === Loader.Ready) {
+                  AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
+              }
               // Load wallpaper
               AN.SystemDispatcher.dispatch("volla.launcher.wallpaperAction", {"wallpaperId": mainView.wallpaperId})
               // Load contacts
@@ -424,8 +429,10 @@ ApplicationWindow {
             console.debug("MainView | Index changed to " + currentIndex)
             switch (currentIndex) {
                 case swipeIndex.Apps:
-                    appGrid.children[0].item.updateNotifications()
-                    break
+                if (appGridLoader.item) {
+                    appGridLoader.item.updateNotifications()
+                }
+                break
                 case swipeIndex.Preferences:
                     settingsPage.children[0].item.updateAvailablePlugins()
                     AN.SystemDispatcher.dispatch("volla.launcher.securityStateAction", {})
@@ -460,6 +467,15 @@ ApplicationWindow {
                 id: appGridLoader
                 anchors.fill: parent
                 sourceComponent: Qt.createComponent("/AppGrid.qml", mainView)
+
+                onLoaded: {
+                    if (Qt.application.state === Qt.ApplicationActive) {
+                        AN.SystemDispatcher.dispatch("volla.launcher.appCountAction", {})
+                        if (mainView.currentIndex === mainView.swipeIndex.Apps) {
+                            item.updateNotifications()
+                        }
+                    }
+                }
             }
         }
 
