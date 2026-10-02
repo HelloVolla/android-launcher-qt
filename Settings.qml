@@ -101,7 +101,7 @@ LauncherPage {
                         }
 
                         Component.onCompleted: {
-                            switch (themeSettings.theme) {
+                            switch (mainView.getSetting("theme")) {
                             case mainView.theme.Dark:
                                 text = qsTr("Dark Mode")
                                 break
@@ -113,6 +113,9 @@ LauncherPage {
                                 break
                             case mainView.theme.LightTranslucent:
                                 text = qsTr("Light Translucent Mode")
+                                break
+                            case mainView.theme.System:
+                                text = qsTr("Follow system theme")
                                 break
                             default:
                                 console.log("Settings | Unknown theme selected: " + mainView.theme)
@@ -180,11 +183,28 @@ LauncherPage {
 
                         leftPadding: mainView.innerSpacing
                         rightPadding: mainView.innerSpacing
-                        bottomPadding: mainView.innerSpacing * 2
+                        bottomPadding: mainView.innerSpacing
                         width: parent.width
                         visible: themeSettingsItem.menuState
                         text: qsTr("Light Translucent Mode")
                         boldText: themeSettingsItem.selectedMenuItem === lightTranslucentModeOption
+                        textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
+                        textOpacity: themeSettingsItem.labelOpacity
+                        backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
+                        fontPointSize: mainView.mediumFontSize
+                    }
+                    HighlightButton {
+                        id: systemModeOption
+
+                        property var theme: mainView.theme.System
+
+                        leftPadding: mainView.innerSpacing
+                        rightPadding: mainView.innerSpacing
+                        bottomPadding: mainView.innerSpacing * 2
+                        width: parent.width
+                        visible: themeSettingsItem.menuState
+                        text: qsTr("Follow system theme")
+                        boldText: themeSettingsItem.selectedMenuItem === systemModeOption
                         textColor: themeSettingsItem.menuState ? mainView.accentTextColor : "white"
                         textOpacity: themeSettingsItem.labelOpacity
                         backgroundColor: themeSettingsItem.menuState ? mainView.accentColor : "transparent"
@@ -233,6 +253,7 @@ LauncherPage {
                     var secondPoint = mapFromItem(lightModeOption, 0, 0)
                     var thirdPoint = mapFromItem(darkTranslucentModeOption, 0, 0)
                     var forthPoint = mapFromItem(lightTranslucentModeOption, 0, 0)
+                    var fifthPoint = mapFromItem(systemModeOption, 0, 0)
                     if(firstPoint.y === 0){
                         firstPoint.y = firstPoint.y+darkModeOption.height
                     }
@@ -245,6 +266,9 @@ LauncherPage {
                     if(forthPoint.y === 0){
                         forthPoint.y = thirdPoint.y+darkModeOption.height
                     }
+                    if(fifthPoint.y === 0){
+                        fifthPoint.y = forthPoint.y+lightTranslucentModeOption.height
+                    }
 
                     var selectedItem
 
@@ -256,6 +280,8 @@ LauncherPage {
                         selectedItem = darkTranslucentModeOption
                     } else if (mouseY > forthPoint.y && mouseY < forthPoint.y + lightTranslucentModeOption.height) {
                         selectedItem = lightTranslucentModeOption
+                    } else if (mouseY > fifthPoint.y && mouseY < fifthPoint.y + systemModeOption.height) {
+                        selectedItem = systemModeOption
                     }else {
                         selectedItem = themeSettingsItemTitle
                     }
@@ -268,45 +294,40 @@ LauncherPage {
                 }
 
                 function executeSelection() {
-                    console.log("Settings | Current mode: " + Universal.theme + ", " + themeSettings.theme)
+                    var selectedTheme = selectedMenuItem.theme
+                    console.log("Settings | Current mode: " + Universal.theme + ", " + mainView.getSetting("theme"))
                     console.log("Settings | Execute mode selection: " + selectedMenuItem.text + ", " + selectedMenuItem.theme)
-                    if (themeSettings.theme !== selectedMenuItem.theme && selectedMenuItem !== themeSettingsItemTitle) {
+                    if (mainView.getSetting("theme") !== selectedTheme && selectedMenuItem !== themeSettingsItemTitle) {
                         themeSettingsItemTitle.text = selectedMenuItem.text
-                        themeSettings.theme = selectedMenuItem.theme
-
-                        if (themeSettings.sync) {
-                            themeSettings.sync()
-                        }
-
-                        switch (themeSettings.theme) {
+                        switch (selectedTheme) {
                             case mainView.theme.Dark:
                                 console.log("Setting | Enable dark mode")
-                                mainView.switchTheme(mainView.theme.Dark, !designSettings.keepLockscreenWallpaper)
+                                mainView.switchTheme(mainView.theme.Dark, !mainView.getSetting("keepLockscreenWallpaper"))
                                 break
                             case mainView.theme.Light:
                                 console.log("Setting | Enable light mode")
-                                mainView.switchTheme(mainView.theme.Light, !designSettings.keepLockscreenWallpaper)
+                                mainView.switchTheme(mainView.theme.Light, !mainView.getSetting("keepLockscreenWallpaper"))
                                 break
                             case mainView.theme.DarkTranslucent:
                                 console.log("Setting | Enable Dark translucent mode")
-                                mainView.switchTheme(mainView.theme.DarkTranslucent, !designSettings.keepLockscreenWallpaper)
+                                mainView.switchTheme(mainView.theme.DarkTranslucent, !mainView.getSetting("keepLockscreenWallpaper"))
                                 break
                             case mainView.theme.LightTranslucent:
                                 console.log("Setting | Enable Light translucent mode")
-                                mainView.switchTheme(mainView.theme.LightTranslucent, !designSettings.keepLockscreenWallpaper)
+                                mainView.switchTheme(mainView.theme.LightTranslucent, !mainView.getSetting("keepLockscreenWallpaper"))
+                                break
+                            case mainView.theme.System:
+                                console.log("Setting | Follow system theme")
+                                mainView.switchTheme(mainView.theme.System, !mainView.getSetting("keepLockscreenWallpaper"))
                                 break
                             default:
-                                console.log("Settings | Unknown theme selected: " + themeSettings.theme)
+                                console.log("Settings | Unknown theme selected: " + selectedTheme)
                         }
 
                         selectedMenuItem = themeSettingsItemTitle
                     }
                 }
 
-                Settings {
-                    id: themeSettings
-                    property int theme: mainView.theme.Dark
-                }
             }
 
             MouseArea {
@@ -1042,7 +1063,7 @@ LauncherPage {
                     function createCheckboxes() {
                         var component = Qt.createComponent("/Checkbox.qml", sourceSettingsItemColumn)
                         var properties = { "actionId": "signal",
-                                "text": qsTr("Signal"), "checked": sourceSettings.signalIsActivated,
+                                "text": qsTr("Signal"), "checked": mainView.getSetting("signalIsActivated"),
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
@@ -1066,15 +1087,8 @@ LauncherPage {
                         if (actionId === "signal") {
                             AN.SystemDispatcher.dispatch("volla.launcher.signalEnable", { "enableSignal": active})
                             mainView.updateSettings("activateSignal", active)
-                            sourceSettings.signalIsActivated = active
                             mainView.isActiveSignal = active
                         }
-                    }
-
-                    Settings {
-                        id: sourceSettings
-
-                        property bool signalIsActivated: false
                     }
 
                     Connections {
@@ -1261,7 +1275,7 @@ LauncherPage {
                     function createCheckboxes() {
                         var component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         var properties = { "actionId": "fullscreen",
-                                "text": qsTr("Fullscreen"), "checked": designSettings.fullscreen,
+                                "text": qsTr("Fullscreen"), "checked": mainView.getSetting("fullscreen"),
                                 "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                 "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                 "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
@@ -1273,7 +1287,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "coloredIcons"
                         properties["text"] = qsTr("Use colored app icons")
-                        properties["checked"] = designSettings.useColoredIcons
+                        properties["checked"] = mainView.getSetting("useColoredIcons")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1283,7 +1297,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "showAppNames"
                         properties["text"] = qsTr("Show app names")
-                        properties["checked"] = designSettings.showAppNames
+                        properties["checked"] = mainView.getSetting("showAppNames")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1293,7 +1307,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "startupIndex"
                         properties["text"] = qsTr("Show apps at startup")
-                        properties["checked"] = designSettings.showAppsAtStartup
+                        properties["checked"] = mainView.getSetting("showAppsAtStartup")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
 
@@ -1304,7 +1318,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "hapticMenus"
                         properties["text"] = qsTr("Use haptic menus")
-                        properties["checked"] = designSettings.useHapticMenus
+                        properties["checked"] = mainView.getSetting("useHapticMenus")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1314,7 +1328,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "useGroupedApps"
                         properties["text"] = qsTr("Show frequently used apps")
-                        properties["checked"] = designSettings.useGroupedApps
+                        properties["checked"] = mainView.getSetting("useGroupedApps")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1324,7 +1338,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "useCategories"
                         properties["text"] = qsTr("Use app categories")
-                        properties["checked"] = designSettings.useCategories
+                        properties["checked"] = mainView.getSetting("useCategories")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1334,7 +1348,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "leftHandedMenu"
                         properties["text"] = qsTr("Left-handed quick menu")
-                        properties["checked"] = designSettings.leftHandedMenu
+                        properties["checked"] = mainView.getSetting("leftHandedMenu")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1344,7 +1358,7 @@ LauncherPage {
                         component = Qt.createComponent("/Checkbox.qml", designSettingsItemColumn)
                         properties["actionId"] = "keepLockscreenWallpaper"
                         properties["text"] = qsTr("Keep the wallpaper unchanged")
-                        properties["checked"] = designSettings.leftHandedMenu
+                        properties["checked"] = mainView.getSetting("keepLockscreenWallpaper")
                         properties["accentColor"] = mainView.accentColor
                         properties["fontFamilyName"] = regularFont.name
                         object = component.createObject(designSettingsItemColumn, properties)
@@ -1366,41 +1380,22 @@ LauncherPage {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
 
                         if (actionId === "fullscreen") {
-                            designSettings.fullscreen = active
-                            designSettings.sync()
                             mainView.updateSettings("fullscreen", active)
                         } else if (actionId === "coloredIcons") {
-                            designSettings.useColoredIcons = active
-                            designSettings.sync()
                             mainView.updateGridView("coloredIcons", active)
-                            mainView.useColoredIcons = active
                         } else if (actionId === "showAppNames") {
-                            designSettings.showAppNames = active
-                            designSettings.sync()
                             mainView.updateGridView("showAppNames", active)
                         } else if (actionId === "startupIndex") {
-                            designSettings.showAppsAtStartup = active
-                            designSettings.sync()
                             mainView.updateSettings("showAppsAtStartup", active)
                         } else if (actionId === "hapticMenus") {
-                            designSettings.useHapticMenus = active
-                            designSettings.sync()
                             mainView.updateSettings("useHapticMenus", active)
                         } else if (actionId === "useGroupedApps") {
-                            designSettings.useGroupedApps = active
-                            designSettings.sync()
                             mainView.updateGridView("useGroupedApps", active)
                         } else if (actionId === "useCategories") {
-                            designSettings.useCategories = active
-                            designSettings.sync()
                             mainView.updateGridView("useCategories", active)
                         } else if (actionId === "leftHandedMenu") {
-                            designSettings.leftHandedMenu = active
-                            designSettings.sync()
                             mainView.updateSettings("leftHandedMenu", active)
                         } else if (actionId === "keepLockscreenWallpaper") {
-                            designSettings.keepLockscreenWallpaper = active
-                            designSettings.sync()
                             mainView.updateSettings("keepLockscreenWallpaper", active)
                         }
                     }
@@ -1421,19 +1416,6 @@ LauncherPage {
                     }
                 }
 
-                Settings {
-                    id: designSettings
-                    property bool fullscreen: false
-                    property bool useColoredIcons: false
-                    property bool useGroupedApps: true
-                    property bool useCategories: false
-                    property bool showAppsAtStartup: false
-                    property bool useHapticMenus: true
-                    property bool showAppNames: true
-                    property bool leftHandedMenu: false
-                    property bool keepLockscreenWallpaper: false
-                    property double blurEffect: 30
-                }
             }
 
             Label {
@@ -1455,7 +1437,7 @@ LauncherPage {
                 width: parent.width
                 from: 0
                 to: 100
-                value: designSettings.blurEffect
+                value: mainView.getSetting("blurEffect")
                 visible: false
 
                 background: Rectangle {
@@ -1488,7 +1470,6 @@ LauncherPage {
 
                 onValueChanged: {
                     console.log("Settings | Blurr filter chanded to " + value)
-                    designSettings.blurEffect = value
                     mainView.updateSettings("blurEffect", value)
                 }
             }
@@ -1532,10 +1513,10 @@ LauncherPage {
                 width: parent.width
                 implicitHeight: widgetsSettingsItemColumn.height
 
-                property var defaultWidgets : [{ "id": 0, "name": qsTr("Weather"), "active": widgetsSettings.weatherWgtIsVisible },
-                                               { "id": 1, "name": qsTr("Clock"), "active": widgetsSettings.clockWgtIsVisible },
-                                               { "id": 2, "name": qsTr("Note"), "active": widgetsSettings.noteWgtIsVisible },
-                                               { "id": 3, "name": qsTr("Dialer"), "active": widgetsSettings.dialerWgtIsVisible }]
+                property var defaultWidgets : [{ "id": 0, "name": qsTr("Weather"), "active": mainView.getSetting("weatherWgtIsVisible") },
+                                               { "id": 1, "name": qsTr("Clock"), "active": mainView.getSetting("clockWgtIsVisible") },
+                                               { "id": 2, "name": qsTr("Note"), "active": mainView.getSetting("noteWgtIsVisible") },
+                                               { "id": 3, "name": qsTr("Dialer"), "active": mainView.getSetting("dialerWgtIsVisible") }]
 
 
                 Column {
@@ -1592,26 +1573,7 @@ LauncherPage {
 
                     function updateSettings(actionId, active) {
                         console.log("Settings | Update settings for " + actionId + ", " + active)
-
-                        switch (actionId) {
-                            case 0:
-                                widgetsSettings.weatherWgtIsVisible = active
-                                break
-                            case 1:
-                                widgetsSettings.clockWgtIsVisible = active
-                                break
-                            case 2:
-                                widgetsSettings.noteWgtIsVisible = active
-                                break
-                            case 3:
-                                widgetsSettings.dialerWgtIsVisible = active
-                                break
-                            default:
-                                break
-                        }
-
                         widgetsSettingsItem.defaultWidgets[actionId].active = active
-                        widgetsSettings.sync()
                         mainView.updateWidgets(actionId, active)
                     }
                 }
@@ -1622,13 +1584,6 @@ LauncherPage {
                     }
                 }
 
-                Settings {
-                    id: widgetsSettings
-                    property bool clockWgtIsVisible: mainView.isTablet ? true : false
-                    property bool weatherWgtIsVisible: mainView.isTablet ? true : false
-                    property bool noteWgtIsVisible: mainView.isTablet ? true : false
-                    property bool dialerWgtIsVisible: false
-                }
             }
 
             Item {

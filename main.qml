@@ -150,7 +150,8 @@ ApplicationWindow {
             'Light': 0,
             'Dark': 1,
             'LightTranslucent': 2,
-            'DarkTranslucent': 3
+            'DarkTranslucent': 3,
+            'System': 4
         }
         property var actionType: {
             'SuggestContact': 0,
@@ -592,12 +593,33 @@ ApplicationWindow {
             toast.show()
         }
 
+        function getSetting(key) {
+            return settings[key]
+        }
+
         function switchTheme(theme, updateLockScreen) {
             settings.theme = theme
             if (settings.sync) {
                 settings.sync()
             }
             console.log("MainView | Switch theme to " + theme + ", " + settings.theme)
+            if (theme === mainView.theme.System) {
+                AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": false})
+                return
+            }
+
+            applyThemeAppearance(theme)
+            AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": updateLockScreen})
+        }
+
+        function applySystemTheme(uiMode) {
+            if (settings.theme !== mainView.theme.System) {
+                return
+            }
+            applyThemeAppearance(uiMode === mainView.theme.Dark ? mainView.theme.Dark : mainView.theme.Light)
+        }
+
+        function applyThemeAppearance(theme) {
             switch (theme) {
             case mainView.theme.Dark:
                 Universal.theme = Universal.Dark
@@ -629,8 +651,6 @@ ApplicationWindow {
             }
             var item = itemAt(swipeIndex.Springboard)
             item.children[0].item.updateHeadlineColor()
-
-            AN.SystemDispatcher.dispatch("volla.launcher.colorAction", { "value": theme, "updateLockScreen": updateLockScreen})
         }
 
         // todo: Improve display date and time with third party library
@@ -931,7 +951,23 @@ ApplicationWindow {
         }
 
         function updateWidgets(widgetId, isVisible) {
-            springboard.children[0].item.updateWidgets(widgetId, isVisible)
+            switch (widgetId) {
+            case 0:
+                settings.weatherWgtIsVisible = isVisible
+                break
+            case 1:
+                settings.clockWgtIsVisible = isVisible
+                break
+            case 2:
+                settings.noteWgtIsVisible = isVisible
+                break
+            case 3:
+                settings.dialerWgtIsVisible = isVisible
+                break
+            default:
+                return
+            }
+            settings.sync()
         }
 
         function getSearchMode() {
@@ -1041,6 +1077,14 @@ ApplicationWindow {
                 mainView.accentTextColor = getContrastColor(mainView.accentColor)
             } else if (key === "keepLockscreenWallpaper") {
                 settings.keepLockscreenWallpaper = value
+            } else if (key === "useColoredIcons") {
+                settings.useColoredIcons = value
+            } else if (key === "showAppNames") {
+                settings.showAppNames = value
+            } else if (key === "useGroupedApps") {
+                settings.useGroupedApps = value
+            } else if (key === "useCategories") {
+                settings.useCategories = value
             }
             if (settings.sync) {
                 settings.sync()
@@ -1210,9 +1254,16 @@ ApplicationWindow {
                     } else {
                         console.log("MainView | Invalid RSS feed url")
                     }
-                } else if (type === "volla.launcher.uiModeResponse") {
-                    console.debug("MainView | volla.launcher.uiModeResponse")
-                    mainView.switchTheme(message["uiMode"], false)
+                } else if (type === "volla.launcher.uiModeResponse" || type === "volla.launcher.uiModeChanged") {
+                    console.debug("MainView | Android UI mode: " + message["uiMode"])
+                    mainView.applySystemTheme(message["uiMode"])
+                    if (type === "volla.launcher.uiModeChanged"
+                            && settings.theme === mainView.theme.System) {
+                        AN.SystemDispatcher.dispatch("volla.launcher.colorAction", {
+                            "value": mainView.theme.System,
+                            "updateLockScreen": false
+                        })
+                    }
                 } else if (type === "volla.launcher.messageResponse") {
                     console.log("MainView | onDispatched: " + type)
                     console.log("MainView | message: " + message["text"] + ", " + mainView.notifications[message["text"]])
@@ -1220,31 +1271,6 @@ ApplicationWindow {
                         mainView.showToast(qsTr(mainView.notifications[message["text"]]))
                     } else {
                         mainView.showToast(qsTr(mainView.notifications[message["text"]]))
-                    }
-                } else if (type === "volla.launcher.uiModeChanged") {
-                    console.debug("MainView | volla.launcher.uiModeChanged")
-                    if (message["uiMode"] !== settings.theme) {
-                        if (message["uiMode"] === mainView.theme.Light) {
-                            if (settings.theme === mainView.theme.DarkTranslucent) {
-                                mainView.switchTheme(mainView.theme.LightTranslucent, false)
-                                settings.theme = mainView.theme.LightTranslucent
-                                settings.sync()
-                            } else if (settings.theme === mainView.theme.Dark) {
-                                mainView.switchTheme(mainView.theme.Light, true)
-                                settings.theme = mainView.theme.Light
-                                settings.sync()
-                            }
-                        } else if (message["uiMode"] === mainView.theme.Dark) {
-                            if (settings.theme === mainView.theme.LightTranslucent) {
-                                mainView.switchTheme(mainView.theme.DarkTranslucent, false)
-                                settings.theme = mainView.theme.DarkTranslucent
-                                settings.sync()
-                            } else if (settings.theme === mainView.theme.Light) {
-                                mainView.switchTheme(mainView.theme.Dark, true)
-                                settings.theme = mainView.theme.Dark
-                                settings.sync()
-                            }
-                        }
                     }
                 } else if (type === "volla.launcher.checkSttAvailabilityResponse") {
                     console.debug("MainView | STT activation status: " + message["isActivated"])
@@ -1306,12 +1332,19 @@ ApplicationWindow {
         property bool sttChecked: false
         property bool signalIsActivated: false
         property bool useColoredIcons: false
+        property bool useGroupedApps: true
+        property bool useCategories: false
+        property bool showAppNames: true
         property bool showAppsAtStartup: false
         property bool useHapticMenus: true
         property bool leftHandedMenu: false
         property double blurEffect: 60.0
         property double lastContactsCheck: 0.0
         property string customAccentColor: ""
+        property bool clockWgtIsVisible: mainView.isTablet
+        property bool weatherWgtIsVisible: mainView.isTablet
+        property bool noteWgtIsVisible: mainView.isTablet
+        property bool dialerWgtIsVisible: false
 
         function checkCustomParameters() {
             var rawPresets = presets.readPresets()

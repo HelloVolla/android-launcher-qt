@@ -43,25 +43,25 @@ LauncherPage {
                 }
             }
         } else if (key === "useCategories") {
-            settings.useCategories = value
+            mainView.updateSettings("useCategories", value)
             appLauncher.selectedGroup = 0
             var apps = getAllApps()
             appLauncher.destroyAppGroups()
             appLauncher.createAppGroups(getGroupedAppsAndShortcuts(apps))
         } else if (key === "useGroupedApps") {
-            settings.useGroupedApps = value
+            mainView.updateSettings("useGroupedApps", value)
             appLauncher.selectedGroup = 0
             apps = getAllApps()
             appLauncher.destroyAppGroups()
             appLauncher.createAppGroups(getGroupedAppsAndShortcuts(apps))
         } else if (key === "coloredIcons") {
-            settings.useColoredIcons = value
+            mainView.updateSettings("useColoredIcons", value)
             for (i = 0; i < appLauncher.appGroups.length; i++) {
                 appGroup = appLauncher.appGroups[i]
                 appGroup.desaturation = value ? 0.0 : 1.0
             }
         } else if (key === "showAppNames") {
-            settings.showAppNames = value
+            mainView.updateSettings("showAppNames", value)
             for (i = 0; i < appLauncher.appGroups.length; i++) {
                 appGroup = appLauncher.appGroups[i]
                 appGroup.showAppNames = value
@@ -92,14 +92,14 @@ LauncherPage {
         // B. Group apps by categries
         // C. Show custom app groups, of not A or B
 
-        if (settings.useGroupedApps) {
+        if (mainView.getSetting("useGroupedApps")) {
             apps.sort(function(a, b) { return b["statistic"] - a["statistic"] })
 
             if (apps.length > appLauncher.maxAppCount) {
                 var appsAndShortcuts = apps.slice(0, appLauncher.maxAppCount).concat(appLauncher.pinnedShortcuts)
                 groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": appsAndShortcuts} )
 
-                if (settings.useCategories) {
+                if (mainView.getSetting("useCategories")) {
                     var remainingApps = apps.slice(appLauncher.maxAppCount)
                     createAppGroupsByCategory(remainingApps, groupedApps, false) // todo: test updated dictionary
                 } else {
@@ -108,7 +108,7 @@ LauncherPage {
             } else {
                 groupedApps.push( { "groupLabel": qsTr("Most used"), "apps": apps.slice(0) } )
             }
-        } else if (settings.useCategories) {
+        } else if (mainView.getSetting("useCategories")) {
             appsAndShortcuts = apps.concat(appLauncher.pinnedShortcuts)
             createAppGroupsByCategory(appsAndShortcuts, groupedApps, false)
         } else {
@@ -181,8 +181,8 @@ LauncherPage {
                                "componentSpacing" : mainView.componentSpacing,
                                "backgroundOpacity": mainView.backgroundOpacity,
                                "accentColor": mainView.accentColor,
-                               "desaturation": settings.useColoredIcons ? 0.0 : 1.0,
-                               "showAppNames": settings.showAppNames,
+                               "desaturation": mainView.getSetting("useColoredIcons") ? 0.0 : 1.0,
+                               "showAppNames": mainView.getSetting("showAppNames"),
                                "pinnedShortcuts": pinnedShortcuts !== undefined ? pinnedShortcuts : new Array,
                                "apps": apps !== undefined ? apps : new Array}
             if (component.status !== Component.Ready) {
@@ -364,7 +364,7 @@ LauncherPage {
                 appContextMenu.gridView = gridView
                 appContextMenu.isPinnedShortcut = app.shortcutId !== undefined && app.shortcutId.length > 0
                 appContextMenu.canBeDeleted = false
-                appContextMenu.useCustomGroups = !(settings.useGroupedApps || settings.useCategories)
+                appContextMenu.useCustomGroups = !(mainView.getSetting("useGroupedApps") || mainView.getSetting("useCategories"))
                 if (appContextMenu.useCustomGroups) appContextMenu.createCustomGroupMenuItems()
                 appContextMenu.popup(gridCell)
             }
@@ -586,9 +586,8 @@ LauncherPage {
             }
             onClicked: {
                 console.log("AppGrid | Enable custom groups");
-                settings.useGroupedApps = false
-                settings.useCategories = false
-                settings.sync()
+                mainView.updateSettings("useGroupedApps", false)
+                mainView.updateSettings("useCategories", false)
                 var apps = getAllApps()
                 appLauncher.destroyAppGroups()
                 appLauncher.selectedGroup = 0
@@ -933,7 +932,7 @@ LauncherPage {
                         }
                     }
                     appLauncher.pinnedShortcuts = pinnedShortcuts
-                    if (settings.useGroupedApps || settings.useCategories) {
+                    if (mainView.getSetting("useGroupedApps") || mainView.getSetting("useCategories")) {
                         appGroup = appGroups[0]
                         if (appGroup !== undefined) {
                             appGroup.pinnedShortcuts = appLauncher.pinnedShortcuts
@@ -964,10 +963,6 @@ LauncherPage {
 
     Settings {
         id: settings
-        property bool useColoredIcons: false
-        property bool useGroupedApps: true
-        property bool useCategories: false
-        property bool showAppNames: true
         property int appCount: 0
         property double lastAppCountCheck: 0.0
         property string customGroups: ""
