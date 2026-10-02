@@ -72,6 +72,17 @@ LauncherPage {
         id: listView
         anchors.fill: parent
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
+        property bool searchPullDownTriggered: false
+        onMovementStarted: searchPullDownTriggered = false
+        onContentYChanged: {
+            if (moving && contentY < originY - 80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onMovementEnded: {
+            mainView.handleSearchPullDown(searchPullDownTriggered, textField)
+            searchPullDownTriggered = false
+        }
 
         header: Rectangle {
             id: header

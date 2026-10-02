@@ -483,6 +483,20 @@ ApplicationWindow {
             item.children[0].item.textInputArea.text = text
         }
 
+        function handleSearchPullDown(pullTriggered, searchField) {
+            if (pullTriggered && searchField) {
+                Qt.callLater(function() {
+                    if (searchField.activeFocus) {
+                        searchField.focus = false
+                        Qt.inputMethod.hide()
+                    } else {
+                        searchField.forceActiveFocus()
+                        Qt.inputMethod.show()
+                    }
+                })
+            }
+        }
+
         function updateShortcutMenuState(opened) {
             console.log("MainView | Update shortcut menu state: '" + opened + "'")
             currentIndex = swipeIndex.Springboard

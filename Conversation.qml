@@ -191,6 +191,17 @@ LauncherPage {
         height: parent.height
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
         footerPositioning: ListView.OverlayFooter  // mainView.backgroundOpacity === 1.0 ? ListView.OverlayFooter : ListView.InlineFooter
+        property bool searchPullDownTriggered: false
+        onMovementStarted: searchPullDownTriggered = false
+        onContentYChanged: {
+            if (moving && contentY < originY - 80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onMovementEnded: {
+            mainView.handleSearchPullDown(searchPullDownTriggered, textField)
+            searchPullDownTriggered = false
+        }
 
         header: Column {
             id: header
