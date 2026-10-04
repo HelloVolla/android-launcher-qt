@@ -684,7 +684,7 @@ ApplicationWindow {
 
         function getFeeds() {
             var channels = feeds.read()
-            console.log("MainView | Retrieved feeds: " + channels.lenth)
+            console.log("MainView | Retrieved feeds: " + channels.length)
             return channels.length > 0 ? JSON.parse(channels) : mainView.defaultFeeds
         }
 
@@ -811,7 +811,7 @@ ApplicationWindow {
                             } else if (channel.childNodes[i].nodeName === "link") {
                                 childNode = channel.childNodes[i]
                                 textNode = childNode.firstChild
-                                var baseUrl = textNode.nodeValue
+                                if (textNode === undefined && childNode.firstChild !== null) var baseUrl = textNode.nodeValue
                             }
                         }
 
@@ -825,17 +825,18 @@ ApplicationWindow {
                         htmlRequest.onreadystatechange = function() {
                             if (htmlRequest.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
                                 console.log("MainView | Received header status for news homepage: " + htmlRequest.status);
+                            } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
                                 if (htmlRequest.status !== 200) {
                                     console.log("MainView | Couldn't load feed homepage. Will take fallback for icon")
                                     feed.icon = defaultFeedIconUrl
                                     mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
                                     return
+                                } else {
+                                    var html = htmlRequest.responseText
+                                    feed.icon = getFavicon(baseUrl, html)
+                                    mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
+                                    return
                                 }
-                            } else if (htmlRequest.readyState === XMLHttpRequest.DONE) {
-                                var html = htmlRequest.responseText
-                                feed.icon = getFavicon(baseUrl, html)
-                                mainView.updateFeed(feed.id, true, mainView.settingsAction.CREATE, feed)
-                                return
                             }
                         }
                         htmlRequest.open("GET", baseUrl)
@@ -857,8 +858,9 @@ ApplicationWindow {
         }
 
         function getFavicon(baseUrl, pageSource) {
-            var pattern = /<link\n?.+\n?.*rel="((apple-touch-)|(shortcut\s))?icon"\n?.+\n?.*>/i
+            var pattern = /<link\srel=(("apple-touch-icon")|("icon"\stype="image\/png")).*\/>/i
             var link = pattern.exec(pageSource)
+            console.debug("MainView | Link: " + link)
             if (link !== undefined && link !== null) {
                 pattern = /href="\S+"/i
                 link = pattern.exec(link).toString()
