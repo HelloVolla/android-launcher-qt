@@ -72,13 +72,14 @@ LauncherPage {
 
     function updateShortcutMenuState(opened) {
         if (opened) {
-            var maxHeight = mainView.height * 0.90
-            var contentHeight = shortcutColumn.topPadding + shortcutColumn.bottomPadding
-                    + shortcutColumn.shortcutLabels.length * (mainView.largeFontSize + mainView.innerSpacing + 2)
-            var finalHeight = Math.min(contentHeight, maxHeight)
-            shortcutMenu.height = finalHeight + mainView.innerSpacing * 1.5
+            var verticalInset = roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
+            var contentHeight = shortcutColumn.implicitHeight
+            var maxHeight = mainView.height * 0.80
+            var finalHeight = Math.min(contentHeight + verticalInset * 2, maxHeight)
+            shortcutMenu.width = Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
+            shortcutMenu.height = finalHeight
             shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
-            shortcutBackground.height = finalHeight
+            shortcutBackground.height = finalHeight - verticalInset * 2
             shortcutFlickable.opacity = 1
             shortcutFlickable.contentY = 0
         } else {
@@ -1490,10 +1491,6 @@ LauncherPage {
             console.log("Springboard | entered")
 
             width = Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
-            var maxHeight = mainView.height * 0.6
-            var contentHeight = shortcutColumn.topPadding * 2 + shortcutColumn.bottomPadding
-                    + shortcutColumn.shortcutLabels.length * (mainView.largeFontSize + mainView.innerSpacing + 2)
-            height = Math.min(contentHeight, maxHeight)
 
             var rbPoint = mapFromItem(rootMenuButton, 0, 0)
             var touchY = dotShortcut ? rbPoint.y : rbPoint.y - rootMenuButton.height
@@ -1700,9 +1697,11 @@ LauncherPage {
             id: shortcutFlickable
             visible: true
             opacity: 0.0
+            z: 1
             width: parent.width - mainView.innerSpacing * 2
-            height: parent.height - mainView.innerSpacing * 4
             clip: true
+            anchors.top: parent.top
+            anchors.topMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
             anchors.right: mainView.useLeftHandedMenu ? undefined : parent.right
             anchors.left: mainView.useLeftHandedMenu ? parent.left : undefined
             anchors.rightMargin: mainView.useLeftHandedMenu ? undefined : (roundedShortcutMenu ? mainView.innerSpacing * 2 : 0)
@@ -1728,9 +1727,15 @@ LauncherPage {
 
             ScrollBar.vertical: ScrollBar {
                 id: scrollBar
+                anchors.topMargin: roundedShortcutMenu ? mainView.innerSpacing : 0
+                anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing : 0
+                anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing : 0
+                z: 1
                 size: shortcutFlickable.height / shortcutFlickable.contentHeight
                 position: shortcutFlickable.contentY / shortcutFlickable.contentHeight
-                active: shortcutFlickable.contentHeight > shortcutFlickable.height
+                active: shortcutColumn.implicitHeight
+                        + (roundedShortcutMenu ? mainView.innerSpacing * 4 : 0)
+                        > mainView.height * 0.80
                 width: 4
                 contentItem: Rectangle {
                     implicitWidth: 4
@@ -1760,6 +1765,7 @@ LauncherPage {
         Rectangle {
             id: rootMenuButton
             visible: true
+            z: 0
             height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             width: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             color: mainView.accentColor
