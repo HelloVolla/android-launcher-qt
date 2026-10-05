@@ -678,7 +678,12 @@
         <translation type="unfinished">Um eine Nachrichtenquelle hinzuzufügen, geben Sie die URL eines RSS- oder Atom-Feeds in das Textfeld auf dem Sprungbrett ein oder teilen Sie die URL aus Ihrem Browser mit der Volla-App.</translation>
     </message>
     <message>
-        <location filename="../Settings.qml" line="1246"/>
+        <location filename="../Settings.qml" line="195"/>
+        <source>Follow system theme</source>
+        <translation>Systemmodus verwenden</translation>
+    </message>
+    <message>
+        <location filename="../Settings.qml" line="1216"/>
         <source>Display and menus</source>
         <translation type="unfinished">Anzeige und Menüs</translation>
     </message>

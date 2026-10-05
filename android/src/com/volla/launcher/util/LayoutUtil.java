@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.view.Display;
 import android.content.Intent;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -33,6 +34,7 @@ import com.volla.launcher.util.OverlayReflect;
 public class LayoutUtil {
 
     private static final String TAG = "LayoutUtil";
+    private static final int MODE_NIGHT_FOLLOW_SYSTEM = -1;
 
     public static final String SET_COLOR = "volla.launcher.colorAction";
     public static final String GET_NAVBAR_HEIGHT = "volla.launcher.navBarAction";
@@ -46,9 +48,14 @@ public class LayoutUtil {
             public void onDispatched(String type, Map message) {
                 if (type.equals(SET_COLOR)) {
                     final int value = (int) message.get("value");
-                    boolean isDarkActive = (value == 1 || value == 3 ) ? true : false;
-                    final boolean updateLockScreen = (boolean) message.get("updateLockScreen");
                     final Activity activity = QtNative.activity();
+                    final boolean followSystem = value == 4;
+                    int currentNightMode = activity.getResources().getConfiguration().uiMode
+                            & Configuration.UI_MODE_NIGHT_MASK;
+                    final boolean isDarkActive = followSystem
+                            ? currentNightMode == Configuration.UI_MODE_NIGHT_YES
+                            : value == 1 || value == 3;
+                    final boolean updateLockScreen = (boolean) message.get("updateLockScreen");
 
                     Log.d(TAG, "Will change lock screen clock color for value " + value + " to " + (isDarkActive ? "white" : "black"));
 
@@ -105,8 +112,9 @@ public class LayoutUtil {
                                     }
                                 }
 
-                                Log.d(TAG, "Will change system ui mode to " + UiModeManager.MODE_NIGHT_YES);
-                                umm.setNightMode(UiModeManager.MODE_NIGHT_YES);
+                                int nightMode = followSystem ? MODE_NIGHT_FOLLOW_SYSTEM : UiModeManager.MODE_NIGHT_YES;
+                                Log.d(TAG, "Will change system ui mode to " + nightMode);
+                                umm.setNightMode(nightMode);
                             } else {
                                 // light mode
                                 Log.d(TAG, "Set light mode and white wallpaper");
@@ -128,11 +136,17 @@ public class LayoutUtil {
                                     }
                                 }
 
-                                Log.d(TAG, "Will change system ui mode to " + UiModeManager.MODE_NIGHT_NO);
-                                umm.setNightMode(UiModeManager.MODE_NIGHT_NO);
+                                int nightMode = followSystem ? MODE_NIGHT_FOLLOW_SYSTEM : UiModeManager.MODE_NIGHT_NO;
+                                Log.d(TAG, "Will change system ui mode to " + nightMode);
+                                umm.setNightMode(nightMode);
                             }
 
                             Log.d(TAG, "Changed system ui mode is " + umm.getNightMode());
+                            if (followSystem) {
+                                Map responseMessage = new HashMap();
+                                responseMessage.put("uiMode", isDarkActive ? 1 : 0);
+                                SystemDispatcher.dispatch("volla.launcher.uiModeResponse", responseMessage);
+                            }
 
                             if (activity.checkSelfPermission(Manifest.permission.SET_WALLPAPER) == PackageManager.PERMISSION_GRANTED
                                 && wm.getWallpaperId(WallpaperManager.FLAG_LOCK) != wallpaperId

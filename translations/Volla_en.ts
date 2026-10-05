@@ -487,6 +487,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Follow system theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Show frequently used apps</source>
         <translation type="unfinished"></translation>
     </message>
