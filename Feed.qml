@@ -72,6 +72,40 @@ LauncherPage {
         id: listView
         anchors.fill: parent
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
+        property bool searchPullDownTriggered: false
+        onMovementStarted: searchPullDownTriggered = false
+        onVerticalOvershootChanged: {
+            if (moving && verticalOvershoot < -80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onMovementEnded: {
+            if (searchPullDownTriggered) {
+                mainView.toggleSearchFocus(feedPage.textInputField)
+            }
+            searchPullDownTriggered = false
+        }
+        DragHandler {
+            target: null
+            xAxis.enabled: false
+            enabled: listView.contentHeight <= listView.height
+            property bool searchPullDownTriggered: false
+
+            onTranslationChanged: {
+                if (active && !searchPullDownTriggered && translation.y > 80) {
+                    searchPullDownTriggered = true
+                }
+            }
+
+            onActiveChanged: {
+                if (active) {
+                    searchPullDownTriggered = false
+                } else if (searchPullDownTriggered) {
+                    mainView.toggleSearchFocus(feedPage.textInputField)
+                    searchPullDownTriggered = false
+                }
+            }
+        }
 
         header: Rectangle {
             id: header

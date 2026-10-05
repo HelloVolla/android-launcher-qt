@@ -288,6 +288,24 @@ LauncherPage {
         anchors.fill: parent
         contentWidth: parent.width
         contentHeight: appLauncherColumn.height
+        property bool searchPullDownTriggered: false
+        onMovementStarted: searchPullDownTriggered = false
+        onVerticalOvershootChanged: {
+            if (moving && verticalOvershoot < -80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onContentYChanged: {
+            if (moving && contentY < originY - 80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onMovementEnded: {
+            if (searchPullDownTriggered || contentY < originY - 80 || verticalOvershoot < -80) {
+                mainView.toggleSearchFocus(headerTextField)
+            }
+            searchPullDownTriggered = false
+        }
 
         Column {
             id: appLauncherColumn
@@ -971,12 +989,6 @@ LauncherPage {
         property int appCount: 0
         property double lastAppCountCheck: 0.0
         property string customGroups: ""
-
-        onUseCategoriesChanged: {
-            if (!useCategories) {
-
-            }
-        }
 
         function getCustomGroups() {
             if (settings.customGroups !== undefined && settings.customGroups.length > 0) {
