@@ -290,13 +290,20 @@ LauncherPage {
         contentHeight: appLauncherColumn.height
         property bool searchPullDownTriggered: false
         onMovementStarted: searchPullDownTriggered = false
+        onVerticalOvershootChanged: {
+            if (moving && verticalOvershoot < -80) {
+                searchPullDownTriggered = true
+            }
+        }
         onContentYChanged: {
             if (moving && contentY < originY - 80) {
                 searchPullDownTriggered = true
             }
         }
         onMovementEnded: {
-            mainView.handleSearchPullDown(searchPullDownTriggered, headerTextField)
+            if (searchPullDownTriggered || contentY < originY - 80 || verticalOvershoot < -80) {
+                mainView.toggleSearchFocus(headerTextField)
+            }
             searchPullDownTriggered = false
         }
 
