@@ -1522,12 +1522,12 @@ LauncherPage {
         onPositionChanged: {
             if (shortcutFlickable.opacity > 0) {
                 var selectedItem = rootMenuButton
-                
+
                 // Handle scrolling when finger moves near top or bottom
                 var scrollSensitivity = mainView.largeFontSize
                 var topThreshold = shortcutFlickable.y + scrollSensitivity * 2
                 var bottomThreshold = shortcutFlickable.y + shortcutFlickable.height - scrollSensitivity * 2
-                
+
                 if (mouseY < topThreshold && shortcutFlickable.contentY > 0) {
                     // Scroll up
                     shortcutFlickable.contentY -= (topThreshold - mouseY) / 2
