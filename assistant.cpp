@@ -14,11 +14,14 @@
 #include "config.h"
 #include "inference.h"
 #include "states.h"
+#include "laya.h"
 
 namespace {
 
 llama_inference g_inference;
 state_type g_state;
+lata_context * laya_ctx;
+laya_model * decision_model;
 
 void releaseAssistant()
 {
@@ -153,6 +156,8 @@ void AssistantEngine::load()
     const QString modelPath = dataDir + QStringLiteral("/models/assistant/model.gguf");
     const QString cachePath = cacheDir + QStringLiteral("/cache.bin");
 
+    const QString layaModelPath = dataDir + QStringLiteral("/models/assistant/laya.gguf");
+    
     if (!QFileInfo::exists(configPath)) {
         emit failed(tr("Assistant config is missing at %1").arg(configPath));
         return;
@@ -161,6 +166,12 @@ void AssistantEngine::load()
         emit failed(tr("Assistant model is missing at %1").arg(modelPath));
         return;
     }
+
+    if (!QFileInfo::exists(layaModelPath)) {
+        emit failed(tr("laya model is missing at %1").arg(layaModelPath));
+        return;
+    }
+    
     QDir().mkpath(cacheDir);
 
     const QByteArray configUtf8 = configPath.toUtf8();
@@ -222,6 +233,11 @@ void AssistantEngine::load()
     }
 
     g_state.kv_applied_chars = g_state.messages != nullptr ? strlen(g_state.messages) : 0;
+
+    // Load laya model
+    decision_model = laya_model_load(layaModelPath);
+    laya_context = laya_context_new(decision_model, laya_context_default_params());
+     
     m_loaded = true;
 
     qDebug() << "Assistant | Ready," << g_state.kv_applied_chars << "prompt chars digested";
