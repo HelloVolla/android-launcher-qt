@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QThread>
+#include <QVariantMap>
 
 /*
  * On-device assistant, exposed to QML as the "assistant" context property.
@@ -21,6 +22,8 @@ public:
 public slots:
     void load();
     void query(const QString &prompt);
+    // Pick the app that should handle the prompt and report it via decided().
+    void decide(const QString &prompt);
 
 signals:
     void loaded();
@@ -28,8 +31,11 @@ signals:
     void unloaded();
     void failed(const QString &message);
     void answered(const QString &text);
+    // key, best, value, confidence, actProbability, temperature, nTokens, probs
+    void decided(const QVariantMap &answer);
 
 private:
+    #define RULE "You need to select the application that you think would be helpfull for user."
     // Free the native state and report that a reload is needed.
     void unload();
 
@@ -56,14 +62,18 @@ public slots:
     // Ask the assistant. Queued behind init(), so it is safe to call while
     // the model is still loading.
     void ask(const QString &prompt);
+    // Classify the prompt with laya. The result arrives in decision().
+    void decide(const QString &prompt);
 
 signals:
     void readyChanged();
     void error(const QString &message);
     void response(const QString &text);
+    void decision(const QVariantMap &answer);
 
     void loadRequested();
     void queryRequested(const QString &prompt);
+    void decideRequested(const QString &prompt);
 
 private:
     QThread m_thread;

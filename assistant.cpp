@@ -20,13 +20,21 @@ namespace {
 
 llama_inference g_inference;
 state_type g_state;
-lata_context * laya_ctx;
-laya_model * decision_model;
+laya_context *laya_ctx = nullptr;
+laya_model *decision_model = nullptr;
 
 void releaseAssistant()
 {
     free_ptr(&g_state);
     free_llama_inference(&g_inference);
+    if (laya_ctx != nullptr) {
+        laya_context_free(laya_ctx);
+        laya_ctx = nullptr;
+    }
+    if (decision_model != nullptr) {
+        laya_model_free(decision_model);
+        decision_model = nullptr;
+    }
 }
 
 int validUtf8PrefixLength(const char *text)
@@ -235,13 +243,70 @@ void AssistantEngine::load()
     g_state.kv_applied_chars = g_state.messages != nullptr ? strlen(g_state.messages) : 0;
 
     // Load laya model
-    decision_model = laya_model_load(layaModelPath);
-    laya_context = laya_context_new(decision_model, laya_context_default_params());
-     
+    decision_model = laya_model_load(layaModelPath.toUtf8().constData());
+    if (decision_model == nullptr) {
+        releaseAssistant();
+        emit failed(tr("The laya model could not be loaded"));
+        return;
+    }
+    laya_ctx = laya_context_new(decision_model, laya_context_default_params());
+    if (laya_ctx == nullptr) {
+        releaseAssistant();
+        emit failed(tr("The laya context could not be created"));
+        return;
+    }
+    
     m_loaded = true;
 
     qDebug() << "Assistant | Ready," << g_state.kv_applied_chars << "prompt chars digested";
     emit loaded();
+#endif
+}
+
+void AssistantEngine::decide(const QString &prompt)
+{
+#ifndef VOLLA_ASSISTANT
+    Q_UNUSED(prompt)
+    emit failed(tr("This build has no assistant"));
+#else
+    if (!m_loaded || laya_ctx == nullptr) {
+        emit failed(tr("The assistant is not available"));
+        return;
+    }
+
+    static const char *keys[] = {"clock", "dialer", "LLM"};
+    static const char *desc[] = {"Setting alarm, setting reminder, timer, stop watch",
+                                 "making call, create a new contact",
+                                 "Answer to general questions"};
+    constexpr int nOptions = 3;
+
+    const laya_question q = {LAYA_QTYPE_CHOICE, RULE, keys, desc, nOptions};
+    float probs[nOptions];
+    laya_answer ans = {};
+
+    const QByteArray utf8 = prompt.toUtf8();
+    if (laya_run_inference(laya_ctx, utf8.constData(), &q, probs, nullptr, &ans) != 0
+        || ans.best < 0 || ans.best >= nOptions) {
+        emit failed(tr("The assistant could not decide"));
+        return;
+    }
+
+    QVariantList probList;
+    for (int i = 0; i < nOptions; ++i)
+        probList.append(probs[i]);
+
+    QVariantMap result;
+    result.insert(QStringLiteral("key"), QString::fromUtf8(keys[ans.best]));
+    result.insert(QStringLiteral("best"), ans.best);
+    result.insert(QStringLiteral("value"), ans.value);
+    result.insert(QStringLiteral("confidence"), ans.confidence);
+    result.insert(QStringLiteral("actProbability"), ans.act_probability);
+    result.insert(QStringLiteral("temperature"), ans.temperature);
+    result.insert(QStringLiteral("nTokens"), ans.n_tokens);
+    result.insert(QStringLiteral("probs"), probList);
+
+    qDebug() << "Assistant | Decided" << result;
+    emit decided(result);
 #endif
 }
 
@@ -303,6 +368,7 @@ Assistant::Assistant(QObject *parent)
     connect(&m_thread, &QThread::finished, m_engine, &QObject::deleteLater);
     connect(this, &Assistant::loadRequested, m_engine, &AssistantEngine::load);
     connect(this, &Assistant::queryRequested, m_engine, &AssistantEngine::query);
+    connect(this, &Assistant::decideRequested, m_engine, &AssistantEngine::decide);
 
     connect(m_engine, &AssistantEngine::loaded, this, [this]() {
         m_ready = true;
@@ -322,6 +388,7 @@ Assistant::Assistant(QObject *parent)
         emit error(message);
     });
     connect(m_engine, &AssistantEngine::answered, this, &Assistant::response);
+    connect(m_engine, &AssistantEngine::decided, this, &Assistant::decision);
 
     m_thread.start();
 }
@@ -358,4 +425,13 @@ void Assistant::ask(const QString &prompt)
 
     qDebug() << "Assistant | Ask:" << prompt;
     emit queryRequested(prompt);
+}
+
+void Assistant::decide(const QString &prompt)
+{
+    if (prompt.trimmed().isEmpty())
+        return;
+
+    qDebug() << "Assistant | Decide:" << prompt;
+    emit decideRequested(prompt);
 }
