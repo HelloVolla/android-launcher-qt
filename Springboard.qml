@@ -43,6 +43,10 @@ LauncherPage {
         }
     }
 
+    onAssistantThinkingChanged: {
+        mainView.updateSpinner(springBoard.assistantThinking)
+    }
+
     onTextInputChanged: {
         console.log("Springboard | text input changed")
         listModel.update()
@@ -301,24 +305,13 @@ LauncherPage {
                     height: springBoard.assistantThinking ? thinkingRow.height
                                                           : answerFlickable.height
 
-                    Row {
+                    Label {
                         id: thinkingRow
                         visible: springBoard.assistantThinking
-                        spacing: mainView.innerSpacing / 2
-
-                        BusyIndicator {
-                            running: springBoard.assistantThinking
-                            width: mainView.mediumFontSize * 2
-                            height: width
-                        }
-
-                        Label {
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: assistant.ready ? qsTr("Thinking...")
-                                                  : qsTr("Starting the assistant...")
-                            color: "#444444"
-                            font.pointSize: mainView.mediumFontSize
-                        }
+                        text: assistant.ready ? qsTr("Thinking...")
+                                              : qsTr("Starting the assistant...")
+                        color: "#444444"
+                        font.pointSize: mainView.mediumFontSize
                     }
 
                     Flickable {
