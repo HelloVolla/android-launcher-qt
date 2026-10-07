@@ -25,6 +25,23 @@ mkdir -p $WORKSPACE
 mkdir -p $CCACHE_DIR
 mkdir -p $GRADLE_DIR
 
+# The assistant is built out of tree. Point at it with VOLLA_ASSISTANT_ROOT;
+# the sibling directory is only a convenience default. It is mounted at the
+# same absolute path it has on the host, so the path the container sees is the
+# one qmake was given. Without it the launcher builds without the assistant.
+ASSISTANT_ROOT=${VOLLA_ASSISTANT_ROOT:-`realpath -m $WORKSPACE/../volla_assistant_native`}
+ASSISTANT_MOUNT=""
+ASSISTANT_ENV=""
+if [[ -d "$ASSISTANT_ROOT" ]]; then
+    ASSISTANT_ROOT=`realpath $ASSISTANT_ROOT`
+    echo "Building with the on-device assistant from $ASSISTANT_ROOT"
+    ASSISTANT_MOUNT="-v $ASSISTANT_ROOT:$ASSISTANT_ROOT:ro"
+    ASSISTANT_ENV="-e VOLLA_ASSISTANT_ROOT=$ASSISTANT_ROOT"
+else
+    echo "No assistant at $ASSISTANT_ROOT - building without the on-device assistant"
+    echo "  (set VOLLA_ASSISTANT_ROOT to build with it)"
+fi
+
 [[ -v DISPLAY ]] && xhost +local:root
 
 docker run --rm \
@@ -41,6 +58,8 @@ docker run --rm \
            -v /tmp/.X11-unix:/tmp/.X11-unix \
            -v $CCACHE_DIR:$CCACHE_DIR \
            -v $GRADLE_DIR:$GRADLE_DIR \
-           -v $WORKSPACE:$WORKSPACE -it \
+           $ASSISTANT_ENV \
+           -v $WORKSPACE:$WORKSPACE \
+           $ASSISTANT_MOUNT -it \
            -u $USER \
            $CONTAINER $EXECUTABLE
