@@ -135,6 +135,45 @@ LauncherPage {
         assistant.init()
     }
 
+    // Contacts with a phone number whose name appears in the text.
+    function contactsMentionedIn(prompt) {
+        var text = " " + prompt.toLowerCase().replace(/[\s.,!?;:"'()]+/g, " ") + " "
+        var words = text.trim().split(" ")
+        var phoneKeys = ["phone.mobile", "phone.home", "phone.work", "phone.other"]
+        var contacts = mainView.getContacts()
+        var matches = []
+        for (var c = 0; c < contacts.length; c++) {
+            var contact = contacts[c]
+            if (contact["name"] === undefined)
+                continue
+            var hasPhone = phoneKeys.some(function (key) {
+                return contact[key] !== undefined && contact[key].length > 0
+            })
+            if (!hasPhone)
+                continue
+            var name = contact["name"].toLowerCase().trim()
+            var firstName = name.split(/\s+/)[0]
+            var score = 0
+            if (text.indexOf(" " + name + " ") >= 0) {
+                score = 3
+            } else if (firstName.length > 1 && text.indexOf(" " + firstName + " ") >= 0) {
+                score = 2
+            } else {
+                for (var w = 0; w < words.length; w++) {
+                    if (words[w].length > 2 && firstName.indexOf(words[w]) === 0) {
+                        score = 1
+                        break
+                    }
+                }
+            }
+            if (score > 0)
+                matches.push({"contact": contact, "score": score})
+        }
+        matches.sort(function (a, b) { return b.score - a.score })
+        return matches.filter(function (m) { return m.score === matches[0].score })
+                      .map(function (m) { return JSON.parse(JSON.stringify(m.contact)) })
+    }
+
     function askAssistant(prompt) {
         console.log("Springboard | Ask assistant: " + prompt)
         springBoard.assistantResponse = ""
@@ -160,7 +199,11 @@ LauncherPage {
                         + " (confidence " + answer.confidence + ")")
 
 
-            springBoard.assistantDecision = JSON.parse(JSON.stringify(answer))
+            var decision = JSON.parse(JSON.stringify(answer))
+
+            if (decision.key === "dialer")
+                decision.callees = contactsMentionedIn(decision.prompt).slice(0, 3)
+            springBoard.assistantDecision = decision
             listModel.update()
             WorkerScript.onMessage(springBoard);
 
@@ -563,6 +606,23 @@ LauncherPage {
                         console.log("Springboard | Will call " + phoneNumber)
                         util.makeCall({"number": phoneNumber, "intent": "call"})
                         textInputArea.text = ""
+                        break
+                    case mainView.actionType.ShowDialer:
+                        AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "dial"})
+                        textInputArea.text = ""
+                        console.log("Springboard | Dialer is opened")
+                        break
+                    case mainView.actionType.CallContact:
+                        if(actionObj !== undefined){
+                            selectedObj = actionObj
+                        }
+                        phoneNumber = phoneNumberForContact()
+                        
+                        if(phoneNumber !== -1){
+                           console.log("Springboard | Will call " + phoneNumber)
+                            util.makeCall({"number": phoneNumber, "intent": "call"})
+                            textInputArea.text = ""
+                        }
                         break
                     case mainView.actionType.MakeCallToMobile:
                         if (selectedObj !== undefined) {
