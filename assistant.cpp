@@ -275,8 +275,8 @@ void AssistantEngine::decide(const QString &prompt)
     }
 
     static const char *keys[] = {"clock", "dialer", "LLM"};
-    static const char *desc[] = {"Setting alarm, setting reminder, timer, stop watch",
-                                 "making call, create a new contact",
+    static const char *desc[] = {"Setting alarm, setting reminder, timer, stop watch even when query is indirect",
+                                 "making call, create a new contact even when query is indirect",
                                  "Answer to general questions"};
     constexpr int nOptions = 3;
 

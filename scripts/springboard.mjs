@@ -1,5 +1,7 @@
-// Word count of the text last sent to laya; kept across messages so each word is decided once.
-var decidedWordCount = 0
+// Text last sent to laya; kept across messages so the same text is not decided twice.
+var decidedText = ""
+// Text of the previous update, used to notice when the user deletes characters.
+var lastTextInput = ""
 
 WorkerScript.onMessage = function(message) {
     console.log("Springboard | Will execute main worker script")
@@ -166,18 +168,20 @@ WorkerScript.onMessage = function(message) {
         filteredSuggestionObj.push([actionName.AskAssistant, actionType.AskAssistant])
     }
 
-    // Ask laya again each time a word is completed, starting from the third word.
     var words = textInput.trim().split(/\s+/).filter(function (w) { return w.length > 0 })
     var requestDecision
     var clearDecision = false
     var decision = message.decision
-    if (words.length < 3 || textInputHasContactPrefix()) {
+    var textDeleted = textInput.length < lastTextInput.length
+    lastTextInput = textInput
+    if (words.length < 1 || textInputHasContactPrefix() || textDeleted) {
         clearDecision = decision !== undefined && decision !== null
         decision = undefined
-        decidedWordCount = 0
-    } else if (/\s$/.test(textInput) && words.length !== decidedWordCount) {
-        decidedWordCount = words.length
-        requestDecision = textInput.trim()
+        decidedText = ""
+    }
+    if (words.length > 0 && !textInputHasContactPrefix() && textInput.trim() !== decidedText) {
+        decidedText = textInput.trim()
+        requestDecision = decidedText
     }
 
     if (decision !== undefined && decision !== null) {

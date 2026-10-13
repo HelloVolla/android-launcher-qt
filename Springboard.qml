@@ -161,8 +161,9 @@ LauncherPage {
 
 
             springBoard.assistantDecision = JSON.parse(JSON.stringify(answer))
-            WorkerScript.onMessage(springBoard);
             listModel.update()
+            WorkerScript.onMessage(springBoard);
+
         }
 
         onError: {
@@ -995,6 +996,14 @@ LauncherPage {
             }
         }
 
+        // Waits for a short pause in typing so laya also sees the last word without a trailing space.
+        Timer {
+            id: decisionTimer
+            property string prompt: ""
+            interval: 400
+            onTriggered: assistant.decide(prompt)
+        }
+
         WorkerScript {
             id: springBoardWorker
             source: "scripts/springboard.mjs"
@@ -1006,8 +1015,12 @@ LauncherPage {
                 listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
                 if (messageObject['clearDecision'])
                     springBoard.assistantDecision = undefined
-                if (messageObject['requestDecision'] !== undefined && assistant.available && assistant.ready)
-                    assistant.decide(messageObject['requestDecision'])
+                if (messageObject['clearDecision'] || messageObject['requestDecision'] !== undefined)
+                    decisionTimer.stop()
+                if (messageObject['requestDecision'] !== undefined && assistant.available && assistant.ready) {
+                    decisionTimer.prompt = messageObject['requestDecision']
+                    decisionTimer.restart()
+                }
                 if (plugins.length > 0){
                     listModel.iteratePlugins(0, plugins.length)
                 }
