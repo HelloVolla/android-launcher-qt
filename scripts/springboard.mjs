@@ -1,3 +1,6 @@
+// Word count of the text last sent to laya; kept across messages so each word is decided once.
+var decidedWordCount = 0
+
 WorkerScript.onMessage = function(message) {
     console.log("Springboard | Will execute main worker script")
 
@@ -163,6 +166,40 @@ WorkerScript.onMessage = function(message) {
         filteredSuggestionObj.push([actionName.AskAssistant, actionType.AskAssistant])
     }
 
+    // Ask laya again each time a word is completed, starting from the third word.
+    var words = textInput.trim().split(/\s+/).filter(function (w) { return w.length > 0 })
+    var requestDecision
+    var clearDecision = false
+    var decision = message.decision
+    if (words.length < 3 || textInputHasContactPrefix()) {
+        clearDecision = decision !== undefined && decision !== null
+        decision = undefined
+        decidedWordCount = 0
+    } else if (/\s$/.test(textInput) && words.length !== decidedWordCount) {
+        decidedWordCount = words.length
+        requestDecision = textInput.trim()
+    }
+
+    if (decision !== undefined && decision !== null) {
+        console.log("Springboard | Laya decision: " + decision.key)
+        var preferred
+        if (decision.key === "clock") {
+            preferred = [actionName.OpenClock, actionType.OpenClock]
+        } else if (decision.key === "dialer") {
+            preferred = [actionName.ShowDialer, actionType.ShowDialer]
+        } else if (decision.key === "LLM") {
+            preferred = [actionName.AskAssistant, actionType.AskAssistant]
+        }
+        if (preferred !== undefined) {
+            filteredSuggestionObj = filteredSuggestionObj.filter(function (item) {
+                return item !== undefined && item[1] !== preferred[1]
+            })
+            filteredSuggestionObj.unshift(preferred)
+            if (indexOfFirstSuggestion > 0)
+                indexOfFirstSuggestion++
+        }
+    }
+
     var existingSuggestionObj = new Object
     for (i = 0; i < model.count; ++i) {
         suggestion = model.get(i).text
@@ -191,8 +228,20 @@ WorkerScript.onMessage = function(message) {
         console.debug("Springboard | Append Suggestion: " + item[0])
     });
 
+    // New items are only appended above, so move the laya pick to the top explicitly.
+    if (preferred !== undefined) {
+        for (i = 0; i < model.count; ++i) {
+            if (model.get(i).action === preferred[1]) {
+                if (i > 0)
+                    model.move(i, 0, 1)
+                break
+            }
+        }
+    }
+
     model.sync()
 
-    WorkerScript.sendMessage( {'indexOfFirstSuggestion': indexOfFirstSuggestion } )
+    WorkerScript.sendMessage( {'indexOfFirstSuggestion': indexOfFirstSuggestion,
+                               'requestDecision': requestDecision, 'clearDecision': clearDecision } )
 }
 

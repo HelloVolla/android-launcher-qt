@@ -293,15 +293,17 @@ void AssistantEngine::decide(const QString &prompt)
 
     QVariantList probList;
     for (int i = 0; i < nOptions; ++i)
-        probList.append(probs[i]);
+        probList.append(double(probs[i]));
 
     QVariantMap result;
+    result.insert(QStringLiteral("prompt"), prompt);
     result.insert(QStringLiteral("key"), QString::fromUtf8(keys[ans.best]));
     result.insert(QStringLiteral("best"), ans.best);
-    result.insert(QStringLiteral("value"), ans.value);
-    result.insert(QStringLiteral("confidence"), ans.confidence);
-    result.insert(QStringLiteral("actProbability"), ans.act_probability);
-    result.insert(QStringLiteral("temperature"), ans.temperature);
+    result.insert(QStringLiteral("value"), double(ans.value));
+    result.insert(QStringLiteral("confidence"), double(ans.confidence));
+    result.insert(QStringLiteral("actProbability"), double(ans.act_probability));
+    result.insert(QStringLiteral("temperature"), double(ans.temperature));
+    result.insert(QStringLiteral("nOptions"), ans.n_options);
     result.insert(QStringLiteral("nTokens"), ans.n_tokens);
     result.insert(QStringLiteral("probs"), probList);
 

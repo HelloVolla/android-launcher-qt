@@ -31,8 +31,14 @@ mkdir -p $RELEASE_DIR
 
 cd $BUILD_DIR
 
+ASSISTANT_ROOT=${VOLLA_ASSISTANT_ROOT:-/assistant}
+LAYA_ROOT=${VOLLA_LAYA_ROOT:-/laya}
+echo "Assistant root: $ASSISTANT_ROOT, laya root: $LAYA_ROOT"
+
 # Run qmake, optional: ship the OpenSSL libraries
-qmake -r $WORKSPACE ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libcrypto.so ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libssl.so
+qmake -r $WORKSPACE ASSISTANT_ROOT=$ASSISTANT_ROOT LAYA_ROOT=$LAYA_ROOT \
+      ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libcrypto.so ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libssl.so
+grep -q VOLLA_ASSISTANT Makefile || echo "!! WARNING: building WITHOUT the on-device assistant - see the qmake warnings above"
 make -j`nproc` || die "Building the sources failed"
 make install INSTALL_ROOT=$ANDROID_BUILD_DIR
 

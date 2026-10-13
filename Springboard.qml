@@ -30,6 +30,8 @@ LauncherPage {
 
     property string assistantResponse: ""
     property bool assistantThinking: false
+    property var assistantDecision
+    property string clockApp: "com.android.deskclock"
 
 
     property bool isCurrentPage: mainView.currentIndex === mainView.swipeIndex.Springboard
@@ -151,6 +153,15 @@ LauncherPage {
             console.log("Springboard | Assistant replied: " + text)
             springBoard.assistantThinking = false
             springBoard.assistantResponse = text
+        }
+
+        onDecision: {
+            console.log("Springboard | Assistant decided: " + answer.key
+                        + " (confidence " + answer.confidence + ")")
+
+
+            springBoard.assistantDecision = JSON.parse(JSON.stringify(answer))
+            listModel.update()
         }
 
         onError: {
@@ -792,7 +803,8 @@ LauncherPage {
                     springBoardWorker.sendMessage({
                         'selectedObj': springBoard.selectedObj, 'textInput': textInput,
                         'contacts': mainView.getContacts(), 'model': listModel, 'actionType': mainView.actionType,
-                        'actionName': mainView.actionName, 'eventRegex': eventRegex
+                        'actionName': mainView.actionName, 'eventRegex': eventRegex,
+                        'decision': springBoard.assistantDecision
                     })
                 }
             }
@@ -991,6 +1003,10 @@ LauncherPage {
                 console.log("Springboard | Number of plugins: " + springBoard.plugins.length)
 
                 listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
+                if (messageObject['clearDecision'])
+                    springBoard.assistantDecision = undefined
+                if (messageObject['requestDecision'] !== undefined && assistant.available && assistant.ready)
+                    assistant.decide(messageObject['requestDecision'])
                 if (plugins.length > 0){
                     listModel.iteratePlugins(0, plugins.length)
                 }
@@ -1723,6 +1739,10 @@ LauncherPage {
                 case mainView.actionType.OpenCam:
                     console.log("Springboard | Show camera")
                     AN.SystemDispatcher.dispatch("volla.launcher.camAction", new Object)
+                    break
+                case mainView.actionType.OpenClock:
+                    console.log("Springboard | Show clock")
+                    AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": springBoard.clockApp})
                     break
                 case mainView.actionType.ShowDialer:
                     console.log("Springboard | Show dialer")

@@ -53,10 +53,29 @@ assistant:for(name, ASSISTANT_LIB_NAMES) {
     }
 }
 
+# laya (app decision model). liblaya.so is self-contained: its own llama.cpp/ggml and
+# libc++ are linked in statically and only the laya_* C API is exported.
+isEmpty(LAYA_ROOT): LAYA_ROOT = $$(VOLLA_LAYA_ROOT)
+isEmpty(LAYA_ROOT): LAYA_ROOT = $$PWD/../../laya-ggml-impl
+isEmpty(LAYA_LIBDIR): LAYA_LIBDIR = $$(VOLLA_LAYA_LIBDIR)
+isEmpty(LAYA_LIBDIR): LAYA_LIBDIR = $$LAYA_ROOT/build-android
+
+assistant:!exists($$LAYA_ROOT/include/laya.h) {
+    warning("laya headers not found at $$LAYA_ROOT/include - building without the on-device assistant")
+    CONFIG -= assistant
+}
+
+assistant:!exists($$LAYA_LIBDIR/liblaya.so) {
+    warning("laya library liblaya.so not found in $$LAYA_LIBDIR - building without the on-device assistant")
+    CONFIG -= assistant
+}
+
 assistant {
     DEFINES += VOLLA_ASSISTANT
 
-    INCLUDEPATH += $$ASSISTANT_INCLUDES
+    INCLUDEPATH += $$ASSISTANT_INCLUDES $$LAYA_ROOT/include
+
+    LIBS += -L$$LAYA_LIBDIR -llaya
 
     LIBS += -L$$ASSISTANT_LIBDIR
     for(name, ASSISTANT_LIB_NAMES): LIBS += -l$$name
@@ -64,6 +83,7 @@ assistant {
     android:!assistant_no_bundle {
         for(name, ASSISTANT_LIB_NAMES): \
             ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/lib$${name}.so
+        ANDROID_EXTRA_LIBS += $$LAYA_LIBDIR/liblaya.so
     }
 }
 
