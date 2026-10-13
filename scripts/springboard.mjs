@@ -184,6 +184,7 @@ WorkerScript.onMessage = function(message) {
         requestDecision = decidedText
     }
 
+    var callees = []
     if (decision !== undefined && decision !== null) {
         console.log("Springboard | Laya decision: " + decision.key)
         var preferred
@@ -191,6 +192,8 @@ WorkerScript.onMessage = function(message) {
             preferred = [actionName.OpenClock, actionType.OpenClock]
         } else if (decision.key === "dialer") {
             preferred = [actionName.ShowDialer, actionType.ShowDialer]
+            if (decision.callees !== undefined)
+                callees = decision.callees
         } else if (decision.key === "LLM") {
             preferred = [actionName.AskAssistant, actionType.AskAssistant]
         }
@@ -199,6 +202,13 @@ WorkerScript.onMessage = function(message) {
                 return item !== undefined && item[1] !== preferred[1]
             })
             filteredSuggestionObj.unshift(preferred)
+            if (indexOfFirstSuggestion > 0)
+                indexOfFirstSuggestion++
+        }
+        for (var j = callees.length - 1; j >= 0; j--) {
+            filteredSuggestionObj.unshift([actionName.CallContact + " " + callees[j]["name"],
+                                           actionType.CallContact,
+                                           JSON.parse(JSON.stringify(callees[j]))])
             if (indexOfFirstSuggestion > 0)
                 indexOfFirstSuggestion++
         }
@@ -236,6 +246,17 @@ WorkerScript.onMessage = function(message) {
     if (preferred !== undefined) {
         for (i = 0; i < model.count; ++i) {
             if (model.get(i).action === preferred[1]) {
+                if (i > 0)
+                    model.move(i, 0, 1)
+                break
+            }
+        }
+    }
+
+    for (var n = callees.length - 1; n >= 0; n--) {
+        var callText = actionName.CallContact + " " + callees[n]["name"]
+        for (i = 0; i < model.count; ++i) {
+            if (model.get(i).text === callText) {
                 if (i > 0)
                     model.move(i, 0, 1)
                 break
