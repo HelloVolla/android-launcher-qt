@@ -161,6 +161,7 @@ LauncherPage {
 
 
             springBoard.assistantDecision = JSON.parse(JSON.stringify(answer))
+            WorkerScript.onMessage(springBoard);
             listModel.update()
         }
 
