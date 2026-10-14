@@ -42,23 +42,6 @@ else
     echo "  (set VOLLA_ASSISTANT_ROOT to build with it)"
 fi
 
-# laya (the app decision model) is bundled as a self-contained liblaya.so from
-# its build-android directory. Point at it with VOLLA_LAYA_ROOT; the sibling of
-# the workspace parent is the default.
-LAYA_ROOT=${VOLLA_LAYA_ROOT:-`realpath -m $WORKSPACE/../../laya-ggml-impl`}
-LAYA_MOUNT=""
-LAYA_ENV=""
-if [[ -d "$LAYA_ROOT" ]]; then
-    LAYA_ROOT=`realpath $LAYA_ROOT`
-    LAYA_LIBDIR=${VOLLA_LAYA_LIBDIR:-$LAYA_ROOT/build-android}
-    echo "Building with laya from $LAYA_ROOT (libraries in $LAYA_LIBDIR)"
-    LAYA_MOUNT="-v $LAYA_ROOT:$LAYA_ROOT:ro"
-    LAYA_ENV="-e VOLLA_LAYA_ROOT=$LAYA_ROOT -e VOLLA_LAYA_LIBDIR=$LAYA_LIBDIR"
-else
-    echo "No laya at $LAYA_ROOT - building without the on-device assistant"
-    echo "  (set VOLLA_LAYA_ROOT to build with it)"
-fi
-
 [[ -v DISPLAY ]] && xhost +local:root
 
 docker run --rm \
@@ -76,9 +59,7 @@ docker run --rm \
            -v $CCACHE_DIR:$CCACHE_DIR \
            -v $GRADLE_DIR:$GRADLE_DIR \
            $ASSISTANT_ENV \
-           $LAYA_ENV \
            -v $WORKSPACE:$WORKSPACE \
-           $ASSISTANT_MOUNT \
-           $LAYA_MOUNT -it \
+           $ASSISTANT_MOUNT -it \
            -u $USER \
            $CONTAINER $EXECUTABLE
