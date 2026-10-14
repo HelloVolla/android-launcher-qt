@@ -31,13 +31,10 @@ mkdir -p $RELEASE_DIR
 
 cd $BUILD_DIR
 
-ASSISTANT_ROOT=${VOLLA_ASSISTANT_ROOT:-/assistant}
-echo "Assistant root: $ASSISTANT_ROOT"
-
-# Run qmake, optional: ship the OpenSSL libraries
-qmake -r $WORKSPACE ASSISTANT_ROOT=$ASSISTANT_ROOT \
+# Run qmake, optional: ship the OpenSSL libraries. The assistant is built in
+# only when VOLLA_ASSISTANT_ROOT is set (qmake reads it from the environment).
+qmake -r $WORKSPACE \
       ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libcrypto.so ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libssl.so
-grep -q VOLLA_ASSISTANT Makefile || echo "!! WARNING: building WITHOUT the on-device assistant - see the qmake warnings above"
 make -j`nproc` || die "Building the sources failed"
 make install INSTALL_ROOT=$ANDROID_BUILD_DIR
 

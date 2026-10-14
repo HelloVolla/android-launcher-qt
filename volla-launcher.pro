@@ -1,6 +1,6 @@
 QT += quick androidextras
 
-CONFIG += c++11 lrelease embed_translations assistant
+CONFIG += c++11 lrelease embed_translations
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -19,44 +19,24 @@ SOURCES += \
         main.cpp
 
 
+# The on-device assistant is built in only when VOLLA_ASSISTANT_ROOT is set
+# (or ASSISTANT_ROOT is passed to qmake).
 isEmpty(ASSISTANT_ROOT): ASSISTANT_ROOT = $$(VOLLA_ASSISTANT_ROOT)
 
 !isEmpty(ASSISTANT_ROOT) {
-    isEmpty(ASSISTANT_INCLUDES) {
-        ASSISTANT_INCLUDES = $$ASSISTANT_ROOT/assistant-core/include \
-                             $$ASSISTANT_ROOT/ai-agents/include \
-                             $$ASSISTANT_ROOT/router/include \
-                             $$ASSISTANT_ROOT/third_party/llama.cpp/include \
-                             $$ASSISTANT_ROOT/third_party/llama.cpp/ggml/include \
-                             $$ASSISTANT_ROOT/third_party/llama.cpp/vendor
-    }
-    isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/build
-}
+    message("Building with the on-device assistant from $$ASSISTANT_ROOT")
 
-# laya (the app decision model, built from router/) is self-contained: its own
-# llama.cpp/ggml and libc++ are linked in statically and only the laya_* C API is exported.
-ASSISTANT_LIB_NAMES = inference states config prompt agent_core session_config llama.cpp laya
+    ASSISTANT_INCLUDES = $$ASSISTANT_ROOT/assistant-core/include \
+                         $$ASSISTANT_ROOT/ai-agents/include \
+                         $$ASSISTANT_ROOT/router/include \
+                         $$ASSISTANT_ROOT/third_party/llama.cpp/include \
+                         $$ASSISTANT_ROOT/third_party/llama.cpp/ggml/include \
+                         $$ASSISTANT_ROOT/third_party/llama.cpp/vendor
+    ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/build
 
-assistant:isEmpty(ASSISTANT_INCLUDES) {
-    warning("No assistant path given (ASSISTANT_ROOT or VOLLA_ASSISTANT_ROOT) - building without the on-device assistant")
-    CONFIG -= assistant
-}
+    # laya (the app decision model, built from router/) 
+    ASSISTANT_LIB_NAMES = inference states config prompt agent_core session_config llama.cpp laya
 
-assistant:for(dir, ASSISTANT_INCLUDES) {
-    !exists($$dir) {
-        warning("Assistant headers not found at $$dir - building without the on-device assistant")
-        CONFIG -= assistant
-    }
-}
-
-assistant:for(name, ASSISTANT_LIB_NAMES) {
-    !exists($$ASSISTANT_LIBDIR/lib$${name}.so) {
-        warning("Assistant library lib$${name}.so not found in $$ASSISTANT_LIBDIR - building without the on-device assistant")
-        CONFIG -= assistant
-    }
-}
-
-assistant {
     DEFINES += VOLLA_ASSISTANT
 
     INCLUDEPATH += $$ASSISTANT_INCLUDES
@@ -67,7 +47,12 @@ assistant {
     android:!assistant_no_bundle {
         for(name, ASSISTANT_LIB_NAMES): \
             ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/lib$${name}.so
+        # Qt's libc++_shared.so has the iostream/stringstream symbols stripped out and
+        # libllama.cpp.so needs them; ship the NDK's full copy (a drop-in superset).
+        ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/libc++_shared.so
     }
+} else {
+    message("VOLLA_ASSISTANT_ROOT not set - building without the on-device assistant")
 }
 
 RESOURCES += qml.qrc
