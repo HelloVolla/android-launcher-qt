@@ -276,8 +276,8 @@ void AssistantEngine::decide(const QString &prompt)
 
     static const char *keys[] = {"clock", "dialer", "LLM"};
     static const char *desc[] = {"Setting alarm, setting reminder, timer, stop watch even when query is indirect",
-                                 "making call, create a new contact even when query is indirect",
-                                 "Answer to general questions"};
+                                 "making call even when query is indirect",
+                                 "Answer to general questions only, no action is available"};
     constexpr int nOptions = 3;
 
     const laya_question q = {LAYA_QTYPE_CHOICE, RULE, keys, desc, nOptions};

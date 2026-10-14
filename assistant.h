@@ -35,7 +35,7 @@ signals:
     void decided(const QVariantMap &answer);
 
 private:
-    #define RULE "You need to select the application that you think would be helpfull for user."
+    #define RULE "Select the application that will be helpfull based on user's query, user's query will be one of German, Dutch, Norwegian or English."
     // Free the native state and report that a reload is needed.
     void unload();
 
