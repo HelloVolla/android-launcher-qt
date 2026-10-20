@@ -71,7 +71,7 @@ jobs:
           ./build_package_android ./releases
           sudo chmod -R 755 ./releases
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v1
         with:
           name: Volla-launcher-si-integrated
           path: releases/*.apk
