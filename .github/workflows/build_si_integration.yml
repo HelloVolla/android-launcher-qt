@@ -7,70 +7,9 @@ on:
   pull_request:
     branches:
     - si-integration
-  workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  ASSISTANT_REPO: HelloVolla/volla_assistant_native
-  ASSISTANT_ABI: arm64-v8a
 
 jobs:
-  assistant:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Find latest assistant release
-        id: release
-        env:
-          GH_TOKEN: ${{ secrets.ASSISTANT_REPO_TOKEN || github.token }}
-        run: |
-          TAG=`gh release view -R $ASSISTANT_REPO --json tagName -q .tagName`
-          echo "Latest assistant release: $TAG"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Checkout assistant sources
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.ASSISTANT_REPO }}
-          ref: ${{ steps.release.outputs.tag }}
-          token: ${{ secrets.ASSISTANT_REPO_TOKEN || github.token }}
-          submodules: recursive
-          path: volla_assistant_native
-
-      - name: Download prebuilt libraries
-        env:
-          GH_TOKEN: ${{ secrets.ASSISTANT_REPO_TOKEN || github.token }}
-          TAG: ${{ steps.release.outputs.tag }}
-        run: |
-          gh release download $TAG -R $ASSISTANT_REPO \
-             -p "volla-assistant-native-$ASSISTANT_ABI-$TAG.tar.gz" -O assistant.tar.gz
-          mkdir -p libs volla_assistant_native/build
-          tar -xzf assistant.tar.gz -C libs
-          cp libs/$ASSISTANT_ABI/*.so volla_assistant_native/build/
-          ls -la volla_assistant_native/build
-
-      - name: Package assistant
-        run: |
-          tar -czf assistant.tgz \
-              volla_assistant_native/build \
-              volla_assistant_native/assistant-core/include \
-              volla_assistant_native/ai-agents/include \
-              volla_assistant_native/router/include \
-              volla_assistant_native/third_party/llama.cpp/include \
-              volla_assistant_native/third_party/llama.cpp/ggml/include \
-              volla_assistant_native/third_party/llama.cpp/vendor
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: assistant
-          path: assistant.tgz
-          if-no-files-found: error
-          retention-days: 1
-
   build:
-    needs: assistant
     runs-on: ubuntu-latest
     container:
       image: a12e/docker-qt:5.13-android_arm64_v8a
@@ -80,9 +19,25 @@ jobs:
         with:
           submodules: true
 
-      - uses: actions/download-artifact@v4
-        with:
-          name: assistant
+      - name: Fetch assistant
+        env:
+          TOKEN: ${{ secrets.ASSISTANT_REPO_TOKEN }}
+          REPO: HelloVolla/volla_assistant_native
+          ABI: arm64-v8a
+        run: |
+          API=https://api.github.com/repos/$REPO
+          RELEASE=`curl -fsSL -H "Authorization: token $TOKEN" $API/releases/latest | tr ',' '\n'`
+          TAG=`echo "$RELEASE" | grep '"tag_name"' | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/'`
+          ASSET=volla-assistant-native-$ABI-$TAG.tar.gz
+          ASSET_URL=`echo "$RELEASE" | grep -B3 "\"name\": *\"$ASSET\"" | grep -o "$API/releases/assets/[0-9]*"`
+          echo "Assistant release $TAG, asset $ASSET"
+          git clone --depth 1 --branch $TAG --recurse-submodules --shallow-submodules \
+              https://x-access-token:$TOKEN@github.com/$REPO.git build/volla_assistant_native
+          curl -fsSL -H "Authorization: token $TOKEN" -H "Accept: application/octet-stream" \
+               -o build/assistant.tar.gz $ASSET_URL
+          mkdir -p build/assistant-libs build/volla_assistant_native/build
+          tar -xzf build/assistant.tar.gz -C build/assistant-libs
+          cp build/assistant-libs/$ABI/*.so build/volla_assistant_native/build/
 
       - name: Build Apk
         env:
@@ -90,10 +45,7 @@ jobs:
           ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
           ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
         run: |
-          sudo chown -R `id -u` ${GITHUB_WORKSPACE}
-          mkdir -p build/assistant
-          tar -xzf assistant.tgz -C build/assistant
-          export VOLLA_ASSISTANT_ROOT=`realpath build/assistant/volla_assistant_native`
+          export VOLLA_ASSISTANT_ROOT=`realpath build/volla_assistant_native`
           export CACHE_DIR=build/cache
           export M2_HOME=`realpath -m $CACHE_DIR/.m2`
           export MAVEN_HOME=`realpath -m $CACHE_DIR/.m2`
@@ -101,15 +53,9 @@ jobs:
           export VERSION=`git describe --tags || git rev-parse --short HEAD`
           export TIMESTAMP=`date +%Y%m%d%H%M`
           export BUILD_ID="$VERSION-$TIMESTAMP"
+          sudo chown -R `id -u` ${GITHUB_WORKSPACE}
           mkdir -p $MAVEN_HOME
           mkdir -p $GRADLE_USER_HOME
           mkdir -p releases
           ./build_package_android ./releases
           sudo chmod -R 755 ./releases
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: volla-launcher-si-integration
-          path: releases/*.apk
-          if-no-files-found: error
-          retention-days: 14
