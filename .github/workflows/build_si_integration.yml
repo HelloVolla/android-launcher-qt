@@ -26,10 +26,19 @@ jobs:
           ABI: arm64-v8a
         run: |
           API=https://api.github.com/repos/$REPO
-          RELEASE=`curl -fsSL -H "Authorization: token $TOKEN" $API/releases/latest | tr ',' '\n'`
+          [ -n "$TOKEN" ] || { echo "ASSISTANT_REPO_TOKEN is not set for this run"; exit 1; }
+          STATUS=`curl -sSL -o release.json -w '%{http_code}' -H "Authorization: token $TOKEN" $API/releases/latest`
+          if [ "$STATUS" != "200" ]; then
+              echo "GitHub API returned $STATUS for the latest release of $REPO:"
+              cat release.json
+              echo "(404: no published release, or the token cannot see the repo; 401: invalid token)"
+              exit 1
+          fi
+          RELEASE=`tr ',' '\n' < release.json`
           TAG=`echo "$RELEASE" | grep '"tag_name"' | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/'`
           ASSET=volla-assistant-native-$ABI-$TAG.tar.gz
-          ASSET_URL=`echo "$RELEASE" | grep -B3 "\"name\": *\"$ASSET\"" | grep -o "$API/releases/assets/[0-9]*"`
+          ASSET_URL=`echo "$RELEASE" | grep -B3 "\"name\": *\"$ASSET\"" | grep -o "$API/releases/assets/[0-9]*" || true`
+          [ -n "$ASSET_URL" ] || { echo "Release $TAG has no asset $ASSET"; exit 1; }
           echo "Assistant release $TAG, asset $ASSET"
           git clone --depth 1 --branch $TAG --recurse-submodules --shallow-submodules \
               https://x-access-token:$TOKEN@github.com/$REPO.git build/volla_assistant_native
