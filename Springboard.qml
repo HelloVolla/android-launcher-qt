@@ -152,19 +152,20 @@ LauncherPage {
             if (!hasPhone)
                 continue
             var name = contact["name"].toLowerCase().trim()
-            var firstName = name.split(/\s+/)[0]
+            var nameParts = name.split(/\s+/)
             var score = 0
             if (text.indexOf(" " + name + " ") >= 0) {
                 score = 3
-            } else if (firstName.length > 1 && text.indexOf(" " + firstName + " ") >= 0) {
+            } else if (nameParts.some(function (part) {
+                return part.length > 1 && text.indexOf(" " + part + " ") >= 0
+            })) {
                 score = 2
-            } else {
-                for (var w = 0; w < words.length; w++) {
-                    if (words[w].length > 2 && firstName.indexOf(words[w]) === 0) {
-                        score = 1
-                        break
-                    }
-                }
+            } else if (words.some(function (word) {
+                return word.length > 2 && nameParts.some(function (part) {
+                    return part.indexOf(word) === 0
+                })
+            })) {
+                score = 1
             }
             if (score > 0)
                 matches.push({"contact": contact, "score": score})
