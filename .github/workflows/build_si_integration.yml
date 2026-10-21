@@ -70,3 +70,15 @@ jobs:
           mkdir -p releases
           ./build_package_android ./releases
           sudo chmod -R 755 ./releases
+      - name: Upload to GitLab
+        if: github.event_name == 'push'
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_PROJECT_ID: ${{ secrets.GITLAB_PROJECT_ID }}
+          GITLAB_URL: https://git.volla.tech
+        run: |
+          VERSION=`git describe --tags || git rev-parse --short HEAD`
+          for FILE in releases/*.apk; do
+              curl -fsS --header "PRIVATE-TOKEN: $GITLAB_TOKEN" --upload-file "$FILE" \
+                   "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/packages/generic/volla-launcher/$VERSION/`basename $FILE`"
+          done
