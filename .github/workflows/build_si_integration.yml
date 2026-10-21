@@ -79,6 +79,6 @@ jobs:
         run: |
           VERSION=`git describe --tags || git rev-parse --short HEAD`
           for FILE in releases/*.apk; do
-              curl -fsS --header "PRIVATE-TOKEN: $GITLAB_TOKEN" --upload-file "$FILE" \
+              curl -fsS --header "DEPLOY-TOKEN: $GITLAB_TOKEN" --upload-file "$FILE" \
                    "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/packages/generic/volla-launcher/$VERSION/`basename $FILE`"
           done
