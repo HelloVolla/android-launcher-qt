@@ -7,3 +7,6 @@
 [submodule "vendor/readability"]
 	path = vendor/readability
 	url = https://github.com/mozilla/readability.git
+[submodule "vendor/volla_assistant_native"]
+	path = vendor/volla_assistant_native
+	url = https://github.com/HelloVolla/volla_assistant_native.git
