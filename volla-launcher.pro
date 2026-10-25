@@ -19,9 +19,14 @@ SOURCES += \
         main.cpp
 
 
-# The on-device assistant is built in only when VOLLA_ASSISTANT_ROOT is set
-# (or ASSISTANT_ROOT is passed to qmake).
+# VOLLA_ASSISTANT_ROOT (or ASSISTANT_ROOT passed to qmake) overrides it.
+# Otherwise the prebuilt libraries in vendor/volla_assistant_native/latest are used.
 isEmpty(ASSISTANT_ROOT): ASSISTANT_ROOT = $$(VOLLA_ASSISTANT_ROOT)
+isEmpty(ASSISTANT_ROOT) {
+    ASSISTANT_ROOT = $$PWD/vendor/volla_assistant_native
+    ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/latest
+}
+isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/build
 
 !isEmpty(ASSISTANT_ROOT) {
     message("Building with the on-device assistant from $$ASSISTANT_ROOT")
@@ -32,7 +37,6 @@ isEmpty(ASSISTANT_ROOT): ASSISTANT_ROOT = $$(VOLLA_ASSISTANT_ROOT)
                          $$ASSISTANT_ROOT/third_party/llama.cpp/include \
                          $$ASSISTANT_ROOT/third_party/llama.cpp/ggml/include \
                          $$ASSISTANT_ROOT/third_party/llama.cpp/vendor
-    ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/build
 
     # laya (the app decision model, built from router/) 
     ASSISTANT_LIB_NAMES = inference states config prompt agent_core session_config llama.cpp laya
@@ -47,9 +51,7 @@ isEmpty(ASSISTANT_ROOT): ASSISTANT_ROOT = $$(VOLLA_ASSISTANT_ROOT)
     android:!assistant_no_bundle {
         for(name, ASSISTANT_LIB_NAMES): \
             ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/lib$${name}.so
-        # Qt's libc++_shared.so has the iostream/stringstream symbols stripped out and
-        # libllama.cpp.so needs them; ship the NDK's full copy (a drop-in superset).
-        ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/libc++_shared.so
+        ANDROID_STDCPP_PATH = $$ASSISTANT_LIBDIR/libc++_shared.so
     }
 } else {
     message("VOLLA_ASSISTANT_ROOT not set - building without the on-device assistant")

@@ -6,3 +6,4 @@ QML_IMPORT_PATH += $$PWD
 
 
 include($$PWD/android/native/pri/androidnative.pri)
+include($$PWD/volla_assistant_native.pri)
