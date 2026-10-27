@@ -34,7 +34,7 @@ LauncherPage {
     property string assistantPrompt: ""
     property bool assistantThinking: false
     property var assistantDecision
-    property string clockApp: "com.android.deskclock"
+    property string clockApp: "org.fossify.clock"
 
 
     property bool isCurrentPage: mainView.currentIndex === mainView.swipeIndex.Springboard
@@ -712,6 +712,11 @@ LauncherPage {
                         AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "dial"})
                         textInputArea.text = ""
                         console.log("Springboard | Dialer is opened")
+                        break
+                    case mainView.actionType.OpenClock:
+                        AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": springBoard.clockApp})
+                        textInputArea.text = ""
+                        console.log("Springboard | Clock is opened")
                         break
                     case mainView.actionType.CallContact:
                         if(actionObj !== undefined){

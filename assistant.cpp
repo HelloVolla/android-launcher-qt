@@ -106,7 +106,6 @@ void appendUserTurn(const QString &prompt, bool thinker)
                                            ? "<|im_end|><|im_start|>assistant\n<think>\n\n</think>\n\n"
                                            : "<|im_end|><|im_start|>assistant\n");
 }
-
 void appendAssistantTurn()
 {
     if (g_state.messages == nullptr)
