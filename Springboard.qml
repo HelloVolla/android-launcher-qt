@@ -28,7 +28,10 @@ LauncherPage {
     property var plugins: new Array
     property var appButtons: new Array
 
-    property string assistantResponse: ""
+    // Items the assistant and laya contribute to listModel, by source. The worker
+    // rebuilds the list on every input change, so they are inserted again after it.
+    property var sourceItems: ({})
+    property string assistantPrompt: ""
     property bool assistantThinking: false
     property var assistantDecision
     property string clockApp: "com.android.deskclock"
@@ -211,9 +214,61 @@ LauncherPage {
 
     function askAssistant(prompt) {
         console.log("Springboard | Ask assistant: " + prompt)
-        springBoard.assistantResponse = ""
+        springBoard.assistantPrompt = prompt.trim()
         springBoard.assistantThinking = true
+        setAssistantItems([assistantItem(assistant.ready ? qsTr("Thinking...")
+                                                        : qsTr("Starting the assistant..."))])
         assistant.ask(prompt)
+    }
+
+    function assistantItem(text) {
+        return {
+            "text": text,
+            "action": mainView.actionType.LiveContentPlugin,
+            "actionObj": {"pluginId": "", "link": ""},
+            "category": listModel.category.LiveContent,
+            "source": "assistant",
+            "isFirstSuggestion": false
+        }
+    }
+
+    function setAssistantItems(items) {
+        setSourceItems("assistant", items)
+    }
+
+    function clearAssistant() {
+        springBoard.assistantPrompt = ""
+        setSourceItems("assistant", [])
+    }
+
+    // laya picks the app for the input, so all its items are functions.
+    function layaItems(decision) {
+        var items = []
+        var add = function (text, action, actionObj) {
+            var item = {"text": text, "action": action, "category": listModel.category.Function,
+                        "source": "laya", "isFirstSuggestion": false}
+            if (actionObj !== undefined)
+                item.actionObj = actionObj
+            items.push(item)
+        }
+        if (decision.callees !== undefined) {
+            for (var i = 0; i < decision.callees.length; i++)
+                add(mainView.actionName.CallContact + " " + decision.callees[i]["name"],
+                    mainView.actionType.CallContact, decision.callees[i])
+        }
+        if (decision.key === "clock")
+            add(mainView.actionName.OpenClock, mainView.actionType.OpenClock)
+        else if (decision.key === "dialer")
+            add(mainView.actionName.ShowDialer, mainView.actionType.ShowDialer)
+        else if (decision.key === "LLM")
+            add(mainView.actionName.AskAssistant, mainView.actionType.AskAssistant)
+        return items
+    }
+
+    function setSourceItems(source, items) {
+        listModel.removeItems(springBoard.sourceItems[source] || [])
+        springBoard.sourceItems[source] = items
+        listModel.insertItems(items)
     }
 
     Connections {
@@ -221,12 +276,17 @@ LauncherPage {
 
         onReadyChanged: {
             console.log("Springboard | Assistant ready: " + assistant.ready)
+            if (springBoard.assistantThinking && assistant.ready)
+                setAssistantItems([assistantItem(qsTr("Thinking..."))])
         }
 
         onResponse: {
             console.log("Springboard | Assistant replied: " + text)
             springBoard.assistantThinking = false
-            springBoard.assistantResponse = text
+            // The input changed while the assistant was thinking.
+            if (springBoard.assistantPrompt === "")
+                return
+            setAssistantItems(text.trim() !== "" ? [assistantItem(text.trim())] : [])
         }
 
         onDecision: {
@@ -239,14 +299,13 @@ LauncherPage {
             if (decision.key === "dialer")
                 decision.callees = contactsMentionedIn(decision.prompt).slice(0, 3)
             springBoard.assistantDecision = decision
-            listModel.update()
-            WorkerScript.onMessage(springBoard);
-
+            setSourceItems("laya", layaItems(decision))
         }
 
         onError: {
             console.warn("Springboard | Assistant error: " + message)
             springBoard.assistantThinking = false
+            clearAssistant()
             mainView.showToast(message)
         }
     }
@@ -372,61 +431,7 @@ LauncherPage {
                     onClicked: {
                         textArea.text = ""
                         textArea.focus = false
-                        springBoard.assistantResponse = ""
                         springBoard.assistantThinking = false
-                    }
-                }
-            }
-
-            Rectangle {
-                id: assistantBox
-                x: mainView.innerSpacing
-                width: parent.width - mainView.innerSpacing * 2
-                height: visible ? assistantContent.height + mainView.innerSpacing : 0
-                visible: springBoard.assistantThinking || springBoard.assistantResponse !== ""
-                color: "white"
-                radius: mainView.innerSpacing / 3
-                border.color: "#e0e0e0"
-
-                Item {
-                    id: assistantContent
-                    x: mainView.innerSpacing / 2
-                    y: mainView.innerSpacing / 2
-                    width: parent.width - mainView.innerSpacing
-                    height: springBoard.assistantThinking ? thinkingRow.height
-                                                          : answerFlickable.height
-
-                    Label {
-                        id: thinkingRow
-                        visible: springBoard.assistantThinking
-                        text: assistant.ready ? qsTr("Thinking...")
-                                              : qsTr("Starting the assistant...")
-                        color: "#444444"
-                        font.pointSize: mainView.mediumFontSize
-                    }
-
-                    Flickable {
-                        id: answerFlickable
-                        visible: !springBoard.assistantThinking
-                        width: parent.width
-                        height: Math.min(contentHeight, springBoard.height * 0.4)
-                        contentWidth: width
-                        contentHeight: answerText.implicitHeight
-                        clip: true
-                        flickableDirection: Flickable.VerticalFlick
-
-                        TextEdit {
-                            id: answerText
-                            width: parent.width
-                            text: springBoard.assistantResponse
-                            readOnly: true
-                            selectByMouse: true
-                            wrapMode: Text.WordWrap
-                            color: "#202020"
-                            font.pointSize: mainView.mediumFontSize
-                        }
-
-                        ScrollBar.vertical: ScrollBar {}
                     }
                 }
             }
@@ -444,6 +449,67 @@ LauncherPage {
 
             property int indexOfFirstSuggestion: -1
             property int indexOfFirstFunction: -1
+
+            // Every item from a plugin or the assistant belongs to one of these.
+            readonly property var category: ({
+                "Function": "function",            
+                "LiveContent": "liveContent",      
+                "Autocompletion": "autocompletion" 
+            })
+
+            function insertItems(items) {
+                var byCategory = function (cat) {
+                    return items.filter(function (item) { return item.category === cat })
+                }
+                var functions = byCategory(category.Function)
+                var liveContent = byCategory(category.LiveContent)
+                var autocompletions = byCategory(category.Autocompletion)
+
+                items.forEach(function (item) {
+                    var i = indexOfItem(item)
+                    if (i >= 0)
+                        removeAt(i, undefined)
+                })
+
+                indexOfFirstSuggestion = indexOfFirstSuggestion + functions.length + liveContent.length
+                indexOfFirstFunction = indexOfFirstFunction + liveContent.length
+                for (var i = 0; i < liveContent.length; i++)
+                    insert(i, row(liveContent[i]))
+                for (i = 0; i < functions.length; i++)
+                    insert(liveContent.length + i, row(functions[i]))
+                for (i = 0; i < autocompletions.length; i++)
+                    append(row(autocompletions[i]))
+            }
+
+            // Rows only carry the roles the worker script uses. Extra roles added here
+            // make the worker's copy of the model crash Qt when it removes the row.
+            function row(item) {
+                return {"text": item.text, "action": item.action, "actionObj": item.actionObj}
+            }
+
+            function indexOfItem(item) {
+                for (var i = 0; i < count; i++) {
+                    if (get(i).text === item.text && get(i).action === item.action)
+                        return i
+                }
+                return -1
+            }
+
+            function removeAt(i, itemCategory) {
+                if (i < indexOfFirstSuggestion)
+                    indexOfFirstSuggestion--
+                if (itemCategory === category.LiveContent)
+                    indexOfFirstFunction--
+                remove(i)
+            }
+
+            function removeItems(items) {
+                items.forEach(function (item) {
+                    var i = indexOfItem(item)
+                    if (i >= 0)
+                        removeAt(i, item.category)
+                })
+            }
 
             function checkContacts(contact) {
                 var fullName = contact["name"].replace(/\s/g, "_")
@@ -895,6 +961,7 @@ LauncherPage {
                 if (textInput.length < 1) {
                     console.debug("Springboard | Will clear property")
                     selectedObj = undefined
+                    springBoard.clearAssistant()
                     listModel.clear()
                 } else {
                     springBoardWorker.sendMessage({
@@ -908,9 +975,7 @@ LauncherPage {
 
             function iteratePlugins(item, length){
                 var counter = 0
-                var pluginFunctions = new Array
-                var autocompletions = new Array
-                var liveContent = new Array
+                var items = new Array
 
                 for (var i = 0; i < length; i++) {
                     console.debug("Springboard | Execute plugin " + springBoard.plugins[i].metadata.id)
@@ -926,53 +991,44 @@ LauncherPage {
                                 }
                                 // plugin provides a function suggestion
                                 if (result[j].functionId !== undefined) {
-                                    pluginFunctions.push({
+                                    items.push({
                                          "text": result[j].label,
                                          "action": mainView.actionType.ExecutePlugin,
                                          "actionObj": {"pluginId": pluginId, "functionId": result[j].functionId},
+                                         "category": listModel.category.Function,
+                                         "source": pluginId,
                                          "isFirstSuggestion": false
                                     })
                                 // plugin provides an autocompletion and entity suggestion
                                 } else if (result[j].object !== undefined) {
-                                    autocompletions.push({
+                                    items.push({
                                         "text": result[j].label,
                                         "action": mainView.actionType.SuggestPluginEntity,
                                         "actionObj": {'pluginId': pluginId, 'entity': result[j].object },
+                                        "category": listModel.category.Autocompletion,
+                                        "source": pluginId,
                                         "isFirstSuggestion": false
                                     })
                                 // plugin provides live content
                                 } else {
-                                    liveContent.push({
+                                    items.push({
                                         "text": result[j].label,
                                         "action": mainView.actionType.LiveContentPlugin,
                                         "actionObj": {"pluginId": pluginId, "link": result[j].link !== undefined ? result[j].link : ""},
+                                        "category": listModel.category.LiveContent,
+                                        "source": pluginId,
                                         "isFirstSuggestion": false
                                     })
                                 }
                             }
                             // group suggestions
                             if (counter++ === length -1) {
-                                listModel.indexOfFirstSuggestion = listModel.indexOfFirstSuggestion + pluginFunctions.length + liveContent.length
-                                listModel.indexOfFirstFunction = liveContent.length
+                                listModel.insertItems(items.filter(function (item) {
+                                    return item.category === listModel.category.Autocompletion
+                                            || selectedObj === undefined
+                                            || (selectedObj.pluginId !== undefined && selectedObj.pluginId === item.source)
+                                }))
                                 console.debug("Springboard | listModel.indexOfFirstSuggestion" + listModel.indexOfFirstSuggestion )
-                                for (i = 0; i < pluginFunctions.length; i++) {
-                                    if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
-                                                                      && selectedObj.pluginId === pluginFunctions[i].actionObj.pluginId)) {
-                                        console.debug("Springboard | Appending plugin function: " + pluginFunctions[i].actionObj.pluginId)
-                                        listView.model.insert(0, pluginFunctions[i])
-                                    }
-                                }
-                                for (i = 0; i < liveContent.length; i++) {
-                                    if (selectedObj === undefined || (selectedObj !== undefined && selectedObj.pluginId !== undefined
-                                            && selectedObj.pluginId === liveContent[i].actionObj.pluginId)) {
-                                        console.debug("Springboard | Appending plugin live content: " + liveContent[i].actionObj.pluginId)
-                                        listView.model.insert(0, liveContent[i])
-                                    }
-                                }
-                                for (i = 0; i < autocompletions.length; i++) {
-                                    console.debug("Springboard | Appending plugin suggestion: " + autocompletions[i].object)
-                                    listView.model.append(autocompletions[i])
-                                }
                             }
                         } else {
                             console.debug("Springboard | Plugin returned success false")
@@ -986,8 +1042,7 @@ LauncherPage {
 
         delegate: Rectangle {
             id: backgroundItem
-            visible: !springBoard.assistantThinking
-            height: visible ? button.height : 0
+            height: button.height
             width: parent.width
             color: model.action < 20000 ? "transparent" :
                                           model.action < 20029 || model.action > 20030 ? mainView.accentColor : "slategrey"
@@ -1108,8 +1163,15 @@ LauncherPage {
                 console.log("Springboard | Number of plugins: " + springBoard.plugins.length)
 
                 listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
-                if (messageObject['clearDecision'])
+                listModel.indexOfFirstFunction = 0
+                if (messageObject['clearDecision']) {
                     springBoard.assistantDecision = undefined
+                    springBoard.sourceItems["laya"] = []
+                }
+                if (springBoard.textInput.trim() !== springBoard.assistantPrompt)
+                    springBoard.clearAssistant()
+                listModel.insertItems(springBoard.sourceItems["laya"] || [])
+                listModel.insertItems(springBoard.sourceItems["assistant"] || [])
                 if (messageObject['clearDecision'] || messageObject['requestDecision'] !== undefined)
                     decisionTimer.stop()
                 if (messageObject['requestDecision'] !== undefined && assistant.available && assistant.ready) {
