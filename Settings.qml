@@ -38,6 +38,10 @@ LauncherPage {
                     shortcutSettingsItemColumn.menuState = false
                     shortcutSettingsItemColumn.destroyCheckboxes()
                 }
+                if (item !== hiddenAppsSettingsItemColumn && hiddenAppsSettingsItemColumn.checkboxes.length > 0) {
+                    hiddenAppsSettingsItemColumn.menuState = false
+                    hiddenAppsSettingsItemColumn.destroyCheckboxes()
+                }
                 if (item !== searchSettingsItemColumn && searchSettingsItemColumn.checkboxes.length > 0) {
                     searchSettingsItemColumn.menuState = false
                     searchSettingsItemColumn.destroyCheckboxes()
@@ -969,13 +973,13 @@ LauncherPage {
                                 console.log("Settings | App " + model["label"] + " selected for shortcuts");
                                 mainView.updateAction(
                                             model["package"], true, mainView.settingsAction.CREATE,
-                                            {"id": model["package"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
+                                            {"id": model["package"], "name": model["label"], "activated": true} )
                                 appMenuModel.append(
-                                            {"id": model["package"], "name": qsTr("Open") + " " + model["label"], "activated": true} )
+                                            {"id": model["package"], "name": model["label"], "activated": true} )
 
                                 var component = Qt.createComponent("/Checkbox.qml", shortcutSettingsItemColumn)
                                 var properties = { "actionId": model["package"],
-                                    "text": qsTr("Open") + " " + model["label"], "checked": true,
+                                    "text": model["label"], "checked": true,
                                     "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
                                     "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
                                     "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
@@ -1004,6 +1008,199 @@ LauncherPage {
                         }
                     }
 
+                }
+            }
+
+            Item {
+                id: hiddenAppsSettingsItem
+                width: parent.width
+                implicitHeight: hiddenAppsSettingsItemColumn.height
+
+                Column {
+                    id: hiddenAppsSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+
+                    HighlightButton {
+                        id: hiddenAppsSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        text: qsTr("Hidden apps")
+                        boldText: hiddenAppsSettingsItemColumn.menuState
+                        onClicked: {
+                            hiddenAppsSettingsItemColumn.menuState = !hiddenAppsSettingsItemColumn.menuState
+                            if (hiddenAppsSettingsItemColumn.menuState) {
+                                console.log("Settings | Will create hidden apps checkboxes")
+                                hiddenAppsSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(hiddenAppsSettingsItemColumn)
+                            } else {
+                                console.log("Settings | Will destroy hidden apps checkboxes")
+                                hiddenAppsSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        destroyCheckboxes()
+                        var hiddenPkgs = mainView.getHiddenApps()
+                        var allInstalled = mainView.getAllInstalledApps()
+
+                        for (var i = 0; i < hiddenPkgs.length; i++) {
+                            var pkg = hiddenPkgs[i]
+                            var appLabel = pkg
+                            for (var j = 0; j < allInstalled.length; j++) {
+                                if (allInstalled[j].package === pkg) {
+                                    appLabel = allInstalled[j].label
+                                    break
+                                }
+                            }
+                            var component = Qt.createComponent("/Checkbox.qml", hiddenAppsSettingsItemColumn)
+                            var properties = {
+                                "actionId": pkg,
+                                "text": appLabel,
+                                "checked": true,
+                                "labelFontSize": mainView.mediumFontSize,
+                                "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing,
+                                "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2,
+                                "topPadding": mainView.innerSpacing / 2,
+                                "hasRemoveButton": true,
+                                "accentColor": mainView.accentColor,
+                                "fontFamilyName": regularFont.name
+                            }
+                            var object = component.createObject(hiddenAppsSettingsItemColumn, properties)
+                            object.activeCheckbox = true
+                            hiddenAppsSettingsItemColumn.checkboxes.push(object)
+                        }
+                        addHiddenAppButton.visible = true
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < hiddenAppsSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = hiddenAppsSettingsItemColumn.checkboxes[i]
+                            checkbox.destroy()
+                        }
+                        addHiddenAppButton.visible = false
+                        hiddenAppsSettingsItemColumn.checkboxes = new Array
+                    }
+
+                    function updateSettings(actionId, active) {
+                        if (!active) {
+                            removeSettings(actionId)
+                        }
+                    }
+
+                    function removeSettings(actionId) {
+                        console.log("Settings | Unhide app: " + actionId)
+                        mainView.unhideApp(actionId)
+                        for (var i = 0; i < hiddenAppsSettingsItemColumn.checkboxes.length; i++) {
+                            var checkbox = hiddenAppsSettingsItemColumn.checkboxes[i]
+                            if (checkbox.actionId === actionId) {
+                                checkboxes.splice(i, 1)
+                                checkbox.destroy()
+                                break
+                            }
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
+                }
+            }
+
+            Button {
+                id: addHiddenAppButton
+                leftPadding: mainView.innerSpacing + 6.0
+                rightPadding: mainView.innerSpacing
+                bottomPadding: mainView.innerSpacing / 2
+                flat: true
+                text: "+"
+                font.family: regularFont.name
+                font.pointSize: mainView.largeFontSize
+                visible: false
+
+                onClicked: {
+                    hiddenAppMenuModel.setData(mainView.getAllInstalledApps())
+                    hiddenAppMenu.popup(settingsPage)
+                }
+
+                Menu {
+                    id: hiddenAppMenu
+
+                    background: Rectangle {
+                        implicitHeight: contentItem.height
+                        implicitWidth: 200
+                        color: mainView.accentColor
+                        radius: mainView.innerSpacing
+                    }
+
+                    contentItem: ListView {
+                        id: hiddenAppList
+                        delegate: Button {
+                            width: parent.width
+                            leftPadding: mainView.innerSpacing
+                            rightPadding: mainView.innerSpacing
+                            topPadding: mainView.innerSpacing
+                            bottomPadding: index === hiddenAppMenuModel.count - 1 ? mainView.innerSpacing : 0
+                            flat: true
+                            contentItem: Text {
+                                text: model.label
+                                color: mainView.fontColor
+                                font.family: regularFont.name
+                                font.pointSize: mainView.mediumFontSize
+                                elide: Text.ElideRight
+                            }
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                            }
+                            onClicked: {
+                                console.log("Settings | App " + model["label"] + " selected to hide");
+                                mainView.hideApp(model["package"])
+                                var component = Qt.createComponent("/Checkbox.qml", hiddenAppsSettingsItemColumn)
+                                var properties = {
+                                    "actionId": model["package"],
+                                    "text": model["label"],
+                                    "checked": true,
+                                    "labelFontSize": mainView.mediumFontSize,
+                                    "circleSize": mainView.largeFontSize,
+                                    "leftPadding": mainView.innerSpacing,
+                                    "rightPadding": mainView.innerSpacing,
+                                    "bottomPadding": mainView.innerSpacing / 2,
+                                    "topPadding": mainView.innerSpacing / 2,
+                                    "hasRemoveButton": true,
+                                    "accentColor": mainView.accentColor,
+                                    "fontFamilyName": regularFont.name
+                                }
+                                var object = component.createObject(hiddenAppsSettingsItemColumn, properties)
+                                object.activeCheckbox = true
+                                hiddenAppsSettingsItemColumn.checkboxes.push(object)
+                                hiddenAppMenu.close()
+                            }
+                        }
+                        model: hiddenAppMenuModel
+                    }
+                }
+
+                ListModel {
+                    id: hiddenAppMenuModel
+                    function setData(data) {
+                        clear()
+                        var hiddenPkgs = mainView.getHiddenApps()
+                        data.forEach(function(app) {
+                            if (hiddenPkgs.indexOf(app.package) < 0) {
+                                var itemLabel = app.package in mainView.labelMap && app.shortcutId === undefined
+                                        ? qsTr(mainView.labelMap[app.package]) : app.label
+                                append({"package": app.package, "label": itemLabel})
+                            }
+                        })
+                    }
                 }
             }
 
