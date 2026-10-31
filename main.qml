@@ -682,6 +682,40 @@ ApplicationWindow {
             return appGrid.children[0].item.getAllApps()
         }
 
+        function getAllInstalledApps() {
+            if (appGrid && appGrid.children && appGrid.children[0] && appGrid.children[0].item) {
+                var appsString = appGrid.children[0].item.getAppsCache()
+                if (appsString && appsString.length > 0) {
+                    try { return JSON.parse(appsString) } catch (e) { return [] }
+                }
+            }
+            return []
+        }
+
+        function getHiddenApps() {
+            return hiddenAppsStore.getHiddenApps()
+        }
+
+        function isHiddenApp(pkg) {
+            return hiddenAppsStore.isHidden(pkg)
+        }
+
+        function hideApp(pkg) {
+            hiddenAppsStore.hideApp(pkg)
+            reloadApps()
+        }
+
+        function unhideApp(pkg) {
+            hiddenAppsStore.unhideApp(pkg)
+            reloadApps()
+        }
+
+        function reloadApps() {
+            if (appGrid && appGrid.children && appGrid.children[0] && appGrid.children[0].item) {
+                appGrid.children[0].item.reloadApps()
+            }
+        }
+
         function getFeeds() {
             var channels = feeds.read()
             console.log("MainView | Retrieved feeds: " + channels.length)
@@ -881,6 +915,11 @@ ApplicationWindow {
             var actions = shortcuts.read()
             console.log("MainView | Retrieved shortcuts: " + actions)
             var actionArr = actions.length > 0 ? JSON.parse(actions) : mainView.defaultActions
+            for (var i = 0; i < actionArr.length; i++) {
+                if (actionArr[i].name && actionArr[i].name.startsWith("Open ") && actionArr[i].id !== actionType.OpenURL && actionArr[i].id !== actionType.OpenContact && actionArr[i].id !== actionType.OpenSignalContact) {
+                    actionArr[i].name = actionArr[i].name.substring(5)
+                }
+            }
             var find = actionArr.find(a => a.id === actionType.Redial)
             if (find === undefined) actionArr.push({"id" : actionType.Redial, "name" : qsTr("Redial"), "activated" : true})
             return actionArr
@@ -1455,6 +1494,47 @@ ApplicationWindow {
         source: "pluginStore.json"
         onError: {
             console.log("MainView | plugin store error: " + msg)
+        }
+    }
+
+    FileIO {
+        id: hiddenAppsStore
+        source: "hiddenApps.json"
+        onError: {
+            console.log("MainView | Hidden apps store error: " + msg)
+        }
+        function getHiddenApps() {
+            var data = readPrivate()
+            if (data !== undefined && data.length > 0) {
+                try {
+                    return JSON.parse(data)
+                } catch (e) {
+                    return []
+                }
+            }
+            return []
+        }
+        function saveHiddenApps(apps) {
+            writePrivate(JSON.stringify(apps))
+        }
+        function isHidden(pkg) {
+            var list = getHiddenApps()
+            return list.indexOf(pkg) >= 0
+        }
+        function hideApp(pkg) {
+            var list = getHiddenApps()
+            if (list.indexOf(pkg) < 0) {
+                list.push(pkg)
+                saveHiddenApps(list)
+            }
+        }
+        function unhideApp(pkg) {
+            var list = getHiddenApps()
+            var idx = list.indexOf(pkg)
+            if (idx >= 0) {
+                list.splice(idx, 1)
+                saveHiddenApps(list)
+            }
         }
     }
 }

@@ -85,6 +85,9 @@ LauncherPage {
     }
 
     function getGroupedAppsAndShortcuts(apps) {
+        apps = apps.filter(function(app) {
+            return app.package === undefined || !mainView.isHiddenApp(app.package)
+        })
         console.debug("AppGrid | getGroupedAppsAndShortcuts: " + apps.length + " apps")
         var groupedApps = new Array
 
@@ -401,7 +404,7 @@ LauncherPage {
 //            Object.keys(app).forEach(function(key) {
 //                console.debug(key, app[key]);
 //            })
-            implicitHeight: addShortCutItem.height  + openAppItem.height + removeAppItem.height  + removePinnedShortcutItem.height
+            implicitHeight: addShortCutItem.height + openAppItem.height + hideAppItem.height + removeAppItem.height + removePinnedShortcutItem.height
                             + addToNewGroupItem.height + removeFromGroupItem.height + enableCustomGroupsItem.height + mainView.innerSpacing
         }
 
@@ -432,12 +435,12 @@ LauncherPage {
                 if (appContextMenu.app.shortcutId !== undefined && appContextMenu.app.shortcutId.length > 0) {
                     console.debug("AbbGrid | ShortcutId: " + appContextMenu.app.shortcutId + ", " + appContextMenu.app.package)
                     var appId = appContextMenu.app.shortcutId + "|" + appContextMenu.app.package
-                    var shortcut = {"id": appId, "name": qsTr("Open") + " " + appContextMenu.app.label,  "activated": true}
+                    var shortcut = {"id": appId, "name": appContextMenu.app.label, "activated": true}
                 } else {
                     appId = appContextMenu.app.isCloned ? appContextMenu.app.package + "|" + appContextMenu.app.className + "|" + appContextMenu.app.userHandle
                                                         : appContextMenu.app.package
-                    shortcut = appContextMenu.app.isCloned ? {"id": appId, "name": qsTr("Open") + " " + appContextMenu.app.label + " 2", "activated": true}
-                                                           : {"id": appId, "name": qsTr("Open") + " " + appContextMenu.app.label, "activated": true}
+                    shortcut = appContextMenu.app.isCloned ? {"id": appId, "name": appContextMenu.app.label + " 2", "activated": true}
+                                                           : {"id": appId, "name": appContextMenu.app.label, "activated": true}
                 }
                 mainView.updateAction(appId, true, mainView.settingsAction.CREATE, shortcut )
             }
@@ -474,6 +477,28 @@ LauncherPage {
                                                  {"appId": appContextMenu.app.package, "class": appContextMenu.app.className,
                                                   "userHandle": appContextMenu.app.userHandle, "isCloned": appContextMenu.app.isCloned})
                 }
+            }
+        }
+        MenuItem {
+            id: hideAppItem
+            anchors.margins: mainView.innerSpacing
+            height: hideAppItem.visible ? appContextMenu.menuItemHeight : 0
+            font.pointSize: appLauncher.labelPointSize
+            contentItem: Label {
+                width: appContextMenu.menuWidth
+                text: qsTr("Hide App")
+                horizontalAlignment: Text.AlignHCenter
+            }
+            background: Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+            }
+            visible: !appContextMenu.isPinnedShortcut && appContextMenu.app !== null
+            onClicked: {
+                console.log("AppGrid | App " + appContextMenu.app["label"] + " selected to hide");
+                appContextMenu.gridView.currentIndex = -1
+                mainView.hideApp(appContextMenu.app["package"])
+                mainView.showToast(qsTr("App hidden"))
             }
         }
         MenuItem {
@@ -989,6 +1014,23 @@ LauncherPage {
         function setCustomGroups(updatedCustomGroups) {
             settings.customGroups = JSON.stringify(updatedCustomGroups)
             settings.sync()
+        }
+    }
+
+    function getAppsCache() {
+        return appsCache.readPrivate()
+    }
+
+    function reloadApps() {
+        var appsString = appsCache.readPrivate()
+        if (appsString.length > 0) {
+            var appsArray = JSON.parse(appsString)
+            for (var i = 0; i < appsArray.length; i++) {
+                if (appsArray[i].isCloned === undefined) appsArray[i].isCloned = false
+            }
+            var groupedApps = getGroupedAppsAndShortcuts(appsArray)
+            destroyAppGroups()
+            createAppGroups(groupedApps)
         }
     }
 
