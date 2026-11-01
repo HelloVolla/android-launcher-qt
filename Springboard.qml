@@ -138,7 +138,7 @@ LauncherPage {
 
         onMovementEnded: {
              if (contentY < -80) {
-                console.log("Trigger: Pull > 80px (ContentY: " + contentY + ")")
+                console.debug("Springboard | Trigger: Pull > 80px (ContentY: " + contentY + ")")
 
                 if (textInputArea) {
                     Qt.callLater(function() {
@@ -155,7 +155,6 @@ LauncherPage {
                     })
                 }
             }
-            // Wenn < 80px gezogen: ListView federt automatisch zurück (Standardverhalten)
         }
 
         header: Column {

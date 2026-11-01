@@ -145,6 +145,26 @@ LauncherPage {
         headerPositioning: mainView.backgroundOpacity === 1.0 ? ListView.PullBackHeader : ListView.InlineHeader
         clip: true
 
+        onMovementEnded: {
+             if (contentY < -80) {
+                console.debug("Collections | Trigger: Pull > 80px (ContentY: " + contentY + ")")
+
+                if (textInputField) {
+                    Qt.callLater(function() {
+                        if (textInputField.activeFocus) {
+                            textInputField.focus = false
+                            Qt.inputMethod.hide()
+                            console.debug("Collection | Hide keyboard")
+                        } else {
+                            textInputField.forceActiveFocus()
+                            Qt.inputMethod.show()
+                            console.debug("Collection | Show keyboard")
+                        }
+                    })
+                }
+            }
+        }
+
         header: Column {
             id: header
             width: parent.width

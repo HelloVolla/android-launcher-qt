@@ -20,6 +20,7 @@ LauncherPage {
     property string currentFeedId: ""
     property string currentFeedIcon: ""
     property var currentFeedModel: rssFeedModel
+    property bool isUpdatingModel: false
 
     property string n_ID:        "id"      // the id of the article or post
     property string n_STITLE:    "stitle"  // the author of the article or post
@@ -66,6 +67,7 @@ LauncherPage {
     onTextInputChanged: {
         console.log("FeedPage | Text input changed")
         currentFeedModel.update(textInput)
+        isUpdatingModel = true
     }
 
     ListView {
@@ -176,6 +178,15 @@ LauncherPage {
                         color: "transparent"
                         border.color: "transparent"
                     }
+
+                    onActiveFocusChanged: {
+                        console.debug("FeedPage | Fextfield's active focus: " + activeFocus)
+                        if (!activeFocus && text.length > 0 && isUpdatingModel) {
+                            isUpdatingModel = false
+                            forceActiveFocus()
+                        }
+                    }
+
                     Binding {
                         target: feedPage
                         property: "textInput"
@@ -292,7 +303,6 @@ LauncherPage {
                             function getDateString() {
                                 var d = new Date(model.n_DATE)
                                 var s = mainView.parseTime(d.valueOf())
-                                console.log("FeedPage | " + d + ": " + s)
                                 if (s.length > 0)
                                     return s
                                 else
@@ -366,9 +376,10 @@ LauncherPage {
         }
 
         function update(text) {
-            console.log("Feed Page | Update Atom model with '" + text + "'")
+            console.log("FeedPage | Update Atom model with '" + text + "'")
             if (text.length > 0) {
-                query = baseQuery + "[contains(title, '" + text + "')]"
+                query = baseQuery + "[contains(lower-case(string(title)), '" + text + "')]"
+
             } else {
                 query = baseQuery
             }
@@ -423,9 +434,9 @@ LauncherPage {
         }
 
         function update(text) {
-            console.log("Feed Page | Update RSS model with '" + text + "'")
+            console.log("FeedPage | Update RSS model with '" + text + "'")
             if (text.length > 0) {
-                query = baseQuery + "[contains(title, '" + text + "')]"
+                query = baseQuery + "[contains(lower-case(string(title)), '" + text + "')]"
             } else {
                 query = baseQuery
             }

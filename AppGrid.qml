@@ -13,6 +13,7 @@ LauncherPage {
     anchors.fill: parent    
 
     property string textInput
+    property var textInputField
     property string favoritsLabel: "AAAA"
     property real labelPointSize: 16
 
@@ -289,6 +290,27 @@ LauncherPage {
         contentWidth: parent.width
         contentHeight: appLauncherColumn.height
 
+        onMovementEnded: {
+             if (contentY < -80) {
+                console.debug("AppGrid | Trigger: Pull > 80px (ContentY: " + contentY + ")")
+
+                if (textInputField) {
+                    Qt.callLater(function() {
+                        if (textInputField.activeFocus) {
+                            textInputField.focus = false
+                            Qt.inputMethod.hide()
+                            console.debug("AppGrid | Hide keyboard")
+                        } else {
+                            textInputField.forceActiveFocus()
+                            Qt.inputMethod.show()
+                            console.debug("AppGrid | Show keyboard")
+
+                        }
+                    })
+                }
+            }
+        }
+
         Column {
             id: appLauncherColumn
             width: parent.width// - 2 * mainView.outerSpacing
@@ -324,6 +346,12 @@ LauncherPage {
                     target: appLauncher
                     property: "textInput"
                     value: headerTextField.displayText.toLowerCase()
+                }
+
+                Binding {
+                    target: appLauncher
+                    property: "textInputField"
+                    value: headerTextField
                 }
 
                 Button {
