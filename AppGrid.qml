@@ -290,25 +290,31 @@ LauncherPage {
         contentWidth: parent.width
         contentHeight: appLauncherColumn.height
 
-        onMovementEnded: {
-             if (contentY < -80) {
-                console.debug("AppGrid | Trigger: Pull > 80px (ContentY: " + contentY + ")")
-
-                if (textInputField) {
-                    Qt.callLater(function() {
-                        if (textInputField.activeFocus) {
-                            textInputField.focus = false
-                            Qt.inputMethod.hide()
-                            console.debug("AppGrid | Hide keyboard")
-                        } else {
-                            textInputField.forceActiveFocus()
-                            Qt.inputMethod.show()
-                            console.debug("AppGrid | Show keyboard")
-
-                        }
-                    })
-                }
+        property bool searchPullDownTriggered: false
+        onMovementStarted: searchPullDownTriggered = false
+        onVerticalOvershootChanged: {
+            if (moving && verticalOvershoot < -80) {
+                searchPullDownTriggered = true
             }
+        }
+        onContentYChanged: {
+            if (moving && contentY < originY - 80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onMovementEnded: {
+            if (searchPullDownTriggered || contentY < originY - 80 || verticalOvershoot < -80) {
+                Qt.callLater(function() {
+                    if (textInputField.activeFocus) {
+                        textInputField.focus = false
+                        Qt.inputMethod.hide()
+                    } else {
+                        textInputField.forceActiveFocus()
+                        Qt.inputMethod.show()
+                    }
+                })
+            }
+            searchPullDownTriggered = false
         }
 
         Column {
