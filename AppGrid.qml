@@ -13,6 +13,7 @@ LauncherPage {
     anchors.fill: parent    
 
     property string textInput
+    property var textInputField
     property string favoritsLabel: "AAAA"
     property real labelPointSize: 16
 
@@ -289,6 +290,33 @@ LauncherPage {
         contentWidth: parent.width
         contentHeight: appLauncherColumn.height
 
+        property bool searchPullDownTriggered: false
+        onMovementStarted: searchPullDownTriggered = false
+        onVerticalOvershootChanged: {
+            if (moving && verticalOvershoot < -80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onContentYChanged: {
+            if (moving && contentY < originY - 80) {
+                searchPullDownTriggered = true
+            }
+        }
+        onMovementEnded: {
+            if (searchPullDownTriggered || contentY < originY - 80 || verticalOvershoot < -80) {
+                Qt.callLater(function() {
+                    if (textInputField.activeFocus) {
+                        textInputField.focus = false
+                        Qt.inputMethod.hide()
+                    } else {
+                        textInputField.forceActiveFocus()
+                        Qt.inputMethod.show()
+                    }
+                })
+            }
+            searchPullDownTriggered = false
+        }
+
         Column {
             id: appLauncherColumn
             width: parent.width// - 2 * mainView.outerSpacing
@@ -324,6 +352,12 @@ LauncherPage {
                     target: appLauncher
                     property: "textInput"
                     value: headerTextField.displayText.toLowerCase()
+                }
+
+                Binding {
+                    target: appLauncher
+                    property: "textInputField"
+                    value: headerTextField
                 }
 
                 Button {
