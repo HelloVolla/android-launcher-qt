@@ -30,6 +30,7 @@ import android.util.Log;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
@@ -104,6 +105,14 @@ public class AppWorker
                                 Log.d(TAG, "Usage stats entries: " + queryUsageStats.size());
                             }
 
+                            Map<String, Long> timeInForegroundByPackage = new HashMap<String, Long>();
+                            for (UsageStats usageStats : queryUsageStats) {
+                                String packageName = usageStats.getPackageName().toLowerCase(Locale.ROOT);
+                                if (!timeInForegroundByPackage.containsKey(packageName)) {
+                                    timeInForegroundByPackage.put(packageName, usageStats.getTotalTimeInForeground());
+                                }
+                            }
+
                             LauncherApps la = (LauncherApps)activity.getSystemService(Context.LAUNCHER_APPS_SERVICE);
                             List<UserHandle> uhl = la.getProfiles();
 
@@ -135,12 +144,10 @@ public class AppWorker
                                         }
 
                                         long timeInForeground = 0;
-
-                                        for (UsageStats us : queryUsageStats) {
-                                            if (us.getPackageName().equalsIgnoreCase(lai.getComponentName().getPackageName())) {
-                                                timeInForeground = us.getTotalTimeInForeground();
-                                                break;
-                                            }
+                                        Long appUsage = timeInForegroundByPackage.get(
+                                                lai.getComponentName().getPackageName().toLowerCase(Locale.ROOT));
+                                        if (appUsage != null) {
+                                            timeInForeground = appUsage;
                                         }
                                         if (mostUsed.contains(lai.getComponentName().getPackageName())) {
                                             timeInForeground = timeInForeground + 10; // fall back for missing stats
