@@ -73,8 +73,8 @@ LauncherPage {
     function updateShortcutMenuState(opened) {
         if (opened) {
             var verticalInset = roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
-            var contentHeight = shortcutColumn.implicitHeight
-            var maxHeight = mainView.height * 0.80
+            var contentHeight = shortcutColumn.shortcutLabels.length * shortcutColumn.shortcutLabelheight
+            var maxHeight = springBoard.height * 0.80
             var finalHeight = Math.min(contentHeight + verticalInset * 2, maxHeight)
             shortcutMenu.width = Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
             shortcutMenu.height = finalHeight
@@ -1726,37 +1726,25 @@ LauncherPage {
 
             ScrollBar.vertical: ScrollBar {
                 id: scrollBar
-                anchors.topMargin: roundedShortcutMenu ? mainView.innerSpacing : 0
-                anchors.rightMargin: roundedShortcutMenu ? mainView.innerSpacing : 0
-                anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing : 0
+                topPadding: roundedShortcutMenu ? mainView.innerSpacing : 0
+                bottomPadding: roundedShortcutMenu ? mainView.innerSpacing : 0
                 z: 1
                 size: shortcutFlickable.height / shortcutFlickable.contentHeight
                 position: shortcutFlickable.contentY / shortcutFlickable.contentHeight
-                active: shortcutColumn.implicitHeight
+                active: shortcutColumn.height
                         + (roundedShortcutMenu ? mainView.innerSpacing * 4 : 0)
-                        > mainView.height * 0.80
+                        > springBoard.height * 0.80
                 width: 4
+                opacity: 0.3
                 contentItem: Rectangle {
-                    implicitWidth: 4
-                    implicitHeight: 40
+                    width: 4
                     radius: 2
                     color: mainView.accentTextColor
-                    opacity: scrollBar.active ? 0.7 : 0
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 150
-                        }
-                    }
+                    opacity: 0.3
                 }
                 background: Rectangle {
-                    implicitWidth: 4
+                    width: 4
                     color: "transparent"
-                }
-            }
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 200
                 }
             }
         }
