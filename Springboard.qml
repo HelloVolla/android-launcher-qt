@@ -72,13 +72,21 @@ LauncherPage {
 
     function updateShortcutMenuState(opened) {
         if (opened) {
+            var verticalInset = roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
+            var contentHeight = shortcutColumn.shortcutLabels.length * shortcutColumn.shortcutLabelheight + mainView.innerSpacing * 2
+            var maxHeight = springBoard.height * 0.80
+            var finalHeight = Math.min(contentHeight + verticalInset * 2, maxHeight)
+            shortcutMenu.width = Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
+            shortcutMenu.height = finalHeight
             shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
-            shortcutBackground.height = shortcutMenu.height
-            shortcutColumn.opacity = 1
+            shortcutBackground.height = finalHeight - verticalInset * 2
+            shortcutFlickable.scrollBarOpacity = finalHeight < maxHeight ? 0 : 0.3
+            shortcutFlickable.opacity = 1
+            shortcutFlickable.contentY = 0
         } else {
             shortcutBackground.width = dotShortcut ? mainView.innerSpacing * 2 : parent.width
             shortcutBackground.height = dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
-            shortcutColumn.opacity = 0
+            shortcutFlickable.opacity = 0
             shortcutMenu.width = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
             shortcutMenu.height = dotShortcut ? mainView.innerSpacing * 4 : mainView.innerSpacing * 3
         }
@@ -1483,8 +1491,6 @@ LauncherPage {
             console.log("Springboard | entered")
 
             width = Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
-            height = shortcutColumn.topPadding + shortcutColumn.bottomPadding
-                    + shortcutColumn.shortcutLabels.length * shortcutColumn.shortcutLabelheight
 
             var rbPoint = mapFromItem(rootMenuButton, 0, 0)
             var touchY = dotShortcut ? rbPoint.y : rbPoint.y - rootMenuButton.height
@@ -1498,7 +1504,7 @@ LauncherPage {
 
         onExited: {
             console.log("Springboard | exited")
-            if (shortcutColumn.opacity > 0) {
+            if (shortcutFlickable.opacity > 0) {
                 updateShortcutMenuState(false)
                 shortcutMenu.executeSelection()
                 selectedMenuItem = rootMenuButton
@@ -1507,20 +1513,33 @@ LauncherPage {
 
         onCanceled: {
             console.log("Springboard | cancelled")
-            if (shortcutColumn.opacity > 0) {
+            if (shortcutFlickable.opacity > 0) {
                 updateShortcutMenuState(false)
                 selectedMenuItem = rootMenuButton
            }
         }
 
         onPositionChanged: {
-            if (shortcutColumn.opacity > 0) {
+            if (shortcutFlickable.opacity > 0) {
                 var selectedItem = rootMenuButton
+
+                // Handle scrolling when finger moves near top or bottom
+                var scrollSensitivity = mainView.largeFontSize
+                var topThreshold = shortcutFlickable.y + scrollSensitivity * 2
+                var bottomThreshold = shortcutFlickable.y + shortcutFlickable.height - scrollSensitivity * 2
+
+                if (mouseY < topThreshold && shortcutFlickable.contentY > 0) {
+                    // Scroll up
+                    shortcutFlickable.contentY -= (topThreshold - mouseY) / 2
+                } else if (mouseY > bottomThreshold && shortcutFlickable.contentY < shortcutFlickable.contentHeight - shortcutFlickable.height) {
+                    // Scroll down
+                    shortcutFlickable.contentY += (mouseY - bottomThreshold) / 2
+                }
 
                 for (var i = 0; i < shortcutColumn.shortcutLabels.length; i++) {
                     var shortcutLabel = shortcutColumn.shortcutLabels[i]
                     var lPoint = mapFromItem(shortcutLabel, 0, 0)
-                    if (lPoint.y && mouseY < lPoint.y + shortcutLabel.height) {
+                    if (lPoint.y && mouseY < lPoint.y + shortcutLabel.height && mouseY > lPoint.y) {
                         selectedItem = shortcutLabel
                         break
                     }
@@ -1572,7 +1591,7 @@ LauncherPage {
         function executeSelection() {
             console.log("Springboard | Action ID is " + selectedMenuItem.actionId)
 
-            if (shortcutColumn.opacity === 0.0 || selectedMenuItem.actionId === undefined) {
+            if (shortcutFlickable.opacity === 0.0 || selectedMenuItem.actionId === undefined) {
                 return;
             }
 
@@ -1674,15 +1693,15 @@ LauncherPage {
             }
         }
 
-        Column {
-            id: shortcutColumn
+        Flickable {
+            id: shortcutFlickable
             visible: true
             opacity: 0.0
-            width:  parent.width - mainView.innerSpacing * 2
-            topPadding: mainView.innerSpacing * 2
-            rightPadding: mainView.innerSpacing
-            leftPadding: mainView.innerSpacing
-            bottomPadding: mainView.innerSpacing
+            z: 1
+            width: parent.width - mainView.innerSpacing * 2
+            clip: true
+            anchors.top: parent.top
+            anchors.topMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
             anchors.right: mainView.useLeftHandedMenu ? undefined : parent.right
             anchors.left: mainView.useLeftHandedMenu ? parent.left : undefined
             anchors.rightMargin: mainView.useLeftHandedMenu ? undefined : (roundedShortcutMenu ? mainView.innerSpacing * 2 : 0)
@@ -1690,13 +1709,45 @@ LauncherPage {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
 
-            property int duration: 200
-            property var shortcutLabels: new Array
-            property var shortcutLabelheight: mainView.largeFontSize + mainView.innerSpacing + 8
+            contentWidth: shortcutColumn.width
+            contentHeight: shortcutColumn.height
 
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: shortcutColumn.duration
+            property double scrollBarOpacity: 0
+
+            Column {
+                id: shortcutColumn
+                width: shortcutFlickable.width
+                topPadding: mainView.innerSpacing
+                rightPadding: mainView.innerSpacing
+                leftPadding: mainView.innerSpacing
+                bottomPadding: mainView.innerSpacing
+
+                property int duration: 200
+                property var shortcutLabels: new Array
+                property var shortcutLabelheight: mainView.largeFontSize + mainView.innerSpacing + 8
+            }
+
+            ScrollBar.vertical: ScrollBar {
+                id: scrollBar
+                topPadding: roundedShortcutMenu ? mainView.innerSpacing : 0
+                bottomPadding: roundedShortcutMenu ? mainView.innerSpacing : 0
+                z: 1
+                size: shortcutFlickable.height / shortcutFlickable.contentHeight
+                position: shortcutFlickable.contentY / shortcutFlickable.contentHeight
+                active: shortcutColumn.height
+                        + (roundedShortcutMenu ? mainView.innerSpacing * 4 : 0)
+                        > springBoard.height * 0.80
+                width: 4
+                opacity: shortcutFlickable.scrollBarOpacity
+                contentItem: Rectangle {
+                    width: 4
+                    radius: 2
+                    color: mainView.accentTextColor
+                    opacity: shortcutFlickable.scrollBarOpacity
+                }
+                background: Rectangle {
+                    width: 4
+                    color: "transparent"
                 }
             }
         }
@@ -1704,6 +1755,7 @@ LauncherPage {
         Rectangle {
             id: rootMenuButton
             visible: true
+            z: 0
             height: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             width: dotShortcut ? mainView.innerSpacing * 2 : mainView.innerSpacing
             color: mainView.accentColor
