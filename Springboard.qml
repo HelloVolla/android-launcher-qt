@@ -73,13 +73,14 @@ LauncherPage {
     function updateShortcutMenuState(opened) {
         if (opened) {
             var verticalInset = roundedShortcutMenu ? mainView.innerSpacing * 2 : 0
-            var contentHeight = shortcutColumn.shortcutLabels.length * shortcutColumn.shortcutLabelheight
+            var contentHeight = shortcutColumn.shortcutLabels.length * shortcutColumn.shortcutLabelheight + mainView.innerSpacing * 2
             var maxHeight = springBoard.height * 0.80
             var finalHeight = Math.min(contentHeight + verticalInset * 2, maxHeight)
             shortcutMenu.width = Screen.desktopAvailableWidth > 445 ? springBoard.menuWidth : springBoard.width
             shortcutMenu.height = finalHeight
             shortcutBackground.width = roundedShortcutMenu ? shortcutMenu.width - mainView.innerSpacing * 4 : shortcutMenu.width
             shortcutBackground.height = finalHeight - verticalInset * 2
+            shortcutFlickable.scrollBarOpacity = finalHeight < maxHeight ? 0 : 0.3
             shortcutFlickable.opacity = 1
             shortcutFlickable.contentY = 0
         } else {
@@ -1711,6 +1712,8 @@ LauncherPage {
             contentWidth: shortcutColumn.width
             contentHeight: shortcutColumn.height
 
+            property double scrollBarOpacity: 0
+
             Column {
                 id: shortcutColumn
                 width: shortcutFlickable.width
@@ -1735,12 +1738,12 @@ LauncherPage {
                         + (roundedShortcutMenu ? mainView.innerSpacing * 4 : 0)
                         > springBoard.height * 0.80
                 width: 4
-                opacity: 0.3
+                opacity: shortcutFlickable.scrollBarOpacity
                 contentItem: Rectangle {
                     width: 4
                     radius: 2
                     color: mainView.accentTextColor
-                    opacity: 0.3
+                    opacity: shortcutFlickable.scrollBarOpacity
                 }
                 background: Rectangle {
                     width: 4
