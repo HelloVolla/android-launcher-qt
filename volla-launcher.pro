@@ -21,12 +21,12 @@ SOURCES += \
 
 # VOLLA_ASSISTANT_ROOT (or ASSISTANT_ROOT passed to qmake) overrides it.
 # Otherwise the prebuilt libraries in vendor/volla_assistant_native/latest are used.
+# The assistant is always linked and bundled from the prebuilt shared
+# libraries in $$ASSISTANT_ROOT/latest (never from a local build/ tree).
+# ASSISTANT_LIBDIR can be passed to qmake to use another .so directory.
 isEmpty(ASSISTANT_ROOT): ASSISTANT_ROOT = $$(VOLLA_ASSISTANT_ROOT)
-isEmpty(ASSISTANT_ROOT) {
-    ASSISTANT_ROOT = $$PWD/vendor/volla_assistant_native
-    ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/latest
-}
-isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/build
+isEmpty(ASSISTANT_ROOT): ASSISTANT_ROOT = $$PWD/vendor/volla_assistant_native
+isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/latest
 
 !isEmpty(ASSISTANT_ROOT) {
     message("Building with the on-device assistant from $$ASSISTANT_ROOT")
@@ -48,10 +48,17 @@ isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/build
     LIBS += -L$$ASSISTANT_LIBDIR
     for(name, ASSISTANT_LIB_NAMES): LIBS += -l$$name
 
-    android:!assistant_no_bundle {
-        for(name, ASSISTANT_LIB_NAMES): \
-            ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/lib$${name}.so
+    # The assistant .so files are only linked against, NOT packed into the
+    # APK: at runtime they are resolved from the OS (e.g. /system/lib64).
+    # Pass CONFIG+=assistant_bundle to qmake to pack them into the APK again.
+    android {
+        # Qt's libc++_shared.so is stripped of symbols libllama.cpp.so needs,
+        # so ship the full NDK copy (it is a superset of Qt's).
         ANDROID_STDCPP_PATH = $$ASSISTANT_LIBDIR/libc++_shared.so
+        assistant_bundle {
+            for(name, ASSISTANT_LIB_NAMES): \
+                ANDROID_EXTRA_LIBS += $$ASSISTANT_LIBDIR/lib$${name}.so
+        }
     }
 } else {
     message("VOLLA_ASSISTANT_ROOT not set - building without the on-device assistant")
