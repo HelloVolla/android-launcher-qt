@@ -606,8 +606,11 @@ LauncherPage {
                     case mainView.actionType.SendSignal:
                         idx = textInput.search(/\s/)
                         message = textInput.substring(idx+1, textInput.length)
+                        var person = selectedObj["name"]
                         phoneNumber = selectedObj["phone.signal"]
-                        AN.SystemDispatcher.dispatch("volla.launcher.signalIntentAction", {"number": phoneNumber, "text": message})
+                        AN.SystemDispatcher.dispatch(
+                                    "volla.launcher.signalSendMessageAction", {"person" : person, "number": phoneNumber, "text": message})
+                        //AN.SystemDispatcher.dispatch("volla.launcher.signalIntentAction", {"number": phoneNumber, "text": message})
                         textInputArea.text = ""
                         break
                     case mainView.actionType.OpenSignalContact:
@@ -1505,8 +1508,8 @@ LauncherPage {
         onExited: {
             console.log("Springboard | exited")
             if (shortcutFlickable.opacity > 0) {
-                updateShortcutMenuState(false)
                 shortcutMenu.executeSelection()
+                updateShortcutMenuState(false)
                 selectedMenuItem = rootMenuButton
             }
         }
