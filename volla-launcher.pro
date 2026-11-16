@@ -51,6 +51,7 @@ isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/latest
     # The assistant .so files are only linked against, NOT packed into the
     # APK: at runtime they are resolved from the OS (e.g. /system/lib64).
     # Pass CONFIG+=assistant_bundle to qmake to pack them into the APK again.
+    CONFIG+=assistant_bundle
     android {
         # Qt's libc++_shared.so is stripped of symbols libllama.cpp.so needs,
         # so ship the full NDK copy (it is a superset of Qt's).
