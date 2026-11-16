@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.SignalUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.ContactUtil");
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.worker.SignalWorker");
+    AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.AlarmUtil");
 
     QQmlApplicationEngine engine;
 
