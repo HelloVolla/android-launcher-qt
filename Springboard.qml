@@ -21,6 +21,7 @@ LauncherPage {
     property var textInputArea
     property var selectedObj
     property var headline
+    property var si
 
     property var eventGlossar: [qsTr("Sunday"), qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"), qsTr("Thursday"), qsTr("Friday"),
                                 qsTr("Saturday"), qsTr("tomorrow")]
@@ -28,12 +29,6 @@ LauncherPage {
     property var plugins: new Array
     property var appButtons: new Array
 
-    // Items the assistant and laya contribute to listModel, by source. The worker
-    // rebuilds the list on every input change, so they are inserted again after it.
-    property var sourceItems: ({})
-    property string assistantPrompt: ""
-    property bool assistantThinking: false
-    property var assistantDecision
     property string clockApp: "org.fossify.clock"
 
 
@@ -44,13 +39,10 @@ LauncherPage {
 
     onIsCurrentPageChanged: {
         if (isCurrentPage){
-            startAssistant()
+            if (si) si.activate()
         }
     }
 
-    onAssistantThinkingChanged: {
-        mainView.updateSpinner(springBoard.assistantThinking)
-    }
 
     onTextInputChanged: {
         console.log("Springboard | text input changed")
@@ -130,185 +122,6 @@ LauncherPage {
         springBoard.headline.color = mainView.fontColor
     }
 
-    // Load the model as soon as the user lands on the springboard.
-    function startAssistant() {
-        if (!assistant.available)
-            return
-        console.log("Springboard | Preloading assistant")
-        assistant.init()
-    }
-
-    function editDistance(a, b) {
-        var m = a.length
-        var n = b.length
-        var dp = []
-        for (var i = 0; i <= m; i++) {
-            dp.push([i])
-            for (var j = 1; j <= n; j++)
-                dp[i].push(i === 0 ? j : 0)
-        }
-        for (i = 1; i <= m; i++) {
-            for (j = 1; j <= n; j++) {
-                var cost = a[i - 1] === b[j - 1] ? 0 : 1
-                dp[i][j] = Math.min(dp[i - 1][j] + 1,
-                                    dp[i][j - 1] + 1,
-                                    dp[i - 1][j - 1] + cost)
-            }
-        }
-        return dp[m][n]
-    }
-
-    // 1 edit allowed for short names, 2 for long ones.
-    function isMisspelling(word, name) {
-        if (word.length < 4 || name.length < 4)
-            return false
-        var allowed = name.length >= 7 ? 2 : 1
-        return Math.abs(word.length - name.length) <= allowed && editDistance(word, name) <= allowed
-    }
-
-    // Contacts with a phone number whose name appears in the text.
-    function contactsMentionedIn(prompt) {
-        var text = " " + prompt.toLowerCase().replace(/[\s.,!?;:"'()]+/g, " ") + " "
-        var words = text.trim().split(" ")
-        var phoneKeys = ["phone.mobile", "phone.home", "phone.work", "phone.other"]
-        var contacts = mainView.getContacts()
-        var matches = []
-        for (var c = 0; c < contacts.length; c++) {
-            var contact = contacts[c]
-            if (contact["name"] === undefined)
-                continue
-            var hasPhone = phoneKeys.some(function (key) {
-                return contact[key] !== undefined && contact[key].length > 0
-            })
-            if (!hasPhone)
-                continue
-            var name = contact["name"].toLowerCase().trim()
-            var nameParts = name.split(/\s+/)
-            var score = 0
-            if (text.indexOf(" " + name + " ") >= 0) {
-                score = 3
-            } else if (nameParts.some(function (part) {
-                return part.length > 1 && text.indexOf(" " + part + " ") >= 0
-            })) {
-                score = 2
-            } else if (words.some(function (word) {
-                return word.length > 2 && nameParts.some(function (part) {
-                    return part.indexOf(word) === 0
-                })
-            })) {
-                score = 1
-            } else if (words.some(function (word) {
-                return nameParts.some(function (part) {
-                    return springBoard.isMisspelling(word, part)
-                })
-            })) {
-                score = 0.5
-            }
-            if (score > 0)
-                matches.push({"contact": contact, "score": score})
-        }
-        matches.sort(function (a, b) { return b.score - a.score })
-        return matches.filter(function (m) { return m.score === matches[0].score })
-                      .map(function (m) { return JSON.parse(JSON.stringify(m.contact)) })
-    }
-
-    function askAssistant(prompt) {
-        console.log("Springboard | Ask assistant: " + prompt)
-        springBoard.assistantPrompt = prompt.trim()
-        springBoard.assistantThinking = true
-        setAssistantItems([assistantItem(assistant.ready ? qsTr("Thinking...")
-                                                        : qsTr("Starting the assistant..."))])
-        assistant.ask(prompt)
-    }
-
-    function assistantItem(text) {
-        return {
-            "text": text,
-            "action": mainView.actionType.LiveContentPlugin,
-            "actionObj": {"pluginId": "", "link": ""},
-            "category": listModel.category.LiveContent,
-            "source": "assistant",
-            "isFirstSuggestion": false
-        }
-    }
-
-    function setAssistantItems(items) {
-        setSourceItems("assistant", items)
-    }
-
-    function clearAssistant() {
-        springBoard.assistantPrompt = ""
-        setSourceItems("assistant", [])
-    }
-
-    // laya picks the app for the input, so all its items are functions.
-    function layaItems(decision) {
-        var items = []
-        var add = function (text, action, actionObj) {
-            var item = {"text": text, "action": action, "category": listModel.category.Function,
-                        "source": "laya", "isFirstSuggestion": false}
-            if (actionObj !== undefined)
-                item.actionObj = actionObj
-            items.push(item)
-        }
-        if (decision.callees !== undefined) {
-            for (var i = 0; i < decision.callees.length; i++)
-                add(mainView.actionName.CallContact + " " + decision.callees[i]["name"],
-                    mainView.actionType.CallContact, decision.callees[i])
-        }
-        if (decision.key === "clock")
-            add(mainView.actionName.OpenClock, mainView.actionType.OpenClock)
-        else if (decision.key === "dialer")
-            add(mainView.actionName.ShowDialer, mainView.actionType.ShowDialer)
-        else if (decision.key === "LLM")
-            add(mainView.actionName.AskAssistant, mainView.actionType.AskAssistant)
-        return items
-    }
-
-    function setSourceItems(source, items) {
-        listModel.removeItems(springBoard.sourceItems[source] || [])
-        springBoard.sourceItems[source] = items
-        listModel.insertItems(items)
-    }
-
-    Connections {
-        target: assistant
-
-        onReadyChanged: {
-            console.log("Springboard | Assistant ready: " + assistant.ready)
-            if (springBoard.assistantThinking && assistant.ready)
-                setAssistantItems([assistantItem(qsTr("Thinking..."))])
-        }
-
-        onResponse: {
-            console.log("Springboard | Assistant replied: " + text)
-            springBoard.assistantThinking = false
-            // The input changed while the assistant was thinking.
-            if (springBoard.assistantPrompt === "")
-                return
-            setAssistantItems(text.trim() !== "" ? [assistantItem(text.trim())] : [])
-        }
-
-        onDecision: {
-            console.log("Springboard | Assistant decided: " + answer.key
-                        + " (confidence " + answer.confidence + ")")
-
-
-            var decision = JSON.parse(JSON.stringify(answer))
-
-            if (decision.key === "dialer")
-                decision.callees = contactsMentionedIn(decision.prompt).slice(0, 3)
-            springBoard.assistantDecision = decision
-            setSourceItems("laya", layaItems(decision))
-        }
-
-        onError: {
-            console.warn("Springboard | Assistant error: " + message)
-            springBoard.assistantThinking = false
-            clearAssistant()
-            mainView.showToast(message)
-        }
-    }
 
     function addPlugin(pluginSource, pluginId) {
         console.debug("Springboard | Plugin " + pluginId + " source length: " + pluginSource.length)
@@ -317,6 +130,13 @@ LauncherPage {
             var qmlObject = Qt.createQmlObject(pluginSource, springBoard, pluginId)
             console.debug("Springboard | Plugin " + qmlObject.metadata.id + " created")
             springBoard.plugins.push(qmlObject)
+            if(qmlObject.metadata.id === "volla_supportive_intelligence") {
+                springBoard.si = qmlObject
+                if (springBoard.isCurrentPage)
+                    qmlObject.activate()
+            }
+            if(typeof qmlObject.init === "function")
+                qmlObject.init()
         } catch (error) {
             console.debug("Springboard | Error loading QML : ")
             for (var i = 0; i < error.qmlErrors.length; i++) {
@@ -326,11 +146,16 @@ LauncherPage {
                 console.debug("Springboard | message: " + error.qmlErrors[i].message)
             }
         }
+
     }
 
     function removePlugin(pluginId) {
-        console.debug("Springboard | Will remove pluding " + pluginId)
+        console.debug("Springboard | Will remove plugin " + pluginId)
         springBoard.plugins = springBoard.plugins.filter(el => el.metadata.id !== pluginId)
+        if (si && si.metadata.id === pluginId) {
+            si.reset()
+            si = undefined
+        }
     }
 
     ListView {
@@ -431,7 +256,7 @@ LauncherPage {
                     onClicked: {
                         textArea.text = ""
                         textArea.focus = false
-                        springBoard.assistantThinking = false
+                        if (si) si.reset()
                     }
                 }
             }
@@ -718,6 +543,11 @@ LauncherPage {
                         textInputArea.text = ""
                         console.log("Springboard | Clock is opened")
                         break
+                    case mainView.actionType.SetAlarm:
+                        console.log("Springboard | Set alarm " + actionObj.hour + ":" + actionObj.minutes)
+                        AN.SystemDispatcher.dispatch("volla.launcher.setAlarmAction", actionObj)
+                        textInputArea.text = ""
+                        break  
                     case mainView.actionType.CallContact:
                         if(actionObj !== undefined){
                             selectedObj = actionObj
@@ -842,9 +672,6 @@ LauncherPage {
                         }
                         textInputArea.text = ""
                         break
-                    case mainView.actionType.AskAssistant:
-                        springBoard.askAssistant(textInput)
-                        break
                     case mainView.actionType.OpenURL:
                         console.log("Springboard | Will open in browser " + textInput)
                         if (/^http/.test(textInput)) {
@@ -893,18 +720,22 @@ LauncherPage {
                         Qt.openUrlExternally("sgnl://signal.me/#p/" + phoneNumber)
                         textInputArea.text = ""
                         break
+                    case mainView.actionType.AskAssistant:
                     case mainView.actionType.ExecutePlugin:
                         console.log("Springboard | Will execute plugin " + actionObj.pluginId)
+              
+                        var keepInput = false
                         for (var i = 0; i < springBoard.plugins.length; i++) {
                             if (actionObj.pluginId === springBoard.plugins[i].metadata.id) {
                                 if (selectedObj !== undefined) {
-                                    springBoard.plugins[i].executeInput(textInput, actionObj.functionId, selectedObj.entity)
+                                    keepInput = springBoard.plugins[i].executeInput(textInput, actionObj.functionId, selectedObj.entity) === true
                                 } else {
-                                    springBoard.plugins[i].executeInput(textInput, actionObj.functionId)
+                                    keepInput = springBoard.plugins[i].executeInput(textInput, actionObj.functionId) === true
                                 }
                             }
                         }
-                        textInputArea.text = ""
+                        if (!keepInput)
+                            textInputArea.text = ""
                         break
                     case mainView.actionType.SuggestPluginEntity:
                         console.log("Springboard | Will complete " + textInput.substring(0, textInput.lastIndexOf(" ")) + actionValue)
@@ -966,14 +797,13 @@ LauncherPage {
                 if (textInput.length < 1) {
                     console.debug("Springboard | Will clear property")
                     selectedObj = undefined
-                    springBoard.clearAssistant()
+                    if (si) si.reset()
                     listModel.clear()
                 } else {
                     springBoardWorker.sendMessage({
                         'selectedObj': springBoard.selectedObj, 'textInput': textInput,
                         'contacts': mainView.getContacts(), 'model': listModel, 'actionType': mainView.actionType,
-                        'actionName': mainView.actionName, 'eventRegex': eventRegex,
-                        'decision': springBoard.assistantDecision
+                        'actionName': mainView.actionName, 'eventRegex': eventRegex
                     })
                 }
             }
@@ -1151,14 +981,6 @@ LauncherPage {
             }
         }
 
-        // Waits for a short pause in typing so laya also sees the last word without a trailing space.
-        Timer {
-            id: decisionTimer
-            property string prompt: ""
-            interval: 400
-            onTriggered: assistant.decide(prompt)
-        }
-
         WorkerScript {
             id: springBoardWorker
             source: "scripts/springboard.mjs"
@@ -1169,20 +991,8 @@ LauncherPage {
 
                 listModel.indexOfFirstSuggestion = messageObject['indexOfFirstSuggestion']
                 listModel.indexOfFirstFunction = 0
-                if (messageObject['clearDecision']) {
-                    springBoard.assistantDecision = undefined
-                    springBoard.sourceItems["laya"] = []
-                }
-                if (springBoard.textInput.trim() !== springBoard.assistantPrompt)
-                    springBoard.clearAssistant()
-                listModel.insertItems(springBoard.sourceItems["laya"] || [])
-                listModel.insertItems(springBoard.sourceItems["assistant"] || [])
-                if (messageObject['clearDecision'] || messageObject['requestDecision'] !== undefined)
-                    decisionTimer.stop()
-                if (messageObject['requestDecision'] !== undefined && assistant.available && assistant.ready) {
-                    decisionTimer.prompt = messageObject['requestDecision']
-                    decisionTimer.restart()
-                }
+                if (si) si.inputProcessed(springBoard.textInput)
+
                 if (plugins.length > 0){
                     listModel.iteratePlugins(0, plugins.length)
                 }
@@ -1727,7 +1537,7 @@ LauncherPage {
 
         Settings {
             id: widgetsSettings
-            property bool clockWgtIsVisible: mainView.isTablet ? true : false
+            property bool clockWgtIsVisible: mainView.isTablet ? truedialer : false
             property bool weatherWgtIsVisible: mainView.isTablet ? true : false
             property bool noteWgtIsVisible: mainView.isTablet ? true : false
             property bool dialerWgtIsVisible: false
@@ -1919,7 +1729,7 @@ LauncherPage {
                 case mainView.actionType.OpenClock:
                     console.log("Springboard | Show clock")
                     AN.SystemDispatcher.dispatch("volla.launcher.runAppAction", {"appId": springBoard.clockApp})
-                    break
+                    break  
                 case mainView.actionType.ShowDialer:
                     console.log("Springboard | Show dialer")
                     AN.SystemDispatcher.dispatch("volla.launcher.dialerAction", {"app": mainView.phoneApp, "action": "dial"})

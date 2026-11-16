@@ -1,7 +1,3 @@
-// Text last sent to laya; kept across messages so the same text is not decided twice.
-var decidedText = ""
-// Text of the previous update, used to notice when the user deletes characters.
-var lastTextInput = ""
 
 WorkerScript.onMessage = function(message) {
     console.log("Springboard | Will execute main worker script")
@@ -164,26 +160,6 @@ WorkerScript.onMessage = function(message) {
     }
 
 
-    if (!textInputHasContactPrefix() && textInput.trim().length > 2) {
-        filteredSuggestionObj.push([actionName.AskAssistant, actionType.AskAssistant])
-    }
-
-    var words = textInput.trim().split(/\s+/).filter(function (w) { return w.length > 0 })
-    var requestDecision
-    var clearDecision = false
-    var decision = message.decision
-    var textDeleted = textInput.length < lastTextInput.length
-    lastTextInput = textInput
-    if (words.length < 1 || textInputHasContactPrefix() || textDeleted) {
-        clearDecision = decision !== undefined && decision !== null
-        decision = undefined
-        decidedText = ""
-    }
-    if (words.length > 0 && !textInputHasContactPrefix() && textInput.trim() !== decidedText) {
-        decidedText = textInput.trim()
-        requestDecision = decidedText
-    }
-
     var existingSuggestionObj = new Object
     for (i = 0; i < model.count; ++i) {
         suggestion = model.get(i).text
@@ -214,7 +190,6 @@ WorkerScript.onMessage = function(message) {
 
     model.sync()
 
-    WorkerScript.sendMessage( {'indexOfFirstSuggestion': indexOfFirstSuggestion,
-                               'requestDecision': requestDecision, 'clearDecision': clearDecision } )
+    WorkerScript.sendMessage( {'indexOfFirstSuggestion': indexOfFirstSuggestion } )
 }
 
