@@ -9,6 +9,7 @@
 #ifdef VOLLA_ASSISTANT
 
 #include <string.h>
+#include <vector>
 
 #include "agent_core.h"
 #include "config.h"
@@ -262,7 +263,31 @@ void AssistantEngine::load()
 #endif
 }
 
-void AssistantEngine::decide(const QString &prompt)
+struct CStringArray
+{
+    std::vector<QByteArray> bytes;
+    std::vector<const char *> pointers;
+
+    const char **data() { return pointers.data(); }
+};
+
+CStringArray convertToCArray(const QStringList &strings)
+{
+    CStringArray array;
+    array.bytes.reserve(strings.size());
+    array.pointers.reserve(strings.size());
+
+    for (const QString &str : strings) {
+        array.bytes.push_back(str.toUtf8());
+        array.pointers.push_back(array.bytes.back().constData());
+    }
+
+    return array;
+}
+
+
+void AssistantEngine::decide(const QString &prompt, const QStringList & keys, const QStringList & desc,
+                             const QString & rule, qint16 nOptions)
 {
 #ifndef VOLLA_ASSISTANT
     Q_UNUSED(prompt)
@@ -272,14 +297,12 @@ void AssistantEngine::decide(const QString &prompt)
         emit failed(tr("The assistant is not available"));
         return;
     }
+    CStringArray CArrKeys = convertToCArray(keys);
+    CStringArray CArrDesc = convertToCArray(desc);
 
-    static const char *keys[] = {"clock", "dialer", "LLM"};
-    static const char *desc[] = {"Setting alarm, setting reminder, timer, stop watch even when query is indirect",
-                                 "making call even when query is indirect",
-                                 "Answer to general questions only, no action is available"};
-    constexpr int nOptions = 3;
 
-    const laya_question q = {LAYA_QTYPE_CHOICE, RULE, keys, desc, nOptions};
+    const QByteArray ruleUtf8 = rule.toUtf8();
+    const laya_question q = {LAYA_QTYPE_CHOICE, ruleUtf8.constData(), CArrKeys.data(), CArrDesc.data(), nOptions};
     float probs[nOptions];
     laya_answer ans = {};
 
@@ -296,7 +319,7 @@ void AssistantEngine::decide(const QString &prompt)
 
     QVariantMap result;
     result.insert(QStringLiteral("prompt"), prompt);
-    result.insert(QStringLiteral("key"), QString::fromUtf8(keys[ans.best]));
+    result.insert(QStringLiteral("key"), keys.at(ans.best));
     result.insert(QStringLiteral("best"), ans.best);
     result.insert(QStringLiteral("value"), double(ans.value));
     result.insert(QStringLiteral("confidence"), double(ans.confidence));
@@ -428,11 +451,12 @@ void Assistant::ask(const QString &prompt)
     emit queryRequested(prompt);
 }
 
-void Assistant::decide(const QString &prompt)
+void Assistant::decide(const QString &prompt, const QStringList & keys, const QStringList & desc,
+                       const QString & rule, qint16 nOptions)
 {
     if (prompt.trimmed().isEmpty())
         return;
 
     qDebug() << "Assistant | Decide:" << prompt;
-    emit decideRequested(prompt);
+    emit decideRequested(prompt, keys, desc, rule, nOptions);
 }

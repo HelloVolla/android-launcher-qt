@@ -5,6 +5,8 @@
 #include <QString>
 #include <QThread>
 #include <QVariantMap>
+#include <QUrl>
+#include <QStandardPaths>
 
 /*
  * On-device assistant, exposed to QML as the "assistant" context property.
@@ -23,7 +25,8 @@ public slots:
     void load();
     void query(const QString &prompt);
     // Pick the app that should handle the prompt and report it via decided().
-    void decide(const QString &prompt);
+    void decide(const QString &prompt, const QStringList & keys, const QStringList & desc,
+                const QString & rule, qint16 nOptions);
 
 signals:
     void loaded();
@@ -46,6 +49,8 @@ private:
 class Assistant : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool ready READ ready NOTIFY readyChanged)
+    Q_PROPERTY(QString configUrl READ configUrl CONSTANT)
     Q_PROPERTY(bool available READ available CONSTANT)
     Q_PROPERTY(bool ready READ ready NOTIFY readyChanged)
 
@@ -55,6 +60,11 @@ public:
 
     bool available() const;
     bool ready() const { return m_ready; }
+    QString configUrl() const {
+        return QUrl::fromLocalFile(
+            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+            + "/configs/assistant_config.json").toString();
+    }
 
 public slots:
     // Load the model.
@@ -63,7 +73,8 @@ public slots:
     // the model is still loading.
     void ask(const QString &prompt);
     // Classify the prompt with laya. The result arrives in decision().
-    void decide(const QString &prompt);
+    void decide(const QString &prompt, const QStringList & keys, const QStringList & desc,
+                const QString & rule, qint16 nOptions);
 
 signals:
     void readyChanged();
@@ -73,7 +84,8 @@ signals:
 
     void loadRequested();
     void queryRequested(const QString &prompt);
-    void decideRequested(const QString &prompt);
+    void decideRequested(const QString &prompt, const QStringList & keys, const QStringList & desc,
+                         const QString & rule, qint16 nOptions);
 
 private:
     QThread m_thread;
