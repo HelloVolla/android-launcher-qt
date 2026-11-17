@@ -548,6 +548,11 @@ LauncherPage {
                         AN.SystemDispatcher.dispatch("volla.launcher.setAlarmAction", actionObj)
                         textInputArea.text = ""
                         break  
+                    case mainView.actionType.SetTimer:
+                        console.log("Springboard | Set timer " + actionObj.hour + ":" + actionObj.minutes)
+                        AN.SystemDispatcher.dispatch("volla.launcher.setTimerAction", actionObj)
+                        textInputArea.text = ""
+                        break
                     case mainView.actionType.CallContact:
                         if(actionObj !== undefined){
                             selectedObj = actionObj
