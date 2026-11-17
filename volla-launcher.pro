@@ -16,7 +16,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         assistant.cpp \
         fileio.cpp \
-        main.cpp
+        main.cpp \
+        modelhandler.cpp
 
 
 # VOLLA_ASSISTANT_ROOT (or ASSISTANT_ROOT passed to qmake) overrides it.
@@ -34,12 +35,13 @@ isEmpty(ASSISTANT_LIBDIR): ASSISTANT_LIBDIR = $$ASSISTANT_ROOT/latest
     ASSISTANT_INCLUDES = $$ASSISTANT_ROOT/assistant-core/include \
                          $$ASSISTANT_ROOT/ai-agents/include \
                          $$ASSISTANT_ROOT/router/include \
+                         $$ASSISTANT_ROOT/model-handler/include \
                          $$ASSISTANT_ROOT/third_party/llama.cpp/include \
                          $$ASSISTANT_ROOT/third_party/llama.cpp/ggml/include \
                          $$ASSISTANT_ROOT/third_party/llama.cpp/vendor
 
-    # laya (the app decision model, built from router/) 
-    ASSISTANT_LIB_NAMES = inference states config prompt agent_core session_config llama.cpp laya
+
+    ASSISTANT_LIB_NAMES = inference states config prompt agent_core session_config llama.cpp laya model_handler
 
     DEFINES += VOLLA_ASSISTANT
 
@@ -98,7 +100,8 @@ contains(ANDROID_TARGET_ARCH,x86) {
 
 HEADERS += \
     assistant.h \
-    fileio.h
+    fileio.h \
+    modelhandler.h
 
 DISTFILES += \
     LICENSE.txt \
