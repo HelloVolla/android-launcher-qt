@@ -3,6 +3,7 @@
 #include <QtAndroidExtras/QtAndroid>
 
 #include "assistant.h"
+#include "modelhandler.h"
 #include "fileio.h"
 
 #ifdef Q_OS_ANDROID
@@ -78,6 +79,9 @@ int main(int argc, char *argv[])
     AndroidNative::SystemDispatcher::instance()->loadClass("com.volla.launcher.util.AlarmUtil");
 
     QQmlApplicationEngine engine;
+    
+    ModelHandler *modelHandler = new ModelHandler;
+    engine.rootContext()->setContextProperty("modelHandler", modelHandler);
 
     Assistant assistant;
     engine.rootContext()->setContextProperty("assistant", &assistant);
