@@ -60,11 +60,8 @@ public:
 
     bool available() const;
     bool ready() const { return m_ready; }
-    QString configUrl() const {
-        return QUrl::fromLocalFile(
-            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-            + "/configs/assistant_config.json").toString();
-    }
+    // file:// URL of assistant_config.json in the shared model directory.
+    QString configUrl() const;
 
 public slots:
     // Load the model.

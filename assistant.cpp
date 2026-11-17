@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QRegularExpression>
 #include <QStandardPaths>
 
@@ -16,6 +18,7 @@
 #include "inference.h"
 #include "states.h"
 #include "laya.h"
+#include "model_handler.h"
 
 namespace {
 
@@ -156,20 +159,40 @@ void AssistantEngine::load()
     if (m_loaded)
         return;
 
-    const QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
                              + QStringLiteral("/assistant");
 
-    const QString configPath = dataDir + QStringLiteral("/configs/assistant_config.json");
-    const QString modelPath = dataDir + QStringLiteral("/models/assistant/model.gguf");
+    // The launcher's SI config is managed by libmodel_handler (config/<app id>.json);
+    // the config itself says where the shared models are.
+    const char *configFile = mh_path(MH_FILE_CONFIG);
+    const QString configPath = configFile != nullptr ? QString::fromUtf8(configFile) : QString();
     const QString cachePath = cacheDir + QStringLiteral("/cache.bin");
 
-    const QString layaModelPath = dataDir + QStringLiteral("/models/assistant/laya.gguf");
-    
-    if (!QFileInfo::exists(configPath)) {
+    if (configPath.isEmpty() || !QFileInfo::exists(configPath)) {
         emit failed(tr("Assistant config is missing at %1").arg(configPath));
         return;
     }
+
+    model_config config;
+    if (config.load_config(configPath.toUtf8().constData()) != 0) {
+        emit failed(tr("The assistant config could not be loaded"));
+        return;
+    }
+
+    QString modelPath = QString::fromStdString(config.get_model_path());
+    if (modelPath.isEmpty())
+        modelPath = QString::fromUtf8(mh_path(MH_FILE_MODEL));
+
+    QString layaModelPath;
+    {
+        QFile file(configPath);
+        if (file.open(QIODevice::ReadOnly))
+            layaModelPath = QJsonDocument::fromJson(file.readAll()).object()
+                                .value(QStringLiteral("laya_model_path")).toString();
+    }
+    if (layaModelPath.isEmpty())
+        layaModelPath = QString::fromUtf8(mh_path(MH_FILE_LAYA));
+
     if (!QFileInfo::exists(modelPath)) {
         emit failed(tr("Assistant model is missing at %1").arg(modelPath));
         return;
@@ -182,18 +205,11 @@ void AssistantEngine::load()
     
     QDir().mkpath(cacheDir);
 
-    const QByteArray configUtf8 = configPath.toUtf8();
     const QByteArray modelUtf8 = modelPath.toUtf8();
     const QByteArray cacheUtf8 = cachePath.toUtf8();
 
     memset(&g_inference, 0, sizeof(llama_inference));
     memset(&g_state, 0, sizeof(state_type));
-
-    model_config config;
-    if (config.load_config(configUtf8.constData()) != 0) {
-        emit failed(tr("The assistant config could not be loaded"));
-        return;
-    }
 
     m_isThinker = config.is_thinker();
 
@@ -421,6 +437,15 @@ Assistant::~Assistant()
 {
     m_thread.quit();
     m_thread.wait();
+}
+
+QString Assistant::configUrl() const
+{
+#ifdef VOLLA_ASSISTANT
+    return QUrl::fromLocalFile(QString::fromUtf8(mh_path(MH_FILE_CONFIG))).toString();
+#else
+    return QString();
+#endif
 }
 
 bool Assistant::available() const
