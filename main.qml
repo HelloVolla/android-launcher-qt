@@ -192,7 +192,8 @@ ApplicationWindow {
             'OpenClock' : 20035,
             'CallContact' : 20036,
             'SetAlarm' : 20037,
-            'SetTimer' : 20038
+            'SetTimer' : 20038,
+            'DismissAlarm' : 20039
         }
         property var actionName: {"SendSMS": qsTr("Send message"), "SendEmail": qsTr("Send email"),
             "SendEmailToHome": qsTr("Send home email"), "SendEmailToWork": qsTr("Send work email"),
@@ -204,7 +205,7 @@ ApplicationWindow {
             "OpenContact" : qsTr("Open Contact"), "ShowNotes": qsTr("Show Notes"), "SendSignal" : qsTr("Send Signal message"),
             "CreateEvent" : qsTr("Add to Calender"), "OpenSignalContact": qsTr("Show in Signal"), "Redial" : qsTr("Redial"),
             "AskAssistant" : qsTr("Ask Volla Assistant"), "OpenClock" : qsTr("Open clock"), "SetAlarm" : qsTr("Set alarm for"),
-            "SetTimer" : qsTr("Set timer for"), "ShowDialer" : qsTr("Open dialer"), "CallContact" : qsTr("Call"),
+            "SetTimer" : qsTr("Set timer for"), "DismissAlarm" : qsTr("Dismiss alarm"), "ShowDialer" : qsTr("Open dialer"), "CallContact" : qsTr("Call"),
         }
         property var swipeIndex: {
             'Preferences' : 0,
