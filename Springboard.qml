@@ -553,6 +553,15 @@ LauncherPage {
                         AN.SystemDispatcher.dispatch("volla.launcher.setTimerAction", actionObj)
                         textInputArea.text = ""
                         break
+                    case mainView.actionType.DismissAlarm:
+                        if (actionObj === undefined || actionObj.hour === undefined) {
+                            console.warn("Springboard | Dismiss alarm without an alarm time")
+                            break
+                        }
+                        console.log("Springboard | Dismiss alarms at " + actionObj.hour + ":" + actionObj.minutes)
+                        AN.SystemDispatcher.dispatch("volla.launcher.dismissAlarmAction", actionObj)
+                        textInputArea.text = ""
+                        break
                     case mainView.actionType.CallContact:
                         if(actionObj !== undefined){
                             selectedObj = actionObj
