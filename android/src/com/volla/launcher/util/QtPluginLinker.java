@@ -12,6 +12,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Prepares qt-reserved-files before QtLoader gets to it.
@@ -120,18 +124,17 @@ public class QtPluginLinker {
         return files != null && files.length > 0 ? dir : null;
     }
 
+    // False if any plugin is still a plain copy or a link that doesn't resolve anymore
     private static boolean isLinked(String pluginsPrefix, String[] libs) {
         for (String entry : libs) {
             String[] split = entry.split(":");
-            File file = new File(pluginsPrefix + split[1]);
-            try {
-                if (file.exists() && !file.getCanonicalPath().equals(file.getAbsolutePath())) {
-                    continue;
-                }
-            } catch (Exception e) {
-                // treat as not linked
+            Path path = Paths.get(pluginsPrefix + split[1]);
+            if (!Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
+                continue; // source wasn't there when we linked, nothing to load either
             }
-            return false;
+            if (!Files.isSymbolicLink(path) || !Files.exists(path)) {
+                return false;
+            }
         }
         return true;
     }
@@ -174,7 +177,7 @@ public class QtPluginLinker {
 
     private static void deleteRecursively(File file) {
         // don't follow symlinks, they point into the apk's lib dir
-        if (file.isDirectory() && !isSymlink(file)) {
+        if (!Files.isSymbolicLink(file.toPath()) && file.isDirectory()) {
             File[] children = file.listFiles();
             if (children != null) {
                 for (File child : children) {
@@ -183,13 +186,5 @@ public class QtPluginLinker {
             }
         }
         file.delete();
-    }
-
-    private static boolean isSymlink(File file) {
-        try {
-            return !file.getCanonicalPath().equals(file.getAbsolutePath());
-        } catch (Exception e) {
-            return false;
-        }
     }
 }
