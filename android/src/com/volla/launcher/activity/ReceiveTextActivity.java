@@ -49,6 +49,7 @@ import com.volla.launcher.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.volla.launcher.util.NotificationPlugin;
+import com.volla.launcher.util.QtPluginLinker;
 import android.content.ServiceConnection;
 import android.content.ComponentName;
 import android.os.IBinder;
@@ -98,6 +99,8 @@ public class ReceiveTextActivity extends AndroidNativeActivity implements SMSUpd
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
+        // Has to run before QtLoader starts, see QtPluginLinker
+        QtPluginLinker.prepare(this);
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreated() called");
