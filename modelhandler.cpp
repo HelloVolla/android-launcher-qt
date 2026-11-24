@@ -23,7 +23,7 @@ QString configPath()
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
            + QStringLiteral("/configs/assistant_config.json");
 }
-const char *const kConfigUrl = "https://example.invalid/volla-si/config/com.volla.launcher.json";
+const char *const kConfigUrl = "https://volla.tech/filedump/si-assets/volla_si_config.json";
 const char *const kConfigSha256 = "";
 const quint64 kConfigSize = 0;
 }
