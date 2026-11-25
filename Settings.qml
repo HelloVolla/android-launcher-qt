@@ -50,6 +50,10 @@ LauncherPage {
                     pluginSettingsItemColumn.menuState = false
                     pluginSettingsItemColumn.destroyCheckboxes()
                 }
+                if (item !== siAccessSettingsItemColumn && siAccessSettingsItemColumn.checkboxes.length > 0) {
+                    siAccessSettingsItemColumn.menuState = false
+                    siAccessSettingsItemColumn.destroyCheckboxes()
+                }
                 if (item !== widgetsSettingsItemColumn && widgetsSettingsItemColumn.checkboxes.length > 0) {
                     widgetsSettingsItemColumn.menuState = false
                     widgetsSettingsItemColumn.destroyCheckboxes()
@@ -1794,6 +1798,114 @@ LauncherPage {
 
                             onClicked: {
                                 pluginDialog.close()
+                            }
+                        }
+                    }
+                }
+
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: 250.0
+                    }
+                }
+            }
+
+            Item {
+                id: siAccessSettingsItem
+                width: parent.width
+                implicitHeight: siAccessSettingsItemColumn.height
+                visible: siAccessSettingsItemColumn.si !== undefined && siAccessSettingsItemColumn.si !== null
+
+                Column {
+                    id: siAccessSettingsItemColumn
+                    width: parent.width
+
+                    property bool menuState: false
+                    property var checkboxes: new Array
+                    property var accessibilities: new Array
+                    property var si: mainView.getSupportiveIntelligence()
+
+                    onSiChanged: {
+                        if (si === undefined || si === null) {
+                            menuState = false
+                            destroyCheckboxes()
+                        }
+                    }
+
+                    Button {
+                        id: siAccessSettingsItemButton
+                        width: parent.width
+                        padding: mainView.innerSpacing
+                        contentItem: Text {
+                            width: parent.width - 2 * siAccessSettingsItemButton.padding
+                            text: qsTr("SI Accessibilities")
+                            font.family: regularFont.name
+                            font.pointSize: mainView.largeFontSize
+                            font.weight: siAccessSettingsItemColumn.menuState ? Font.Black : Font.Normal
+                            color: Universal.foreground
+                        }
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                        }
+                        onClicked: {
+                            siAccessSettingsItemColumn.menuState = !siAccessSettingsItemColumn.menuState
+                            if (siAccessSettingsItemColumn.menuState) {
+                                siAccessSettingsItemColumn.createCheckboxes()
+                                settingsColumn.closeAllItemsExcept(siAccessSettingsItemColumn)
+                            } else {
+                                siAccessSettingsItemColumn.destroyCheckboxes()
+                            }
+                        }
+                    }
+
+                    function createCheckboxes() {
+                        accessibilities = si && typeof si.getAccessibilities === "function"
+                                ? si.getAccessibilities() : []
+                        if (accessibilities.length === 0) {
+                            mainView.showToast(qsTr("Available after the assistant models are downloaded"))
+                            menuState = false
+                            return
+                        }
+                        for (var i = 0; i < accessibilities.length; i++) {
+                            var component = Qt.createComponent("/Checkbox.qml", siAccessSettingsItemColumn)
+                            var properties = { "actionId": accessibilities[i]["id"],
+                                "text": accessibilities[i]["name"], "checked": accessibilities[i]["enabled"],
+                                "labelFontSize": mainView.mediumFontSize, "circleSize": mainView.largeFontSize,
+                                "leftPadding": mainView.innerSpacing, "rightPadding": mainView.innerSpacing,
+                                "bottomPadding": mainView.innerSpacing / 2, "topPadding": mainView.innerSpacing / 2,
+                                "hasDescriptionButton": true, "accentColor": mainView.accentColor, "fontFamilyName" : regularFont.name }
+                            var object = component.createObject(siAccessSettingsItemColumn, properties)
+                            object.activeCheckbox = true
+                            checkboxes.push(object)
+                        }
+                    }
+
+                    function destroyCheckboxes() {
+                        for (var i = 0; i < checkboxes.length; i++)
+                            checkboxes[i].destroy()
+                        checkboxes = new Array
+                    }
+
+                    function showDescription(actionId) {
+                        var access = accessibilities.find(a => a.id === actionId)
+                        if (access === undefined)
+                            return
+                        pluginDialog.backgroundColor = mainView.fontColor.toString() === "#ffffff"  ? "#292929" : "#CCCCCC"
+                        pluginDialog.dialogDescritpion = access.description
+                        pluginDialog.open()
+                    }
+
+                    function updateSettings(actionId, active) {
+                        console.log("Settings | Update SI access for " + actionId + ", " + active)
+                        if (si && typeof si.setAccessEnabled === "function" && si.setAccessEnabled(actionId, active))
+                            return
+                        mainView.showToast(qsTr("Couldn't save the SI setting"))
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i].actionId === actionId) {
+                                checkboxes[i].activeCheckbox = false
+                                checkboxes[i].checked = !active
+                                checkboxes[i].activeCheckbox = true
                             }
                         }
                     }

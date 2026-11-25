@@ -1074,6 +1074,10 @@ ApplicationWindow {
             AN.SystemDispatcher.dispatch("volla.launcher.checkContactAction", {"timestamp": settings.lastContactsCheck })
         }
 
+        function getSupportiveIntelligence() {
+            return springboardLoader.item ? springboardLoader.item.si : undefined
+        }
+
         function getInstalledPlugins() {
             pluginStore.setSource("installedPlugins.json")
             var pluginsStr = pluginStore.readPrivate()
