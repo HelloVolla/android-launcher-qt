@@ -63,6 +63,9 @@ public:
     // file:// URL of assistant_config.json in the shared model directory.
     QString configUrl() const;
 
+    // Replace the SI config with the given JSON text.
+    Q_INVOKABLE bool writeConfig(const QString &json);
+
 public slots:
     // Load the model.
     void init();

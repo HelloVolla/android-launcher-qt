@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>
+#include <QSaveFile>
 #include <QStandardPaths>
 
 #ifdef VOLLA_ASSISTANT
@@ -445,6 +446,38 @@ QString Assistant::configUrl() const
     return QUrl::fromLocalFile(QString::fromUtf8(mh_path(MH_FILE_CONFIG))).toString();
 #else
     return QString();
+#endif
+}
+
+bool Assistant::writeConfig(const QString &json)
+{
+#ifdef VOLLA_ASSISTANT
+    QJsonParseError parseError;
+    const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8(), &parseError);
+    if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
+        qWarning() << "Assistant | Refusing to write invalid config:" << parseError.errorString();
+        return false;
+    }
+
+    const QString path = QString::fromUtf8(mh_path(MH_FILE_CONFIG));
+    if (path.isEmpty())
+        return false;
+
+    QSaveFile file(path);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "Assistant | Could not open config" << path << file.errorString();
+        return false;
+    }
+    file.write(doc.toJson(QJsonDocument::Indented));
+    if (!file.commit()) {
+        qWarning() << "Assistant | Could not write config" << path << file.errorString();
+        return false;
+    }
+    qDebug() << "Assistant | Config written to" << path;
+    return true;
+#else
+    Q_UNUSED(json)
+    return false;
 #endif
 }
 
